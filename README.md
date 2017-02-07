@@ -19,5 +19,9 @@ from R by doing:
 
 ## What's working so far:
 
+### 2017 Feb 7
+
+- some R function for post-processing
+
 ### 2016 Dec 1
 - nothing (yes, nothing is working; in fact, nothing is working beautifully)
