@@ -11,9 +11,9 @@ from R by doing:
 
 **Developers**: the 'staging' branch is for work-in-progress.  Install it with
 ```R
-    install.packages("devtools")              ## if you haven't already done this
+    install.packages("devtools")               ## if you haven't already done this
 
-    install_github("jbrzusto/motus@staging")   ## the lastest stable version
+    install_github("jbrzusto/motus@staging")   ## the development version
 ```
 
 
