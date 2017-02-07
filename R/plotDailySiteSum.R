@@ -6,6 +6,8 @@
 #' @param data dataframe of Motus detection data
 #' @param Site name of site to plot
 #' @export
+#' @author Zoe Crysler \email{zcrysler@@gmail.com}
+#'
 #' @examples
 #' plotDailySiteSum(dat, Site = "Longridge")
 

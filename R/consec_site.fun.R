@@ -2,6 +2,10 @@
 #'
 #' @param data dataframe of Motus detection data containing at a minimum fullID, ts, lat, lon
 #'
+#' @export
+#'
+#' @author Zoe Crysler \email{zcrysler@@gmail.com}
+#'
 
 ## site.fun and consec.fun adapted from "between.locs.R" script written by Phil
 

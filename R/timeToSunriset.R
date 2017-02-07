@@ -5,7 +5,11 @@
 #'
 #' @param data dataframe of Motus detection data, or dataframe containing latitude, longitude, and POSIXct date/time
 #' @param units units to display time difference, defaults to "hours", options include "secs", "mins", "hours", "days", "weeks"
+#'
 #' @export
+#'
+#' @author Zoe Crysler \email{zcrysler@@gmail.com}
+#'
 #' @return the original dataframe provided, with the following additional columns:
 #' \itemize{
 #' \item sunrise: sunrise time for the date and location provided by ts and lat/lon per row

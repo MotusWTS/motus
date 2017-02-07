@@ -18,6 +18,8 @@
 #' }
 #'
 #' @export
+#' @author Zoe Crysler \email{zcrysler@@gmail.com}
+#'
 #'
 #' @examples
 #' daily_site_summary <- siteSumDaily(dat, units = "mins")

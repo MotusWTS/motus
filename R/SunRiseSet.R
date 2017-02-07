@@ -4,6 +4,8 @@
 #'
 #' @param data dataframe of Motus detection data, or dataframe containing latitude, longitude, and POSIXct date/time
 #' @export
+#' @author Zoe Crysler \email{zcrysler@@gmail.com}
+#'
 #' @return the original dataframe provided, with the following additional columns:
 #' - sunrise: sunrise time for the date and location provided by ts and lat/lon per row
 #' - sunset: sunset time for the date and location provided by ts and lat/lon per row

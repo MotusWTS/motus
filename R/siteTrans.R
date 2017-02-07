@@ -27,6 +27,8 @@
 #'}
 #'
 #' @export
+#' @author Zoe Crysler \email{zcrysler@@gmail.com}
+#'
 #'
 #' @examples
 #' transitions <- siteTrans(dat)

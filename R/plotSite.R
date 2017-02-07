@@ -4,6 +4,8 @@
 #'
 #' @param data dataframe of Motus detection data
 #' @export
+#' @author Zoe Crysler \email{zcrysler@@gmail.com}
+#'
 #' @examples
 #' plotSite(dat, sitename = "Piskwamish")
 
@@ -14,4 +16,3 @@ plotSite <- function(data, sitename = unique(data$site)){
   p <- ggplot2::ggplot(data, ggplot2::aes(round_ts, fullID, col = ant))
   p + ggplot2::geom_point() + ggplot2::theme_bw() + ggplot2::labs(title = "Detection Time vs Tag ID, coloured by antenna", x = "Date", y = "Tag ID", colour = "Antenna")
 }
-

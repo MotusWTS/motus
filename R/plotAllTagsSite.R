@@ -5,6 +5,8 @@
 #' @param data dataframe of Motus detection data
 #' @param tagsPerPanel number of tags in each panel of the plot
 #' @export
+#' @author Zoe Crysler \email{zcrysler@@gmail.com}
+#'
 #' @examples
 #' plotAllTagsSite(dat, tagsPerPanel = 4)
 

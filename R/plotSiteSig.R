@@ -4,6 +4,8 @@
 #'
 #' @param data dataframe of Motus detection data
 #' @export
+#' @author Zoe Crysler \email{zcrysler@@gmail.com}
+#'
 #' @examples
 #' plotSiteSig(dat, sitename = "Piskwamish")
 

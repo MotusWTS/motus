@@ -6,6 +6,8 @@
 #'
 #' @param data dataframe of Motus detection data
 #' @export
+#' @author Zoe Crysler \email{zcrysler@@gmail.com}
+#'
 #' @return a data.frame with these columns:
 #' \itemize{
 #' \item fullID: fullID of Motus registered tag

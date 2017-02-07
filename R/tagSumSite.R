@@ -6,6 +6,8 @@
 #' @param data dataframe of Motus detection data
 #' @param units units to display time difference, defaults to "hours", options include "secs", "mins", "hours", "days", "weeks"
 #' @export
+#' @author Zoe Crysler \email{zcrysler@@gmail.com}
+#'
 #' @examples
 #' tag_site_summary <- tagSumSite(dat, units = "mins")
 
