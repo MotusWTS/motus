@@ -1,0 +1,28 @@
+#' Constants and writable storage for the motus package
+#'
+#' This is an environment that holds constants (whose bindings are locked)
+#' and session variables (not locked) used by this package.
+#'
+#' @details Constants are:
+#'
+#' \describe{
+#' \item{API_REGISTER_TAG}{URL to call for registering a tag}
+#' \item{API_DEPLOY_TAG}{URL to call for deploying a tag}
+#' \item{API_SEARCH_TAGS}{URL to call for listing registered tags}
+#' \item{FLOAT_FIELDS}{list of API fieldnames requiring floating point values}
+#' \item{FLOAT_REGEX}{regex to recognize fields requiring fixups in API queries}
+#' }
+#'
+#' and variables are:
+#'
+#' \describe{
+#' \item{userLogin}{login name for user at motus.org}
+#' \item{userPassword}{password for user at motus.org}
+#' \item{myProjects}{project IDs for user at motus.org}
+#' }
+#'
+#' @export
+#'
+#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
+
+Motus = new.env(emptyenv())
