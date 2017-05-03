@@ -37,7 +37,7 @@
 
         API_REGISTER_TAG = "https://motus.org/api/tag/register"
         API_DEPLOY_TAG   = "https://motus.org/api/tag/deploy"
-        API_SEARCH_TAGS  = "https://sandbox.motus.org/api/tags/search"
+        API_SEARCH_TAGS  = "https://motus.org/api/tags/search"
 
         ## a list of field names which must be formatted as floats so that the
         ## motus API recognizes them correctly.  This means that if they happen
