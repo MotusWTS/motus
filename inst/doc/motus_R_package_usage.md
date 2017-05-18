@@ -10,7 +10,7 @@ password.  This will only happen once per R session.
 
 ## Tag Databases ##
 
-Your copy of a tag database is stored as an [SQLite](www.sqlite.org)
+Your copy of a tag database is stored as an [SQLite](http://www.sqlite.org)
 file with the extension `.motus`, whose schema is described in another
 document.
 
