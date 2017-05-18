@@ -9,15 +9,37 @@ with this package.
 
 ## API calls ##
 
+## authenticate user ##
+
+   authenticate_user (user, password)
+
+      - user: username
+      - password: password (in cleartext)
+
+   - returns a list with these items:
+      - token: character string; 264 random bits, base64-encoded
+      - expiry: numeric timestamp of expiry for token
+      - userID: integer motus ID for user
+      - projects: integer vector of project #s user is allowed to request tag detections for
+      - receivers: character vector of serial #s of receivers user is allowed to request tag detections for
+
+   or
+
+   - a list with this item:
+      - error: "authentication failed"
+
+Note: the token returned by this API must be included in all other API
+calls.  This is not shown in the prototypes below.
+
 ### get batches by tag project ###
 
-   batches_for_tag_project (P, TS)
+   batches_for_tag_project (projectID, ts)
 
-       - P: integer project ID
-       - TS: numeric timestamp
+       - projectID: integer project ID
+       - ts: numeric timestamp
 
-   - return a list of all batches with detections of tags in project P,
-     where the tsSG of the batch is >= TS
+   - return a list of all batches with detections of tags in project `projectID`,
+     where the processing timestamp of the batch is >= `ts`
 
    - columns in the return value should include these fields (as they exist in the transfer
      tables):
@@ -30,13 +52,13 @@ with this package.
 
 ### get batches by receiver project ###
 
-   batches_for_receiver_project (P, TS)
+   batches_for_receiver_project (projectID, ts)
 
-       - P: integer project ID
-       - TS: numeric timestamp
+       - projectID: integer project ID
+       - ts: numeric timestamp
 
-   - return a list of all batches from receivers in project P,
-     where the tsSG of the batch is >= TS
+   - return a list of all batches from receivers in project projectID,
+     where the processing timestamp of the batch is >= `ts`
 
    - columns should include these fields (as they exist in the transfer
      tables):
@@ -49,13 +71,14 @@ with this package.
 
 ### get runs by tag project from given batch ###
 
-   runs_for_tag_project (P, B)
+   runs_for_tag_project (projectID, batchID, runID)
 
-       - P: integer project ID
-       - B: integer batch ID
+       - projectID: integer project ID
+       - batchID: integer batch ID
+       - runID: integer largest run ID we *already* have from this batch and tag project
 
-   - return a list of all runs of a tag in project P, from the batch
-   with ID = B
+   - return a list of all runs of a tag in project `projectID`, from batch
+     `batchID` and with run ID > `runID`
 
    - columns should include these fields (as they exist in the transfer
      tables):
@@ -65,17 +88,21 @@ with this package.
       - motusTagID
       - ant
       - len
+
+Paging for this query is achieved by using the last returned value of `runID`
+as `runID` on subsequent calls.
 
 ### get all runs from given batch ###
 
 This would be called when building a copy of the receiver database; in
 that case, all runs, regardless of tag project, would be provided.
 
-   runs_for_batch (B)
+   runs_for_batch (batchID, runID)
 
-       - B: integer batch ID
+       - batchID: integer batch ID
+       - runID: integer largest runID we *already* have from this batch
 
-   - return a list of all runs from the batch with ID = B
+   - return a list of all runs from batch `batchID` with run ID > `runID`
 
    - columns should include these fields (as they exist in the transfer
      tables):
@@ -86,19 +113,19 @@ that case, all runs, regardless of tag project, would be provided.
       - ant
       - len
 
-Paging for this query is achieved by using the last returned value of `hitID`
-as `H` on subsequent calls.
+Paging for this query is achieved by using the last returned value of `runID`
+as `runID` on subsequent calls.
 
 ### get all hits by tag project from given batch ###
 
-   hits_for_tag_project_in_batch (P, B, H)
+   hits_for_tag_project_in_batch (projectID, batchID, hitID)
 
-       - P: integer project ID
-       - B: integer batchID
-       - H: integer largest hitID we *already* have
+       - projectID: integer project ID
+       - batchID: integer batchID
+       - hitID: integer largest hitID we *already* have from this batch
 
-   - return a list of all hits on tags in project P which are in batch B,
-     and whose hit ID is > H
+   - return a list of all hits on tags in project `projectID` which are in batch `batchID`,
+     and whose hit ID is > `hitID`
 
    - columns should include these fields (as they exist in the transfer
      tables):
@@ -115,16 +142,16 @@ as `H` on subsequent calls.
       - burstSlop
 
 Paging for this query is achieved by using the last returned value of `hitID`
-as `H` on subsequent calls.
+as `hitID` on subsequent calls.
 
 ### get all hits from given batch ###
 
-   hits_in_batch (B, H)
+   hits_in_batch (batchID, hitID)
 
-        - B: integer batchID
-        - H: integer largest hitID we *already* have
+        - batchID: integer batchID
+        - hitID: integer largest hitID we *already* have from this batch
 
-   - return a list of all hits in batch B whose hit ID is > H
+   - return a list of all hits in batch `batchID` whose hit ID is > `hitID`
 
    - columns should include these fields (as they exist in the transfer
      tables):
@@ -139,24 +166,27 @@ as `H` on subsequent calls.
       - freqSD
       - slop
       - burstSlop
+
+Paging for this query is achieved by using the last returned value of `hitID`
+as `hitID` on subsequent calls.
 
 ### get all GPS fixes from a given batch ###
   Used when a receiver deployment is marked as 'mobile'.
 
-     gps_in_batch (B, TS)
+  gps_in_batch (batchID, ts)
 
-        - B: integer batchID
-        - TS: largest gps timestamp we *already* have
+    - batchID: integer batchID
+    - ts: largest gps timestamp we *already* have for this batch
 
-     - return all GPS fixes from batch B which are later than timestamp TS
+   - return all GPS fixes from batch batchID which are later than timestamp ts
 
-     - columns should include these fields (as they exist in the transfer
-       tables):
-        - ts
-        - batchID (optional; this is just B)
-        - lat
-        - lon
-        - alt
+   - columns should include these fields (as they exist in the transfer
+     tables):
+     - ts
+     - batchID (optional; this is just batchID)
+     - lat
+     - lon
+     - alt
 
 Paging for this query is achieved by using the last returned value of `ts`
-as `TS` on subsequent calls.
+as `ts` on subsequent calls.
