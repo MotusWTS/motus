@@ -29,7 +29,7 @@ with this package.
       - error: "authentication failed"
 
 Note: the token returned by this API must be included in all other API
-calls.  This is not shown in the prototypes below.
+calls as a parameter called `authToken`.  This is not shown in the prototypes below.
 
 ### get batches by tag project ###
 

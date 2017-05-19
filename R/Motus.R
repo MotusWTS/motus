@@ -13,7 +13,7 @@
 #' \item{FLOAT_REGEX}{regex to recognize fields requiring fixups in API queries}
 #' }
 #'
-#' and variables are:
+#' and session variables are:
 #'
 #' \describe{
 #' \item{userLogin}{login name for user at motus.org}
