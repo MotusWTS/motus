@@ -29,11 +29,19 @@
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 .onLoad = function(...) {
+    ## interim location of unprotected local data server
+
+    dataServerURL = "http://localhost:55930"
+
     ## Assign constants
 
     with(Motus,
     {
-        ## API entry points
+        ## API entry points for the data server (these are relative to the data server URL)
+
+        API_DATA_AUTHENTICATE = "custom/authenticate_user"
+
+        ## API entry points for the motus server (absolute URLs)
 
         API_REGISTER_TAG = "https://motus.org/api/tag/register"
         API_DEPLOY_TAG   = "https://motus.org/api/tag/deploy"
@@ -73,6 +81,8 @@
     sessionVariable("userPassword", "password at motus.org")
 
     ## Add additional variables
+    sessionVariable("authToken", srvAuth)
+    sessionVariable("dataServerURL", "URL of data server", val=dataServerURL)  ## FIXME: switch to wrapper URL once implemented
 
     with(Motus,
     {
