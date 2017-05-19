@@ -19,6 +19,10 @@ from R by doing:
 
 ## What's working so far:
 
+### 2017 May 19
+
+- authentication against local data server
+
 ### 2017 Feb 7
 
 - some R functions for post-processing
