@@ -1,3 +1,5 @@
+# Using the motus R package #
+
 This document outlines how to use the
 [motus R package](https://github.com/jbrzusto/motus) to obtain and
 work with your motus detection data.

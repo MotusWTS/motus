@@ -39,9 +39,9 @@ calls as a parameter called `authToken`.  This is not shown in the prototypes be
        - ts: numeric timestamp
 
    - return a list of all batches with detections of tags in project `projectID`,
-     where the processing timestamp of the batch is >= `ts`
+     where the processing timestamp of the batch is > `ts`
 
-   - columns in the return value should include these fields (as they exist in the transfer
+   - items in the return value are vectors (as they exist in the transfer
      tables):
       - batchID
       - motusDeviceID
@@ -49,6 +49,10 @@ calls as a parameter called `authToken`.  This is not shown in the prototypes be
       - tsBegin
       - tsEnd
       - numHits
+
+Paging for this query is achieved by using the last returned value of `ts`
+as `ts` on subsequent calls.  When there are no further batches, the API
+returns an empty list.
 
 ### get batches by receiver project ###
 
@@ -58,7 +62,7 @@ calls as a parameter called `authToken`.  This is not shown in the prototypes be
        - ts: numeric timestamp
 
    - return a list of all batches from receivers in project projectID,
-     where the processing timestamp of the batch is >= `ts`
+     where the processing timestamp of the batch is > `ts`
 
    - columns should include these fields (as they exist in the transfer
      tables):
@@ -69,7 +73,11 @@ calls as a parameter called `authToken`.  This is not shown in the prototypes be
       - tsEnd
       - numHits
 
-### get runs by tag project from given batch ###
+Paging for this query is achieved by using the last returned value of `ts`
+as `ts` on subsequent calls.  When there are no further batches, the API
+returns an empty list.
+
+### get runs by tag project from a batch ###
 
    runs_for_tag_project (projectID, batchID, runID)
 
@@ -90,9 +98,10 @@ calls as a parameter called `authToken`.  This is not shown in the prototypes be
       - len
 
 Paging for this query is achieved by using the last returned value of `runID`
-as `runID` on subsequent calls.
+as `runID` on subsequent calls.  When there are no further runs, the API
+returns an empty list.
 
-### get all runs from given batch ###
+### get all runs from a batch ###
 
 This would be called when building a copy of the receiver database; in
 that case, all runs, regardless of tag project, would be provided.
@@ -114,9 +123,10 @@ that case, all runs, regardless of tag project, would be provided.
       - len
 
 Paging for this query is achieved by using the last returned value of `runID`
-as `runID` on subsequent calls.
+as `runID` on subsequent calls.  When there are no further runs, the API
+returns an empty list.
 
-### get all hits by tag project from given batch ###
+### get all hits by tag project from a batch ###
 
    hits_for_tag_project_in_batch (projectID, batchID, hitID)
 
@@ -142,9 +152,10 @@ as `runID` on subsequent calls.
       - burstSlop
 
 Paging for this query is achieved by using the last returned value of `hitID`
-as `hitID` on subsequent calls.
+as `hitID` on subsequent calls.  When there are no further hits, the API
+returns an empty list.
 
-### get all hits from given batch ###
+### get all hits from a batch ###
 
    hits_in_batch (batchID, hitID)
 
@@ -168,9 +179,10 @@ as `hitID` on subsequent calls.
       - burstSlop
 
 Paging for this query is achieved by using the last returned value of `hitID`
-as `hitID` on subsequent calls.
+as `hitID` on subsequent calls.  When there are no further hits, the API
+returns an empty list.
 
-### get all GPS fixes from a given batch ###
+### get all GPS fixes from a batch ###
   Used when a receiver deployment is marked as 'mobile'.
 
   gps_in_batch (batchID, ts)
@@ -189,4 +201,5 @@ as `hitID` on subsequent calls.
      - alt
 
 Paging for this query is achieved by using the last returned value of `ts`
-as `ts` on subsequent calls.
+as `ts` on subsequent calls.  When there are no further GPS fixes, the API
+returns an empty list.
