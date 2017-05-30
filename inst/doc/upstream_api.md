@@ -49,6 +49,7 @@ calls as a parameter called `authToken`.  This is not shown in the prototypes be
       - tsBegin
       - tsEnd
       - numHits
+      - ts
 
 Paging for this query is achieved by using the last returned value of `ts`
 as `ts` on subsequent calls.  When there are no further batches, the API
@@ -72,6 +73,7 @@ returns an empty list.
       - tsBegin
       - tsEnd
       - numHits
+      - ts
 
 Paging for this query is achieved by using the last returned value of `ts`
 as `ts` on subsequent calls.  When there are no further batches, the API
