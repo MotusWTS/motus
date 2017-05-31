@@ -10,6 +10,9 @@
 #' \item{API_REGISTER_TAG}{URL to call for registering a tag}
 #' \item{API_DEPLOY_TAG}{URL to call for deploying a tag}
 #' \item{API_SEARCH_TAGS}{URL to call for listing registered tags}
+#' \item{API_BATCHES_FOR_TAG_PROJECT}{URL to call for getting batches for a tag project}
+#' \item{API_BATCHES_FOR_RECEIVER_PROJECT}{URL to call for getting batches for a receiver project}
+#'
 #' \item{FLOAT_FIELDS}{list of API fieldnames requiring floating point values}
 #' \item{FLOAT_REGEX}{regex to recognize fields requiring fixups in API queries}
 #' }
@@ -20,6 +23,7 @@
 #' \item{userLogin}{login name for user at motus.org}
 #' \item{userPassword}{password for user at motus.org}
 #' \item{myProjects}{project IDs for user at motus.org}
+#' \item{dataServerURL}{URL to data server}
 #' }
 #'
 #' @seealso \link{\code{Motus}}
@@ -46,6 +50,10 @@
         API_REGISTER_TAG = "https://motus.org/api/tag/register"
         API_DEPLOY_TAG   = "https://motus.org/api/tag/deploy"
         API_SEARCH_TAGS  = "https://motus.org/api/tags/search"
+
+        ## API entry points for the data server (URLs relative to dataServerURL)
+        API_BATCHES_FOR_TAG_PROJECT      = "custom/batches_for_tag_project"
+        API_BATCHES_FOR_RECEIVER_PROJECT = "custom/batches_for_receiver_project"
 
         ## a list of field names which must be formatted as floats so that the
         ## motus API recognizes them correctly.  This means that if they happen

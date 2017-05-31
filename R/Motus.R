@@ -9,6 +9,8 @@
 #' \item{API_REGISTER_TAG}{URL to call for registering a tag}
 #' \item{API_DEPLOY_TAG}{URL to call for deploying a tag}
 #' \item{API_SEARCH_TAGS}{URL to call for listing registered tags}
+#' \item{API_BATCHES_FOR_TAG_PROJECT}{URL to call for getting batches for a tag project}
+#' \item{API_BATCHES_FOR_RECEIVER_PROJECT}{URL to call for getting batches for a receiver project}
 #' \item{FLOAT_FIELDS}{list of API fieldnames requiring floating point values}
 #' \item{FLOAT_REGEX}{regex to recognize fields requiring fixups in API queries}
 #' }
