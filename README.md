@@ -19,6 +19,10 @@ from R by doing:
 
 ## What's working so far:
 
+## 2017 May 31
+- srvBatchesForTagProject()
+- srvBatchesForRecvProject()
+
 ### 2017 May 19
 
 - authentication against local data server
