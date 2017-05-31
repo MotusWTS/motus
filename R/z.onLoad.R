@@ -54,6 +54,7 @@
         ## API entry points for the data server (URLs relative to dataServerURL)
         API_BATCHES_FOR_TAG_PROJECT      = "custom/batches_for_tag_project"
         API_BATCHES_FOR_RECEIVER_PROJECT = "custom/batches_for_receiver_project"
+        API_RUNS_FOR_TAG_PROJECT         = "custom/runs_for_tag_project"
 
         ## a list of field names which must be formatted as floats so that the
         ## motus API recognizes them correctly.  This means that if they happen
