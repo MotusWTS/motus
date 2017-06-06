@@ -28,12 +28,23 @@ with this package.
    - a list with this item:
       - error: "authentication failed"
 
-Note: the token returned by this API must be included in all other API
-calls as a parameter called `authToken`.  This is not shown in the prototypes below.
+### Notes ###
 
-### get batches by tag project ###
+1. The token returned by this API must be included in all other API
+calls as a parameter called `authToken`.  This is not shown in the
+prototypes below.
 
-   batches_for_tag_project (projectID, ts)
+2. Authorization is by project: if a user has permission for a
+project, then that user can see:
+
+   - all batches, runs, and hits for receiver deployments by that project
+
+   - all runs and hits for tag deployments by that project
+
+Calls where no authorized data are available return an appropriate
+data.frame with zero rows.
+
+### batches_for_tag_project (projectID, ts) ###
 
        - projectID: integer project ID
        - ts: numeric timestamp
@@ -55,9 +66,7 @@ Paging for this query is achieved by using the last returned value of `ts`
 as `ts` on subsequent calls.  When there are no further batches, the API
 returns an empty list.
 
-### get batches by receiver project ###
-
-   batches_for_receiver_project (projectID, ts)
+### batches_for_receiver_project (projectID, ts) ###
 
        - projectID: integer project ID
        - ts: numeric timestamp
@@ -79,9 +88,7 @@ Paging for this query is achieved by using the last returned value of `ts`
 as `ts` on subsequent calls.  When there are no further batches, the API
 returns an empty list.
 
-### get runs by tag project from a batch ###
-
-   runs_for_tag_project (projectID, batchID, runID)
+### runs_for_tag_project (projectID, batchID, runID) ###
 
        - projectID: integer project ID
        - batchID: integer batch ID
@@ -103,13 +110,9 @@ Paging for this query is achieved by using the last returned value of `runID`
 as `runID` on subsequent calls.  When there are no further runs, the API
 returns an empty list.
 
-### get all runs from a batch ###
+### runs_for_receiver_project (projectID, batchID, runID) ###
 
-This would be called when building a copy of the receiver database; in
-that case, all runs, regardless of tag project, would be provided.
-
-   runs_for_batch (batchID, runID)
-
+       - projectID: integer project ID; project receiver belongs to
        - batchID: integer batch ID
        - runID: integer largest runID we *already* have from this batch
 
@@ -128,9 +131,7 @@ Paging for this query is achieved by using the last returned value of `runID`
 as `runID` on subsequent calls.  When there are no further runs, the API
 returns an empty list.
 
-### get all hits by tag project from a batch ###
-
-   hits_for_tag_project_in_batch (projectID, batchID, hitID)
+### hits_for_tag_project (projectID, batchID, hitID) ###
 
        - projectID: integer project ID
        - batchID: integer batchID
@@ -157,10 +158,9 @@ Paging for this query is achieved by using the last returned value of `hitID`
 as `hitID` on subsequent calls.  When there are no further hits, the API
 returns an empty list.
 
-### get all hits from a batch ###
+### hits_for_receiver_project (projectID, batchID, hitID) ###
 
-   hits_in_batch (batchID, hitID)
-
+        - projectID; integer project ID of receiver deployment
         - batchID: integer batchID
         - hitID: integer largest hitID we *already* have from this batch
 
@@ -184,11 +184,11 @@ Paging for this query is achieved by using the last returned value of `hitID`
 as `hitID` on subsequent calls.  When there are no further hits, the API
 returns an empty list.
 
-### get all GPS fixes from a batch ###
+### gps_for_receiver_project (projectID, batchID, ts) ###
+
   Used when a receiver deployment is marked as 'mobile'.
 
-  gps_in_batch (batchID, ts)
-
+    - projectID; integer project ID of receiver deployment
     - batchID: integer batchID
     - ts: largest gps timestamp we *already* have for this batch
 
