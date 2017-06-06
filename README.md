@@ -19,11 +19,19 @@ from R by doing:
 
 ## What's working so far:
 
+### 2017 Jun 6
+
+API call wrappers done:
+- srvRunsForReceiverProject()
+- srvHitsForTagProject()
+- srvHitsForReceiverProject()
+- srvGPSforReceiverProject()
+
 ### 2017 May 31
 
 - srvRunsForTagProject()
 - srvBatchesForTagProject()
-- srvBatchesForRecvProject()
+- srvBatchesForReceiverProject()
 
 ### 2017 May 19
 
