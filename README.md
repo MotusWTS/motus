@@ -19,9 +19,13 @@ from R by doing:
 
 ## What's working so far:
 
+### 2017 Jun 8
+
+- srvGPSforTagProject()
+- srvMetadataForTags()
+
 ### 2017 Jun 6
 
-API call wrappers done:
 - srvRunsForReceiverProject()
 - srvHitsForTagProject()
 - srvHitsForReceiverProject()
