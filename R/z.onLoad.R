@@ -12,6 +12,8 @@
 #' \item{API_SEARCH_TAGS}{URL to call for listing registered tags}
 #' \item{API_BATCHES_FOR_TAG_PROJECT}{URL to call for getting batches for a tag project}
 #' \item{API_BATCHES_FOR_RECEIVER_PROJECT}{URL to call for getting batches for a receiver project}
+#' \item{API_GPS_FOR_TAG_PROJECT}{URL to call for getting GPS fixes for a tag project}
+#' \item{API_GPS_FOR_RECEIVER_PROJECT}{{URL to call for getting GPS fixes for a receiver project}
 #'
 #' \item{FLOAT_FIELDS}{list of API fieldnames requiring floating point values}
 #' \item{FLOAT_REGEX}{regex to recognize fields requiring fixups in API queries}
@@ -58,7 +60,9 @@
         API_RUNS_FOR_RECEIVER_PROJECT     = "custom/runs_for_receiver_project"
         API_HITS_FOR_TAG_PROJECT          = "custom/hits_for_tag_project"
         API_HITS_FOR_RECEIVER_PROJECT     = "custom/hits_for_receiver_project"
+        API_GPS_FOR_TAG_PROJECT           = "custom/gps_for_tag_project"
         API_GPS_FOR_RECEIVER_PROJECT      = "custom/gps_for_receiver_project"
+        API_METADATA_FOR_TAGS             = "custom/metadata_for_tags"
 
         ## a list of field names which must be formatted as floats so that the
         ## motus API recognizes them correctly.  This means that if they happen
