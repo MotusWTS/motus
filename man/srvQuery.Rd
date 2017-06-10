@@ -4,7 +4,7 @@
 \alias{srvQuery}
 \title{Send a query to the data server API}
 \usage{
-srvQuery(API, params = NULL, requestType = "get", show = FALSE,
+srvQuery(API, params = NULL, requestType = "post", show = FALSE,
   JSON = FALSE, auth = TRUE)
 }
 \arguments{

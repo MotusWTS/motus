@@ -25,7 +25,7 @@
 #' @author John Brzustowski
 #'     \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
-srvQuery = function (API, params = NULL, requestType="get", show=FALSE, JSON=FALSE, auth=TRUE) {
+srvQuery = function (API, params = NULL, requestType="post", show=FALSE, JSON=FALSE, auth=TRUE) {
     curl = RCurl::getCurlHandle()
     RCurl::curlSetOpt(.opts=list(verbose=0, header=0, failonerror=0), curl=curl)
     # params is a named list of parameters which will be passed along in the JSON query
@@ -47,7 +47,7 @@ srvQuery = function (API, params = NULL, requestType="get", show=FALSE, JSON=FAL
 
     tryCatch({
         if (requestType == "post")
-            resp = RCurl::postForm(URL, json=json, style="post", curl=curl)
+            resp = RCurl::postForm(URL, json=json, style="post", curl=curl, .contentEncodeFun=RCurl::curlPercentEncode)
         else
             resp = RCurl::getForm(URL, json=json, curl=curl)
         resp = memDecompress(structure(resp, `Content-Type`=NULL), "gzip", asChar=TRUE)

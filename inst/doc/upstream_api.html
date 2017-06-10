@@ -7,181 +7,429 @@ package; i.e. what requests must a server respond to if it is to work
 with this package.</p>
 <h2>
 <a id="user-content-api-calls" class="anchor" href="#api-calls" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API calls</h2>
+<h2>
+<a id="user-content-authenticate-user" class="anchor" href="#authenticate-user" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>authenticate user</h2>
+<p>authenticate_user (user, password)</p>
+<pre><code>  - user: username
+  - password: password (in cleartext)
+</code></pre>
+<ul>
+<li>returns a list with these items:
+<ul>
+<li>token: character string; 264 random bits, base64-encoded</li>
+<li>expiry: numeric timestamp of expiry for token</li>
+<li>userID: integer motus ID for user</li>
+<li>projects: integer vector of project #s user is allowed to request tag detections for</li>
+<li>receivers: character vector of serial #s of receivers user is allowed to request tag detections for</li>
+</ul>
+</li>
+</ul>
+<p>or</p>
+<ul>
+<li>a list with this item:
+<ul>
+<li>error: "authentication failed"</li>
+</ul>
+</li>
+</ul>
 <h3>
-<a id="user-content-get-batches-by-tag-project" class="anchor" href="#get-batches-by-tag-project" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>get batches by tag project</h3>
-<p>batches_for_tag_project (P, TS)</p>
-<pre><code>   - P: integer project ID
-   - TS: numeric timestamp
+<a id="user-content-notes" class="anchor" href="#notes" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Notes</h3>
+<ol>
+<li>
+<p>The token returned by this API must be included in all other API
+calls as a parameter called <code>authToken</code>.  This is not shown in the
+prototypes below.</p>
+</li>
+<li>
+<p>Authorization is by project: if a user has permission for a
+project, then that user can see:</p>
+<ul>
+<li>
+<p>all batches, runs, and hits for receiver deployments by that project</p>
+</li>
+<li>
+<p>all runs and hits for tag deployments by that project</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>Calls where no authorized data are available return an appropriate
+data.frame with zero rows.</p>
+<p>"Ownership" of detections follows these assumptions:</p>
+<ul>
+<li>
+<p>tag runs nest within tag deployments:  either all or none of the detections of a tag
+run belong to a given tag deployment; i.e. we assume the tag is deactivated
+for at least ~ 20 minutes between deployments under <strong>different</strong> projects.</p>
+</li>
+<li>
+<p>batches nest within receiver deployments:  either all or none of the detections in a
+batch belong to a given receiver deployment; i.e. we assume the receiver is
+rebooted at least once between deployments under <strong>different</strong> projects.</p>
+</li>
+</ul>
+<p>These assumptions allow for simpler, more efficient database queries.</p>
+<h3>
+<a id="user-content-batches_for_tag_project-projectid-ts" class="anchor" href="#batches_for_tag_project-projectid-ts" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>batches_for_tag_project (projectID, ts)</h3>
+<pre><code>   - projectID: integer project ID
+   - ts: numeric timestamp
 </code></pre>
 <ul>
 <li>
-<p>return a list of all batches with detections of tags in project P,
-where the tsSG of the batch is &gt;= TS</p>
+<p>return a list of all batches with detections of tags in project <code>projectID</code>,
+where the processing timestamp of the batch is &gt; <code>ts</code></p>
 </li>
 <li>
-<p>columns in the return value should include these fields (as they exist in the transfer
+<p>items in the return value are vectors (as they exist in the transfer
 tables):</p>
 <ul>
 <li>batchID</li>
-<li>motusDeviceID</li>
+<li>deviceID</li>
 <li>monoBN</li>
 <li>tsBegin</li>
 <li>tsEnd</li>
 <li>numHits</li>
-</ul>
-</li>
-</ul>
-<h3>
-<a id="user-content-get-batches-by-receiver-project" class="anchor" href="#get-batches-by-receiver-project" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>get batches by receiver project</h3>
-<p>batches_for_receiver_project (P, TS)</p>
-<pre><code>   - P: integer project ID
-   - TS: numeric timestamp
-</code></pre>
-<ul>
-<li>
-<p>return a list of all batches from receivers in project P,
-where the tsSG of the batch is &gt;= TS</p>
-</li>
-<li>
-<p>columns should include these fields (as they exist in the transfer
-tables):</p>
-<ul>
-<li>batchID</li>
-<li>motusDeviceID</li>
-<li>monoBN</li>
-<li>tsBegin</li>
-<li>tsEnd</li>
-<li>numHits</li>
-</ul>
-</li>
-</ul>
-<h3>
-<a id="user-content-get-runs-by-tag-project-from-given-batch" class="anchor" href="#get-runs-by-tag-project-from-given-batch" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>get runs by tag project from given batch</h3>
-<p>runs_for_tag_project (P, B)</p>
-<pre><code>   - P: integer project ID
-   - B: integer batch ID
-</code></pre>
-<ul>
-<li>
-<p>return a list of all runs of a tag in project P, from the batch
-with ID = B</p>
-</li>
-<li>
-<p>columns should include these fields (as they exist in the transfer
-tables):</p>
-<ul>
-<li>runID</li>
-<li>batchIDbegin</li>
-<li>batchIDend</li>
-<li>motusTagID</li>
-<li>ant</li>
-<li>len</li>
-</ul>
-</li>
-</ul>
-<h3>
-<a id="user-content-get-all-runs-from-given-batch" class="anchor" href="#get-all-runs-from-given-batch" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>get all runs from given batch</h3>
-<p>This would be called when building a copy of the receiver database; in
-that case, all runs, regardless of tag project, would be provided.</p>
-<p>runs_for_batch (B)</p>
-<pre><code>   - B: integer batch ID
-</code></pre>
-<ul>
-<li>
-<p>return a list of all runs from the batch with ID = B</p>
-</li>
-<li>
-<p>columns should include these fields (as they exist in the transfer
-tables):</p>
-<ul>
-<li>runID</li>
-<li>batchIDbegin</li>
-<li>batchIDend</li>
-<li>motusTagID</li>
-<li>ant</li>
-<li>len</li>
-</ul>
-</li>
-</ul>
-<p>Paging for this query is achieved by using the last returned value of <code>hitID</code>
-as <code>H</code> on subsequent calls.</p>
-<h3>
-<a id="user-content-get-all-hits-by-tag-project-from-given-batch" class="anchor" href="#get-all-hits-by-tag-project-from-given-batch" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>get all hits by tag project from given batch</h3>
-<p>hits_for_tag_project_in_batch (P, B, H)</p>
-<pre><code>   - P: integer project ID
-   - B: integer batchID
-   - H: integer largest hitID we *already* have
-</code></pre>
-<ul>
-<li>
-<p>return a list of all hits on tags in project P which are in batch B,
-and whose hit ID is &gt; H</p>
-</li>
-<li>
-<p>columns should include these fields (as they exist in the transfer
-tables):</p>
-<ul>
-<li>hitID</li>
-<li>runID</li>
-<li>batchID</li>
 <li>ts</li>
-<li>sig</li>
-<li>sigSD</li>
-<li>noise</li>
-<li>freq</li>
-<li>freqSD</li>
-<li>slop</li>
-<li>burstSlop</li>
 </ul>
 </li>
 </ul>
-<p>Paging for this query is achieved by using the last returned value of <code>hitID</code>
-as <code>H</code> on subsequent calls.</p>
-<h3>
-<a id="user-content-get-all-hits-from-given-batch" class="anchor" href="#get-all-hits-from-given-batch" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>get all hits from given batch</h3>
-<p>hits_in_batch (B, H)</p>
-<pre><code>    - B: integer batchID
-    - H: integer largest hitID we *already* have
-</code></pre>
-<ul>
-<li>
-<p>return a list of all hits in batch B whose hit ID is &gt; H</p>
-</li>
-<li>
-<p>columns should include these fields (as they exist in the transfer
-tables):</p>
-<ul>
-<li>hitID</li>
-<li>runID</li>
-<li>batchID</li>
-<li>ts</li>
-<li>sig</li>
-<li>sigSD</li>
-<li>noise</li>
-<li>freq</li>
-<li>freqSD</li>
-<li>slop</li>
-<li>burstSlop</li>
-</ul>
-</li>
-</ul>
-<h3>
-<a id="user-content-get-all-gps-fixes-from-a-given-batch" class="anchor" href="#get-all-gps-fixes-from-a-given-batch" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>get all GPS fixes from a given batch</h3>
-<p>Used when a receiver deployment is marked as 'mobile'.</p>
-<pre><code> gps_in_batch (B, TS)
-
-    - B: integer batchID
-    - TS: largest gps timestamp we *already* have
-
- - return all GPS fixes from batch B which are later than timestamp TS
-
- - columns should include these fields (as they exist in the transfer
-   tables):
-    - ts
-    - batchID (optional; this is just B)
-    - lat
-    - lon
-    - alt
-</code></pre>
 <p>Paging for this query is achieved by using the last returned value of <code>ts</code>
-as <code>TS</code> on subsequent calls.</p>
+as <code>ts</code> on subsequent calls.  When there are no further batches, the API
+returns an empty list.</p>
+<h3>
+<a id="user-content-batches_for_receiver_project-projectid-ts" class="anchor" href="#batches_for_receiver_project-projectid-ts" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>batches_for_receiver_project (projectID, ts)</h3>
+<pre><code>   - projectID: integer project ID
+   - ts: numeric timestamp
+</code></pre>
+<ul>
+<li>
+<p>return a list of all batches from receivers in project projectID,
+where the processing timestamp of the batch is &gt; <code>ts</code></p>
+</li>
+<li>
+<p>columns should include these fields (as they exist in the transfer
+tables):</p>
+<ul>
+<li>batchID</li>
+<li>deviceID</li>
+<li>monoBN</li>
+<li>tsBegin</li>
+<li>tsEnd</li>
+<li>numHits</li>
+<li>ts</li>
+</ul>
+</li>
+</ul>
+<p>Paging for this query is achieved by using the last returned value of <code>ts</code>
+as <code>ts</code> on subsequent calls.  When there are no further batches, the API
+returns an empty list.</p>
+<h3>
+<a id="user-content-runs_for_tag_project-projectid-batchid-runid" class="anchor" href="#runs_for_tag_project-projectid-batchid-runid" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>runs_for_tag_project (projectID, batchID, runID)</h3>
+<pre><code>   - projectID: integer project ID
+   - batchID: integer batch ID
+   - runID: integer largest run ID we *already* have from this batch and tag project
+</code></pre>
+<ul>
+<li>
+<p>return a list of all runs of a tag in project <code>projectID</code>, from batch
+<code>batchID</code> and with run ID &gt; <code>runID</code></p>
+</li>
+<li>
+<p>columns should include these fields (as they exist in the transfer
+tables):</p>
+<ul>
+<li>runID</li>
+<li>batchIDbegin</li>
+<li>batchIDend</li>
+<li>motusTagID</li>
+<li>ant</li>
+<li>len</li>
+</ul>
+</li>
+</ul>
+<p>Paging for this query is achieved by using the last returned value of <code>runID</code>
+as <code>runID</code> on subsequent calls.  When there are no further runs, the API
+returns an empty list.</p>
+<h3>
+<a id="user-content-runs_for_receiver_project-projectid-batchid-runid" class="anchor" href="#runs_for_receiver_project-projectid-batchid-runid" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>runs_for_receiver_project (projectID, batchID, runID)</h3>
+<pre><code>   - projectID: integer project ID; project receiver belongs to
+   - batchID: integer batch ID
+   - runID: integer largest runID we *already* have from this batch
+</code></pre>
+<ul>
+<li>
+<p>return a list of all runs from batch <code>batchID</code> with run ID &gt; <code>runID</code></p>
+</li>
+<li>
+<p>columns should include these fields (as they exist in the transfer
+tables):</p>
+<ul>
+<li>runID</li>
+<li>batchIDbegin</li>
+<li>batchIDend</li>
+<li>motusTagID</li>
+<li>ant</li>
+<li>len</li>
+</ul>
+</li>
+</ul>
+<p>Paging for this query is achieved by using the last returned value of <code>runID</code>
+as <code>runID</code> on subsequent calls.  When there are no further runs, the API
+returns an empty list.</p>
+<h3>
+<a id="user-content-hits_for_tag_project-projectid-batchid-hitid" class="anchor" href="#hits_for_tag_project-projectid-batchid-hitid" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>hits_for_tag_project (projectID, batchID, hitID)</h3>
+<pre><code>   - projectID: integer project ID
+   - batchID: integer batchID
+   - hitID: integer largest hitID we *already* have from this batch
+</code></pre>
+<ul>
+<li>
+<p>return a list of all hits on tags in project <code>projectID</code> which are in batch <code>batchID</code>,
+and whose hit ID is &gt; <code>hitID</code></p>
+</li>
+<li>
+<p>columns should include these fields (as they exist in the transfer
+tables):</p>
+<ul>
+<li>hitID</li>
+<li>runID</li>
+<li>batchID</li>
+<li>ts</li>
+<li>sig</li>
+<li>sigSD</li>
+<li>noise</li>
+<li>freq</li>
+<li>freqSD</li>
+<li>slop</li>
+<li>burstSlop</li>
+</ul>
+</li>
+</ul>
+<p>Paging for this query is achieved by using the last returned value of <code>hitID</code>
+as <code>hitID</code> on subsequent calls.  When there are no further hits, the API
+returns an empty list.</p>
+<h3>
+<a id="user-content-hits_for_receiver_project-projectid-batchid-hitid" class="anchor" href="#hits_for_receiver_project-projectid-batchid-hitid" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>hits_for_receiver_project (projectID, batchID, hitID)</h3>
+<pre><code>    - projectID; integer project ID of receiver deployment
+    - batchID: integer batchID
+    - hitID: integer largest hitID we *already* have from this batch
+</code></pre>
+<ul>
+<li>
+<p>return a list of all hits in batch <code>batchID</code> whose hit ID is &gt; <code>hitID</code></p>
+</li>
+<li>
+<p>columns should include these fields (as they exist in the transfer
+tables):</p>
+<ul>
+<li>hitID</li>
+<li>runID</li>
+<li>batchID</li>
+<li>ts</li>
+<li>sig</li>
+<li>sigSD</li>
+<li>noise</li>
+<li>freq</li>
+<li>freqSD</li>
+<li>slop</li>
+<li>burstSlop</li>
+</ul>
+</li>
+</ul>
+<p>Paging for this query is achieved by using the last returned value of <code>hitID</code>
+as <code>hitID</code> on subsequent calls.  When there are no further hits, the API
+returns an empty list.</p>
+<h3>
+<a id="user-content-gps_for_receiver_project-projectid-batchid-ts" class="anchor" href="#gps_for_receiver_project-projectid-batchid-ts" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>gps_for_receiver_project (projectID, batchID, ts)</h3>
+<pre><code>- projectID; integer project ID of receiver deployment
+- batchID: integer batchID
+- ts: largest gps timestamp we *already* have for this batch
+</code></pre>
+<ul>
+<li>
+<p>return all GPS fixes from batch batchID which are later than timestamp ts</p>
+</li>
+<li>
+<p>columns should include these fields (as they exist in the transfer
+tables):</p>
+<ul>
+<li>ts</li>
+<li>batchID (optional; this is just batchID)</li>
+<li>lat</li>
+<li>lon</li>
+<li>alt</li>
+</ul>
+</li>
+</ul>
+<p>Paging for this query is achieved by using the last returned value of <code>ts</code>
+as <code>ts</code> on subsequent calls.  When there are no further GPS fixes, the API
+returns an empty list.</p>
+<h3>
+<a id="user-content-gps_for_tag_project-projectid-batchid-ts" class="anchor" href="#gps_for_tag_project-projectid-batchid-ts" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>gps_for_tag_project (projectID, batchID, ts)</h3>
+<pre><code>- projectID; integer project ID of tags
+- batchID: integer batchID where tags from projectID were detected
+- ts: largest gps timestamp we *already* have for this batch
+</code></pre>
+<ul>
+<li>
+<p>return all GPS fixes from batch <code>batchID</code> which are later than
+timestamp ts and "near" detections of a tag deployment from
+project <code>projectID</code>.  This is done by hourly bins: the hourly
+bins of every run of detections of any tag from project
+<code>projectID</code> are noted, and all GPS fixes from any of these bins
+are returned.  An additional bin before the earliest and after
+the latest detection are added, to ensure temporal coverage.</p>
+</li>
+<li>
+<p>columns should include these fields (as they exist in the transfer
+tables):</p>
+<ul>
+<li>ts</li>
+<li>batchID (optional; this is just batchID)</li>
+<li>lat</li>
+<li>lon</li>
+<li>alt</li>
+</ul>
+</li>
+</ul>
+<p>Paging for this query is achieved by using the last returned value of <code>ts</code>
+as <code>ts</code> on subsequent calls.  When there are no further GPS fixes, the API
+returns an empty list.</p>
+<h3>
+<a id="user-content-metadata-for-tags-motustagids" class="anchor" href="#metadata-for-tags-motustagids" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>metadata for tags (motusTagIDs)</h3>
+<pre><code>- motusTagIDs: integer vector of motus tag IDs; tag metadata will
+  only be returned for tag deployments whose project has indicated
+  their metadata are public, or tags deployments by one of the
+  projects the user has permissions to.
+</code></pre>
+<ul>
+<li>
+<p>return a list with these items:</p>
+<ul>
+<li>
+<p>tags; a list with these columns:</p>
+<ul>
+<li>tagID; integer tag ID</li>
+<li>projectID; integer motus ID of project which <em>registered</em> tag</li>
+<li>mfgID; character manufacturer tag ID</li>
+<li>type; character  "ID" or "BEEPER"</li>
+<li>codeSet; character e.g. "Lotek3", "Lotek4"</li>
+<li>manufacturer; character e.g. "Lotek"</li>
+<li>model; character e.g. "NTQB-3-1"</li>
+<li>lifeSpan; integer estimated tag lifeSpan, in days</li>
+<li>nomFreq; numeric nominal frequency of tag, in MHz</li>
+<li>offsetFreq; numeric estimated offset frequency of tag, in kHz</li>
+<li>bi; numeric burst interval or period of tag, in seconds</li>
+<li>pulseLen; numeric length of tag pulses, in ms (not applicable to all tags)</li>
+</ul>
+</li>
+<li>
+<p>tagDeps; a list with these columns:</p>
+<ul>
+<li>tagID; integer motus tagID</li>
+<li>deployID; integer tag deployment ID (internal to motus)</li>
+<li>projectID; integer motus ID of project which <em>deployed</em> tag</li>
+<li>tsStart; numeric timestamp of start of deployment</li>
+<li>tsEnd; numeric timestamp of end of deployment</li>
+<li>deferSec; integer deferred activation period, in seconds (0 for most tags).</li>
+<li>speciesID; integer motus species ID code</li>
+<li>markerType; character type of marker on organism; e.g. leg band</li>
+<li>markerNumber; character details of marker; e.g. leg band code</li>
+<li>latitude; numeric deployment location, degrees N (negative is S)</li>
+<li>longitude; numeric deployment location, degrees E (negative is W)</li>
+<li>elevation; numeric deployment location, metres ASL</li>
+<li>comments; character possibly JSON-formatted list of additional metadata</li>
+</ul>
+</li>
+<li>
+<p>species; a list with these columns:</p>
+<ul>
+<li>id; integer species ID,</li>
+<li>english; character; English species name</li>
+<li>french; character; French species name</li>
+<li>scientific; character; scientific species name</li>
+<li>group; character; higher-level taxon</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>);</p>
+<h3>
+<a id="user-content-metadata-for-receivers-deviceids" class="anchor" href="#metadata-for-receivers-deviceids" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>metadata for receivers (deviceIDs)</h3>
+<pre><code>- deviceID; integer device ID; receiver metadata will only be
+  returned for receivers whose project has indicated their
+  metadata are public, or receivers in one of the projects the
+  user has permissions to.
+</code></pre>
+<ul>
+<li>
+<p>return a list with these items:</p>
+<ul>
+<li>
+<p>recvDeps; a list with these columns:</p>
+<ul>
+<li>deployID; integer deployment ID (internal to motus, but links to antDeps)</li>
+<li>projectID; integer ID of project that deployed the receiver</li>
+<li>serno; character serial number, e.g. "SG-1214BBBK3999", "Lotek-8681"</li>
+<li>receiverType; character "SENSORGNOME" or "LOTEK"</li>
+<li>deviceID; integer device ID (internal to motus)</li>
+<li>status; character deployment status</li>
+<li>name; character; typically a site name</li>
+<li>fixtureType; character; what is the receiver mounted on?</li>
+<li>latitude; numeric (initial) location, degrees North</li>
+<li>longitude; numeric (initial) location, degrees East</li>
+<li>elevation; numeric (initial) location, metres ASL</li>
+<li>isMobile; integer non-zero means a mobile deployment</li>
+<li>tsStart; numeric; timestamp of deployment start</li>
+<li>tsEnd; numeric; timestamp of deployment end, or NA if ongoing</li>
+</ul>
+</li>
+<li>
+<p>antDeps; a list with these columns:</p>
+<ul>
+<li>deployID; integer, links to deployID in recvDeps table</li>
+<li>port; integer, which receiver port (USB for SGs, BNC for
+Lotek) the antenna is connected to</li>
+<li>antennaType; character; e.g. "Yagi-5", "omni"</li>
+<li>bearing; numeric compass angle at which antenna is pointing; degrees clockwise from
+magnetic north</li>
+<li>heightMeters; numeric height of main antenna element above ground</li>
+<li>cableLengthMeters; numeric length of coaxial cable from antenna to receiver, in metres</li>
+<li>cableType: character; type of cable; e.g. "RG-58"</li>
+<li>mountDistanceMeters; numeric distance of mounting point from receiver, in metres</li>
+<li>mountBearing; numeric compass angle from receiver to antenna mount; degrees clockwise from
+magnetic north</li>
+<li>polarization2; numeric angle giving tilt from "normal" position, in degrees</li>
+<li>polarization1; numeric angle giving rotation of antenna about own axis, in degrees.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3>
+<a id="user-content-tags-for-ambiguities" class="anchor" href="#tags-for-ambiguities" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>tags for ambiguities</h3>
+<pre><code>- ambigIDs; integer tag ambiguity IDs; this a vector of negative
+  integers, each representing 2 to 6 tags for which detections are
+  indistinguishable over some period of time; i.e. a detection of
+  the given ambigID could represent any of the motus tagIDs.  (6 is
+  an implementation limit, not a conceptual one.)
+</code></pre>
+<ul>
+<li>
+<p>return a list with these vector items:</p>
+<ul>
+<li>ambigID; negative integer tag ambiguity ID</li>
+<li>motusTagID1; positive integer motus tag ID</li>
+<li>motusTagID2; positive integer motus tag ID</li>
+<li>motusTagID3; positive integer motus tag ID or null</li>
+<li>motusTagID4; positive integer motus tag ID or null</li>
+<li>motusTagID5; positive integer motus tag ID or null</li>
+<li>motusTagID6; positive integer motus tag ID or null</li>
+</ul>
+<p>i.e. return what real tags each ambiguityID represents.
+If motusTagID<code>M</code>[i] is null, then motusTagID<code>N</code>[i] is also null for
+<code>N</code> &gt; <code>M</code> and <code>N</code> &lt;= 6; i.e. non-null values precede null values
+for each ambiguity.</p>
+</li>
+</ul>

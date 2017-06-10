@@ -7,8 +7,6 @@
 srvMetadataForTags(projectID, motusTagIDs)
 }
 \arguments{
-\item{projectID}{integer scalar motus tag project ID}
-
 \item{motusTagIDs}{integer vector of motus tag IDs}
 }
 \value{
@@ -17,7 +15,7 @@ a list with these items:
 \item tags; a data.frame with these columns:
 \itemize{
 \item tagID; integer tag ID
-\item projectID; integer project ID (who registered the tag)
+\item projectID; integer motus ID of project that registered the tag
 \item mfgID; character manufacturer tag ID
 \item type; character  "ID" or "BEEPER"
 \item codeSet; character e.g. "Lotek3", "Lotek4"
@@ -33,7 +31,7 @@ a list with these items:
 \itemize{
 \item tagID; integer motus tagID
 \item deployID; integer tag deployment ID (internal to motus)
-\item projectID; integer motus ID of project deploying tag
+\item projectID; integer motus ID of project that deployed the tag
 \item tsStart; numeric timestamp of start of deployment
 \item tsEnd; numeric timestamp of end of deployment
 \item deferSec; integer deferred activation period, in seconds (0 for most tags).

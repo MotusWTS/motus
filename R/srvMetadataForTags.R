@@ -4,8 +4,6 @@
 #' deployments the user has project permissions to, or which have
 #' made their tag metadata public.
 #'
-#' @param projectID integer scalar motus tag project ID
-#'
 #' @param motusTagIDs integer vector of motus tag IDs
 #'
 #' @return a list with these items:
@@ -13,7 +11,7 @@
 #' \item tags; a data.frame with these columns:
 #' \itemize{
 #' \item tagID; integer tag ID
-#' \item projectID; integer project ID (who registered the tag)
+#' \item projectID; integer motus ID of project that registered the tag
 #' \item mfgID; character manufacturer tag ID
 #' \item type; character  "ID" or "BEEPER"
 #' \item codeSet; character e.g. "Lotek3", "Lotek4"
@@ -29,7 +27,7 @@
 #' \itemize{
 #' \item tagID; integer motus tagID
 #' \item deployID; integer tag deployment ID (internal to motus)
-#' \item projectID; integer motus ID of project deploying tag
+#' \item projectID; integer motus ID of project that deployed the tag
 #' \item tsStart; numeric timestamp of start of deployment
 #' \item tsEnd; numeric timestamp of end of deployment
 #' \item deferSec; integer deferred activation period, in seconds (0 for most tags).
@@ -56,10 +54,10 @@
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 srvMetadataForTags = function(projectID, motusTagIDs) {
-    x = srvQuery(API=Motus$API_METADATA_FOR_TAGS, params=list(projectID=projectID, motusTagIDs=motusTagIDs))
+    x = srvQuery(API=Motus$API_METADATA_FOR_TAGS, params=list(motusTagIDs=motusTagIDs))
     return (list(
-        tags = structure(x[[1]], class = "data.frame", row.names=seq(along=x[[1]][[1]])),
-        tagDeps = structure(x[[2]], class = "data.frame", row.names=seq(along=x[[2]][[1]])),
-        species = structure(x[[3]], class = "data.frame", row.names=seq(along=x[[3]][[1]]))
+        tags = structure(x$tags, class = "data.frame", row.names=seq(along=x$tags[[1]])),
+        tagDeps = structure(x$tagDeps, class = "data.frame", row.names=seq(along=x$tagDeps[[1]])),
+        species = structure(x$species, class = "data.frame", row.names=seq(along=x$species[[1]]))
     ))
 }

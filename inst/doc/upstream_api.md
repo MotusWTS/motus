@@ -67,7 +67,7 @@ These assumptions allow for simpler, more efficient database queries.
    - items in the return value are vectors (as they exist in the transfer
      tables):
       - batchID
-      - motusDeviceID
+      - deviceID
       - monoBN
       - tsBegin
       - tsEnd
@@ -89,7 +89,7 @@ returns an empty list.
    - columns should include these fields (as they exist in the transfer
      tables):
       - batchID
-      - motusDeviceID
+      - deviceID
       - monoBN
       - tsBegin
       - tsEnd
@@ -242,9 +242,7 @@ Paging for this query is achieved by using the last returned value of `ts`
 as `ts` on subsequent calls.  When there are no further GPS fixes, the API
 returns an empty list.
 
-### metadata for tags (projectID, motusTagIDs) ###
-
-    - projectID; integer project ID user belongs to
+### metadata for tags (motusTagIDs) ###
 
     - motusTagIDs: integer vector of motus tag IDs; tag metadata will
       only be returned for tag deployments whose project has indicated
@@ -255,7 +253,7 @@ returns an empty list.
 
       - tags; a list with these columns:
          - tagID; integer tag ID
-         - projectID; integer project ID (who registered the tag)
+         - projectID; integer motus ID of project which *registered* tag
          - mfgID; character manufacturer tag ID
          - type; character  "ID" or "BEEPER"
          - codeSet; character e.g. "Lotek3", "Lotek4"
@@ -270,7 +268,7 @@ returns an empty list.
       - tagDeps; a list with these columns:
          - tagID; integer motus tagID
          - deployID; integer tag deployment ID (internal to motus)
-         - projectID; integer motus ID of project deploying tag
+         - projectID; integer motus ID of project which *deployed* tag
          - tsStart; numeric timestamp of start of deployment
          - tsEnd; numeric timestamp of end of deployment
          - deferSec; integer deferred activation period, in seconds (0 for most tags).
@@ -291,14 +289,12 @@ returns an empty list.
 
 );
 
-### metadata for receiver (projectID, deviceID) ###
+### metadata for receivers (deviceIDs) ###
 
-    - projectID; integer project ID user belongs to
-
-    - deviceID; integer device ID; receiver metadata will
-      only be returned for receivers whose project has
-      indicated their metadata are public, or receivers in one
-      of the projects the user has permissions to.
+    - deviceID; integer device ID; receiver metadata will only be
+      returned for receivers whose project has indicated their
+      metadata are public, or receivers in one of the projects the
+      user has permissions to.
 
    - return a list with these items:
 
@@ -333,3 +329,25 @@ returns an empty list.
            magnetic north
          - polarization2; numeric angle giving tilt from "normal" position, in degrees
          - polarization1; numeric angle giving rotation of antenna about own axis, in degrees.
+
+### tags for ambiguities ###
+
+    - ambigIDs; integer tag ambiguity IDs; this a vector of negative
+      integers, each representing 2 to 6 tags for which detections are
+      indistinguishable over some period of time; i.e. a detection of
+      the given ambigID could represent any of the motus tagIDs.  (6 is
+      an implementation limit, not a conceptual one.)
+
+   - return a list with these vector items:
+      - ambigID; negative integer tag ambiguity ID
+      - motusTagID1; positive integer motus tag ID
+      - motusTagID2; positive integer motus tag ID
+      - motusTagID3; positive integer motus tag ID or null
+      - motusTagID4; positive integer motus tag ID or null
+      - motusTagID5; positive integer motus tag ID or null
+      - motusTagID6; positive integer motus tag ID or null
+
+      i.e. return what real tags each ambiguityID represents.
+      If motusTagID`M`[i] is null, then motusTagID`N`[i] is also null for
+      `N` > `M` and `N` <= 6; i.e. non-null values precede null values
+      for each ambiguity.

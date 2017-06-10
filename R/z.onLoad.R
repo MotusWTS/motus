@@ -13,8 +13,10 @@
 #' \item{API_BATCHES_FOR_TAG_PROJECT}{URL to call for getting batches for a tag project}
 #' \item{API_BATCHES_FOR_RECEIVER_PROJECT}{URL to call for getting batches for a receiver project}
 #' \item{API_GPS_FOR_TAG_PROJECT}{URL to call for getting GPS fixes for a tag project}
-#' \item{API_GPS_FOR_RECEIVER_PROJECT}{{URL to call for getting GPS fixes for a receiver project}
-#'
+#' \item{API_GPS_FOR_RECEIVER_PROJECT}{URL to call for getting GPS fixes for a receiver project}
+#' \item{API_METADATA_FOR_TAGS}{URL to call for getting metadata for tags}
+#' \item{API_METADATA_FOR_RECEIVERS}{URL to call for getting metadata for receivers}
+#' \item{API_TAGS_FOR_AMBIGIUITIES}{URL to call for getting motus tagIDs represented by an ambiguity ID}
 #' \item{FLOAT_FIELDS}{list of API fieldnames requiring floating point values}
 #' \item{FLOAT_REGEX}{regex to recognize fields requiring fixups in API queries}
 #' }
@@ -63,6 +65,8 @@
         API_GPS_FOR_TAG_PROJECT           = "custom/gps_for_tag_project"
         API_GPS_FOR_RECEIVER_PROJECT      = "custom/gps_for_receiver_project"
         API_METADATA_FOR_TAGS             = "custom/metadata_for_tags"
+        API_METADATA_FOR_RECEIVERS        = "custom/metadata_for_receivers"
+        API_TAGS_FOR_AMBIGUITIES          = "custom/tags_for_ambiguities"
 
         ## a list of field names which must be formatted as floats so that the
         ## motus API recognizes them correctly.  This means that if they happen
