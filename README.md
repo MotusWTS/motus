@@ -19,6 +19,11 @@ from R by doing:
 
 ## What's working so far:
 
+### 2017 Jun 10
+
+- srvTagsForAmbiguities()
+- srvMetadataForReceivers()
+
 ### 2017 Jun 8
 
 - srvGPSforTagProject()
