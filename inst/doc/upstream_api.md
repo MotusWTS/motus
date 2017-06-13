@@ -31,8 +31,7 @@ with this package.
 ### Notes ###
 
 1. The token returned by this API must be included in all other API
-calls as a parameter called `authToken`.  This is not shown in the
-prototypes below.
+calls as the parameter called `authToken`.
 
 2. Authorization is by project: if a user has permission for a
 project, then that user can see:
@@ -56,10 +55,12 @@ rebooted at least once between deployments under **different** projects.
 
 These assumptions allow for simpler, more efficient database queries.
 
-### batches_for_tag_project (projectID, ts) ###
+### batches_for_tag_project (projectID, ts, authToken, countOnly) ###
 
        - projectID: integer project ID
        - ts: numeric timestamp
+       - authToken: authorization token returned by authenticate_user
+       - countOnly: boolean; if TRUE, only return the number of available records, as field `count`
 
    - return a list of all batches with detections of tags in project `projectID`,
      where the processing timestamp of the batch is > `ts`
@@ -78,10 +79,12 @@ Paging for this query is achieved by using the last returned value of `ts`
 as `ts` on subsequent calls.  When there are no further batches, the API
 returns an empty list.
 
-### batches_for_receiver_project (projectID, ts) ###
+### batches_for_receiver_project (projectID, ts, authToken, countOnly) ###
 
        - projectID: integer project ID
        - ts: numeric timestamp
+       - authToken: authorization token returned by authenticate_user
+       - countOnly: boolean; if TRUE, only return the number of available records, as field `count`
 
    - return a list of all batches from receivers in project projectID,
      where the processing timestamp of the batch is > `ts`
@@ -100,11 +103,13 @@ Paging for this query is achieved by using the last returned value of `ts`
 as `ts` on subsequent calls.  When there are no further batches, the API
 returns an empty list.
 
-### runs_for_tag_project (projectID, batchID, runID) ###
+### runs_for_tag_project (projectID, batchID, runID, authToken, countOnly) ###
 
        - projectID: integer project ID
        - batchID: integer batch ID
        - runID: integer largest run ID we *already* have from this batch and tag project
+       - authToken: authorization token returned by authenticate_user
+       - countOnly: boolean; if TRUE, only return the number of available records, as field `count`
 
    - return a list of all runs of a tag in project `projectID`, from batch
      `batchID` and with run ID > `runID`
@@ -122,11 +127,13 @@ Paging for this query is achieved by using the last returned value of `runID`
 as `runID` on subsequent calls.  When there are no further runs, the API
 returns an empty list.
 
-### runs_for_receiver_project (projectID, batchID, runID) ###
+### runs_for_receiver_project (projectID, batchID, runID, authToken, countOnly) ###
 
        - projectID: integer project ID; project receiver belongs to
        - batchID: integer batch ID
        - runID: integer largest runID we *already* have from this batch
+       - authToken: authorization token returned by authenticate_user
+       - countOnly: boolean; if TRUE, only return the number of available records, as field `count`
 
    - return a list of all runs from batch `batchID` with run ID > `runID`
 
@@ -143,11 +150,13 @@ Paging for this query is achieved by using the last returned value of `runID`
 as `runID` on subsequent calls.  When there are no further runs, the API
 returns an empty list.
 
-### hits_for_tag_project (projectID, batchID, hitID) ###
+### hits_for_tag_project (projectID, batchID, hitID, authToken, countOnly) ###
 
        - projectID: integer project ID
        - batchID: integer batchID
        - hitID: integer largest hitID we *already* have from this batch
+       - authToken: authorization token returned by authenticate_user
+       - countOnly: boolean; if TRUE, only return the number of available records, as field `count`
 
    - return a list of all hits on tags in project `projectID` which are in batch `batchID`,
      and whose hit ID is > `hitID`
@@ -170,11 +179,13 @@ Paging for this query is achieved by using the last returned value of `hitID`
 as `hitID` on subsequent calls.  When there are no further hits, the API
 returns an empty list.
 
-### hits_for_receiver_project (projectID, batchID, hitID) ###
+### hits_for_receiver_project (projectID, batchID, hitID, authToken, countOnly) ###
 
-        - projectID; integer project ID of receiver deployment
-        - batchID: integer batchID
-        - hitID: integer largest hitID we *already* have from this batch
+       - projectID; integer project ID of receiver deployment
+       - batchID: integer batchID
+       - hitID: integer largest hitID we *already* have from this batch
+       - authToken: authorization token returned by authenticate_user
+       - countOnly: boolean; if TRUE, only return the number of available records, as field `count`
 
    - return a list of all hits in batch `batchID` whose hit ID is > `hitID`
 
@@ -196,11 +207,13 @@ Paging for this query is achieved by using the last returned value of `hitID`
 as `hitID` on subsequent calls.  When there are no further hits, the API
 returns an empty list.
 
-### gps_for_receiver_project (projectID, batchID, ts) ###
+### gps_for_receiver_project (projectID, batchID, ts, authToken, countOnly) ###
 
     - projectID; integer project ID of receiver deployment
     - batchID: integer batchID
     - ts: largest gps timestamp we *already* have for this batch
+    - authToken: authorization token returned by authenticate_user
+    - countOnly: boolean; if TRUE, only return the number of available records, as field `count`
 
    - return all GPS fixes from batch batchID which are later than timestamp ts
 
@@ -216,11 +229,13 @@ Paging for this query is achieved by using the last returned value of `ts`
 as `ts` on subsequent calls.  When there are no further GPS fixes, the API
 returns an empty list.
 
-### gps_for_tag_project (projectID, batchID, ts) ###
+### gps_for_tag_project (projectID, batchID, ts, authToken, countOnly) ###
 
     - projectID; integer project ID of tags
     - batchID: integer batchID where tags from projectID were detected
     - ts: largest gps timestamp we *already* have for this batch
+    - authToken: authorization token returned by authenticate_user
+    - countOnly: boolean; if TRUE, only return the number of available records, as field `count`
 
    - return all GPS fixes from batch `batchID` which are later than
      timestamp ts and "near" detections of a tag deployment from
@@ -242,12 +257,13 @@ Paging for this query is achieved by using the last returned value of `ts`
 as `ts` on subsequent calls.  When there are no further GPS fixes, the API
 returns an empty list.
 
-### metadata for tags (motusTagIDs) ###
+### metadata for tags (motusTagIDs, authToken, countOnly) ###
 
     - motusTagIDs: integer vector of motus tag IDs; tag metadata will
       only be returned for tag deployments whose project has indicated
       their metadata are public, or tags deployments by one of the
       projects the user has permissions to.
+    - authToken: authorization token returned by authenticate_user
 
    - return a list with these items:
 
@@ -289,12 +305,13 @@ returns an empty list.
 
 );
 
-### metadata for receivers (deviceIDs) ###
+### metadata for receivers (deviceIDs, authToken, countOnly) ###
 
     - deviceID; integer device ID; receiver metadata will only be
       returned for receivers whose project has indicated their
       metadata are public, or receivers in one of the projects the
       user has permissions to.
+    - authToken: authorization token returned by authenticate_user
 
    - return a list with these items:
 
@@ -330,13 +347,14 @@ returns an empty list.
          - polarization2; numeric angle giving tilt from "normal" position, in degrees
          - polarization1; numeric angle giving rotation of antenna about own axis, in degrees.
 
-### tags for ambiguities ###
+### tags for ambiguities (ambigIDs, authToken, countOnly) ###
 
     - ambigIDs; integer tag ambiguity IDs; this a vector of negative
       integers, each representing 2 to 6 tags for which detections are
       indistinguishable over some period of time; i.e. a detection of
       the given ambigID could represent any of the motus tagIDs.  (6 is
       an implementation limit, not a conceptual one.)
+    - authToken: authorization token returned by authenticate_user
 
    - return a list with these vector items:
       - ambigID; negative integer tag ambiguity ID
