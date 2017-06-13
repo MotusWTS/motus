@@ -366,6 +366,6 @@ returns an empty list.
       - motusTagID6; positive integer motus tag ID or null
 
       i.e. return what real tags each ambiguityID represents.
-      If motusTagID`M`[i] is null, then motusTagID`N`[i] is also null for
-      `N` > `M` and `N` <= 6; i.e. non-null values precede null values
+      If `motusTagIDM[i]` is null, then `motusTagIDN[i]` is also null for
+      `N` > `M` and `N <= 6`; i.e. non-null values precede null values
       for each ambiguity.
