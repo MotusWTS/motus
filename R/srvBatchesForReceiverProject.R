@@ -3,6 +3,8 @@
 #' @param projectID integer scalar motus project ID
 #' @param ts real scalar processing timestamp of latest batch already owned
 #' Default: 0, meaning none.
+#' @param countOnly logical; if TRUE, return only the cound of available batches.
+#' Default: FALSE.
 #'
 #' @return data.frame with these columns:
 #' \itemize{
@@ -19,7 +21,10 @@
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
-srvBatchesForReceiverProject = function(projectID, ts=0) {
-    x = srvQuery(API=Motus$API_BATCHES_FOR_RECEIVER_PROJECT, params=list(projectID=projectID, ts=ts))
-    return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
+srvBatchesForReceiverProject = function(projectID, ts=0, countOnly=FALSE) {
+    x = srvQuery(API=Motus$API_BATCHES_FOR_RECEIVER_PROJECT, params=list(projectID=projectID, ts=ts, countOnly=countOnly))
+    if (countOnly)
+        return (x$count)
+    else
+        return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
 }

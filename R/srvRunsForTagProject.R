@@ -4,6 +4,8 @@
 #' @param batchID integer scalar motus batch ID
 #' @param runID integer scalar ID of latest run already obtained.
 #' Default: 0, meaning none.
+#' @param countOnly logical; if TRUE, return only the cound of available batches.
+#' Default: FALSE.
 #'
 #' @return data.frame with these columns:
 #' \itemize{
@@ -19,7 +21,10 @@
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
-srvRunsForTagProject = function(projectID, batchID, runID=0) {
-    x = srvQuery(API=Motus$API_RUNS_FOR_TAG_PROJECT, params=list(projectID=projectID, batchID=batchID, runID=runID))
-    return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
+srvRunsForTagProject = function(projectID, batchID, runID=0, countOnly=FALSE) {
+    x = srvQuery(API=Motus$API_RUNS_FOR_TAG_PROJECT, params=list(projectID=projectID, batchID=batchID, runID=runID, countOnly=countOnly))
+    if (countOnly)
+        return (x$count)
+    else
+        return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
 }

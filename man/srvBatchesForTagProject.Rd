@@ -4,13 +4,16 @@
 \alias{srvBatchesForTagProject}
 \title{get the batches for a tag project from the data server}
 \usage{
-srvBatchesForTagProject(projectID, ts = 0)
+srvBatchesForTagProject(projectID, ts = 0, countOnly = FALSE)
 }
 \arguments{
 \item{projectID}{integer scalar motus project ID}
 
 \item{ts}{real scalar processing timestamp of latest batch already owned
 Default: 0, meaning none.}
+
+\item{countOnly}{logical; if TRUE, return only the cound of available batches.
+Default: FALSE.}
 }
 \value{
 data.frame with these columns:

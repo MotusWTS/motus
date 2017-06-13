@@ -4,7 +4,7 @@
 \alias{srvGPSforReceiverProject}
 \title{get the GPS fixes for a receiver project from the data server}
 \usage{
-srvGPSforReceiverProject(projectID, batchID, ts = 0)
+srvGPSforReceiverProject(projectID, batchID, ts = 0, countOnly = FALSE)
 }
 \arguments{
 \item{projectID}{integer scalar motus project ID}
@@ -13,6 +13,9 @@ srvGPSforReceiverProject(projectID, batchID, ts = 0)
 
 \item{ts}{real scalar processing timestamp of latest fix already owned
 Default: 0, meaning none.}
+
+\item{countOnly}{logical; if TRUE, return only the cound of available batches.
+Default: FALSE.}
 }
 \value{
 data.frame with these columns:
