@@ -367,5 +367,5 @@ returns an empty list.
 
       i.e. return what real tags each ambiguityID represents.
       If `motusTagIDM[i]` is null, then `motusTagIDN[i]` is also null for
-      `N` > `M` and `N <= 6`; i.e. non-null values precede null values
+      `M < N <= 6`; i.e. non-null values precede null values
       for each ambiguity.

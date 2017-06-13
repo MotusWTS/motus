@@ -58,7 +58,7 @@ tag databases of both kinds.  Here's how it works:
 
 ```R
 # create and open a local tag database for motus project 14 in the
-# current directory
+# current directory, but do not fetch any data for it.
 
 tagme(proj=14, new=TRUE)
 
