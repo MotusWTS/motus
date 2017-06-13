@@ -27,7 +27,14 @@
 
 srvQuery = function (API, params = NULL, requestType="post", show=FALSE, JSON=FALSE, auth=TRUE) {
     curl = RCurl::getCurlHandle()
-    RCurl::curlSetOpt(.opts=list(verbose=0, header=0, failonerror=0), curl=curl)
+    RCurl::curlSetOpt(curl=curl,
+                      .opts = list(
+                          httpheader = c(
+                              "Content-Type"="application/json",
+                              "Accept"="application/json"),
+                          timeout = 20,
+                          verbose = FALSE)
+                      )
     # params is a named list of parameters which will be passed along in the JSON query
 
     ## query object for getting project list
