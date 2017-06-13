@@ -65,17 +65,21 @@ tagme(proj=14, new=TRUE)
 # update and open the local tag database for motus project 14;
 # it must already exist and be in the current directory
 
-tagme(proj=14, update=TRUE)
+tagme(proj=14)
 
 # update and open the local tag database for a receiver;
 # it must already exist and be in the current directory
 
-tagme(recv="SG-1234BBBK4567", update=TRUE)
+tagme(recv="SG-1234BBBK4567")
 
 # open the local tag database for a receiver, without
 # updating it
 
-tagme(recv="SG-1234BBBK4567")
+tagme(recv="SG-1234BBBK4567", update=FALSE)
+
+# update all existing local tag or receiver databases
+
+tagme()
 
 ```
 Each of these functions returns a `dplyr::src_sqlite` that refers to the
