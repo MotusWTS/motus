@@ -26,7 +26,7 @@
 #' \describe{
 #' \item{userLogin}{login name for user at motus.org}
 #' \item{userPassword}{password for user at motus.org}
-#' \item{myProjects}{project IDs for user at motus.org}
+#' \item{projects}{project IDs for user at motus.org}
 #' \item{dataServerURL}{URL to data server}
 #' }
 #'
@@ -107,6 +107,6 @@
 
     with(Motus,
     {
-        myProjects = integer(0)  ## vector of projectIDs to which user has access
+        projects = integer(0)  ## vector of projectIDs to which user has access
     })
 }

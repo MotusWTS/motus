@@ -16,7 +16,7 @@
 srvAuth = function() {
     res = srvQuery(Motus$API_DATA_AUTHENTICATE, list(user=Motus$userLogin, password=Motus$userPassword), auth=FALSE)
     if (is.null(res$error)) {
-        Motus$groups = res$groups
+        Motus$projects = res$projects
         return(res$token)
     } else {
         stop("Login with data server failed.  You can try again after resetting your credentials\n",
