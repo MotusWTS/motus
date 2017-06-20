@@ -60,22 +60,22 @@ tag databases of both kinds.  Here's how it works:
 # create and open a local tag database for motus project 14 in the
 # current directory, but do not fetch any data for it.
 
-tagme(proj=14, new=TRUE)
+tagme(14, new=TRUE)
 
 # update and open the local tag database for motus project 14;
 # it must already exist and be in the current directory
 
-tagme(proj=14)
+tagme(14)
 
 # update and open the local tag database for a receiver;
 # it must already exist and be in the current directory
 
-tagme(recv="SG-1234BBBK4567")
+tagme("SG-1234BBBK4567")
 
 # open the local tag database for a receiver, without
 # updating it
 
-tagme(recv="SG-1234BBBK4567", update=FALSE)
+tagme("SG-1234BBBK4567", update=FALSE)
 
 # update all existing local tag or receiver databases
 
@@ -93,7 +93,7 @@ by receiver and antenna, you could do this:
 
 ```R
 library(motus)
-db = tagme(proj=14)
+db = tagme(14)
 hourly = db %>% distinct (recv, ant, tagID, floor(ts / 3600))
 ```
 
@@ -115,7 +115,7 @@ parameter; e.g.:
 ## download and open a new copy of the full tag database for motus project 14,
 ## without prompting the user for confirmation
 
-db = tagme(proj=14, new=TRUE, force=TRUE, dir="/home/john/Desktop")
+db = tagme(14, new=TRUE, force=TRUE, dir="/home/john/Desktop")
 ```
 
 Sometimes, you might want to know approximately how much new data is available
@@ -124,28 +124,28 @@ for your project without actually downloading it.  You can do this:
 ```R
 ### ask how much new data motus.org has for your project
 
-tellme(proj=14)
+tellme(14)
 ```
 This returns a named list with these items:
 
  - **numBatches**: number of batches of new data
  - **numRuns**: number of runs of new tag detections
  - **numHits**: number of new tag detections
- - **size**: approximate size of data transfer required, in megabytes
+ - **size**: approximate uncompressed size of data transfer required, in megabytes.
 
 Of course, *new* means data you do not already have, so the `tellme` function
 needs to know where your existing tag database files are.  If they are not in the
 current directory, then you can use the `dir` parameter to say where they are; e.g.:
 
 ```R
-tellme(proj=14, dir="c:/Users/emily/telemetry/HEGU")
+tellme(14, dir="c:/Users/emily/telemetry/HEGU")
 ```
 
 If you want to know how much data is available for a project but you *do not* already
 have a database for it, use the `new` parameter:
 
 ```R
-tellme(proj=14, new=TRUE)
+tellme(14, new=TRUE)
 ```
 Otherwise, `tellme` will return an error saying it doesn't know where your existing
 database is.

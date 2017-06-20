@@ -61,24 +61,28 @@ into memory.</p>
 <p>The motus packages provides one basic function to create and update
 tag databases of both kinds.  Here's how it works:</p>
 <div class="highlight highlight-source-r"><pre><span class="pl-c"><span class="pl-c">#</span> create and open a local tag database for motus project 14 in the</span>
-<span class="pl-c"><span class="pl-c">#</span> current directory</span>
+<span class="pl-c"><span class="pl-c">#</span> current directory, but do not fetch any data for it.</span>
 
-tagme(<span class="pl-v">proj</span><span class="pl-k">=</span><span class="pl-c1">14</span>, <span class="pl-v">new</span><span class="pl-k">=</span><span class="pl-c1">TRUE</span>)
+tagme(<span class="pl-c1">14</span>, <span class="pl-v">new</span><span class="pl-k">=</span><span class="pl-c1">TRUE</span>)
 
 <span class="pl-c"><span class="pl-c">#</span> update and open the local tag database for motus project 14;</span>
 <span class="pl-c"><span class="pl-c">#</span> it must already exist and be in the current directory</span>
 
-tagme(<span class="pl-v">proj</span><span class="pl-k">=</span><span class="pl-c1">14</span>, <span class="pl-v">update</span><span class="pl-k">=</span><span class="pl-c1">TRUE</span>)
+tagme(<span class="pl-c1">14</span>)
 
 <span class="pl-c"><span class="pl-c">#</span> update and open the local tag database for a receiver;</span>
 <span class="pl-c"><span class="pl-c">#</span> it must already exist and be in the current directory</span>
 
-tagme(<span class="pl-v">recv</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>SG-1234BBBK4567<span class="pl-pds">"</span></span>, <span class="pl-v">update</span><span class="pl-k">=</span><span class="pl-c1">TRUE</span>)
+tagme(<span class="pl-s"><span class="pl-pds">"</span>SG-1234BBBK4567<span class="pl-pds">"</span></span>)
 
 <span class="pl-c"><span class="pl-c">#</span> open the local tag database for a receiver, without</span>
 <span class="pl-c"><span class="pl-c">#</span> updating it</span>
 
-tagme(<span class="pl-v">recv</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>SG-1234BBBK4567<span class="pl-pds">"</span></span>)
+tagme(<span class="pl-s"><span class="pl-pds">"</span>SG-1234BBBK4567<span class="pl-pds">"</span></span>, <span class="pl-v">update</span><span class="pl-k">=</span><span class="pl-c1">FALSE</span>)
+
+<span class="pl-c"><span class="pl-c">#</span> update all existing local tag or receiver databases</span>
+
+tagme()
 </pre></div>
 <p>Each of these functions returns a <code>dplyr::src_sqlite</code> that refers to the
 database file on disk.  So you can use all the dplyr functions to
@@ -88,7 +92,7 @@ has everything they need.</p>
 <p>For example, to find the first hourly detection of each tag in each hour
 by receiver and antenna, you could do this:</p>
 <div class="highlight highlight-source-r"><pre>library(<span class="pl-smi">motus</span>)
-<span class="pl-v">db</span> <span class="pl-k">=</span> tagme(<span class="pl-v">proj</span><span class="pl-k">=</span><span class="pl-c1">14</span>)
+<span class="pl-v">db</span> <span class="pl-k">=</span> tagme(<span class="pl-c1">14</span>)
 <span class="pl-v">hourly</span> <span class="pl-k">=</span> <span class="pl-smi">db</span> %<span class="pl-k">&gt;</span>% distinct (<span class="pl-smi">recv</span>, <span class="pl-smi">ant</span>, <span class="pl-smi">tagID</span>, floor(<span class="pl-smi">ts</span> <span class="pl-k">/</span> <span class="pl-c1">3600</span>))</pre></div>
 <p>By default, tag databases are stored in the current directory (<code>getwd()</code> in R).
 You can change this by adding the <code>dir=</code> parameter to function calls; e.g.:</p>
@@ -102,12 +106,12 @@ parameter; e.g.:</p>
 <div class="highlight highlight-source-r"><pre><span class="pl-c"><span class="pl-c">#</span># download and open a new copy of the full tag database for motus project 14,</span>
 <span class="pl-c"><span class="pl-c">#</span># without prompting the user for confirmation</span>
 
-<span class="pl-v">db</span> <span class="pl-k">=</span> tagme(<span class="pl-v">proj</span><span class="pl-k">=</span><span class="pl-c1">14</span>, <span class="pl-v">new</span><span class="pl-k">=</span><span class="pl-c1">TRUE</span>, <span class="pl-v">force</span><span class="pl-k">=</span><span class="pl-c1">TRUE</span>, <span class="pl-v">dir</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>/home/john/Desktop<span class="pl-pds">"</span></span>)</pre></div>
+<span class="pl-v">db</span> <span class="pl-k">=</span> tagme(<span class="pl-c1">14</span>, <span class="pl-v">new</span><span class="pl-k">=</span><span class="pl-c1">TRUE</span>, <span class="pl-v">force</span><span class="pl-k">=</span><span class="pl-c1">TRUE</span>, <span class="pl-v">dir</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>/home/john/Desktop<span class="pl-pds">"</span></span>)</pre></div>
 <p>Sometimes, you might want to know approximately how much new data is available
 for your project without actually downloading it.  You can do this:</p>
 <div class="highlight highlight-source-r"><pre><span class="pl-c"><span class="pl-c">#</span>## ask how much new data motus.org has for your project</span>
 
-tellme(<span class="pl-v">proj</span><span class="pl-k">=</span><span class="pl-c1">14</span>)</pre></div>
+tellme(<span class="pl-c1">14</span>)</pre></div>
 <p>This returns a named list with these items:</p>
 <ul>
 <li>
@@ -117,14 +121,14 @@ tellme(<span class="pl-v">proj</span><span class="pl-k">=</span><span class="pl-
 <li>
 <strong>numHits</strong>: number of new tag detections</li>
 <li>
-<strong>size</strong>: approximate size of data transfer required, in megabytes</li>
+<strong>size</strong>: approximate uncompressed size of data transfer required, in megabytes.</li>
 </ul>
 <p>Of course, <em>new</em> means data you do not already have, so the <code>tellme</code> function
 needs to know where your existing tag database files are.  If they are not in the
 current directory, then you can use the <code>dir</code> parameter to say where they are; e.g.:</p>
-<div class="highlight highlight-source-r"><pre>tellme(<span class="pl-v">proj</span><span class="pl-k">=</span><span class="pl-c1">14</span>, <span class="pl-v">dir</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>c:/Users/emily/telemetry/HEGU<span class="pl-pds">"</span></span>)</pre></div>
+<div class="highlight highlight-source-r"><pre>tellme(<span class="pl-c1">14</span>, <span class="pl-v">dir</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>c:/Users/emily/telemetry/HEGU<span class="pl-pds">"</span></span>)</pre></div>
 <p>If you want to know how much data is available for a project but you <em>do not</em> already
 have a database for it, use the <code>new</code> parameter:</p>
-<div class="highlight highlight-source-r"><pre>tellme(<span class="pl-v">proj</span><span class="pl-k">=</span><span class="pl-c1">14</span>, <span class="pl-v">new</span><span class="pl-k">=</span><span class="pl-c1">TRUE</span>)</pre></div>
+<div class="highlight highlight-source-r"><pre>tellme(<span class="pl-c1">14</span>, <span class="pl-v">new</span><span class="pl-k">=</span><span class="pl-c1">TRUE</span>)</pre></div>
 <p>Otherwise, <code>tellme</code> will return an error saying it doesn't know where your existing
 database is.</p>
