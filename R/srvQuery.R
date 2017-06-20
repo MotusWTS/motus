@@ -32,7 +32,7 @@ srvQuery = function (API, params = NULL, requestType="post", show=FALSE, JSON=FA
                           httpheader = c(
                               "Content-Type"="application/json",
                               "Accept"="application/json"),
-                          timeout = 20,
+                          timeout = 300,
                           verbose = FALSE)
                       )
     # params is a named list of parameters which will be passed along in the JSON query
