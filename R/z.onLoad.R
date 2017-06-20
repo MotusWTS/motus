@@ -28,6 +28,7 @@
 #' \item{userPassword}{password for user at motus.org}
 #' \item{projects}{project IDs for user at motus.org}
 #' \item{dataServerURL}{URL to data server}
+#' \item{dbDir}{path to folder with project and tag databases}
 #' }
 #'
 #' @seealso \link{\code{Motus}}
@@ -109,6 +110,7 @@
 
     with(Motus,
     {
-        projects = integer(0)  ## vector of projectIDs to which user has access
+        projects = integer(0)   ## vector of projectIDs to which user has access
+        dbDir = getwd()         ## folder where tag and receiver databases are stored
     })
 }
