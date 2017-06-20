@@ -17,6 +17,9 @@
 #' \item len
 #' }
 #'
+#' @note see https://github.com/jbrzusto/motus/issues/1 for a detailed
+#' description of what "in a batch" means for a run.
+#'
 #' @export
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
