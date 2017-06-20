@@ -37,8 +37,7 @@ with this package.</p>
 <ol>
 <li>
 <p>The token returned by this API must be included in all other API
-calls as a parameter called <code>authToken</code>.  This is not shown in the
-prototypes below.</p>
+calls as the parameter called <code>authToken</code>.</p>
 </li>
 <li>
 <p>Authorization is by project: if a user has permission for a
@@ -70,9 +69,11 @@ rebooted at least once between deployments under <strong>different</strong> proj
 </ul>
 <p>These assumptions allow for simpler, more efficient database queries.</p>
 <h3>
-<a id="user-content-batches_for_tag_project-projectid-ts" class="anchor" href="#batches_for_tag_project-projectid-ts" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>batches_for_tag_project (projectID, ts)</h3>
+<a id="user-content-batches_for_tag_project-projectid-batchid-authtoken-countonly" class="anchor" href="#batches_for_tag_project-projectid-batchid-authtoken-countonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>batches_for_tag_project (projectID, batchID, authToken, countOnly)</h3>
 <pre><code>   - projectID: integer project ID
-   - ts: numeric timestamp
+   - batchID: integer largest batchID we already have for this project
+   - authToken: authorization token returned by authenticate_user
+   - countOnly: boolean; if TRUE, only return the number of available records, as field `count`
 </code></pre>
 <ul>
 <li>
@@ -93,13 +94,15 @@ tables):</p>
 </ul>
 </li>
 </ul>
-<p>Paging for this query is achieved by using the last returned value of <code>ts</code>
-as <code>ts</code> on subsequent calls.  When there are no further batches, the API
+<p>Paging for this query is achieved by using the largest returned value of <code>batchID</code>
+as <code>batchID</code> on subsequent calls.  When there are no further batches, the API
 returns an empty list.</p>
 <h3>
-<a id="user-content-batches_for_receiver_project-projectid-ts" class="anchor" href="#batches_for_receiver_project-projectid-ts" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>batches_for_receiver_project (projectID, ts)</h3>
+<a id="user-content-batches_for_receiver_project-projectid-batchid-authtoken-countonly" class="anchor" href="#batches_for_receiver_project-projectid-batchid-authtoken-countonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>batches_for_receiver_project (projectID, batchID, authToken, countOnly)</h3>
 <pre><code>   - projectID: integer project ID
-   - ts: numeric timestamp
+   - batchID: integer largest batchID we already have for this project
+   - authToken: authorization token returned by authenticate_user
+   - countOnly: boolean; if TRUE, only return the number of available records, as field `count`
 </code></pre>
 <ul>
 <li>
@@ -120,14 +123,16 @@ tables):</p>
 </ul>
 </li>
 </ul>
-<p>Paging for this query is achieved by using the last returned value of <code>ts</code>
-as <code>ts</code> on subsequent calls.  When there are no further batches, the API
+<p>Paging for this query is achieved by using the largest returned value of <code>batchID</code>
+as <code>batchID</code> on subsequent calls.  When there are no further batches, the API
 returns an empty list.</p>
 <h3>
-<a id="user-content-runs_for_tag_project-projectid-batchid-runid" class="anchor" href="#runs_for_tag_project-projectid-batchid-runid" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>runs_for_tag_project (projectID, batchID, runID)</h3>
+<a id="user-content-runs_for_tag_project-projectid-batchid-runid-authtoken-countonly" class="anchor" href="#runs_for_tag_project-projectid-batchid-runid-authtoken-countonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>runs_for_tag_project (projectID, batchID, runID, authToken, countOnly)</h3>
 <pre><code>   - projectID: integer project ID
    - batchID: integer batch ID
    - runID: integer largest run ID we *already* have from this batch and tag project
+   - authToken: authorization token returned by authenticate_user
+   - countOnly: boolean; if TRUE, only return the number of available records, as field `count`
 </code></pre>
 <ul>
 <li>
@@ -151,10 +156,12 @@ tables):</p>
 as <code>runID</code> on subsequent calls.  When there are no further runs, the API
 returns an empty list.</p>
 <h3>
-<a id="user-content-runs_for_receiver_project-projectid-batchid-runid" class="anchor" href="#runs_for_receiver_project-projectid-batchid-runid" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>runs_for_receiver_project (projectID, batchID, runID)</h3>
+<a id="user-content-runs_for_receiver_project-projectid-batchid-runid-authtoken-countonly" class="anchor" href="#runs_for_receiver_project-projectid-batchid-runid-authtoken-countonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>runs_for_receiver_project (projectID, batchID, runID, authToken, countOnly)</h3>
 <pre><code>   - projectID: integer project ID; project receiver belongs to
    - batchID: integer batch ID
    - runID: integer largest runID we *already* have from this batch
+   - authToken: authorization token returned by authenticate_user
+   - countOnly: boolean; if TRUE, only return the number of available records, as field `count`
 </code></pre>
 <ul>
 <li>
@@ -177,10 +184,12 @@ tables):</p>
 as <code>runID</code> on subsequent calls.  When there are no further runs, the API
 returns an empty list.</p>
 <h3>
-<a id="user-content-hits_for_tag_project-projectid-batchid-hitid" class="anchor" href="#hits_for_tag_project-projectid-batchid-hitid" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>hits_for_tag_project (projectID, batchID, hitID)</h3>
+<a id="user-content-hits_for_tag_project-projectid-batchid-hitid-authtoken-countonly" class="anchor" href="#hits_for_tag_project-projectid-batchid-hitid-authtoken-countonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>hits_for_tag_project (projectID, batchID, hitID, authToken, countOnly)</h3>
 <pre><code>   - projectID: integer project ID
    - batchID: integer batchID
    - hitID: integer largest hitID we *already* have from this batch
+   - authToken: authorization token returned by authenticate_user
+   - countOnly: boolean; if TRUE, only return the number of available records, as field `count`
 </code></pre>
 <ul>
 <li>
@@ -209,10 +218,12 @@ tables):</p>
 as <code>hitID</code> on subsequent calls.  When there are no further hits, the API
 returns an empty list.</p>
 <h3>
-<a id="user-content-hits_for_receiver_project-projectid-batchid-hitid" class="anchor" href="#hits_for_receiver_project-projectid-batchid-hitid" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>hits_for_receiver_project (projectID, batchID, hitID)</h3>
-<pre><code>    - projectID; integer project ID of receiver deployment
-    - batchID: integer batchID
-    - hitID: integer largest hitID we *already* have from this batch
+<a id="user-content-hits_for_receiver_project-projectid-batchid-hitid-authtoken-countonly" class="anchor" href="#hits_for_receiver_project-projectid-batchid-hitid-authtoken-countonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>hits_for_receiver_project (projectID, batchID, hitID, authToken, countOnly)</h3>
+<pre><code>   - projectID; integer project ID of receiver deployment
+   - batchID: integer batchID
+   - hitID: integer largest hitID we *already* have from this batch
+   - authToken: authorization token returned by authenticate_user
+   - countOnly: boolean; if TRUE, only return the number of available records, as field `count`
 </code></pre>
 <ul>
 <li>
@@ -240,10 +251,12 @@ tables):</p>
 as <code>hitID</code> on subsequent calls.  When there are no further hits, the API
 returns an empty list.</p>
 <h3>
-<a id="user-content-gps_for_receiver_project-projectid-batchid-ts" class="anchor" href="#gps_for_receiver_project-projectid-batchid-ts" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>gps_for_receiver_project (projectID, batchID, ts)</h3>
+<a id="user-content-gps_for_receiver_project-projectid-batchid-ts-authtoken-countonly" class="anchor" href="#gps_for_receiver_project-projectid-batchid-ts-authtoken-countonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>gps_for_receiver_project (projectID, batchID, ts, authToken, countOnly)</h3>
 <pre><code>- projectID; integer project ID of receiver deployment
 - batchID: integer batchID
 - ts: largest gps timestamp we *already* have for this batch
+- authToken: authorization token returned by authenticate_user
+- countOnly: boolean; if TRUE, only return the number of available records, as field `count`
 </code></pre>
 <ul>
 <li>
@@ -265,10 +278,12 @@ tables):</p>
 as <code>ts</code> on subsequent calls.  When there are no further GPS fixes, the API
 returns an empty list.</p>
 <h3>
-<a id="user-content-gps_for_tag_project-projectid-batchid-ts" class="anchor" href="#gps_for_tag_project-projectid-batchid-ts" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>gps_for_tag_project (projectID, batchID, ts)</h3>
+<a id="user-content-gps_for_tag_project-projectid-batchid-ts-authtoken-countonly" class="anchor" href="#gps_for_tag_project-projectid-batchid-ts-authtoken-countonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>gps_for_tag_project (projectID, batchID, ts, authToken, countOnly)</h3>
 <pre><code>- projectID; integer project ID of tags
 - batchID: integer batchID where tags from projectID were detected
 - ts: largest gps timestamp we *already* have for this batch
+- authToken: authorization token returned by authenticate_user
+- countOnly: boolean; if TRUE, only return the number of available records, as field `count`
 </code></pre>
 <ul>
 <li>
@@ -296,11 +311,12 @@ tables):</p>
 as <code>ts</code> on subsequent calls.  When there are no further GPS fixes, the API
 returns an empty list.</p>
 <h3>
-<a id="user-content-metadata-for-tags-motustagids" class="anchor" href="#metadata-for-tags-motustagids" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>metadata for tags (motusTagIDs)</h3>
+<a id="user-content-metadata-for-tags-motustagids-authtoken-countonly" class="anchor" href="#metadata-for-tags-motustagids-authtoken-countonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>metadata for tags (motusTagIDs, authToken, countOnly)</h3>
 <pre><code>- motusTagIDs: integer vector of motus tag IDs; tag metadata will
   only be returned for tag deployments whose project has indicated
   their metadata are public, or tags deployments by one of the
   projects the user has permissions to.
+- authToken: authorization token returned by authenticate_user
 </code></pre>
 <ul>
 <li>
@@ -356,11 +372,12 @@ returns an empty list.</p>
 </ul>
 <p>);</p>
 <h3>
-<a id="user-content-metadata-for-receivers-deviceids" class="anchor" href="#metadata-for-receivers-deviceids" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>metadata for receivers (deviceIDs)</h3>
+<a id="user-content-metadata-for-receivers-deviceids-authtoken-countonly" class="anchor" href="#metadata-for-receivers-deviceids-authtoken-countonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>metadata for receivers (deviceIDs, authToken, countOnly)</h3>
 <pre><code>- deviceID; integer device ID; receiver metadata will only be
   returned for receivers whose project has indicated their
   metadata are public, or receivers in one of the projects the
   user has permissions to.
+- authToken: authorization token returned by authenticate_user
 </code></pre>
 <ul>
 <li>
@@ -408,12 +425,13 @@ magnetic north</li>
 </li>
 </ul>
 <h3>
-<a id="user-content-tags-for-ambiguities" class="anchor" href="#tags-for-ambiguities" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>tags for ambiguities</h3>
+<a id="user-content-tags-for-ambiguities-ambigids-authtoken-countonly" class="anchor" href="#tags-for-ambiguities-ambigids-authtoken-countonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>tags for ambiguities (ambigIDs, authToken, countOnly)</h3>
 <pre><code>- ambigIDs; integer tag ambiguity IDs; this a vector of negative
   integers, each representing 2 to 6 tags for which detections are
   indistinguishable over some period of time; i.e. a detection of
   the given ambigID could represent any of the motus tagIDs.  (6 is
   an implementation limit, not a conceptual one.)
+- authToken: authorization token returned by authenticate_user
 </code></pre>
 <ul>
 <li>
@@ -428,8 +446,8 @@ magnetic north</li>
 <li>motusTagID6; positive integer motus tag ID or null</li>
 </ul>
 <p>i.e. return what real tags each ambiguityID represents.
-If motusTagID<code>M</code>[i] is null, then motusTagID<code>N</code>[i] is also null for
-<code>N</code> &gt; <code>M</code> and <code>N</code> &lt;= 6; i.e. non-null values precede null values
+If <code>motusTagIDM[i]</code> is null, then <code>motusTagIDN[i]</code> is also null for
+<code>M &lt; N &lt;= 6</code>; i.e. non-null values precede null values
 for each ambiguity.</p>
 </li>
 </ul>

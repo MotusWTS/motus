@@ -1,7 +1,7 @@
 #' get the batches for a tag project from the data server
 #'
 #' @param projectID integer scalar motus project ID
-#' @param ts real scalar processing timestamp of latest batch already owned
+#' @param batchID integer largest batchID already owned for this project.
 #' Default: 0, meaning none.
 #' @param countOnly logical; if TRUE, return only the cound of available batches.
 #' Default: FALSE.
@@ -21,8 +21,8 @@
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
-srvBatchesForTagProject = function(projectID, ts=0, countOnly=FALSE) {
-    x = srvQuery(API=Motus$API_BATCHES_FOR_TAG_PROJECT, params=list(projectID=projectID, ts=ts, countOnly=countOnly))
+srvBatchesForTagProject = function(projectID, batchID=0, countOnly=FALSE) {
+    x = srvQuery(API=Motus$API_BATCHES_FOR_TAG_PROJECT, params=list(projectID=projectID, batchID=batchID, countOnly=countOnly))
     if (countOnly)
         return (x$count)
     else

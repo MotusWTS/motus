@@ -55,10 +55,10 @@ rebooted at least once between deployments under **different** projects.
 
 These assumptions allow for simpler, more efficient database queries.
 
-### batches_for_tag_project (projectID, ts, authToken, countOnly) ###
+### batches_for_tag_project (projectID, batchID, authToken, countOnly) ###
 
        - projectID: integer project ID
-       - ts: numeric timestamp
+       - batchID: integer largest batchID we already have for this project
        - authToken: authorization token returned by authenticate_user
        - countOnly: boolean; if TRUE, only return the number of available records, as field `count`
 
@@ -75,14 +75,14 @@ These assumptions allow for simpler, more efficient database queries.
       - numHits
       - ts
 
-Paging for this query is achieved by using the last returned value of `ts`
-as `ts` on subsequent calls.  When there are no further batches, the API
+Paging for this query is achieved by using the largest returned value of `batchID`
+as `batchID` on subsequent calls.  When there are no further batches, the API
 returns an empty list.
 
-### batches_for_receiver_project (projectID, ts, authToken, countOnly) ###
+### batches_for_receiver_project (projectID, batchID, authToken, countOnly) ###
 
        - projectID: integer project ID
-       - ts: numeric timestamp
+       - batchID: integer largest batchID we already have for this project
        - authToken: authorization token returned by authenticate_user
        - countOnly: boolean; if TRUE, only return the number of available records, as field `count`
 
@@ -99,8 +99,8 @@ returns an empty list.
       - numHits
       - ts
 
-Paging for this query is achieved by using the last returned value of `ts`
-as `ts` on subsequent calls.  When there are no further batches, the API
+Paging for this query is achieved by using the largest returned value of `batchID`
+as `batchID` on subsequent calls.  When there are no further batches, the API
 returns an empty list.
 
 ### runs_for_tag_project (projectID, batchID, runID, authToken, countOnly) ###
