@@ -4,16 +4,13 @@
 \alias{srvBatchesForReceiverProject}
 \title{get the batches for a receiver project from the data server}
 \usage{
-srvBatchesForReceiverProject(projectID, batchID = 0, countOnly = FALSE)
+srvBatchesForReceiverProject(projectID, batchID = 0)
 }
 \arguments{
 \item{projectID}{integer scalar motus project ID}
 
 \item{batchID}{integer largest batchID already owned for this project.
 Default: 0, meaning none.}
-
-\item{countOnly}{logical; if TRUE, return only the cound of available batches.
-Default: FALSE.}
 }
 \value{
 data.frame with these columns:

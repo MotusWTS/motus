@@ -4,7 +4,7 @@
 \alias{srvHitsForTagProject}
 \title{get the hits for a tag project from the data server}
 \usage{
-srvHitsForTagProject(projectID, batchID, hitID = 0, countOnly = FALSE)
+srvHitsForTagProject(projectID, batchID, hitID = 0)
 }
 \arguments{
 \item{projectID}{integer scalar motus project ID}
@@ -13,9 +13,6 @@ srvHitsForTagProject(projectID, batchID, hitID = 0, countOnly = FALSE)
 
 \item{hitID}{integer scalar ID of latest hit already obtained.
 Default: 0, meaning none.}
-
-\item{countOnly}{logical; if TRUE, return only the cound of available batches.
-Default: FALSE.}
 }
 \value{
 data.frame with these columns:

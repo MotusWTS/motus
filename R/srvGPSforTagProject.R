@@ -7,8 +7,6 @@
 #' @param batchID integer scalar batch ID
 #' @param ts real scalar processing timestamp of latest fix already owned
 #' Default: 0, meaning none.
-#' @param countOnly logical; if TRUE, return only the cound of available batches.
-#' Default: FALSE.
 #'
 #' @return data.frame with these columns:
 #' \itemize{
@@ -28,10 +26,7 @@
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
-srvGPSforTagProject = function(projectID, batchID, ts=0, countOnly=FALSE) {
-    x = srvQuery(API=Motus$API_GPS_FOR_TAG_PROJECT, params=list(projectID=projectID, batchID=batchID, ts=ts, countOnly=countOnly))
-    if (countOnly)
-        return (x$count)
-    else
-        return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
+srvGPSforTagProject = function(projectID, batchID, ts=0) {
+    x = srvQuery(API=Motus$API_GPS_FOR_TAG_PROJECT, params=list(projectID=projectID, batchID=batchID, ts=ts))
+    return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
 }

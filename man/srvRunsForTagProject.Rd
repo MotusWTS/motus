@@ -4,7 +4,7 @@
 \alias{srvRunsForTagProject}
 \title{get the runs for a tag project in a batch from the data server}
 \usage{
-srvRunsForTagProject(projectID, batchID, runID = 0, countOnly = FALSE)
+srvRunsForTagProject(projectID, batchID, runID = 0)
 }
 \arguments{
 \item{projectID}{integer scalar motus project ID}
@@ -13,9 +13,6 @@ srvRunsForTagProject(projectID, batchID, runID = 0, countOnly = FALSE)
 
 \item{runID}{integer scalar ID of latest run already obtained.
 Default: 0, meaning none.}
-
-\item{countOnly}{logical; if TRUE, return only the cound of available batches.
-Default: FALSE.}
 }
 \value{
 data.frame with these columns:

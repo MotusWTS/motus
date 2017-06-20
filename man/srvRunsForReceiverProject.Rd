@@ -4,7 +4,7 @@
 \alias{srvRunsForReceiverProject}
 \title{get the runs for a receiver project from the data server}
 \usage{
-srvRunsForReceiverProject(projectID, batchID, runID = 0, countOnly = FALSE)
+srvRunsForReceiverProject(projectID, batchID, runID = 0)
 }
 \arguments{
 \item{projectID}{integer scalar motus project ID}
@@ -13,9 +13,6 @@ srvRunsForReceiverProject(projectID, batchID, runID = 0, countOnly = FALSE)
 
 \item{runID}{integer scalar ID of latest run already obtained.
 Default: 0, meaning none.}
-
-\item{countOnly}{logical; if TRUE, return only the cound of available batches.
-Default: FALSE.}
 }
 \value{
 data.frame with these columns:
