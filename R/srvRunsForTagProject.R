@@ -5,18 +5,23 @@
 #' @param runID integer scalar ID of latest run already obtained.
 #' Default: 0, meaning none.
 #'
-#' @return data.frame with these columns:
+#' @return a list with these items:
 #' \itemize{
-#' \item runID
-#' \item batchIDbegin
-#' \item batchIDend
-#' \item motusTagID
-#' \item ant
-#' \item len
+#'    \item runs, a data.frame with these columns:
+#'       \itemize{
+#'          \item runID
+#'          \item batchIDbegin
+#'          \item batchIDend
+#'          \item motusTagID
+#'          \item ant
+#'          \item len
+#'       }
+#'    \item batchRuns, a data.frame with these columns:
+#'       \itemize{
+#'          \item batchID
+#'          \item runID
+#'       }
 #' }
-#'
-#' @note see https://github.com/jbrzusto/motus/issues/1 for a detailed
-#' description of what "in a batch" means for a run.
 #'
 #' @export
 #'
@@ -24,5 +29,8 @@
 
 srvRunsForTagProject = function(projectID, batchID, runID=0) {
     x = srvQuery(API=Motus$API_RUNS_FOR_TAG_PROJECT, params=list(projectID=projectID, batchID=batchID, runID=runID))
-    return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
+    return (list(
+        runs = structure(x$runs, class = "data.frame", row.names=seq(along=x$runs[[1]])),
+        batchRuns = structure(x$batchRuns, class = "data.frame", row.names=seq(along=x$batchRuns[[1]]))
+        ))
 }

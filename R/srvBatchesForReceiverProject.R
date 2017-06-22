@@ -9,7 +9,7 @@
 #' \item batchID integer motus batch ID
 #' \item deviceID integer motus device ID
 #' \item monoBN boot number, for SG receivers; NA for Lotek
-#' \item tsBegin first timestamp of data
+#' \item tsStart first timestamp of data
 #' \item tsEnd last timestamp of data
 #' \item numHits integer number of hits
 #' \item ts real processing timestamp

@@ -95,7 +95,7 @@ CREATE TABLE batches (
                                               -- database.
     monoBN INT,                               -- boot number for this receiver; (NULL
                                               -- okay; e.g. Lotek)
-    tsBegin FLOAT(53),                        -- timestamp for start of period
+    tsStart FLOAT(53),                        -- timestamp for start of period
                                               -- covered by batch; unix-style:
                                               -- seconds since 1 Jan 1970 GMT
     tsEnd FLOAT(53),                          -- timestamp for end of period
@@ -127,6 +127,18 @@ CREATE TABLE runs (
 
 ")
     }
+
+    if (! "batchRuns" %in% tables) {
+        sql("
+CREATE TABLE batchRuns (
+    batchID INTEGER NOT NULL,               -- identifier of batch
+    runID INTEGER NOT NULL                  -- identifier of run
+);
+")
+        sql("create index batchRuns_batchID on batchRuns ( batchID )")
+        sql("create index batchRuns_runID on batchRuns ( runID )")
+    }
+
     if (! "hits" %in% tables) {
         sql("
 CREATE TABLE hits (
@@ -269,4 +281,4 @@ CREATE TABLE species (
 
 ## list of tables needed in the receiver database
 
-dbTableNames = c("meta", "batches", "runs", "hits", "gps", "tagAmbig", "projs", "tagDeps", "recvDeps", "antDeps", "species")
+dbTableNames = c("meta", "batches", "runs", "batchRuns", "hits", "gps", "tagAmbig", "projs", "tagDeps", "recvDeps", "antDeps", "species")
