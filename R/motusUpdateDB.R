@@ -23,8 +23,8 @@ motusUpdateDB = function(projRecv, src, countOnly) {
     if (! is.numeric(projRecv) && ! is.character(projRecv))
         stop ("projRecv must be an integer motus project ID, or a character receiver serial number")
 
-    if (! inherits(src, "dplyr::src_sqlite"))
-        stop ("src must be a dplyr::src_sqlite object")
+    if (! inherits(src, "src_sql"))
+        stop ("src must be a dplyr::src_sql object")
 
     if (!is.logical(countOnly))
         stop("countOnly must be a logical scalar")
