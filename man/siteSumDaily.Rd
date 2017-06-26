@@ -33,4 +33,3 @@ daily_site_summary <- siteSumDaily(dat, units = "mins")
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}
 }
-

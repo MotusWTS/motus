@@ -28,4 +28,3 @@ get the amount of data required to update a tag project from the data server
 \author{
 John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
 }
-

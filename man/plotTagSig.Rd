@@ -18,4 +18,3 @@ plotTagSig(dat, tag = 171)
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}
 }
-

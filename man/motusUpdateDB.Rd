@@ -24,10 +24,9 @@ update a motus tag detection database (backend)
 This function does most of the work of fetching data and metadata from
 motus servers.  It is not really meant to be called directly by most users.
 }
-\author{
-John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
-}
 \seealso{
 \link{\code{tagme}}, which is intended for most users, and calls this function.
 }
-
+\author{
+John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
+}

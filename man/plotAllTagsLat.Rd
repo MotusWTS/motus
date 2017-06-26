@@ -20,4 +20,3 @@ plotAllTagsLat(dat, tagsPerPanel = 4)
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}
 }
-

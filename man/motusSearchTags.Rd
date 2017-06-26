@@ -52,4 +52,3 @@ return a list of motus tags
 \author{
 John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
 }
-

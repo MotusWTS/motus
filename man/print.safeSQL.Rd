@@ -12,4 +12,3 @@
 \description{
 safeSQL method for printing
 }
-

@@ -21,4 +21,3 @@ plotDailySiteSum(dat, Site = "Longridge")
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}
 }
-

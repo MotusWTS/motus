@@ -64,10 +64,9 @@ update a motus tag detection database
 # tagme()
 
 }
-\author{
-John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
-}
 \seealso{
 \link{\code{tellme}}, which is a synonym for \code{tagme(..., countOnly=TRUE)}
 }
-
+\author{
+John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
+}

@@ -33,4 +33,3 @@ Receiver database files have names like "SG-1234BBBK06EA.motus" or
 \author{
 John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
 }
-

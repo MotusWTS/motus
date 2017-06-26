@@ -23,4 +23,3 @@ dat <- SunRiseSet(dat) ## adds sunrise and sunset columns to dataframe "dat"
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}
 }
-

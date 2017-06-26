@@ -22,4 +22,3 @@ latCentre = 44, lonCentre = -70, zoom = 5, startTime = "2016-01-01", endTime = "
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}
 }
-

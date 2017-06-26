@@ -18,4 +18,3 @@ plotSiteSig(dat, sitename = "Piskwamish")
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}
 }
-

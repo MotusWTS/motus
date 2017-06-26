@@ -15,4 +15,3 @@
 \description{
 safeSQL method to provide read access to some internals
 }
-

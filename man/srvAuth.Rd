@@ -16,10 +16,9 @@ an authentication token from the data server.
 \details{
 if login is unsuccessful, execution stops with error message
 }
-\author{
-John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
-}
 \seealso{
 \link{\code{Motus}}
 }
-
+\author{
+John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
+}

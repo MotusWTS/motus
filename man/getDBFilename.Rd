@@ -33,10 +33,9 @@ get the full filename for a tag project or receiver database
 ##       database for project 5, which is in folder \\code{/home/me/mydbs}
 
 }
-\author{
-John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
-}
 \seealso{
 \link{\code{tagme}}
 }
-
+\author{
+John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
+}

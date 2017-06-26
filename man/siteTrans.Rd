@@ -41,4 +41,3 @@ transitions <- siteTrans(dat)
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}
 }
-

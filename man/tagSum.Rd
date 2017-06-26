@@ -39,4 +39,3 @@ tag_summary <- tagSum(dat)
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}
 }
-

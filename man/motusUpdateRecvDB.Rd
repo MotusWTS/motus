@@ -17,11 +17,10 @@ database.}
 \description{
 update a motus tag detection database - receiver flavour (backend)
 }
-\author{
-John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
-}
 \seealso{
 \link{\code{tagme}}, which is intended for most users, and
     indirectly calls this function.
 }
-
+\author{
+John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
+}

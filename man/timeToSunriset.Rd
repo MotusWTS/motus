@@ -32,4 +32,3 @@ dat <- timeToSunriset(dat, units = "mins")
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}
 }
-

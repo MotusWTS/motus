@@ -61,4 +61,3 @@ made their tag metadata public.
 \author{
 John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
 }
-

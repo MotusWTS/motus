@@ -21,4 +21,3 @@ tag_site_summary <- tagSumSite(dat, units = "mins")
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}
 }
-

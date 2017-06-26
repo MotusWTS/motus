@@ -36,4 +36,3 @@ If you have not already entered your motus login credentials
 John Brzustowski
     \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
 }
-

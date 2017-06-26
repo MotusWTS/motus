@@ -15,4 +15,3 @@ Create dataframe for siteTrans function
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}
 }
-
