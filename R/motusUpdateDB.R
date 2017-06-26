@@ -32,7 +32,7 @@ motusUpdateDB = function(projRecv, src, countOnly) {
     sql = safeSQL(src)
 
     if (is.numeric(projRecv))
-        return(motusUpdateRecvDB(sql, countOnly))
+        return(motusUpdateTagDB(sql, countOnly))
     else
-        return(motusUpdateProjDB(sql, countOnly))
+        return(motusUpdateRecvDB(sql, countOnly))
 }

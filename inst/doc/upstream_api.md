@@ -62,7 +62,7 @@ These assumptions allow for simpler, more efficient database queries.
        - authToken: authorization token returned by authenticate_user
 
    - return a list of all batches with detections of tags in project `projectID`,
-     where the processing timestamp of the batch is > `ts`
+     where the batchID is > `batchID`
 
    - items in the return value are vectors (as they exist in the transfer
      tables):
@@ -85,7 +85,7 @@ returns an empty list.
        - authToken: authorization token returned by authenticate_user
 
    - return a list of all batches from receivers in project projectID,
-     where the processing timestamp of the batch is > `ts`
+     where the batchID is > `batchID`
 
    - columns should include these fields (as they exist in the transfer
      tables):

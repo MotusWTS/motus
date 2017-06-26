@@ -115,9 +115,11 @@ CREATE TABLE batches (
     if (! "runs" %in% tables) {
         sql("
 CREATE TABLE runs (
-    runID INTEGER UNIQUE PRIMARY KEY,                 -- identifier of run; unique for this receiver
-    batchIDbegin INTEGER NOT NULL REFERENCES batches, -- unique identifier of batch this run began in
-    batchIDend INTEGER  REFERENCES batches,           -- unique identifier of batch this run ends in (if run is complete)
+    runID INTEGER PRIMARY KEY,                        -- identifier of run; unique for this receiver
+    batchIDbegin INT NOT NULL,                        -- ID of batch this run begins in
+    tsBegin FLOAT(53),                                -- timestamp of first detection in run
+    tsEnd  FLOAT(53),                                 -- timestamp of last detection in run (so far)
+    done TINYINT NOT NULL DEFAULT 0,                  -- is run finished? 0 if no, 1 if yes.
     motusTagID INT NOT NULL,                          -- ID for the tag detected; foreign key to Motus DB
                                                       -- table
     ant TINYINT NOT NULL,                             -- antenna number (USB Hub port # for SG; antenna port

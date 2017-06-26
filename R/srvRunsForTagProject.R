@@ -11,7 +11,9 @@
 #'       \itemize{
 #'          \item runID
 #'          \item batchIDbegin
-#'          \item batchIDend
+#'          \item tsBegin
+#'          \item tsEnd
+#'          \item done
 #'          \item motusTagID
 #'          \item ant
 #'          \item len

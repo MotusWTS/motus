@@ -19,32 +19,31 @@ motusUpdateTagDB = function(sql, countOnly=FALSE) {
         stop("sql must be a database connection of type 'safeSQL'.\nPerhaps use tagme() instead of this function?")
     projectID = sql("select val from meta where key='tagProject'")[[1]]
 
+    batchID = sql("select max(batchID) from batches")
+    if (! is.finite(batchID))
+        batchID = 0
+    if (countOnly)
+        return (srvSizeOfUpdateForTagProject(projectID=projectID, batchID=batchID))
+
     ## keep track of items we'll need metadata for
     tagIDs = c()
     devIDs = c()
-
-    ## counts of items
-    numBatches = numRuns = numHits = 0
 
     ## ----------------------------------------------------------------------------
     ## 1. get records for all new batches
     ## Start after the latest batch we already have.
     ## ----------------------------------------------------------------------------
 
-    ts = sql("select max(ts) from batches")
-    if (! is.finite(ts))
-        ts = 0
     repeat {
         ## we always use countOnly = FALSE, because we need to obtain batchIDs
         ## in order to count runs and hits
-        b = srvBatchesForTagProject(projectID=projectID, ts=ts, countOnly=FALSE)
+        b = srvBatchesForTagProject(projectID=projectID, batchIDs=batchID, countOnly=FALSE)
         if (nrow(b) == 0)
             break
         ## temporary work-around to batches with incorrect starting timestamps
         ## (e.g. negative, or on CLOCK_MONOTONIC) that make a batch appears
         ## to span multiple deployments.
         b = subset(b, ! duplicated(batchID))
-        numBatches = numBatches + if (countOnly) b else nrow(b)
 
         devIDs = unique(c(devIDs, b$motusDeviceID))
         cat(sprintf("Got %d batch records\n", nrow(b)), file=stderr())
@@ -62,15 +61,10 @@ motusUpdateTagDB = function(sql, countOnly=FALSE) {
             runID = 0
             repeat {
 
-                r = srvRunsForTagProject(projectID=projectID, batchID=batchID, runID=runID, countOnly=countOnly)
-                if (countOnly) {
-                    if (r == 0)
-                        break
-                    numRuns = num
-                    if (&& r == 0) || (! countOnly && nrow(r) == 0))
+                r = srvRunsForTagProject(projectID=projectID, batchID=batchID, runID=runID)
+                if (nrow(r) == 0)
                     break
 
-                numRuns = numRuns + nrow(r)
                 tagIDs = unique(c(tagIDs, r$motusTagID))
                 ## add these run records to the DB
                 ## Because some might be updates, or a previous transfer might have been
@@ -88,10 +82,9 @@ motusUpdateTagDB = function(sql, countOnly=FALSE) {
 
             hitID = sql("select max(hitID) from hits where batchID=%d", b)
             repeat {
-                h = srvHitsForTagProject(projectID=projectID, batchID=batchID, hitID=hitID, countOnly=countOnly)
+                h = srvHitsForTagProject(projectID=projectID, batchID=batchID, hitID=hitID)
                 if (nrow(h) == 0)
                     break
-                numHits = numHits + nrow(h)
                 cat(sprintf("Got %d hits for batch %b                \r", nrow(h), b), file=stderr())
                 ## add these hit records to the DB
                 ## Because a previous transfer might have been
@@ -122,7 +115,7 @@ motusUpdateTagDB = function(sql, countOnly=FALSE) {
 
             dbWriteTable(sql$con, "batches", b[bi,], append=TRUE, row.names=FALSE)
         }
-        ts = max(b$ts)
+        batchID = max(b$batchID)
     }
 
     ## ----------------------------------------------------------------------------

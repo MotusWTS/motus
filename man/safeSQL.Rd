@@ -17,6 +17,56 @@ to allow for inter-process DB locking.  Only implemented for
 SQLite connections, as it appears unnecessary for MySQL
 connections.}
 }
+\value{
+a function, S with class "safeSQL" taking two or more
+    parameters:
+\itemize{
+    \item \code{query} sqlite query with parameter handling indicated by:
+    \itemize{
+       \item words beginning with ":", which does parameter binding for RSQLite,
+       \item \bold{or} sprintf-style formatting codes (e.g. "\%d") which does parameter substitution for RSQLite or MySQL
+    }
+    \item \code{...} list of named (for ":" binding) or unnamed
+    (for "%" substitution) items specifying values for parameters in
+    query.  For ":" binding, all items must be named and have the same
+    length.  For "%" substitution, all items must be unnamed scalars.
+}
+
+For RSQLite, these items are passed to \code{data.frame}, along with the
+parameter \code{stringsAsFactors=FALSE}.
+\itemize{
+\item \emph{":"-binding example; SQLite only}:
+\code{
+S("insert into contacts values(:address, :phone)", address=c("123 West Blvd, Truro, NS", "5 East St., Digby, NS"), phone=c("902-555-1234", "902-555-6789"))
+}
+\item \emph{"%"-substitution example; SQLite or MySQL}:
+\code{
+S("insert into contacts values(\"%s\", \"%s\")", "123 West Blvd, Truro, NS", "902-555-1234")
+S("insert into contacts values(\"%s\", \"%s\")", "5 East St., Digby, NS", "902-555-6789")
+}
+}
+
+\item \code{.CLOSE} boolean scalar; if TRUE, close the underlying
+database connection, disabling further use of this function.
+
+\item \code{.QUOTE} boolean scalar (only for RMySQL connections); if TRUE, the
+default, quote string parameters using \link{\code{dbQuoteString}}.  Any parameter
+wrapped in \link{\code{DBI::SQL}} will not be quoted.  The only reason to use
+\code{.QUOTE=FALSE} is for a query where you know all parameters must not be
+quoted, and don't want to clutter your code with multiple \link{\code{DBI::SQL}}.
+A table name used as a parameter to a query should not be quoted, so for example,
+\code{
+s = safeSQL(dbConnect(MySQL(), 'motus'));
+tableName = "tags"
+columnName = "fullID"
+columnValue = "Mytags#123:4.7@166.38"
+s("select * from %s where %s=%s", DBI::SQL(tableName), DBI::SQL(columnName), columnValue)
+}
+would select all rows from the \code{tags} table where \code{fullID="Mytags#123:4.7@166.38"}
+Without using \link{\code{DBI::SQL}}, the resulting query would be the incorrect:
+\code{select * from 'tags' where 'fullID' = 'Mytags#123:4.7@166.38'}
+}
+}
 \description{
 This uses dbGetPreparedQuery (for RSQLite and ":" parameters) or
 dbQuoteStrings (for MySQL or RSQLite "%" parameters).  It should

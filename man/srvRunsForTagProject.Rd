@@ -15,22 +15,28 @@ srvRunsForTagProject(projectID, batchID, runID = 0)
 Default: 0, meaning none.}
 }
 \value{
-data.frame with these columns:
+a list with these items:
 \itemize{
-\item runID
-\item batchIDbegin
-\item batchIDend
-\item motusTagID
-\item ant
-\item len
+   \item runs, a data.frame with these columns:
+      \itemize{
+         \item runID
+         \item batchIDbegin
+         \item tsBegin
+         \item tsEnd
+         \item done
+         \item motusTagID
+         \item ant
+         \item len
+      }
+   \item batchRuns, a data.frame with these columns:
+      \itemize{
+         \item batchID
+         \item runID
+      }
 }
 }
 \description{
 get the runs for a tag project in a batch from the data server
-}
-\note{
-see https://github.com/jbrzusto/motus/issues/1 for a detailed
-description of what "in a batch" means for a run.
 }
 \author{
 John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}

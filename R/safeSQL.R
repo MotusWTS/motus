@@ -17,14 +17,16 @@
 #' @return a function, S with class "safeSQL" taking two or more
 #'     parameters:
 #' \itemize{
-#' \item \code{query} sqlite query with parameter handling indicated by:
+#'     \item \code{query} sqlite query with parameter handling indicated by:
 #'     \itemize{
 #'        \item words beginning with ":", which does parameter binding for RSQLite,
 #'        \item \bold{or} sprintf-style formatting codes (e.g. "\%d") which does parameter substitution for RSQLite or MySQL
-#'      }
-#' \item \code{...} list of named (for ":" binding) or unnamed (for "%" substitution) items
-#' specifying values for parameters in query.  For ":" binding, all items must be named and have
-#' the same length.  For "%" substitution, all items must be unnamed scalars.
+#'     }
+#'     \item \code{...} list of named (for ":" binding) or unnamed
+#'     (for "%" substitution) items specifying values for parameters in
+#'     query.  For ":" binding, all items must be named and have the same
+#'     length.  For "%" substitution, all items must be unnamed scalars.
+#' }
 #'
 #' For RSQLite, these items are passed to \code{data.frame}, along with the
 #' parameter \code{stringsAsFactors=FALSE}.
