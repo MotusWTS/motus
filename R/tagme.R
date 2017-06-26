@@ -65,7 +65,7 @@ tagme = function(projRecv, update=FALSE, new=FALSE, dir=getwd(), countOnly=FALSE
                           tagme(projRecv=sub("\\.motus$", "", f), update=update, new=new, dir=dir, countOnly=countOnly)
                       }))
     }
-    if (length(projRecv) != 1 || ! is.numeric(projRecv) || ! is.character(projRecv))
+    if (length(projRecv) != 1 || (! is.numeric(projRecv) && ! is.character(projRecv)))
         stop("You must specify an integer project ID or a character receiver serial number.")
     dbname = getDBFilename(projRecv, dir)
     have = file.exists(dbname)
