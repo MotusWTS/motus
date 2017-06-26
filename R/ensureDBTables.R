@@ -11,8 +11,8 @@
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 ensureDBTables = function(src, projRecv) {
-    if (! inherits(src, "src_sqlite"))
-        stop("src is not a dplyr::src_sqlite object")
+    if (! inherits(src, "src_sql"))
+        stop("src is not a dplyr::src_sql object")
     con = src$con
     if (! inherits(con, "SQLiteConnection"))
         stop("src is not open or is corrupt; underlying db connection invalid")
@@ -46,22 +46,22 @@ val  character                              -- character string giving meta data
             }
             sql("
 insert into meta (key, val)
-values (
+values
 ('dbType', 'receiver'),
 ('recvSerno', '%s'),
 ('recvType', '%s'),
 ('recvModel', '%s'),
-)",
+",
 projRecv,
 type,
 model)
         } else if (is.numeric(projRecv)) {
             sql("
 insert into meta (key, val)
-values (
+values
 ('dbType', 'tag'),
 ('tagProject', %d)
-)",
+",
 projRecv)
         } else {
             stop("projRecv must be an integer motus project ID or a character receiver serial number")
@@ -274,8 +274,8 @@ CREATE TABLE species (
    english TEXT,
    french TEXT,
    scientific TEXT,
-   group TEXT,
-   sort INTEGER
+   \"group\" TEXT,
+   \"sort\" INTEGER
 );
 ");
     }
