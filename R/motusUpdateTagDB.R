@@ -19,7 +19,7 @@ motusUpdateTagDB = function(sql, countOnly=FALSE) {
         stop("sql must be a database connection of type 'safeSQL'.\nPerhaps use tagme() instead of this function?")
     projectID = sql("select val from meta where key='tagProject'")[[1]]
 
-    batchID = sql("select max(batchID) from batches")
+    batchID = sql("select max(batchID) from batches")[[1]]
     if (! is.finite(batchID))
         batchID = 0
     if (countOnly)
@@ -37,7 +37,7 @@ motusUpdateTagDB = function(sql, countOnly=FALSE) {
     repeat {
         ## we always use countOnly = FALSE, because we need to obtain batchIDs
         ## in order to count runs and hits
-        b = srvBatchesForTagProject(projectID=projectID, batchIDs=batchID, countOnly=FALSE)
+        b = srvBatchesForTagProject(projectID=projectID, batchID=batchID)
         if (nrow(b) == 0)
             break
         ## temporary work-around to batches with incorrect starting timestamps
