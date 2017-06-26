@@ -8,6 +8,7 @@ Depends:
     R (>= 3.1.0),
     dplyr
 Imports:
+    RSQLite,
     httr,
     jsonlite,
     lattice,
@@ -15,6 +16,6 @@ Imports:
     stringi
 License: GPL-2+
 Date: 2016-11-27
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 LazyData: true
 Suggests: testthat
