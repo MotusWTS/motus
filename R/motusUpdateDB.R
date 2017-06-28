@@ -10,6 +10,9 @@
 #'     that would need to be transferred in order to update the
 #'     database.
 #'
+#' @return invisible(NULL) if \code{updateOnly} is FALSE.  Otherwise, a list
+#' of counts of items available for an update.
+#'
 #' @seealso \link{\code{tagme}}, which is intended for most users, and calls this function.
 #'
 #' @note This function does most of the work of fetching data and metadata from

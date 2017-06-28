@@ -17,6 +17,10 @@ requested database updates.  Otherwise, return a count of items
 that would need to be transferred in order to update the
 database.}
 }
+\value{
+invisible(NULL) if \code{updateOnly} is FALSE.  Otherwise, a list
+of counts of items available for an update.
+}
 \description{
 update a motus tag detection database (backend)
 }

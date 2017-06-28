@@ -151,4 +151,6 @@ motusUpdateTagDB = function(sql, countOnly=FALSE) {
     rmeta = srvMetadataForReceivers(devIDs)
     dbInsertOrReplace(sql$con, "recvDeps", rmeta$recvDeps)
     dbInsertOrReplace(sql$con, "antDeps", rmeta$antDeps)
+
+    invisible(NULL)
 }
