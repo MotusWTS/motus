@@ -17,11 +17,9 @@
 motusUpdateTagDB = function(sql, countOnly=FALSE) {
     if (!inherits(sql, "safeSQL"))
         stop("sql must be a database connection of type 'safeSQL'.\nPerhaps use tagme() instead of this function?")
-    projectID = sql("select val from meta where key='tagProject'")[[1]]
+    projectID = sql("select val from meta where key='tagProject'")[[1]] %>% as.integer
 
-    batchID = sql("select max(batchID) from batches")[[1]]
-    if (! is.finite(batchID))
-        batchID = 0
+    batchID = sql("select ifnull(max(batchID), 0) from batches")[[1]]
     if (countOnly)
         return (srvSizeOfUpdateForTagProject(projectID=projectID, batchID=batchID))
 
@@ -38,7 +36,7 @@ motusUpdateTagDB = function(sql, countOnly=FALSE) {
         ## we always use countOnly = FALSE, because we need to obtain batchIDs
         ## in order to count runs and hits
         b = srvBatchesForTagProject(projectID=projectID, batchID=batchID)
-        if (nrow(b) == 0)
+        if (! isTRUE(nrow(b) > 0))
             break
         ## temporary work-around to batches with incorrect starting timestamps
         ## (e.g. negative, or on CLOCK_MONOTONIC) that make a batch appears
@@ -62,7 +60,7 @@ motusUpdateTagDB = function(sql, countOnly=FALSE) {
             repeat {
 
                 r = srvRunsForTagProject(projectID=projectID, batchID=batchID, runID=runID)
-                if (nrow(r) == 0)
+                if (! isTRUE(nrow(r) > 0))
                     break
 
                 tagIDs = unique(c(tagIDs, r$motusTagID))
@@ -71,25 +69,30 @@ motusUpdateTagDB = function(sql, countOnly=FALSE) {
                 ## interrupted, use dbInsertOrReplace
 
                 dbInsertOrReplace(sql$con, "runs", r)
-                cat(sprintf("Got %d runs from batch %d                \r", nrow(r), b), file=stderr())
+                dbWriteTable(sql$con, "batchRuns", data.frame(batchID=batchID, runID=r$runID), append=TRUE, row.names=FALSE)
+                cat(sprintf("Got %d runs from batch %d                \r", nrow(r), batchID), file=stderr())
                 runID = max(r$runID)
             }
 
             ## ----------------------------------------------------------------------------
             ## 3. get hits for one new batch
-            ## Start after the largest hitID we already have
+            ## Start after the largest hitID we already have.
+            ## (also get the count of hits we already have for this batch, to which we'll add
+            ## new hits as we get them, writing the final total to the numHits field in
+            ## this batch's record).
             ## ----------------------------------------------------------------------------
 
-            hitID = sql("select max(hitID) from hits where batchID=%d", b)
+            nn = sql("select ifnull(max(hitID), 0), count(*) from hits where batchID=%d", batchID)
+            hitID = nn[[1]]
+            numHits = nn[[2]]
             repeat {
                 h = srvHitsForTagProject(projectID=projectID, batchID=batchID, hitID=hitID)
-                if (nrow(h) == 0)
+                if (! isTRUE(nrow(h) > 0))
                     break
-                cat(sprintf("Got %d hits for batch %b                \r", nrow(h), b), file=stderr())
+                cat(sprintf("Got %d hits for batch %d                \r", nrow(h), batchID), file=stderr())
                 ## add these hit records to the DB
-                ## Because a previous transfer might have been
-                ## interrupted, use dbInsertOrReplace
-                dbInsertOrReplace(sql$con, "hits", h)
+                dbWriteTable(sql$con, "hits", h, append=TRUE, row.names=FALSE)
+                nn = nn + nrow(h)
                 hitID = max(h$hitID)
             }
 
@@ -98,13 +101,13 @@ motusUpdateTagDB = function(sql, countOnly=FALSE) {
             ## Start after the largest TS for which we already have a fix
             ## ----------------------------------------------------------------------------
 
-            ts = sql("select max(ts) from gps where batchID=%d", batchID)
+            ts = sql("select ifnull(max(ts), 0) from gps where batchID=%d", batchID)[[1]]
             repeat {
                 g = srvGPSforTagProject(projectID=projectID, batchID=batchID, ts=ts)
-                if (nrow(g) == 0)
+                if (! isTRUE(nrow(g) > 0))
                     break
-                cat(sprintf("Got %d GPS fixes for batch %b                \r", nrow(g), b), file=stderr())
-                dbInsertOrReplace(sql$con, "gps", g)
+                cat(sprintf("Got %d GPS fixes for batch %d                \r", nrow(g), batchID), file=stderr())
+                dbInsertOrReplace(sql$con, "gps", g[, c("batchID", "ts", "gpsts", "lat", "lon", "alt")])
                 ts = max(g$ts)
             }
 
@@ -113,6 +116,13 @@ motusUpdateTagDB = function(sql, countOnly=FALSE) {
             ## This marks the transfers for this batch as complete.
             ## ----------------------------------------------------------------------------
 
+            ## update the number of hits; this won't necessarily be
+            ## the same value as supplied by the server, since our
+            ## copy of this batch has only the hits from tags in this
+            ## project, whereas the server's has hits from all
+            ## projects's tags.
+
+            b$numHits[bi] = numHits
             dbWriteTable(sql$con, "batches", b[bi,], append=TRUE, row.names=FALSE)
         }
         batchID = max(b$batchID)

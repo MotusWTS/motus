@@ -5,24 +5,16 @@
 #' @param runID integer scalar ID of latest run already obtained.
 #' Default: 0, meaning none.
 #'
-#' @return a list with these items:
+#' @return a data.frame with these columns:
 #' \itemize{
-#'    \item runs, a data.frame with these columns:
-#'       \itemize{
-#'          \item runID
-#'          \item batchIDbegin
-#'          \item tsBegin
-#'          \item tsEnd
-#'          \item done
-#'          \item motusTagID
-#'          \item ant
-#'          \item len
-#'       }
-#'    \item batchRuns, a data.frame with these columns:
-#'       \itemize{
-#'          \item batchID
-#'          \item runID
-#'       }
+#'    \item runID
+#'    \item batchIDbegin
+#'    \item tsBegin
+#'    \item tsEnd
+#'    \item done
+#'    \item motusTagID
+#'    \item ant
+#'    \item len
 #' }
 #'
 #' @export
@@ -31,8 +23,5 @@
 
 srvRunsForReceiverProject = function(projectID, batchID, runID=0) {
     x = srvQuery(API=Motus$API_RUNS_FOR_RECEIVER_PROJECT, params=list(projectID=projectID, batchID=batchID, runID=runID))
-    return (list(
-        runs = structure(x$runs, class = "data.frame", row.names=seq(along=x$runs[[1]])),
-        batchRuns = structure(x$batchRuns, class = "data.frame", row.names=seq(along=x$batchRuns[[1]]))
-        ))
+    return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
 }

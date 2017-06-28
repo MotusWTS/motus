@@ -15,24 +15,16 @@ srvRunsForTagProject(projectID, batchID, runID = 0)
 Default: 0, meaning none.}
 }
 \value{
-a list with these items:
+a data.frame with these columns:
 \itemize{
-   \item runs, a data.frame with these columns:
-      \itemize{
-         \item runID
-         \item batchIDbegin
-         \item tsBegin
-         \item tsEnd
-         \item done
-         \item motusTagID
-         \item ant
-         \item len
-      }
-   \item batchRuns, a data.frame with these columns:
-      \itemize{
-         \item batchID
-         \item runID
-      }
+   \item runID
+   \item batchIDbegin
+   \item tsBegin
+   \item tsEnd
+   \item done
+   \item motusTagID
+   \item ant
+   \item len
 }
 }
 \description{
