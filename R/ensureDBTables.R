@@ -71,12 +71,13 @@ projRecv)
     if (! "gps" %in% tables) {
         sql("
 create table gps (
-ts      DOUBLE UNIQUE PRIMARY KEY,           -- system timestamp for this record
 batchID INTEGER NOT NULL REFERENCES batches, -- batch from which this fix came
+ts      DOUBLE,                              -- system timestamp for this record
 gpsts   DOUBLE,                              -- gps timestamp
 lat     DOUBLE,                              -- latitude, decimal degrees
 lon     DOUBLE,                              -- longitude, decimal degrees
-alt     DOUBLE                               -- altitude, metres
+alt     DOUBLE,                              -- altitude, metres
+PRIMARY KEY (batchID, ts)
 )");
 
         sql("create index gps_batchID on gps ( batchID )")
@@ -221,6 +222,26 @@ CREATE TABLE tagDeps (
         sql("CREATE INDEX IF NOT EXISTS tagDeps_projectID on tagDeps(projectID)")
         sql("CREATE INDEX IF NOT EXISTS tagDeps_deployID on tagDeps(deployID)")
 }
+    if (! "tags" %in% tables) {
+        sql('
+CREATE TABLE "tags" (
+  "tagID" INTEGER PRIMARY KEY,
+  "projectID" INTEGER,
+  "mfgID" TEXT,
+  "type" TEXT,
+  "codeSet" TEXT,
+  "manufacturer" TEXT,
+  "model" TEXT,
+  "lifeSpan" INTEGER,
+  "nomFreq" REAL,
+  "offsetFreq" REAL,
+  "bi" REAL,
+  "pulseLen" REAL
+);
+')
+        sql("CREATE INDEX IF NOT EXISTS tags_projectID on tags(projectID)")
+    }
+
     if (! "tagDeps" %in% tables) {
         sql("
 CREATE TABLE recvDeps (
@@ -283,4 +304,4 @@ CREATE TABLE species (
 
 ## list of tables needed in the receiver database
 
-dbTableNames = c("meta", "batches", "runs", "batchRuns", "hits", "gps", "tagAmbig", "projs", "tagDeps", "recvDeps", "antDeps", "species")
+dbTableNames = c("meta", "batches", "runs", "batchRuns", "hits", "gps", "tagAmbig", "projs", "tags", "tagDeps", "recvDeps", "antDeps", "species")
