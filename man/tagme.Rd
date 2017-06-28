@@ -25,10 +25,13 @@ downloads of large amounts of data that you already have!}
 requested database updates.  Otherwise, return a count of items
 that would need to be transferred in order to update the
 database.}
+
+\item{dir:}{path to the folder where you are storing databases
+Default: the current directory; i.e. \code{getwd()}}
 }
 \value{
 a dplyr::src_sqlite for the (possibly updated) database, or a list
-of these if called with no value for \code{projRecv}
+of counts if \code{countOnly==TRUE}
 }
 \description{
 update a motus tag detection database
@@ -65,7 +68,7 @@ update a motus tag detection database
 
 }
 \seealso{
-\link{\code{tellme}}, which is a synonym for \code{tagme(..., countOnly=TRUE)}
+\link{\code{tellme}}, which is a synonym for \code{tagme(..., update=TRUE, countOnly=TRUE)}
 }
 \author{
 John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}

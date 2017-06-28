@@ -13,6 +13,9 @@
 #' in the current directory.  This is mainly to prevent inadvertent
 #' downloads of large amounts of data that you already have!
 #'
+#' @param dir: path to the folder where you are storing databases
+#' Default: the current directory; i.e. \code{getwd()}
+#'
 #' @param countOnly logical scalar: if FALSE, the default, then do
 #'     requested database updates.  Otherwise, return a count of items
 #'     that would need to be transferred in order to update the
@@ -49,9 +52,9 @@
 #' # tagme()
 #'
 #' @return a dplyr::src_sqlite for the (possibly updated) database, or a list
-#' of these if called with no value for \code{projRecv}
+#' of counts if \code{countOnly==TRUE}
 #'
-#' @seealso \link{\code{tellme}}, which is a synonym for \code{tagme(..., countOnly=TRUE)}
+#' @seealso \link{\code{tellme}}, which is a synonym for \code{tagme(..., update=TRUE, countOnly=TRUE)}
 #'
 #' @export
 #'
@@ -81,7 +84,7 @@ tagme = function(projRecv, update=FALSE, new=FALSE, dir=getwd(), countOnly=FALSE
     ensureDBTables(rv, projRecv)
 
     if (update)
-        motusUpdateDB(projRecv, rv, countOnly)
+        rv2 = motusUpdateDB(projRecv, rv, countOnly)
 
-    return(rv)
+    return(if (countOnly) rv2 else rv)
 }
