@@ -7,7 +7,7 @@
 #' @return data.frame with these columns:
 #' \itemize{
 #' \item batchID integer motus batch ID
-#' \item deviceID integer motus device ID
+#' \item motusDeviceID integer motus device ID
 #' \item monoBN boot number, for SG receivers; NA for Lotek
 #' \item tsStart first timestamp of data
 #' \item tsEnd last timestamp of data

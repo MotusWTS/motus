@@ -20,6 +20,7 @@ a data.frame with these columns:
    \item motusTagID5; positive integer motus tag ID or NA
    \item motusTagID6; positive integer motus tag ID or NA
 }
+with one row per ambigID
 }
 \description{
 Ambiguity IDs ("negative tag IDs") represent sets of 2 to 6 motus tags

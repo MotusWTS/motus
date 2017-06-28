@@ -15,6 +15,7 @@
 #'    \item motusTagID5; positive integer motus tag ID or NA
 #'    \item motusTagID6; positive integer motus tag ID or NA
 #' }
+#' with one row per ambigID
 #'
 #' @export
 #'
