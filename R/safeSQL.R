@@ -114,7 +114,7 @@ safeSQL = function(con, busyTimeout = 300) {
                     tryCatch({
                         a = list(...)
                         if (length(a) > 0) {
-                            if (names(a) != NULL) {
+                            if (!is.null(names(a))) {
                                 return(dbGetPreparedQuery(con, query, data.frame(a, stringsAsFactors=FALSE)))
                             } else {
                                 if (.QUOTE) {
