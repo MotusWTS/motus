@@ -6,6 +6,7 @@ Author: John Brzustowski <jbrzusto@fastmail.fm>
 Maintainer: John Brzustowski <jbrzusto@fastmail.fm>
 Depends:
     R (>= 3.1.0),
+    RSQLite,
     dplyr
 Imports:
     RSQLite,
