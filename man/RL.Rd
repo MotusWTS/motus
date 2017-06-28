@@ -2,15 +2,19 @@
 % Please edit documentation in R/RL.R
 \name{RL}
 \alias{RL}
-\title{reload a function in this package from its source folder}
+\title{reload a function in a package from its source folder}
 \usage{
-RL(X, path = file.path("~/src/motus/R", paste0(substitute(X), ".R")))
+RL(f, path = NULL, package = NULL)
 }
 \arguments{
 \item{f}{unquoted name of function}
 
-\item{path;}{path to source file containing new definition for \code{f};
-default: \code{~/src/motus/R/f.R}}
+\item{path:}{path to source file containing new definition for \code{f};
+Default is to run \code{find} starting at the user's home directory, looking
+for a file called \code{paste0(substitute(f), ".R")}}
+
+\item{package:}{name of package to which \code{f} belongs.  Defaults to the
+first package returned by \code{getAnywhere(f)}}
 }
 \description{
 Not for final package distribution: this is a kludge to avoid having
@@ -18,24 +22,25 @@ to rebuild the whole package just to propagate a change in a single
 function.
 }
 \details{
-Here's what \code{RL(X)} does:
+Here's what \code{RL(f)} does:
 \itemize{
 \item the file \code{path} is sourced into
 an empty environment \code{E}
 \item for each symbol \code{S} in \code{E}:
 \itemize{
-\item if \code{S} is a function, set its binding environment to \code{namespace:motusServer}
-\item unlock the binding for \code{S} in \code{namespace:motusServer}
-\item bind \code{S} to \code{E$S} in \code{namespace:motusServer}
-\item lock the binding for \code{S} in \code{namespace:motusServer}
-\item if \code{S} is bound in \code{package:motusServer}:
+\item if \code{S} is a function, set its binding environment to \code{namespace:PACKAGE}
+\item unlock the binding for \code{S} in \code{namespace:PACKAGE}
+\item bind \code{S} to \code{E$S} in \code{namespace:PACKAGE}
+\item lock the binding for \code{S} in \code{namespace:PACKAGE}
+\item if \code{S} is bound in \code{package:PACKAGE}:
 \itemize{
-\item unlock the binding for \code{S} in \code{package:motusServer}
-\item bind \code{S} to \code{E$S} in \code{package:motusServer}
-\item lock the binding for \code{S} in \code{package:motusServer}
+\item unlock the binding for \code{S} in \code{package:PACKAGE}
+\item bind \code{S} to \code{E$S} in \code{package:PACKAGE}
+\item lock the binding for \code{S} in \code{package:PACKAGE}
 }
 }
 }
+where \code{PACKAGE} stands for the value of \code{package}.
 }
 \author{
 John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
