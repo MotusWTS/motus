@@ -115,7 +115,9 @@ returns an empty list.
      tables):
       - runID
       - batchIDbegin
-      - batchIDend
+      - tsBegin
+      - tsEnd
+      - done
       - motusTagID
       - ant
       - len
@@ -137,7 +139,9 @@ returns an empty list.
      tables):
       - runID
       - batchIDbegin
-      - batchIDend
+      - tsBegin
+      - tsEnd
+      - done
       - motusTagID
       - ant
       - len
@@ -230,12 +234,14 @@ returns an empty list.
     - authToken: authorization token returned by authenticate_user
 
    - return all GPS fixes from batch `batchID` which are later than
-     timestamp ts and "near" detections of a tag deployment from
-     project `projectID`.  This is done by hourly bins: the hourly
-     bins of every run of detections of any tag from project
-     `projectID` are noted, and all GPS fixes from any of these bins
-     are returned.  An additional bin before the earliest and after
-     the latest detection are added, to ensure temporal coverage.
+     timestamp ts and "relevant to" detections of a tag deployment
+     from project `projectID`.  This is given a permissive
+     interpretation: all GPS fixes from 1 hour before the first
+     detection of a project tag to 1 hour after the last detection of
+     a project tag in the given batch are returned.  This might return
+     GPS fixes for long periods where no tags from the project were
+     detected, if a batch has a few early and a few late detections of
+     the project's tags.
 
    - columns should include these fields (as they exist in the transfer
      tables):
@@ -373,6 +379,7 @@ returns an empty list.
       - numRuns
       - numHits
       - numGPS
+      - numBytes: estimated uncompressed size of data transfer
 
 ### size_of_update_for_receiver_project (projectID, batchID) ###
 
@@ -384,3 +391,4 @@ returns an empty list.
       - numRuns
       - numHits
       - numGPS
+      - numBytes: estimated uncompressed size of data transfer
