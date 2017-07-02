@@ -4,7 +4,7 @@
 \alias{srvMetadataForTags}
 \title{get the metadata for some tags}
 \usage{
-srvMetadataForTags(projectID, motusTagIDs)
+srvMetadataForTags(motusTagIDs)
 }
 \arguments{
 \item{motusTagIDs}{integer vector of motus tag IDs}

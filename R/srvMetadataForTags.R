@@ -53,7 +53,7 @@
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
-srvMetadataForTags = function(projectID, motusTagIDs) {
+srvMetadataForTags = function(motusTagIDs) {
     x = srvQuery(API=Motus$API_METADATA_FOR_TAGS, params=list(motusTagIDs=motusTagIDs))
     return (list(
         tags = structure(x$tags, class = "data.frame", row.names=seq(along=x$tags[[1]])),
