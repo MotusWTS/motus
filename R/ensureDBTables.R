@@ -18,7 +18,7 @@ ensureDBTables = function(src, projRecv) {
         stop("src is not open or is corrupt; underlying db connection invalid")
 
     ## function to send a single statement to the underlying connection
-    sql = function(...) dbGetQuery(con, sprintf(...))
+    sql = function(...) DBI::dbExecute(con, sprintf(...))
 
     sql("pragma page_size=4096") ## reasonably large page size; post 2011 hard drives have 4K sectors anyway
 
