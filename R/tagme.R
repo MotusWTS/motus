@@ -84,7 +84,7 @@ tagme = function(projRecv, update=FALSE, new=FALSE, dir=getwd(), countOnly=FALSE
     ensureDBTables(rv, projRecv)
 
     if (update)
-        rv2 = motusUpdateDB(projRecv, rv, countOnly)
+        rv = motusUpdateDB(projRecv, rv, countOnly)
 
-    return(if (countOnly) rv2 else rv)
+    return(rv)
 }
