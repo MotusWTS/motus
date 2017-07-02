@@ -90,7 +90,7 @@ motusUpdateTagDB = function(sql, countOnly=FALSE) {
                 cat(sprintf("Got %d hits for batch %d                \r", nrow(h), batchID), file=stderr())
                 ## add these hit records to the DB
                 dbWriteTable(sql$con, "hits", h, append=TRUE, row.names=FALSE)
-                nn = nn + nrow(h)
+                numHits = numHits + nrow(h)
                 hitID = max(h$hitID)
             }
 
