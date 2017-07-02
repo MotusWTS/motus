@@ -10,8 +10,6 @@
 #' @seealso \link{\code{tagme}}, which is intended for most users, and
 #'     indirectly calls this function.
 #'
-#' @export
-#'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 motusUpdateRecvDB = function(sql, countOnly) {
