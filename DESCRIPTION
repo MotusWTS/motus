@@ -7,7 +7,8 @@ Maintainer: John Brzustowski <jbrzusto@fastmail.fm>
 Depends:
     R (>= 3.1.0),
     RSQLite,
-    dplyr
+    dplyr,
+    dbplyr
 Imports:
     RSQLite,
     httr,
