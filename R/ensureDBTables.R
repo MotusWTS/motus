@@ -245,7 +245,6 @@ CREATE TABLE "tags" (
     if (! "tagDeps" %in% tables) {
         sql("
 CREATE TABLE recvDeps (
-   id INTEGER PRIMARY KEY,
    serno TEXT,
    receiverType TEXT,
    deviceID INTEGER,
@@ -263,6 +262,7 @@ CREATE TABLE recvDeps (
    elevation REAL
 );
 ")
+        sql("CREATE INDEX IF NOT EXISTS recvDeps_serno on recvDeps(serno)")
         sql("CREATE INDEX IF NOT EXISTS recvDeps_deviceID on recvDeps(deviceID)")
         sql("CREATE INDEX IF NOT EXISTS recvDeps_projectID on recvDeps(projectID)")
         sql("CREATE INDEX IF NOT EXISTS recvDeps_deployID on recvDeps(deployID)")
