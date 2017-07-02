@@ -57,6 +57,7 @@
         API_SEARCH_TAGS  = "https://motus.org/api/tags/search"
 
         ## API entry points for the data server (URLs relative to dataServerURL)
+        API_RECEIVERS_FOR_PROJECT               = "custom/receivers_for_project"
         API_BATCHES_FOR_TAG_PROJECT             = "custom/batches_for_tag_project"
         API_BATCHES_FOR_RECEIVER_PROJECT        = "custom/batches_for_receiver_project"
         API_RUNS_FOR_TAG_PROJECT                = "custom/runs_for_tag_project"

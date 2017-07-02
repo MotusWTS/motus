@@ -55,6 +55,28 @@ rebooted at least once between deployments under **different** projects.
 
 These assumptions allow for simpler, more efficient database queries.
 
+### receivers_for_project (projectID, authToken) ###
+
+       - projectID: integer project ID
+
+   - return a list of receiver deployments belonging to project `projectID`
+
+   - items in the return value are vectors:
+      - serno character serial number; e.g. SG-1234BBBK9876, Lotek-149
+      - receiverType character; "LOTEK" or "SENSORGNOME"
+      - deviceID integer motus device ID
+      - status character,
+      - deployID integer; motus device deployment ID
+      - name character; short name for this deployment; typically a site name
+      - fixtureType character; e.g. "PopTower"
+      - latitude numeric; decimal degrees North (at start of deployment if mobile)
+      - longitude numeric; decimal degrees East (at start of deployment if mobile)
+      - isMobile logical; is this a mobile deployment
+      - tsStart numeric; unix timestamp of start of deployment
+      - tsEnd numeric; unix timestamp of end of deployment, or null if still deployed
+      - projectID integer; motus project ID owning deployment
+      - elevation numeric; metres above sea level
+
 ### batches_for_tag_project (projectID, batchID, authToken) ###
 
        - projectID: integer project ID
