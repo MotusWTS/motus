@@ -125,31 +125,6 @@ motusUpdateTagDB = function(sql, countOnly=FALSE) {
         }
         batchID = max(b$batchID)
     }
-
-    ## ----------------------------------------------------------------------------
-    ## 6. get metadata for tags, their deployments, and species names
-    ## ----------------------------------------------------------------------------
-
-    tmeta = srvMetadataForTags(projectID=projectID, motusTagIDs=tagIDs[tagIDs > 0])
-    dbInsertOrReplace(sql$con, "tags", tmeta$tags)
-    dbInsertOrReplace(sql$con, "tagDeps", tmeta$tagDeps)
-    dbInsertOrReplace(sql$con, "species", tmeta$species)
-
-    ## ----------------------------------------------------------------------------
-    ## 7. get metadata for tag ambiguities
-    ## ----------------------------------------------------------------------------
-
-    ambig = srvTagsForAmbiguities(tagIDs[tagIDs < 0])
-    dbInsertOrReplace(sql$con, "tagAmbig", ambig)
-
-    ## ----------------------------------------------------------------------------
-    ## 8. get metadata for receivers and their antennas
-    ## ----------------------------------------------------------------------------
-
-    rmeta = srvMetadataForReceivers(devIDs)
-    dbInsertOrReplace(sql$con, "recvDeps", rmeta$recvDeps)
-    dbInsertOrReplace(sql$con, "antDeps", rmeta$antDeps)
-
-    invisible(NULL)
+    motusUpdateDBmetadata(sql, tagIDs, devIDs)
     return(sql)
 }
