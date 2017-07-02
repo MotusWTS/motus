@@ -153,4 +153,5 @@ motusUpdateTagDB = function(sql, countOnly=FALSE) {
     dbInsertOrReplace(sql$con, "antDeps", rmeta$antDeps)
 
     invisible(NULL)
+    return(sql)
 }

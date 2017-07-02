@@ -10,15 +10,13 @@
 #'     that would need to be transferred in order to update the
 #'     database.
 #'
-#' @return invisible(NULL) if \code{updateOnly} is FALSE.  Otherwise, a list
+#' @return \code{src} if \code{countOnly} is FALSE.  Otherwise, a list
 #' of counts of items available for an update.
 #'
 #' @seealso \link{\code{tagme}}, which is intended for most users, and calls this function.
 #'
 #' @note This function does most of the work of fetching data and metadata from
-#' motus servers.  It is not really meant to be called directly by most users.
-#'
-#' @export
+#' motus servers.  It is not intended to be called directly by users.
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 

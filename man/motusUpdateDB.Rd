@@ -18,7 +18,7 @@ that would need to be transferred in order to update the
 database.}
 }
 \value{
-invisible(NULL) if \code{updateOnly} is FALSE.  Otherwise, a list
+\code{src} if \code{countOnly} is FALSE.  Otherwise, a list
 of counts of items available for an update.
 }
 \description{
@@ -26,7 +26,7 @@ update a motus tag detection database (backend)
 }
 \note{
 This function does most of the work of fetching data and metadata from
-motus servers.  It is not really meant to be called directly by most users.
+motus servers.  It is not intended to be called directly by users.
 }
 \seealso{
 \link{\code{tagme}}, which is intended for most users, and calls this function.
