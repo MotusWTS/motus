@@ -39,7 +39,7 @@ val  character                              -- character string giving meta data
         if (is.character(projRecv))  {
             if (grepl("^SG", projRecv)) {
                 type = "SENSORGNOME"
-                model = substring(projRecv, 5, 8)
+                model = substring(projRecv, 8, 11)
             } else {
                 type = "Lotek"
                 model = getLotekModel(projRecv)
@@ -50,7 +50,7 @@ values
 ('dbType', 'receiver'),
 ('recvSerno', '%s'),
 ('recvType', '%s'),
-('recvModel', '%s'),
+('recvModel', '%s')
 ",
 projRecv,
 type,
