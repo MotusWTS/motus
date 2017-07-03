@@ -55,6 +55,16 @@ rebooted at least once between deployments under **different** projects.
 
 These assumptions allow for simpler, more efficient database queries.
 
+### deviceID_for_receiver (serno, authToken) ###
+
+       - serno: character vector of receiver serial number(s)
+
+   - return a list of receiver device IDs for the given serial numbers
+
+   - items in the return value are vectors:
+      - serno character serial number, as specified
+      - deviceID integer motus device ID, or NA where the serial number was not found
+
 ### receivers_for_project (projectID, authToken) ###
 
        - projectID: integer project ID
@@ -100,14 +110,14 @@ Paging for this query is achieved by using the largest returned value of `batchI
 as `batchID` on subsequent calls.  When there are no further batches, the API
 returns an empty list.
 
-### batches_for_receiver_project (projectID, batchID, authToken) ###
+### batches_for_receiver (deviceID, batchID, authToken) ###
 
-       - projectID: integer project ID
+       - deviceID: integer motus device ID, e.g. as returned by receivers_for_project
        - batchID: integer largest batchID we already have for this project
        - authToken: authorization token returned by authenticate_user
 
-   - return a list of all batches from receivers in project projectID,
-     where the batchID is > `batchID`
+   - return a list of all batches from deployments of the device by
+     project projectID, where the batchID is > `batchID`
 
    - columns should include these fields (as they exist in the transfer
      tables):
@@ -148,9 +158,8 @@ Paging for this query is achieved by using the last returned value of `runID`
 as `runID` on subsequent calls.  When there are no further runs, the API
 returns an empty list.
 
-### runs_for_receiver_project (projectID, batchID, runID, authToken) ###
+### runs_for_receiver (batchID, runID, authToken) ###
 
-       - projectID: integer project ID; project receiver belongs to
        - batchID: integer batch ID
        - runID: integer largest runID we *already* have from this batch
        - authToken: authorization token returned by authenticate_user
@@ -200,9 +209,8 @@ Paging for this query is achieved by using the last returned value of `hitID`
 as `hitID` on subsequent calls.  When there are no further hits, the API
 returns an empty list.
 
-### hits_for_receiver_project (projectID, batchID, hitID, authToken) ###
+### hits_for_receiver (batchID, hitID, authToken) ###
 
-       - projectID; integer project ID of receiver deployment
        - batchID: integer batchID
        - hitID: integer largest hitID we *already* have from this batch
        - authToken: authorization token returned by authenticate_user
@@ -227,9 +235,8 @@ Paging for this query is achieved by using the last returned value of `hitID`
 as `hitID` on subsequent calls.  When there are no further hits, the API
 returns an empty list.
 
-### gps_for_receiver_project (projectID, batchID, ts, authToken) ###
+### gps_for_receiver (batchID, ts, authToken) ###
 
-    - projectID; integer project ID of receiver deployment
     - batchID: integer batchID
     - ts: largest gps timestamp we *already* have for this batch
     - authToken: authorization token returned by authenticate_user
@@ -403,9 +410,9 @@ returns an empty list.
       - numGPS
       - numBytes: estimated uncompressed size of data transfer
 
-### size_of_update_for_receiver_project (projectID, batchID) ###
+### size_of_update_for_receiver (deviceID, batchID) ###
 
-    - projectID: integer project ID
+    - deviceID: integer motus device ID
     - batchID: integer ID of largest batch client already has
 
    - return a list with these scalar items:

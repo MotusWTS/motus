@@ -1,6 +1,5 @@
-#' get the runs for a receiver project from the data server
+#' get the runs for a receiver from the data server
 #'
-#' @param projectID integer scalar motus project ID
 #' @param batchID integer scalar motus batch ID
 #' @param runID integer scalar ID of latest run already obtained.
 #' Default: 0, meaning none.
@@ -21,7 +20,7 @@
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
-srvRunsForReceiverProject = function(projectID, batchID, runID=0) {
-    x = srvQuery(API=Motus$API_RUNS_FOR_RECEIVER_PROJECT, params=list(projectID=projectID, batchID=batchID, runID=runID))
+srvRunsForReceiver = function(batchID, runID=0) {
+    x = srvQuery(API=Motus$API_RUNS_FOR_RECEIVER, params=list(batchID=batchID, runID=runID))
     return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
 }

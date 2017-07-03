@@ -18,12 +18,12 @@ document.
 
 There are two *flavours* of tag database:
 
-1. **receiver tag database**: all detections of any tags from a single receiver.
-A receiver tag database has a name like `SG-1234BBBK5678.motus`; where the name
+1. **receiver database**: all detections of any tags from a single receiver.
+A receiver database has a name like `SG-1234BBBK5678.motus`; where the name
 is the serial number of the receiver.
 
-1. **project tag database**: all detections of *your* tags from across the motus network
-A project tag database has a name like `project-123.motus`, where the number
+1. **tag project database**: all detections of *your* tags from across the motus network
+A tag project database has a name like `project-123.motus`, where the number
 is the motus project ID.
 
 These correspond to the basic model of data sharing:

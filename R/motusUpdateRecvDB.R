@@ -15,15 +15,15 @@
 motusUpdateRecvDB = function(sql, countOnly) {
     if (!inherits(sql, "safeSQL"))
         stop("sql must be a database connection of type 'safeSQL'.\nPerhaps use tagme() instead of this function?")
-    projectID = sql("select val from meta where key='recvProject'")[[1]] %>% as.integer
-
+    deviceID = sql("select val from meta where key='deviceID'")[[1]] %>% as.integer
+    if (!isTRUE(deviceID > 0))
+        stop("This receiver database does not have a valid deviceID stored in it.\nTry delete or rename the file and use tagme() again?")
     batchID = sql("select ifnull(max(batchID), 0) from batches")[[1]]
     if (countOnly)
-        return (srvSizeOfUpdateForReceiverProject(projectID=projectID, batchID=batchID))
+        return (srvSizeOfUpdateForReceiver(deviceID=deviceID, batchID=batchID))
 
     ## keep track of items we'll need metadata for
     tagIDs = c()
-    devIDs = c()
 
     ## ----------------------------------------------------------------------------
     ## 1. get records for all new batches
@@ -33,7 +33,7 @@ motusUpdateRecvDB = function(sql, countOnly) {
     repeat {
         ## we always use countOnly = FALSE, because we need to obtain batchIDs
         ## in order to count runs and hits
-        b = srvBatchesForReceiverProject(projectID=projectID, batchID=batchID)
+        b = srvBatchesForReceiver(deviceID=deviceID, batchID=batchID)
         if (! isTRUE(nrow(b) > 0))
             break
         ## temporary work-around to batches with incorrect starting timestamps
@@ -41,7 +41,6 @@ motusUpdateRecvDB = function(sql, countOnly) {
         ## to span multiple deployments.
         b = subset(b, ! duplicated(batchID))
 
-        devIDs = unique(c(devIDs, b$motusDeviceID))
         cat(sprintf("Got %d batch records\n", nrow(b)), file=stderr())
         for (bi in 1:nrow(b)) {
             batchID = b$batchID[bi]
@@ -57,7 +56,7 @@ motusUpdateRecvDB = function(sql, countOnly) {
             runID = 0
             repeat {
 
-                r = srvRunsForReceiverProject(projectID=projectID, batchID=batchID, runID=runID)
+                r = srvRunsForReceiver(batchID=batchID, runID=runID)
                 if (! isTRUE(nrow(r) > 0))
                     break
 
@@ -68,7 +67,7 @@ motusUpdateRecvDB = function(sql, countOnly) {
 
                 dbInsertOrReplace(sql$con, "runs", r)
                 dbWriteTable(sql$con, "batchRuns", data.frame(batchID=batchID, runID=r$runID), append=TRUE, row.names=FALSE)
-                cat(sprintf("Got %d runs from batch %d                \r", nrow(r), batchID), file=stderr())
+                cat(sprintf("Got %d runs starting at %.0f from batch %d                \r", nrow(r), runID, batchID), file=stderr())
                 runID = max(r$runID)
             }
 
@@ -82,10 +81,10 @@ motusUpdateRecvDB = function(sql, countOnly) {
 
             hitID = sql("select ifnull(max(hitID), 0) from hits where batchID=%d", batchID)[[1]]
             repeat {
-                h = srvHitsForReceiverProject(projectID=projectID, batchID=batchID, hitID=hitID)
+                h = srvHitsForReceiver(batchID=batchID, hitID=hitID)
                 if (! isTRUE(nrow(h) > 0))
                     break
-                cat(sprintf("Got %d hits for batch %d                \r", nrow(h), batchID), file=stderr())
+                cat(sprintf("Got %d hits starting at %.0f for batch %d                \r", nrow(h), hitID, batchID), file=stderr())
                 ## add these hit records to the DB
                 dbWriteTable(sql$con, "hits", h, append=TRUE, row.names=FALSE)
                 hitID = max(h$hitID)
@@ -98,7 +97,7 @@ motusUpdateRecvDB = function(sql, countOnly) {
 
             ts = sql("select ifnull(max(ts), 0) from gps where batchID=%d", batchID)[[1]]
             repeat {
-                g = srvGPSforRecvProject(projectID=projectID, batchID=batchID, ts=ts)
+                g = srvGPSforReceiver(batchID=batchID, ts=ts)
                 if (! isTRUE(nrow(g) > 0))
                     break
                 cat(sprintf("Got %d GPS fixes for batch %d                \r", nrow(g), batchID), file=stderr())
@@ -122,6 +121,6 @@ motusUpdateRecvDB = function(sql, countOnly) {
         batchID = max(b$batchID)
     }
 
-    motusUpdateDBmetadata(sql, tagIDs, devIds)
+    motusUpdateDBmetadata(sql, tagIDs, deviceID)
     return(sql)
 }

@@ -10,7 +10,10 @@
 #' \item{API_REGISTER_TAG}{URL to call for registering a tag}
 #' \item{API_DEPLOY_TAG}{URL to call for deploying a tag}
 #' \item{API_SEARCH_TAGS}{URL to call for listing registered tags}
+#' \item{API_RECEIVERS_FOR_PROJECT}{URL to call for getting a list of receiver deployments for a project}
+#' \item{API_DEVICE_ID_FOR_RECEIVER}{URL to call for getting the device ID for a receiver}
 #' \item{API_BATCHES_FOR_TAG_PROJECT}{URL to call for getting batches for a tag project}
+#' \item{API_BATCHES_FOR_RECEIVER}{URL to call for getting batches for a receiver}
 #' \item{API_BATCHES_FOR_RECEIVER_PROJECT}{URL to call for getting batches for a receiver project}
 #' \item{API_GPS_FOR_TAG_PROJECT}{URL to call for getting GPS fixes for a tag project}
 #' \item{API_GPS_FOR_RECEIVER_PROJECT}{URL to call for getting GPS fixes for a receiver project}
@@ -57,20 +60,21 @@
         API_SEARCH_TAGS  = "https://motus.org/api/tags/search"
 
         ## API entry points for the data server (URLs relative to dataServerURL)
+        API_DEVICE_ID_FOR_RECEIVER              = "custom/deviceID_for_receiver"
         API_RECEIVERS_FOR_PROJECT               = "custom/receivers_for_project"
         API_BATCHES_FOR_TAG_PROJECT             = "custom/batches_for_tag_project"
-        API_BATCHES_FOR_RECEIVER_PROJECT        = "custom/batches_for_receiver_project"
+        API_BATCHES_FOR_RECEIVER                = "custom/batches_for_receiver"
         API_RUNS_FOR_TAG_PROJECT                = "custom/runs_for_tag_project"
-        API_RUNS_FOR_RECEIVER_PROJECT           = "custom/runs_for_receiver_project"
+        API_RUNS_FOR_RECEIVER                   = "custom/runs_for_receiver"
         API_HITS_FOR_TAG_PROJECT                = "custom/hits_for_tag_project"
-        API_HITS_FOR_RECEIVER_PROJECT           = "custom/hits_for_receiver_project"
+        API_HITS_FOR_RECEIVER                   = "custom/hits_for_receiver"
         API_GPS_FOR_TAG_PROJECT                 = "custom/gps_for_tag_project"
-        API_GPS_FOR_RECEIVER_PROJECT            = "custom/gps_for_receiver_project"
+        API_GPS_FOR_RECEIVER                    = "custom/gps_for_receiver"
         API_METADATA_FOR_TAGS                   = "custom/metadata_for_tags"
         API_METADATA_FOR_RECEIVERS              = "custom/metadata_for_receivers"
         API_TAGS_FOR_AMBIGUITIES                = "custom/tags_for_ambiguities"
         API_SIZE_OF_UPDATE_FOR_TAG_PROJECT      = "custom/size_of_update_for_tag_project"
-        API_SIZE_OF_UPDATE_FOR_RECEIVER_PROJECT = "custom/size_of_update_for_receiver_project"
+        API_SIZE_OF_UPDATE_FOR_RECEIVER         = "custom/size_of_update_for_receiver"
 
         ## a list of field names which must be formatted as floats so that the
         ## motus API recognizes them correctly.  This means that if they happen

@@ -1,6 +1,6 @@
-#' get the batches for a receiver project from the data server
+#' get the batches for a receiver from the data server
 #'
-#' @param projectID integer scalar motus project ID
+#' @param deviceID integer scalar motus device ID
 #' @param batchID integer largest batchID already owned for this project.
 #' Default: 0, meaning none.
 #'
@@ -19,7 +19,7 @@
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
-srvBatchesForReceiverProject = function(projectID, batchID=0) {
-    x = srvQuery(API=Motus$API_BATCHES_FOR_RECEIVER_PROJECT, params=list(projectID=projectID, batchID=batchID))
+srvBatchesForReceiver = function(deviceID, batchID=0) {
+    x = srvQuery(API=Motus$API_BATCHES_FOR_RECEIVER, params=list(deviceID=deviceID, batchID=batchID))
     return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
 }
