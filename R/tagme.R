@@ -79,6 +79,13 @@ tagme = function(projRecv, update=FALSE, new=FALSE, dir=getwd(), countOnly=FALSE
              )
     if (new && have)
         warning("Database ", dbname, " already exists, so I'm ignoring the 'new=TRUE' option")
+    if (! have && is.character(projRecv)) {
+        deviceID = srvDeviceIDForReceiver(projRecv)[[2]]
+        if (! isTRUE(as.integer(deviceID) > 0))
+            stop("Either the serial number '", projRecv, "' is not for a receiver registered with motus\nor you don't have permission to access it")
+    } else {
+        deviceID = NULL
+    }
     rv = dplyr::src_sqlite(dbname, create=new)
 
     ensureDBTables(rv, projRecv)

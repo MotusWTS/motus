@@ -1,4 +1,4 @@
-#' make sure a receiver database has the required tables
+#' make sure a tag or receiver database has the required tables
 #'
 #' @param src dplyr sqlite src, as returned by \code{dplyr::src_sqlite()}
 #'
@@ -6,11 +6,14 @@
 #'     character scalar receiver serial number; must be specified if
 #' \code{src} does not already contain a table named \code{meta}.
 #'
+#' @param deviceID integer scalar motus deviceID; must be specified
+#' when this is a new receiver database.
+#'
 #' @return returns NULL (silently); fails on any error
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
-ensureDBTables = function(src, projRecv) {
+ensureDBTables = function(src, projRecv, deviceID) {
     if (! inherits(src, "src_sql"))
         stop("src is not a dplyr::src_sql object")
     con = src$con
@@ -37,6 +40,9 @@ val  character                              -- character string giving meta data
 )
 ");
         if (is.character(projRecv))  {
+            if (missing(deviceID) || ! isTRUE(is.numeric(deviceID))) {
+                stop("must specify deviceID for new receiver database")
+            }
             if (grepl("^SG", projRecv)) {
                 type = "SENSORGNOME"
                 model = substring(projRecv, 8, 11)
@@ -50,11 +56,13 @@ values
 ('dbType', 'receiver'),
 ('recvSerno', '%s'),
 ('recvType', '%s'),
-('recvModel', '%s')
+('recvModel', '%s'),
+('deviceID', '%d')
 ",
 projRecv,
 type,
-model)
+model,
+as.integer(deviceID))
         } else if (is.numeric(projRecv)) {
             sql("
 insert into meta (key, val)

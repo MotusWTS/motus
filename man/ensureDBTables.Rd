@@ -2,9 +2,9 @@
 % Please edit documentation in R/ensureDBTables.R
 \name{ensureDBTables}
 \alias{ensureDBTables}
-\title{make sure a receiver database has the required tables}
+\title{make sure a tag or receiver database has the required tables}
 \usage{
-ensureDBTables(src, projRecv)
+ensureDBTables(src, projRecv, deviceID)
 }
 \arguments{
 \item{src}{dplyr sqlite src, as returned by \code{dplyr::src_sqlite()}}
@@ -12,12 +12,15 @@ ensureDBTables(src, projRecv)
 \item{projRecv}{integer scalar motus project ID number *or*
     character scalar receiver serial number; must be specified if
 \code{src} does not already contain a table named \code{meta}.}
+
+\item{deviceID}{integer scalar motus deviceID; must be specified
+when this is a new receiver database.}
 }
 \value{
 returns NULL (silently); fails on any error
 }
 \description{
-make sure a receiver database has the required tables
+make sure a tag or receiver database has the required tables
 }
 \author{
 John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
