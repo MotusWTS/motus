@@ -63,10 +63,11 @@
 tagme = function(projRecv, update=FALSE, new=FALSE, dir=getwd(), countOnly=FALSE) {
     if (missing(projRecv)) {
         ## special case: update all existing databases in \code{dir}
-        return(lapply(dir(dir, pattern="\\.motus$"),
-                      function(f) {
-                          tagme(projRecv=sub("\\.motus$", "", f), update=update, new=new, dir=dir, countOnly=countOnly)
-                      }))
+        ## return(lapply(dir(dir, pattern="\\.motus$"),
+        ##               function(f) {
+        ##                   tagme(projRecv=sub("\\.motus$", "", f), update=update, new=new, dir=dir, countOnly=countOnly)
+        ##               }))
+        stop("for now, you must specify a project number or receiver serial number")
     }
     if (length(projRecv) != 1 || (! is.numeric(projRecv) && ! is.character(projRecv)))
         stop("You must specify an integer project ID or a character receiver serial number.")
