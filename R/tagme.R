@@ -4,7 +4,8 @@
 #' character scalar receiver serial number
 #'
 #' @param update boolean scalar: should any new data be downloaded and merged?
-#' default: TRUE
+#' default: TRUE, unless this is a new database (in which case you must
+#' specify \code{update=TRUE} explicitly).
 #'
 #' @param new logical scalar: is this a new database?  Default: FALSE
 #' You have to specify \code{new=TRUE} if you want a new local copy of the
@@ -60,7 +61,7 @@
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
-tagme = function(projRecv, update=FALSE, new=FALSE, dir=getwd(), countOnly=FALSE) {
+tagme = function(projRecv, update=TRUE, new=FALSE, dir=getwd(), countOnly=FALSE) {
     if (missing(projRecv)) {
         ## special case: update all existing databases in \code{dir}
         ## return(lapply(dir(dir, pattern="\\.motus$"),
@@ -80,6 +81,8 @@ tagme = function(projRecv, update=FALSE, new=FALSE, dir=getwd(), countOnly=FALSE
              )
     if (new && have)
         warning("Database ", dbname, " already exists, so I'm ignoring the 'new=TRUE' option")
+    if (new && missing(update))
+        update = FALSE
     if (! have && is.character(projRecv)) {
         deviceID = srvDeviceIDForReceiver(projRecv)[[2]]
         if (! isTRUE(as.integer(deviceID) > 0))
@@ -87,9 +90,10 @@ tagme = function(projRecv, update=FALSE, new=FALSE, dir=getwd(), countOnly=FALSE
     } else {
         deviceID = NULL
     }
+
     rv = dplyr::src_sqlite(dbname, create=new)
 
-    ensureDBTables(rv, projRecv)
+    ensureDBTables(rv, projRecv, deviceID)
 
     if (update)
         rv = motusUpdateDB(projRecv, rv, countOnly)

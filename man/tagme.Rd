@@ -4,7 +4,7 @@
 \alias{tagme}
 \title{update a motus tag detection database}
 \usage{
-tagme(projRecv, update = FALSE, new = FALSE, dir = getwd(),
+tagme(projRecv, update = TRUE, new = FALSE, dir = getwd(),
   countOnly = FALSE)
 }
 \arguments{
@@ -12,7 +12,8 @@ tagme(projRecv, update = FALSE, new = FALSE, dir = getwd(),
 character scalar receiver serial number}
 
 \item{update}{boolean scalar: should any new data be downloaded and merged?
-default: TRUE}
+default: TRUE, unless this is a new database (in which case you must
+specify \code{update=TRUE} explicitly).}
 
 \item{new}{logical scalar: is this a new database?  Default: FALSE
 You have to specify \code{new=TRUE} if you want a new local copy of the
