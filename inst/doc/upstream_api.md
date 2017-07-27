@@ -6,6 +6,28 @@ motus.org This document describes the API calls required by the motus
 package; i.e. what requests must a server respond to if it is to work
 with this package.
 
+## API summary ##
+
+### Request ###
+ - requests are sent by the HTTP POST method
+ - the request has header `Content-Type: application/x-www-form-urlencoded`
+ - the POST data has a single item called `json`
+ - the fields of `json` are the parameters listed for each API entrypoint below.
+
+### Reply ###
+ - is a json object: header `Content-Type = application/json`
+ - is bzip2-compressed: header `Content-Encoding = bzip2`
+ - most return values are lists of vectors of
+   equal length, which is the natural JSON encoding of an R data.frame
+ - errors are indicated by including a field called `error` in the reply; other
+   fields might be present, giving additional information.  If no field `error`
+   is present, the request succeeded.
+
+Examples are given for each call using the command-line client [curl](https://curl.haxx.se/download.html)
+which returns the raw bzip2-compressed data. To view the response, redirect the output of curl into
+a file and use [7zip](http://7-zip.org) to decompress it (for example).
+
+The server is at [https://sgdata.motus.org](https://sgdata.motus.org) and the URL prefix is "/data/custom/".
 
 ## API calls ##
 
@@ -16,8 +38,11 @@ with this package.
       - user: username
       - password: password (in cleartext)
 
+      e.g.
+      curl --data-url-encode json='{"user":"someone","password":"bigsecret"}' https://sgdata.motus.org/data/custom/authenticate_user
+
    - returns a list with these items:
-      - token: character string; 264 random bits, base64-encoded
+      - authToken: character string; 264 random bits, base64-encoded
       - expiry: numeric timestamp of expiry for token
       - userID: integer motus ID for user
       - projects: integer vector of project #s user is allowed to request tag detections for
@@ -26,12 +51,11 @@ with this package.
    or
 
    - a list with this item:
-      - error: "authentication failed"
+      - error: "authentication with motus failed"
 
 ### Notes ###
 
-1. The token returned by this API must be included in all other API
-calls as the parameter called `authToken`.
+1. The `authToken` returned by this API must be included in all other API calls.
 
 2. Authorization is by project: if a user has permission for a
 project, then that user can see:
@@ -59,6 +83,9 @@ These assumptions allow for simpler, more efficient database queries.
 
        - serno: character vector of receiver serial number(s)
 
+      e.g.
+      curl --data-url-encode json='{"serno":"SG-1234BBBK5678","authToken":"XXX"}' https://sgdata.motus.org/data/custom/deviceID_for_receiver
+
    - return a list of receiver device IDs for the given serial numbers
 
    - items in the return value are vectors:
@@ -68,6 +95,9 @@ These assumptions allow for simpler, more efficient database queries.
 ### receivers_for_project (projectID, authToken) ###
 
        - projectID: integer project ID
+
+      e.g.
+      curl --data-url-encode json='{"projectID":123,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/receivers_for_project
 
    - return a list of receiver deployments belonging to project `projectID`
 
@@ -93,6 +123,9 @@ These assumptions allow for simpler, more efficient database queries.
        - batchID: integer largest batchID we already have for this project
        - authToken: authorization token returned by authenticate_user
 
+      e.g.
+      curl --data-url-encode json='{"projectID":123,"batchID":0, "authToken":"XXX"}' https://sgdata.motus.org/data/custom/batches_for_tag_project
+
    - return a list of all batches with detections of tags in project `projectID`,
      where the batchID is > `batchID`
 
@@ -115,6 +148,9 @@ returns an empty list.
        - deviceID: integer motus device ID, e.g. as returned by receivers_for_project
        - batchID: integer largest batchID we already have for this project
        - authToken: authorization token returned by authenticate_user
+
+      e.g.
+      curl --data-url-encode json='{"projectID":123,"batchID":0, "authToken":"XXX"}' https://sgdata.motus.org/data/custom/batches_for_receiver
 
    - return a list of all batches from deployments of the device by
      project projectID, where the batchID is > `batchID`
@@ -140,6 +176,9 @@ returns an empty list.
        - runID: integer largest run ID we *already* have from this batch and tag project
        - authToken: authorization token returned by authenticate_user
 
+      e.g.
+      curl --data-url-encode json='{"projectID":123,"batchID":111,"runID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/runs_for_tag_project
+
    - return a list of all runs of a tag in project `projectID`, from batch
      `batchID` and with run ID > `runID`
 
@@ -164,6 +203,9 @@ returns an empty list.
        - runID: integer largest runID we *already* have from this batch
        - authToken: authorization token returned by authenticate_user
 
+      e.g.
+      curl --data-url-encode json='{"projectID":123,"batchID":111,"runID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/runs_for_receiver
+
    - return a list of all runs from batch `batchID` with run ID > `runID`
 
    - columns should include these fields (as they exist in the transfer
@@ -187,6 +229,9 @@ returns an empty list.
        - batchID: integer batchID
        - hitID: integer largest hitID we *already* have from this batch
        - authToken: authorization token returned by authenticate_user
+
+      e.g.
+      curl --data-url-encode json='{"projectID":123,"batchID":111,"hitID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/hits_for_tag_project
 
    - return a list of all hits on tags in project `projectID` which are in batch `batchID`,
      and whose hit ID is > `hitID`
@@ -215,6 +260,9 @@ returns an empty list.
        - hitID: integer largest hitID we *already* have from this batch
        - authToken: authorization token returned by authenticate_user
 
+      e.g.
+      curl --data-url-encode json='{"batchID":111,"hitID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/hits_for_receiver
+
    - return a list of all hits in batch `batchID` whose hit ID is > `hitID`
 
    - columns should include these fields (as they exist in the transfer
@@ -235,32 +283,15 @@ Paging for this query is achieved by using the last returned value of `hitID`
 as `hitID` on subsequent calls.  When there are no further hits, the API
 returns an empty list.
 
-### gps_for_receiver (batchID, ts, authToken) ###
-
-    - batchID: integer batchID
-    - ts: largest gps timestamp we *already* have for this batch
-    - authToken: authorization token returned by authenticate_user
-
-   - return all GPS fixes from batch batchID which are later than timestamp ts
-
-   - columns should include these fields (as they exist in the transfer
-     tables):
-     - ts
-     - batchID (optional; this is just batchID)
-     - lat
-     - lon
-     - alt
-
-Paging for this query is achieved by using the last returned value of `ts`
-as `ts` on subsequent calls.  When there are no further GPS fixes, the API
-returns an empty list.
-
 ### gps_for_tag_project (projectID, batchID, ts, authToken) ###
 
-    - projectID; integer project ID of tags
-    - batchID: integer batchID where tags from projectID were detected
-    - ts: largest gps timestamp we *already* have for this batch
-    - authToken: authorization token returned by authenticate_user
+       - projectID; integer project ID of tags
+       - batchID: integer batchID where tags from projectID were detected
+       - ts: largest gps timestamp we *already* have for this batch
+       - authToken: authorization token returned by authenticate_user
+
+      e.g.
+      curl --data-url-encode json='{"projectID":123,"batchID":111,"ts":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/gps_for_tag_project
 
    - return all GPS fixes from batch `batchID` which are later than
      timestamp ts and "relevant to" detections of a tag deployment
@@ -284,13 +315,39 @@ Paging for this query is achieved by using the last returned value of `ts`
 as `ts` on subsequent calls.  When there are no further GPS fixes, the API
 returns an empty list.
 
+### gps_for_receiver (batchID, ts, authToken) ###
+
+       - batchID: integer batchID
+       - ts: largest gps timestamp we *already* have for this batch
+       - authToken: authorization token returned by authenticate_user
+
+      e.g.
+      curl --data-url-encode json='{"batchID":111,"ts":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/gps_for_receiver
+
+   - return all GPS fixes from batch batchID which are later than timestamp ts
+
+   - columns should include these fields (as they exist in the transfer
+     tables):
+     - ts
+     - batchID (optional; this is just batchID)
+     - lat
+     - lon
+     - alt
+
+Paging for this query is achieved by using the last returned value of `ts`
+as `ts` on subsequent calls.  When there are no further GPS fixes, the API
+returns an empty list.
+
 ### metadata for tags (motusTagIDs, authToken) ###
 
-    - motusTagIDs: integer vector of motus tag IDs; tag metadata will
-      only be returned for tag deployments whose project has indicated
-      their metadata are public, or tags deployments by one of the
-      projects the user has permissions to.
-    - authToken: authorization token returned by authenticate_user
+       - motusTagIDs: integer vector of motus tag IDs; tag metadata will
+         only be returned for tag deployments whose project has indicated
+         their metadata are public, or tags deployments by one of the
+         projects the user has permissions to.
+       - authToken: authorization token returned by authenticate_user
+
+      e.g.
+      curl --data-url-encode json='{"motusTagIDs":[12345,12346,12347],"authToken":"XXX"}' https://sgdata.motus.org/data/custom/metadata_for_tags
 
    - return a list with these items:
 
@@ -334,11 +391,14 @@ returns an empty list.
 
 ### metadata for receivers (deviceIDs, authToken) ###
 
-    - deviceID; integer device ID; receiver metadata will only be
-      returned for receivers whose project has indicated their
-      metadata are public, or receivers in one of the projects the
-      user has permissions to.
-    - authToken: authorization token returned by authenticate_user
+       - deviceID; integer device ID; receiver metadata will only be
+         returned for receivers whose project has indicated their
+         metadata are public, or receivers in one of the projects the
+         user has permissions to.
+       - authToken: authorization token returned by authenticate_user
+
+      e.g.
+      curl --data-url-encode json='{"deviceIDs":[123,124,125],"authToken":"XXX"}' https://sgdata.motus.org/data/custom/metadata_for_receivers
 
    - return a list with these items:
 
@@ -376,12 +436,15 @@ returns an empty list.
 
 ### tags for ambiguities (ambigIDs, authToken) ###
 
-    - ambigIDs; integer tag ambiguity IDs; this a vector of negative
-      integers, each representing 2 to 6 tags for which detections are
-      indistinguishable over some period of time; i.e. a detection of
-      the given ambigID could represent any of the motus tagIDs.  (6 is
-      an implementation limit, not a conceptual one.)
-    - authToken: authorization token returned by authenticate_user
+       - ambigIDs; integer tag ambiguity IDs; this a vector of negative
+         integers, each representing 2 to 6 tags for which detections are
+         indistinguishable over some period of time; i.e. a detection of
+         the given ambigID could represent any of the motus tagIDs.  (6 is
+         an implementation limit, not a conceptual one.)
+       - authToken: authorization token returned by authenticate_user
+
+      e.g.
+      curl --data-url-encode json='{"ambigIDs":[-3,-4,-5],"authToken":"XXX"}' https://sgdata.motus.org/data/custom/tags_for_ambiguities
 
    - return a list with these vector items:
       - ambigID; negative integer tag ambiguity ID
@@ -398,10 +461,13 @@ returns an empty list.
       for each ambiguity.
 
 
-### size_of_update_for_tag_project (projectID, batchID) ###
+### size_of_update_for_tag_project (projectID, batchID, authToken) ###
 
-    - projectID: integer project ID
-    - batchID: integer ID of largest batch client already has
+       - projectID: integer project ID
+       - batchID: integer ID of largest batch client already has
+
+      e.g.
+      curl --data-url-encode json='{"projectID":123,"batchID":15538,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/size_of_update_for_tag_project
 
    - return a list with these scalar items:
       - numBatches
@@ -410,10 +476,13 @@ returns an empty list.
       - numGPS
       - numBytes: estimated uncompressed size of data transfer
 
-### size_of_update_for_receiver (deviceID, batchID) ###
+### size_of_update_for_receiver (deviceID, batchID, authToken) ###
 
-    - deviceID: integer motus device ID
-    - batchID: integer ID of largest batch client already has
+       - deviceID: integer motus device ID
+       - batchID: integer ID of largest batch client already has
+
+      e.g.
+      curl --data-url-encode json='{"deviceID":221,"batchID":15538,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/size_of_update_for_receiver
 
    - return a list with these scalar items:
       - numBatches

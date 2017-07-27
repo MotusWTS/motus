@@ -6,17 +6,49 @@ motus.org This document describes the API calls required by the motus
 package; i.e. what requests must a server respond to if it is to work
 with this package.</p>
 <h2>
+<a id="user-content-api-summary" class="anchor" href="#api-summary" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API summary</h2>
+<h3>
+<a id="user-content-request" class="anchor" href="#request" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Request</h3>
+<ul>
+<li>requests are sent by the HTTP POST method</li>
+<li>the request has header <code>Content-Type: application/x-www-form-urlencoded</code>
+</li>
+<li>the POST data has a single item called <code>json</code>
+</li>
+<li>the fields of <code>json</code> are the parameters listed for each API entrypoint below.</li>
+</ul>
+<h3>
+<a id="user-content-reply" class="anchor" href="#reply" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Reply</h3>
+<ul>
+<li>is a json object: header <code>Content-Type = application/json</code>
+</li>
+<li>is bzip2-compressed: header <code>Content-Encoding = bzip2</code>
+</li>
+<li>most return values are lists of vectors of
+equal length, which is the natural JSON encoding of an R data.frame</li>
+<li>errors are indicated by including a field called <code>error</code> in the reply; other
+fields might be present, giving additional information.  If no field <code>error</code>
+is present, the request succeeded.</li>
+</ul>
+<p>Examples are given for each call using the command-line client <a href="https://curl.haxx.se/download.html">curl</a>
+which returns the raw bzip2-compressed data. To view the response, redirect the output of curl into
+a file and use <a href="http://7-zip.org">7zip</a> to decompress it (for example).</p>
+<p>The server is at <a href="">https://sgdata.motus.org</a> and the URL prefix is "/data/custom/".</p>
+<h2>
 <a id="user-content-api-calls" class="anchor" href="#api-calls" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API calls</h2>
 <h2>
 <a id="user-content-authenticate-user" class="anchor" href="#authenticate-user" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>authenticate user</h2>
 <p>authenticate_user (user, password)</p>
 <pre><code>  - user: username
   - password: password (in cleartext)
+
+  e.g.
+  curl --data-url-encode json='{"user":"someone","password":"bigsecret"}' https://sgdata.motus.org/data/custom/authenticate_user
 </code></pre>
 <ul>
 <li>returns a list with these items:
 <ul>
-<li>token: character string; 264 random bits, base64-encoded</li>
+<li>authToken: character string; 264 random bits, base64-encoded</li>
 <li>expiry: numeric timestamp of expiry for token</li>
 <li>userID: integer motus ID for user</li>
 <li>projects: integer vector of project #s user is allowed to request tag detections for</li>
@@ -28,7 +60,7 @@ with this package.</p>
 <ul>
 <li>a list with this item:
 <ul>
-<li>error: "authentication failed"</li>
+<li>error: "authentication with motus failed"</li>
 </ul>
 </li>
 </ul>
@@ -36,8 +68,7 @@ with this package.</p>
 <a id="user-content-notes" class="anchor" href="#notes" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Notes</h3>
 <ol>
 <li>
-<p>The token returned by this API must be included in all other API
-calls as the parameter called <code>authToken</code>.</p>
+<p>The <code>authToken</code> returned by this API must be included in all other API calls.</p>
 </li>
 <li>
 <p>Authorization is by project: if a user has permission for a
@@ -69,16 +100,68 @@ rebooted at least once between deployments under <strong>different</strong> proj
 </ul>
 <p>These assumptions allow for simpler, more efficient database queries.</p>
 <h3>
-<a id="user-content-batches_for_tag_project-projectid-batchid-authtoken-countonly" class="anchor" href="#batches_for_tag_project-projectid-batchid-authtoken-countonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>batches_for_tag_project (projectID, batchID, authToken, countOnly)</h3>
+<a id="user-content-deviceid_for_receiver-serno-authtoken" class="anchor" href="#deviceid_for_receiver-serno-authtoken" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>deviceID_for_receiver (serno, authToken)</h3>
+<pre><code>   - serno: character vector of receiver serial number(s)
+
+  e.g.
+  curl --data-url-encode json='{"serno":"SG-1234BBBK5678","authToken":"XXX"}' https://sgdata.motus.org/data/custom/deviceID_for_receiver
+</code></pre>
+<ul>
+<li>
+<p>return a list of receiver device IDs for the given serial numbers</p>
+</li>
+<li>
+<p>items in the return value are vectors:</p>
+<ul>
+<li>serno character serial number, as specified</li>
+<li>deviceID integer motus device ID, or NA where the serial number was not found</li>
+</ul>
+</li>
+</ul>
+<h3>
+<a id="user-content-receivers_for_project-projectid-authtoken" class="anchor" href="#receivers_for_project-projectid-authtoken" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>receivers_for_project (projectID, authToken)</h3>
+<pre><code>   - projectID: integer project ID
+
+  e.g.
+  curl --data-url-encode json='{"projectID":123,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/receivers_for_project
+</code></pre>
+<ul>
+<li>
+<p>return a list of receiver deployments belonging to project <code>projectID</code></p>
+</li>
+<li>
+<p>items in the return value are vectors:</p>
+<ul>
+<li>serno character serial number; e.g. SG-1234BBBK9876, Lotek-149</li>
+<li>receiverType character; "LOTEK" or "SENSORGNOME"</li>
+<li>deviceID integer motus device ID</li>
+<li>status character,</li>
+<li>deployID integer; motus device deployment ID</li>
+<li>name character; short name for this deployment; typically a site name</li>
+<li>fixtureType character; e.g. "PopTower"</li>
+<li>latitude numeric; decimal degrees North (at start of deployment if mobile)</li>
+<li>longitude numeric; decimal degrees East (at start of deployment if mobile)</li>
+<li>isMobile logical; is this a mobile deployment</li>
+<li>tsStart numeric; unix timestamp of start of deployment</li>
+<li>tsEnd numeric; unix timestamp of end of deployment, or null if still deployed</li>
+<li>projectID integer; motus project ID owning deployment</li>
+<li>elevation numeric; metres above sea level</li>
+</ul>
+</li>
+</ul>
+<h3>
+<a id="user-content-batches_for_tag_project-projectid-batchid-authtoken" class="anchor" href="#batches_for_tag_project-projectid-batchid-authtoken" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>batches_for_tag_project (projectID, batchID, authToken)</h3>
 <pre><code>   - projectID: integer project ID
    - batchID: integer largest batchID we already have for this project
    - authToken: authorization token returned by authenticate_user
-   - countOnly: boolean; if TRUE, only return the number of available records, as field `count`
+
+  e.g.
+  curl --data-url-encode json='{"projectID":123,"batchID":0, "authToken":"XXX"}' https://sgdata.motus.org/data/custom/batches_for_tag_project
 </code></pre>
 <ul>
 <li>
 <p>return a list of all batches with detections of tags in project <code>projectID</code>,
-where the processing timestamp of the batch is &gt; <code>ts</code></p>
+where the batchID is &gt; <code>batchID</code></p>
 </li>
 <li>
 <p>items in the return value are vectors (as they exist in the transfer
@@ -98,16 +181,18 @@ tables):</p>
 as <code>batchID</code> on subsequent calls.  When there are no further batches, the API
 returns an empty list.</p>
 <h3>
-<a id="user-content-batches_for_receiver_project-projectid-batchid-authtoken-countonly" class="anchor" href="#batches_for_receiver_project-projectid-batchid-authtoken-countonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>batches_for_receiver_project (projectID, batchID, authToken, countOnly)</h3>
-<pre><code>   - projectID: integer project ID
+<a id="user-content-batches_for_receiver-deviceid-batchid-authtoken" class="anchor" href="#batches_for_receiver-deviceid-batchid-authtoken" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>batches_for_receiver (deviceID, batchID, authToken)</h3>
+<pre><code>   - deviceID: integer motus device ID, e.g. as returned by receivers_for_project
    - batchID: integer largest batchID we already have for this project
    - authToken: authorization token returned by authenticate_user
-   - countOnly: boolean; if TRUE, only return the number of available records, as field `count`
+
+  e.g.
+  curl --data-url-encode json='{"projectID":123,"batchID":0, "authToken":"XXX"}' https://sgdata.motus.org/data/custom/batches_for_receiver
 </code></pre>
 <ul>
 <li>
-<p>return a list of all batches from receivers in project projectID,
-where the processing timestamp of the batch is &gt; <code>ts</code></p>
+<p>return a list of all batches from deployments of the device by
+project projectID, where the batchID is &gt; <code>batchID</code></p>
 </li>
 <li>
 <p>columns should include these fields (as they exist in the transfer
@@ -127,12 +212,14 @@ tables):</p>
 as <code>batchID</code> on subsequent calls.  When there are no further batches, the API
 returns an empty list.</p>
 <h3>
-<a id="user-content-runs_for_tag_project-projectid-batchid-runid-authtoken-countonly" class="anchor" href="#runs_for_tag_project-projectid-batchid-runid-authtoken-countonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>runs_for_tag_project (projectID, batchID, runID, authToken, countOnly)</h3>
+<a id="user-content-runs_for_tag_project-projectid-batchid-runid-authtoken" class="anchor" href="#runs_for_tag_project-projectid-batchid-runid-authtoken" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>runs_for_tag_project (projectID, batchID, runID, authToken)</h3>
 <pre><code>   - projectID: integer project ID
    - batchID: integer batch ID
    - runID: integer largest run ID we *already* have from this batch and tag project
    - authToken: authorization token returned by authenticate_user
-   - countOnly: boolean; if TRUE, only return the number of available records, as field `count`
+
+  e.g.
+  curl --data-url-encode json='{"projectID":123,"batchID":111,"runID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/runs_for_tag_project
 </code></pre>
 <ul>
 <li>
@@ -145,7 +232,9 @@ tables):</p>
 <ul>
 <li>runID</li>
 <li>batchIDbegin</li>
-<li>batchIDend</li>
+<li>tsBegin</li>
+<li>tsEnd</li>
+<li>done</li>
 <li>motusTagID</li>
 <li>ant</li>
 <li>len</li>
@@ -156,12 +245,13 @@ tables):</p>
 as <code>runID</code> on subsequent calls.  When there are no further runs, the API
 returns an empty list.</p>
 <h3>
-<a id="user-content-runs_for_receiver_project-projectid-batchid-runid-authtoken-countonly" class="anchor" href="#runs_for_receiver_project-projectid-batchid-runid-authtoken-countonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>runs_for_receiver_project (projectID, batchID, runID, authToken, countOnly)</h3>
-<pre><code>   - projectID: integer project ID; project receiver belongs to
-   - batchID: integer batch ID
+<a id="user-content-runs_for_receiver-batchid-runid-authtoken" class="anchor" href="#runs_for_receiver-batchid-runid-authtoken" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>runs_for_receiver (batchID, runID, authToken)</h3>
+<pre><code>   - batchID: integer batch ID
    - runID: integer largest runID we *already* have from this batch
    - authToken: authorization token returned by authenticate_user
-   - countOnly: boolean; if TRUE, only return the number of available records, as field `count`
+
+  e.g.
+  curl --data-url-encode json='{"projectID":123,"batchID":111,"runID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/runs_for_receiver
 </code></pre>
 <ul>
 <li>
@@ -173,7 +263,9 @@ tables):</p>
 <ul>
 <li>runID</li>
 <li>batchIDbegin</li>
-<li>batchIDend</li>
+<li>tsBegin</li>
+<li>tsEnd</li>
+<li>done</li>
 <li>motusTagID</li>
 <li>ant</li>
 <li>len</li>
@@ -184,12 +276,14 @@ tables):</p>
 as <code>runID</code> on subsequent calls.  When there are no further runs, the API
 returns an empty list.</p>
 <h3>
-<a id="user-content-hits_for_tag_project-projectid-batchid-hitid-authtoken-countonly" class="anchor" href="#hits_for_tag_project-projectid-batchid-hitid-authtoken-countonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>hits_for_tag_project (projectID, batchID, hitID, authToken, countOnly)</h3>
+<a id="user-content-hits_for_tag_project-projectid-batchid-hitid-authtoken" class="anchor" href="#hits_for_tag_project-projectid-batchid-hitid-authtoken" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>hits_for_tag_project (projectID, batchID, hitID, authToken)</h3>
 <pre><code>   - projectID: integer project ID
    - batchID: integer batchID
    - hitID: integer largest hitID we *already* have from this batch
    - authToken: authorization token returned by authenticate_user
-   - countOnly: boolean; if TRUE, only return the number of available records, as field `count`
+
+  e.g.
+  curl --data-url-encode json='{"projectID":123,"batchID":111,"hitID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/hits_for_tag_project
 </code></pre>
 <ul>
 <li>
@@ -218,12 +312,13 @@ tables):</p>
 as <code>hitID</code> on subsequent calls.  When there are no further hits, the API
 returns an empty list.</p>
 <h3>
-<a id="user-content-hits_for_receiver_project-projectid-batchid-hitid-authtoken-countonly" class="anchor" href="#hits_for_receiver_project-projectid-batchid-hitid-authtoken-countonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>hits_for_receiver_project (projectID, batchID, hitID, authToken, countOnly)</h3>
-<pre><code>   - projectID; integer project ID of receiver deployment
-   - batchID: integer batchID
+<a id="user-content-hits_for_receiver-batchid-hitid-authtoken" class="anchor" href="#hits_for_receiver-batchid-hitid-authtoken" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>hits_for_receiver (batchID, hitID, authToken)</h3>
+<pre><code>   - batchID: integer batchID
    - hitID: integer largest hitID we *already* have from this batch
    - authToken: authorization token returned by authenticate_user
-   - countOnly: boolean; if TRUE, only return the number of available records, as field `count`
+
+  e.g.
+  curl --data-url-encode json='{"batchID":111,"hitID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/hits_for_receiver
 </code></pre>
 <ul>
 <li>
@@ -251,12 +346,50 @@ tables):</p>
 as <code>hitID</code> on subsequent calls.  When there are no further hits, the API
 returns an empty list.</p>
 <h3>
-<a id="user-content-gps_for_receiver_project-projectid-batchid-ts-authtoken-countonly" class="anchor" href="#gps_for_receiver_project-projectid-batchid-ts-authtoken-countonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>gps_for_receiver_project (projectID, batchID, ts, authToken, countOnly)</h3>
-<pre><code>- projectID; integer project ID of receiver deployment
-- batchID: integer batchID
-- ts: largest gps timestamp we *already* have for this batch
-- authToken: authorization token returned by authenticate_user
-- countOnly: boolean; if TRUE, only return the number of available records, as field `count`
+<a id="user-content-gps_for_tag_project-projectid-batchid-ts-authtoken" class="anchor" href="#gps_for_tag_project-projectid-batchid-ts-authtoken" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>gps_for_tag_project (projectID, batchID, ts, authToken)</h3>
+<pre><code>   - projectID; integer project ID of tags
+   - batchID: integer batchID where tags from projectID were detected
+   - ts: largest gps timestamp we *already* have for this batch
+   - authToken: authorization token returned by authenticate_user
+
+  e.g.
+  curl --data-url-encode json='{"projectID":123,"batchID":111,"ts":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/gps_for_tag_project
+</code></pre>
+<ul>
+<li>
+<p>return all GPS fixes from batch <code>batchID</code> which are later than
+timestamp ts and "relevant to" detections of a tag deployment
+from project <code>projectID</code>.  This is given a permissive
+interpretation: all GPS fixes from 1 hour before the first
+detection of a project tag to 1 hour after the last detection of
+a project tag in the given batch are returned.  This might return
+GPS fixes for long periods where no tags from the project were
+detected, if a batch has a few early and a few late detections of
+the project's tags.</p>
+</li>
+<li>
+<p>columns should include these fields (as they exist in the transfer
+tables):</p>
+<ul>
+<li>ts</li>
+<li>batchID (optional; this is just batchID)</li>
+<li>lat</li>
+<li>lon</li>
+<li>alt</li>
+</ul>
+</li>
+</ul>
+<p>Paging for this query is achieved by using the last returned value of <code>ts</code>
+as <code>ts</code> on subsequent calls.  When there are no further GPS fixes, the API
+returns an empty list.</p>
+<h3>
+<a id="user-content-gps_for_receiver-batchid-ts-authtoken" class="anchor" href="#gps_for_receiver-batchid-ts-authtoken" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>gps_for_receiver (batchID, ts, authToken)</h3>
+<pre><code>   - batchID: integer batchID
+   - ts: largest gps timestamp we *already* have for this batch
+   - authToken: authorization token returned by authenticate_user
+
+  e.g.
+  curl --data-url-encode json='{"batchID":111,"ts":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/gps_for_receiver
 </code></pre>
 <ul>
 <li>
@@ -278,45 +411,15 @@ tables):</p>
 as <code>ts</code> on subsequent calls.  When there are no further GPS fixes, the API
 returns an empty list.</p>
 <h3>
-<a id="user-content-gps_for_tag_project-projectid-batchid-ts-authtoken-countonly" class="anchor" href="#gps_for_tag_project-projectid-batchid-ts-authtoken-countonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>gps_for_tag_project (projectID, batchID, ts, authToken, countOnly)</h3>
-<pre><code>- projectID; integer project ID of tags
-- batchID: integer batchID where tags from projectID were detected
-- ts: largest gps timestamp we *already* have for this batch
-- authToken: authorization token returned by authenticate_user
-- countOnly: boolean; if TRUE, only return the number of available records, as field `count`
-</code></pre>
-<ul>
-<li>
-<p>return all GPS fixes from batch <code>batchID</code> which are later than
-timestamp ts and "near" detections of a tag deployment from
-project <code>projectID</code>.  This is done by hourly bins: the hourly
-bins of every run of detections of any tag from project
-<code>projectID</code> are noted, and all GPS fixes from any of these bins
-are returned.  An additional bin before the earliest and after
-the latest detection are added, to ensure temporal coverage.</p>
-</li>
-<li>
-<p>columns should include these fields (as they exist in the transfer
-tables):</p>
-<ul>
-<li>ts</li>
-<li>batchID (optional; this is just batchID)</li>
-<li>lat</li>
-<li>lon</li>
-<li>alt</li>
-</ul>
-</li>
-</ul>
-<p>Paging for this query is achieved by using the last returned value of <code>ts</code>
-as <code>ts</code> on subsequent calls.  When there are no further GPS fixes, the API
-returns an empty list.</p>
-<h3>
-<a id="user-content-metadata-for-tags-motustagids-authtoken-countonly" class="anchor" href="#metadata-for-tags-motustagids-authtoken-countonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>metadata for tags (motusTagIDs, authToken, countOnly)</h3>
-<pre><code>- motusTagIDs: integer vector of motus tag IDs; tag metadata will
-  only be returned for tag deployments whose project has indicated
-  their metadata are public, or tags deployments by one of the
-  projects the user has permissions to.
-- authToken: authorization token returned by authenticate_user
+<a id="user-content-metadata-for-tags-motustagids-authtoken" class="anchor" href="#metadata-for-tags-motustagids-authtoken" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>metadata for tags (motusTagIDs, authToken)</h3>
+<pre><code>   - motusTagIDs: integer vector of motus tag IDs; tag metadata will
+     only be returned for tag deployments whose project has indicated
+     their metadata are public, or tags deployments by one of the
+     projects the user has permissions to.
+   - authToken: authorization token returned by authenticate_user
+
+  e.g.
+  curl --data-url-encode json='{"motusTagIDs":[12345,12346,12347],"authToken":"XXX"}' https://sgdata.motus.org/data/custom/metadata_for_tags
 </code></pre>
 <ul>
 <li>
@@ -372,12 +475,15 @@ returns an empty list.</p>
 </ul>
 <p>);</p>
 <h3>
-<a id="user-content-metadata-for-receivers-deviceids-authtoken-countonly" class="anchor" href="#metadata-for-receivers-deviceids-authtoken-countonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>metadata for receivers (deviceIDs, authToken, countOnly)</h3>
-<pre><code>- deviceID; integer device ID; receiver metadata will only be
-  returned for receivers whose project has indicated their
-  metadata are public, or receivers in one of the projects the
-  user has permissions to.
-- authToken: authorization token returned by authenticate_user
+<a id="user-content-metadata-for-receivers-deviceids-authtoken" class="anchor" href="#metadata-for-receivers-deviceids-authtoken" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>metadata for receivers (deviceIDs, authToken)</h3>
+<pre><code>   - deviceID; integer device ID; receiver metadata will only be
+     returned for receivers whose project has indicated their
+     metadata are public, or receivers in one of the projects the
+     user has permissions to.
+   - authToken: authorization token returned by authenticate_user
+
+  e.g.
+  curl --data-url-encode json='{"deviceIDs":[123,124,125],"authToken":"XXX"}' https://sgdata.motus.org/data/custom/metadata_for_receivers
 </code></pre>
 <ul>
 <li>
@@ -425,13 +531,16 @@ magnetic north</li>
 </li>
 </ul>
 <h3>
-<a id="user-content-tags-for-ambiguities-ambigids-authtoken-countonly" class="anchor" href="#tags-for-ambiguities-ambigids-authtoken-countonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>tags for ambiguities (ambigIDs, authToken, countOnly)</h3>
-<pre><code>- ambigIDs; integer tag ambiguity IDs; this a vector of negative
-  integers, each representing 2 to 6 tags for which detections are
-  indistinguishable over some period of time; i.e. a detection of
-  the given ambigID could represent any of the motus tagIDs.  (6 is
-  an implementation limit, not a conceptual one.)
-- authToken: authorization token returned by authenticate_user
+<a id="user-content-tags-for-ambiguities-ambigids-authtoken" class="anchor" href="#tags-for-ambiguities-ambigids-authtoken" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>tags for ambiguities (ambigIDs, authToken)</h3>
+<pre><code>   - ambigIDs; integer tag ambiguity IDs; this a vector of negative
+     integers, each representing 2 to 6 tags for which detections are
+     indistinguishable over some period of time; i.e. a detection of
+     the given ambigID could represent any of the motus tagIDs.  (6 is
+     an implementation limit, not a conceptual one.)
+   - authToken: authorization token returned by authenticate_user
+
+  e.g.
+  curl --data-url-encode json='{"ambigIDs":[-3,-4,-5],"authToken":"XXX"}' https://sgdata.motus.org/data/custom/tags_for_ambiguities
 </code></pre>
 <ul>
 <li>
@@ -449,5 +558,43 @@ magnetic north</li>
 If <code>motusTagIDM[i]</code> is null, then <code>motusTagIDN[i]</code> is also null for
 <code>M &lt; N &lt;= 6</code>; i.e. non-null values precede null values
 for each ambiguity.</p>
+</li>
+</ul>
+<h3>
+<a id="user-content-size_of_update_for_tag_project-projectid-batchid-authtoken" class="anchor" href="#size_of_update_for_tag_project-projectid-batchid-authtoken" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>size_of_update_for_tag_project (projectID, batchID, authToken)</h3>
+<pre><code>   - projectID: integer project ID
+   - batchID: integer ID of largest batch client already has
+
+  e.g.
+  curl --data-url-encode json='{"projectID":123,"batchID":15538,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/size_of_update_for_tag_project
+</code></pre>
+<ul>
+<li>return a list with these scalar items:
+<ul>
+<li>numBatches</li>
+<li>numRuns</li>
+<li>numHits</li>
+<li>numGPS</li>
+<li>numBytes: estimated uncompressed size of data transfer</li>
+</ul>
+</li>
+</ul>
+<h3>
+<a id="user-content-size_of_update_for_receiver-deviceid-batchid-authtoken" class="anchor" href="#size_of_update_for_receiver-deviceid-batchid-authtoken" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>size_of_update_for_receiver (deviceID, batchID, authToken)</h3>
+<pre><code>   - deviceID: integer motus device ID
+   - batchID: integer ID of largest batch client already has
+
+  e.g.
+  curl --data-url-encode json='{"deviceID":221,"batchID":15538,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/size_of_update_for_receiver
+</code></pre>
+<ul>
+<li>return a list with these scalar items:
+<ul>
+<li>numBatches</li>
+<li>numRuns</li>
+<li>numHits</li>
+<li>numGPS</li>
+<li>numBytes: estimated uncompressed size of data transfer</li>
+</ul>
 </li>
 </ul>
