@@ -19,6 +19,18 @@ from R by doing:
 
 ## What's working so far:
 
+### 2017 Jul 28
+
+- tagme() - for updating local copies of receiver or tag project detection databases
+- tellme() - for asking how much data will need to be transferred by the corresponding tagme() call
+
+The latest version of the data server that works with this package is
+now running on a new box, but its database is only populated with data
+from 4 (!) receivers.  Raw files from other receivers will be re-run with
+the latest version of the tag finder and added to this database.  Only
+those users willing to wrestle with alpha code and not actually interested
+in getting their data should be using this package for now.
+
 ### 2017 Jun 10
 
 - srvTagsForAmbiguities()
