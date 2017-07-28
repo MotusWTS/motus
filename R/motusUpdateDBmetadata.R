@@ -39,7 +39,8 @@ motusUpdateDBmetadata = function(sql, tagIDs=NULL, deviceIDs=NULL) {
         ## augment the tagIDs we need metadata for by the ambiguous tags for each
         ## ambigTagID; these are stored in columns motusTagID1, motusTagID2, ...
 
-        realTagIds = unique(c(realTagIds, unlist(ambig[, grep("motusTagID", names(ambig))])))
+        realTagIDs = unique(c(realTagIDs, unlist(ambig[, grep("motusTagID", names(ambig))])))
+        realTagIDs = realTagIDs[! is.na(realTagIDs)]
     }
 
     ## get metadata for tags, their deployments, and species names
