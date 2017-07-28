@@ -86,7 +86,8 @@ Each of these functions returns a `dplyr::src_sqlite` that refers to the
 database file on disk.  So you can use all the dplyr functions to
 filter and summarize your data.  The format of tables in these databases
 is described elsewhere.  Most users will find the table called `alltags`
-has everything they need.
+has everything they need.  (TODO: the function which generates the
+view `alltags` hasn't been ported from the motusServer package yet.)
 
 For example, to find the first hourly detection of each tag in each hour
 by receiver and antenna, you could do this:
@@ -94,7 +95,8 @@ by receiver and antenna, you could do this:
 ```R
 library(motus)
 db = tagme(14)
-hourly = db %>% distinct (recv, ant, tagID, floor(ts / 3600))
+t = tbl(db, "alltags")  ### `alltags` not yet implemented
+hourly = t %>% distinct (recv, ant, tagID, floor(ts / 3600))
 ```
 
 By default, tag databases are stored in the current directory (`getwd()` in R).
