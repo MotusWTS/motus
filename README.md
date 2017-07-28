@@ -16,6 +16,9 @@ from R by doing:
     install_github("jbrzusto/motus@staging")   ## the development version
 ```
 
+## Usage vignette
+
+A brief sketch is [here](https://github.com/jbrzusto/motus/blob/staging/inst/doc/motus_R_package_usage.md)
 
 ## What's working so far:
 
