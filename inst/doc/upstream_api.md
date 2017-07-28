@@ -39,7 +39,7 @@ The server is at [https://sgdata.motus.org](https://sgdata.motus.org) and the UR
       - password: password (in cleartext)
 
       e.g.
-      curl --data-url-encode json='{"user":"someone","password":"bigsecret"}' https://sgdata.motus.org/data/custom/authenticate_user
+      curl --data-urlencode json='{"user":"someone","password":"bigsecret"}' https://sgdata.motus.org/data/custom/authenticate_user
 
    - returns a list with these items:
       - authToken: character string; 264 random bits, base64-encoded
@@ -64,8 +64,14 @@ project, then that user can see:
 
    - all runs and hits for tag deployments by that project
 
-Calls where no authorized data are available return an appropriate
-data.frame with zero rows.
+If an API call does not find any data for which the user is
+authorized, it will return a json object of the usual structure,
+except that column arrays will have length zero.  This represents an R
+data.frame with the correct column names but zero rows.
+
+The API doesn't currently provide a way to tell whether there are additional data
+which would be returned for a given call if the user had authorization for more
+projects.
 
 "Ownership" of detections follows these assumptions:
 
@@ -84,7 +90,7 @@ These assumptions allow for simpler, more efficient database queries.
        - serno: character vector of receiver serial number(s)
 
       e.g.
-      curl --data-url-encode json='{"serno":"SG-1234BBBK5678","authToken":"XXX"}' https://sgdata.motus.org/data/custom/deviceID_for_receiver
+      curl --data-urlencode json='{"serno":"SG-1234BBBK5678","authToken":"XXX"}' https://sgdata.motus.org/data/custom/deviceID_for_receiver
 
    - return a list of receiver device IDs for the given serial numbers
 
@@ -97,7 +103,7 @@ These assumptions allow for simpler, more efficient database queries.
        - projectID: integer project ID
 
       e.g.
-      curl --data-url-encode json='{"projectID":123,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/receivers_for_project
+      curl --data-urlencode json='{"projectID":123,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/receivers_for_project
 
    - return a list of receiver deployments belonging to project `projectID`
 
@@ -124,7 +130,7 @@ These assumptions allow for simpler, more efficient database queries.
        - authToken: authorization token returned by authenticate_user
 
       e.g.
-      curl --data-url-encode json='{"projectID":123,"batchID":0, "authToken":"XXX"}' https://sgdata.motus.org/data/custom/batches_for_tag_project
+      curl --data-urlencode json='{"projectID":123,"batchID":0, "authToken":"XXX"}' https://sgdata.motus.org/data/custom/batches_for_tag_project
 
    - return a list of all batches with detections of tags in project `projectID`,
      where the batchID is > `batchID`
@@ -150,7 +156,7 @@ returns an empty list.
        - authToken: authorization token returned by authenticate_user
 
       e.g.
-      curl --data-url-encode json='{"projectID":123,"batchID":0, "authToken":"XXX"}' https://sgdata.motus.org/data/custom/batches_for_receiver
+      curl --data-urlencode json='{"projectID":123,"batchID":0, "authToken":"XXX"}' https://sgdata.motus.org/data/custom/batches_for_receiver
 
    - return a list of all batches from deployments of the device by
      project projectID, where the batchID is > `batchID`
@@ -177,7 +183,7 @@ returns an empty list.
        - authToken: authorization token returned by authenticate_user
 
       e.g.
-      curl --data-url-encode json='{"projectID":123,"batchID":111,"runID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/runs_for_tag_project
+      curl --data-urlencode json='{"projectID":123,"batchID":111,"runID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/runs_for_tag_project
 
    - return a list of all runs of a tag in project `projectID`, from batch
      `batchID` and with run ID > `runID`
@@ -204,7 +210,7 @@ returns an empty list.
        - authToken: authorization token returned by authenticate_user
 
       e.g.
-      curl --data-url-encode json='{"projectID":123,"batchID":111,"runID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/runs_for_receiver
+      curl --data-urlencode json='{"projectID":123,"batchID":111,"runID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/runs_for_receiver
 
    - return a list of all runs from batch `batchID` with run ID > `runID`
 
@@ -231,7 +237,7 @@ returns an empty list.
        - authToken: authorization token returned by authenticate_user
 
       e.g.
-      curl --data-url-encode json='{"projectID":123,"batchID":111,"hitID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/hits_for_tag_project
+      curl --data-urlencode json='{"projectID":123,"batchID":111,"hitID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/hits_for_tag_project
 
    - return a list of all hits on tags in project `projectID` which are in batch `batchID`,
      and whose hit ID is > `hitID`
@@ -261,7 +267,7 @@ returns an empty list.
        - authToken: authorization token returned by authenticate_user
 
       e.g.
-      curl --data-url-encode json='{"batchID":111,"hitID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/hits_for_receiver
+      curl --data-urlencode json='{"batchID":111,"hitID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/hits_for_receiver
 
    - return a list of all hits in batch `batchID` whose hit ID is > `hitID`
 
@@ -291,7 +297,7 @@ returns an empty list.
        - authToken: authorization token returned by authenticate_user
 
       e.g.
-      curl --data-url-encode json='{"projectID":123,"batchID":111,"ts":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/gps_for_tag_project
+      curl --data-urlencode json='{"projectID":123,"batchID":111,"ts":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/gps_for_tag_project
 
    - return all GPS fixes from batch `batchID` which are later than
      timestamp ts and "relevant to" detections of a tag deployment
@@ -322,7 +328,7 @@ returns an empty list.
        - authToken: authorization token returned by authenticate_user
 
       e.g.
-      curl --data-url-encode json='{"batchID":111,"ts":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/gps_for_receiver
+      curl --data-urlencode json='{"batchID":111,"ts":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/gps_for_receiver
 
    - return all GPS fixes from batch batchID which are later than timestamp ts
 
@@ -347,7 +353,7 @@ returns an empty list.
        - authToken: authorization token returned by authenticate_user
 
       e.g.
-      curl --data-url-encode json='{"motusTagIDs":[12345,12346,12347],"authToken":"XXX"}' https://sgdata.motus.org/data/custom/metadata_for_tags
+      curl --data-urlencode json='{"motusTagIDs":[12345,12346,12347],"authToken":"XXX"}' https://sgdata.motus.org/data/custom/metadata_for_tags
 
    - return a list with these items:
 
@@ -398,7 +404,7 @@ returns an empty list.
        - authToken: authorization token returned by authenticate_user
 
       e.g.
-      curl --data-url-encode json='{"deviceIDs":[123,124,125],"authToken":"XXX"}' https://sgdata.motus.org/data/custom/metadata_for_receivers
+      curl --data-urlencode json='{"deviceIDs":[123,124,125],"authToken":"XXX"}' https://sgdata.motus.org/data/custom/metadata_for_receivers
 
    - return a list with these items:
 
@@ -444,7 +450,7 @@ returns an empty list.
        - authToken: authorization token returned by authenticate_user
 
       e.g.
-      curl --data-url-encode json='{"ambigIDs":[-3,-4,-5],"authToken":"XXX"}' https://sgdata.motus.org/data/custom/tags_for_ambiguities
+      curl --data-urlencode json='{"ambigIDs":[-3,-4,-5],"authToken":"XXX"}' https://sgdata.motus.org/data/custom/tags_for_ambiguities
 
    - return a list with these vector items:
       - ambigID; negative integer tag ambiguity ID
@@ -467,7 +473,7 @@ returns an empty list.
        - batchID: integer ID of largest batch client already has
 
       e.g.
-      curl --data-url-encode json='{"projectID":123,"batchID":15538,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/size_of_update_for_tag_project
+      curl --data-urlencode json='{"projectID":123,"batchID":15538,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/size_of_update_for_tag_project
 
    - return a list with these scalar items:
       - numBatches
@@ -482,7 +488,7 @@ returns an empty list.
        - batchID: integer ID of largest batch client already has
 
       e.g.
-      curl --data-url-encode json='{"deviceID":221,"batchID":15538,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/size_of_update_for_receiver
+      curl --data-urlencode json='{"deviceID":221,"batchID":15538,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/size_of_update_for_receiver
 
    - return a list with these scalar items:
       - numBatches
