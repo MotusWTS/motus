@@ -1,20 +1,20 @@
 #' update a motus tag detection database - tag flavour (backend)
 #'
-#' @param sql safeSQL object representing the tag project database
+#' @param src src_sqlite object representing the database
 #'
-#' @param countOnly logical scalar: if FALSE, the default, then do
-#'     requested database updates.  Otherwise, return a count of items
-#'     that would need to be transferred in order to update the
-#'     database.
+#' @param countOnly logical scalar: count results instead of returning them?
+#'
+#' @return \code{src}, if countOnly is FALSE.  Otherwise, a list
+#' of counts items that would be transferred by the update.
 #'
 #' @seealso \link{\code{tagme}}, which is intended for most users, and
 #'     indirectly calls this function.
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
-motusUpdateTagDB = function(sql, countOnly=FALSE) {
-    if (!inherits(sql, "safeSQL"))
-        stop("sql must be a database connection of type 'safeSQL'.\nPerhaps use tagme() instead of this function?")
+motusUpdateTagDB = function(src, countOnly=FALSE) {
+    sql = safeSQL(src)
+
     projectID = sql("select val from meta where key='tagProject'")[[1]] %>% as.integer
 
     batchID = sql("select ifnull(max(batchID), 0) from batches")[[1]]
@@ -126,5 +126,5 @@ motusUpdateTagDB = function(sql, countOnly=FALSE) {
         batchID = max(b$batchID)
     }
     motusUpdateDBmetadata(sql, tagIDs, devIDs)
-    return(sql)
+    return(src)
 }

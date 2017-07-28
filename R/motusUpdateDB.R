@@ -30,10 +30,8 @@ motusUpdateDB = function(projRecv, src, countOnly) {
     if (!is.logical(countOnly))
         stop("countOnly must be a logical scalar")
 
-    sql = safeSQL(src)
-
     if (is.numeric(projRecv))
-        return(motusUpdateTagDB(sql, countOnly))
+        return(motusUpdateTagDB(src, countOnly))
     else
-        return(motusUpdateRecvDB(sql, countOnly))
+        return(motusUpdateRecvDB(src, countOnly))
 }

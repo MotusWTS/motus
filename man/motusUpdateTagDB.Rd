@@ -4,15 +4,16 @@
 \alias{motusUpdateTagDB}
 \title{update a motus tag detection database - tag flavour (backend)}
 \usage{
-motusUpdateTagDB(sql, countOnly = FALSE)
+motusUpdateTagDB(src, countOnly = FALSE)
 }
 \arguments{
-\item{sql}{safeSQL object representing the tag project database}
+\item{src}{src_sqlite object representing the database}
 
-\item{countOnly}{logical scalar: if FALSE, the default, then do
-requested database updates.  Otherwise, return a count of items
-that would need to be transferred in order to update the
-database.}
+\item{countOnly}{logical scalar: count results instead of returning them?}
+}
+\value{
+\code{src}, if countOnly is FALSE.  Otherwise, a list
+of counts items that would be transferred by the update.
 }
 \description{
 update a motus tag detection database - tag flavour (backend)

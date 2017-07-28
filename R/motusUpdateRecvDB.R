@@ -1,20 +1,20 @@
 #' update a motus tag detection database - receiver flavour (backend)
 #'
-#' @param sql safeSQL object representing the receiver database
+#' @param src src_sqlite object representing the database
 #'
-#' @param countOnly logical scalar: if FALSE, the default, then do
-#'     requested database updates.  Otherwise, return a count of items
-#'     that would need to be transferred in order to update the
-#'     database.
+#' @param countOnly logical scalar: count results instead of returning them?
+#'
+#' @return \code{src}, if countOnly is FALSE.  Otherwise, a list of
+#'     counts items that would be transferred by the update.
 #'
 #' @seealso \link{\code{tagme}}, which is intended for most users, and
 #'     indirectly calls this function.
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
-motusUpdateRecvDB = function(sql, countOnly) {
-    if (!inherits(sql, "safeSQL"))
-        stop("sql must be a database connection of type 'safeSQL'.\nPerhaps use tagme() instead of this function?")
+motusUpdateRecvDB = function(src, countOnly) {
+    sql = safeSQL(src)
+
     deviceID = sql("select val from meta where key='deviceID'")[[1]] %>% as.integer
     if (!isTRUE(deviceID > 0))
         stop("This receiver database does not have a valid deviceID stored in it.\nTry delete or rename the file and use tagme() again?")
@@ -122,5 +122,5 @@ motusUpdateRecvDB = function(sql, countOnly) {
     }
 
     motusUpdateDBmetadata(sql, tagIDs, deviceID)
-    return(sql)
+    return(src)
 }
