@@ -4,6 +4,9 @@
 #'
 #' @param countOnly logical scalar: count results instead of returning them?
 #'
+#' @param forceMeta logical scalar: if true, re-get metadata for tags and
+#' receivers, even if we already have them.  Default:  FALSE.
+#'
 #' @return \code{src}, if countOnly is FALSE.  Otherwise, a list
 #' of counts items that would be transferred by the update.
 #'
@@ -12,7 +15,7 @@
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
-motusUpdateTagDB = function(src, countOnly=FALSE) {
+motusUpdateTagDB = function(src, countOnly=FALSE, forceMeta=FALSE) {
     sql = safeSQL(src)
 
     projectID = sql("select val from meta where key='tagProject'")[[1]] %>% as.integer
@@ -125,6 +128,6 @@ motusUpdateTagDB = function(src, countOnly=FALSE) {
         }
         batchID = max(b$batchID)
     }
-    motusUpdateDBmetadata(sql, tagIDs, devIDs)
+    motusUpdateDBmetadata(sql, tagIDs, devIDs, force=forceMeta)
     return(src)
 }

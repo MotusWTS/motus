@@ -13,20 +13,38 @@
 #' should be obtained; default: NULL, meaning obtain metadata for all
 #' receivers from which the database has detections
 #'
+#' @param force logical scalar; if TRUE, re-obtain metadata even if we
+#' already have it.
+#'
 #' @seealso \link{\code{tagme}}, which is intended for most users, and
 #'     indirectly calls this function.
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
-motusUpdateDBmetadata = function(sql, tagIDs=NULL, deviceIDs=NULL) {
+motusUpdateDBmetadata = function(sql, tagIDs=NULL, deviceIDs=NULL, force=FALSE) {
     if (!inherits(sql, "safeSQL"))
         stop("sql must be a database connection of type 'safeSQL'.\nPerhaps use tagme() instead of this function?")
 
     if (is.null(tagIDs))
         tagIDs = sql("select distinct motusTagID from runs")[[1]]
 
+    if (! force) {
+        ## drop tags for which we already have metadata
+        have = sql("select distinct tagID from tagDeps")[[1]]
+        tagIDs = setdiff(tagIDs, have)
+
+        ## drop ambiguous tags for which we already ave the mapping
+        have = sql("select distinct ambigID from tagAmbig")[[1]]
+        tagIDs = setdiff(tagIDs, have)
+    }
+
     if (is.null(deviceIDs))
         deviceIDs = sql("select distinct motusDeviceID from batches")[[1]]
+
+    if (! force) {
+        have = sql("select distinct deviceID from recvDeps")[[1]]
+        deviceIDs = setdiff(deviceIDs, have)
+    }
 
     realTagIDs  = tagIDs[tagIDs > 0]
     ambigTagIDs = tagIDs[tagIDs < 0]

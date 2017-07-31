@@ -4,6 +4,9 @@
 #'
 #' @param countOnly logical scalar: count results instead of returning them?
 #'
+#' @param forceMeta logical scalar: if true, re-get metadata for tags and
+#' receivers, even if we already have them.  Default: FALSE
+#'
 #' @return \code{src}, if countOnly is FALSE.  Otherwise, a list of
 #'     counts items that would be transferred by the update.
 #'
@@ -12,7 +15,7 @@
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
-motusUpdateRecvDB = function(src, countOnly) {
+motusUpdateRecvDB = function(src, countOnly, forceMeta=FALSE) {
     sql = safeSQL(src)
 
     deviceID = sql("select val from meta where key='deviceID'")[[1]] %>% as.integer
@@ -121,6 +124,6 @@ motusUpdateRecvDB = function(src, countOnly) {
         batchID = max(b$batchID)
     }
 
-    motusUpdateDBmetadata(sql, tagIDs, deviceID)
+    motusUpdateDBmetadata(sql, tagIDs, deviceID, force=forceMeta)
     return(src)
 }

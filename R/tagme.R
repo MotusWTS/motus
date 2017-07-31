@@ -22,6 +22,9 @@
 #'     that would need to be transferred in order to update the
 #'     database.
 #'
+#' @param forceMeta logical scalar: if true, re-get metadata for tags and
+#' receivers, even if we already have them.
+#'
 #' @examples
 #'
 #' ## create and open a local tag database for motus project 14 in the
@@ -61,7 +64,7 @@
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
-tagme = function(projRecv, update=TRUE, new=FALSE, dir=getwd(), countOnly=FALSE) {
+tagme = function(projRecv, update=TRUE, new=FALSE, dir=getwd(), countOnly=FALSE, forceMeta=FALSE) {
     if (missing(projRecv)) {
         ## special case: update all existing databases in \code{dir}
         ## return(lapply(dir(dir, pattern="\\.motus$"),
@@ -96,7 +99,7 @@ tagme = function(projRecv, update=TRUE, new=FALSE, dir=getwd(), countOnly=FALSE)
     ensureDBTables(rv, projRecv, deviceID)
 
     if (update)
-        rv = motusUpdateDB(projRecv, rv, countOnly)
+        rv = motusUpdateDB(projRecv, rv, countOnly, forceMeta)
 
     return(rv)
 }

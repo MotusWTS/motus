@@ -4,7 +4,7 @@
 \alias{motusUpdateDB}
 \title{update a motus tag detection database (backend)}
 \usage{
-motusUpdateDB(projRecv, src, countOnly)
+motusUpdateDB(projRecv, src, countOnly, forceMeta = FALSE)
 }
 \arguments{
 \item{projRecv}{integer scalar project code from motus.org, *or*
@@ -16,6 +16,9 @@ character scalar receiver serial number}
 requested database updates.  Otherwise, return a count of items
 that would need to be transferred in order to update the
 database.}
+
+\item{forceMeta}{logical scalar: if true, re-get metadata for tags and
+receivers, even if we already have them.}
 }
 \value{
 \code{src} if \code{countOnly} is FALSE.  Otherwise, a list

@@ -10,6 +10,9 @@
 #'     that would need to be transferred in order to update the
 #'     database.
 #'
+#' @param forceMeta logical scalar: if true, re-get metadata for tags and
+#' receivers, even if we already have them.
+#'
 #' @return \code{src} if \code{countOnly} is FALSE.  Otherwise, a list
 #' of counts of items available for an update.
 #'
@@ -20,7 +23,7 @@
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
-motusUpdateDB = function(projRecv, src, countOnly) {
+motusUpdateDB = function(projRecv, src, countOnly, forceMeta=FALSE) {
     if (! is.numeric(projRecv) && ! is.character(projRecv))
         stop ("projRecv must be an integer motus project ID, or a character receiver serial number")
 
@@ -31,7 +34,7 @@ motusUpdateDB = function(projRecv, src, countOnly) {
         stop("countOnly must be a logical scalar")
 
     if (is.numeric(projRecv))
-        return(motusUpdateTagDB(src, countOnly))
+        return(motusUpdateTagDB(src, countOnly, forceMeta))
     else
-        return(motusUpdateRecvDB(src, countOnly))
+        return(motusUpdateRecvDB(src, countOnly, forceMeta))
 }

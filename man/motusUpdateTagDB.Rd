@@ -4,12 +4,15 @@
 \alias{motusUpdateTagDB}
 \title{update a motus tag detection database - tag flavour (backend)}
 \usage{
-motusUpdateTagDB(src, countOnly = FALSE)
+motusUpdateTagDB(src, countOnly = FALSE, forceMeta = FALSE)
 }
 \arguments{
 \item{src}{src_sqlite object representing the database}
 
 \item{countOnly}{logical scalar: count results instead of returning them?}
+
+\item{forceMeta}{logical scalar: if true, re-get metadata for tags and
+receivers, even if we already have them.  Default:  FALSE.}
 }
 \value{
 \code{src}, if countOnly is FALSE.  Otherwise, a list

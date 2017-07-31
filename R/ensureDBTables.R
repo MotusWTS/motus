@@ -96,7 +96,7 @@ PRIMARY KEY (batchID, ts)
     if (! "batches" %in% tables) {
         sql("
 CREATE TABLE batches (
-    batchID INTEGER UNIQUE PRIMARY KEY,       -- unique identifier for this batch
+    batchID INTEGER PRIMARY KEY,       -- unique identifier for this batch
     motusDeviceID INTEGER,                    -- motus ID of this receiver (NULL means not yet
                                               -- registered or not yet looked-up)  In a receiver
                                               -- database, this will be a constant column, but
@@ -153,7 +153,7 @@ CREATE TABLE batchRuns (
     if (! "hits" %in% tables) {
         sql("
 CREATE TABLE hits (
-    hitID INTEGER UNIQUE PRIMARY KEY,              -- unique ID of this hit
+    hitID INTEGER PRIMARY KEY,                     -- unique ID of this hit
     runID INTEGER NOT NULL REFERENCES runs,        -- ID of run this hit belongs to
     batchID INTEGER NOT NULL REFERENCES batches,   -- ID of batch this hit belongs to
     ts FLOAT(53) NOT NULL,                         -- timestamp (centre of first pulse in detection);
@@ -180,7 +180,7 @@ CREATE TABLE hits (
     if (! "tagAmbig" %in% tables) {
         sql("
 CREATE TABLE tagAmbig (
-    ambigID INTEGER UNIQUE PRIMARY KEY NOT NULL,  -- identifier of group of tags which are ambiguous (identical); will be negative
+    ambigID INTEGER PRIMARY KEY NOT NULL,  -- identifier of group of tags which are ambiguous (identical); will be negative
     masterAmbigID INTEGER,                 -- master ID of this ambiguity group, once different receivers have been combined
     motusTagID1 INT NOT NULL,              -- motus ID of tag in group (not null because there have to be at least 2)
     motusTagID2 INT NOT NULL,              -- motus ID of tag in group.(not null because there have to be at least 2)
@@ -195,7 +195,7 @@ CREATE TABLE tagAmbig (
     if (! "projs" %in% tables) {
         sql("
 CREATE TABLE projs (
-   id INTEGER UNIQUE PRIMARY KEY NOT NULL,
+   id INTEGER PRIMARY KEY NOT NULL,
    name TEXT,
    label TEXT,
    tagsPermissions INTEGER,
@@ -206,9 +206,9 @@ CREATE TABLE projs (
     if (! "tagDeps" %in% tables) {
         sql("
 CREATE TABLE tagDeps (
-   tagID INTEGER PRIMARY KEY,
+   deployID INTEGER PRIMARY KEY,
+   tagID INTEGER,
    projectID INTEGER,
-   deployID INTEGER,
    status TEXT,
    tsStart REAL,
    tsEnd REAL,
@@ -250,15 +250,15 @@ CREATE TABLE "tags" (
         sql("CREATE INDEX IF NOT EXISTS tags_projectID on tags(projectID)")
     }
 
-    if (! "tagDeps" %in% tables) {
+    if (! "recvDeps" %in% tables) {
         sql("
 CREATE TABLE recvDeps (
+   deployID INTEGER PRIMARY KEY,
    serno TEXT,
    receiverType TEXT,
    deviceID INTEGER,
    macAddress TEXT,
    status TEXT,
-   deployID INTEGER,
    name TEXT,
    fixtureType TEXT,
    latitude REAL,
@@ -273,7 +273,6 @@ CREATE TABLE recvDeps (
         sql("CREATE INDEX IF NOT EXISTS recvDeps_serno on recvDeps(serno)")
         sql("CREATE INDEX IF NOT EXISTS recvDeps_deviceID on recvDeps(deviceID)")
         sql("CREATE INDEX IF NOT EXISTS recvDeps_projectID on recvDeps(projectID)")
-        sql("CREATE INDEX IF NOT EXISTS recvDeps_deployID on recvDeps(deployID)")
     }
 
     if (! "antDeps" %in% tables) {
@@ -289,7 +288,8 @@ CREATE TABLE antDeps (
    mountDistanceMeters REAL,
    mountBearing REAL,
    polarization2 REAL,
-   polarization1 REAL
+   polarization1 REAL,
+   primary key(deployID, port)
 );
 ")
         sql("CREATE INDEX IF NOT EXISTS antDeps_deployID on antDeps(deployID)")
@@ -299,7 +299,7 @@ CREATE TABLE antDeps (
     if (! "species" %in% tables) {
         sql("
 CREATE TABLE species (
-   id INTEGER UNIQUE PRIMARY KEY NOT NULL,
+   id INTEGER PRIMARY KEY NOT NULL,
    english TEXT,
    french TEXT,
    scientific TEXT,
