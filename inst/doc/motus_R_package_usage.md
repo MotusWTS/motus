@@ -79,15 +79,14 @@ db = tagme("SG-1013BB000626", update=FALSE)
 
 # update all existing local tag or receiver databases
 
-## NOT YET IMPLEMENTED: tagme()
+tagme() ## with no recveiver or project
 
 ```
 Each of these functions returns a `dplyr::src_sqlite` that refers to the
 database file on disk.  So you can use all the dplyr functions to
 filter and summarize your data.  The format of tables in these databases
 is described elsewhere.  Most users will find the table called `alltags`
-has everything they need.  (TODO: the function which generates the
-view `alltags` hasn't been ported from the motusServer package yet.)
+has everything they need.
 
 For example, to find the first hourly detection of each tag in each hour
 by receiver and antenna, you could do this:
