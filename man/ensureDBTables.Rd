@@ -17,7 +17,8 @@ ensureDBTables(src, projRecv, deviceID)
 when this is a new receiver database.}
 }
 \value{
-returns NULL (silently); fails on any error
+returns a dplyr::tbl representing the alltags virtual table
+which is created in \code{src}.
 }
 \description{
 make sure a tag or receiver database has the required tables

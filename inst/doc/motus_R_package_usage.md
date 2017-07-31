@@ -60,26 +60,26 @@ tag databases of both kinds.  Here's how it works:
 # create and open a local tag database for motus project 14 in the
 # current directory, but do not fetch any data for it.
 
-tagme(14, new=TRUE)
+db = tagme(14, new=TRUE)
 
 # update and open the local tag database for motus project 14;
 # it must already exist and be in the current directory
 
-tagme(14)
+db = tagme(14)
 
 # update and open the local tag database for a receiver;
 # it must already exist and be in the current directory
 
-tagme("SG-1234BBBK4567")
+db = tagme("SG-1013BB000626")
 
 # open the local tag database for a receiver, without
 # updating it
 
-tagme("SG-1234BBBK4567", update=FALSE)
+db = tagme("SG-1013BB000626", update=FALSE)
 
 # update all existing local tag or receiver databases
 
-tagme()
+## NOT YET IMPLEMENTED: tagme()
 
 ```
 Each of these functions returns a `dplyr::src_sqlite` that refers to the
@@ -94,16 +94,30 @@ by receiver and antenna, you could do this:
 
 ```R
 library(motus)
-db = tagme(14)
-t = tbl(db, "alltags")  ### `alltags` not yet implemented
-hourly = t %>% distinct (recv, ant, tagID, floor(ts / 3600))
+db = tagme(8)
+t = tbl(db, "alltags")
+hourly = t %>% mutate (hour = 3600 * round(ts / 3600, 0)) %>% distinct (serno, ant, tagID, hour)
+
+## collect these into a data.frame
+
+hh = hourly %>% collect %>% as.data.frame
+
+## adjust column types so xyplot() treats them specially
+
+hh$tagID = as.factor(hh$tagID)
+class(hh$hour) = class(Sys.time())
+
+## plot tag ID vs. time, grouping by (receiver, ant)
+
+library(lattice)
+xyplot(tagID~hour, groups=paste(serno, ant), auto.key=TRUE, hh, xlab="Date (GMT)", ylab="motus tag ID")
 ```
 
 By default, tag databases are stored in the current directory (`getwd()` in R).
 You can change this by adding the `dir=` parameter to function calls; e.g.:
 
 ```R
-db = tagme(proj=14, dir="c:/Users/emily/telemetry/HEGU")
+db = tagme(proj=8, dir="c:/Users/emily/telemetry/HEGU")
 ```
 
 To prevent downloading the same data many times, the `tagme()` function requires
@@ -117,7 +131,7 @@ parameter; e.g.:
 ## download and open a new copy of the full tag database for motus project 14,
 ## without prompting the user for confirmation
 
-db = tagme(14, new=TRUE, force=TRUE, dir="/home/john/Desktop")
+db = tagme(8, new=TRUE, force=TRUE, dir="/home/john/Desktop")
 ```
 
 Sometimes, you might want to know approximately how much new data is available
@@ -126,7 +140,7 @@ for your project without actually downloading it.  You can do this:
 ```R
 ### ask how much new data motus.org has for your project
 
-tellme(14)
+tellme(8)
 ```
 This returns a named list with these items:
 
@@ -140,14 +154,14 @@ needs to know where your existing tag database files are.  If they are not in th
 current directory, then you can use the `dir` parameter to say where they are; e.g.:
 
 ```R
-tellme(14, dir="c:/Users/emily/telemetry/HEGU")
+tellme(8, dir="c:/Users/emily/telemetry/HEGU")
 ```
 
 If you want to know how much data is available for a project but you *do not* already
 have a database for it, use the `new` parameter:
 
 ```R
-tellme(14, new=TRUE)
+tellme(8, new=TRUE)
 ```
 Otherwise, `tellme` will return an error saying it doesn't know where your existing
 database is.

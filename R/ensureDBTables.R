@@ -9,7 +9,8 @@
 #' @param deviceID integer scalar motus deviceID; must be specified
 #' when this is a new receiver database.
 #'
-#' @return returns NULL (silently); fails on any error
+#' @return returns a dplyr::tbl representing the alltags virtual table
+#' which is created in \code{src}.
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
@@ -308,8 +309,9 @@ CREATE TABLE species (
 );
 ");
     }
+    makeAlltagsView(src)
 }
 
 ## list of tables needed in the receiver database
 
-dbTableNames = c("meta", "batches", "runs", "batchRuns", "hits", "gps", "tagAmbig", "projs", "tags", "tagDeps", "recvDeps", "antDeps", "species")
+dbTableNames = c("alltags", "meta", "batches", "runs", "batchRuns", "hits", "gps", "tagAmbig", "projs", "tags", "tagDeps", "recvDeps", "antDeps", "species")
