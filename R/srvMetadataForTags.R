@@ -47,6 +47,12 @@
 #' \item scientific; character; scientific species name
 #' \item group; character; higher-level taxon
 #' }
+#' \item projs; a list with these columns:
+#' \itemize{
+#' \item id; integer motus project id
+#' \item name; character full name of motus project
+#' \item label; character short label for motus project; e.g. for use in plots
+#' }
 #' }
 #'
 #' @export
@@ -58,6 +64,7 @@ srvMetadataForTags = function(motusTagIDs) {
     return (list(
         tags = structure(x$tags, class = "data.frame", row.names=seq(along=x$tags[[1]])),
         tagDeps = structure(x$tagDeps, class = "data.frame", row.names=seq(along=x$tagDeps[[1]])),
-        species = structure(x$species, class = "data.frame", row.names=seq(along=x$species[[1]]))
+        species = structure(x$species, class = "data.frame", row.names=seq(along=x$species[[1]])),
+        projs = structure(x$projs, class = "data.frame", row.names=seq(along=x$projs[[1]]))
     ))
 }

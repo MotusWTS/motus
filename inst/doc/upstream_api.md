@@ -393,6 +393,10 @@ returns an empty list.
          - scientific; character; scientific species name
          - group; character; higher-level taxon
 
+      - projs; a list with these columns:
+         - id; integer motus project id
+         - name; character full name of motus project
+         - label; character short label for motus project; e.g. for use in plots
 );
 
 ### metadata for receivers (deviceIDs, authToken) ###
@@ -439,6 +443,11 @@ returns an empty list.
            magnetic north
          - polarization2; numeric angle giving tilt from "normal" position, in degrees
          - polarization1; numeric angle giving rotation of antenna about own axis, in degrees.
+
+      - projs; a list with these columns:
+         - id; integer motus project id
+         - name; character full name of motus project
+         - label; character short label for motus project; e.g. for use in plots
 
 ### tags for ambiguities (ambigIDs, authToken) ###
 

@@ -67,6 +67,7 @@ motusUpdateDBmetadata = function(sql, tagIDs=NULL, deviceIDs=NULL, force=FALSE) 
         dbInsertOrReplace(sql$con, "tags", tmeta$tags)
         dbInsertOrReplace(sql$con, "tagDeps", tmeta$tagDeps)
         dbInsertOrReplace(sql$con, "species", tmeta$species)
+        dbInsertOrReplace(sql$con, "projs", tmeta$projs)
     }
 
     ## get metadata for receivers and their antennas
@@ -74,6 +75,7 @@ motusUpdateDBmetadata = function(sql, tagIDs=NULL, deviceIDs=NULL, force=FALSE) 
         rmeta = srvMetadataForReceivers(deviceIDs)
         dbInsertOrReplace(sql$con, "recvDeps", rmeta$recvDeps)
         dbInsertOrReplace(sql$con, "antDeps", rmeta$antDeps)
+        dbInsertOrReplace(sql$con, "projs", rmeta$projs)
     }
     invisible(NULL)
 }

@@ -43,6 +43,12 @@ a list with these items:
       \item polarization2; numeric angle giving tilt from "normal" position, in degrees
       \item polarization1; numeric angle giving rotation of antenna about own axis, in degrees.
    }
+   \item projs; a list with these columns:
+   \itemize{
+      \item id; integer motus project id
+      \item name; character full name of motus project
+      \item label; character short label for motus project; e.g. for use in plots
+   }
 }
 }
 \description{

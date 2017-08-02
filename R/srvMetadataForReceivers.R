@@ -39,6 +39,12 @@
 #'       \item polarization2; numeric angle giving tilt from "normal" position, in degrees
 #'       \item polarization1; numeric angle giving rotation of antenna about own axis, in degrees.
 #'    }
+#'    \item projs; a list with these columns:
+#'    \itemize{
+#'       \item id; integer motus project id
+#'       \item name; character full name of motus project
+#'       \item label; character short label for motus project; e.g. for use in plots
+#'    }
 #' }
 #'
 #' @export
@@ -49,6 +55,7 @@ srvMetadataForReceivers = function(deviceIDs) {
     x = srvQuery(API=Motus$API_METADATA_FOR_RECEIVERS, params=list(deviceIDs=deviceIDs))
     return (list(
         recvDeps = structure(x$recvDeps, class = "data.frame", row.names=seq(along=x$recvDeps[[1]])),
-        antDeps = structure(x$antDeps, class = "data.frame", row.names=seq(along=x$antDeps[[1]]))
+        antDeps = structure(x$antDeps, class = "data.frame", row.names=seq(along=x$antDeps[[1]])),
+        projs = structure(x$projs, class = "data.frame", row.names=seq(along=x$projs[[1]]))
     ))
 }
