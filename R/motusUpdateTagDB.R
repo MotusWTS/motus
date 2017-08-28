@@ -71,7 +71,7 @@ motusUpdateTagDB = function(src, countOnly=FALSE, forceMeta=FALSE) {
 
                 dbInsertOrReplace(sql$con, "runs", r)
                 dbWriteTable(sql$con, "batchRuns", data.frame(batchID=batchID, runID=r$runID), append=TRUE, row.names=FALSE)
-                cat(sprintf("Got %d runs from batch %d                \r", nrow(r), batchID), file=stderr())
+                cat(sprintf("Got %d runs starting at %.0f for batch %d              \r", nrow(r), runID, batchID), file=stderr())
                 runID = max(r$runID)
             }
 
@@ -90,7 +90,7 @@ motusUpdateTagDB = function(src, countOnly=FALSE, forceMeta=FALSE) {
                 h = srvHitsForTagProject(projectID=projectID, batchID=batchID, hitID=hitID)
                 if (! isTRUE(nrow(h) > 0))
                     break
-                cat(sprintf("Got %d hits for batch %d                \r", nrow(h), batchID), file=stderr())
+                cat(sprintf("Got %d hits starting at %.0f for batch %d               \r", nrow(h), hitID, batchID), file=stderr())
                 ## add these hit records to the DB
                 dbWriteTable(sql$con, "hits", h, append=TRUE, row.names=FALSE)
                 numHits = numHits + nrow(h)
