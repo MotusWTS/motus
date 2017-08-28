@@ -167,9 +167,9 @@ SELECT
    t8.`group` as spGroup,
    t9.label as tagProj,
    t10.label as proj,
-   t11.lat as lat,
-   t11.lon as lon,
-   t11.alt as alt
+   ifnull(t11.lat, t6.latitude) as lat,
+   ifnull(t11.lon, t6.longitude) as lon,
+   ifnull(t11.alt, t6.elevation) as alt
 FROM
    hits AS t1
 LEFT JOIN
