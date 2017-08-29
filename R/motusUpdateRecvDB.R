@@ -70,7 +70,7 @@ motusUpdateRecvDB = function(src, countOnly, forceMeta=FALSE) {
 
                 dbInsertOrReplace(sql$con, "runs", r)
                 dbWriteTable(sql$con, "batchRuns", data.frame(batchID=batchID, runID=r$runID), append=TRUE, row.names=FALSE)
-                cat(sprintf("Got %d runs starting at %.0f from batch %d                \r", nrow(r), runID, batchID), file=stderr())
+                cat(sprintf("Got %d runs starting at %.0f for batch %d                 \r", nrow(r), runID, batchID), file=stderr())
                 runID = max(r$runID)
             }
 
