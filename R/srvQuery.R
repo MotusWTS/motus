@@ -30,7 +30,6 @@ srvQuery = function (API, params = NULL, requestType="post", show=FALSE, JSON=FA
     RCurl::curlSetOpt(curl=curl,
                       .opts = list(
                           httpheader = c(
-                              "Content-Type"="application/json",
                               "Accept"="application/json"),
                           timeout = 300,
                           verbose = FALSE)
