@@ -30,10 +30,14 @@ equal length, which is the natural JSON encoding of an R data.frame</li>
 fields might be present, giving additional information.  If no field <code>error</code>
 is present, the request succeeded.</li>
 </ul>
-<p>Examples are given for each call using the command-line client <a href="https://curl.haxx.se/download.html">curl</a>
-which returns the raw bzip2-compressed data. To view the response, redirect the output of curl into
-a file and use <a href="http://7-zip.org">7zip</a> to decompress it (for example).</p>
-<p>The server is at <a href="">https://sgdata.motus.org</a> and the URL prefix is "/data/custom/".</p>
+<p>Examples are given for each call using the command-line
+client <a href="https://curl.haxx.se/download.html">curl</a> with quoting
+appropriate for the Bash shell.  These examples return the raw
+bzip2-compressed data. To view the response, redirect the output of
+curl into a file and use <a href="http://7-zip.org">7zip</a> to decompress it
+(for example), or add <code>| bunzip2 -cd</code> to the end of the command in
+Bash.</p>
+<p>The server is at <a href="https://sgdata.motus.org">https://sgdata.motus.org</a> and the URL prefix is "/data/custom/".</p>
 <h2>
 <a id="user-content-api-calls" class="anchor" href="#api-calls" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API calls</h2>
 <h2>
@@ -43,7 +47,7 @@ a file and use <a href="http://7-zip.org">7zip</a> to decompress it (for example
   - password: password (in cleartext)
 
   e.g.
-  curl --data-url-encode json='{"user":"someone","password":"bigsecret"}' https://sgdata.motus.org/data/custom/authenticate_user
+  curl --data-urlencode json='{"user":"someone","password":"bigsecret"}' https://sgdata.motus.org/data/custom/authenticate_user
 </code></pre>
 <ul>
 <li>returns a list with these items:
@@ -83,8 +87,13 @@ project, then that user can see:</p>
 </ul>
 </li>
 </ol>
-<p>Calls where no authorized data are available return an appropriate
-data.frame with zero rows.</p>
+<p>If an API call does not find any data for which the user is
+authorized, it will return a json object of the usual structure,
+except that column arrays will have length zero.  This represents an R
+data.frame with the correct column names but zero rows.</p>
+<p>The API doesn't currently provide a way to tell whether there are additional data
+which would be returned for a given call if the user had authorization for more
+projects.</p>
 <p>"Ownership" of detections follows these assumptions:</p>
 <ul>
 <li>
@@ -104,7 +113,7 @@ rebooted at least once between deployments under <strong>different</strong> proj
 <pre><code>   - serno: character vector of receiver serial number(s)
 
   e.g.
-  curl --data-url-encode json='{"serno":"SG-1234BBBK5678","authToken":"XXX"}' https://sgdata.motus.org/data/custom/deviceID_for_receiver
+  curl --data-urlencode json='{"serno":"SG-1234BBBK5678","authToken":"XXX"}' https://sgdata.motus.org/data/custom/deviceID_for_receiver
 </code></pre>
 <ul>
 <li>
@@ -123,7 +132,7 @@ rebooted at least once between deployments under <strong>different</strong> proj
 <pre><code>   - projectID: integer project ID
 
   e.g.
-  curl --data-url-encode json='{"projectID":123,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/receivers_for_project
+  curl --data-urlencode json='{"projectID":123,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/receivers_for_project
 </code></pre>
 <ul>
 <li>
@@ -156,7 +165,7 @@ rebooted at least once between deployments under <strong>different</strong> proj
    - authToken: authorization token returned by authenticate_user
 
   e.g.
-  curl --data-url-encode json='{"projectID":123,"batchID":0, "authToken":"XXX"}' https://sgdata.motus.org/data/custom/batches_for_tag_project
+  curl --data-urlencode json='{"projectID":123,"batchID":0, "authToken":"XXX"}' https://sgdata.motus.org/data/custom/batches_for_tag_project
 </code></pre>
 <ul>
 <li>
@@ -187,7 +196,7 @@ returns an empty list.</p>
    - authToken: authorization token returned by authenticate_user
 
   e.g.
-  curl --data-url-encode json='{"projectID":123,"batchID":0, "authToken":"XXX"}' https://sgdata.motus.org/data/custom/batches_for_receiver
+  curl --data-urlencode json='{"projectID":123,"batchID":0, "authToken":"XXX"}' https://sgdata.motus.org/data/custom/batches_for_receiver
 </code></pre>
 <ul>
 <li>
@@ -219,7 +228,7 @@ returns an empty list.</p>
    - authToken: authorization token returned by authenticate_user
 
   e.g.
-  curl --data-url-encode json='{"projectID":123,"batchID":111,"runID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/runs_for_tag_project
+  curl --data-urlencode json='{"projectID":123,"batchID":111,"runID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/runs_for_tag_project
 </code></pre>
 <ul>
 <li>
@@ -251,7 +260,7 @@ returns an empty list.</p>
    - authToken: authorization token returned by authenticate_user
 
   e.g.
-  curl --data-url-encode json='{"projectID":123,"batchID":111,"runID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/runs_for_receiver
+  curl --data-urlencode json='{"projectID":123,"batchID":111,"runID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/runs_for_receiver
 </code></pre>
 <ul>
 <li>
@@ -283,7 +292,7 @@ returns an empty list.</p>
    - authToken: authorization token returned by authenticate_user
 
   e.g.
-  curl --data-url-encode json='{"projectID":123,"batchID":111,"hitID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/hits_for_tag_project
+  curl --data-urlencode json='{"projectID":123,"batchID":111,"hitID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/hits_for_tag_project
 </code></pre>
 <ul>
 <li>
@@ -318,7 +327,7 @@ returns an empty list.</p>
    - authToken: authorization token returned by authenticate_user
 
   e.g.
-  curl --data-url-encode json='{"batchID":111,"hitID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/hits_for_receiver
+  curl --data-urlencode json='{"batchID":111,"hitID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/hits_for_receiver
 </code></pre>
 <ul>
 <li>
@@ -353,7 +362,7 @@ returns an empty list.</p>
    - authToken: authorization token returned by authenticate_user
 
   e.g.
-  curl --data-url-encode json='{"projectID":123,"batchID":111,"ts":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/gps_for_tag_project
+  curl --data-urlencode json='{"projectID":123,"batchID":111,"ts":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/gps_for_tag_project
 </code></pre>
 <ul>
 <li>
@@ -389,7 +398,7 @@ returns an empty list.</p>
    - authToken: authorization token returned by authenticate_user
 
   e.g.
-  curl --data-url-encode json='{"batchID":111,"ts":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/gps_for_receiver
+  curl --data-urlencode json='{"batchID":111,"ts":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/gps_for_receiver
 </code></pre>
 <ul>
 <li>
@@ -419,7 +428,7 @@ returns an empty list.</p>
    - authToken: authorization token returned by authenticate_user
 
   e.g.
-  curl --data-url-encode json='{"motusTagIDs":[12345,12346,12347],"authToken":"XXX"}' https://sgdata.motus.org/data/custom/metadata_for_tags
+  curl --data-urlencode json='{"motusTagIDs":[12345,12346,12347],"authToken":"XXX"}' https://sgdata.motus.org/data/custom/metadata_for_tags
 </code></pre>
 <ul>
 <li>
@@ -470,10 +479,18 @@ returns an empty list.</p>
 <li>group; character; higher-level taxon</li>
 </ul>
 </li>
+<li>
+<p>projs; a list with these columns:</p>
+<ul>
+<li>id; integer motus project id</li>
+<li>name; character full name of motus project</li>
+<li>label; character short label for motus project; e.g. for use in plots
+);</li>
 </ul>
 </li>
 </ul>
-<p>);</p>
+</li>
+</ul>
 <h3>
 <a id="user-content-metadata-for-receivers-deviceids-authtoken" class="anchor" href="#metadata-for-receivers-deviceids-authtoken" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>metadata for receivers (deviceIDs, authToken)</h3>
 <pre><code>   - deviceID; integer device ID; receiver metadata will only be
@@ -483,7 +500,7 @@ returns an empty list.</p>
    - authToken: authorization token returned by authenticate_user
 
   e.g.
-  curl --data-url-encode json='{"deviceIDs":[123,124,125],"authToken":"XXX"}' https://sgdata.motus.org/data/custom/metadata_for_receivers
+  curl --data-urlencode json='{"deviceIDs":[123,124,125],"authToken":"XXX"}' https://sgdata.motus.org/data/custom/metadata_for_receivers
 </code></pre>
 <ul>
 <li>
@@ -527,6 +544,14 @@ magnetic north</li>
 <li>polarization1; numeric angle giving rotation of antenna about own axis, in degrees.</li>
 </ul>
 </li>
+<li>
+<p>projs; a list with these columns:</p>
+<ul>
+<li>id; integer motus project id</li>
+<li>name; character full name of motus project</li>
+<li>label; character short label for motus project; e.g. for use in plots</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -540,7 +565,7 @@ magnetic north</li>
    - authToken: authorization token returned by authenticate_user
 
   e.g.
-  curl --data-url-encode json='{"ambigIDs":[-3,-4,-5],"authToken":"XXX"}' https://sgdata.motus.org/data/custom/tags_for_ambiguities
+  curl --data-urlencode json='{"ambigIDs":[-3,-4,-5],"authToken":"XXX"}' https://sgdata.motus.org/data/custom/tags_for_ambiguities
 </code></pre>
 <ul>
 <li>
@@ -566,7 +591,7 @@ for each ambiguity.</p>
    - batchID: integer ID of largest batch client already has
 
   e.g.
-  curl --data-url-encode json='{"projectID":123,"batchID":15538,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/size_of_update_for_tag_project
+  curl --data-urlencode json='{"projectID":123,"batchID":15538,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/size_of_update_for_tag_project
 </code></pre>
 <ul>
 <li>return a list with these scalar items:
@@ -585,7 +610,7 @@ for each ambiguity.</p>
    - batchID: integer ID of largest batch client already has
 
   e.g.
-  curl --data-url-encode json='{"deviceID":221,"batchID":15538,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/size_of_update_for_receiver
+  curl --data-urlencode json='{"deviceID":221,"batchID":15538,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/size_of_update_for_receiver
 </code></pre>
 <ul>
 <li>return a list with these scalar items:

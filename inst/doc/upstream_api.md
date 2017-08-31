@@ -23,9 +23,13 @@ with this package.
    fields might be present, giving additional information.  If no field `error`
    is present, the request succeeded.
 
-Examples are given for each call using the command-line client [curl](https://curl.haxx.se/download.html)
-which returns the raw bzip2-compressed data. To view the response, redirect the output of curl into
-a file and use [7zip](http://7-zip.org) to decompress it (for example).
+Examples are given for each call using the command-line
+client [curl](https://curl.haxx.se/download.html) with quoting
+appropriate for the Bash shell.  These examples return the raw
+bzip2-compressed data. To view the response, redirect the output of
+curl into a file and use [7zip](http://7-zip.org) to decompress it
+(for example), or add ` | bunzip2 -cd ` to the end of the command in
+Bash.
 
 The server is at [https://sgdata.motus.org](https://sgdata.motus.org) and the URL prefix is "/data/custom/".
 
