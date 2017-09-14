@@ -226,7 +226,7 @@ LEFT JOIN
              AND t11b.ts <= t1.ts
          )
 ")
-    dbGetQuery(db$con, paste0("DROP VIEW IF EXISTS ", name))
-    dbGetQuery(db$con, query)
+    DBI::dbExecute(db$con, paste0("DROP VIEW IF EXISTS ", name))
+    DBI::dbExecute(db$con, query)
     return(tbl(db, name))
 }

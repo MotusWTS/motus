@@ -22,7 +22,7 @@ dbInsertOrReplace = function(con, name, df) {
     if (nrow(df) == 0)
         return()
 
-    sql = function(...) dbGetQuery(con, sprintf(...))
+    sql = function(...) DBI::dbExecute(con, sprintf(...))
 
     tmp = basename(tempfile("zztmp"))
 
