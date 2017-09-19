@@ -1,43 +1,68 @@
 #' Plot all tag detections by latitude
 #'
-#' Plot latitude vs time for each tag
+#' Plot latitude vs time (UTC rounded to the hour) for each tag using .motus data.  Latitude is by default taken from a receivers GPS recordings.
 #'
-#' @param data dataframe of Motus detection data
-#' @param tagsPerPanel number of tags in each panel of the plot
+#' @param data tbl file of .motus data
+#' @param tagsPerPanel number of tags in each panel of the plot, by default this is 5
+#' @param lat.name column name from which to obtain location values, by default it is set to GPS latitude
 #' @export
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @examples
-#' plotAllTagsLat(dat, tagsPerPanel = 4)
+#' access the "all tags" table within the motus sql
+#' tmp <- tbl(motusSqlFile, "alltags")
+#' 
+#' # Plot tbl file "tmp" with default GPS latitude data and 5 tags per panel
+#' plotAllTagsLat(tmp)
+#' 
+#' # Plot tbl file "tmp" with 10 tags per panel
+#' plotAllTagsLat(tmp, tagsPerPanel = 10)
+#' 
+#' # Plot tbl file "tmp" using receiver deployment latitudes with default 5 tags per panel
+#' plotAllTagsLat(tmp, lat.name = "depLat")
+#' 
+#' # Plot tbl file "tmp" using LONGITUDES and 1 tag per panel
+#' plotAllTagsLat(tmp, lat.name = "lon", tagsPerPanel = 1)
+
+#' # Plot tbl file "tmp" using lat and 1 tag per panel for select motus tagIDs
+#' plotAllTagsLat(filter(tmp, motusTagID %in% c(9045, 10234, 96321)), tagsPerPanel = 1)
 
 ## grouping code taken from sensorgnome package
 
-plotAllTagsLat <- function(data, tagsPerPanel=n){
-  data$round_ts <- as.POSIXct(round(data$ts, "hours")) ## round to the hour
-  data <- data %>%
-    group_by(site) %>%
-    mutate(meanlat = mean(lat)) ## get mean latitude
-  data$meanlat = round(data$meanlat, digits = 4) ## round to 4 significant digits
-  ## We want to plot multiple tags per panel, so sort their labels and create a grouping factor
-  ## Note that labels are sorted in increasing order by ID
-  labs = data$label[order(data$id,data$label)]
+
+plotAllTagsLat <- function (data, lat.name = "lat", tagsPerPanel = 5) {
+  if(class(tagsPerPanel) != "numeric") stop('Numeric value required for "tagsPerPanel"')
+  data = data %>% mutate(hour = 3600*round(ts/3600, 0)) ## round times to the hour
+  dataGrouped <- filter_(data, paste(lat.name, "!=", 0)) %>% group_by(site) %>% 
+    summarise_(.dots = setNames(paste0('mean(',lat.name,')'), 'meanlat')) ## get summary of mean lats by site
+  data <- inner_join(data, dataGrouped, by = "site") ## join grouped data with data
+  data <- select(data, id, site, hour, lat, meanlat, fullID) %>% distinct %>% collect %>% as.data.frame
+  data$hour <- lubridate::as_datetime(data$hour, tz = "UTC")
+  labs = data$fullID[order(data$id, data$fullID)]
   dup = duplicated(labs)
   tagLabs = labs[!dup]
-  tagGroupIDs = data$id[order(data$id,data$label)][!dup]
-  tagGroup = 1 + floor((0:length(tagLabs)) / tagsPerPanel)
+  tagGroupIDs = data$id[order(data$id, data$fullID)][!dup]
+  tagGroup = 1 + floor((0:length(tagLabs))/tagsPerPanel)
   ngroup = length(tagGroup)
   names(tagGroup) = tagLabs
-  tagGroupFactor = tagGroup[as.character(data$label)]
-  tagGroupLabels = tapply(tagGroupIDs, 1 + floor((0:(length(tagGroupIDs)-1)) / tagsPerPanel), function(data) paste("IDs:", paste(sort(unique(data)), collapse=",")))
-  data$tagGroupFactor = factor(tagGroupFactor, labels=tagGroupLabels, ordered=TRUE)
-  data <- unique(subset(data, select = c(round_ts, meanlat, site, fullID, tagGroupFactor))) ## get unique hourly detections for small dataframe
-  data <- data[order(data$round_ts),] ## order by time
-  out <- by(data, INDICES = data$tagGroupFactor, FUN = function(m){
+  tagGroupFactor = tagGroup[as.character(data$fullID)]
+  tagGroupLabels = tapply(tagGroupIDs, 1 + floor((0:(length(tagGroupIDs) - 
+                                                       1))/tagsPerPanel), function(data) paste("IDs:", paste(sort(unique(data)), 
+                                                                                                             collapse = ",")))
+  data$tagGroupFactor = factor(tagGroupFactor, labels = tagGroupLabels, 
+                               ordered = TRUE)
+  data <- unique(subset(data, select = c(hour, meanlat, 
+                                         site, fullID, tagGroupFactor)))
+  data <- data[order(data$hour), ]
+  out <- by(data, INDICES = data$tagGroupFactor, FUN = function(m) {
     m <- droplevels(m)
-    m <- ggplot2::ggplot(m, ggplot2::aes(round_ts, meanlat, colour = fullID, group = fullID))
-    m + ggplot2::geom_line() + ggplot2::geom_point(pch = 21) + ggplot2::theme_bw() +
-      ggplot2::labs(title = "Detection time vs Latitude by Tag", x = "Date", y = "Latitude", colour = "ID") +
-      ggplot2::facet_wrap("tagGroupFactor")
+    m <- ggplot2::ggplot(m, ggplot2::aes(hour, meanlat, 
+                                         colour = fullID, group = fullID))
+    m + ggplot2::geom_line() + ggplot2::geom_point(pch = 21) + 
+      ggplot2::theme_bw() + ggplot2::labs(title = "Detection time vs Latitude by Tag", 
+                                          x = "Date", y = paste0('mean_', lat.name), colour = "ID") + ggplot2::facet_wrap("tagGroupFactor") +
+      ggplot2::theme(axis.text.x = element_text(angle = 45, hjust = 1))
   })
   do.call(gridExtra::grid.arrange, out)
 }
+
