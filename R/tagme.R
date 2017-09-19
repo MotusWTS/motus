@@ -74,6 +74,8 @@ tagme = function(projRecv, update=TRUE, new=FALSE, dir=getwd(), countOnly=FALSE,
     }
     if (length(projRecv) != 1 || (! is.numeric(projRecv) && ! is.character(projRecv)))
         stop("You must specify an integer project ID or a character receiver serial number.")
+    if (is.character(projRecv) && grepl("\\.motus$", projRecv, ignore.case=TRUE))
+        projRecv = gsub("\\.motus$", projRecv, ignore.case=TRUE)
     dbname = getDBFilename(projRecv, dir)
     have = file.exists(dbname)
     if (! new && ! have)

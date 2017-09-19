@@ -34,64 +34,51 @@ srvQuery = function (API, params = NULL, requestType="post", show=FALSE, JSON=FA
                           timeout = 300,
                           verbose = FALSE)
                       )
-    # params is a named list of parameters which will be passed along in the JSON query
-
-    ## query object for getting project list
-
-    if (auth)
-        query = list(authToken = Motus$authToken)
-    else
-        query = list()
-    query = c(query, params)
-
-    json = query %>% jsonlite::toJSON (auto_unbox=TRUE, null="null")
-
-    if(show)
-        cat(json, "\n")
 
     URL = file.path(Motus$dataServerURL, API)
 
-    tokenReset = FALSE
-    repeat {
-        tryCatch({
-            if (requestType == "post")
-                resp = RCurl::postForm(URL, json=json, style="post", curl=curl, .contentEncodeFun=RCurl::curlPercentEncode)
-            else
-                resp = RCurl::getForm(URL, json=json, curl=curl)
-            resp = memDecompress(structure(resp, `Content-Type`=NULL), "bzip2", asChar=TRUE)
-            if (JSON)
-                return (resp)
-            if (grepl("^[ \r\n]*$", resp))
-                return(list())
-            rv = jsonlite::fromJSON(resp)
-            if ("error" %in% names(rv))
-                stop(rv$error)
-            if (! is.null(rv$data))
-                return(rv$data)
-            return(rv)
-        }, error=function(e) {
-            e = as.character(e)
-            if (any(grepl("authorization with motus failed", e))) {
-                if (tokenReset) {
-                    e = "Motus authorization failed.\nPlease retry the function (you will be prompted again for a username and password).\n"
-                    Motus$authToken <- NULL
-                    Motus$userLogin <- NULL
-                    Motus$userPassword <- NULL
-                } else {
-                    ## we haven't tried resetting the authToken, so do that now and quietly retry the query
-                    ## this isn't sufficient as a mechanism for mediating between multiple user R sessions accessing
-                    ## the server, because it's a race condition (will the other session re-authorize before this session
-                    ## submits the real query?).  But at least it deals with token expiry.
-                    Motus$authToken <- NULL
-                    tokenReset <<- TRUE
-                    query$authToken <<- Motus$authToken ## active binding which triggers a call to srvAuth
-                    return()  ## just returning from the error handler
-                }
+    for (i in 1:2) {
+        ## at most two iterations; the second allows for
+        ## reauthentication when the authToken has expired
+
+        if (auth) {
+            ## Note: due its active binding if Motus$authToken is
+            ## currently NULL, the following will generate a call to
+            ## srvAuth, which in turn calls this srvQuery, but with
+            ## auth=FALSE.  If authentication on that call fails,
+            ## an error propagates up, exiting this function.
+
+            query = list(authToken = Motus$authToken)
+
+        } else {
+            query = list()
+        }
+        query = c(query, params)
+
+        json = query %>% jsonlite::toJSON (auto_unbox=TRUE, null="null")
+
+        if(show)
+            cat(json, "\n")
+
+        if (requestType == "post")
+            resp = RCurl::postForm(URL, json=json, style="post", curl=curl, .contentEncodeFun=RCurl::curlPercentEncode)
+        else
+            resp = RCurl::getForm(URL, json=json, curl=curl)
+        resp = memDecompress(structure(resp, `Content-Type`=NULL), "bzip2", asChar=TRUE)
+        if (JSON)
+            return (resp)
+        if (grepl("^[ \r\n]*$", resp))
+            return(list())
+        rv = jsonlite::fromJSON(resp)
+        if (! is.null(rv$error)) {
+            if (rv$error %in% c("token expired", "token invalid")) {
+                Motus$authToken = NULL
+                next
             }
-            ## propagate the error
-            stop ("A query to the motus data server failed: ", e)
-        })
-        if (! tokenReset)
-            stop ("Weird error in srvQuery: please report to motus.org") ## this loop should happen at most twice, and twice only if a tokenReset occurred
+            stop(rv$error)
+        }
+        if (! is.null(rv$data))
+            return(rv$data)
+        return(rv)
     }
 }

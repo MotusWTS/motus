@@ -8,7 +8,16 @@ work with your motus detection data.
 
 The first time you call a function in the motus package that needs to
 authenticate you at motus.org, you will be asked for a username and
-password.  This will only happen once per R session.
+password.  This will only happen once per R session.  You can supply
+your credentials from an R script like so:
+
+```R
+   library(motus)
+   ...
+   motusLogout() ## only needed if changing login credentials during an R session
+   Motus$userLogin = "username"
+   Motus$userPassword = "secret"
+```
 
 ## Tag Databases ##
 
@@ -57,6 +66,8 @@ The motus packages provides one basic function to create and update
 tag databases of both kinds.  Here's how it works:
 
 ```R
+library(motus)
+
 # create and open a local tag database for motus project 14 in the
 # current directory, but do not fetch any data for it.
 
@@ -146,7 +157,8 @@ This returns a named list with these items:
  - **numBatches**: number of batches of new data
  - **numRuns**: number of runs of new tag detections
  - **numHits**: number of new tag detections
- - **size**: approximate uncompressed size of data transfer required, in megabytes.
+ - **numGPS**: number of new GPS records
+ - **numBytes**: approximate uncompressed size of data transfer required, in bytes.
 
 Of course, *new* means data you do not already have, so the `tellme` function
 needs to know where your existing tag database files are.  If they are not in the

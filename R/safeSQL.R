@@ -101,7 +101,7 @@ safeSQL = function(con, busyTimeout = 300) {
 
         ########## RSQLite ##########
 
-        dbGetQuery(con, paste0("pragma busy_timeout=", round(busyTimeout * 1000)))
+        DBI::dbExecute(con, paste0("pragma busy_timeout=", round(busyTimeout * 1000)))
         structure(
             function(query, ..., .CLOSE=FALSE, .QUOTE=TRUE) {
                 if (! missing(.QUOTE))
@@ -110,22 +110,23 @@ safeSQL = function(con, busyTimeout = 300) {
                     dbDisconnect(con)
                     return(con <<- NULL)
                 }
+                queryFun = if(grepl("(?i)^select", query, perl=TRUE)) dbGetQuery else dbSendQuery
                 repeat {
                     tryCatch({
                         a = list(...)
                         if (length(a) > 0) {
                             if (!is.null(names(a))) {
-                                return(dbGetPreparedQuery(con, query, data.frame(a, stringsAsFactors=FALSE)))
+                                return(queryFun(con, query, params=a))
                             } else {
                                 if (.QUOTE) {
                                     ## there are some parameters to the query, so escape those which are strings
                                     a = c(query, lapply(a, function(x) if (is.character(x)) dbQuoteString(con=con, x) else x ))
                                 }
                                 q = do.call(sprintf, a)
-                                return(dbGetQuery(con, q))
+                                return(queryFun(con, q))
                             }
                         } else {
-                            return(dbGetQuery(con, query))
+                            return(queryFun(con, query))
                         }
                     },
                     error = function(e) {
@@ -148,6 +149,7 @@ safeSQL = function(con, busyTimeout = 300) {
                     dbDisconnect(con)
                     return(con <<- NULL)
                 }
+                queryFun = if(grepl("(?i)^select", query, perl=TRUE)) dbGetQuery else dbSendQuery
                 a = list(...)
                 if (length(a) > 1 && .QUOTE) {
                     ## there are some parameters to the query, so escape those which are strings
@@ -157,7 +159,7 @@ safeSQL = function(con, busyTimeout = 300) {
                 Encoding(q) = "UTF-8"
                 repeat {
                     tryCatch(
-                        return(dbGetQuery(con, q)),
+                        return(queryFun(con, q)),
                         error = function(e) {
                             if (! grepl("Deadlock.*try restarting transaction", as.character(e), perl=TRUE))
                                 stop(e) ## re-throw if error isn't due to a locked database

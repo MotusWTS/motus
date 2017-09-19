@@ -10,11 +10,11 @@ srvAuth()
 a character scalar authentication/authorization token
 }
 \description{
-This function uses Motus$userLogin and Motus$userPassword to get
-an authentication token from the data server.
+Use Motus$userLogin and Motus$userPassword to get an authentication
+token from the data server.
 }
 \details{
-if login is unsuccessful, execution stops with error message
+if login is unsuccessful, execution stops with an error message
 }
 \seealso{
 \link{\code{Motus}}
