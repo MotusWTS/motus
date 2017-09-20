@@ -48,6 +48,7 @@ motusUpdateTagDB = function(src, countOnly=FALSE, forceMeta=FALSE) {
         cat(sprintf("Got %d batch records\n", nrow(b)), file=stderr())
         for (bi in 1:nrow(b)) {
             batchID = b$batchID[bi]
+            batchMsg = sprintf("batchID %8d (#%6d of %6d)", batchID, bi, nrow(b))
             ## To handle interruption of transfers, we save a record to the batches
             ## table as the last step after acquiring runs and hits for that batch.
 
@@ -71,7 +72,7 @@ motusUpdateTagDB = function(src, countOnly=FALSE, forceMeta=FALSE) {
 
                 dbInsertOrReplace(sql$con, "runs", r)
                 dbWriteTable(sql$con, "batchRuns", data.frame(batchID=batchID, runID=r$runID), append=TRUE, row.names=FALSE)
-                cat(sprintf("Got %d runs starting at %.0f for batch %d              \r", nrow(r), runID, batchID), file=stderr())
+                cat(sprintf("%s: got %6d runs starting at %15.0f\r", batchMsg, nrow(r), runID), file=stderr())
                 runID = max(r$runID)
             }
 
@@ -90,7 +91,7 @@ motusUpdateTagDB = function(src, countOnly=FALSE, forceMeta=FALSE) {
                 h = srvHitsForTagProject(projectID=projectID, batchID=batchID, hitID=hitID)
                 if (! isTRUE(nrow(h) > 0))
                     break
-                cat(sprintf("Got %d hits starting at %.0f for batch %d               \r", nrow(h), hitID, batchID), file=stderr())
+                cat(sprintf("%s: got %6d hits starting at %15.0f\r", batchMsg, nrow(h), hitID), file=stderr())
                 ## add these hit records to the DB
                 dbWriteTable(sql$con, "hits", h, append=TRUE, row.names=FALSE)
                 numHits = numHits + nrow(h)
@@ -107,7 +108,7 @@ motusUpdateTagDB = function(src, countOnly=FALSE, forceMeta=FALSE) {
                 g = srvGPSforTagProject(projectID=projectID, batchID=batchID, ts=ts)
                 if (! isTRUE(nrow(g) > 0))
                     break
-                cat(sprintf("Got %d GPS fixes for batch %d                \r", nrow(g), batchID), file=stderr())
+                cat(sprintf("%s: got %6d GPS fixes                     \r", batchMsg, nrow(g)), file=stderr())
                 dbInsertOrReplace(sql$con, "gps", g[, c("batchID", "ts", "gpsts", "lat", "lon", "alt")])
                 ts = max(g$ts)
             }
