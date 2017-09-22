@@ -4,6 +4,23 @@ This document outlines how to use the
 [motus R package](https://github.com/jbrzusto/motus) to obtain and
 work with your motus detection data.
 
+## Installation ##
+
+**Users**: the 'master' branch is what you want.  You can install it
+from R by doing:
+```R
+    install.packages("devtools")              ## if you haven't already done this
+
+    install_github("jbrzusto/motus@master")   ## the lastest stable version
+```
+
+**Developers**: the 'staging' branch is for work-in-progress.  Install it with
+```R
+    install.packages("devtools")               ## if you haven't already done this
+
+    install_github("jbrzusto/motus@staging")   ## the development version
+```
+
 ## Authentication ##
 
 The first time you call a function in the motus package that needs to
