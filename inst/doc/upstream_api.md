@@ -13,6 +13,8 @@ with this package.
  - the request has header `Content-Type: application/x-www-form-urlencoded`
  - the POST data has a single item called `json`
  - the fields of `json` are the parameters listed for each API entrypoint below.
+ - most requests require an `authToken` value, which can be obtained by a call
+   to `authenticate_user`
 
 ### Reply ###
  - is a json object: header `Content-Type = application/json`
@@ -22,6 +24,11 @@ with this package.
  - errors are indicated by including a field called `error` in the reply; other
    fields might be present, giving additional information.  If no field `error`
    is present, the request succeeded.
+ - requests return a (fixed) maximum number of rows.  If a reply has
+   fewer than the maximum number of rows, there are no further data
+   for the given query; i.e. the next `paging` call to the same API
+   would return 0 rows.  The maximum number of rows can be obtained by
+   calling `api_info`
 
 Examples are given for each call using the command-line
 client [curl](https://curl.haxx.se/download.html) with quoting
@@ -34,6 +41,16 @@ Bash.
 The server is at [https://sgdata.motus.org](https://sgdata.motus.org) and the URL prefix is "/data/custom/".
 
 ## API calls ##
+
+### api_info (authToken) ###
+
+   - return a list with these items:
+
+      - maxRows: integer, maximum number of rows returned by a query
+
+      e.g.
+      curl https://sgdata.motus.org/data/custom/api_info
+
 
 ## authenticate user ##
 
@@ -59,7 +76,7 @@ The server is at [https://sgdata.motus.org](https://sgdata.motus.org) and the UR
 
 ### Notes ###
 
-1. The `authToken` returned by this API must be included in all other API calls.
+1. The `authToken` returned by this API must be included in most other API calls.
 
 2. Authorization is by project: if a user has permission for a
 project, then that user can see:

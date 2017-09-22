@@ -16,6 +16,9 @@ with this package.</p>
 <li>the POST data has a single item called <code>json</code>
 </li>
 <li>the fields of <code>json</code> are the parameters listed for each API entrypoint below.</li>
+<li>most requests require an <code>authToken</code> value, which can be obtained by a call
+to <code>authenticate_user</code>
+</li>
 </ul>
 <h3>
 <a id="user-content-reply" class="anchor" href="#reply" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Reply</h3>
@@ -29,6 +32,12 @@ equal length, which is the natural JSON encoding of an R data.frame</li>
 <li>errors are indicated by including a field called <code>error</code> in the reply; other
 fields might be present, giving additional information.  If no field <code>error</code>
 is present, the request succeeded.</li>
+<li>requests return a (fixed) maximum number of rows.  If a reply has
+fewer than the maximum number of rows, there are no further data
+for the given query; i.e. the next <code>paging</code> call to the same API
+would return 0 rows.  The maximum number of rows can be obtained by
+calling <code>api_info</code>
+</li>
 </ul>
 <p>Examples are given for each call using the command-line
 client <a href="https://curl.haxx.se/download.html">curl</a> with quoting
@@ -40,6 +49,18 @@ Bash.</p>
 <p>The server is at <a href="https://sgdata.motus.org">https://sgdata.motus.org</a> and the URL prefix is "/data/custom/".</p>
 <h2>
 <a id="user-content-api-calls" class="anchor" href="#api-calls" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API calls</h2>
+<h3>
+<a id="user-content-api_info-authtoken" class="anchor" href="#api_info-authtoken" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>api_info (authToken)</h3>
+<ul>
+<li>
+<p>return a list with these items:</p>
+<ul>
+<li>maxRows: integer, maximum number of rows returned by a query</li>
+</ul>
+<p>e.g.
+curl <a href="https://sgdata.motus.org/data/custom/api_info">https://sgdata.motus.org/data/custom/api_info</a></p>
+</li>
+</ul>
 <h2>
 <a id="user-content-authenticate-user" class="anchor" href="#authenticate-user" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>authenticate user</h2>
 <p>authenticate_user (user, password)</p>
@@ -72,7 +93,7 @@ Bash.</p>
 <a id="user-content-notes" class="anchor" href="#notes" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Notes</h3>
 <ol>
 <li>
-<p>The <code>authToken</code> returned by this API must be included in all other API calls.</p>
+<p>The <code>authToken</code> returned by this API must be included in most other API calls.</p>
 </li>
 <li>
 <p>Authorization is by project: if a user has permission for a
