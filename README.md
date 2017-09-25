@@ -22,6 +22,15 @@ A brief sketch is [here](https://github.com/jbrzusto/motus/blob/staging/inst/doc
 
 ## What's working so far:
 
+### 2017 Sep 25
+
+- tagme() / tellme() and supporting functions are now in the [motusClient](https://github.com/jbrzusto/motusClient)
+package, which is automatically installed from github the first time you do `library(motus)` after installing
+the `motus` package.  If automatic installation of `motusClient` fails, you can install it directly like so:
+```R
+install_github("jbrzusto/motusClient")
+```
+
 ### 2017 Jul 28
 
 - tagme() - for updating local copies of receiver or tag project detection databases
