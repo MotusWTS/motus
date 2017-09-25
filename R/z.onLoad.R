@@ -41,7 +41,7 @@
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 .onLoad = function(...) {
-    ## interim location of unprotected local data server
+    ## default location of data server
 
     dataServerURL = "https://sgdata.motus.org/data"
 
