@@ -18,7 +18,7 @@ from R by doing:
 
 ## Usage vignette
 
-A brief sketch is [here](https://github.com/jbrzusto/motus/blob/staging/inst/doc/motus_R_package_usage.md)
+A brief sketch (of `motusClient` usage) is [here](https://github.com/jbrzusto/motusClient/blob/master/inst/doc/motusClient_R_package_usage.md)
 
 ## What's working so far:
 
