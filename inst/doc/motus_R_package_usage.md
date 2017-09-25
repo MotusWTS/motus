@@ -21,6 +21,14 @@ from R by doing:
     install_github("jbrzusto/motus@staging")   ## the development version
 ```
 
+Note: the `motus` package depends on the `motusClient` package, which should be
+installed automatically the first time you do `library(motus)`.  But if that
+fails, you can also install the `motusClient` package directly like so:
+
+```R
+   install_github("jbrzusto/motusClient")
+```
+
 ## Authentication ##
 
 The first time you call a function in the motus package that needs to
