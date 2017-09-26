@@ -33,7 +33,7 @@
 plotAllTagsLat <- function (data, lat.name = "lat", tagsPerPanel = 5) {
   if(class(tagsPerPanel) != "numeric") stop('Numeric value required for "tagsPerPanel"')
   data = data %>% mutate(hour = 3600*round(ts/3600, 0)) ## round times to the hour
-  dataGrouped <- filter_(data, paste(lat.name, "!=", 0)) %>% group_by(site) %>% 
+  dataGrouped <- dplyr::filter_(data, paste(lat.name, "!=", 0)) %>% group_by(site) %>% 
     summarise_(.dots = setNames(paste0('mean(',lat.name,')'), 'meanlat')) ## get summary of mean lats by site
   data <- inner_join(data, dataGrouped, by = "site") ## join grouped data with data
   data <- select(data, id, site, hour, lat, meanlat, fullID) %>% distinct %>% collect %>% as.data.frame

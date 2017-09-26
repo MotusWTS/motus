@@ -16,8 +16,7 @@
 #' Plot only detections at a specific site; Piskwamish
 #' plotSite(filter(tmp, site == "Piswamish"))
 #'
-dataGrouped <- filter_(data, paste(lat.name, "!=", 0)) %>% group_by(site) %>% 
-  
+
 plotSite <- function(data, sitename = unique(data$site)){
   data = data %>% mutate(hour = 3600*round(ts/3600, 0)) ## round times to the hour
   #data <- filter_(data, paste("site", "==", "sitename"))
