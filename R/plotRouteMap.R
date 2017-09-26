@@ -21,14 +21,13 @@
 #' 
 #' Plot routemap of all detection data, with "terrain" type, and receivers active between 2016-01-01 and 2017-01-01
 #' plotRouteMap(site_data = locs, detection_data = dat, maptype = "terrain",
-#' latCentre = 44, lonCentre = -70, zoom = 5, startTime = "2016-01-01", endTime = "2016-12-31")
+#' latCentre = 44, lonCentre = -70, zoom = 5, recvStart = "2016-01-01", recvEnd = "2016-12-31")
 #' 
 #' Plot routemap for a subset of one species
 #' plotRouteMap(site_data = locs, detection_data = filter(tmp, spEN == "Swainson's Thrush"), maptype = "satellite",
-#' latCentre = 50, lonCentre = -60, zoom = 3, startTime = "2016-01-01", endTime = "2016-12-31")
+#' latCentre = 50, lonCentre = -60, zoom = 3, recvStart = "2016-01-01", recvEnd = "2016-12-31")
 
-plotRouteMap 
-fun <- function(data, site_data, zoom, latCentre, lonCentre, maptype, recvStart, recvEnd){
+plotRouteMap <- function(detection_data, site_data, zoom, latCentre, lonCentre, maptype, recvStart, recvEnd){
   if(class(zoom) != "numeric") stop('Numeric value 3-21 required for "zoom"')
   if(class(latCentre) != "numeric") stop('Numeric value required for "latCentre"')
   if(class(lonCentre) != "numeric") stop('Numeric value required for "lonCentre"')
