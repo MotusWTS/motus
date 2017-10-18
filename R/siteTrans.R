@@ -38,9 +38,9 @@
 ## site.fun and consec.fun adapted from "between.locs.R" script written by Phil
 
 siteTrans <- function(data){
-  data <- subset(data, select = c(ts, fullID, lat, lon, site)) ## get only relevant columns
-  data <- data %>% dplyr::group_by(fullID) %>% do(consec.fun(.))
-  data <- data %>% dplyr::group_by(fullID) %>% do(site.fun(.))
+  data <- subset(data, select = c(ts, motusTagID, tagDeployID, lat, lon, site)) ## get only relevant columns
+  data <- data %>% dplyr::group_by(motusTagID, tagDeployID) %>% do(consec.fun(.))
+  data <- data %>% dplyr::group_by(motusTagID, tagDeployID) %>% do(site.fun(.))
   data$tot_ts = difftime(data$ts.y, data$ts.x, units = "secs")
   data$dist <- with(data, sensorgnome::latLonDist(lat.x, lon.x, lat.y, lon.y)) ## distance in meters
   data$rate <- with(data, dist/(as.numeric(tot_ts))) ## rate of travel in m/s

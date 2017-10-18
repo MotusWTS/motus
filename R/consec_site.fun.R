@@ -23,7 +23,7 @@ consec.fun <- function(df) {
 }
 
 site.fun <- function(df) {
-  df <- subset(df, select = -c(fullID))
+  df <- subset(df, select = -c(motusTagID, tagDeployID))
   df <- df[order(df$ts),] ## should already be in order, but just in case
   out.df.x <- df[1:(length(df$site)-1), ]
   names(out.df.x) <- paste(names(df), "x", sep=".")
