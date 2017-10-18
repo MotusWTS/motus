@@ -24,6 +24,7 @@
 #' dat <- timeToSunriset(dat, units = "mins")
 
 timeToSunriset <- function(data, units = "hours"){
+  if(class(data$ts) !="POSIXct") stop('ts is not in class POSIXct')
   cols <- c("lat", "lon", "ts") ## Select columns that can't contain NA values
   loc_na <- data[!complete.cases(data[cols]),] ## new dataframe with NA values in lat, lon, or ts
   loc <- data[complete.cases(data[cols]),] ## new dataframe with no NA values in lat, lon, or ts
