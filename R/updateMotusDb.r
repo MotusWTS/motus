@@ -1,11 +1,11 @@
-#' Ensures that the motus sqlite file is up-to-date to support the current version of the package.  
+#' Ensures that the motus sqlite file is up-to-date to support the current version of the package.
 #'
-#' This function is called from the z.onLoad function which adds a hook to the ensureDBTables function of the motusClient package. 
+#' This function is called from the z.onLoad function which adds a hook to the ensureDBTables function of the motusClient package.
 #' addHook("ensureDBTables", updateMotusDb). I.E., the current function will be called each time that a new motus file is opened
 #' (and the ensureDBTables function is accessed).
 #'
-#' @param rv 
-#' @param src 
+#' @param rv
+#' @param src
 #' @param projRecv parameter provided by the hook function call, when opening a file built by project ID
 #' @param deviceID parameter provided by the hook function call, when opening a file built by receiver ID
 #' @export
@@ -17,9 +17,12 @@
 
 updateMotusDb = function(rv, src, projRecv, deviceID) {
 
-# 16/10/2017 add deployID fields to the alltags view (drop and recreate the alltags view). 
+print("hook started")
 
-      if (0 == nrow(DBI::dbGetQuery("select * from sqlite_master where tbl_name='alltags' and sql glob '* tagDeployID *'"))) {
+# 16/10/2017 add deployID fields to the alltags view (drop and recreate the alltags view).
+
+      if (0 == nrow(DBI::dbGetQuery("select * from sqlite_master where tbl_name='alltags' and sql glob '* recvDeployLat *'"))) {
+         print("recreate alltags")
          DBI::dbExecute(src$con, "DROP VIEW alltags")
          DBI::dbExecute(src$con, "CREATE VIEW alltags AS
 SELECT
@@ -61,6 +64,9 @@ SELECT
    t5.tsEndCode as endCode,
    ifnull(t5.fullID, printf('?proj?-%d#%s:%.1f', t5.projectID, t4.mfgID, t4.bi)) as fullID,
    t6.deployID as recvDeployID,
+   t6.latitude as recvDeployLat,
+   t6.longitude as recvDeployLon,
+   t6.elevation as recvDeployElevation,
    t6.serno as recv,
    t6.name as site,
    t6.isMobile as isMobile,
@@ -80,9 +86,10 @@ SELECT
    t8.`group` as spGroup,
    t9.label as tagProj,
    t10.label as proj,
-   ifnull(t11.lat, t6.latitude) as lat,
-   ifnull(t11.lon, t6.longitude) as lon,
-   ifnull(t11.alt, t6.elevation) as alt
+   t11.lat as lat,
+   t11.lon as lon,
+   t11.alt as alt
+
 FROM
    hits AS t1
 LEFT JOIN
@@ -142,7 +149,7 @@ LEFT JOIN
 
 # 16/10/2017 create a new view that transposes the tagAmbig in rows
 
-	DBI::dbExecute(src$con,	  
+	DBI::dbExecute(src$con,	
 "CREATE VIEW IF NOT EXISTS allambigs
 as
 SELECT ambigID, motusTagID1 as motusTagID FROM tagAmbig where motusTagID1 is not null
@@ -152,10 +159,10 @@ UNION SELECT ambigID, motusTagID4 as motusTagID FROM tagAmbig where motusTagID4 
 UNION SELECT ambigID, motusTagID5 as motusTagID FROM tagAmbig where motusTagID5 is not null
 UNION SELECT ambigID, motusTagID6 as motusTagID FROM tagAmbig where motusTagID6 is not null"
 	)
-	  
-# 16/10/2017 create a new view that combines the detections with the allambigs view (duplicating ambiguous hits among all possible tags) 
-	  
-	DBI::dbExecute(src$con,	  
+	
+# 16/10/2017 create a new view that combines the detections with the allambigs view (duplicating ambiguous hits among all possible tags)
+	
+	DBI::dbExecute(src$con,	
 "CREATE VIEW IF NOT EXISTS alltagswithambigs
 as
 SELECT
@@ -198,6 +205,9 @@ SELECT
    t5.tsEndCode as endCode,
    ifnull(t5.fullID, printf('?proj?-%d#%s:%.1f', t5.projectID, t4.mfgID, t4.bi)) as fullID,
    t6.deployID as recvDeployID,
+   t6.latitude as recvDeployLat,
+   t6.longitude as recvDeployLon,
+   t6.elevation as recvDeployElevation,
    t6.serno as recv,
    t6.name as site,
    t6.isMobile as isMobile,
@@ -217,9 +227,9 @@ SELECT
    t8.`group` as spGroup,
    t9.label as tagProj,
    t10.label as proj,
-   ifnull(t11.lat, t6.latitude) as lat,
-   ifnull(t11.lon, t6.longitude) as lon,
-   ifnull(t11.alt, t6.elevation) as alt
+   t11.lat as lat,
+   t11.lon as lon,
+   t11.alt as alt
 FROM
    hits AS t1
 LEFT JOIN
@@ -277,7 +287,7 @@ LEFT JOIN
              t11b.batchID=t3.batchID
              AND t11b.ts <= t1.ts
          )")
-		 
+		
    return(rv)
    }
 
