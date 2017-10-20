@@ -1,7 +1,7 @@
 Package: motus
 Version: 0.1.0
 Title: fetch and use data from http://motus.org
-Description: Functions to retrieve telemetry data from motus.
+Description: Functions to retrieve telemetry data from motus. Once supported, add motusClient and Remotes: git::https://github.com/jbrzusto/motusClient
 Author: John Brzustowski <jbrzusto@fastmail.fm>
 Maintainer: John Brzustowski <jbrzusto@fastmail.fm>
 Depends:
@@ -21,5 +21,3 @@ Imports:
 License: GPL-2+
 Date: 2017-10-20
 RoxygenNote: 6.0.1
-LazyData: true
-
