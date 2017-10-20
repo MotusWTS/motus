@@ -4,35 +4,18 @@
 \alias{plotAllTagsLat}
 \title{Plot all tag detections by latitude}
 \usage{
-plotAllTagsLat(data, lat.name = "lat", tagsPerPanel = 5)
+plotAllTagsLat(data, tagsPerPanel = n)
 }
 \arguments{
-\item{data}{tbl file of .motus data}
+\item{data}{dataframe of Motus detection data}
 
-\item{lat.name}{column name from which to obtain location values, by default it is set to GPS latitude}
-
-\item{tagsPerPanel}{number of tags in each panel of the plot, by default this is 5}
+\item{tagsPerPanel}{number of tags in each panel of the plot}
 }
 \description{
-Plot latitude vs time (UTC rounded to the hour) for each tag using .motus data.  Latitude is by default taken from a receivers GPS recordings.
+Plot latitude vs time for each tag
 }
 \examples{
-access the "all tags" table within the motus sql
-tmp <- tbl(motusSqlFile, "alltags")
-
-# Plot tbl file "tmp" with default GPS latitude data and 5 tags per panel
-plotAllTagsLat(tmp)
-
-# Plot tbl file "tmp" with 10 tags per panel
-plotAllTagsLat(tmp, tagsPerPanel = 10)
-
-# Plot tbl file "tmp" using receiver deployment latitudes with default 5 tags per panel
-plotAllTagsLat(tmp, lat.name = "depLat")
-
-# Plot tbl file "tmp" using LONGITUDES and 1 tag per panel
-plotAllTagsLat(tmp, lat.name = "lon", tagsPerPanel = 1)
-# Plot tbl file "tmp" using lat and 1 tag per panel for select motus tagIDs
-plotAllTagsLat(filter(tmp, motusTagID \%in\% c(9045, 10234, 96321)), tagsPerPanel = 1)
+plotAllTagsLat(dat, tagsPerPanel = 4)
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

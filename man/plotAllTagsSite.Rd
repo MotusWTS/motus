@@ -4,33 +4,18 @@
 \alias{plotAllTagsSite}
 \title{Plot all tag detections by site}
 \usage{
-plotAllTagsSite(data, lat.name = "lat", tagsPerPanel = 5)
+plotAllTagsSite(data, tagsPerPanel = n)
 }
 \arguments{
-\item{data}{tbl file of .motus data}
+\item{data}{dataframe of Motus detection data}
 
-\item{lat.name}{column of receivermlatitude values to use, defaults to GPS latitude}
-
-\item{tagsPerPanel}{number of tags in each panel of the plot, default is 5}
+\item{tagsPerPanel}{number of tags in each panel of the plot}
 }
 \description{
-Plot site (ordered by latitude) vs time (UTC) for each tag
+Plot site (ordered by latitude) vs time for each tag
 }
 \examples{
-access the "all tags" table within the motus sql
-tmp <- tbl(motusSqlFile, "alltags")
-
-# Plot tbl file "tmp" with default GPS latitude data and 5 tags per panel
-plotAllTagsSite(tmp)
-
-# Plot tbl file "tmp" with 10 tags per panel
-plotAllTagsSite(tmp, tagsPerPanel = 10)
-
-# Plot tbl file "tmp" using receiver deployment latitudes with default 5 tags per panel
-plotAllTagsSite(tmp, lat.name = "depLat")
-
-# Plot tbl file "tmp" using lat and 1 tag per panel for select species and 3 tags per panel
-plotAllTagsSite(filter(tmp, spEN == "Swainson's Thrush"), tagsPerPanel = 3)
+plotAllTagsSite(dat, tagsPerPanel = 4)
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

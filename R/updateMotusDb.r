@@ -4,14 +4,16 @@
 #' addHook("ensureDBTables", updateMotusDb). I.E., the current function will be called each time that a new motus file is opened
 #' (and the ensureDBTables function is accessed).
 #'
-#' @param rv return value
-#' @param src sqlite database source
+#' @param rv
+#' @param src
 #' @param projRecv parameter provided by the hook function call, when opening a file built by project ID
 #' @param deviceID parameter provided by the hook function call, when opening a file built by receiver ID
 #' @export
 #' @author Denis Lepage \email{dlepage@@bsc-eoc,org}
 #'
 #' @return rv
+#'
+#' @examples
 
 updateMotusDb = function(rv, src, projRecv, deviceID) {
 

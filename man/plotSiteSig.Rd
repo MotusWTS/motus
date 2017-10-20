@@ -2,27 +2,18 @@
 % Please edit documentation in R/plotSiteSig.R
 \name{plotSiteSig}
 \alias{plotSiteSig}
-\title{Plot signal strength of all tags by a specified site}
+\title{Plot signal strength of all tags at a specified site}
 \usage{
-plotSiteSig(data, sitename)
+plotSiteSig(data, sitename = unique(data$site))
 }
 \arguments{
 \item{data}{dataframe of Motus detection data}
-
-\item{sitename}{name of site}
 }
 \description{
 Plot signal strength vs time for all tags detected at a specified site, coloured by antenna
 }
 \examples{
-access the "all tags" table within the motus sql
-tmp <- tbl(motusSqlFile, "alltags")
-
-plot all tags for site Piskwamish
-plotSiteSig(tmp, sitename = "Piskwamish")
-
-Plot select tags for site Piskwamish 
-plotSiteSig(filter(tmp, motusTagID \%in\% c(9045, 10234, 96321)), sitename = "Piskwamish")
+plotSiteSig(dat, sitename = "Piskwamish")
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}
