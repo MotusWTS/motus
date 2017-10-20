@@ -2,18 +2,26 @@
 % Please edit documentation in R/plotSite.R
 \name{plotSite}
 \alias{plotSite}
-\title{Plot all tags at a specified site}
+\title{Plot all tags by site}
 \usage{
 plotSite(data, sitename = unique(data$site))
 }
 \arguments{
-\item{data}{dataframe of Motus detection data}
+\item{data}{tbl file of .motus data}
 }
 \description{
-Plot tag ID vs time for all tags detected at a specified site, coloured by antenna
+Plot tag ID vs time for all tags detected by site, coloured by antenna bearing
 }
 \examples{
-plotSite(dat, sitename = "Piskwamish")
+access the "all tags" table within the motus sql
+tmp <- tbl(motusSqlFile, "alltags")
+
+Plot all sites within file
+plotSite(tmp)
+
+Plot only detections at a specific site; Piskwamish
+plotSite(filter(tmp, site == "Piswamish"))
+
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

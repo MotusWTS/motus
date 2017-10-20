@@ -2,22 +2,43 @@
 % Please edit documentation in R/plotRouteMap.R
 \name{plotRouteMap}
 \alias{plotRouteMap}
-\title{Map of routes and sites coloured by id}
+\title{Map of tag routes and sites coloured by id}
 \usage{
-plotRouteMap(site_data, detection_data, zoom, latCentre, lonCentre,
-  maptype = c("satellite", "terrain", "hybrid", "roadmap"), startTime,
-  endTime)
+plotRouteMap(detection_data, site_data, zoom, latCentre, lonCentre, maptype,
+  recvStart, recvEnd)
 }
 \arguments{
+\item{site_data}{receiver metadata file}
+
+\item{zoom}{integer for zoom 3-21, 3 being continent level, 10 being city-scale}
+
+\item{latCentre}{latitude to centre map around}
+
+\item{lonCentre}{longitude to centre map around}
+
+\item{maptype}{google map type to display, can be: "terrain" , "roadmap", "satellite", or "hybrid"}
+
+\item{recvStart}{start date for date range of active receivers}
+
+\item{recvEnd}{end date for date range of active receivers}
+
 \item{data}{dataframe of Motus detection data}
 }
 \description{
-Google map of routes Motus detections coloured by ID, with sites that were operational
-at some point during a user defined time interval
+Google map of routes of Motus tag detections coloured by ID.  User defines a date range to show
+points for receivers that were operational at some point during the date range.
 }
 \examples{
+access the "all tags" table within the motus sql
+tmp <- tbl(motusSqlFile, "alltags")
+
+Plot routemap of all detection data, with "terrain" type, and receivers active between 2016-01-01 and 2017-01-01
 plotRouteMap(site_data = locs, detection_data = dat, maptype = "terrain",
-latCentre = 44, lonCentre = -70, zoom = 5, startTime = "2016-01-01", endTime = "2016-12-31")
+latCentre = 44, lonCentre = -70, zoom = 5, recvStart = "2016-01-01", recvEnd = "2016-12-31")
+
+Plot routemap for a subset of one species
+plotRouteMap(site_data = locs, detection_data = filter(tmp, spEN == "Swainson's Thrush"), maptype = "satellite",
+latCentre = 50, lonCentre = -60, zoom = 3, recvStart = "2016-01-01", recvEnd = "2016-12-31")
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

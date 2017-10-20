@@ -11,15 +11,16 @@ Depends:
     dbplyr,
     ggplot2
 Imports:
-## once CRAN:devtools supports installing imports from github:    motusClient,
+    motusClient,
     RSQLite,
     httr,
     jsonlite,
     lattice,
     RCurl,
-    stringi
+    stringi,
+    lubridate
 License: GPL-2+
-Date: 2016-11-27
+Date: 2017-10-20
 RoxygenNote: 6.0.1
 LazyData: true
-## once CRAN:devtools supports installing imports from github:  Remotes: git::https://github.com/jbrzusto/motusClient
+Remotes: git::https://github.com/jbrzusto/motusClient
