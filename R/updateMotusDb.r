@@ -35,7 +35,7 @@ updateMotusDb = function(rv, src, projRecv, deviceID) {
     cat(sprintf("\nupdateMotusDb started (%d rows)", length(updateSql[,1])))
     dates = apply(updateSql, 1, function(row) {
       cat("\n - ", row["descr"], sep="")
-      DBI::dbExecute(src$con, row["sql"])
+      try(DBI::dbExecute(src$con, row["sql"]))
       row["date"]
     })
     if (length(dates) > 0) dt = dates[length(dates)]
