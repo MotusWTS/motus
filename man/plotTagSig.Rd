@@ -4,7 +4,7 @@
 \alias{plotTagSig}
 \title{Plot signal strength of all detections for a specified tag by site}
 \usage{
-plotTagSig(data, tag)
+plotTagSig(data, tag.id)
 }
 \arguments{
 \item{data}{dataframe of Motus detection data}
@@ -13,7 +13,12 @@ plotTagSig(data, tag)
 Plot signal strength vs time for specified tag, faceted by site (ordered by latitude) and coloured by antenna
 }
 \examples{
-plotTagSig(dat, tag = 171)
+access the "all tags" table within the motus sql
+tmp <- tbl(motusSqlFile, "alltags")
+
+Plot signal strength of a specified tag
+plotTagSig(tmp, tag.id = 17367)
+
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}
