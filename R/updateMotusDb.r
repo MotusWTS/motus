@@ -31,22 +31,18 @@ updateMotusDb = function(rv, src, projRecv, deviceID) {
   src2 = dplyr::src_sqlite(system.file("extdata", "updateMotusDb.sqlite", package = "motus"), create=FALSE)
   updateSql = DBI::dbGetQuery(src2$con, paste("select date, sql, descr from updateDb where date > '", strftime(dt, "%Y-%m-%d %H:%M:%S"), "' ORDER BY date", sep=""))
 
-  if (length(updateSql[,1]) > 0)
-    print(paste("updateMotusDb started (", length(updateSql[,1]), " rows)", sep=""))
+  if (length(updateSql[,1]) > 0) {
+    cat(sprintf("\nupdateMotusDb started (%d rows)", length(updateSql[,1])))
+    dates = apply(updateSql, 1, function(row) {
+      cat("\n - ", row["descr"], sep="")
+      DBI::dbExecute(src$con, row["sql"])
+      row["date"]
+    })
+    if (length(dates) > 0) dt = dates[length(dates)]
+    
+    if (dt > as.POSIXct(admInfo$db_version))
+      DBI::dbExecute(src$con, paste("UPDATE admInfo set value = '", strftime(dt, "%Y-%m-%d %H:%M:%S"), "' where key = 'db_version'", sep=""))
+  }
 
-  dates = apply(updateSql, 1, function(row) {
-    print(row["descr"])
-    DBI::dbExecute(src$con, row["sql"])
-    row["date"]
-  })
-  if (length(dates) > 0) dt = dates[length(dates)]
-  
-  print(format(dt, "%Y-%m-%d"))
-  
-  if (dt > as.POSIXct(admInfo$db_version))
-    DBI::dbExecute(src$con, paste("UPDATE admInfo set value = '", strftime(dt, "%Y-%m-%d %H:%M:%S"), "' where key = 'db_version'", sep=""))
-
-  print("ok")
-  
   return(rv)
 }
