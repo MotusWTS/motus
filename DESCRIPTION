@@ -21,3 +21,4 @@ Imports:
 License: GPL-2+
 Date: 2017-10-20
 RoxygenNote: 6.0.1
+LazyData: true
