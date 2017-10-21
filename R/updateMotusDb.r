@@ -15,11 +15,11 @@
 
 updateMotusDb = function(rv, src, projRecv, deviceID) {
 
-print("hook started")
+print("updateMotusDb started")
 
 # 16/10/2017 add deployID fields to the alltags view (drop and recreate the alltags view).
 
-      if (0 == nrow(DBI::dbGetQuery("select * from sqlite_master where tbl_name='alltags' and sql glob '* recvDeployLat *'"))) {
+      if (0 == nrow(DBI::dbGetQuery(src$con, "select * from sqlite_master where tbl_name='alltags' and sql glob '* recvDeployLat *'"))) {
          print("recreate alltags")
          DBI::dbExecute(src$con, "DROP VIEW alltags")
          DBI::dbExecute(src$con, "CREATE VIEW alltags AS
