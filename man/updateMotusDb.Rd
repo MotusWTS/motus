@@ -2,7 +2,19 @@
 % Please edit documentation in R/updateMotusDb.r
 \name{updateMotusDb}
 \alias{updateMotusDb}
-\title{Ensures that the motus sqlite file is up-to-date to support the current version of the package.}
+\title{Ensures that the motus sqlite file is up-to-date to support the current version of the package.
+Relies on the updateMotusDb.sqlite database in /inst/extdata/ to run the SQL on the basis of date
+To insert new sql commands, simply create a new record in the sqlite file as follow.
+  date: date at which the sql update record was added (default current timestamp)
+  sql: sql string to execute (you should minimize the risk of database errors by using IF EXISTS or DROP as appropriate prior to your command)
+  descr: description of the update, printed for the user during the update process
+The function adds a new admInfo table in the motus sqlite file that keeps track of the 
+date at which the last correction was applied. The updateMotusDb function only exectute
+sql commands added since the last correction.
+ 
+This function is called from the z.onLoad function which adds a hook to the ensureDBTables function of the motusClient package.
+addHook("ensureDBTables", updateMotusDb). I.E., the current function will be called each time that a new motus file is opened
+(and the ensureDBTables function is accessed).}
 \usage{
 updateMotusDb(rv, src, projRecv, deviceID)
 }
@@ -19,6 +31,16 @@ updateMotusDb(rv, src, projRecv, deviceID)
 rv
 }
 \description{
+Ensures that the motus sqlite file is up-to-date to support the current version of the package.
+Relies on the updateMotusDb.sqlite database in /inst/extdata/ to run the SQL on the basis of date
+To insert new sql commands, simply create a new record in the sqlite file as follow.
+  date: date at which the sql update record was added (default current timestamp)
+  sql: sql string to execute (you should minimize the risk of database errors by using IF EXISTS or DROP as appropriate prior to your command)
+  descr: description of the update, printed for the user during the update process
+The function adds a new admInfo table in the motus sqlite file that keeps track of the 
+date at which the last correction was applied. The updateMotusDb function only exectute
+sql commands added since the last correction.
+ 
 This function is called from the z.onLoad function which adds a hook to the ensureDBTables function of the motusClient package.
 addHook("ensureDBTables", updateMotusDb). I.E., the current function will be called each time that a new motus file is opened
 (and the ensureDBTables function is accessed).
