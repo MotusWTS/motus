@@ -39,6 +39,7 @@ updateMotusDb = function(rv, src, projRecv, deviceID) {
       row["date"]
     })
     if (length(dates) > 0) dt = dates[length(dates)]
+    cat("\n\n")
     
     if (dt > as.POSIXct(admInfo$db_version))
       DBI::dbExecute(src$con, paste("UPDATE admInfo set value = '", strftime(dt, "%Y-%m-%d %H:%M:%S"), "' where key = 'db_version'", sep=""))
