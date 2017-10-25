@@ -9,6 +9,7 @@ Depends:
     RSQLite,
     dplyr,
     dbplyr,
+    gridExtra,
     ggplot2
 Imports:
     RSQLite,
