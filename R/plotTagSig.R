@@ -2,7 +2,7 @@
 #'
 #' Plot signal strength vs time for specified tag, faceted by site (ordered by latitude) and coloured by antenna
 #'
-#' @param data dataframe of Motus detection data
+#' @param data a selected table from .motus data, eg. "alltags" or "alltagswithambigs"
 #' @export
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'

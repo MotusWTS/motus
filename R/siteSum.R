@@ -4,7 +4,7 @@
 #' the number of tags, and the total number of detections at a site.  Plots total number of detections across all tags,
 #' and total number of tags detected at each site.
 #'
-#' @param data dataframe of Motus detection data
+#' @param data a selected table from .motus data, eg. "alltags" or "alltagswithambigs"
 #' @param units units to display time difference, defaults to "hours", options include "secs", "mins", "hours", "days", "weeks"
 #' @export
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
@@ -20,16 +20,28 @@
 #' }
 #'
 #' @examples
-#' site_summary <- siteSum(dat, units = "mins")
+#' access the "all tags" table within the motus sql
+#' tmp <- tbl(motusSqlFile, "alltags")
+#' 
+#' Create site summaries for all sites within detection data with time in default hours
+#' site_summary <- siteSum(tmp)
+#' 
+#' Create site summaries for only select sites with time in minutes
+#' site_summary <- siteSum(filter(tmp, site %in% c("Niapiskau", "Netitishi", "Old Cur", "Washkaugou")), units = "mins")
+#'
+#' Create site summaries for only a select species
+#' site_summary <- siteSum(filter(tmp, spEN == "Red Knot))
 
-siteSum <- function(data, site, fullID, ts, units = "hours"){
+siteSum <- function(data, units = "hours"){
+  data <- select(data, motusTagID, sig, lat, site, ts) %>% distinct %>% collect %>% as.data.frame
   data <- within(data, site <- reorder(site, (lat))) ## order site by latitude
+  data$ts <- as_datetime(data$ts, tz = "UTC")
   grouped <- dplyr::group_by(data, site)
   data <- dplyr::summarise(grouped,
                  first_ts=min(ts),
                  last_ts=max(ts),
                  tot_ts = difftime(max(ts), min(ts), units = units),
-                 num.tags = length(unique(fullID)),
+                 num.tags = length(unique(motusTagID)),
                  num.det = length(ts))
   detections <- ggplot2::ggplot(data = data, ggplot2::aes(x = site, y = num.det)) +
     ggplot2::geom_bar(stat = "identity") + ggplot2::theme_bw() +
