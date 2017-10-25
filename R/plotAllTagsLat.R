@@ -2,7 +2,7 @@
 #'
 #' Plot latitude vs time (UTC rounded to the hour) for each tag using .motus data.  Latitude is by default taken from a receivers GPS recordings.
 #'
-#' @param data tbl file of .motus data
+#' @param file.name the file path for your .motus data
 #' @param tagsPerPanel number of tags in each panel of the plot, by default this is 5
 #' @param lat.name column name from which to obtain location values, by default it is set to GPS latitude
 #' @export
@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' access the "all tags" table within the motus sql
-#' tmp <- tbl(motusSqlFile, "alltags")
+#' tmp <- "./Data/project-sample.motus"
 #' 
 #' # Plot tbl file "tmp" with default GPS latitude data and 5 tags per panel
 #' plotAllTagsLat(tmp)
@@ -30,8 +30,10 @@
 ## grouping code taken from sensorgnome package
 
 
-plotAllTagsLat <- function (data, lat.name = "lat", tagsPerPanel = 5) {
+plotAllTagsLat  <- function (file.name, lat.name = "lat", tagsPerPanel = 5) {
   if(class(tagsPerPanel) != "numeric") stop('Numeric value required for "tagsPerPanel"')
+  data <- src_sqlite(file.name)
+  data <- tbl(data, "alltagswithambigs")
   data = data %>% mutate(hour = 3600*round(ts/3600, 0)) ## round times to the hour
   dataGrouped <- dplyr::filter_(data, paste(lat.name, "!=", 0)) %>% group_by(site) %>% 
     summarise_(.dots = setNames(paste0('mean(',lat.name,')'), 'meanlat')) ## get summary of mean lats by site

@@ -42,7 +42,7 @@ siteTrans <- function(data){
   data <- data %>% dplyr::group_by(motusTagID, tagDeployID) %>% do(consec.fun(.))
   data <- data %>% dplyr::group_by(motusTagID, tagDeployID) %>% do(site.fun(.))
   data$tot_ts = difftime(data$ts.y, data$ts.x, units = "secs")
-  data$dist <- with(data, sensorgnome::latLonDist(lat.x, lon.x, lat.y, lon.y)) ## distance in meters
+  data$dist <- with(data, latLonDist(lat.x, lon.x, lat.y, lon.y)) ## distance in meters
   data$rate <- with(data, dist/(as.numeric(tot_ts))) ## rate of travel in m/s
   data$bearing <- with(data, geosphere::bearing(matrix(c(lon.x, lat.x), ncol=2),
                                    matrix(c(lon.y, lat.y), ncol=2))) ## bearing (see package geosphere for help)

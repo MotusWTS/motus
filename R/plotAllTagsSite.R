@@ -2,7 +2,7 @@
 #'
 #' Plot site (ordered by latitude) vs time (UTC) for each tag
 #'
-#' @param data tbl file of .motus data
+#' @param file.name the file path for your .motus data
 #' @param tagsPerPanel number of tags in each panel of the plot, default is 5
 #' @param lat.name column of receivermlatitude values to use, defaults to GPS latitude
 #' @export
@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' access the "all tags" table within the motus sql
-#' tmp <- tbl(motusSqlFile, "alltags")
+#' tmp <- "./Data/project-sample.motus"
 #' 
 #' # Plot tbl file "tmp" with default GPS latitude data and 5 tags per panel
 #' plotAllTagsSite(tmp)
@@ -26,8 +26,10 @@
 
 ## grouping code taken from sensorgnome package
 
-plotAllTagsSite <- function(data, lat.name = "lat", tagsPerPanel = 5){
+plotAllTagsSite <- function(file.name, lat.name = "lat", tagsPerPanel = 5){
   if(class(tagsPerPanel) != "numeric") stop('Numeric value required for "tagsPerPanel"')
+  data <- src_sqlite(file.name)
+  data <- tbl(data, "alltagswithambigs")
   data = data %>% mutate(round_ts = 3600*round(ts/3600, 0)) ## round times to the hour
   data = distinct(select(data, id, site, round_ts, lat, fullID))
   dataGrouped <- dplyr::filter_(data, paste(lat.name, "!=", 0)) %>% group_by(site) %>% 
