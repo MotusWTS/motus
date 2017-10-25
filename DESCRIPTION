@@ -13,6 +13,7 @@ Depends:
 Imports:
     RSQLite,
     httr,
+    gridExtra,
     jsonlite,
     lattice,
     RCurl,
