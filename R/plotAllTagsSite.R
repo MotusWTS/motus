@@ -2,43 +2,48 @@
 #'
 #' Plot site (ordered by latitude) vs time (UTC) for each tag
 #'
-#' @param file.name the file path for your .motus data
+#' @param data a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
+#' including at a minimum the variables id, site, ts, lat, fullID
 #' @param tagsPerPanel number of tags in each panel of the plot, default is 5
-#' @param lat.name column of receivermlatitude values to use, defaults to GPS latitude
+#' @param coordinate column of receivermlatitude values to use, defaults to GPS latitude
 #' @export
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @examples
-#' access the "all tags" table within the motus sql
-#' tmp <- "./Data/project-sample.motus"
+#' You can use either the tbl or the flat format for the siteTrans function, instructions to convert
+#' a .motus file to both formats is below.
+#' To access any tbl from .motus data saved on your computer:
+#' file.name <- "data/project-sample.motus" ## replace with the full location of the sample dataset or your own project-XX.motus file
+#' tmp <- dplyr::src_sqlite(file.name)
+#' alltags <- tbl(motusSqlFile, "alltags")
 #' 
-#' # Plot tbl file "tmp" with default GPS latitude data and 5 tags per panel
-#' plotAllTagsSite(tmp)
+#' To convert tbl to flat format:
+#' alltags <- alltags %>% collect %>% as.data.frame
 #' 
-#' # Plot tbl file "tmp" with 10 tags per panel
-#' plotAllTagsSite(tmp, tagsPerPanel = 10)
+#' Plot detections of all tags by site ordered by latitude, with default 5 tags per panel
+#' plotAllTagsSite(alltags)
 #' 
-#' # Plot tbl file "tmp" using receiver deployment latitudes with default 5 tags per panel
-#' plotAllTagsSite(tmp, lat.name = "depLat")
+#' Plot detections of all tags by site ordered by latitude, with 10 tags per panel
+#' plotAllTagsSite(alltags, tagsPerPanel = 10)
+#' 
+#' Plot detections of all tags by site ordered by receiver deployment latitude
+#' plotAllTagsSite(alltags, coordinate = "recvDeployLat")
 #' 
 #' # Plot tbl file "tmp" using lat and 1 tag per panel for select species and 3 tags per panel
-#' plotAllTagsSite(filter(tmp, spEN == "Swainson's Thrush"), tagsPerPanel = 3)
+#' plotAllTagsSite(filter(alltags, spEN == "Red Knot"), tagsPerPanel = 3)
 
 ## grouping code taken from sensorgnome package
-
-plotAllTagsSite <- function(file.name, lat.name = "lat", tagsPerPanel = 5){
+plotAllTagsSite <- function(data, coordinate = "lat", tagsPerPanel = 5){
   if(class(tagsPerPanel) != "numeric") stop('Numeric value required for "tagsPerPanel"')
-  data <- src_sqlite(file.name)
-  data <- tbl(data, "alltagswithambigs")
-  data = data %>% mutate(round_ts = 3600*round(ts/3600, 0)) ## round times to the hour
-  data = distinct(select(data, id, site, round_ts, lat, fullID))
-  dataGrouped <- dplyr::filter_(data, paste(lat.name, "!=", 0)) %>% group_by(site) %>% 
-    summarise_(.dots = setNames(paste0('mean(',lat.name,')'), 'meanlat')) ## get summary of mean lats by site
+  data = data %>% mutate(round_ts = 3600*round(as.numeric(ts)/3600, 0)) ## round times to the hour
+  #data = distinct(select(data, id, site, round_ts, lat, recvDeployLat, lon, recvDeployLon, fullID))
+  dataGrouped <- dplyr::filter_(data, paste(coordinate, "!=", 0)) %>% group_by(site) %>% 
+    summarise_(.dots = setNames(paste0('mean(',coordinate,')'), 'meanlat')) ## get summary of mean lats by site
   data <- inner_join(data, dataGrouped, by = "site") ## join grouped data with data
   data <- select(data, id, site, round_ts, lat, meanlat, fullID) %>% distinct %>% collect %>% as.data.frame
   data$meanlat = round(data$meanlat, digits = 2) ## round to 2 significant digits
   data$sitelat <- as.factor(paste(data$site, data$meanlat, sep = " ")) ## new column with site and lat
-  data <- within(data, sitelat <- reorder(sitelat, (lat))) ## order sitelat by latitude
+  data <- within(data, sitelat <- reorder(sitelat, (meanlat))) ## order sitelat by latitude
   data$round_ts <- lubridate::as_datetime(data$round_ts, tz = "UTC")
   ## We want to plot multiple tags per panel, so sort their labels and create a grouping factor
   ## Note that labels are sorted in increasing order by ID
@@ -59,7 +64,7 @@ plotAllTagsSite <- function(file.name, lat.name = "lat", tagsPerPanel = 5){
     m <- ggplot2::ggplot(m, ggplot2::aes(round_ts, sitelat, colour = fullID, group = fullID))
     p <- ggplot2::ggplot(data, ggplot2::aes(round_ts, sitelat, col = fullID, group = fullID))
     m + ggplot2::geom_line() + ggplot2::geom_point(pch = 21) + ggplot2::theme_bw() +
-      ggplot2::labs(title = "Detection time vs Site (ordered by latitude) by Tag", x = "Date", y = "Latitude", colour = "ID") +
+      ggplot2::labs(title = "Detection time vs Site (ordered by latitude) by Tag", x = "Date", y = paste0('Site ordered by ',coordinate), colour = "ID") +
       ggplot2::facet_wrap("tagGroupFactor") + ggplot2::theme(axis.text.x = element_text(angle = 45, hjust = 1))
   })
   do.call(gridExtra::grid.arrange, out)

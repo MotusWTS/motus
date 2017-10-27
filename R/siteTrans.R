@@ -4,9 +4,10 @@
 #' are identified as the period between the final detection at site x (possible "departure"), and the first detection
 #' (possible "arrival") at site y (ordered chronologically). Each row contains the last detection time and lat/lon
 #' of site x, first deteciton time and lat/lon of site y, distance between the site pair, time between detections,
-#' rate of movement between detections, bearing and rhumbline bearing between site pair.
+#' rate of movement between detections, and bearing between site pairs.
 #'
-#' @param data dataframe of Motus detection data containing at a minimum fullID, ts, lat, lon
+#' @param data a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
+#' including at a minimum the variables ts, motusTagID, tagDeployID, lat, lon, site
 #'
 #' @return a data.frame with these columns:
 #' \itemize{
@@ -23,22 +24,36 @@
 #' \item dist: total straight line distance between site.x and site.y (in metres), see latLonDist function in sensorgnome package for details
 #' \item rate: overall rate of movement (tot_ts/dist), in metres/second
 #' \item bearing: bearing between first and last detection sites, see bearing function in geosphere package for more details
-#' \item rhumbline_bearing: rhumbline bearing between first and last detection sites, see bearingRhumb function in geosphere package for more detail
 #'}
 #'
 #' @export
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
-#'
 #' @examples
-#' transitions <- siteTrans(dat)
-
-## at this point it keeps both detections for simultaneous detections (see tag 378, sites Shelburne and BennettMeadow)
-## also get a ton of transitions between close detections (see tag 181 between sites FI and Bull)
-## site.fun and consec.fun adapted from "between.locs.R" script written by Phil
+#' You can use either the tbl or the flat format for the siteTrans function, instructions to convert
+#' a .motus file to both formats is below.
+#' To access any tbl from .motus data saved on your computer:
+#' file.name <- "data/project-sample.motus" ## replace with the full location of the sample dataset or your own project-XX.motus file
+#' tmp <- dplyr::src_sqlite(file.name)
+#' alltags <- tbl(motusSqlFile, "alltags")
+#' 
+#' To convert tbl to flat format:
+#' alltags <- alltags %>% collect %>% as.data.frame
+#' 
+#' View all site transitions for all detection data
+#' transitions <- siteTrans(alltags)
+#' 
+#' View site transitions for only tag 16038
+#' transitions <- siteTrans(filter(alltags, motusTagID == 16030))
 
 siteTrans <- function(data){
-  data <- subset(data, select = c(ts, motusTagID, tagDeployID, lat, lon, site)) ## get only relevant columns
+   tmp <- if(class(data) == "data.frame"){
+    tmp = data
+   } else {
+      tmp = data %>% collect %>% as.data.frame
+      }
+  data <- subset(tmp, select = c(ts, motusTagID, tagDeployID, lat, lon, site)) ## get only relevant columns
+  data$ts <- lubridate::as_datetime(data$ts, tz = "UTC")
   data <- data %>% dplyr::group_by(motusTagID, tagDeployID) %>% do(consec.fun(.))
   data <- data %>% dplyr::group_by(motusTagID, tagDeployID) %>% do(site.fun(.))
   data$tot_ts = difftime(data$ts.y, data$ts.x, units = "secs")
@@ -46,7 +61,5 @@ siteTrans <- function(data){
   data$rate <- with(data, dist/(as.numeric(tot_ts))) ## rate of travel in m/s
   data$bearing <- with(data, geosphere::bearing(matrix(c(lon.x, lat.x), ncol=2),
                                    matrix(c(lon.y, lat.y), ncol=2))) ## bearing (see package geosphere for help)
-  data$rhumbline_bearing <- with(data, geosphere::bearingRhumb(matrix(c(lon.x, lat.x), ncol=2),
-                                                  matrix(c(lon.y, lat.y), ncol=2))) ## rhumbline bearing (see package geosphere for help)
   return(data)
 }

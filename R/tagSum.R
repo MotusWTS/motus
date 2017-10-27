@@ -4,7 +4,8 @@
 #' length of time between first and last detection,  straight line distance between first and last detection site,
 #' rate of movement, and bearing
 #'
-#' @param data a selected table from .motus data, eg. "alltags" or "alltagswithambigs"
+#' @param data a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
+#' including at a minimum the variables motusTagID, fullID, sig, lat, lon, site, ts
 #' @export
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
@@ -26,17 +27,24 @@
 #' }
 #'
 #' @examples
-#' access the "all tags" table within the motus sql
-#' tmp <- tbl(motusSqlFile, "alltags")
+#' You can use either the tbl or the flat format for the siteTrans function, instructions to convert
+#' a .motus file to both formats is below.
+#' To access any tbl from .motus data saved on your computer:
+#' file.name <- "data/project-sample.motus" ## replace with the full location of the sample dataset or your own project-XX.motus file
+#' tmp <- dplyr::src_sqlite(file.name)
+#' alltags <- tbl(motusSqlFile, "alltags")
+#' 
+#' To convert tbl to flat format:
+#' alltags <- alltags %>% collect %>% as.data.frame
 #' 
 #' Create tag summary for all tags within detection data
-#' tag_summary <- tagSum(tmp)
+#' tag_summary <- tagSum(alltags)
 #' 
 #' Create site summaries for only select tags
-#' site_summary <- tagSum(filter(alltags, motusTagID %in% c(16047, 16037, 16039)))
+#' tag_summary <- tagSum(filter(alltags, motusTagID %in% c(16047, 16037, 16039)))
 #'
 #' Create site summaries for only a select species
-#' tag_summary <- tagSum(filter(tmp, spEN == "Red Knot))
+#' tag_summary <- tagSum(filter(alltags, spEN == "Red Knot))
 
 tagSum <- function(data){
   data <- select(data, motusTagID, fullID, sig, lat, lon, site, ts) %>% distinct %>% collect %>% as.data.frame

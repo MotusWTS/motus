@@ -3,7 +3,8 @@
 #' Creates and adds columns for time to, and time from sunrise/sunset based on a column of POSIXct dates/times
 #' dataframe must contain latitude, longitude, and a POSIXct date/time.
 #'
-#' @param data dataframe of Motus detection data, or dataframe containing latitude, longitude, and POSIXct date/time
+#' @param data a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
+#' including at a minimum the variables ts, lat, lon
 #' @param units units to display time difference, defaults to "hours", options include "secs", "mins", "hours", "days", "weeks"
 #'
 #' @export
@@ -21,10 +22,22 @@
 #' }
 #'
 #' @examples
-#' dat <- timeToSunriset(dat, units = "mins")
+#' You can use either the tbl or the flat format for the siteTrans function, instructions to convert
+#' a .motus file to both formats is below.
+#' To access any tbl from .motus data saved on your computer:
+#' file.name <- "data/project-sample.motus" ## replace with the full location of the sample dataset or your own project-XX.motus file
+#' tmp <- dplyr::src_sqlite(file.name)
+#' alltags <- tbl(motusSqlFile, "alltags")
+#' 
+#' To convert tbl to flat format:
+#' alltags <- alltags %>% collect %>% as.data.frame
+#' 
+#' get sunrise and sunset information with units in minutes
+#' sunrise <- timeToSunriset(alltags, units = "mins")
 
 timeToSunriset <- function(data, units = "hours"){
-  if(class(data$ts) !="POSIXct") stop('ts is not in class POSIXct')
+  data <- data %>% collect %>% as.data.frame
+  data$ts <- as_datetime(data$ts, tz = "UTC")
   cols <- c("lat", "lon", "ts") ## Select columns that can't contain NA values
   loc_na <- data[!complete.cases(data[cols]),] ## new dataframe with NA values in lat, lon, or ts
   loc <- data[complete.cases(data[cols]),] ## new dataframe with no NA values in lat, lon, or ts
