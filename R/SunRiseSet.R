@@ -24,8 +24,7 @@
 #' Add sunrise/sunset columns to a data.frame from alltags
 #' sun <- SunRiseSet(alltags, units = "mins)
 
-SunRiseSet 
-fun<- function(data){
+SunRiseSet <- function(data){
   data <- data %>% collect %>% as.data.frame
   data$ts <- as_datetime(data$ts, tz = "UTC")
   cols <- c("lat", "lon", "ts") ## Select columns that can't contain NA values
