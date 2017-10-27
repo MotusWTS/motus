@@ -9,6 +9,8 @@ Depends:
     RSQLite,
     dplyr,
     dbplyr,
+    maptools,
+    lubridate,
     ggplot2
 Imports:
     RSQLite,
@@ -17,9 +19,7 @@ Imports:
     jsonlite,
     lattice,
     RCurl,
-    stringi,
-    maptools,
-    lubridate
+    stringi
 License: GPL-2+
 Date: 2017-10-20
 RoxygenNote: 6.0.1
