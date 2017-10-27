@@ -2,3 +2,4 @@
 *.so
 nohup.out
 .Rproj.user
+.Rhistory
