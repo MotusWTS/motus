@@ -36,5 +36,5 @@ plotDailySiteSum <- function(data, sitename){
   tags <- ggplot2::ggplot(sitesum, ggplot2::aes(date, num_tags)) +
     ggplot2::geom_bar(stat = "identity") + ggplot2::theme_bw() + ## creates line graph by site
     ggplot2::labs(x= "Date", y = "Number of tags")
-  gridExtra::grid.arrange(detections, tags, nrow = 2, top = paste("Daily number of detections and tags at", Site, sep = " "))
+  gridExtra::grid.arrange(detections, tags, nrow = 2, top = paste("Daily number of detections and tags at", sitename, sep = " "))
 }
