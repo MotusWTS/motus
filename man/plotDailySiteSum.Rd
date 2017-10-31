@@ -4,10 +4,11 @@
 \alias{plotDailySiteSum}
 \title{Plots number of detections and tags, daily, for a specified site}
 \usage{
-plotDailySiteSum(data, Site)
+plotDailySiteSum(data, sitename)
 }
 \arguments{
-\item{data}{dataframe of Motus detection data}
+\item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
+including at a minimum the variables motusTagID, sig, site, ts}
 
 \item{Site}{name of site to plot}
 }
@@ -16,7 +17,18 @@ Plots total number of detections across all tags, and total number of tags detec
 a specified site.  Depends on siteSumDaily function.
 }
 \examples{
-plotDailySiteSum(dat, Site = "Longridge")
+You can use either the tbl or the flat format for the siteTrans function, instructions to convert
+a .motus file to both formats is below.
+To access any tbl from .motus data saved on your computer:
+file.name <- "data/project-sample.motus" ## replace with the full location of the sample dataset or your own project-XX.motus file
+tmp <- dplyr::src_sqlite(file.name)
+alltags <- tbl(motusSqlFile, "alltags")
+
+To convert tbl to flat format:
+alltags <- alltags \%>\% collect \%>\% as.data.frame
+
+Plot of all tag detections at site Longridge
+plotDailySiteSum(alltags, sitename = "Longridge")
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

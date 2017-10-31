@@ -4,12 +4,13 @@
 \alias{plotAllTagsSite}
 \title{Plot all tag detections by site}
 \usage{
-plotAllTagsSite(data, lat.name = "lat", tagsPerPanel = 5)
+plotAllTagsSite(data, coordinate = "lat", tagsPerPanel = 5)
 }
 \arguments{
-\item{data}{tbl file of .motus data}
+\item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
+including at a minimum the variables id, site, ts, lat, fullID}
 
-\item{lat.name}{column of receivermlatitude values to use, defaults to GPS latitude}
+\item{coordinate}{column of receivermlatitude values to use, defaults to GPS latitude}
 
 \item{tagsPerPanel}{number of tags in each panel of the plot, default is 5}
 }
@@ -17,20 +18,27 @@ plotAllTagsSite(data, lat.name = "lat", tagsPerPanel = 5)
 Plot site (ordered by latitude) vs time (UTC) for each tag
 }
 \examples{
-access the "all tags" table within the motus sql
-tmp <- tbl(motusSqlFile, "alltags")
+You can use either the tbl or the flat format for the siteTrans function, instructions to convert
+a .motus file to both formats is below.
+To access any tbl from .motus data saved on your computer:
+file.name <- "data/project-sample.motus" ## replace with the full location of the sample dataset or your own project-XX.motus file
+tmp <- dplyr::src_sqlite(file.name)
+alltags <- tbl(motusSqlFile, "alltags")
 
-# Plot tbl file "tmp" with default GPS latitude data and 5 tags per panel
-plotAllTagsSite(tmp)
+To convert tbl to flat format:
+alltags <- alltags \%>\% collect \%>\% as.data.frame
 
-# Plot tbl file "tmp" with 10 tags per panel
-plotAllTagsSite(tmp, tagsPerPanel = 10)
+Plot detections of all tags by site ordered by latitude, with default 5 tags per panel
+plotAllTagsSite(alltags)
 
-# Plot tbl file "tmp" using receiver deployment latitudes with default 5 tags per panel
-plotAllTagsSite(tmp, lat.name = "depLat")
+Plot detections of all tags by site ordered by latitude, with 10 tags per panel
+plotAllTagsSite(alltags, tagsPerPanel = 10)
+
+Plot detections of all tags by site ordered by receiver deployment latitude
+plotAllTagsSite(alltags, coordinate = "recvDeployLat")
 
 # Plot tbl file "tmp" using lat and 1 tag per panel for select species and 3 tags per panel
-plotAllTagsSite(filter(tmp, spEN == "Swainson's Thrush"), tagsPerPanel = 3)
+plotAllTagsSite(filter(alltags, spEN == "Red Knot"), tagsPerPanel = 3)
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

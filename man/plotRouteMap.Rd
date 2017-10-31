@@ -4,11 +4,10 @@
 \alias{plotRouteMap}
 \title{Map of tag routes and sites coloured by id}
 \usage{
-plotRouteMap(detection_data, site_data, zoom, latCentre, lonCentre, maptype,
-  recvStart, recvEnd)
+plotRouteMap(data, zoom, latCentre, lonCentre, maptype, recvStart, recvEnd)
 }
 \arguments{
-\item{site_data}{receiver metadata file}
+\item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs"}
 
 \item{zoom}{integer for zoom 3-21, 3 being continent level, 10 being city-scale}
 
@@ -22,7 +21,7 @@ plotRouteMap(detection_data, site_data, zoom, latCentre, lonCentre, maptype,
 
 \item{recvEnd}{end date for date range of active receivers}
 
-\item{data}{dataframe of Motus detection data}
+\item{site_data}{receiver metadata file}
 }
 \description{
 Google map of routes of Motus tag detections coloured by ID.  User defines a date range to show
@@ -32,13 +31,11 @@ points for receivers that were operational at some point during the date range.
 access the "all tags" table within the motus sql
 tmp <- tbl(motusSqlFile, "alltags")
 
-Plot routemap of all detection data, with "terrain" type, and receivers active between 2016-01-01 and 2017-01-01
-plotRouteMap(site_data = locs, detection_data = dat, maptype = "terrain",
-latCentre = 44, lonCentre = -70, zoom = 5, recvStart = "2016-01-01", recvEnd = "2016-12-31")
+Plot routemap of all detection data, with "terrain" maptype, and receivers active between 2016-01-01 and 2017-01-01
+plotRouteMap(tmp, maptype = "terrain", latCentre = 44, lonCentre = -70, zoom = 5, recvStart = "2016-01-01", recvEnd = "2016-12-31")
 
-Plot routemap for a subset of one species
-plotRouteMap(site_data = locs, detection_data = filter(tmp, spEN == "Swainson's Thrush"), maptype = "satellite",
-latCentre = 50, lonCentre = -60, zoom = 3, recvStart = "2016-01-01", recvEnd = "2016-12-31")
+Plot routemap of only select species (Red Knot), with "satellite" maptype, and receivers active between 2015-01-01 and 2016-01-01
+plotRouteMap(filter(tmp, speEN == "Red Knot"), maptype = "terrain", latCentre = 44, lonCentre = -70, zoom = 5, recvStart = "2016-01-01", recvEnd = "2016-12-31")
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

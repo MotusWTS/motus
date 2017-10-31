@@ -7,7 +7,8 @@
 plotSiteSig(data, sitename)
 }
 \arguments{
-\item{data}{dataframe of Motus detection data}
+\item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
+including at a minimum the variables antBearing, ts, lat, sig, fullID, site}
 
 \item{sitename}{name of site}
 }
@@ -15,14 +16,21 @@ plotSiteSig(data, sitename)
 Plot signal strength vs time for all tags detected at a specified site, coloured by antenna
 }
 \examples{
-access the "all tags" table within the motus sql
-tmp <- tbl(motusSqlFile, "alltags")
+You can use either the tbl or the flat format for the siteTrans function, instructions to convert
+a .motus file to both formats is below.
+To access any tbl from .motus data saved on your computer:
+file.name <- "data/project-sample.motus" ## replace with the full location of the sample dataset or your own project-XX.motus file
+tmp <- dplyr::src_sqlite(file.name)
+alltags <- tbl(motusSqlFile, "alltags")
+
+To convert tbl to flat format:
+alltags <- alltags \%>\% collect \%>\% as.data.frame
 
 plot all tags for site Piskwamish
-plotSiteSig(tmp, sitename = "Piskwamish")
+plotSiteSig(alltags, sitename = "Piskwamish")
 
 Plot select tags for site Piskwamish 
-plotSiteSig(filter(tmp, motusTagID \%in\% c(9045, 10234, 96321)), sitename = "Piskwamish")
+plotSiteSig(filter(alltags, motusTagID \%in\% c(16037, 16039, 16035)), sitename = "Netitishi")
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

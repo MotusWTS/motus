@@ -20,7 +20,6 @@
 #' 
 #' Plot signal strength of a specified tag
 #' plotTagSig(alltags, tag.id = 16047)
-#' 
 
 
 plotTagSig <- function(data, tag.id){

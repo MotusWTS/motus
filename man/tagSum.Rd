@@ -7,7 +7,8 @@
 tagSum(data)
 }
 \arguments{
-\item{data}{dataframe of Motus detection data}
+\item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
+including at a minimum the variables motusTagID, fullID, sig, lat, lon, site, ts}
 }
 \value{
 a data.frame with these columns:
@@ -25,16 +26,12 @@ a data.frame with these columns:
 \item dist: total straight line distance between first and last detection site (in metres), see latLonDist function in sensorgnome package for details
 \item rate: overall rate of movement (tot_ts/dist), in metres/second
 \item bearing: bearing between first and last detection sites, see bearing function in geosphere package for more details
-\item rhumbline_bearing: rhumbline bearing between first and last detection sites, see bearingRhumb function in geosphere package for more detail
 }
 }
 \description{
 Creates a summary for each tag of it's first and last detection time, first and last detection site,
 length of time between first and last detection,  straight line distance between first and last detection site,
-rate of movement, bearing, and rhumbline bearing
-}
-\examples{
-tag_summary <- tagSum(dat)
+rate of movement, and bearing
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

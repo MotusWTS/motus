@@ -4,16 +4,11 @@
 \alias{SunRiseSet}
 \title{Obtain sunrise and sunset times}
 \usage{
-SunRiseSet(data, lat.name = "lat", lon.name = "lon", ts.name = "ts")
+SunRiseSet(data)
 }
 \arguments{
-\item{data}{data.frame of Motus detection data, or data.frame containing latitude, longitude, and POSIXct date/time}
-
-\item{ts.name}{column containing ts in POSIXct format}
-
-\item{lat}{column containing latitude}
-
-\item{lon}{column containing longitude}
+\item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
+including at a minimum the variables ts, lat, lon}
 }
 \value{
 the original dataframe provided, with the following additional columns:
@@ -22,15 +17,6 @@ the original dataframe provided, with the following additional columns:
 }
 \description{
 Creates and adds a sunrise and sunset column to a data.frame containing latitude, longitude, and a POSIXct date/time
-}
-\examples{
-convert a .motus file to a data.frame
-tmp <- tbl(motusSqlFile, "alltags") ## access the "alltags" tbl from the sql
-tmp <- tmp \%>\% distinct \%>\% collect \%>\% as.data.frame ## convert tbl to data.frame for typical "flat" format
-tmp$ts <- as_datetime(data$ts, tz = "UTC") ## convert ts to POSIXct; requires package "lubridate"
-
-Add sunrise/sunset columns to data.frame "tmp"
-tmp <- SunRiseSet(tmp)
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

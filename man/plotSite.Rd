@@ -7,21 +7,31 @@
 plotSite(data, sitename = unique(data$site))
 }
 \arguments{
-\item{data}{tbl file of .motus data}
+\item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
+including at a minimum the variables ts, antBearing, fullID, site}
 }
 \description{
 Plot tag ID vs time for all tags detected by site, coloured by antenna bearing
 }
 \examples{
-access the "all tags" table within the motus sql
-tmp <- tbl(motusSqlFile, "alltags")
+You can use either the tbl or the flat format for the siteTrans function, instructions to convert
+a .motus file to both formats is below.
+To access any tbl from .motus data saved on your computer:
+file.name <- "data/project-sample.motus" ## replace with the full location of the sample dataset or your own project-XX.motus file
+tmp <- dplyr::src_sqlite(file.name)
+alltags <- tbl(motusSqlFile, "alltags")
+
+To convert tbl to flat format:
+alltags <- alltags \%>\% collect \%>\% as.data.frame
 
 Plot all sites within file
-plotSite(tmp)
+plotSite(alltags)
 
 Plot only detections at a specific site; Piskwamish
-plotSite(filter(tmp, site == "Piswamish"))
+plotSite(filter(alltags, site == "Piskwamish"))
 
+Plot only detections for specified tags
+plotSite(filter(alltags, motusTagID \%in\% c(16047, 16037, 16039)))
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

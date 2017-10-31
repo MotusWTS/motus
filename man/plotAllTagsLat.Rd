@@ -4,12 +4,12 @@
 \alias{plotAllTagsLat}
 \title{Plot all tag detections by latitude}
 \usage{
-plotAllTagsLat(data, lat.name = "lat", tagsPerPanel = 5)
+plotAllTagsLat(data, coordinate = "lat", tagsPerPanel = 5)
 }
 \arguments{
-\item{data}{tbl file of .motus data}
+\item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs"}
 
-\item{lat.name}{column name from which to obtain location values, by default it is set to GPS latitude}
+\item{coordinate}{column name from which to obtain location values, by default it is set to GPS latitude}
 
 \item{tagsPerPanel}{number of tags in each panel of the plot, by default this is 5}
 }
@@ -27,12 +27,12 @@ plotAllTagsLat(tmp)
 plotAllTagsLat(tmp, tagsPerPanel = 10)
 
 # Plot tbl file "tmp" using receiver deployment latitudes with default 5 tags per panel
-plotAllTagsLat(tmp, lat.name = "depLat")
+plotAllTagsLat(tmp, coordinate = "depLat")
 
-# Plot tbl file "tmp" using LONGITUDES and 1 tag per panel
-plotAllTagsLat(tmp, lat.name = "lon", tagsPerPanel = 1)
-# Plot tbl file "tmp" using lat and 1 tag per panel for select motus tagIDs
-plotAllTagsLat(filter(tmp, motusTagID \%in\% c(9045, 10234, 96321)), tagsPerPanel = 1)
+# Plot tbl file "tmp" using LONGITUDES and 10 tags per panel
+plotAllTagsLat(tmp, coordinate = "lon", tagsPerPanel = 10)
+# Plot tbl file "tmp" using lat and 10 tags per panel for select motus tagIDs
+plotAllTagsLat(filter(tmp, motusTagID \%in\% c(9045, 10234, 96321)), tagsPerPanel = 10)
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}
