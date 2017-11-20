@@ -188,13 +188,17 @@ These assumptions allow for simpler, more efficient database queries.
      where the batchID is > `batchID`
 
    - fields in the returned object are arrays:
-      - batchID
-      - deviceID
-      - monoBN
-      - tsStart
-      - tsEnd
-      - numHits
-      - ts
+      - batchID: integer;
+      - motusDeviceID: integer; motus device ID
+      - monoBN: integer; corrected boot count for device (where available)
+      - tsStart: double; unix timestamp (seconds since 1 Jan 1970 GMT) for start of raw data processed in this batch
+      - tsEnd: double; unix timestamp for end of raw data processed in this batch
+      - numHits: integer; count of detections on all antennas in this batch
+      - ts: double; unix timestamp at which processing of this batch completed
+      - motusUserID: integer; motus ID of user who submitted top-level job; e.g. who uploaded files; might be null
+      - motusProjectID; integer; motus ID of project that user selected for products resulting from the upload
+        might be null;
+      - motusJobID; integer; ID of processing job on data server.
 
 Paging for this query is achieved by using the largest returned value of `batchID`
 as `batchID` on subsequent calls.  When there are no further batches, the API
@@ -215,13 +219,16 @@ returns an empty list.
      project projectID, where the batchID is > `batchID`
 
    - the returned object has these array fields:
-      - batchID: integer;
-      - deviceID: integer; motus device ID
-      - monoBN: integer; corrected boot count for device (where available)
-      - tsStart: double; unix timestamp (seconds since 1 Jan 1970 GMT) for start of raw data processed in this batch
-      - tsEnd: double; unix timestamp for end of raw data processed in this batch
-      - numHits: integer; count of detections on all antennas in this batch
-      - ts: double; unix timestamp at which processing of this batch completed
+      - batchID
+      - deviceID
+      - monoBN
+      - tsStart
+      - tsEnd
+      - numHits
+      - ts
+      - motusUserID
+      - motusProjectID
+      - motusJobID
 
 Paging for this query is achieved by using the largest returned value of `batchID`
 as `batchID` on subsequent calls.  When there are no further batches, the API
@@ -241,12 +248,15 @@ returns an empty list.
 
    - fields in the returned object are arrays:
       - batchID
-      - deviceID
+      - motusDeviceID
       - monoBN
       - tsStart
       - tsEnd
       - numHits
       - ts
+      - motusUserID
+      - motusProjectID
+      - motusJobID
 
 Paging for this query is achieved by using the largest returned value of `batchID`
 as `batchID` on subsequent calls.  When there are no further batches, the API
@@ -408,7 +418,10 @@ For admin users, *all* hits are returned, regardless of batch ownership
      the project's tags.
 
    - fields in the returned object are arrays:
-     - ts
+     - ts receiver timestamp (seconds since 1 Jan 1970, GMT)
+     - gpsts if present, timestamp reported by GPS; not necessarily identical to `ts`, as
+       receiver clock tracks gps by rate slewing, rather than stepping, so adjustments
+       are gradual and never negative.
      - batchID (optional; this is just batchID)
      - lat
      - lon
@@ -433,6 +446,9 @@ returns an empty list.
 
    - fields in the returned object are arrays:
      - ts
+     - gpsts if present, timestamp reported by GPS; not necessarily identical to `ts`, as
+       receiver clock tracks gps by rate slewing, rather than stepping, so adjustments
+       are gradual and never negative.
      - batchID (optional; this is just batchID)
      - lat
      - lon
