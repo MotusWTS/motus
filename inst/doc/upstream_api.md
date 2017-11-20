@@ -191,7 +191,7 @@ These assumptions allow for simpler, more efficient database queries.
       - batchID
       - deviceID
       - monoBN
-      - tsBegin
+      - tsStart
       - tsEnd
       - numHits
       - ts
@@ -218,7 +218,7 @@ returns an empty list.
       - batchID: integer;
       - deviceID: integer; motus device ID
       - monoBN: integer; corrected boot count for device (where available)
-      - tsBegin: double; unix timestamp (seconds since 1 Jan 1970 GMT) for start of raw data processed in this batch
+      - tsStart: double; unix timestamp (seconds since 1 Jan 1970 GMT) for start of raw data processed in this batch
       - tsEnd: double; unix timestamp for end of raw data processed in this batch
       - numHits: integer; count of detections on all antennas in this batch
       - ts: double; unix timestamp at which processing of this batch completed
@@ -243,7 +243,7 @@ returns an empty list.
       - batchID
       - deviceID
       - monoBN
-      - tsBegin
+      - tsStart
       - tsEnd
       - numHits
       - ts
