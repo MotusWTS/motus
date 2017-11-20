@@ -25,15 +25,24 @@ it is to work with this package.
 ### Request ###
  - requests are sent by the HTTP POST method
  - the request has header `Content-Type: application/x-www-form-urlencoded`
- - the POST data has a single item called `json`
+ - can have an optional header `Accept-Encoding: gzip` in which case the reply
+   will be gzip-compressed, rather then bzip2-compressed (see below)
+ - the POST data has a single item called `json`, which is a JSON-encoded object.
  - the fields of `json` are the parameters listed for each API entrypoint below.
  - most requests require an `authToken` value, which can be obtained by a call
    to `authenticate_user`
+ - if a request indicates that a parameter should be an array, then
+   a scalar of the same type can be provided instead, and is treated as an array of length 1.
+   i.e. the API doesn't distinguish between `"par":X` and `"par":[X]` if `X` is a double, integer,
+   boolean or string
 
 ### Reply ###
- - is a json object: header `Content-Type = application/json`
- - is bzip2-compressed: header `Content-Encoding = bzip2`
- - most return values are an object whose fields are arrays of
+ - is a JSON-encoded object: header `Content-Type = application/json`
+ - is bzip2-compressed: header `Content-Encoding = bzip2`.  To support browsers and other
+   contexts without native bzip2 decompression, if the request had a
+   header called `Accept-Encoding` that includes the string "gzip", then the
+   reply is gzip-compressed, with header `Content-Encoding: gzip`.
+ - most returned objects have fields which are arrays of
    equal length, which is the natural JSON encoding of an R data.frame
  - errors are indicated by including a field called `error` in the reply; other
    fields might be present, giving additional information.  If no field `error`
@@ -133,7 +142,7 @@ These assumptions allow for simpler, more efficient database queries.
 
    - return a list of receiver device IDs for the given serial numbers
 
-   - fields in the return value are arrays:
+   - fields in the returned object are arrays:
       - serno: string; serial number, as specified
       - deviceID: integer; motus device ID, or NA where the serial number was not found
 
@@ -302,6 +311,12 @@ Paging for this query is achieved by using the last returned value of `runID`
 as `runID` on subsequent calls.  When there are no further runs, the API
 returns an empty list.
 
+For regular users, this only returns runs if the user has permission for
+the project which owns the receiver deployment covering this batch.
+
+For admin users, *all* runs are returned, regardless of batch ownership
+(or lack thereof).
+
 ### hits for tag project ###
 
    hits_for_tag_project (projectID, batchID, hitID, authToken)
@@ -364,6 +379,12 @@ Paging for this query is achieved by using the last returned value of `hitID`
 as `hitID` on subsequent calls.  When there are no further hits, the API
 returns an empty list.
 
+For regular users, this only returns hits if the user has permission for
+the project which owns the receiver deployment covering this batch.
+
+For admin users, *all* hits are returned, regardless of batch ownership
+(or lack thereof).
+
 ### gps for tag project ###
 
    gps_for_tag_project (projectID, batchID, ts, authToken)
@@ -420,6 +441,12 @@ returns an empty list.
 Paging for this query is achieved by using the last returned value of `ts`
 as `ts` on subsequent calls.  When there are no further GPS fixes, the API
 returns an empty list.
+
+For regular users, this only returns gps records if the user has permission for
+the project which owns the receiver deployment covering this batch.
+
+For admin users, *all* gps records are returned, regardless of batch ownership
+(or lack thereof).
 
 ### metadata for tags ###
 
@@ -594,6 +621,12 @@ returns an empty list.
       - numGPS
       - numBytes: estimated uncompressed size of data transfer
 
+For regular users, this only counts items where the user has permission for
+the project which owns the receiver deployment covering the batch.
+
+For admin users, *all* items are counted, regardless of batch ownership
+(or lack thereof).
+
 ### project ambiguities for tag project ###
 
    project_ambiguities_for_tag_project (projectID)
@@ -666,3 +699,9 @@ Paging for this query is achieved by using the last returned values of
 there are no further pulse counts, the API returns an empty list.
 
 Note that this API returns pulses sorted by hourBin within antenna for each batch.
+
+For regular users, this only returns pulse counts if the user has permission for
+the project which owns the receiver deployment covering this batch.
+
+For admin users, *all* pulse counts are returned, regardless of batch ownership
+(or lack thereof).
