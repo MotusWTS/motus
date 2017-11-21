@@ -277,22 +277,28 @@ detections.  Currently, that means only administrative users.
       e.g.
       curl --data-urlencode json='{"projectID":123,"batchID":111,"runID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/runs_for_tag_project
 
-   - return a list of all runs of a tag in project `projectID`, from batch
-     `batchID` and with run ID > `runID`
+   - return a list of all runs of a tag in project `projectID`, that began,
+     were extended or ended in batch `batchID`, and with run ID > `runID`
 
    - fields in the returned object are arrays:
-      - runID
-      - batchIDbegin
-      - tsBegin
-      - tsEnd
-      - done
-      - motusTagID
-      - ant
-      - len
+      - runID: big integer; unique ID of run
+      - batchIDbegin: integer; id of batch in which run began
+      - tsBegin: double; unix timestamp of first detection in run
+      - tsEnd: double; unix timestamp of last detection in run (*so far*, if `done` is 0)
+      - done: integer; 0 if the run might continue; 1 if it has finished
+      - motusTagID: integer; ID of tag whose run of detections this is
+      - ant: integer; antenna port number; (-1) indicates "A1+A2+A3+A4" (Lotek)
+      - len: integer; length of run (*so far*, if `done` is 0)
 
 Paging for this query is achieved by using the last returned value of `runID`
 as `runID` on subsequent calls.  When there are no further runs, the API
 returns an empty list.
+
+If a run's `done` field is zero, then later processing of data from
+the same receiver by the server might extend the run.  In that case the
+same run might be returned by later calls to the same API, but with a
+different batchID; and the run's `tsEnd`, `len`, or `done`
+fields could change if the run were extended or known to have ended.
 
 ### runs for receiver ###
 
@@ -305,17 +311,17 @@ returns an empty list.
       e.g.
       curl --data-urlencode json='{"projectID":123,"batchID":111,"runID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/runs_for_receiver
 
-   - return a list of all runs from batch `batchID` with run ID > `runID`
+   - return a list of all runs begun, extended, or ended in batch `batchID` with run ID > `runID`
 
    - fields in the returned object are arrays:
-      - runID
-      - batchIDbegin
-      - tsBegin
-      - tsEnd
-      - done
-      - motusTagID
-      - ant
-      - len
+      - runID: big integer; unique ID of run
+      - batchIDbegin: integer; id of batch in which run began
+      - tsBegin: double; unix timestamp of first detection in run
+      - tsEnd: double; unix timestamp of last detection in run (*so far*, if `done` is 0)
+      - done: integer; 0 if the run might continue; 1 if it has finished
+      - motusTagID: integer; ID of tag whose run of detections this is
+      - ant: integer; antenna port number; (-1) indicates "A1+A2+A3+A4" (Lotek)
+      - len: integer; length of run (*so far*, if `done` is 0)
 
 Paging for this query is achieved by using the last returned value of `runID`
 as `runID` on subsequent calls.  When there are no further runs, the API
@@ -326,6 +332,12 @@ the project which owns the receiver deployment covering this batch.
 
 For admin users, *all* runs are returned, regardless of batch ownership
 (or lack thereof).
+
+If a run's `done` field is zero, then later processing of data from
+the same receiver by the server might extend the run.  In that case the
+same run might be returned by later calls to the same API, but with a
+different batchID; and the run's `tsEnd`, `len`, or `done`
+fields could change if the run were extended or known to have ended.
 
 ### hits for tag project ###
 
