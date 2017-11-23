@@ -25,7 +25,7 @@
 #' Plot routemap of only select species (Red Knot), with "satellite" maptype, and receivers active between 2015-01-01 and 2016-01-01
 #' plotRouteMap(filter(tmp, speEN == "Red Knot"), maptype = "terrain", latCentre = 44, lonCentre = -70, zoom = 5, recvStart = "2016-01-01", recvEnd = "2016-12-31")
 
-plotRouteMap <- function(data, zoom, latCentre, lonCentre, maptype, recvStart, recvEnd){
+plotRouteMap <- function(data, file.name, zoom, latCentre, lonCentre, maptype, recvStart, recvEnd){
   if(class(zoom) != "numeric") stop('Numeric value 3-21 required for "zoom"')
   if(class(latCentre) != "numeric") stop('Numeric value required for "latCentre"')
   if(class(lonCentre) != "numeric") stop('Numeric value required for "lonCentre"')
@@ -40,7 +40,7 @@ plotRouteMap <- function(data, zoom, latCentre, lonCentre, maptype, recvStart, r
   siteOp <- with(site, lubridate::interval(tsStart, tsEnd)) ## get running intervals for each deployment
   dateRange <- lubridate::interval(as.POSIXct(recvStart), as.POSIXct(recvEnd)) ## get time interval you are interested in
   site$include <- lubridate::int_overlaps(siteOp, dateRange) ## if include == TRUE then the intervals overlapped and the site was "running" at some point during the specified time
-  data <- select(data, motusTagID, ts, lat, lon, fullID, site, spEN) %>% distinct %>% collect %>% as.data.frame
+  data <- select(data, motusTagID, ts, recvDeployLat, recvDeployLon, fullID, recvDepName, speciesEN) %>% distinct %>% collect %>% as.data.frame
   data$ts <- lubridate::as_datetime(data$ts, tz = "UTC")
   data <- data[order(data$ts),] ## order by time
   gmap <-  ggmap::get_map(location = c(lon = lonCentre, lat = latCentre), ## lon/lat to centre map over
@@ -48,7 +48,7 @@ plotRouteMap <- function(data, zoom, latCentre, lonCentre, maptype, recvStart, r
                    source = "google",
                    zoom = zoom) ## zoom, must be a whole number
   p <- ggmap::ggmap(gmap)
-  p + ggplot2::geom_point(data = subset(site_data, include == TRUE), ggplot2::aes(longitude, latitude), pch=21, colour = "black", fill = "yellow") +
-    ggplot2::geom_path(data=data, ggplot2::aes(lon, lat, group=fullID, col = fullID)) +
+  p + ggplot2::geom_point(data = subset(site, include == TRUE), ggplot2::aes(longitude, latitude), pch=21, colour = "black", fill = "yellow") +
+    ggplot2::geom_path(data=data, ggplot2::aes(recvDeployLon, recvDeployLat, group=fullID, col = fullID)) +
     ggplot2::labs(x = "Longitude", y = "Latitude") + ggplot2::theme_bw()
 }

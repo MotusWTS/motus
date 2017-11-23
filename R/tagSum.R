@@ -5,7 +5,7 @@
 #' rate of movement, and bearing
 #'
 #' @param data a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
-#' including at a minimum the variables motusTagID, fullID, sig, lat, lon, site, ts
+#' including at a minimum the variables motusTagID, fullID, recvDeployLat, recvDeployLon, recvDepName, ts
 #' @export
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
@@ -47,7 +47,6 @@
 #' tag_summary <- tagSum(filter(alltags, spEN == "Red Knot))
 
 tagSum <- function(data){
-  data <- select(data, motusTagID, fullID, sig, lat, lon, site, ts) %>% distinct %>% collect %>% as.data.frame
   data$ts <- as_datetime(data$ts, tz = "UTC")
   grouped <- dplyr::group_by(data, fullID)
   tmp <- dplyr::summarise(grouped,
@@ -55,17 +54,17 @@ tagSum <- function(data){
                     last_ts=max(ts),
                     tot_ts = difftime(max(ts), min(ts), units = "secs"),
                     num_det = length(ts)) ## total time in seconds
-  tmp <- merge(tmp, subset(data, select = c(ts, fullID, site, lat, lon)),
+  tmp <- merge(tmp, subset(data, select = c(ts, fullID, recvDepName, recvDeployLat, recvDeployLon)),
                by.x = c("first_ts", "fullID"), by.y = c("ts", "fullID"), all.x = TRUE)
-  tmp <- unique(merge(tmp, subset(data, select = c(ts, fullID, site, lat, lon)),
+  tmp <- unique(merge(tmp, subset(data, select = c(ts, fullID, recvDepName, recvDeployLat, recvDeployLon)),
                by.x = c("last_ts", "fullID"), by.y = c("ts", "fullID"), all.x = TRUE))
-  tmp <- dplyr::rename(tmp, first_site = site.x, last_site = site.y)
-  tmp$dist <- with(tmp, latLonDist(lat.x, lon.x, lat.y, lon.y)) ## distance in meters
+  tmp <- dplyr::rename(tmp, first_site = recvDepName.x, last_site = recvDepName.y)
+  tmp$dist <- with(tmp, latLonDist(recvDeployLat.x, recvDeployLat.x, recvDeployLat.y, recvDeployLat.y)) ## distance in meters
   tmp$rate <- with(tmp, dist/(as.numeric(tot_ts))) ## rate of travel in m/s
-  tmp$bearing <- with(tmp, geosphere::bearing(matrix(c(lon.x, lat.x), ncol=2),
-                                                 matrix(c(lon.y, lat.y), ncol=2))) ## bearing (see package geosphere for help)
-#  tmp$rhumbline_bearing <- with(tmp, geosphere::bearingRhumb(matrix(c(lon.x, lat.x), ncol=2),
-#                                                        matrix(c(lon.y, lat.y), ncol=2))) ## rhumbline bearing (see package geosphere for help)
-  return(tmp[c("fullID", "first_ts", "last_ts", "first_site", "last_site", "lat.x", "lon.x", "lat.y", "lon.y",
+  tmp$bearing <- with(tmp, geosphere::bearing(matrix(c(recvDeployLat.x, recvDeployLat.x), ncol=2),
+                                                 matrix(c(recvDeployLat.y, recvDeployLat.y), ncol=2))) ## bearing (see package geosphere for help)
+#  tmp$rhumbline_bearing <- with(tmp, geosphere::bearingRhumb(matrix(c(recvDeployLat.x, recvDeployLat.x), ncol=2),
+#                                                        matrix(c(recvDeployLat.y, recvDeployLat.y), ncol=2))) ## rhumbline bearing (see package geosphere for help)
+  return(tmp[c("fullID", "first_ts", "last_ts", "first_site", "last_site", "recvDeployLat.x", "recvDeployLat.y",
                "tot_ts", "dist", "rate", "bearing", "num_det")])
 }

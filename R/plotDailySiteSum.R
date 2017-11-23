@@ -4,8 +4,8 @@
 #' a specified site.  Depends on siteSumDaily function.
 #'
 #' @param data a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
-#' including at a minimum the variables motusTagID, sig, site, ts
-#' @param Site name of site to plot
+#' including at a minimum the variables motusTagID, sig, recvDepName, ts
+#' @param recvDepName name of site to plot
 #' @export
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
@@ -29,12 +29,12 @@ plotDailySiteSum <- function(data, sitename){
   } else {
     tmp = data %>% collect %>% as.data.frame
   }
-  sitesum <- siteSumDaily(filter(data, site == sitename))
+  sitesum <- siteSumDaily(filter(data, recvDepName == sitename))
   detections <- ggplot2::ggplot(sitesum, ggplot2::aes(date, num_det)) +
-    ggplot2::geom_bar(stat = "identity") + ggplot2::theme_bw() + ## creates bar plot by site
+    ggplot2::geom_bar(stat = "identity") + ggplot2::theme_bw() + ## creates bar plot by recvDepName
     ggplot2::labs(x= "Date", y = "Total detections")
   tags <- ggplot2::ggplot(sitesum, ggplot2::aes(date, num_tags)) +
-    ggplot2::geom_bar(stat = "identity") + ggplot2::theme_bw() + ## creates line graph by site
+    ggplot2::geom_bar(stat = "identity") + ggplot2::theme_bw() + ## creates line graph by recvDepName
     ggplot2::labs(x= "Date", y = "Number of tags")
   gridExtra::grid.arrange(detections, tags, nrow = 2, top = paste("Daily number of detections and tags at", sitename, sep = " "))
 }

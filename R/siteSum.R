@@ -5,7 +5,7 @@
 #' and total number of tags detected at each site.
 #'
 #' @param data a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
-#' including at a minimum the variables motusTagID, sig, lat, site, ts
+#' including at a minimum the variables motusTagID, sig, recvDeployLat, recvDepName, ts
 #' @param units units to display time difference, defaults to "hours", options include "secs", "mins", "hours", "days", "weeks"
 #' @export
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
@@ -35,28 +35,28 @@
 #' site_summary <- siteSum(alltags)
 #' 
 #' Create site summaries for only select sites with time in minutes
-#' site_summary <- siteSum(filter(alltags, site %in% c("Niapiskau", "Netitishi", "Old Cur", "Washkaugou")), units = "mins")
+#' site_summary <- siteSum(filter(alltags, recvDepName %in% c("Niapiskau", "Netitishi", "Old Cur", "Washkaugou")), units = "mins")
 #'
 #' Create site summaries for only a select species
-#' site_summary <- siteSum(filter(alltags, spEN == "Red Knot"))
+#' site_summary <- siteSum(filter(alltags, speciesEN == "Red Knot"))
 
 siteSum <- function(data, units = "hours"){
-  data <- select(data, motusTagID, sig, lat, site, ts) %>% distinct %>% collect %>% as.data.frame
-  data <- within(data, site <- reorder(site, (lat))) ## order site by latitude
+  data <- select(data, motusTagID, sig, recvDeployLat, recvDepName, ts) %>% distinct %>% collect %>% as.data.frame
+  data <- within(data, recvDepName <- reorder(recvDepName, (recvDeployLat))) ## order site by latitude
   data$ts <- as_datetime(data$ts, tz = "UTC")
-  grouped <- dplyr::group_by(data, site)
+  grouped <- dplyr::group_by(data, recvDepName)
   data <- dplyr::summarise(grouped,
                  first_ts=min(ts),
                  last_ts=max(ts),
                  tot_ts = difftime(max(ts), min(ts), units = units),
                  num.tags = length(unique(motusTagID)),
                  num.det = length(ts))
-  detections <- ggplot2::ggplot(data = data, ggplot2::aes(x = site, y = num.det)) +
+  detections <- ggplot2::ggplot(data = data, ggplot2::aes(x = recvDepName, y = num.det)) +
     ggplot2::geom_bar(stat = "identity") + ggplot2::theme_bw() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)) +  ## make x-axis labels on a 45º angle to read more easily
-    ggplot2::labs(title = "Total number of detections per site, across all tags", x= "Site", y = "Total detections") ## changes x- and y-axis label
-  tags <- ggplot2::ggplot(data = data, ggplot2::aes(x = site, y = num.tags)) +
-    ggplot2::geom_bar(stat = "identity") + ggplot2::theme_bw() + ## creates bar plot by site
+    ggplot2::labs(title = "Total number of detections per recvDepName, across all tags", x= "Site", y = "Total detections") ## changes x- and y-axis label
+  tags <- ggplot2::ggplot(data = data, ggplot2::aes(x = recvDepName, y = num.tags)) +
+    ggplot2::geom_bar(stat = "identity") + ggplot2::theme_bw() + ## creates bar plot by recvDepName
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)) + ## make x-axis labels on a 45º angle to read more easily
     ggplot2::labs(title = "Total number of tags detected per site", x= "Site", y = "Number of tags") ## changes x- and y-axis label
   gridExtra::grid.arrange(detections, tags, nrow = 2)

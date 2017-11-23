@@ -3,7 +3,10 @@
 #' Creates and adds a sunrise and sunset column to a data.frame containing latitude, longitude, and a POSIXct date/time
 #'
 #' @param data a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
-#' including at a minimum the variables ts, lat, lon
+#' including at a minimum variables for date/time, latitude, and longitude
+#' @param lat variable with latitude values, defaults to recvDeployLat
+#' @param lon variable with longitude values, defaults to recvDeployLon
+#' @param ts variable with time in UTC as numeric or POSIXct, defaults to ts
 #' @export
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
@@ -22,12 +25,16 @@
 #' alltags <- alltags %>% collect %>% as.data.frame
 #' 
 #' Add sunrise/sunset columns to a data.frame from alltags
-#' sun <- SunRiseSet(alltags, units = "mins)
+#' sun <- sunRiseSet(alltags, units = "mins)
+#' 
+#' get sunrise and sunset information using gps lat/lon
+#' sun <- sunRiseSet(alltags, lat = "gpsLat", lon = "gpsLon")
 
-SunRiseSet <- function(data){
+
+SunRiseSet <- function(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = "ts"){
   data <- data %>% collect %>% as.data.frame
   data$ts <- as_datetime(data$ts, tz = "UTC")
-  cols <- c("lat", "lon", "ts") ## Select columns that can't contain NA values
+  cols <- c(lat, lon, ts) ## Select columns that can't contain NA values
   loc_na <- data[!complete.cases(data[cols]),] ## new dataframe with NA values in lat, lon, or ts
   loc <- data[complete.cases(data[cols]),] ## new dataframe with no NA values in lat, lon, or ts
   loc$sunrise <- maptools::sunriset(as.matrix(dplyr::select(loc,lon,lat)),loc$ts, POSIXct.out=T, direction='sunrise')$time

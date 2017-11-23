@@ -3,8 +3,8 @@
 #' Plot signal strength vs time for all tags detected at a specified site, coloured by antenna
 #'
 #' @param data a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
-#' including at a minimum the variables antBearing, ts, lat, sig, fullID, site
-#' @param sitename name of site
+#' including at a minimum the variables antBearing, ts, lat, sig, fullID, recvDepName
+#' @param sitename name of recvDepName
 #' @export
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
@@ -26,8 +26,8 @@
 #' plotSiteSig(filter(alltags, motusTagID %in% c(16037, 16039, 16035)), sitename = "Netitishi")
 
 plotSiteSig <- function(data, sitename){
-  data <- filter_(data, paste("site", "==", "sitename"))
-  data <- select(data, antBearing, ts, lat, sig, fullID, site) %>% distinct %>% collect %>% as.data.frame
+  data <- filter_(data, paste("recvDepName", "==", "sitename"))
+  data <- select(data, antBearing, ts, recvDeployLat, sig, fullID, recvDepName) %>% distinct %>% collect %>% as.data.frame
   data$ts <- lubridate::as_datetime(data$ts, tz = "UTC")
   p <- ggplot2::ggplot(data, ggplot2::aes(ts, sig, col = as.factor(antBearing)))
   p + ggplot2::geom_point() + ggplot2::theme_bw() + ggplot2::theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 

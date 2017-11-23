@@ -3,9 +3,9 @@
 #' Plot site (ordered by latitude) vs time (UTC) for each tag
 #'
 #' @param data a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
-#' including at a minimum the variables id, site, ts, lat, fullID
+#' including at a minimum the variables id, recvDepName, ts, lat, fullID
 #' @param tagsPerPanel number of tags in each panel of the plot, default is 5
-#' @param coordinate column of receivermlatitude values to use, defaults to GPS latitude
+#' @param coordinate column of receiver latitude/longitude values to use, defaults to recvDeployLat
 #' @export
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
@@ -27,30 +27,30 @@
 #' plotAllTagsSite(alltags, tagsPerPanel = 10)
 #' 
 #' Plot detections of all tags by site ordered by receiver deployment latitude
-#' plotAllTagsSite(alltags, coordinate = "recvDeployLat")
+#' plotAllTagsSite(alltags, coordinate = "recvDeployLon")
 #' 
 #' # Plot tbl file "tmp" using lat and 1 tag per panel for select species and 3 tags per panel
-#' plotAllTagsSite(filter(alltags, spEN == "Red Knot"), tagsPerPanel = 3)
+#' plotAllTagsSite(filter(alltags, spEN == "Red Knot"), coordinate = gpsLat, tagsPerPanel = 3)
 
 ## grouping code taken from sensorgnome package
-plotAllTagsSite <- function(data, coordinate = "lat", tagsPerPanel = 5){
+plotAllTagsSite <- function(data, coordinate = "recvDeployLat", tagsPerPanel = 5){
   if(class(tagsPerPanel) != "numeric") stop('Numeric value required for "tagsPerPanel"')
   data = data %>% mutate(round_ts = 3600*round(as.numeric(ts)/3600, 0)) ## round times to the hour
   #data = distinct(select(data, id, site, round_ts, lat, recvDeployLat, lon, recvDeployLon, fullID))
-  dataGrouped <- dplyr::filter_(data, paste(coordinate, "!=", 0)) %>% group_by(site) %>% 
-    summarise_(.dots = setNames(paste0('mean(',coordinate,')'), 'meanlat')) ## get summary of mean lats by site
-  data <- inner_join(data, dataGrouped, by = "site") ## join grouped data with data
-  data <- select(data, id, site, round_ts, lat, meanlat, fullID) %>% distinct %>% collect %>% as.data.frame
+  dataGrouped <- dplyr::filter_(data, paste(coordinate, "!=", 0)) %>% group_by(recvDepName) %>% 
+    summarise_(.dots = setNames(paste0('mean(',coordinate,')'), 'meanlat')) ## get summary of mean lats by recvDepName
+  data <- inner_join(data, dataGrouped, by = "recvDepName") ## join grouped data with data
+  data <- select(data, mfgID, recvDepName, round_ts, meanlat, fullID) %>% distinct %>% collect %>% as.data.frame
   data$meanlat = round(data$meanlat, digits = 2) ## round to 2 significant digits
-  data$sitelat <- as.factor(paste(data$site, data$meanlat, sep = " ")) ## new column with site and lat
+  data$sitelat <- as.factor(paste(data$recvDepName, data$meanlat, sep = " ")) ## new column with recvDepName and lat
   data <- within(data, sitelat <- reorder(sitelat, (meanlat))) ## order sitelat by latitude
   data$round_ts <- lubridate::as_datetime(data$round_ts, tz = "UTC")
   ## We want to plot multiple tags per panel, so sort their labels and create a grouping factor
   ## Note that labels are sorted in increasing order by ID
-  labs = data$fullID[order(data$id,data$fullID)]
+  labs = data$fullID[order(data$mfgID,data$fullID)]
   dup = duplicated(labs)
   tagLabs = labs[!dup]
-  tagGroupIDs = data$id[order(data$id,data$fullID)][!dup]
+  tagGroupIDs = data$mfgID[order(data$mfgID,data$fullID)][!dup]
   tagGroup = 1 + floor((0:length(tagLabs)) / tagsPerPanel)
   ngroup = length(tagGroup)
   names(tagGroup) = tagLabs

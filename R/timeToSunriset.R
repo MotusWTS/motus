@@ -1,10 +1,13 @@
 #' Obtain time to and from sunrise/sunset for a dataframe containing POSIXct times
 #'
 #' Creates and adds columns for time to, and time from sunrise/sunset based on a column of POSIXct dates/times
-#' dataframe must contain latitude, longitude, and a POSIXct date/time.
+#' dataframe must contain latitude, longitude, and a date/time variable
 #'
 #' @param data a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
-#' including at a minimum the variables ts, lat, lon
+#' including at a minimum variables for date/time, latitude, and longitude
+#' @param lat variable with latitude values, defaults to recvDeployLat
+#' @param lon variable with longitude values, defaults to recvDeployLon
+#' @param ts variable with time in UTC as numeric or POSIXct, defaults to ts
 #' @param units units to display time difference, defaults to "hours", options include "secs", "mins", "hours", "days", "weeks"
 #'
 #' @export
@@ -13,8 +16,8 @@
 #'
 #' @return the original dataframe provided, with the following additional columns:
 #' \itemize{
-#' \item sunrise: sunrise time for the date and location provided by ts and lat/lon per row
-#' \item sunset: sunset time for the date and location provided by ts and lat/lon per row
+#' \item sunrise: sunrise time for the date and location provided by ts and recvDeployLat/recvDeployLon per row
+#' \item sunset: sunset time for the date and location provided by ts and recvDeployLat/recvDeployLon per row
 #' \item ts_to_set: time to next sunset after "ts", units default to "hours"
 #' \item ts_since_set: time to previous sunset since "ts", units default to "hours"
 #' \item ts_to_rise: time to next sunrise after "ts", units default to "hours"
@@ -34,11 +37,14 @@
 #' 
 #' get sunrise and sunset information with units in minutes
 #' sunrise <- timeToSunriset(alltags, units = "mins")
+#' 
+#' get sunrise and sunset information with units in hours using gps lat/lon
+#' sunrise <- timeToSunriset(alltags, lat = "gpsLat", lon = "gpsLon")
 
-timeToSunriset <- function(data, units = "hours"){
+timeToSunriset <- function(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = "ts", units = "hours"){
   data <- data %>% collect %>% as.data.frame
   data$ts <- as_datetime(data$ts, tz = "UTC")
-  cols <- c("lat", "lon", "ts") ## Select columns that can't contain NA values
+  cols <- c(lat, lon, ts) ## Select columns that can't contain NA values
   loc_na <- data[!complete.cases(data[cols]),] ## new dataframe with NA values in lat, lon, or ts
   loc <- data[complete.cases(data[cols]),] ## new dataframe with no NA values in lat, lon, or ts
   loc$sunrise <- maptools::sunriset(as.matrix(dplyr::select(loc,lon,lat)),loc$ts, POSIXct.out=T, direction='sunrise')$time

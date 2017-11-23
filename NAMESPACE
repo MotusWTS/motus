@@ -3,7 +3,6 @@
 export(.onLoad)
 export(SunRiseSet)
 export(consec.fun)
-export(plotAllTagsLat)
 export(plotAllTagsSite)
 export(plotDailySiteSum)
 export(plotRouteMap)
