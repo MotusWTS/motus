@@ -14,7 +14,7 @@
 
     if(!suppressWarnings(suppressMessages(require("motusClient",
                                                   quietly=TRUE, character.only=TRUE)))) {
-        devtools::install_github("jbrzusto/motusClient")
+        devtools::install_github("motusWTS/motusClient")
         suppressMessages(require("motusClient", character.only=TRUE))
     }
     addHook("ensureDBTables", updateMotusDb)

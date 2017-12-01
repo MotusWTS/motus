@@ -1,7 +1,7 @@
 # Using the motus R package #
 
 This document outlines how to use the
-[motus R package](https://github.com/jbrzusto/motus) to obtain and
+[motus R package](https://github.com/motusWTS/motus) to obtain and
 work with your motus detection data.
 
 ## Installation ##
@@ -11,14 +11,14 @@ from R by doing:
 ```R
     install.packages("devtools")              ## if you haven't already done this
     library(devtools)
-    install_github("jbrzusto/motus@master")   ## the lastest stable version
+    install_github("motusWTS/motus@master")   ## the lastest stable version
 ```
 
 **Developers**: the 'staging' branch is for work-in-progress.  Install it with
 ```R
     install.packages("devtools")               ## if you haven't already done this
     library(devtools)
-    install_github("jbrzusto/motus@staging")   ## the development version
+    install_github("motusWTS/motus@staging")   ## the development version
 ```
 
 Note: the `motus` package depends on the `motusClient` package, which should be
@@ -26,7 +26,7 @@ installed automatically the first time you do `library(motus)`.  But if that
 fails, you can also install the `motusClient` package directly like so:
 
 ```R
-   install_github("jbrzusto/motusClient")
+   install_github("motusWTS/motusClient")
 ```
 
 ## Authentication ##

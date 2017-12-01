@@ -6,29 +6,29 @@ from R by doing:
 ```R
     install.packages("devtools")              ## if you haven't already done this
 
-    install_github("jbrzusto/motus@master")   ## the lastest stable version
+    install_github("motusWTS/motus@master")   ## the lastest stable version
 ```
 
 **Developers**: the 'staging' branch is for work-in-progress.  Install it with
 ```R
     install.packages("devtools")               ## if you haven't already done this
 
-    install_github("jbrzusto/motus@staging")   ## the development version
+    install_github("motusWTS/motus@staging")   ## the development version
 ```
 
 ## Usage vignette
 
-A brief sketch (of `motusClient` usage) is [here](https://github.com/jbrzusto/motusClient/blob/master/inst/doc/motusClient_R_package_usage.md)
+A brief sketch (of `motusClient` usage) is [here](https://github.com/motusWTS/motusClient/blob/master/inst/doc/motusClient_R_package_usage.md)
 
 ## What's working so far:
 
 ### 2017 Sep 25
 
-- tagme() / tellme() and supporting functions are now in the [motusClient](https://github.com/jbrzusto/motusClient)
+- tagme() / tellme() and supporting functions are now in the [motusClient](https://github.com/motusWTS/motusClient)
 package, which is automatically installed from github the first time you do `library(motus)` after installing
 the `motus` package.  If automatic installation of `motusClient` fails, you can install it directly like so:
 ```R
-install_github("jbrzusto/motusClient")
+install_github("motusWTS/motusClient")
 ```
 
 ### 2017 Jul 28
