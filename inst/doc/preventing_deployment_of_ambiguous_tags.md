@@ -2,8 +2,10 @@
 
 The problem:
 
+```
    Given the set of registered tags and their active deployed lifetimes, find any
    ambiguities between them and a set of proposed new tags and deployment dates.
+```
 
 One partial solution already exists: the tag finder builds a tree that
 includes nodes representing groups of tags which cannot be
