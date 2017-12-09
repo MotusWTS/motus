@@ -7,14 +7,14 @@
 tagSumSite(data, units = "hours")
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
-including at a minimum the variables motusTagID, fullID, recvDepName, ts}
+\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
+including at a minimum variables for motusTagID, fullID, recvDepName, ts}
 
 \item{units}{units to display time difference, defaults to "hours", options include "secs", "mins", "hours", "days", "weeks"}
 }
 \description{
 Creates a summary for each tag of it's first and last detection time at each site,
-length of time between first and last detection of each site, and total number of detections at each site
+length of time between first and last detection of each site, and total number of detections at each site.
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

@@ -8,7 +8,8 @@ plotAllTagsCoord(data, coordinate = "recvDeployLat", ts = "ts",
   tagsPerPanel = 5)
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs"}
+\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
+including at a minimum variables for recvDepName, fullID, mfgID, date/time, latitude or longitude}
 
 \item{coordinate}{column name from which to obtain location values, by default it is set to recvDeployLat}
 
@@ -17,28 +18,8 @@ plotAllTagsCoord(data, coordinate = "recvDeployLat", ts = "ts",
 \item{tagsPerPanel}{number of tags in each panel of the plot, by default this is 5}
 }
 \description{
-Plot latitude/longitude vs time (UTC rounded to the hour) for each tag using .motus data.  Coordinate is by default taken from a receivers GPS latitude recordings.
-}
-\examples{
-You can use either the tbl or the flat format, instructions to convert a .motus file to both formats are below.
-To access any tbl from .motus data saved on your computer:
-sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
-tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
-df.alltags <- tbl.alltags \%>\% collect \%>\% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
-
-# Plot tbl file tbl.alltags with default GPS latitude data and 5 tags per panel
-plotAllTagsCoord(tbl.alltags)
-
-# Plot tbl file tbl.alltags with 10 tags per panel
-plotAllTagsCoord(tbl.alltags, tagsPerPanel = 10)
-
-# Plot dataframe df.alltags using receiver deployment latitudes with default 5 tags per panel
-plotAllTagsCoord(tmp, coordinate = "recvDeployLat")
-
-# Plot dataframe df.alltags using LONGITUDES and 10 tags per panel
-plotAllTagsCoord(df.alltags, coordinate = "gpsLon", tagsPerPanel = 10)
-# Plot dataframe df.alltags using lat and 10 tags per panel for select motus tagIDs
-plotAllTagsCoord(filter(df.alltags, motusTagID \%in\% c(9045, 10234, 96321)), tagsPerPanel = 10)
+Plot latitude/longitude vs time (UTC rounded to the hour) for each tag using .motus detection data.  
+Coordinate is by default taken from a receivers GPS latitude recordings.
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

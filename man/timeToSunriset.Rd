@@ -8,7 +8,7 @@ timeToSunriset(data, lat = "recvDeployLat", lon = "recvDeployLon",
   ts = "ts", units = "hours")
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
+\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
 including at a minimum variables for date/time, latitude, and longitude}
 
 \item{lat}{variable with latitude values, defaults to recvDeployLat}
@@ -33,23 +33,6 @@ the original dataframe provided, with the following additional columns:
 \description{
 Creates and adds columns for time to, and time from sunrise/sunset based on a column of POSIXct dates/times
 dataframe must contain latitude, longitude, and a date/time variable
-}
-\examples{
-You can use either the tbl or the flat format for the siteTrans function, instructions to convert
-a .motus file to both formats is below.
-To access any tbl from .motus data saved on your computer:
-file.name <- "data/project-sample.motus" ## replace with the full location of the sample dataset or your own project-XX.motus file
-tmp <- dplyr::src_sqlite(file.name)
-alltags <- tbl(motusSqlFile, "alltags")
-
-To convert tbl to flat format:
-alltags <- alltags \%>\% collect \%>\% as.data.frame
-
-get sunrise and sunset information with units in minutes
-sunrise <- timeToSunriset(alltags, units = "mins")
-
-get sunrise and sunset information with units in hours using gps lat/lon
-sunrise <- timeToSunriset(alltags, lat = "gpsLat", lon = "gpsLon")
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

@@ -7,8 +7,8 @@
 siteSum(data, units = "hours")
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
-including at a minimum the variables motusTagID, sig, recvDeployLat, recvDepName, ts}
+\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
+including at a minimum variables for motusTagID, sig, recvDeployLat, recvDepName, and ts}
 
 \item{units}{units to display time difference, defaults to "hours", options include "secs", "mins", "hours", "days", "weeks"}
 }
@@ -27,26 +27,6 @@ a data.frame with these columns:
 Creates a summary of the first and last detection at a site, the length of time between first and last detection,
 the number of tags, and the total number of detections at a site.  Plots total number of detections across all tags,
 and total number of tags detected at each site.
-}
-\examples{
-You can use either the tbl or the flat format for the siteTrans function, instructions to convert
-a .motus file to both formats is below.
-To access any tbl from .motus data saved on your computer:
-file.name <- "data/project-sample.motus" ## replace with the full location of the sample dataset or your own project-XX.motus file
-tmp <- dplyr::src_sqlite(file.name)
-alltags <- tbl(motusSqlFile, "alltags")
-
-To convert tbl to flat format:
-alltags <- alltags \%>\% collect \%>\% as.data.frame
-
-Create site summaries for all sites within detection data with time in default hours
-site_summary <- siteSum(alltags)
-
-Create site summaries for only select sites with time in minutes
-site_summary <- siteSum(filter(alltags, recvDepName \%in\% c("Niapiskau", "Netitishi", "Old Cur", "Washkaugou")), units = "mins")
-
-Create site summaries for only a select species
-site_summary <- siteSum(filter(alltags, speciesEN == "Red Knot"))
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

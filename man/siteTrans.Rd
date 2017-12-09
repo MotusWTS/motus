@@ -7,8 +7,8 @@
 siteTrans(data)
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
-including at a minimum the variables ts, motusTagID, tagDeployID, recvDeployLat, recvDeployLon, recvDepName}
+\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
+including at a minimum variables for ts, motusTagID, tagDeployID, recvDeployLat, recvDeployLon, recvDepName}
 }
 \value{
 a data.frame with these columns:
@@ -32,25 +32,8 @@ a data.frame with these columns:
 Creates a dataframe of transitions between sites; detections are ordered by detection time, then "transitions"
 are identified as the period between the final detection at site x (possible "departure"), and the first detection
 (possible "arrival") at site y (ordered chronologically). Each row contains the last detection time and lat/lon
-of site x, first deteciton time and lat/lon of site y, distance between the site pair, time between detections,
+of site x, first detection time and lat/lon of site y, distance between the site pair, time between detections,
 rate of movement between detections, and bearing between site pairs.
-}
-\examples{
-You can use either the tbl or the flat format for the siteTrans function, instructions to convert
-a .motus file to both formats is below.
-To access any tbl from .motus data saved on your computer:
-file.name <- "data/project-sample.motus" ## replace with the full location of the sample dataset or your own project-XX.motus file
-tmp <- dplyr::src_sqlite(file.name)
-alltags <- tbl(motusSqlFile, "alltags")
-
-To convert tbl to flat format:
-alltags <- alltags \%>\% collect \%>\% as.data.frame
-
-View all site transitions for all detection data
-transitions <- siteTrans(alltags)
-
-View site transitions for only tag 16038
-transitions <- siteTrans(filter(alltags, motusTagID == 16030))
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

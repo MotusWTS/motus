@@ -2,43 +2,20 @@
 % Please edit documentation in R/plotAllTagsSite.R
 \name{plotAllTagsSite}
 \alias{plotAllTagsSite}
-\title{Plot all tag detections by site}
+\title{Plot all tag detections by deployment}
 \usage{
 plotAllTagsSite(data, coordinate = "recvDeployLat", tagsPerPanel = 5)
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
-including at a minimum the variables id, recvDepName, ts, lat, fullID}
+\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
+including at a minimum variables for recvDepName, fullID, mfgID, date/time, latitude or longitude}
 
 \item{coordinate}{column of receiver latitude/longitude values to use, defaults to recvDeployLat}
 
 \item{tagsPerPanel}{number of tags in each panel of the plot, default is 5}
 }
 \description{
-Plot site (ordered by latitude) vs time (UTC) for each tag
-}
-\examples{
-You can use either the tbl or the flat format for the siteTrans function, instructions to convert
-a .motus file to both formats is below.
-To access any tbl from .motus data saved on your computer:
-file.name <- "data/project-sample.motus" ## replace with the full location of the sample dataset or your own project-XX.motus file
-tmp <- dplyr::src_sqlite(file.name)
-alltags <- tbl(motusSqlFile, "alltags")
-
-To convert tbl to flat format:
-alltags <- alltags \%>\% collect \%>\% as.data.frame
-
-Plot detections of all tags by site ordered by latitude, with default 5 tags per panel
-plotAllTagsSite(alltags)
-
-Plot detections of all tags by site ordered by latitude, with 10 tags per panel
-plotAllTagsSite(alltags, tagsPerPanel = 10)
-
-Plot detections of all tags by site ordered by receiver deployment latitude
-plotAllTagsSite(alltags, coordinate = "recvDeployLon")
-
-# Plot tbl file "tmp" using lat and 1 tag per panel for select species and 3 tags per panel
-plotAllTagsSite(filter(alltags, spEN == "Red Knot"), coordinate = gpsLat, tagsPerPanel = 3)
+Plot deployment (ordered by latitude) vs time (UTC) for each tag
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

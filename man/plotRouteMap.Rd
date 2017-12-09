@@ -4,11 +4,10 @@
 \alias{plotRouteMap}
 \title{Map of tag routes and sites coloured by id}
 \usage{
-plotRouteMap(data, file.name, zoom, latCentre, lonCentre, maptype, recvStart,
-  recvEnd)
+plotRouteMap(data, zoom, latCentre, lonCentre, maptype, recvStart, recvEnd)
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs"}
+\item{data}{a .motus sql file}
 
 \item{zoom}{integer for zoom 3-21, 3 being continent level, 10 being city-scale}
 
@@ -29,14 +28,11 @@ Google map of routes of Motus tag detections coloured by ID.  User defines a dat
 points for receivers that were operational at some point during the date range.
 }
 \examples{
-access the "all tags" table within the motus sql
-tmp <- tbl(motusSqlFile, "alltags")
+You must use a .motus sql file, instructions to load using tagme() are below
+sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
 
 Plot routemap of all detection data, with "terrain" maptype, and receivers active between 2016-01-01 and 2017-01-01
-plotRouteMap(tmp, maptype = "terrain", latCentre = 44, lonCentre = -70, zoom = 5, recvStart = "2016-01-01", recvEnd = "2016-12-31")
-
-Plot routemap of only select species (Red Knot), with "satellite" maptype, and receivers active between 2015-01-01 and 2016-01-01
-plotRouteMap(filter(tmp, speEN == "Red Knot"), maptype = "terrain", latCentre = 44, lonCentre = -70, zoom = 5, recvStart = "2016-01-01", recvEnd = "2016-12-31")
+plotRouteMap(sql.motus, maptype = "terrain", latCentre = 44, lonCentre = -70, zoom = 5, recvStart = "2016-01-01", recvEnd = "2016-12-31")
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}
