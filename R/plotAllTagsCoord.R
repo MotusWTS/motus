@@ -1,8 +1,10 @@
 #' Plot all tag detections by latitude or longitude
 #'
-#' Plot latitude/longitude vs time (UTC rounded to the hour) for each tag using .motus data.  Coordinate is by default taken from a receivers GPS latitude recordings.
+#' Plot latitude/longitude vs time (UTC rounded to the hour) for each tag using .motus detection data.  
+#' Coordinate is by default taken from a receivers GPS latitude recordings.
 #'
-#' @param data a selected table from .motus data, eg. "alltags" or "alltagswithambigs"
+#' @param data a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
+#' including at a minimum variables for recvDepName, fullID, mfgID, date/time, latitude or longitude
 #' @param tagsPerPanel number of tags in each panel of the plot, by default this is 5
 #' @param coordinate column name from which to obtain location values, by default it is set to recvDeployLat
 #' @param ts column for a date/time object as numeric or POSIXct, defaults to ts
@@ -10,23 +12,25 @@
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @examples
-#' access the "all tags" table within the motus sql
-#' tmp <- tbl(motusSqlFile, "alltags")
+#' You can use either a selected tbl from .motus eg. "alltags, or a data.frame, instructions to convert a .motus file to all formats are below.
+#' sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
+#' tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+#' df.alltags <- tbl.alltags %>% collect %>% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
 #' 
-#' # Plot tbl file "tmp" with default GPS latitude data and 5 tags per panel
-#' plotAllTagsCoord(tmp)
+#' # Plot tbl file tbl.alltags with default GPS latitude data and 5 tags per panel
+#' plotAllTagsCoord(tbl.alltags)
 #' 
-#' # Plot tbl file "tmp" with 10 tags per panel
-#' plotAllTagsCoord(tmp, tagsPerPanel = 10)
+#' # Plot an sql file tbl.alltags with 10 tags per panel
+#' plotAllTagsCoord(tbl.alltags, tagsPerPanel = 10)
 #' 
-#' # Plot tbl file "tmp" using receiver deployment latitudes with default 5 tags per panel
-#' plotAllTagsCoord(tmp, coordinate = "recvDeployLat")
+#' # Plot dataframe df.alltags using receiver deployment latitudes with default 5 tags per panel
+#' plotAllTagsCoord(df.alltags, coordinate = "recvDeployLat")
 #' 
-#' # Plot tbl file "tmp" using LONGITUDES and 10 tags per panel
-#' plotAllTagsCoord(tmp, coordinate = "gpsLon", tagsPerPanel = 10)
+#' # Plot dataframe df.alltags using LONGITUDES and 10 tags per panel
+#' plotAllTagsCoord(df.alltags, coordinate = "gpsLon", tagsPerPanel = 10)
 
-#' # Plot tbl file "tmp" using lat and 10 tags per panel for select motus tagIDs
-#' plotAllTagsCoord(filter(tmp, motusTagID %in% c(9045, 10234, 96321)), tagsPerPanel = 10)
+#' # Plot dataframe df.alltags using lat for select motus tagIDs
+#' plotAllTagsCoord(filter(df.alltags, motusTagID %in% c(19129, 16011, 17357)), tagsPerPanel = 1)
 
 ## grouping code taken from sensorgnome package
 

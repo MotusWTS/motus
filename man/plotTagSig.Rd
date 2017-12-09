@@ -4,11 +4,11 @@
 \alias{plotTagSig}
 \title{Plot signal strength of all detections for a specified tag by site}
 \usage{
-plotTagSig(data, tag.id)
+plotTagSig(data, motusTagID)
 }
 \arguments{
 \item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
-including at a minimum the variables motusTagID, sig, ts, antBearing, lat, fullID, site}
+including at a minimum the variables motusTagID, sig, ts, antBearing, recvDeployLat, fullID, recvDepName}
 }
 \description{
 Plot signal strength vs time for specified tag, faceted by site (ordered by latitude) and coloured by antenna

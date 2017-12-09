@@ -3,7 +3,7 @@
 #' Creates and adds columns for time to, and time from sunrise/sunset based on a column of POSIXct dates/times
 #' dataframe must contain latitude, longitude, and a date/time variable
 #'
-#' @param data a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
+#' @param data a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
 #' including at a minimum variables for date/time, latitude, and longitude
 #' @param lat variable with latitude values, defaults to recvDeployLat
 #' @param lon variable with longitude values, defaults to recvDeployLon
@@ -25,21 +25,16 @@
 #' }
 #'
 #' @examples
-#' You can use either the tbl or the flat format for the siteTrans function, instructions to convert
-#' a .motus file to both formats is below.
-#' To access any tbl from .motus data saved on your computer:
-#' file.name <- "data/project-sample.motus" ## replace with the full location of the sample dataset or your own project-XX.motus file
-#' tmp <- dplyr::src_sqlite(file.name)
-#' alltags <- tbl(motusSqlFile, "alltags")
+#' You can use either a selected tbl from .motus eg. "alltags, or a data.frame, instructions to convert a .motus file to all formats are below.
+#' sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
+#' tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+#' df.alltags <- tbl.alltags %>% collect %>% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
 #' 
-#' To convert tbl to flat format:
-#' alltags <- alltags %>% collect %>% as.data.frame
+#' get sunrise and sunset information with units in minutes using tbl file tbl.alltags
+#' sunrise <- timeToSunriset(tbl.alltags, units = "mins")
 #' 
-#' get sunrise and sunset information with units in minutes
-#' sunrise <- timeToSunriset(alltags, units = "mins")
-#' 
-#' get sunrise and sunset information with units in hours using gps lat/lon
-#' sunrise <- timeToSunriset(alltags, lat = "gpsLat", lon = "gpsLon")
+#' get sunrise and sunset information with units in hours using gps lat/lon using data.frame df.alltags
+#' sunrise <- timeToSunriset(df.alltags, lat = "gpsLat", lon = "gpsLon")
 
 timeToSunriset <- function(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = "ts", units = "hours"){
   data <- data %>% collect %>% as.data.frame

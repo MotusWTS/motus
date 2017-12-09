@@ -2,30 +2,25 @@
 #'
 #' Plot tag ID vs time for all tags detected by site, coloured by antenna bearing
 #'
-#' @param data a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
-#' including at a minimum the variables ts, antBearing, fullID, recvDepName
+#' @param data a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
+#' including at a minimum variables for ts, antBearing, fullID, recvDepName
 #' @export
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @examples
-#' You can use either the tbl or the flat format for the siteTrans function, instructions to convert
-#' a .motus file to both formats is below.
-#' To access any tbl from .motus data saved on your computer:
-#' file.name <- "data/project-sample.motus" ## replace with the full location of the sample dataset or your own project-XX.motus file
-#' tmp <- dplyr::src_sqlite(file.name)
-#' alltags <- tbl(motusSqlFile, "alltags")
+#' You can use either a selected tbl from .motus eg. "alltags, or a data.frame, instructions to convert a .motus file to all formats are below.
+#' sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
+#' tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+#' df.alltags <- tbl.alltags %>% collect %>% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
 #' 
-#' To convert tbl to flat format:
-#' alltags <- alltags %>% collect %>% as.data.frame
+#' Plot all sites within file for tbl file tbl.alltags
+#' plotSite(tbl.alltags)
 #' 
-#' Plot all sites within file
-#' plotSite(alltags)
-#' 
-#' Plot only detections at a specific site; Piskwamish
-#' plotSite(filter(alltags, recvDepName == "Piskwamish"))
+#' Plot only detections at a specific site; Piskwamish for data.frame df.alltags
+#' plotSite(filter(df.alltags, recvDepName == "Piskwamish"))
 #'
-#' Plot only detections for specified tags
-#' plotSite(filter(alltags, motusTagID %in% c(16047, 16037, 16039)))
+#' Plot only detections for specified tags for data.frame df.alltags
+#' plotSite(filter(df.alltags, motusTagID %in% c(16047, 16037, 16039)))
 
 
 plotSite <- function(data, sitename = unique(data$recvDepName)){

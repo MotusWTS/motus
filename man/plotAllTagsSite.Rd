@@ -4,13 +4,13 @@
 \alias{plotAllTagsSite}
 \title{Plot all tag detections by site}
 \usage{
-plotAllTagsSite(data, coordinate = "lat", tagsPerPanel = 5)
+plotAllTagsSite(data, coordinate = "recvDeployLat", tagsPerPanel = 5)
 }
 \arguments{
 \item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
-including at a minimum the variables id, site, ts, lat, fullID}
+including at a minimum the variables id, recvDepName, ts, lat, fullID}
 
-\item{coordinate}{column of receivermlatitude values to use, defaults to GPS latitude}
+\item{coordinate}{column of receiver latitude/longitude values to use, defaults to recvDeployLat}
 
 \item{tagsPerPanel}{number of tags in each panel of the plot, default is 5}
 }
@@ -35,10 +35,10 @@ Plot detections of all tags by site ordered by latitude, with 10 tags per panel
 plotAllTagsSite(alltags, tagsPerPanel = 10)
 
 Plot detections of all tags by site ordered by receiver deployment latitude
-plotAllTagsSite(alltags, coordinate = "recvDeployLat")
+plotAllTagsSite(alltags, coordinate = "recvDeployLon")
 
 # Plot tbl file "tmp" using lat and 1 tag per panel for select species and 3 tags per panel
-plotAllTagsSite(filter(alltags, spEN == "Red Knot"), tagsPerPanel = 3)
+plotAllTagsSite(filter(alltags, spEN == "Red Knot"), coordinate = gpsLat, tagsPerPanel = 3)
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

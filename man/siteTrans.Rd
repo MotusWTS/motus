@@ -8,7 +8,7 @@ siteTrans(data)
 }
 \arguments{
 \item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
-including at a minimum the variables ts, motusTagID, tagDeployID, lat, lon, site}
+including at a minimum the variables ts, motusTagID, tagDeployID, recvDeployLat, recvDeployLon, recvDepName}
 }
 \value{
 a data.frame with these columns:

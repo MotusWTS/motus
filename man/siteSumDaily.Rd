@@ -8,20 +8,20 @@ siteSumDaily(data, units = "hours")
 }
 \arguments{
 \item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
-including at a minimum the variables motusTagID, sig, site, ts}
+including at a minimum the variables motusTagID, sig, recvDepName, ts}
 
 \item{units}{units to display time difference, defaults to "hours", options include "secs", "mins", "hours", "days", "weeks"}
 }
 \value{
 a data.frame with these columns:
 \itemize{
-\item site: site
+\item recvDepName: site name of deployment
 \item date: date that is being summarised
-\item first_ts: time of first detection on specified "date" at "site"
-\item last_ts: time of last detection on specified "date" at "site"
-\item tot_ts: total amount of time between first and last detection at "site" on "date, output in specified unit (defaults to "hours")
-\item num.tags: total number of unique tags detected at "site", on "date"
-\item num.det: total number of detections at "site", on "date"
+\item first_ts: time of first detection on specified "date" at "recvDepName"
+\item last_ts: time of last detection on specified "date" at "recvDepName"
+\item tot_ts: total amount of time between first and last detection at "recvDepName" on "date, output in specified unit (defaults to "hours")
+\item num.tags: total number of unique tags detected at "recvDepName", on "date"
+\item num.det: total number of detections at "recvDepName", on "date"
 }
 }
 \description{
@@ -33,7 +33,7 @@ You can use either the tbl or the flat format for the siteTrans function, instru
 a .motus file to both formats is below.
 To access any tbl from .motus data saved on your computer:
 file.name <- "data/project-sample.motus" ## replace with the full location of the sample dataset or your own project-XX.motus file
-tmp <- dplyr::src_sqlite(file.name)
+motusSqlFile <- dplyr::src_sqlite(file.name)
 alltags <- tbl(motusSqlFile, "alltags")
 
 To convert tbl to flat format:
@@ -43,7 +43,7 @@ Create site summaries for all sites within detection data with time in minutes
 daily_site_summary <- siteSumDaily(alltags, units = "mins")
 
 Create site summaries for only select sites with time in minutes
-daily_site_summary <- siteSumDaily(filter(alltags, site \%in\% c("Niapiskau", "Netitishi", "Old Cur", "Washkaugou")), units = "mins")
+daily_site_summary <- siteSumDaily(filter(alltags, recvDepName \%in\% c("Niapiskau", "Netitishi", "Old Cut", "Washkaugou")), units = "mins")
 
 Create site summaries for only a select species with default time in hours
 daily_site_summary <- siteSumDaily(filter(alltags, spEN == "Red Knot"))

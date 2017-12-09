@@ -8,7 +8,7 @@ siteSum(data, units = "hours")
 }
 \arguments{
 \item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
-including at a minimum the variables motusTagID, sig, lat, site, ts}
+including at a minimum the variables motusTagID, sig, recvDeployLat, recvDepName, ts}
 
 \item{units}{units to display time difference, defaults to "hours", options include "secs", "mins", "hours", "days", "weeks"}
 }
@@ -43,10 +43,10 @@ Create site summaries for all sites within detection data with time in default h
 site_summary <- siteSum(alltags)
 
 Create site summaries for only select sites with time in minutes
-site_summary <- siteSum(filter(alltags, site \%in\% c("Niapiskau", "Netitishi", "Old Cur", "Washkaugou")), units = "mins")
+site_summary <- siteSum(filter(alltags, recvDepName \%in\% c("Niapiskau", "Netitishi", "Old Cur", "Washkaugou")), units = "mins")
 
 Create site summaries for only a select species
-site_summary <- siteSum(filter(alltags, spEN == "Red Knot"))
+site_summary <- siteSum(filter(alltags, speciesEN == "Red Knot"))
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

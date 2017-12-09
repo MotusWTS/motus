@@ -4,11 +4,17 @@
 \alias{SunRiseSet}
 \title{Obtain sunrise and sunset times}
 \usage{
-SunRiseSet(data)
+SunRiseSet(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = "ts")
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
-including at a minimum the variables ts, lat, lon}
+\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
+including at a minimum variables for date/time, latitude, and longitude}
+
+\item{lat}{variable with latitude values, defaults to recvDeployLat}
+
+\item{lon}{variable with longitude values, defaults to recvDeployLon}
+
+\item{ts}{variable with time in UTC as numeric or POSIXct, defaults to ts}
 }
 \value{
 the original dataframe provided, with the following additional columns:
@@ -16,7 +22,21 @@ the original dataframe provided, with the following additional columns:
 - sunset: sunset time for the date and location provided by ts and lat/lon per row
 }
 \description{
-Creates and adds a sunrise and sunset column to a data.frame containing latitude, longitude, and a POSIXct date/time
+Creates and adds a sunrise and sunset column to a data.frame containing latitude, longitude, 
+and a date/time as POSIXct or numeric.
+}
+\examples{
+You can use either the tbl or the flat format, instructions to convert a .motus file to both formats are below.
+To access any tbl from .motus data saved on your computer:
+sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
+tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+df.alltags <- tbl.alltags \%>\% collect \%>\% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+
+Add sunrise/sunset columns to a data.frame from alltags
+sun <- SunRiseSet(df.alltags)
+
+get sunrise and sunset information from tbl.alltags using gps lat/lon
+sun <- SunRiseSet(tbl.alltags, lat = "gpsLat", lon = "gpsLon")
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

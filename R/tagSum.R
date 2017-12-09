@@ -4,8 +4,8 @@
 #' length of time between first and last detection,  straight line distance between first and last detection site,
 #' rate of movement, and bearing
 #'
-#' @param data a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
-#' including at a minimum the variables motusTagID, fullID, recvDeployLat, recvDeployLon, recvDepName, ts
+#' @param data a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
+#' including at a minimum variables for motusTagID, fullID, recvDeployLat, recvDeployLon, recvDepName, ts
 #' @export
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
@@ -27,26 +27,22 @@
 #' }
 #'
 #' @examples
-#' You can use either the tbl or the flat format for the siteTrans function, instructions to convert
-#' a .motus file to both formats is below.
-#' To access any tbl from .motus data saved on your computer:
-#' file.name <- "data/project-sample.motus" ## replace with the full location of the sample dataset or your own project-XX.motus file
-#' tmp <- dplyr::src_sqlite(file.name)
-#' alltags <- tbl(motusSqlFile, "alltags")
+#' You can use either a selected tbl from .motus eg. "alltags, or a data.frame, instructions to convert a .motus file to all formats are below.
+#' sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
+#' tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+#' df.alltags <- tbl.alltags %>% collect %>% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
 #' 
-#' To convert tbl to flat format:
-#' alltags <- alltags %>% collect %>% as.data.frame
+#' Create tag summary for all tags within detection data using tbl file tbl.alltags
+#' tag_summary <- tagSum(tbl.alltags)
 #' 
-#' Create tag summary for all tags within detection data
-#' tag_summary <- tagSum(alltags)
-#' 
-#' Create site summaries for only select tags
-#' tag_summary <- tagSum(filter(alltags, motusTagID %in% c(16047, 16037, 16039)))
+#' Create site summaries for only select tags using tbl file tbl.alltags
+#' tag_summary <- tagSum(filter(tbl.alltags, motusTagID %in% c(16047, 16037, 16039)))
 #'
-#' Create site summaries for only a select species
-#' tag_summary <- tagSum(filter(alltags, spEN == "Red Knot))
+#' Create site summaries for only a select species using data.frame df.alltags
+#' tag_summary <- tagSum(filter(df.alltags, speciesEN == "Red Knot"))
 
 tagSum <- function(data){
+  data <- data %>% collect %>% as.data.frame
   data$ts <- as_datetime(data$ts, tz = "UTC")
   grouped <- dplyr::group_by(data, fullID)
   tmp <- dplyr::summarise(grouped,

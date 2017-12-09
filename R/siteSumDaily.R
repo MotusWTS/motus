@@ -3,8 +3,8 @@
 #' Creates a summary of the first and last daily detection at a site, the length of time between first and last detection,
 #' the number of tags, and the total number of detections at a site for each day. Same as siteSum, but daily by site.
 #'
-#' @param data a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
-#' including at a minimum the variables motusTagID, sig, recvDepName, ts
+#' @param data a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
+#' including at a minimum variables for motusTagID, sig, recvDepName, ts
 #' @param units units to display time difference, defaults to "hours", options include "secs", "mins", "hours", "days", "weeks"
 #'
 #' @return a data.frame with these columns:
@@ -22,24 +22,19 @@
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @examples
-#' You can use either the tbl or the flat format for the siteTrans function, instructions to convert
-#' a .motus file to both formats is below.
-#' To access any tbl from .motus data saved on your computer:
-#' file.name <- "data/project-sample.motus" ## replace with the full location of the sample dataset or your own project-XX.motus file
-#' motusSqlFile <- dplyr::src_sqlite(file.name)
-#' alltags <- tbl(motusSqlFile, "alltags")
+#' You can use either a selected tbl from .motus eg. "alltags, or a data.frame, instructions to convert a .motus file to all formats are below.
+#' sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
+#' tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+#' df.alltags <- tbl.alltags %>% collect %>% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
 #' 
-#' To convert tbl to flat format:
-#' alltags <- alltags %>% collect %>% as.data.frame
+#' Create site summaries for all sites within detection data with time in minutes using tbl file tbl.alltags
+#' daily_site_summary <- siteSumDaily(tbl.alltags, units = "mins")
 #' 
-#' Create site summaries for all sites within detection data with time in minutes
-#' daily_site_summary <- siteSumDaily(alltags, units = "mins")
-#' 
-#' Create site summaries for only select sites with time in minutes
-#' daily_site_summary <- siteSumDaily(filter(alltags, recvDepName %in% c("Niapiskau", "Netitishi", "Old Cut", "Washkaugou")), units = "mins")
+#' Create site summaries for only select sites with time in minutes using tbl file tbl.alltags
+#' daily_site_summary <- siteSumDaily(filter(tbl.alltags, recvDepName %in% c("Niapiskau", "Netitishi", "Old Cut", "Washkaugou")), units = "mins")
 #'
-#' Create site summaries for only a select species with default time in hours
-#' daily_site_summary <- siteSumDaily(filter(alltags, spEN == "Red Knot"))
+#' Create site summaries for only a select species, Red Knot, with default time in hours using data.frame df.alltags
+#' daily_site_summary <- siteSumDaily(filter(df.alltags, speciesEN == "Red Knot"))
 
 siteSumDaily <- function(data, units = "hours"){
   data <- select(data, motusTagID, sig, recvDepName, ts) %>% distinct %>% collect %>% as.data.frame

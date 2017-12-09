@@ -1,8 +1,9 @@
 #' Obtain sunrise and sunset times
 #'
-#' Creates and adds a sunrise and sunset column to a data.frame containing latitude, longitude, and a POSIXct date/time
+#' Creates and adds a sunrise and sunset column to a data.frame containing latitude, longitude, 
+#' and a date/time as POSIXct or numeric.
 #'
-#' @param data a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
+#' @param data a selected table from .motus detection data, eg. "alltags", or a data.frame of detection data 
 #' including at a minimum variables for date/time, latitude, and longitude
 #' @param lat variable with latitude values, defaults to recvDeployLat
 #' @param lon variable with longitude values, defaults to recvDeployLon
@@ -14,21 +15,16 @@
 #' - sunrise: sunrise time for the date and location provided by ts and lat/lon per row
 #' - sunset: sunset time for the date and location provided by ts and lat/lon per row
 #' @examples
-#' You can use either the tbl or the flat format for the siteTrans function, instructions to convert
-#' a .motus file to both formats is below.
-#' To access any tbl from .motus data saved on your computer:
-#' file.name <- "data/project-sample.motus" ## replace with the full location of the sample dataset or your own project-XX.motus file
-#' tmp <- dplyr::src_sqlite(file.name)
-#' alltags <- tbl(motusSqlFile, "alltags")
-#' 
-#' To convert tbl to flat format:
-#' alltags <- alltags %>% collect %>% as.data.frame
+#' You can use either a selected tbl from .motus eg. "alltags, or a data.frame, instructions to convert a .motus file to all formats are below.
+#' sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
+#' tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+#' df.alltags <- tbl.alltags %>% collect %>% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
 #' 
 #' Add sunrise/sunset columns to a data.frame from alltags
-#' sun <- sunRiseSet(alltags, units = "mins)
+#' sun <- SunRiseSet(df.alltags)
 #' 
-#' get sunrise and sunset information using gps lat/lon
-#' sun <- sunRiseSet(alltags, lat = "gpsLat", lon = "gpsLon")
+#' get sunrise and sunset information from tbl.alltags using gps lat/lon
+#' sun <- SunRiseSet(tbl.alltags, lat = "gpsLat", lon = "gpsLon")
 
 
 SunRiseSet <- function(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = "ts"){

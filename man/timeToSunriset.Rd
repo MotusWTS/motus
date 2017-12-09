@@ -4,19 +4,26 @@
 \alias{timeToSunriset}
 \title{Obtain time to and from sunrise/sunset for a dataframe containing POSIXct times}
 \usage{
-timeToSunriset(data, units = "hours")
+timeToSunriset(data, lat = "recvDeployLat", lon = "recvDeployLon",
+  ts = "ts", units = "hours")
 }
 \arguments{
 \item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
-including at a minimum the variables ts, lat, lon}
+including at a minimum variables for date/time, latitude, and longitude}
+
+\item{lat}{variable with latitude values, defaults to recvDeployLat}
+
+\item{lon}{variable with longitude values, defaults to recvDeployLon}
+
+\item{ts}{variable with time in UTC as numeric or POSIXct, defaults to ts}
 
 \item{units}{units to display time difference, defaults to "hours", options include "secs", "mins", "hours", "days", "weeks"}
 }
 \value{
 the original dataframe provided, with the following additional columns:
 \itemize{
-\item sunrise: sunrise time for the date and location provided by ts and lat/lon per row
-\item sunset: sunset time for the date and location provided by ts and lat/lon per row
+\item sunrise: sunrise time for the date and location provided by ts and recvDeployLat/recvDeployLon per row
+\item sunset: sunset time for the date and location provided by ts and recvDeployLat/recvDeployLon per row
 \item ts_to_set: time to next sunset after "ts", units default to "hours"
 \item ts_since_set: time to previous sunset since "ts", units default to "hours"
 \item ts_to_rise: time to next sunrise after "ts", units default to "hours"
@@ -25,7 +32,7 @@ the original dataframe provided, with the following additional columns:
 }
 \description{
 Creates and adds columns for time to, and time from sunrise/sunset based on a column of POSIXct dates/times
-dataframe must contain latitude, longitude, and a POSIXct date/time.
+dataframe must contain latitude, longitude, and a date/time variable
 }
 \examples{
 You can use either the tbl or the flat format for the siteTrans function, instructions to convert
@@ -40,6 +47,9 @@ alltags <- alltags \%>\% collect \%>\% as.data.frame
 
 get sunrise and sunset information with units in minutes
 sunrise <- timeToSunriset(alltags, units = "mins")
+
+get sunrise and sunset information with units in hours using gps lat/lon
+sunrise <- timeToSunriset(alltags, lat = "gpsLat", lon = "gpsLon")
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

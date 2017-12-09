@@ -4,7 +4,8 @@
 \alias{plotRouteMap}
 \title{Map of tag routes and sites coloured by id}
 \usage{
-plotRouteMap(data, zoom, latCentre, lonCentre, maptype, recvStart, recvEnd)
+plotRouteMap(data, file.name, zoom, latCentre, lonCentre, maptype, recvStart,
+  recvEnd)
 }
 \arguments{
 \item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs"}

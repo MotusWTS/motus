@@ -8,9 +8,9 @@ plotDailySiteSum(data, sitename)
 }
 \arguments{
 \item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
-including at a minimum the variables motusTagID, sig, site, ts}
+including at a minimum the variables motusTagID, sig, recvDepName, ts}
 
-\item{Site}{name of site to plot}
+\item{recvDepName}{name of site to plot}
 }
 \description{
 Plots total number of detections across all tags, and total number of tags detected per day for

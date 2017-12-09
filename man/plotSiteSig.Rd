@@ -8,9 +8,9 @@ plotSiteSig(data, sitename)
 }
 \arguments{
 \item{data}{a selected table from .motus data, eg. "alltags" or "alltagswithambigs", or a data.frame of detection data 
-including at a minimum the variables antBearing, ts, lat, sig, fullID, site}
+including at a minimum the variables antBearing, ts, lat, sig, fullID, recvDepName}
 
-\item{sitename}{name of site}
+\item{sitename}{name of recvDepName}
 }
 \description{
 Plot signal strength vs time for all tags detected at a specified site, coloured by antenna
