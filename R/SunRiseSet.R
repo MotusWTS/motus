@@ -20,14 +20,14 @@
 #' tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
 #' df.alltags <- tbl.alltags %>% collect %>% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
 #' 
-#' Add sunrise/sunset columns to a data.frame from alltags
-#' sun <- SunRiseSet(df.alltags)
+#' Add sunrise and sunset columns to a data.frame from alltags
+#' sun <- sunRiseSet(df.alltags)
 #' 
 #' get sunrise and sunset information from tbl.alltags using gps lat/lon
-#' sun <- SunRiseSet(tbl.alltags, lat = "gpsLat", lon = "gpsLon")
+#' sun <- sunRiseSet(tbl.alltags, lat = "gpsLat", lon = "gpsLon")
 
 
-sunRiseSet <- function(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = "ts"){
+SunRiseSet <- function(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = "ts"){
   data <- data %>% collect %>% as.data.frame
   data$ts <- as_datetime(data$ts, tz = "UTC")
   cols <- c(lat, lon, ts) ## Select columns that can't contain NA values
