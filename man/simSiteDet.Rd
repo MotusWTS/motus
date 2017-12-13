@@ -14,6 +14,18 @@ including at a minimum variables for motusTagID, recvDepName, ts}
 Creates a dataframe consisting of detections of tags that are detected at two or more receiver
 at the same time.
 }
+\examples{
+You can use either a selected tbl from .motus eg. "alltags", or a data.frame, instructions to convert a .motus file to all formats are below.
+sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
+tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+df.alltags <- tbl.alltags \%>\% collect \%>\% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+
+To get a data.frame of just simultaneous detections from a tbl file tbl.alltags
+simSites <- simSiteDet(tbl.alltags)
+
+To get a data.frame of just simultaneous detections from a dataframe df.alltags
+simSites <- simSiteDet(df.alltags)
+}
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}
 }

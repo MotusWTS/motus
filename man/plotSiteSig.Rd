@@ -15,6 +15,18 @@ including at a minimum variables for antBearing, ts, lat, sig, fullID, recvDepNa
 \description{
 Plot signal strength vs time for all tags detected at a specified site, coloured by antenna
 }
+\examples{
+You can use either a selected tbl from .motus eg. "alltags", or a data.frame, instructions to convert a .motus file to all formats are below.
+sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
+tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+df.alltags <- tbl.alltags \%>\% collect \%>\% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+
+plot all tags for site Piskwamish
+plotSiteSig(tbl.alltags, recvDepName = "Piskwamish")
+
+Plot select tags for site Piskwamish 
+plotSiteSig(filter(df.alltags, motusTagID \%in\% c(16037, 16039, 16035)), recvDepName = "Netitishi")
+}
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}
 }

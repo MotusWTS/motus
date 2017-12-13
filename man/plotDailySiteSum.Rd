@@ -16,6 +16,18 @@ including at a minimum variables for motusTagID, sig, recvDepName, ts}
 Plots total number of detections across all tags, and total number of tags detected per day for
 a specified site.  Depends on siteSumDaily function.
 }
+\examples{
+You can use either a selected tbl from .motus eg. "alltags", or a data.frame, instructions to convert a .motus file to all formats are below.
+sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
+tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+df.alltags <- tbl.alltags \%>\% collect \%>\% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+
+Plot of all tag detections at site Longridge using dataframe df.alltags
+plotDailySiteSum(df.alltags, recvDepName = "Longridge")
+
+Plot of all tag detections at site Niapiskau using tbl file tbl.alltags
+plotDailySiteSum(df.alltags, recvDepName = "Niapiskau")
+}
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}
 }

@@ -15,7 +15,7 @@
 #' - sunrise: sunrise time for the date and location provided by ts and lat/lon per row
 #' - sunset: sunset time for the date and location provided by ts and lat/lon per row
 #' @examples
-#' You can use either a selected tbl from .motus eg. "alltags, or a data.frame, instructions to convert a .motus file to all formats are below.
+#' You can use either a selected tbl from .motus eg. "alltags", or a data.frame, instructions to convert a .motus file to all formats are below.
 #' sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
 #' tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
 #' df.alltags <- tbl.alltags %>% collect %>% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
@@ -27,7 +27,7 @@
 #' sun <- SunRiseSet(tbl.alltags, lat = "gpsLat", lon = "gpsLon")
 
 
-SunRiseSet <- function(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = "ts"){
+sunRiseSet <- function(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = "ts"){
   data <- data %>% collect %>% as.data.frame
   data$ts <- as_datetime(data$ts, tz = "UTC")
   cols <- c(lat, lon, ts) ## Select columns that can't contain NA values

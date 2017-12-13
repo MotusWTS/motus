@@ -13,6 +13,21 @@ including at a minimum variables for ts, antBearing, fullID, recvDepName}
 \description{
 Plot tag ID vs time for all tags detected by site, coloured by antenna bearing
 }
+\examples{
+You can use either a selected tbl from .motus eg. "alltags", or a data.frame, instructions to convert a .motus file to all formats are below.
+sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
+tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+df.alltags <- tbl.alltags \%>\% collect \%>\% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+
+Plot all sites within file for tbl file tbl.alltags
+plotSite(tbl.alltags)
+
+Plot only detections at a specific site; Piskwamish for data.frame df.alltags
+plotSite(filter(df.alltags, recvDepName == "Piskwamish"))
+
+Plot only detections for specified tags for data.frame df.alltags
+plotSite(filter(df.alltags, motusTagID \%in\% c(16047, 16037, 16039)))
+}
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}
 }

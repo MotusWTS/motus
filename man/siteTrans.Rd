@@ -35,6 +35,18 @@ are identified as the period between the final detection at site x (possible "de
 of site x, first detection time and lat/lon of site y, distance between the site pair, time between detections,
 rate of movement between detections, and bearing between site pairs.
 }
+\examples{
+You can use either a selected tbl from .motus eg. "alltags", or a data.frame, instructions to convert a .motus file to all formats are below.
+sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
+tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+df.alltags <- tbl.alltags \%>\% collect \%>\% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+
+View all site transitions for all detection data from tbl file tbl.alltags
+transitions <- siteTrans(tbl.alltags)
+
+View site transitions for only tag 16037 from data.frame df.alltags
+transitions <- siteTrans(filter(df.alltags, motusTagID == 16037))
+}
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}
 }
