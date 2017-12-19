@@ -4,18 +4,18 @@
 #' the number of tags, and the total number of detections at a site for each day. Same as siteSum, but daily by site.
 #'
 #' @param data a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-#' including at a minimum variables for motusTagID, sig, recvDepName, ts
+#' including at a minimum variables for motusTagID, sig, recvDeployName, ts
 #' @param units units to display time difference, defaults to "hours", options include "secs", "mins", "hours", "days", "weeks"
 #'
 #' @return a data.frame with these columns:
 #' \itemize{
-#' \item recvDepName: site name of deployment
+#' \item recvDeployName: site name of deployment
 #' \item date: date that is being summarised
-#' \item first_ts: time of first detection on specified "date" at "recvDepName"
-#' \item last_ts: time of last detection on specified "date" at "recvDepName"
-#' \item tot_ts: total amount of time between first and last detection at "recvDepName" on "date, output in specified unit (defaults to "hours")
-#' \item num.tags: total number of unique tags detected at "recvDepName", on "date"
-#' \item num.det: total number of detections at "recvDepName", on "date"
+#' \item first_ts: time of first detection on specified "date" at "recvDeployName"
+#' \item last_ts: time of last detection on specified "date" at "recvDeployName"
+#' \item tot_ts: total amount of time between first and last detection at "recvDeployName" on "date, output in specified unit (defaults to "hours")
+#' \item num.tags: total number of unique tags detected at "recvDeployName", on "date"
+#' \item num.det: total number of detections at "recvDeployName", on "date"
 #' }
 #'
 #' @export
@@ -31,16 +31,16 @@
 #' daily_site_summary <- siteSumDaily(tbl.alltags, units = "mins")
 #' 
 #' Create site summaries for only select sites with time in minutes using tbl file tbl.alltags
-#' daily_site_summary <- siteSumDaily(filter(tbl.alltags, recvDepName %in% c("Niapiskau", "Netitishi", "Old Cut", "Washkaugou")), units = "mins")
+#' daily_site_summary <- siteSumDaily(filter(tbl.alltags, recvDeployName %in% c("Niapiskau", "Netitishi", "Old Cut", "Washkaugou")), units = "mins")
 #'
 #' Create site summaries for only a select species, Red Knot, with default time in hours using data.frame df.alltags
 #' daily_site_summary <- siteSumDaily(filter(df.alltags, speciesEN == "Red Knot"))
 
 siteSumDaily <- function(data, units = "hours"){
-  data <- select(data, motusTagID, sig, recvDepName, ts) %>% distinct %>% collect %>% as.data.frame
+  data <- select(data, motusTagID, sig, recvDeployName, ts) %>% distinct %>% collect %>% as.data.frame
   data$ts <- as_datetime(data$ts, tz = "UTC")
   data$date <- as.Date(data$ts)
-  grouped <- dplyr::group_by(data, recvDepName, date)
+  grouped <- dplyr::group_by(data, recvDeployName, date)
   site_sum <- dplyr::summarise(grouped,
                         first_ts=min(ts),
                         last_ts=max(ts),

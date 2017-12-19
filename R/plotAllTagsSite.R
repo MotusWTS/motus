@@ -3,7 +3,7 @@
 #' Plot deployment (ordered by latitude) vs time (UTC) for each tag
 #'
 #' @param data a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-#' including at a minimum variables for recvDepName, fullID, mfgID, date/time, latitude or longitude
+#' including at a minimum variables for recvDeployName, fullID, mfgID, date/time, latitude or longitude
 #' @param tagsPerPanel number of tags in each panel of the plot, default is 5
 #' @param coordinate column of receiver latitude/longitude values to use, defaults to recvDeployLat
 #' @export
@@ -32,12 +32,12 @@ plotAllTagsSite <- function(data, coordinate = "recvDeployLat", tagsPerPanel = 5
   if(class(tagsPerPanel) != "numeric") stop('Numeric value required for "tagsPerPanel"')
   data = data %>% mutate(round_ts = 3600*round(as.numeric(ts)/3600, 0)) ## round times to the hour
   #data = distinct(select(data, id, site, round_ts, lat, recvDeployLat, lon, recvDeployLon, fullID))
-  dataGrouped <- dplyr::filter_(data, paste(coordinate, "!=", 0)) %>% group_by(recvDepName) %>% 
-    summarise_(.dots = setNames(paste0('mean(',coordinate,')'), 'meanlat')) ## get summary of mean lats by recvDepName
-  data <- inner_join(data, dataGrouped, by = "recvDepName") ## join grouped data with data
-  data <- select(data, mfgID, recvDepName, round_ts, meanlat, fullID) %>% distinct %>% collect %>% as.data.frame
+  dataGrouped <- dplyr::filter_(data, paste(coordinate, "!=", 0)) %>% group_by(recvDeployName) %>% 
+    summarise_(.dots = setNames(paste0('mean(',coordinate,')'), 'meanlat')) ## get summary of mean lats by recvDeployName
+  data <- inner_join(data, dataGrouped, by = "recvDeployName") ## join grouped data with data
+  data <- select(data, mfgID, recvDeployName, round_ts, meanlat, fullID) %>% distinct %>% collect %>% as.data.frame
   data$meanlat = round(data$meanlat, digits = 2) ## round to 2 significant digits
-  data$sitelat <- as.factor(paste(data$recvDepName, data$meanlat, sep = " ")) ## new column with recvDepName and lat
+  data$sitelat <- as.factor(paste(data$recvDeployName, data$meanlat, sep = " ")) ## new column with recvDeployName and lat
   data <- within(data, sitelat <- reorder(sitelat, (meanlat))) ## order sitelat by latitude
   data$round_ts <- lubridate::as_datetime(data$round_ts, tz = "UTC")
   ## We want to plot multiple tags per panel, so sort their labels and create a grouping factor

@@ -5,7 +5,7 @@
 #' rate of movement, and bearing
 #'
 #' @param data a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-#' including at a minimum variables for motusTagID, fullID, recvDeployLat, recvDeployLon, recvDepName, ts
+#' including at a minimum variables for motusTagID, fullID, recvDeployLat, recvDeployLon, recvDeployName, ts
 #' @export
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
@@ -50,11 +50,11 @@ tagSum <- function(data){
                     last_ts=max(ts),
                     tot_ts = difftime(max(ts), min(ts), units = "secs"),
                     num_det = length(ts)) ## total time in seconds
-  tmp <- merge(tmp, subset(data, select = c(ts, fullID, recvDepName, recvDeployLat, recvDeployLon)),
+  tmp <- merge(tmp, subset(data, select = c(ts, fullID, recvDeployName, recvDeployLat, recvDeployLon)),
                by.x = c("first_ts", "fullID"), by.y = c("ts", "fullID"), all.x = TRUE)
-  tmp <- unique(merge(tmp, subset(data, select = c(ts, fullID, recvDepName, recvDeployLat, recvDeployLon)),
+  tmp <- unique(merge(tmp, subset(data, select = c(ts, fullID, recvDeployName, recvDeployLat, recvDeployLon)),
                by.x = c("last_ts", "fullID"), by.y = c("ts", "fullID"), all.x = TRUE))
-  tmp <- dplyr::rename(tmp, first_site = recvDepName.x, last_site = recvDepName.y)
+  tmp <- dplyr::rename(tmp, first_site = recvDeployName.x, last_site = recvDeployName.y)
   tmp$dist <- with(tmp, latLonDist(recvDeployLat.x, recvDeployLat.x, recvDeployLat.y, recvDeployLat.y)) ## distance in meters
   tmp$rate <- with(tmp, dist/(as.numeric(tot_ts))) ## rate of travel in m/s
   tmp$bearing <- with(tmp, geosphere::bearing(matrix(c(recvDeployLat.x, recvDeployLat.x), ncol=2),

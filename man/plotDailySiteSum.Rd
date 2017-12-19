@@ -4,13 +4,13 @@
 \alias{plotDailySiteSum}
 \title{Plots number of detections and tags, daily, for a specified site}
 \usage{
-plotDailySiteSum(data, recvDepName)
+plotDailySiteSum(data, recvDeployname)
 }
 \arguments{
 \item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-including at a minimum variables for motusTagID, sig, recvDepName, ts}
+including at a minimum variables for motusTagID, sig, recvDeployname, ts}
 
-\item{recvDepName}{name of site to plot}
+\item{recvDeployname}{name of site to plot}
 }
 \description{
 Plots total number of detections across all tags, and total number of tags detected per day for
@@ -23,10 +23,10 @@ tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl
 df.alltags <- tbl.alltags \%>\% collect \%>\% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
 
 Plot of all tag detections at site Longridge using dataframe df.alltags
-plotDailySiteSum(df.alltags, recvDepName = "Longridge")
+plotDailySiteSum(df.alltags, recvDeployname = "Longridge")
 
 Plot of all tag detections at site Niapiskau using tbl file tbl.alltags
-plotDailySiteSum(df.alltags, recvDepName = "Niapiskau")
+plotDailySiteSum(df.alltags, recvDeployname = "Niapiskau")
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

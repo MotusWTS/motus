@@ -4,13 +4,13 @@
 \alias{plotSiteSig}
 \title{Plot signal strength of all tags by a specified site}
 \usage{
-plotSiteSig(data, recvDepName)
+plotSiteSig(data, recvDeployName)
 }
 \arguments{
 \item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-including at a minimum variables for antBearing, ts, recvDeploylat, sig, fullID, recvDepName}
+including at a minimum variables for antBearing, ts, recvDeploylat, sig, fullID, recvDeployName}
 
-\item{recvDepName}{name of recvDepName}
+\item{recvDeployName}{name of recvDeployName}
 }
 \description{
 Plot signal strength vs time for all tags detected at a specified site, coloured by antenna
@@ -22,10 +22,10 @@ tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl
 df.alltags <- tbl.alltags \%>\% collect \%>\% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
 
 plot all tags for site Piskwamish
-plotSiteSig(tbl.alltags, recvDepName = "Piskwamish")
+plotSiteSig(tbl.alltags, recvDeployName = "Piskwamish")
 
 Plot select tags for site Piskwamish 
-plotSiteSig(filter(df.alltags, motusTagID \%in\% c(16037, 16039, 16035)), recvDepName = "Netitishi")
+plotSiteSig(filter(df.alltags, motusTagID \%in\% c(16037, 16039, 16035)), recvDeployName = "Netitishi")
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

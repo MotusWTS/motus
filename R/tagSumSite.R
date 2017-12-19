@@ -4,7 +4,7 @@
 #' length of time between first and last detection of each site, and total number of detections at each site.
 #'
 #' @param data a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-#' including at a minimum variables for motusTagID, fullID, recvDepName, ts
+#' including at a minimum variables for motusTagID, fullID, recvDeployName, ts
 #' @param units units to display time difference, defaults to "hours", options include "secs", "mins", "hours", "days", "weeks"
 #' @export
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
@@ -25,9 +25,9 @@
 #' tag_site_summary <- tagSumSite(filter(df.alltags, speciesEN == "Red Knot"))
 
 tagSumSite <- function(data, units = "hours"){
-  data <- select(data, motusTagID, fullID, recvDepName, ts) %>% distinct %>% collect %>% as.data.frame
+  data <- select(data, motusTagID, fullID, recvDeployName, ts) %>% distinct %>% collect %>% as.data.frame
   data$ts <- as_datetime(data$ts, tz = "UTC")
-  grouped <- dplyr::group_by(data, fullID, recvDepName)
+  grouped <- dplyr::group_by(data, fullID, recvDeployName)
   data <- dplyr::summarise(grouped,
                     first_ts=min(ts),
                     last_ts=max(ts),

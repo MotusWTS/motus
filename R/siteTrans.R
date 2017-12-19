@@ -7,7 +7,9 @@
 #' rate of movement between detections, and bearing between site pairs.
 #'
 #' @param data a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-#' including at a minimum variables for ts, motusTagID, tagDeployID, recvDeployLat, recvDeployLon, recvDepName
+#' including at a minimum variables for ts, motusTagID, tagDeployID, recvDeployName, and a latitude/longitude
+#' @param latCoord a variable with numeric latitude values, defaults to recvDeployLat
+#' @param lonCoord a variable with numeric longitude values, defaults to recvDeployLon
 #'
 #' @return a data.frame with these columns:
 #' \itemize{
@@ -38,23 +40,24 @@
 #' View all site transitions for all detection data from tbl file tbl.alltags
 #' transitions <- siteTrans(tbl.alltags)
 #' 
-#' View site transitions for only tag 16037 from data.frame df.alltags
-#' transitions <- siteTrans(filter(df.alltags, motusTagID == 16037))
+#' View site transitions for only tag 16037 from data.frame df.alltags using gpsLat/gpsLon
+#' transitions <- siteTrans(filter(df.alltags, motusTagID == 16037), latCoord = "gpsLat", lonCoord = "gpsLon")
 
-siteTrans <- function(data){
+siteTrans <- function(data, latCoord = "recvDeployLat", lonCoord = "recvDeployLon"){
    tmp <- if(class(data) == "data.frame"){
     tmp = data
    } else {
       tmp = data %>% collect %>% as.data.frame
-      }
-  data <- subset(tmp, select = c(ts, motusTagID, tagDeployID, recvDeployLat, recvDeployLon, recvDepName)) ## get only relevant columns
+   }
+  data <- rename_(tmp, lat = latCoord, lon = lonCoord)
+  data <- select(data, "ts", "motusTagID", "tagDeployID", "lat", "lon", "recvDeployName") ## get only relevant columns
   data$ts <- lubridate::as_datetime(data$ts, tz = "UTC")
   data <- data %>% dplyr::group_by(motusTagID, tagDeployID) %>% do(consec.fun(.))
   data <- data %>% dplyr::group_by(motusTagID, tagDeployID) %>% do(site.fun(.))
   data$tot_ts = difftime(data$ts.y, data$ts.x, units = "secs")
-  data$dist <- with(data, latLonDist(recvDeployLat.x, recvDeployLat.x, recvDeployLat.y, recvDeployLon.y)) ## distance in meters
+  data$dist <- with(data, latLonDist(lat.x, lon.x, lat.y, lon.y)) ## distance in meters
   data$rate <- with(data, dist/(as.numeric(tot_ts))) ## rate of travel in m/s
-  data$bearing <- with(data, geosphere::bearing(matrix(c(recvDeployLon.x, recvDeployLat.x), ncol=2),
-                                   matrix(c(recvDeployLon.y, recvDeployLat.y), ncol=2))) ## bearing (see package geosphere for help)
+  data$bearing <- with(data, geosphere::bearing(matrix(c(lon.x, lat.x), ncol=2),
+                                   matrix(c(lon.y, lat.y), ncol=2))) ## bearing (see package geosphere for help)
   return(data)
 }

@@ -4,11 +4,15 @@
 \alias{siteTrans}
 \title{Summarize transitions between sites for each tag}
 \usage{
-siteTrans(data)
+siteTrans(data, latCoord = "recvDeployLat", lonCoord = "recvDeployLon")
 }
 \arguments{
 \item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-including at a minimum variables for ts, motusTagID, tagDeployID, recvDeployLat, recvDeployLon, recvDepName}
+including at a minimum variables for ts, motusTagID, tagDeployID, recvDeployName, and a latitude/longitude}
+
+\item{latCoord}{a variable with numeric latitude values, defaults to recvDeployLat}
+
+\item{lonCoord}{a variable with numeric longitude values, defaults to recvDeployLon}
 }
 \value{
 a data.frame with these columns:
@@ -44,8 +48,8 @@ df.alltags <- tbl.alltags \%>\% collect \%>\% as.data.frame() ## convert the tbl
 View all site transitions for all detection data from tbl file tbl.alltags
 transitions <- siteTrans(tbl.alltags)
 
-View site transitions for only tag 16037 from data.frame df.alltags
-transitions <- siteTrans(filter(df.alltags, motusTagID == 16037))
+View site transitions for only tag 16037 from data.frame df.alltags using gpsLat/gpsLon
+transitions <- siteTrans(filter(df.alltags, motusTagID == 16037), latCoord = "gpsLat", lonCoord = "gpsLon")
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

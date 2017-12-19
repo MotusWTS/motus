@@ -9,7 +9,7 @@ plotAllTagsCoord(data, coordinate = "recvDeployLat", ts = "ts",
 }
 \arguments{
 \item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-including at a minimum variables for recvDepName, fullID, mfgID, date/time, latitude or longitude}
+including at a minimum variables for recvDeployName, fullID, mfgID, date/time, latitude or longitude}
 
 \item{coordinate}{column name from which to obtain location values, by default it is set to recvDeployLat}
 

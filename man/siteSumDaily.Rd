@@ -8,20 +8,20 @@ siteSumDaily(data, units = "hours")
 }
 \arguments{
 \item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-including at a minimum variables for motusTagID, sig, recvDepName, ts}
+including at a minimum variables for motusTagID, sig, recvDeployName, ts}
 
 \item{units}{units to display time difference, defaults to "hours", options include "secs", "mins", "hours", "days", "weeks"}
 }
 \value{
 a data.frame with these columns:
 \itemize{
-\item recvDepName: site name of deployment
+\item recvDeployName: site name of deployment
 \item date: date that is being summarised
-\item first_ts: time of first detection on specified "date" at "recvDepName"
-\item last_ts: time of last detection on specified "date" at "recvDepName"
-\item tot_ts: total amount of time between first and last detection at "recvDepName" on "date, output in specified unit (defaults to "hours")
-\item num.tags: total number of unique tags detected at "recvDepName", on "date"
-\item num.det: total number of detections at "recvDepName", on "date"
+\item first_ts: time of first detection on specified "date" at "recvDeployName"
+\item last_ts: time of last detection on specified "date" at "recvDeployName"
+\item tot_ts: total amount of time between first and last detection at "recvDeployName" on "date, output in specified unit (defaults to "hours")
+\item num.tags: total number of unique tags detected at "recvDeployName", on "date"
+\item num.det: total number of detections at "recvDeployName", on "date"
 }
 }
 \description{
@@ -38,7 +38,7 @@ Create site summaries for all sites within detection data with time in minutes u
 daily_site_summary <- siteSumDaily(tbl.alltags, units = "mins")
 
 Create site summaries for only select sites with time in minutes using tbl file tbl.alltags
-daily_site_summary <- siteSumDaily(filter(tbl.alltags, recvDepName \%in\% c("Niapiskau", "Netitishi", "Old Cut", "Washkaugou")), units = "mins")
+daily_site_summary <- siteSumDaily(filter(tbl.alltags, recvDeployName \%in\% c("Niapiskau", "Netitishi", "Old Cut", "Washkaugou")), units = "mins")
 
 Create site summaries for only a select species, Red Knot, with default time in hours using data.frame df.alltags
 daily_site_summary <- siteSumDaily(filter(df.alltags, speciesEN == "Red Knot"))

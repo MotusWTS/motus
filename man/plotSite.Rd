@@ -4,11 +4,11 @@
 \alias{plotSite}
 \title{Plot all tags by site}
 \usage{
-plotSite(data, sitename = unique(data$recvDepName))
+plotSite(data, sitename = unique(data$recvDeployName))
 }
 \arguments{
 \item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-including at a minimum variables for ts, antBearing, fullID, recvDepName}
+including at a minimum variables for ts, antBearing, fullID, recvDeployName}
 }
 \description{
 Plot tag ID vs time for all tags detected by site, coloured by antenna bearing
@@ -23,7 +23,7 @@ Plot all sites within file for tbl file tbl.alltags
 plotSite(tbl.alltags)
 
 Plot only detections at a specific site; Piskwamish for data.frame df.alltags
-plotSite(filter(df.alltags, recvDepName == "Piskwamish"))
+plotSite(filter(df.alltags, recvDeployName == "Piskwamish"))
 
 Plot only detections for specified tags for data.frame df.alltags
 plotSite(filter(df.alltags, motusTagID \%in\% c(16047, 16037, 16039)))

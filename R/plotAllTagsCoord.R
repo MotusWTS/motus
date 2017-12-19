@@ -4,7 +4,7 @@
 #' Coordinate is by default taken from a receivers GPS latitude recordings.
 #'
 #' @param data a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-#' including at a minimum variables for recvDepName, fullID, mfgID, date/time, latitude or longitude
+#' including at a minimum variables for recvDeployName, fullID, mfgID, date/time, latitude or longitude
 #' @param tagsPerPanel number of tags in each panel of the plot, by default this is 5
 #' @param coordinate column name from which to obtain location values, by default it is set to recvDeployLat
 #' @param ts column for a date/time object as numeric or POSIXct, defaults to ts
@@ -37,10 +37,10 @@
 plotAllTagsCoord <- function(data, coordinate = "recvDeployLat", ts = "ts", tagsPerPanel = 5) {
   if(class(tagsPerPanel) != "numeric") stop('Numeric value required for "tagsPerPanel"')
   data = data %>% mutate(hour = 3600*round(as.numeric(ts)/3600, 0)) ## round times to the hour
-  dataGrouped <- dplyr::filter_(data, paste(coordinate, "!=", 0)) %>% group_by(recvDepName) %>% 
-    summarise_(.dots = setNames(paste0('mean(',coordinate,')'), 'meanlat')) ## get summary of mean lats by recvDepName
-  data <- inner_join(data, dataGrouped, by = "recvDepName") ## join grouped data with data
-  data <- select(data, mfgID, recvDepName, hour, meanlat, fullID) %>% distinct %>% collect %>% as.data.frame
+  dataGrouped <- dplyr::filter_(data, paste(coordinate, "!=", 0)) %>% group_by(recvDeployName) %>% 
+    summarise_(.dots = setNames(paste0('mean(',coordinate,')'), 'meanlat')) ## get summary of mean lats by recvDeployName
+  data <- inner_join(data, dataGrouped, by = "recvDeployName") ## join grouped data with data
+  data <- select(data, mfgID, recvDeployName, hour, meanlat, fullID) %>% distinct %>% collect %>% as.data.frame
   data$hour <- lubridate::as_datetime(data$hour, tz = "UTC")
   labs = data$fullID[order(data$mfgID, data$fullID)]
   dup = duplicated(labs)
@@ -56,7 +56,7 @@ plotAllTagsCoord <- function(data, coordinate = "recvDeployLat", ts = "ts", tags
   data$tagGroupFactor = factor(tagGroupFactor, labels = tagGroupLabels, 
                                ordered = TRUE)
   data <- unique(subset(data, select = c(hour, meanlat, 
-                                         recvDepName, fullID, tagGroupFactor)))
+                                         recvDeployName, fullID, tagGroupFactor)))
   data <- data[order(data$hour), ]
   out <- by(data, INDICES = data$tagGroupFactor, FUN = function(m) {
     m <- droplevels(m)
