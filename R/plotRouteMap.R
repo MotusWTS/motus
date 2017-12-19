@@ -37,7 +37,7 @@ plotRouteMap <- function(data, zoom, latCentre, lonCentre, maptype, recvStart, r
   dateRange <- lubridate::interval(as.POSIXct(recvStart), as.POSIXct(recvEnd)) ## get time interval you are interested in
   site$include <- lubridate::int_overlaps(siteOp, dateRange) ## if include == TRUE then the intervals overlapped and the site was "running" at some point during the specified time
   data <- tbl(data, "alltags")
-  data <- select(data, motusTagID, ts, recvDeployLat, recvDeployLon, fullID, recvDepName, speciesEN) %>% distinct %>% collect %>% as.data.frame
+  data <- select(data, motusTagID, ts, recvDeployLat, recvDeployLon, fullID, recvDeployName, speciesEN) %>% distinct %>% collect %>% as.data.frame
   data$ts <- lubridate::as_datetime(data$ts, tz = "UTC")
   data <- data[order(data$ts),] ## order by time
   gmap <-  ggmap::get_map(location = c(lon = lonCentre, lat = latCentre), ## lon/lat to centre map over

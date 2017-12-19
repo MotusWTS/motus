@@ -3,7 +3,7 @@
 #' Plot signal strength vs time for specified tag, faceted by site (ordered by latitude) and coloured by antenna
 #'
 #' @param data a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-#' including at a minimum variables for motusTagID, sig, ts, antBearing, recvDeployLat, fullID, recvDepName
+#' including at a minimum variables for motusTagID, sig, ts, antBearing, recvDeployLat, fullID, recvDeployName
 #' @param motusTagID a numeric motusTagId to display in plot
 #' @export
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
@@ -23,10 +23,10 @@
 plotTagSig <- function(data, motusTagID){
   tag.id <- motusTagID
   data <- filter_(data, paste("motusTagID", "==", "tag.id"))
-  data <- select(data, motusTagID, sig, ts, antBearing, recvDeployLat, fullID, recvDepName) %>% distinct %>% collect %>% as.data.frame
-  data <- within(data, recvDepName <- reorder(recvDepName, (recvDeployLat))) ## order recvDepName by latitude
+  data <- select(data, motusTagID, sig, ts, antBearing, recvDeployLat, fullID, recvDeployName) %>% distinct %>% collect %>% as.data.frame
+  data <- within(data, recvDeployName <- reorder(recvDeployName, (recvDeployLat))) ## order recvDeployName by latitude
   data$ts <- lubridate::as_datetime(data$ts, tz = "UTC")
   p <- ggplot2::ggplot(data, ggplot2::aes(ts, sig, col = as.factor(antBearing)))
   p + ggplot2::geom_point() + ggplot2::theme_bw() + ggplot2::labs(title = paste("Detection Time vs Signal Strength, coloured by antenna \n ID ", motusTagID), x = "Date", y = "Signal Strength", colour = "Antenna Bearing") +
-    ggplot2::facet_grid(recvDepName~.) + ggplot2::theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    ggplot2::facet_grid(recvDeployName~.) + ggplot2::theme(axis.text.x = element_text(angle = 45, hjust = 1))
 }

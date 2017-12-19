@@ -8,7 +8,7 @@ simSiteDet(data)
 }
 \arguments{
 \item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-including at a minimum variables for motusTagID, recvDepName, ts}
+including at a minimum variables for motusTagID, recvDeployName, ts}
 }
 \description{
 Creates a dataframe consisting of detections of tags that are detected at two or more receiver

@@ -8,7 +8,7 @@ tagSum(data)
 }
 \arguments{
 \item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-including at a minimum variables for motusTagID, fullID, recvDeployLat, recvDeployLon, recvDepName, ts}
+including at a minimum variables for motusTagID, fullID, recvDeployLat, recvDeployLon, recvDeployName, ts}
 }
 \value{
 a data.frame with these columns:
