@@ -14,6 +14,7 @@
 #' @return the original dataframe provided, with the following additional columns:
 #' - sunrise: sunrise time for the date and location provided by ts and lat/lon per row
 #' - sunset: sunset time for the date and location provided by ts and lat/lon per row
+#'
 #' @examples
 #' You can use either a selected tbl from .motus eg. "alltags", or a data.frame, instructions to convert a .motus file to all formats are below.
 #' sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
