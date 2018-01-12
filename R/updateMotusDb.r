@@ -36,11 +36,11 @@ updateMotusDb = function(rv, src, projRecv, deviceID) {
     dates = apply(updateSql, 1, function(row) {
       cat("\n - ", row["descr"], sep="")
 	  
-	  v = strsplit(row["sql"], ";")
-      l = lapply(v[[1]], function(sql) {
-		try(DBI::dbExecute(src$con, sql))
-		sql
-	  })	
+	    v = unlist(strsplit(row["sql"], ";"))
+      l = lapply(v, function(sql) {
+        if (sql != "") try(DBI::dbExecute(src$con, sql))
+	  	  sql
+	    })	
       row["date"]
     })
     if (length(dates) > 0) dt = dates[length(dates)]
