@@ -12,6 +12,7 @@ Depends:
     maptools,
     lubridate,
     ggplot2
+    ggmap
 Imports:
     RSQLite,
     httr,
