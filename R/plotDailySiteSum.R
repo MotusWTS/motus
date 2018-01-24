@@ -4,8 +4,8 @@
 #' a specified site.  Depends on siteSumDaily function.
 #'
 #' @param data a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-#' including at a minimum variables for motusTagID, sig, recvDeployname, ts
-#' @param recvDeployname name of site to plot
+#' including at a minimum variables for motusTagID, sig, recvDeployName, ts
+#' @param recvDeployName name of site to plot
 #' @export
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
@@ -16,18 +16,18 @@
 #' df.alltags <- tbl.alltags %>% collect %>% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
 #' 
 #' Plot of all tag detections at site Longridge using dataframe df.alltags
-#' plotDailySiteSum(df.alltags, recvDeployname = "Longridge")
+#' plotDailySiteSum(df.alltags, recvDeployName = "Longridge")
 #' 
 #' Plot of all tag detections at site Niapiskau using tbl file tbl.alltags
-#' plotDailySiteSum(df.alltags, recvDeployname = "Niapiskau")
+#' plotDailySiteSum(df.alltags, recvDeployName = "Niapiskau")
 
-plotDailySiteSum <- function(data, recvDeployname){
+plotDailySiteSum <- function(data, recvDeployName){
   tmp <- if(class(data) == "data.frame"){
     tmp = data
   } else {
     tmp = data %>% collect %>% as.data.frame
   }
-  sitesum <- siteSumDaily(filter(data, recvDeployname == recvDeployname))
+  sitesum <- siteSumDaily(filter(data, recvDeployName == recvDeployName))
   detections <- ggplot2::ggplot(sitesum, ggplot2::aes(date, num_det)) +
     ggplot2::geom_bar(stat = "identity") + ggplot2::theme_bw() + ## creates bar plot by recvDeployname
     ggplot2::labs(x= "Date", y = "Total detections")
