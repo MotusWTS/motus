@@ -17,7 +17,7 @@
 #' @param projRecv parameter provided by the hook function call, when opening a file built by project ID
 #' @param deviceID parameter provided by the hook function call, when opening a file built by receiver ID
 #' @export
-#' @author Denis Lepage \email{dlepage@@bsc-eoc,org}
+#' @author Denis Lepage \email{dlepage@@bsc-eoc.org}
 #'
 #' @return rv
 

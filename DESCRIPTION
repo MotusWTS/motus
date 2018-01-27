@@ -1,9 +1,9 @@
 Package: motus
-Version: 0.1.0
+Version: 1.0.0
 Title: fetch and use data from http://motus.org
 Description: Functions to retrieve telemetry data from motus. Once supported, add motusClient and Remotes: git::https://github.com/motusWTS/motusClient
-Author: John Brzustowski <jbrzusto@fastmail.fm>
-Maintainer: John Brzustowski <jbrzusto@fastmail.fm>
+Author: John Brzustowski <jbrzusto@fastmail.fm>, Denis Lepage <dlepage@birdscanada.org>
+Maintainer: Denis Lepage <dlepage@birdscanada.org>
 Depends:
     R (>= 3.1.0),
     RSQLite,
@@ -21,6 +21,6 @@ Imports:
     RCurl,
     stringi
 License: GPL-2+
-Date: 2017-10-20
+Date: 2018-01-26
 RoxygenNote: 6.0.1
 LazyData: true

@@ -46,5 +46,5 @@ addHook("ensureDBTables", updateMotusDb). I.E., the current function will be cal
 (and the ensureDBTables function is accessed).
 }
 \author{
-Denis Lepage \email{dlepage@bsc-eoc,org}
+Denis Lepage \email{dlepage@bsc-eoc.org}
 }
