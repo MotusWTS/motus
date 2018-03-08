@@ -25,8 +25,20 @@
 #' tag_site_summary <- tagSumSite(filter(df.alltags, speciesEN == "Red Knot"))
 
 tagSumSite <- function(data, units = "hours"){
-  data <- select(data, motusTagID, fullID, recvDeployName, ts) %>% distinct %>% collect %>% as.data.frame
-  data$ts <- as_datetime(data$ts, tz = "UTC")
+  data <- select(data, motusTagID, fullID, recvDeployName, recvDeployLat, 
+                 recvDeployLon, gpsLat, gpsLon, ts) %>% distinct %>% collect %>% as.data.frame
+  data <- mutate(data,
+                 recvLat = if_else((is.na(gpsLat)|gpsLat == 0|gpsLat ==999),
+                                   recvDeployLat,
+                                   gpsLat),
+                 recvLon = if_else((is.na(gpsLon)|gpsLon == 0|gpsLon == 999),
+                                   recvDeployLon,
+                                   gpsLon),
+                 recvDeployName = paste(recvDeployName, 
+                                        round(recvLat, digits = 1), sep = "\n" ),
+                 recvDeployName = paste(recvDeployName,
+                                        round(recvLon, digits = 1), sep = ", "),
+                 ts = lubridate::as_datetime(ts, tz = "UTC"))
   grouped <- dplyr::group_by(data, fullID, recvDeployName)
   data <- dplyr::summarise(grouped,
                     first_ts=min(ts),

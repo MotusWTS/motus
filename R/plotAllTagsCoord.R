@@ -1,7 +1,7 @@
 #' Plot all tag detections by latitude or longitude
 #'
 #' Plot latitude/longitude vs time (UTC rounded to the hour) for each tag using .motus detection data.  
-#' Coordinate is by default taken from a receivers GPS latitude recordings.
+#' Coordinate is by default taken from a receivers deployment latitude in metadata.
 #'
 #' @param data a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
 #' including at a minimum variables for recvDeployName, fullID, mfgID, date/time, latitude or longitude

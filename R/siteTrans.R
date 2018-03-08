@@ -51,7 +51,13 @@ siteTrans <- function(data, latCoord = "recvDeployLat", lonCoord = "recvDeployLo
    }
   data <- rename_(tmp, lat = latCoord, lon = lonCoord)
   data <- select(data, "ts", "motusTagID", "tagDeployID", "lat", "lon", "recvDeployName") ## get only relevant columns
-  data$ts <- lubridate::as_datetime(data$ts, tz = "UTC")
+  data <- mutate(data,
+                 recvDeployName = paste(recvDeployName, 
+                                        round(lat, digits = 1), sep = "_" ),
+                 recvDeployName = paste(recvDeployName,
+                                        round(lon, digits = 1), sep = ", "),
+                 ts = as_datetime(ts, tz = "UTC"))
+  #data$ts <- lubridate::as_datetime(data$ts, tz = "UTC")
   data <- data %>% dplyr::group_by(motusTagID, tagDeployID) %>% do(consec.fun(.))
   data <- data %>% dplyr::group_by(motusTagID, tagDeployID) %>% do(site.fun(.))
   data$tot_ts = difftime(data$ts.y, data$ts.x, units = "secs")

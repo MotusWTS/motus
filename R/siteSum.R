@@ -36,9 +36,22 @@
 #' site_summary <- siteSum(filter(df.alltags, speciesEN == "Red Knot"))
 
 siteSum <- function(data, units = "hours"){
-  data <- select(data, motusTagID, sig, recvDeployLat, recvDeployName, ts) %>% distinct %>% collect %>% as.data.frame
-  data <- within(data, recvDeployName <- reorder(recvDeployName, (recvDeployLat))) ## order site by latitude
-  data$ts <- as_datetime(data$ts, tz = "UTC")
+  data <- select(data, motusTagID, sig, recvDeployLat, recvDeployLon, 
+                 gpsLat, gpsLon, recvDeployName, ts) %>% distinct %>% collect %>% as.data.frame
+  data <- mutate(data,
+                 recvLat = if_else((is.na(gpsLat)|gpsLat == 0|gpsLat ==999),
+                                   recvDeployLat,
+                                   gpsLat),
+                 recvLon = if_else((is.na(gpsLon)|gpsLon == 0|gpsLon == 999),
+                                   recvDeployLon,
+                                   gpsLon),
+                 recvDeployName = paste(recvDeployName, 
+                                        round(recvLat, digits = 1), sep = "_" ),
+                 recvDeployName = paste(recvDeployName,
+                                        round(recvLon, digits = 1), sep = ", "),
+                 ts = lubridate::as_datetime(ts, tz = "UTC"))
+  data <- within(data, recvDeployName <- reorder(recvDeployName, (recvLat))) ## order site by latitude
+#  data$ts <- as_datetime(data$ts, tz = "UTC")
   grouped <- dplyr::group_by(data, recvDeployName)
   data <- dplyr::summarise(grouped,
                  first_ts=min(ts),

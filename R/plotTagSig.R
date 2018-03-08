@@ -23,9 +23,22 @@
 plotTagSig <- function(data, motusTagID){
   tag.id <- motusTagID
   data <- filter_(data, paste("motusTagID", "==", "tag.id"))
-  data <- select(data, motusTagID, sig, ts, antBearing, recvDeployLat, fullID, recvDeployName) %>% distinct %>% collect %>% as.data.frame
-  data <- within(data, recvDeployName <- reorder(recvDeployName, (recvDeployLat))) ## order recvDeployName by latitude
-  data$ts <- lubridate::as_datetime(data$ts, tz = "UTC")
+  data <- select(data, motusTagID, sig, ts, antBearing, recvDeployLat, recvDeployLon, 
+                 gpsLat, gpsLon, fullID, recvDeployName) %>% distinct %>% collect %>% as.data.frame
+  data <- mutate(data,
+                 recvLat = if_else((is.na(gpsLat)|gpsLat == 0|gpsLat ==999),
+                                   recvDeployLat,
+                                   gpsLat),
+                 recvLon = if_else((is.na(gpsLon)|gpsLon == 0|gpsLon == 999),
+                                   recvDeployLon,
+                                   gpsLon),
+                 recvDeployName = paste(recvDeployName, 
+                                        round(recvLat, digits = 1), sep = "\n" ),
+                 recvDeployName = paste(recvDeployName,
+                                        round(recvLon, digits = 1), sep = ", "),
+                 ts = as_datetime(ts, tz = "UTC"))
+  data <- within(data, recvDeployName <- reorder(recvDeployName, (recvLat))) ## order recvDeployName by latitude
+#  data$ts <- lubridate::as_datetime(data$ts, tz = "UTC")
   p <- ggplot2::ggplot(data, ggplot2::aes(ts, sig, col = as.factor(antBearing)))
   p + ggplot2::geom_point() + ggplot2::theme_bw() + ggplot2::labs(title = paste("Detection Time vs Signal Strength, coloured by antenna \n ID ", motusTagID), x = "Date", y = "Signal Strength", colour = "Antenna Bearing") +
     ggplot2::facet_grid(recvDeployName~.) + ggplot2::theme(axis.text.x = element_text(angle = 45, hjust = 1))

@@ -25,9 +25,20 @@
 
 plotSite <- function(data, sitename = unique(data$recvDeployName)){
   data = data %>% mutate(hour = 3600*round(as.numeric(ts)/3600, 0)) ## round times to the hour
-  #data <- filter_(data, paste("recvDeployName", "==", "sitename"))
-  data <- select(data, hour, antBearing, fullID, recvDeployName) %>% distinct %>% collect %>% as.data.frame
-  data$hour <- lubridate::as_datetime(data$hour, tz = "UTC")
+  data <- select(data, hour, antBearing, fullID, recvDeployName, recvDeployLat, recvDeployLon,
+                 gpsLat, gpsLon) %>% distinct %>% collect %>% as.data.frame
+  data <- mutate(data,
+                 recvLat = if_else((is.na(gpsLat)|gpsLat == 0|gpsLat ==999),
+                                   recvDeployLat,
+                                   gpsLat),
+                 recvLon = if_else((is.na(gpsLon)|gpsLon == 0|gpsLon == 999),
+                                   recvDeployLon,
+                                   gpsLon),
+                 recvDeployName = paste(recvDeployName, 
+                                        round(recvLat, digits = 1), sep = "\n" ),
+                 recvDeployName = paste(recvDeployName,
+                                        round(recvLon, digits = 1), sep = ", "),
+                 hour = lubridate::as_datetime(hour, tz = "UTC"))
   p <- ggplot2::ggplot(data, ggplot2::aes(hour, fullID, col = as.factor(antBearing)))
   p + ggplot2::geom_point() + ggplot2::theme_bw() + 
     ggplot2::labs(title = "Detection Time vs Tag ID, coloured by antenna", x = NULL, y = "Tag ID", colour = "Antenna Bearing") +
