@@ -11,8 +11,7 @@ Depends:
     dbplyr,
     maptools,
     lubridate,
-    ggplot2,
-    ggmap
+    ggplot2
 Imports:
     RSQLite,
     httr,
