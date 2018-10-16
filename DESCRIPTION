@@ -10,8 +10,7 @@ Depends:
     dplyr,
     dbplyr,
     maptools,
-    lubridate,
-    ggplot2
+    lubridate
 Imports:
     RSQLite,
     httr,
