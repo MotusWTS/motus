@@ -18,6 +18,7 @@ Imports:
     gridExtra,
     jsonlite,
     lattice,
+    purrr(>= 0.3.0),
     RCurl,
     stringi
 License: GPL-2+

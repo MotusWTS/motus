@@ -30,16 +30,24 @@
 ## grouping code taken from sensorgnome package
 plotAllTagsSite <- function(data, coordinate = "recvDeployLat", tagsPerPanel = 5){
   if(class(tagsPerPanel) != "numeric") stop('Numeric value required for "tagsPerPanel"')
-  data = data %>% mutate(round_ts = 3600*round(as.numeric(ts)/3600, 0)) ## round times to the hour
-  #data = distinct(select(data, id, site, round_ts, lat, recvDeployLat, lon, recvDeployLon, fullID))
-  dataGrouped <- dplyr::filter_(data, paste(coordinate, "!=", 0)) %>% group_by(recvDeployName) %>% 
-    summarise_(.dots = setNames(paste0('mean(',coordinate,')'), 'meanlat')) ## get summary of mean lats by recvDeployName
-  data <- inner_join(data, dataGrouped, by = "recvDeployName") ## join grouped data with data
-  data <- select(data, mfgID, recvDeployName, round_ts, meanlat, fullID) %>% distinct %>% collect %>% as.data.frame
-  data$meanlat = round(data$meanlat, digits = 2) ## round to 2 significant digits
-  data$sitelat <- as.factor(paste(data$recvDeployName, data$meanlat, sep = " ")) ## new column with recvDeployName and lat
-  data <- within(data, sitelat <- reorder(sitelat, (meanlat))) ## order sitelat by latitude
-  data$round_ts <- lubridate::as_datetime(data$round_ts, tz = "UTC")
+  
+  data <- data %>% 
+    ## round times to the hour
+    dplyr::mutate(round_ts = 3600*round(as.numeric(ts)/3600, 0)) %>%
+    dplyr::filter(!!rlang::sym(coordinate) != 0) %>% 
+    dplyr::group_by(recvDeployName) %>% 
+    ## get mean lats by recvDeployName
+    dplyr::mutate(meanlat = mean(!!rlang::sym(coordinate))) %>%
+    dplyr::ungroup() %>%
+    dplyr::select(mfgID, recvDeployName, round_ts, meanlat, fullID) %>% 
+    dplyr::distinct() %>% 
+    dplyr::collect() %>%
+    dplyr::mutate(meanlat = round(meanlat, digits = 2), ## round to 2 significant digits
+                  ## new column with recvDeployName and lat
+                  sitelat = as.factor(paste(recvDeployName, meanlat, sep = " ")),
+                  sitelat = reorder(sitelat, meanlat),
+                  round_ts = lubridate::as_datetime(round_ts, tz = "UTC"))
+  
   ## We want to plot multiple tags per panel, so sort their labels and create a grouping factor
   ## Note that labels are sorted in increasing order by ID
   labs = data$fullID[order(data$mfgID,data$fullID)]

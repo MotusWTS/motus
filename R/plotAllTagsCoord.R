@@ -1,12 +1,16 @@
 #' Plot all tag detections by latitude or longitude
 #'
-#' Plot latitude/longitude vs time (UTC rounded to the hour) for each tag using .motus detection data.  
-#' Coordinate is by default taken from a receivers deployment latitude in metadata.
+#' Plot latitude/longitude vs time (UTC rounded to the hour) for each tag using
+#' .motus detection data. Coordinate is by default taken from a receivers
+#' deployment latitude in metadata.
 #'
-#' @param data a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-#' including at a minimum variables for recvDeployName, fullID, mfgID, date/time, latitude or longitude
-#' @param tagsPerPanel number of tags in each panel of the plot, by default this is 5
-#' @param coordinate column name from which to obtain location values, by default it is set to recvDeployLat
+#' @param data a selected table from .motus data, eg. "alltags", or a data.frame
+#'   of detection data including at a minimum variables for recvDeployName,
+#'   fullID, mfgID, date/time, latitude or longitude
+#' @param tagsPerPanel number of tags in each panel of the plot, by default this
+#'   is 5
+#' @param coordinate column name from which to obtain location values, by
+#'   default it is set to recvDeployLat
 #' @param ts column for a date/time object as numeric or POSIXct, defaults to ts
 #' @export
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
@@ -36,12 +40,18 @@
 
 plotAllTagsCoord <- function(data, coordinate = "recvDeployLat", ts = "ts", tagsPerPanel = 5) {
   if(class(tagsPerPanel) != "numeric") stop('Numeric value required for "tagsPerPanel"')
-  data = data %>% mutate(hour = 3600*round(as.numeric(ts)/3600, 0)) ## round times to the hour
-  dataGrouped <- dplyr::filter_(data, paste(coordinate, "!=", 0)) %>% group_by(recvDeployName) %>% 
-    summarise_(.dots = setNames(paste0('mean(',coordinate,')'), 'meanlat')) ## get summary of mean lats by recvDeployName
-  data <- inner_join(data, dataGrouped, by = "recvDeployName") ## join grouped data with data
-  data <- select(data, mfgID, recvDeployName, hour, meanlat, fullID) %>% distinct %>% collect %>% as.data.frame
-  data$hour <- lubridate::as_datetime(data$hour, tz = "UTC")
+  
+  data <- data %>%
+    dplyr::mutate(hour = 3600*round(as.numeric(ts)/3600, 0)) %>% ## round times to the hour
+    dplyr::filter(!!rlang::sym(coordinate) != 0) %>% 
+    dplyr::group_by(recvDeployName) %>% 
+    ## get summary of mean lats by recvDeployName
+    dplyr::mutate(meanlat = mean(!!rlang::sym(coordinate))) %>%
+    dplyr::select(mfgID, recvDeployName, hour, meanlat, fullID) %>% 
+    dplyr::distinct() %>% 
+    dplyr::collect() %>% 
+    dplyr::mutate(hour = lubridate::as_datetime(hour, tz = "UTC"))
+  
   labs = data$fullID[order(data$mfgID, data$fullID)]
   dup = duplicated(labs)
   tagLabs = labs[!dup]

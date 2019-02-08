@@ -27,7 +27,7 @@ plotDailySiteSum <- function(data, recvDeployName){
   } else {
     tmp = data %>% collect %>% as.data.frame
   }
-  sitesum <- siteSumDaily(filter(data, recvDeployName == recvDeployName))
+  sitesum <- siteSumDaily(filter(data, recvDeployName == !!recvDeployName))
   detections <- ggplot2::ggplot(sitesum, ggplot2::aes(date, num_det)) +
     ggplot2::geom_bar(stat = "identity") + ggplot2::theme_bw() + ## creates bar plot by recvDeployName
     ggplot2::labs(x= "Date", y = "Total detections")
