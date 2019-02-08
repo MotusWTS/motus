@@ -19,7 +19,7 @@ including at a minimum variables for recvDeployName, fullID, mfgID, date/time, l
 }
 \description{
 Plot latitude/longitude vs time (UTC rounded to the hour) for each tag using .motus detection data.  
-Coordinate is by default taken from a receivers GPS latitude recordings.
+Coordinate is by default taken from a receivers deployment latitude in metadata.
 }
 \examples{
 You can use either a selected tbl from .motus eg. "alltags", or a data.frame, instructions to convert a .motus file to all formats are below.

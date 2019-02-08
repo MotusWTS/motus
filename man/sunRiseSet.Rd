@@ -4,7 +4,8 @@
 \alias{sunRiseSet}
 \title{Obtain sunrise and sunset times}
 \usage{
-sunRiseSet(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = "ts")
+sunRiseSet(data, lat = "recvDeployLat", lon = "recvDeployLon",
+  ts = "ts")
 }
 \arguments{
 \item{data}{a selected table from .motus detection data, eg. "alltags", or a data.frame of detection data 

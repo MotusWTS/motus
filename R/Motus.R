@@ -1,4 +1,4 @@
-#' Constants and writable storage for the motusClient package
+#' Constants and writable storage for the motus package
 #'
 #' This is an environment that holds constants (whose bindings are locked)
 #' and session variables (not locked) used by this package.

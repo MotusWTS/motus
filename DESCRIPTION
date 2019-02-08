@@ -22,5 +22,6 @@ Imports:
     stringi
 License: GPL-2+
 Date: 2018-01-26
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 LazyData: true
+Encoding: UTF-8
