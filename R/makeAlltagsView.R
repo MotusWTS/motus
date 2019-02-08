@@ -54,7 +54,7 @@
 #'    \item{recvDeployLon} longitude of receiver deployment, in decimal degrees
 #'    \item{recvDeployAlt} altitude of receiver deployment, in metres ASL
 #'    \item{recv} serial number of receiver; e.g. SG-1234BBBK5678 or Lotek-12345
-#'    \item{recvDepName} name assigned to the receiver deployment
+#'    \item{recvDeployName} name assigned to the receiver deployment
 #'    \item{recvSiteName} name assigned to the site where the receiver deployment is located
 #'    \item{isRecvMobile} whether the receiver is mobile or not
 #'    \item{recvProjID} unique motus ID for project receiver was deployed by
@@ -154,7 +154,7 @@ SELECT
    t6.longitude as recvDeployLon,
    t6.elevation as recvDeployAlt,
    t6a.serno as recv,
-   t6.name as recvDepName,
+   t6.name as recvDeployName,
    t6.isMobile as isRecvMobile,
    t6.projectID as recvProjID,
    t7.antennaType as antType,
