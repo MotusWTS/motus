@@ -22,7 +22,7 @@
 #' plotDailySiteSum(df.alltags, recvDeployName = "Niapiskau")
 
 plotDailySiteSum <- function(data, recvDeployName){
-  tmp <- if(class(data) == "data.frame"){
+  tmp <- if(any(class(data) == "data.frame")){
     tmp = data
   } else {
     tmp = data %>% collect %>% as.data.frame

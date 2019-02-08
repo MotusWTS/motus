@@ -62,7 +62,7 @@
 #' }
 
 siteTrans <- function(data, latCoord = "recvDeployLat", lonCoord = "recvDeployLon"){
-   tmp <- if(class(data) == "data.frame"){
+  tmp <- if(any(class(data) == "data.frame")){
     tmp = data
   } else {
     tmp = data %>% 
