@@ -159,7 +159,5 @@ motusUpdateTagDB = function(src, countOnly=FALSE, forceMeta=FALSE) {
     }
     motusUpdateDBmetadata(sql, tagIDs, devIDs, force=forceMeta)
     rv = src
-    for (hookfun in Motus$hooks$ensureDBTables)
-        rv = hookfun(rv, src, countOnly, forceMeta)
     return(rv)
 }

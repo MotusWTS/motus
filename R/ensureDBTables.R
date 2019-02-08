@@ -453,7 +453,5 @@ CREATE UNIQUE INDEX IF NOT EXISTS runsFilters_filterID_runID_motusTagID ON runsF
 
     rv = makeAllambigsView(src)
     rv = makeAlltagsView(src)
-    for (hookfun in Motus$hooks$ensureDBTables)
-        rv = hookfun(rv, src, projRecv, deviceID)
     return(rv)
 }

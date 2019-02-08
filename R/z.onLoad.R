@@ -37,7 +37,6 @@
 #' \item{projects}{project IDs for user at motus.org}
 #' \item{dataServerURL}{URL to data server}
 #' \item{dbDir}{path to folder with project and tag databases}
-#' \item{hooks}{named list of lists of hook functions, called at various points in processing}
 #' }
 #'
 #' @seealso \code{\link{Motus}}
@@ -117,13 +116,6 @@
 
     ## Assign non-constant variables which are not session variables
 
-    ## list of function hooks; initially empty lists of functions
-    Motus$hooks = list(
-        ensureDBTables = list(),
-        motusUpdateTagDB = list(),
-        motusUpdateRecvDB = list(),
-        motusUpdateDBmetadata = list()
-    )
 
     ## Assign active bindings for variables for which we ask for values only
     ## the first time they are needed.
