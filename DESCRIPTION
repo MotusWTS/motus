@@ -21,10 +21,12 @@ Imports:
     purrr(>= 0.3.0),
     RCurl,
     stringi
+Suggests:
+    ggmap (>= 3.0.0),
+    testthat
 License: GPL-2+
 Date: 2018-01-26
 RoxygenNote: 6.1.1
 LazyData: true
 Encoding: UTF-8
-Suggests: 
-    testthat
+    
