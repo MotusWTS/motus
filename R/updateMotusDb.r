@@ -1,25 +1,35 @@
-#' Ensures that the motus sqlite file is up-to-date to support the current version of the package.
-#' Relies on the updateMotusDb.sqlite database in /inst/extdata/ to run the SQL on the basis of date
-#' To insert new sql commands, simply create a new record in the sqlite file as follow.
-#'   date: date at which the sql update record was added (default current timestamp)
-#'   sql: sql string to execute (you should minimize the risk of database errors by using IF EXISTS or DROP as appropriate prior to your command)
-#'   descr: description of the update, printed for the user during the update process
-#' The function adds a new admInfo table in the motus sqlite file that keeps track of the 
-#' date at which the last correction was applied. The updateMotusDb function only exectute
-#' sql commands added since the last correction.
-#'  
-#' This function is called from the z.onLoad function which adds a hook to the ensureDBTables function of the motusClient package.
-#' addHook("ensureDBTables", updateMotusDb). I.E., the current function will be called each time that a new motus file is opened
-#' (and the ensureDBTables function is accessed).
+#' Update motus sqlite file
+#' 
+#' Ensures that the motus sqlite file is up-to-date to support the current
+#' version of the package. Relies on the \code{sql_versions} internal data frame
+#' to run the SQL on the basis of date.
+#' 
+#' This function adds a new admInfo table in the motus sqlite file that keeps
+#' track of the date at which the last correction was applied. The updateMotusDb
+#' function only exectute sql commands added since the last correction.
+#' 
+#' To insert a new version update modify and run the ./data-raw/updatesql.R
+#' script to add new sql commands to the internal data frame.
+#' 
+#' \itemize{
+#'   \item date: date at which the sql update record was added (default current
+#'   timestamp)
+#'   \item sql: sql string to execute (you should minimize the risk of database
+#'   errors by using IF EXISTS or DROP as appropriate prior to your command)
+#'   \item descr: description of the update, printed for the user during the
+#'   update process
+#' }
+#'   
+#' This function is called at the end of the \code{\link{ensureDBTables}}
+#' function. i.e., it will be called each time that a motus file is opened.
 #'
 #' @param rv return value
 #' @param src sqlite database source
-#' @param projRecv parameter provided by the hook function call, when opening a file built by project ID
-#' @param deviceID parameter provided by the hook function call, when opening a file built by receiver ID
 #' @export
 #' @author Denis Lepage \email{dlepage@@bsc-eoc.org}
 #'
 #' @return rv
+#' @keywords internal
 
 updateMotusDb <- function(rv, src) {
 
