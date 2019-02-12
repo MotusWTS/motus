@@ -21,8 +21,9 @@
 #' plotSiteSig(filter(df.alltags, motusTagID %in% c(16037, 16039, 16035)), recvDeployName = "Netitishi")
 
 plotSiteSig <- function(data, recvDeployName){
+
   data <- data %>%
-    dplyr::filter(.data$recvDeployName == !!recvDeployName) %>%
+    dplyr::filter(recvDeployName == !!recvDeployName) %>%
     dplyr::select(antBearing, ts, recvDeployLat, sig, fullID, recvDeployName) %>% 
     dplyr::distinct() %>% 
     dplyr::collect() %>% 

@@ -34,11 +34,14 @@ plotAllTagsSite <- function(data, coordinate = "recvDeployLat", tagsPerPanel = 5
   data <- data %>% 
     ## round times to the hour
     dplyr::mutate(round_ts = 3600*round(as.numeric(ts)/3600, 0)) %>%
-    dplyr::filter(!!rlang::sym(coordinate) != 0) %>% 
+    dplyr::filter(!!rlang::sym(coordinate) != 0)
+  
+  # Left-join summaries back in because these databases don't support mutate for mean/min/max etc.
+  data <- data %>%
     dplyr::group_by(recvDeployName) %>% 
     ## get mean lats by recvDeployName
-    dplyr::mutate(meanlat = mean(!!rlang::sym(coordinate))) %>%
-    dplyr::ungroup() %>%
+    dplyr::summarize(meanlat = mean(!!rlang::sym(coordinate), na.rm = TRUE)) %>%
+    dplyr::left_join(data, ., by = "recvDeployName") %>%
     dplyr::select(mfgID, recvDeployName, round_ts, meanlat, fullID) %>% 
     dplyr::distinct() %>% 
     dplyr::collect() %>%

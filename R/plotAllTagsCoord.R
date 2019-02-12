@@ -40,18 +40,22 @@
 
 plotAllTagsCoord <- function(data, coordinate = "recvDeployLat", ts = "ts", tagsPerPanel = 5) {
   if(class(tagsPerPanel) != "numeric") stop('Numeric value required for "tagsPerPanel"')
-  
+
   data <- data %>%
     dplyr::mutate(hour = 3600*round(as.numeric(ts)/3600, 0)) %>% ## round times to the hour
-    dplyr::filter(!!rlang::sym(coordinate) != 0) %>% 
+    dplyr::filter(!!rlang::sym(coordinate) != 0)
+  
+  # Left-join summaries back in because these databases don't support mutate for mean/min/max etc.
+  data <- data %>%
     dplyr::group_by(recvDeployName) %>% 
     ## get summary of mean lats by recvDeployName
-    dplyr::mutate(meanlat = mean(!!rlang::sym(coordinate))) %>%
+    dplyr::summarize(meanlat = mean(!!rlang::sym(coordinate), na.rm = TRUE)) %>%    
+    dplyr::left_join(data, ., by = "recvDeployName") %>%
     dplyr::select(mfgID, recvDeployName, hour, meanlat, fullID) %>% 
     dplyr::distinct() %>% 
     dplyr::collect() %>% 
     dplyr::mutate(hour = lubridate::as_datetime(hour, tz = "UTC"))
-  
+
   labs = data$fullID[order(data$mfgID, data$fullID)]
   dup = duplicated(labs)
   tagLabs = labs[!dup]
