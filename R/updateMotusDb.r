@@ -21,20 +21,29 @@
 #'
 #' @return rv
 
-updateMotusDb = function(rv, src, projRecv, deviceID) {
+updateMotusDb <- function(rv, src) {
 
-  DBI::dbExecute(src$con, "CREATE TABLE IF NOT EXISTS admInfo (key VARCHAR PRIMARY KEY NOT NULL, value VARCHAR)")
-  DBI::dbExecute(src$con, "INSERT OR IGNORE INTO admInfo (key,value) VALUES('db_version',date('1970-01-01'))")
-  admInfo = DBI::dbGetQuery(src$con, "select value as db_version from admInfo where key = 'db_version' limit 1")
+  # Create and fill the admInfo table if it doesn't exist
+  DBI::dbExecute(src$con, paste0("CREATE TABLE IF NOT EXISTS admInfo ",
+                                 "(key VARCHAR PRIMARY KEY NOT NULL, value VARCHAR)"))
+  DBI::dbExecute(src$con, paste0("INSERT OR IGNORE INTO admInfo (key,value) ",
+                                 "VALUES('db_version',date('1970-01-01'))"))
 
-  dt = as.POSIXct(admInfo$db_version)
-  src2 = dplyr::src_sqlite(system.file("extdata", "updateMotusDb.sqlite", package = "motus"), create=FALSE)
-  updateSql = DBI::dbGetQuery(src2$con, paste("select date, sql, descr from updateDb where date > '", strftime(dt, "%Y-%m-%d %H:%M:%S"), "' ORDER BY date", sep=""))
+  # Get the current src version
+  src_version <- dplyr::tbl(src$con, "admInfo") %>%
+    dplyr::filter(key == "db_version") %>%
+    dplyr::pull(value) %>%
+    as.POSIXct(., tz = "UTC")
+  
+  update_versions <- dplyr::filter(sql_versions, date > src_version) %>%
+    dplyr::arrange(date)
 
-  if (length(updateSql[,1]) > 0) {
-    cat(sprintf("\nupdateMotusDb started (%d rows)", length(updateSql[,1])))
-    dates = apply(updateSql, 1, function(row) {
-      cat("\n - ", row["descr"], sep="")
+  if (nrow(update_versions) > 0) {
+    message(sprintf("updateMotusDb started (%d versions updates)", 
+                    nrow(update_versions)))
+    
+    dates <- apply(update_versions, 1, function(row) {
+      message(" - ", row["descr"], sep = "")
 	  
 	    v = unlist(strsplit(row["sql"], ";"))
       l = lapply(v, function(sql) {
@@ -43,12 +52,15 @@ updateMotusDb = function(rv, src, projRecv, deviceID) {
 	    })	
       row["date"]
     })
-    if (length(dates) > 0) dt = dates[length(dates)]
-    cat("\n\n")
-    
-    if (dt > as.POSIXct(admInfo$db_version))
-      DBI::dbExecute(src$con, paste("UPDATE admInfo set value = '", strftime(dt, "%Y-%m-%d %H:%M:%S"), "' where key = 'db_version'", sep=""))
+
+    if (length(dates) > 0) dt <- dates[length(dates)]
+
+    if (dt > src_version) {
+      DBI::dbExecute(src$con, paste0("UPDATE admInfo set value = '",
+                                    strftime(dt, "%Y-%m-%d %H:%M:%S"),
+                                    "' where key = 'db_version'"))
+    }
   }
 
-  return(rv)
+  rv
 }

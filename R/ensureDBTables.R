@@ -453,6 +453,6 @@ CREATE UNIQUE INDEX IF NOT EXISTS runsFilters_filterID_runID_motusTagID ON runsF
 
     rv = makeAllambigsView(src)
     rv = makeAlltagsView(src)
-    rv = updateMotusDb(rv, src, projRecv, deviceID)
+    rv = updateMotusDb(rv, src)
     return(rv)
 }
