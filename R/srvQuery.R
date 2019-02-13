@@ -25,7 +25,7 @@
 #' @keywords internal
 
 srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE, auth = TRUE) {
-
+    
     url <- file.path(Motus$dataServerURL, API)
     ua <- httr::user_agent(agent = "http://github.com/MotusWTS/motus")
     
@@ -33,39 +33,39 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE, auth = TRU
     httr::set_config(httr::accept_json())
     httr::set_config(httr::timeout(300))
     #httr::set_config(httr::verbose())
-
+    
     for (i in 1:2) {
         ## at most two iterations; the second allows for
         ## reauthentication when the authToken has expired
-
+        
         if (auth) {
             ## Note: due its active binding if Motus$authToken is
             ## currently NULL, the following will generate a call to
             ## srvAuth, which in turn calls this srvQuery, but with
             ## auth=FALSE.  If authentication on that call fails,
             ## an error propagates up, exiting this function.
-
-            query = list(authToken = Motus$authToken)
-
+            
+            query <- list(authToken = Motus$authToken)
+            
         } else {
-            query = list()
+            query <- list()
         }
-        query = c(query, params)
-
-        json = jsonlite::toJSON(query, auto_unbox = TRUE, null = "null")
-
+        query <- c(query, params)
+        
+        json <- jsonlite::toJSON(query, auto_unbox = TRUE, null = "null")
+        
         if(show) message(json, "\n")
-    
+        
         resp <- httr::POST(url, body = list("json" = json), encode = "form",
                            httr::config(http_content_decoding = 0)) %>%
             httr::content(as = "raw") %>%
             memDecompress("bzip2", asChar = TRUE)
         
-		Encoding(resp) = "UTF-8"
-
+        Encoding(resp) <- "UTF-8"
+        
         if (JSON) return(resp)
         if (grepl("^[ \r\n]*$", resp)) return(list())
-		
+        
         rv <- jsonlite::fromJSON(resp)
         
         if (! is.null(rv$error)) {
@@ -75,8 +75,9 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE, auth = TRU
             }
             stop(rv$error)
         }
-        if (! is.null(rv$data))
+        if (! is.null(rv$data)) {
             return(rv$data)
+        }
         return(rv)
     }
 }
