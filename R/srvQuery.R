@@ -32,6 +32,7 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE, auth = TRU
     # Set curl options
     httr::set_config(httr::accept_json())
     httr::set_config(httr::timeout(300))
+    httr::set_config(httr::content_type_json())
     #httr::set_config(httr::verbose())
     
     for (i in 1:2) {
@@ -57,7 +58,23 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE, auth = TRU
         if(show) message(json, "\n")
         
         resp <- httr::POST(url, body = list("json" = json), encode = "form",
-                           httr::config(http_content_decoding = 0)) %>%
+                           httr::config(http_content_decoding = 0), ua)
+        
+        # Catch http errors
+        if(httr::http_error(resp)) {
+            if(httr::http_type(resp) == "application/json") {
+                p <- jsonlite::fromJSON(httr::content(resp, "text"), simplifyVector = FALSE)
+            } else if (httr::status_code(resp) == 500) {
+                p <- list(errorMsg = "Internal Server Error")
+            } else p <- list(errorMsg = "Unknown Error")
+            
+            stop(sprintf("Motus API requrest failed [%s]\n%s",
+                         httr::status_code(resp),
+                         p$errorMsg), 
+                 call. = FALSE)
+        }
+        
+        resp <- resp %>%
             httr::content(as = "raw") %>%
             memDecompress("bzip2", asChar = TRUE)
         
@@ -68,12 +85,13 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE, auth = TRU
         
         rv <- jsonlite::fromJSON(resp)
         
+        # Catch call errors
         if (! is.null(rv$error)) {
             if (rv$error %in% c("token expired", "token invalid")) {
                 Motus$authToken = NULL
                 next
             }
-            stop(rv$error)
+            stop(rv$error, call. = FALSE)
         }
         if (! is.null(rv$data)) {
             return(rv$data)
