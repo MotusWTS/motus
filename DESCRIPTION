@@ -16,12 +16,11 @@ Depends:
     ggplot2
 Imports:
     RSQLite,
-    httr,
+    httr (>= 1.4.0),
     gridExtra,
     jsonlite,
     lattice,
     purrr(>= 0.3.0),
-    RCurl,
     stringi
 Suggests:
     ggmap (>= 3.0.0),
