@@ -12,7 +12,7 @@ test_that("tagme() and tellme() access the server appropriately", {
                               "updateMotusDb"),
                "Internal Server Error")
   
-  expect_error(tagme(projRecv = 176, new = FALSE, update = TRUE), NA)
+  expect_error(tagme(projRecv = 176, new = TRUE, update = TRUE), NA)
   
   # Clean up
   file.remove("./project-176.motus")
