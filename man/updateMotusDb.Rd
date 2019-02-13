@@ -4,7 +4,7 @@
 \alias{updateMotusDb}
 \title{Update motus sqlite file}
 \usage{
-updateMotusDb(rv, src, projRecv, deviceID)
+updateMotusDb(rv, src)
 }
 \arguments{
 \item{rv}{return value}
