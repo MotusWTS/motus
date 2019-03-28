@@ -66,6 +66,7 @@
 
         ## API entry points for the data server (URLs relative to dataServerURL)
         API_API_INFO                            = "custom/api_info"
+        API_ACTIVITY_FOR_BATCHES                = "custom/activity_for_batch"
         API_DEVICE_ID_FOR_RECEIVER              = "custom/deviceID_for_receiver"
         API_RECEIVERS_FOR_PROJECT               = "custom/receivers_for_project"
         API_BATCHES_FOR_TAG_PROJECT             = "custom/batches_for_tag_project"

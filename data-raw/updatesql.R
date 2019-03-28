@@ -1,5 +1,33 @@
 sql_versions <- dplyr::tibble()
 
+
+# Update 2019-03-13 -------------------------------------------------------
+sql_versions <- rbind(
+   sql_versions, 
+   cbind(date = "2019-03-13",
+         descr = "Create new 'activity' table",
+         sql = "CREATE TABLE IF NOT EXISTS activity (
+                batchID INTEGER,
+                motusDeviceID INTEGER,
+                ant TINYINT,
+                year INTEGER,
+                month INTEGER,
+                day INTEGER,
+                hourbin INTEGER 
+                numTags INTEGER,
+                pulseCounts INTEGER,
+                numRuns INTEGER,
+                numHits INTEGER,
+                run2 INTEGER,
+                run3 INTEGER,
+                run4 INTEGER,
+                run5 INTEGER,
+                run6 INTEGER,
+                run7plus INTEGER,
+         UNIQUE(batchID, ant, hourbin));")
+)
+            
+
 # Update 2018-06-12 22:00:01 ---------------------------------------------------
 sql_versions <- rbind(sql_versions, 
                       cbind(date = "2018-06-12 22:00:01",

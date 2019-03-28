@@ -1,11 +1,14 @@
 Package: motus
 Type: Package
-Version: 1.0.0
+Version: 1.5.0
 Title: Fetch and use data from the Motus Wildlife Tracking System
-Description: Retrieve, filter, and visualize telemetry data from 
-    the Motus Wildlife Tracking System <http://motus.org>
-Author: John Brzustowski <jbrzusto@fastmail.fm>, Denis Lepage <dlepage@birdscanada.org>
-Maintainer: Denis Lepage <dlepage@birdscanada.org>
+Description: Retrieve, filter, and visualize telemetry data from the Motus 
+    Wildlife Tracking System http://motus.org.
+Authors@R: c(
+    person("John", "Brzustowski", email = "jbrzusto@fastmail.fm", role = "aut"),
+    person("Denis", "LePage", email = "dlepage@bsc-eoc.org", role = c("aut", "cre")),
+    person("Zoe", "Crysler", email = "zcrysler@@gmail.com", role = "ctb"),
+    person("Steffi", "LaZerte", email = "steffi@steffi.ca", role = "ctb"))
 Depends:
     R (>= 3.1.0),
     RSQLite,
@@ -15,18 +18,22 @@ Depends:
     lubridate,
     ggplot2
 Imports:
-    RSQLite,
+    DBI (>= 1.0.0),
     httr (>= 1.4.0),
+    geosphere (>= 1.5.7),
     gridExtra,
     jsonlite,
     lattice,
-    purrr(>= 0.3.0),
-    stringi
+    purrr (>= 0.3.0),
+    rlang (>= 0.3.1),
+    stringi,
+    stringr (>= 1.4.0),
+    tidyr (>= 0.8.3)
 Suggests:
     ggmap (>= 3.0.0),
     testthat
-License: GPL-2+
-Date: 2018-01-26
+License: GPL-3 + file LICENSE
+Date: 2019-03-28
 RoxygenNote: 6.1.1
 LazyData: true
 Encoding: UTF-8

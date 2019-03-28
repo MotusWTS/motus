@@ -46,20 +46,21 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE, auth = TRU
             ## auth=FALSE.  If authentication on that call fails,
             ## an error propagates up, exiting this function.
             
-            query <- list(authToken = Motus$authToken)
+            query <- list(authToken = Motus$authToken, version = 1)
             
         } else {
             query <- list()
         }
-        query <- c(query, params)
         
+        query <- c(query, params)
+
         json <- jsonlite::toJSON(query, auto_unbox = TRUE, null = "null")
         
         if(show) message(json, "\n")
-        
+
         resp <- httr::POST(url, body = list("json" = json), encode = "form",
                            httr::config(http_content_decoding = 0), ua)
-        
+
         # Catch http errors
         if(httr::http_error(resp)) {
             if(httr::http_type(resp) == "application/json") {
