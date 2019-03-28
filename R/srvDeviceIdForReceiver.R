@@ -17,6 +17,6 @@
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 srvDeviceIDForReceiver = function(serno) {
-    x = srvQuery(API=Motus$API_DEVICE_ID_FOR_RECEIVER, params=list(serno=serno))
+    x = srvQuery(API=motus_vars$API_DEVICE_ID_FOR_RECEIVER, params=list(serno=serno))
     return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
 }

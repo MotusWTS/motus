@@ -68,7 +68,7 @@
 #' @author Denis Lepage, Bird Studies Canada
 
 srvTagMetadataForProjects = function(projectIDs) {
-    x = srvQuery(API=Motus$API_TAG_METADATA_FOR_PROJECTS, params=list(projectIDs=projectIDs))
+    x = srvQuery(API=motus_vars$API_TAG_METADATA_FOR_PROJECTS, params=list(projectIDs=projectIDs))
     return (list(
         tags = structure(x$tags, class = "data.frame", row.names=seq(along=x$tags[[1]])),
         tagDeps = structure(x$tagDeps, class = "data.frame", row.names=seq(along=x$tagDeps[[1]])),

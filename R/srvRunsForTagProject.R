@@ -22,6 +22,6 @@
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 srvRunsForTagProject = function(projectID, batchID, runID=0) {
-    x = srvQuery(API=Motus$API_RUNS_FOR_TAG_PROJECT, params=list(projectID=projectID, batchID=batchID, runID=runID))
+    x = srvQuery(API=motus_vars$API_RUNS_FOR_TAG_PROJECT, params=list(projectID=projectID, batchID=batchID, runID=runID))
     return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
 }

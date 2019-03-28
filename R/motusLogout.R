@@ -8,9 +8,9 @@
 #'
 #' @details This function just resets these items to NULL:
 #' \itemize{
-#'    \item Motus$authToken
-#'    \item Motus$userLogin
-#'    \item Motus$userPassword
+#'    \item motus_vars$authToken
+#'    \item motus_vars$userLogin
+#'    \item motus_vars$userPassword
 #' }
 #' Due to their active bindings, subsequent calls to
 #' any functions that need them will prompt for a login.
@@ -21,8 +21,8 @@
 #'     \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 motusLogout = function () {
-    Motus$authToken = NULL
-    Motus$userLogin = NULL
-    Motus$userPassword = NULL
+    motus_vars$authToken = NULL
+    motus_vars$userLogin = NULL
+    motus_vars$userPassword = NULL
     cat("\n   Salut - bye bye!\n\n")
 }

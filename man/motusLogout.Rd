@@ -17,9 +17,9 @@ password.
 \details{
 This function just resets these items to NULL:
 \itemize{
-   \item Motus$authToken
-   \item Motus$userLogin
-   \item Motus$userPassword
+   \item motus_vars$authToken
+   \item motus_vars$userLogin
+   \item motus_vars$userPassword
 }
 Due to their active bindings, subsequent calls to
 any functions that need them will prompt for a login.

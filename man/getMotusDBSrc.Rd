@@ -5,7 +5,7 @@
 \title{Get the src_sqlite for a receiver or tag database}
 \usage{
 getMotusDBSrc(recv = NULL, proj = NULL, create = FALSE,
-  dbDir = Motus$dbDir)
+  dbDir = motus_vars$dbDir)
 }
 \arguments{
 \item{recv}{receiver serial number}
@@ -18,7 +18,7 @@ Same semantics as for src_sqlite()'s parameter of the same
 name:  the DB must already exist unless you specify \code{create=TRUE}}
 
 \item{dbDir}{path to folder with existing receiver databases
-Default: \code{Motus$dbDir}, which is set to the current folder
+Default: \code{motus_vars$dbDir}, which is set to the current folder
 by \code{getwd()} when this library is loaded.}
 }
 \value{

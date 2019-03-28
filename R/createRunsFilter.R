@@ -24,7 +24,7 @@ createRunsFilter = function(src, filterName, motusProjID=NA, descr=NA, update=FA
   
   df = sqlq("select * from filters where filterName = '%s' and motusProjID = %d", filterName, motusProjID)
   if (nrow(df) == 0) {
-    df = data.frame(userLogin=Motus$userLogin, filterName=filterName, motusProjID=motusProjID, descr=descr, lastModified=format(Sys.time(), "%Y-%m-%d %H:%M:%S"))
+    df = data.frame(userLogin=motus_vars$userLogin, filterName=filterName, motusProjID=motusProjID, descr=descr, lastModified=format(Sys.time(), "%Y-%m-%d %H:%M:%S"))
     dbInsertOrReplace(src$con, "filters", df)
     df = sqlq("select * from filters where filterName = '%s' and motusProjID = %d", filterName, motusProjID)
     return (df[1,]$filterID)

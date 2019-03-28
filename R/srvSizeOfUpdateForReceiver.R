@@ -18,6 +18,6 @@
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 srvSizeOfUpdateForReceiver = function(deviceID, batchID=0) {
-    x = srvQuery(API=Motus$API_SIZE_OF_UPDATE_FOR_RECEIVER, params=list(deviceID=deviceID, batchID=batchID))
+    x = srvQuery(API=motus_vars$API_SIZE_OF_UPDATE_FOR_RECEIVER, params=list(deviceID=deviceID, batchID=batchID))
     return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
 }

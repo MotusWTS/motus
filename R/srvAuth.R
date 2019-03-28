@@ -1,13 +1,13 @@
 #' Authenticate with the data server.
 #'
-#' Use Motus$userLogin and Motus$userPassword to get an authentication
+#' Use motus_vars$userLogin and motus_vars$userPassword to get an authentication
 #' token from the data server.
 #'
 #' @return a character scalar authentication/authorization token
 #'
 #' @details if login is unsuccessful, execution stops with an error message
 #'
-#' @seealso \code{\link{Motus}}
+#' @seealso \code{\link{motus_vars}}
 #'
 #' @export
 #'
@@ -18,15 +18,16 @@ srvAuth = function() {
     ## (we don't want to use lazy evaluation here by instead passing the list(...)
     ## expression to srvQuery
 
-    pars = list(user=Motus$userLogin, password=Motus$userPassword)
+    pars = list(user=motus_vars$userLogin, password=motus_vars$userPassword)
     tryCatch({
-        res = srvQuery(Motus$API_DATA_AUTHENTICATE, pars, auth=FALSE)
-        Motus$projects = res$projects
-        ## cat(sprintf("Got authentication token from %s  \r",Motus$dataServerURL))
+        res = srvQuery(motus_vars$API_DATA_AUTHENTICATE, pars, auth=FALSE)
+        motus_vars$projects = res$projects
+        ## cat(sprintf("Got authentication token from %s  \r",motus_vars$dataServerURL))
         return(res$authToken)
     }, error = function(e) {
-        Motus$userLogin = NULL
-        Motus$userPassword = NULL
-        stop("The motus data server rejected your login credentials")
+        motus_vars$userLogin = NULL
+        motus_vars$userPassword = NULL
+        stop("The motus data server rejected your login credentials", 
+             call. = FALSE)
     })
 }

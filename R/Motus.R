@@ -28,4 +28,4 @@
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
-Motus = new.env(emptyenv())
+motus_vars = new.env(emptyenv())

@@ -5,10 +5,10 @@
 \title{Send a query to the data server API}
 \usage{
 srvQuery(API, params = NULL, show = FALSE, JSON = FALSE,
-  auth = TRUE)
+  auth = TRUE, url = motus_vars$dataServerURL)
 }
 \arguments{
-\item{API}{one of the Motus$API_DATA_... constants}
+\item{API}{one of the motus_vars$API_DATA_... constants}
 
 \item{params}{named list of API-specific parameters}
 
@@ -19,9 +19,11 @@ motus}
 list}
 
 \item{auth}{if TRUE, the default, the API requires an authentication token,
-which will be included automatically from \code{Motus$authToken} Otherwise,
-an authentication token will be requested using the credentials in
-\code{Motus[c("userLogin", "userPassword")]}}
+which will be included automatically from \code{motus_vars$authToken}
+Otherwise, an authentication token will be requested using the credentials
+in \code{motus_vars[c("userLogin", "userPassword")]}}
+
+\item{url}{Character. API url, defaults to `motus_vars$dataServerURL`}
 }
 \value{
 the result of sending the request to the data server API.  The

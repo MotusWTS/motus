@@ -10,14 +10,14 @@ srvAuth()
 a character scalar authentication/authorization token
 }
 \description{
-Use Motus$userLogin and Motus$userPassword to get an authentication
+Use motus_vars$userLogin and motus_vars$userPassword to get an authentication
 token from the data server.
 }
 \details{
 if login is unsuccessful, execution stops with an error message
 }
 \seealso{
-\code{\link{Motus}}
+\code{\link{motus_vars}}
 }
 \author{
 John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}

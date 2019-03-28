@@ -1,6 +1,6 @@
 #' Initialize constants and writable storage for the motus package
 #'
-#' This function initializes the Motus environment that holds
+#' This function initializes the motus_vars environment that holds
 #' constants (whose bindings are locked) and session variables (not
 #' locked) used by this package.
 #'
@@ -39,7 +39,7 @@
 #' \item{dbDir}{path to folder with project and tag databases}
 #' }
 #'
-#' @seealso \code{\link{Motus}}
+#' @seealso \code{\link{motus_vars}}
 #'
 #' @keywords internal
 #' 
@@ -52,7 +52,7 @@
 
     ## Assign constants
 
-    with(Motus,
+    with(motus_vars,
     {
         ## API entry points for the data server (these are relative to the data server URL)
 
@@ -112,8 +112,8 @@
 
     ## bind all constants
 
-    for (n in ls(Motus))
-        lockBinding(n, Motus)
+    for (n in ls(motus_vars))
+        lockBinding(n, motus_vars)
 
     ## Assign non-constant variables which are not session variables
 
@@ -128,7 +128,7 @@
     sessionVariable("authToken", srvAuth)
     sessionVariable("dataServerURL", "URL of data server", val=dataServerURL)  ## FIXME: switch to wrapper URL once implemented
 
-    with(Motus,
+    with(motus_vars,
     {
         projects = integer(0)   ## vector of projectIDs to which user has access
         dbDir = getwd()         ## folder where tag and receiver databases are stored

@@ -17,7 +17,7 @@
 #' the value of the variable (or generate an error if not successful).
 #'
 #' @param env environment in which to create the session variable
-#' Default:  Motus
+#' Default:  motus_vars
 #'
 #' @param class the class of the variable desired; when the user is
 #' prompted for it, the value is coerced to this class.
@@ -32,13 +32,13 @@
 #'
 #'  sessionVariable("userLogin", "user login at motus.org")
 #'
-#' ## This creates an active binding for the symbol "userLogin" in the environment "Motus"
-#' ## If the variable \code{Motus$userLogin} is requested in code, the user will
+#' ## This creates an active binding for the symbol "userLogin" in the environment "motus_vars"
+#' ## If the variable \code{motus_vars$userLogin} is requested in code, the user will
 #' ## be prompted to enter a value if there is no current value.
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
-sessionVariable = function(name, info=name, env=Motus, class="character", val=NULL) {
+sessionVariable = function(name, info=name, env=motus_vars, class="character", val=NULL) {
     getSet = function(val) {
         if ( ! missing(val)) {
             ## value supplied, so set it

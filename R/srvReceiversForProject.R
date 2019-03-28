@@ -30,6 +30,6 @@
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 srvReceiversForProject = function(projectID) {
-    x = srvQuery(API=Motus$API_RECEIVERS_FOR_PROJECT, params=list(projectID=projectID))
+    x = srvQuery(API=motus_vars$API_RECEIVERS_FOR_PROJECT, params=list(projectID=projectID))
     return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
 }

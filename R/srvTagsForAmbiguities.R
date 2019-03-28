@@ -22,6 +22,6 @@
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 srvTagsForAmbiguities = function(ambigIDs) {
-    x = srvQuery(API=Motus$API_TAGS_FOR_AMBIGUITIES, params=list(ambigIDs=ambigIDs))
+    x = srvQuery(API=motus_vars$API_TAGS_FOR_AMBIGUITIES, params=list(ambigIDs=ambigIDs))
     return(structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
 }

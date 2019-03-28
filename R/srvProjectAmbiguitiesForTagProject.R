@@ -20,6 +20,6 @@
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 srvProjectAmbiguitiesForTagProject = function(projectID) {
-    x = srvQuery(API=Motus$API_PROJECT_AMBIGUITIES_FOR_TAG_PROJECT, params=list(projectID=projectID))
+    x = srvQuery(API=motus_vars$API_PROJECT_AMBIGUITIES_FOR_TAG_PROJECT, params=list(projectID=projectID))
     return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
 }

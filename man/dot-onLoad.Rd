@@ -7,7 +7,7 @@
 .onLoad(...)
 }
 \description{
-This function initializes the Motus environment that holds
+This function initializes the motus_vars environment that holds
 constants (whose bindings are locked) and session variables (not
 locked) used by this package.
 }
@@ -48,7 +48,7 @@ and variables are:
 }
 }
 \seealso{
-\code{\link{Motus}}
+\code{\link{motus_vars}}
 }
 \author{
 John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}

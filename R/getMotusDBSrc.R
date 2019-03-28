@@ -14,7 +14,7 @@
 #' name:  the DB must already exist unless you specify \code{create=TRUE}
 #'
 #' @param dbDir path to folder with existing receiver databases
-#' Default: \code{Motus$dbDir}, which is set to the current folder
+#' Default: \code{motus_vars$dbDir}, which is set to the current folder
 #' by \code{getwd()} when this library is loaded.
 #'
 #' @return a src_sqlite for the receiver; if the receiver is new, this database
@@ -24,7 +24,7 @@
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
-getMotusDBSrc = function(recv=NULL, proj=NULL, create = FALSE, dbDir = Motus$dbDir) {
+getMotusDBSrc = function(recv=NULL, proj=NULL, create = FALSE, dbDir = motus_vars$dbDir) {
     if (missing(recv) + missing(proj) != 1)
         stop("Must specify exactly one of `recv` or `proj`")
     name = if(missing(proj)) recv else sprintf("project-%d", proj)

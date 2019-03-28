@@ -27,6 +27,6 @@
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 srvGPSforTagProject = function(projectID, batchID, ts=0) {
-    x = srvQuery(API=Motus$API_GPS_FOR_TAG_PROJECT, params=list(projectID=projectID, batchID=batchID, ts=ts))
+    x = srvQuery(API=motus_vars$API_GPS_FOR_TAG_PROJECT, params=list(projectID=projectID, batchID=batchID, ts=ts))
     return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
 }

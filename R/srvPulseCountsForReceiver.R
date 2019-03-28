@@ -25,6 +25,6 @@
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 srvPulseCountsforReceiver = function(batchID, ant, hourBin=0) {
-    x = srvQuery(API=Motus$API_PULSE_COUNTS_FOR_RECEIVER, params=list(batchID=batchID, ant=ant, hourBin=hourBin))
+    x = srvQuery(API=motus_vars$API_PULSE_COUNTS_FOR_RECEIVER, params=list(batchID=batchID, ant=ant, hourBin=hourBin))
     return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
 }
