@@ -12,8 +12,8 @@ srvDeviceIDForReceiver(serno)
 \value{
 a data.frame with these columns:
 \itemize{
-   \item serno; character serial number, e.g. "SG-1214BBBK3999", "Lotek-8681"
-   \item deviceID; integer device ID (internal to motus)
+\item serno; character serial number, e.g. "SG-1214BBBK3999", "Lotek-8681"
+\item deviceID; integer device ID (internal to motus)
 }
 }
 \description{

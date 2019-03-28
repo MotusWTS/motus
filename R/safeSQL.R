@@ -1,13 +1,13 @@
 #' Return a function that safely performs sql queries on a connection.
 #'
-#' This uses the `params` parameter for \code{\link{DBI::dbGetQuery}}
-#' and \code{\link{DBI::dbExecute}} (for RSQLite and ":" parameters)
+#' This uses the `params` parameter for [DBI::dbGetQuery()]
+#' and [DBI::dbExecute()] (for RSQLite and ":" parameters)
 #' or dbQuoteStrings (for MySQL or RSQLite "%" parameters).  It should
 #' prevent e.g. SQL injection attacks.
 #'
 #' @param con RSQLite connection to database, as returned by
 #'     dbConnect(SQLite(), ...), or character scalar giving path
-#'     to SQLite database, or MySQLConnection, or dplyr::src
+#'     to SQLite database, or MySQLConnection, or [dplyr::src()]
 #'
 #' @param busyTimeout how many total seconds to wait while retrying a
 #'     locked database.  Default: 300 (5 minutes).  Uses \code{pragma busy_timeout}
@@ -47,10 +47,10 @@
 #' database connection, disabling further use of this function.
 #'
 #' \item \code{.QUOTE} boolean scalar (only for RMySQL connections); if TRUE, the
-#' default, quote string parameters using \code{\link{dbQuoteString}}.  Any parameter
-#' wrapped in \code{\link{DBI::SQL}} will not be quoted.  The only reason to use
+#' default, quote string parameters using [dbQuoteString()].  Any parameter
+#' wrapped in [DBI::SQL()] will not be quoted.  The only reason to use
 #' \code{.QUOTE=FALSE} is for a query where you know all parameters must not be
-#' quoted, and don't want to clutter your code with multiple \code{\link{DBI::SQL}}.
+#' quoted, and don't want to clutter your code with multiple [DBI::SQL()].
 #' A table name used as a parameter to a query should not be quoted, so for example,
 #' \code{
 #' s = safeSQL(dbConnect(MySQL(), 'motus'));
@@ -60,7 +60,7 @@
 #' s("select * from %s where %s=%s", DBI::SQL(tableName), DBI::SQL(columnName), columnValue)
 #' }
 #' would select all rows from the \code{tags} table where \code{fullID="Mytags#123:4.7@166.38"}
-#' Without using \code{\link{DBI::SQL}}, the resulting query would be the incorrect:
+#' Without using [DBI::SQL()], the resulting query would be the incorrect:
 #' \code{select * from 'tags' where 'fullID' = 'Mytags#123:4.7@166.38'}
 #' }
 #'
@@ -73,8 +73,8 @@
 #'
 #' For MySQL, only one line of an insert can be provided per call; i.e. there is
 #' no SendPreparedQuery method to allow binding a data.frame's data to a prepared
-#' query.  Moreover, character parameters are quoted using \code{\link{dbQuoteString}}
-#' unless the parameter is wrapped in \code{\link{DBI::SQL}}, or if you
+#' query.  Moreover, character parameters are quoted using [DBI::dbQuoteString()]
+#' unless the parameter is wrapped in [DBI::SQL()], or if you
 #' specify \code{.QUOTE=FALSE}
 #'
 #' safeSQL is meant for multi-process access of a DB with small, fast

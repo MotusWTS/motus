@@ -8,7 +8,7 @@ sunRiseSet(data, lat = "recvDeployLat", lon = "recvDeployLon",
   ts = "ts")
 }
 \arguments{
-\item{data}{a selected table from .motus detection data, eg. "alltags", or a data.frame of detection data 
+\item{data}{a selected table from .motus detection data, eg. "alltags", or a data.frame of detection data
 including at a minimum variables for date/time, latitude, and longitude}
 
 \item{lat}{variable with latitude values, defaults to recvDeployLat}
@@ -19,11 +19,13 @@ including at a minimum variables for date/time, latitude, and longitude}
 }
 \value{
 the original dataframe provided, with the following additional columns:
-- sunrise: sunrise time for the date and location provided by ts and lat/lon per row
-- sunset: sunset time for the date and location provided by ts and lat/lon per row
+\itemize{
+\item sunrise: sunrise time for the date and location provided by ts and lat/lon per row
+\item sunset: sunset time for the date and location provided by ts and lat/lon per row
+}
 }
 \description{
-Creates and adds a sunrise and sunset column to a data.frame containing latitude, longitude, 
+Creates and adds a sunrise and sunset column to a data.frame containing latitude, longitude,
 and a date/time as POSIXct or numeric.
 }
 \examples{

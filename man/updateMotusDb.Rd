@@ -28,14 +28,14 @@ To insert a new version update modify and run the ./data-raw/updatesql.R
 script to add new sql commands to the internal data frame.
 
 \itemize{
-  \item date: date at which the sql update record was added (default current
-  timestamp)
-  \item sql: sql string to execute (you should minimize the risk of database
-  errors by using IF EXISTS or DROP as appropriate prior to your command)
-  \item descr: description of the update, printed for the user during the
-  update process
+\item date: date at which the sql update record was added (default current
+timestamp)
+\item sql: sql string to execute (you should minimize the risk of database
+errors by using IF EXISTS or DROP as appropriate prior to your command)
+\item descr: description of the update, printed for the user during the
+update process
 }
-  
+
 This function is called at the end of the \code{\link{ensureDBTables}}
 function. i.e., it will be called each time that a motus file is opened.
 }

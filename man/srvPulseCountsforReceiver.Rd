@@ -18,10 +18,10 @@ obtained for this batch.  When 0, \code{ant} is ignored}
 \value{
 data.frame with these columns:
 \itemize{
-   \item batchID  integer batch ID
-   \item ant      integer antenna number
-   \item hourBin  numeric hour indicator given as \code{floor(timestamp / 3600)}
-   \item count    integer number of pulses seen by antenna in this hour bin
+\item batchID  integer batch ID
+\item ant      integer antenna number
+\item hourBin  numeric hour indicator given as \code{floor(timestamp / 3600)}
+\item count    integer number of pulses seen by antenna in this hour bin
 }
 }
 \description{

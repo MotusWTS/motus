@@ -8,7 +8,7 @@ timeToSunriset(data, lat = "recvDeployLat", lon = "recvDeployLon",
   ts = "ts", units = "hours")
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
+\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data
 including at a minimum variables for date/time, latitude, and longitude}
 
 \item{lat}{variable with latitude values, defaults to recvDeployLat}

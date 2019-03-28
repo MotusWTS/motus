@@ -23,7 +23,7 @@ update a motus tag detection database - tag flavour (backend)
 }
 \seealso{
 \code{\link{tagme}}, which is intended for most users, and
-    indirectly calls this function.
+indirectly calls this function.
 }
 \author{
 John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}

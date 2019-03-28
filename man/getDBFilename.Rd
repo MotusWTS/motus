@@ -7,7 +7,7 @@
 getDBFilename(projRecv, dir = getwd())
 }
 \arguments{
-\item{projRecv}{integer scalar project code from motus.org, *or*
+\item{projRecv}{integer scalar project code from motus.org, \emph{or}
 character scalar receiver serial number.}
 
 \item{dir}{character scalar: path to folder where databases are stored

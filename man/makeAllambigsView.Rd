@@ -16,8 +16,8 @@ Default: 'allambigs'.}
 a dplyr::tbl which refers to the newly-created virtual table.
 By default, the columns in the virtual table are:
 \itemize{
-   \item{ambigID} unique ID linking ambiguous tag detections
-   \item{motusTagID} unique motus ID for this physical tag
+\item{ambigID} unique ID linking ambiguous tag detections
+\item{motusTagID} unique motus ID for this physical tag
 }
 }
 \description{

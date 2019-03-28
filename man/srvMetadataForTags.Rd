@@ -47,7 +47,7 @@ a list with these items:
 \itemize{
 \item tagID; integer motus tagID
 \item deployID; integer tag deployment ID (internal to motus)
-\item propID; integer property ID 
+\item propID; integer property ID
 \item propName; character name of the custom property value provided by the user
 \item propValue; character value of the custom property provided by the user
 }

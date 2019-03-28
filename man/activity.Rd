@@ -20,9 +20,9 @@ unreliable hits.
 }
 \details{
 If an 'activity' table doesn't exist, it will be created prior to
-  downloading.
-  
-  If there is an existing 'activity' table, this will update the records.
+downloading.
+
+If there is an existing 'activity' table, this will update the records.
 }
 \examples{
 \dontrun{

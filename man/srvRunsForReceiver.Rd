@@ -15,14 +15,14 @@ Default: 0, meaning none.}
 \value{
 a data.frame with these columns:
 \itemize{
-   \item runID
-   \item batchIDbegin
-   \item tsBegin
-   \item tsEnd
-   \item done
-   \item motusTagID
-   \item ant
-   \item len
+\item runID
+\item batchIDbegin
+\item tsBegin
+\item tsEnd
+\item done
+\item motusTagID
+\item ant
+\item len
 }
 }
 \description{

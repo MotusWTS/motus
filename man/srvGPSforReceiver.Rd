@@ -15,12 +15,12 @@ Default: 0, meaning none.}
 \value{
 data.frame with these columns:
 \itemize{
-   \item ts       numeric system timestamp
-   \item gpsts    numeric GPS timestamp
-   \item batchID  integer batch ID
-   \item lat      numeric latitude in degrees N (negative is south)
-   \item lon      numeric longitude in degrees E (negative is west)
-   \item alt      numeric altitude in metres ASL
+\item ts       numeric system timestamp
+\item gpsts    numeric GPS timestamp
+\item batchID  integer batch ID
+\item lat      numeric latitude in degrees N (negative is south)
+\item lon      numeric longitude in degrees E (negative is west)
+\item alt      numeric altitude in metres ASL
 }
 }
 \description{

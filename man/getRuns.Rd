@@ -3,9 +3,9 @@
 \name{getRuns}
 \alias{getRuns}
 \title{Returns a dataframe containing the runID and motusTagID, ambigID and timestamp range
-of runs, filtered by optional parameters. The match.partial parameter (default = TRUE) determines how  
-timestamp filtering works. When match.partial is FALSE, runID's are only included when both 
-tsBegin and tsEnd falls between ts.min and ts.max (only includes runs when they entirely contained 
+of runs, filtered by optional parameters. The match.partial parameter (default = TRUE) determines how
+timestamp filtering works. When match.partial is FALSE, runID's are only included when both
+tsBegin and tsEnd falls between ts.min and ts.max (only includes runs when they entirely contained
 in the specified range). When match.partial is TRUE, runID's are returned whenever the run
 partially matches the specified period.}
 \usage{
@@ -30,9 +30,9 @@ a dataframe containing the runID, the motusTagID and the ambigID (if applicable)
 }
 \description{
 Returns a dataframe containing the runID and motusTagID, ambigID and timestamp range
-of runs, filtered by optional parameters. The match.partial parameter (default = TRUE) determines how  
-timestamp filtering works. When match.partial is FALSE, runID's are only included when both 
-tsBegin and tsEnd falls between ts.min and ts.max (only includes runs when they entirely contained 
+of runs, filtered by optional parameters. The match.partial parameter (default = TRUE) determines how
+timestamp filtering works. When match.partial is FALSE, runID's are only included when both
+tsBegin and tsEnd falls between ts.min and ts.max (only includes runs when they entirely contained
 in the specified range). When match.partial is TRUE, runID's are returned whenever the run
 partially matches the specified period.
 }

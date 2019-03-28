@@ -17,14 +17,14 @@ password.
 \details{
 This function just resets these items to NULL:
 \itemize{
-   \item motus_vars$authToken
-   \item motus_vars$userLogin
-   \item motus_vars$userPassword
+\item motus_vars$authToken
+\item motus_vars$userLogin
+\item motus_vars$userPassword
 }
 Due to their active bindings, subsequent calls to
 any functions that need them will prompt for a login.
 }
 \author{
 John Brzustowski
-    \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
+\email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
 }

@@ -23,23 +23,23 @@ which will be included automatically from \code{motus_vars$authToken}
 Otherwise, an authentication token will be requested using the credentials
 in \code{motus_vars[c("userLogin", "userPassword")]}}
 
-\item{url}{Character. API url, defaults to `motus_vars$dataServerURL`}
+\item{url}{Character. API url, defaults to \code{motus_vars$dataServerURL}}
 }
 \value{
 the result of sending the request to the data server API.  The
-    result is a JSON-format character scalar if \code{json} is
-    \code{TRUE}; otherwise it is an R list with named components,
-    extracted from the JSON return value.
+result is a JSON-format character scalar if \code{json} is
+\code{TRUE}; otherwise it is an R list with named components,
+extracted from the JSON return value.
 }
 \description{
 Send a query to the data server API
 }
 \note{
 If you have not already entered your motus login credentials
-    in this R session, you will be prompted for them.
+in this R session, you will be prompted for them.
 }
 \author{
 John Brzustowski
-    \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
+\email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
 }
 \keyword{internal}

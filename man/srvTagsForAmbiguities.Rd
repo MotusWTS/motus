@@ -12,13 +12,13 @@ srvTagsForAmbiguities(ambigIDs)
 \value{
 a data.frame with these columns:
 \itemize{
-   \item ambigID; negative integer tag ambiguity ID
-   \item motusTagID1; positive integer motus tag ID
-   \item motusTagID2; positive integer motus tag ID
-   \item motusTagID3; positive integer motus tag ID or NA
-   \item motusTagID4; positive integer motus tag ID or NA
-   \item motusTagID5; positive integer motus tag ID or NA
-   \item motusTagID6; positive integer motus tag ID or NA
+\item ambigID; negative integer tag ambiguity ID
+\item motusTagID1; positive integer motus tag ID
+\item motusTagID2; positive integer motus tag ID
+\item motusTagID3; positive integer motus tag ID or NA
+\item motusTagID4; positive integer motus tag ID or NA
+\item motusTagID5; positive integer motus tag ID or NA
+\item motusTagID6; positive integer motus tag ID or NA
 }
 with one row per ambigID
 }

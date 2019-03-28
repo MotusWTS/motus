@@ -7,7 +7,7 @@
 tellme(projRecv, new = FALSE, dir = getwd())
 }
 \arguments{
-\item{projRecv}{integer scalar project code from motus.org, *or*
+\item{projRecv}{integer scalar project code from motus.org, \emph{or}
 character scalar receiver serial number}
 
 \item{new}{logical scalar: is this a new database?  Default: FALSE
@@ -23,15 +23,15 @@ Default: the current directory; i.e. \code{getwd()}}
 \value{
 a named list with these items:
 \itemize{
-   \item numBatches: number of batches having data for your database
-   \item numRuns: number of runs of tags detections with new data
-   \item numHits: number of new detections
-   \item numGPS: number of new GPS fixes covering the new detections
-   \item numBytes: estimated size of download, in bytes.  This is
-         an estimate of the \emph{uncompressed} size, but
-         data are gz-compressed for transfer, so the number of bytes
-         you have to download is typically going to be smaller than
-         this number by a factor of 2 or more.
+\item numBatches: number of batches having data for your database
+\item numRuns: number of runs of tags detections with new data
+\item numHits: number of new detections
+\item numGPS: number of new GPS fixes covering the new detections
+\item numBytes: estimated size of download, in bytes.  This is
+an estimate of the \emph{uncompressed} size, but
+data are gz-compressed for transfer, so the number of bytes
+you have to download is typically going to be smaller than
+this number by a factor of 2 or more.
 }
 }
 \description{

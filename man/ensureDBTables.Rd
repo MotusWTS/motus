@@ -9,8 +9,8 @@ ensureDBTables(src, projRecv, deviceID)
 \arguments{
 \item{src}{dplyr sqlite src, as returned by \code{dplyr::src_sqlite()}}
 
-\item{projRecv}{integer scalar motus project ID number *or*
-    character scalar receiver serial number; must be specified if
+\item{projRecv}{integer scalar motus project ID number \emph{or}
+character scalar receiver serial number; must be specified if
 \code{src} does not already contain a table named \code{meta}.}
 
 \item{deviceID}{integer scalar motus deviceID; must be specified

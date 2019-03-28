@@ -17,7 +17,7 @@ the query will be written to the .rds file, but the query can
 include 'limit' and 'offset' phrases.}
 
 \item{bind.data}{values for query parameters, if any; see
-\code{\link{DBI::dbGetQuery}}.  Defaults to \code{data.frame(x=0L)},
+\code{\link[DBI:dbGetQuery]{DBI::dbGetQuery()}}.  Defaults to \code{data.frame(x=0L)},
 i.e. a trivial data.frame meant only to pass the sanity checks
 imposed by \code{dbGetQuery()}}
 
@@ -28,7 +28,7 @@ results will be saved.  Should end in ".rds".}
 subset of the columns in parameter \code{query}}
 
 \item{rowsPerBlock}{maximum number of rows fetched from the DB at a
-    time; this limits the maximum memory consumed by this function.
+time; this limits the maximum memory consumed by this function.
 Default: 10000}
 
 \item{stringsAsFactors}{should string columns be exported as
@@ -45,11 +45,11 @@ the \code{'classes'} parameter.}
 
 \item{factorQueries}{a named character vector of queries for quickly obtaining the
 levels for those columns you wish to be factors.  This list will be consulted
-for any string column, if `stringsAsFactors` is TRUE, and for any column
-whose entry in \code{classes} is `factor`.  Names of this list are
+for any string column, if \code{stringsAsFactors} is TRUE, and for any column
+whose entry in \code{classes} is \code{factor}.  Names of this list are
 column names, and values are the query to perform to get the factor levels
 for that column.  The query should return a distinct set of levels.
-You don't have to specify `factorQueries`, but if you don't, \code{sqliteToRDS}
+You don't have to specify \code{factorQueries}, but if you don't, \code{sqliteToRDS}
 might take $N+1$ times as long to run as it would otherwise, where $N$ is the
 number of factor columns.}
 }
@@ -62,16 +62,16 @@ memory (Linux, OS X; not Windows)
 }
 \details{
 Typically, exporting the contents of an sqlite database
-    table as an R .rds file has meant reading the entire table into
-    R as a data.frame, then using \code{saveRDS()}.  This requires
-    memory proportional to the size of the data.frame, but with a sufficiently
-    large swap partition, this will still work.  However, our experience on
-    an Intel core-i7 server with 4 cores @ 3.4 GHz, 32 G RAM, and a 256 SSD swap
-    shows that our largest sites still slow the server down to a grind when
-    processing one site at a time.  To permit this all to work on a lower
-    spec server with multiple sites potentially being processed at once, we
-    need to do this with a much smaller memory footprint, even at the expense
-    of considerably longer running time.
+table as an R .rds file has meant reading the entire table into
+R as a data.frame, then using \code{saveRDS()}.  This requires
+memory proportional to the size of the data.frame, but with a sufficiently
+large swap partition, this will still work.  However, our experience on
+an Intel core-i7 server with 4 cores @ 3.4 GHz, 32 G RAM, and a 256 SSD swap
+shows that our largest sites still slow the server down to a grind when
+processing one site at a time.  To permit this all to work on a lower
+spec server with multiple sites potentially being processed at once, we
+need to do this with a much smaller memory footprint, even at the expense
+of considerably longer running time.
 
 This function serializes the results of an SQLite query as a
 data.frame into an .rds file, using a fixed amount of memory that
@@ -84,14 +84,14 @@ these into the final .rds file via a shell command.
 }
 \note{
 End users should really be working with an on-disk .sqlite
-    version of their data, but we want to maintain some backward
-    compatibility with users' existing code.  Also, the details of
-    the algorithm in this function depend on the encoding inherent
-    in the files serialize.c and Rinternals.h from the R source
-    tree.
+version of their data, but we want to maintain some backward
+compatibility with users' existing code.  Also, the details of
+the algorithm in this function depend on the encoding inherent
+in the files serialize.c and Rinternals.h from the R source
+tree.
 
 The resulting .rds file uses bzip2 compression, which works with
-recent versions of R, but might break `readRDS()` in older versions.
+recent versions of R, but might break \code{readRDS()} in older versions.
 
 The algorithm, ignoring headers and footers, is:
 
@@ -119,9 +119,9 @@ read more quickly into memory.
 
 Data types are converted as so:
 \itemize{
- \item sqlite real: written as 8-byte doubles
- \item sqlite int: written as 4-byte signed integers or logical (see below)
- \item sqlite text: written as a factor
+\item sqlite real: written as 8-byte doubles
+\item sqlite int: written as 4-byte signed integers or logical (see below)
+\item sqlite text: written as a factor
 }
 
 Additionally, class() attributes can be specified for any of the columns.
@@ -129,12 +129,12 @@ If "logical" or "integer" is specified for a column, it is
 written as a native vector of that type.
 
 If there are no result rows from the query, then the R value
-    \code{NULL} is saved to file \code{out}.
+\code{NULL} is saved to file \code{out}.
 
 This function currently only works on linux (and OS X?)
-    because we use shell commands `cat` and `bzip2`.  The author
-    would appreciate information on how to implement this for
-    Windows platforms.
+because we use shell commands \code{cat} and \code{bzip2}.  The author
+would appreciate information on how to implement this for
+Windows platforms.
 }
 \author{
 John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}

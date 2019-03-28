@@ -16,11 +16,11 @@ writeRunsFilter(src, filterName, motusProjID = NA, df,
 
 \item{df}{dataframe containing the runID, the motusTagID and probability values to save in the local database}
 
-\item{overwrite}{boolean. When TRUE ensures that existing records matching the same filterName 
+\item{overwrite}{boolean. When TRUE ensures that existing records matching the same filterName
 and runID get replaced}
 
-\item{delete}{boolean. When TRUE, removes all existing filter records associated with the filterName 
-and re-inserts the ones contained in the dataframe. This option should be used if the dataframe 
+\item{delete}{boolean. When TRUE, removes all existing filter records associated with the filterName
+and re-inserts the ones contained in the dataframe. This option should be used if the dataframe
 provided contains the entire set of filters you want to save.}
 }
 \value{

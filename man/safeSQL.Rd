@@ -9,7 +9,7 @@ safeSQL(con, busyTimeout = 300)
 \arguments{
 \item{con}{RSQLite connection to database, as returned by
 dbConnect(SQLite(), ...), or character scalar giving path
-to SQLite database, or MySQLConnection, or dplyr::src}
+to SQLite database, or MySQLConnection, or \code{\link[dplyr:src]{dplyr::src()}}}
 
 \item{busyTimeout}{how many total seconds to wait while retrying a
 locked database.  Default: 300 (5 minutes).  Uses \code{pragma busy_timeout}
@@ -19,17 +19,17 @@ connections.}
 }
 \value{
 a function, S with class "safeSQL" taking two or more
-    parameters:
+parameters:
 \itemize{
-    \item \code{query} sqlite query with parameter handling indicated by:
-    \itemize{
-       \item words beginning with ":", which does parameter binding for RSQLite,
-       \item \bold{or} sprintf-style formatting codes (e.g. "\%d") which does parameter substitution for RSQLite or MySQL
-    }
-    \item \code{...} list of named (for ":" binding) or unnamed
-    (for "%" substitution) items specifying values for parameters in
-    query.  For ":" binding, all items must be named and have the same
-    length.  For "%" substitution, all items must be unnamed scalars.
+\item \code{query} sqlite query with parameter handling indicated by:
+\itemize{
+\item words beginning with ":", which does parameter binding for RSQLite,
+\item \bold{or} sprintf-style formatting codes (e.g. "\%d") which does parameter substitution for RSQLite or MySQL
+}
+\item \code{...} list of named (for ":" binding) or unnamed
+(for "%" substitution) items specifying values for parameters in
+query.  For ":" binding, all items must be named and have the same
+length.  For "%" substitution, all items must be unnamed scalars.
 }
 
 For RSQLite, these items are passed to \code{data.frame}, along with the
@@ -50,10 +50,10 @@ S("insert into contacts values(\"%s\", \"%s\")", "5 East St., Digby, NS", "902-5
 database connection, disabling further use of this function.
 
 \item \code{.QUOTE} boolean scalar (only for RMySQL connections); if TRUE, the
-default, quote string parameters using \code{\link{dbQuoteString}}.  Any parameter
-wrapped in \code{\link{DBI::SQL}} will not be quoted.  The only reason to use
+default, quote string parameters using \code{\link[=dbQuoteString]{dbQuoteString()}}.  Any parameter
+wrapped in \code{\link[DBI:SQL]{DBI::SQL()}} will not be quoted.  The only reason to use
 \code{.QUOTE=FALSE} is for a query where you know all parameters must not be
-quoted, and don't want to clutter your code with multiple \code{\link{DBI::SQL}}.
+quoted, and don't want to clutter your code with multiple \code{\link[DBI:SQL]{DBI::SQL()}}.
 A table name used as a parameter to a query should not be quoted, so for example,
 \code{
 s = safeSQL(dbConnect(MySQL(), 'motus'));
@@ -63,13 +63,13 @@ columnValue = "Mytags#123:4.7@166.38"
 s("select * from %s where %s=%s", DBI::SQL(tableName), DBI::SQL(columnName), columnValue)
 }
 would select all rows from the \code{tags} table where \code{fullID="Mytags#123:4.7@166.38"}
-Without using \code{\link{DBI::SQL}}, the resulting query would be the incorrect:
+Without using \code{\link[DBI:SQL]{DBI::SQL()}}, the resulting query would be the incorrect:
 \code{select * from 'tags' where 'fullID' = 'Mytags#123:4.7@166.38'}
 }
 }
 \description{
-This uses the `params` parameter for \code{\link{DBI::dbGetQuery}}
-and \code{\link{DBI::dbExecute}} (for RSQLite and ":" parameters)
+This uses the \code{params} parameter for \code{\link[DBI:dbGetQuery]{DBI::dbGetQuery()}}
+and \code{\link[DBI:dbExecute]{DBI::dbExecute()}} (for RSQLite and ":" parameters)
 or dbQuoteStrings (for MySQL or RSQLite "%" parameters).  It should
 prevent e.g. SQL injection attacks.
 }
@@ -83,8 +83,8 @@ for convenience, access is provided to some safeSQL internals, via the
 
 For MySQL, only one line of an insert can be provided per call; i.e. there is
 no SendPreparedQuery method to allow binding a data.frame's data to a prepared
-query.  Moreover, character parameters are quoted using \code{\link{dbQuoteString}}
-unless the parameter is wrapped in \code{\link{DBI::SQL}}, or if you
+query.  Moreover, character parameters are quoted using \code{\link[DBI:dbQuoteString]{DBI::dbQuoteString()}}
+unless the parameter is wrapped in \code{\link[DBI:SQL]{DBI::SQL()}}, or if you
 specify \code{.QUOTE=FALSE}
 
 safeSQL is meant for multi-process access of a DB with small, fast

@@ -7,7 +7,7 @@
 motusUpdateDB(projRecv, src, countOnly, forceMeta = FALSE)
 }
 \arguments{
-\item{projRecv}{integer scalar project code from motus.org, *or*
+\item{projRecv}{integer scalar project code from motus.org, \emph{or}
 character scalar receiver serial number}
 
 \item{src}{src_sqlite object representing the database}

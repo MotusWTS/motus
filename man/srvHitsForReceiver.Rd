@@ -15,17 +15,17 @@ Default: 0, meaning none.}
 \value{
 data.frame with these columns:
 \itemize{
-  \item hitID
-  \item runID
-  \item batchID
-  \item ts
-  \item sig
-  \item sigSD
-  \item noise
-  \item freq
-  \item freqSD
-  \item slop
-  \item burstSlop
+\item hitID
+\item runID
+\item batchID
+\item ts
+\item sig
+\item sigSD
+\item noise
+\item freq
+\item freqSD
+\item slop
+\item burstSlop
 }
 }
 \description{

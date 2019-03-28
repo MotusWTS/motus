@@ -7,7 +7,7 @@
 plotAllTagsSite(data, coordinate = "recvDeployLat", tagsPerPanel = 5)
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
+\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data
 including at a minimum variables for recvDeployName, fullID, mfgID, date/time, latitude or longitude}
 
 \item{coordinate}{column of receiver latitude/longitude values to use, defaults to recvDeployLat}

@@ -16,14 +16,14 @@ receivers, even if we already have them.  Default: FALSE}
 }
 \value{
 \code{src}, if countOnly is FALSE.  Otherwise, a list of
-    counts items that would be transferred by the update.
+counts items that would be transferred by the update.
 }
 \description{
 update a motus tag detection database - receiver flavour (backend)
 }
 \seealso{
 \code{\link{tagme}}, which is intended for most users, and
-    indirectly calls this function.
+indirectly calls this function.
 }
 \author{
 John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}

@@ -11,7 +11,7 @@ getMotusDBSrc(recv = NULL, proj = NULL, create = FALSE,
 \item{recv}{receiver serial number}
 
 \item{proj}{integer motus project number
-exactly  one of `proj` or `recv` must be specified.}
+exactly  one of \code{proj} or \code{recv} must be specified.}
 
 \item{create}{Is this a new database?  Default: FALSE.
 Same semantics as for src_sqlite()'s parameter of the same

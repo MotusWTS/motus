@@ -13,7 +13,7 @@ deleteRunsFilter(src, filterName, motusProjID = NA, clearOnly = FALSE)
 
 \item{motusProjID}{optional project ID attached to the filter in order to share with other users of the same project.}
 
-\item{clearOnly}{boolean. When true, only remove the probability records associated with the filter, 
+\item{clearOnly}{boolean. When true, only remove the probability records associated with the filter,
 but retain the filter itself}
 }
 \value{

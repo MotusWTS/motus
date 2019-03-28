@@ -9,7 +9,7 @@ srvAPIinfo()
 \value{
 a list with (at least) these items:
 \itemize{
-   \item maxRows; integer; maximum number of rows returned by any API calls
+\item maxRows; integer; maximum number of rows returned by any API calls
 }
 }
 \description{

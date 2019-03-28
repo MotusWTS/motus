@@ -74,7 +74,7 @@
 #'     include 'limit' and 'offset' phrases.
 #'
 #' @param bind.data values for query parameters, if any; see
-#' \code{\link{DBI::dbGetQuery}}.  Defaults to \code{data.frame(x=0L)},
+#' [DBI::dbGetQuery()].  Defaults to \code{data.frame(x=0L)},
 #' i.e. a trivial data.frame meant only to pass the sanity checks
 #' imposed by \code{dbGetQuery()}
 #'

@@ -2,8 +2,8 @@
 % Please edit documentation in R/metadata.R
 \name{metadata}
 \alias{metadata}
-\title{update entire metadata for receivers and tags from Motus server. Contrary to tagme, 
-this function retrieves the entire set of metadata for tags and receivers, and not only those 
+\title{update entire metadata for receivers and tags from Motus server. Contrary to tagme,
+this function retrieves the entire set of metadata for tags and receivers, and not only those
 pertinent to the detections of your local file.}
 \usage{
 metadata(src, projectIDs = NULL, replace = TRUE, delete = FALSE)
@@ -12,7 +12,7 @@ metadata(src, projectIDs = NULL, replace = TRUE, delete = FALSE)
 \item{src}{src_sqlite object representing the database (either tag or receiver)}
 
 \item{projectIDs}{optional integer vector of Motus projects IDs for which metadata should
-be obtained; default: NULL, meaning obtain metadata for all tags and receivers that your permissions 
+be obtained; default: NULL, meaning obtain metadata for all tags and receivers that your permissions
 allow.}
 
 \item{replace}{logical scalar; if TRUE (default), existing data replace the existing metadata with the newly acquired ones.}
@@ -20,12 +20,12 @@ allow.}
 \item{delete}{logical scalar; Defaut = FALSE. if TRUE, the entire metadata tables are cleared (for all projects) before re-importing the metadata.}
 }
 \description{
-update entire metadata for receivers and tags from Motus server. Contrary to tagme, 
-this function retrieves the entire set of metadata for tags and receivers, and not only those 
+update entire metadata for receivers and tags from Motus server. Contrary to tagme,
+this function retrieves the entire set of metadata for tags and receivers, and not only those
 pertinent to the detections of your local file.
 }
 \seealso{
-\code{\link{tagme}} provides an option to update only the metadata relevant to a specific 
+\code{\link{tagme}} provides an option to update only the metadata relevant to a specific
 project or receiver file.
 }
 \author{

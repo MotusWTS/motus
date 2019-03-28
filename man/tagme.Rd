@@ -8,7 +8,7 @@ tagme(projRecv, update = TRUE, new = FALSE, dir = getwd(),
   countOnly = FALSE, forceMeta = FALSE)
 }
 \arguments{
-\item{projRecv}{integer scalar project code from motus.org, *or*
+\item{projRecv}{integer scalar project code from motus.org, \emph{or}
 character scalar receiver serial number}
 
 \item{update}{boolean scalar: should any new data be downloaded and merged?
