@@ -40,7 +40,7 @@ Commonly used functions:
    \item \code{\link{tagSum}()}
    \item \code{\link{tagSumSite}()}
    \item \code{\link{simSiteDet}()}
-   \item \code{\link{sitesum}()}
+   \item \code{\link{siteSum}()}
    \item \code{\link{siteSumDaily}()}
    \item \code{\link{siteTrans}()}
    }

@@ -32,7 +32,7 @@
 #'    \item \code{\link{tagSum}()}
 #'    \item \code{\link{tagSumSite}()}
 #'    \item \code{\link{simSiteDet}()}
-#'    \item \code{\link{sitesum}()}
+#'    \item \code{\link{siteSum}()}
 #'    \item \code{\link{siteSumDaily}()}
 #'    \item \code{\link{siteTrans}()}
 #'    }
@@ -69,5 +69,4 @@
 #' @docType package
 #' @name motus
 #' @aliases motus-package motus-pkg
-
 NULL
