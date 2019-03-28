@@ -25,4 +25,7 @@ test_that("Plots run with no errors", {
   
   expect_silent(plotTagSig(shorebirds, "16035"))
   expect_silent(plotTagSig(dplyr::tbl(shorebirds_sql, "alltags"), "16035"))
+  
+  # Clean up
+  file.remove("Rplots.pdf")
 })
