@@ -21,7 +21,7 @@ test_that("checkVersion and updateMotusDb run and return messages as expected", 
   expect_message(checkVersion(test_sql), 
                  "Your motus sqlite file version does not match the package.")
   expect_message(updateMotusDb(test_sql, test_sql), 
-                 "updateMotusDb started \\(5 versions updates\\)")
+                 "updateMotusDb started \\(6 versions updates\\)")
   
   # After update
   expect_silent(updateMotusDb(test_sql, test_sql))
@@ -35,7 +35,7 @@ test_that("checkVersion and updateMotusDb run and return messages as expected", 
   expect_message(checkVersion(test_sql), 
                  "The admInfo table has not yet been created in your motus sqlite file.")
   expect_message(updateMotusDb(test_sql, test_sql), 
-                 "updateMotusDb started \\(9 versions updates\\)")
+                 "updateMotusDb started \\(10 versions updates\\)")
   
   # Clean up
   file.remove("./project-176.motus")
