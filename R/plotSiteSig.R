@@ -21,11 +21,19 @@
 #' plotSiteSig(filter(df.alltags, motusTagID %in% c(16037, 16039, 16035)), recvDeployName = "Netitishi")
 
 plotSiteSig <- function(data, recvDeployName){
-  data <- filter_(data, paste("recvDeployName", "==", "recvDeployName"))
-  data <- select(data, antBearing, ts, recvDeployLat, sig, fullID, recvDeployName) %>% distinct %>% collect %>% as.data.frame
-  data$ts <- lubridate::as_datetime(data$ts, tz = "UTC")
-  p <- ggplot2::ggplot(data, ggplot2::aes(ts, sig, col = as.factor(antBearing)))
-  p + ggplot2::geom_point() + ggplot2::theme_bw() + ggplot2::theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
-    ggplot2::labs(title = paste0(recvDeployName, ' tag detections by signal strength, coloured by antenna'), x = "Date", y = "Signal Strength", colour = "Antenna Bearing") +
+
+  data <- data %>%
+    dplyr::filter(recvDeployName == !!recvDeployName) %>%
+    dplyr::select(antBearing, ts, recvDeployLat, sig, fullID, recvDeployName) %>% 
+    dplyr::distinct() %>% 
+    dplyr::collect() %>% 
+    dplyr::mutate(ts = lubridate::as_datetime(ts, tz = "UTC"))
+  
+  ggplot2::ggplot(data, ggplot2::aes(ts, sig, col = as.factor(antBearing))) + 
+    ggplot2::geom_point() + 
+    ggplot2::theme_bw() + 
+    ggplot2::theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
+    ggplot2::labs(title = paste0(recvDeployName, ' tag detections by signal strength, coloured by antenna'), 
+                  x = "Date", y = "Signal Strength", colour = "Antenna Bearing") +
     ggplot2::facet_wrap(~fullID) 
 }

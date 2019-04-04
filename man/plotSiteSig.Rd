@@ -7,7 +7,7 @@
 plotSiteSig(data, recvDeployName)
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
+\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data
 including at a minimum variables for antBearing, ts, recvDeploylat, sig, fullID, recvDeployName}
 
 \item{recvDeployName}{name of recvDeployName}

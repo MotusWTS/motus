@@ -4,35 +4,43 @@
 \alias{plotRouteMap}
 \title{Map of tag routes and sites coloured by id}
 \usage{
-plotRouteMap(data, zoom, latCentre, lonCentre, maptype, recvStart, recvEnd)
+plotRouteMap(data, zoom = 3, lat = NULL, lon = NULL,
+  maptype = "terrain", recvStart = NULL, recvEnd = NULL)
 }
 \arguments{
 \item{data}{a .motus sql file}
 
-\item{zoom}{integer for zoom 3-21, 3 being continent level, 10 being city-scale}
+\item{zoom}{integer.  Values between 3 and 21, 3 being continent level, 10 being city-scale}
 
-\item{latCentre}{latitude to centre map around}
+\item{lat}{numeric vector. Top and bottom latitude bounds. If NULL (default)
+this is calculated from the data}
 
-\item{lonCentre}{longitude to centre map around}
+\item{lon}{numeric vector. Left and right longitude bounds. If NULL
+(default) this is calculated from the data}
 
-\item{maptype}{google map type to display, can be: "terrain" , "roadmap", "satellite", or "hybrid"}
+\item{maptype}{map type to display, can be: "terrain" , "toner",
+"watercolor", or any other option available to
+\code{\link[ggmap]{get_stamenmap}()}.}
 
-\item{recvStart}{start date for date range of active receivers}
+\item{recvStart}{start date for date range of active receivers. If NULL uses
+the full data range}
 
-\item{recvEnd}{end date for date range of active receivers}
-
-\item{site_data}{receiver metadata file}
+\item{recvEnd}{end date for date range of active receivers. If NULL uses the
+full data range}
 }
 \description{
 Google map of routes of Motus tag detections coloured by ID.  User defines a date range to show
 points for receivers that were operational at some point during the date range.
+}
+\details{
+By default this function uses Stamen maps
 }
 \examples{
 You must use a .motus sql file, instructions to load using tagme() are below
 sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
 
 Plot routemap of all detection data, with "terrain" maptype, and receivers active between 2016-01-01 and 2017-01-01
-plotRouteMap(sql.motus, maptype = "terrain", latCentre = 44, lonCentre = -70, zoom = 5, recvStart = "2016-01-01", recvEnd = "2016-12-31")
+plotRouteMap(sql.motus, recvStart = "2016-01-01", recvEnd = "2016-12-31")
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

@@ -7,12 +7,15 @@
 siteTrans(data, latCoord = "recvDeployLat", lonCoord = "recvDeployLon")
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-including at a minimum variables for ts, motusTagID, tagDeployID, recvDeployName, and a latitude/longitude}
+\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame
+of detection data including at a minimum variables for ts, motusTagID,
+tagDeployID, recvDeployName, and a latitude/longitude}
 
-\item{latCoord}{a variable with numeric latitude values, defaults to recvDeployLat}
+\item{latCoord}{a variable with numeric latitude values, defaults to
+recvDeployLat}
 
-\item{lonCoord}{a variable with numeric longitude values, defaults to recvDeployLon}
+\item{lonCoord}{a variable with numeric longitude values, defaults to
+recvDeployLon}
 }
 \value{
 a data.frame with these columns:
@@ -33,23 +36,38 @@ a data.frame with these columns:
 }
 }
 \description{
-Creates a dataframe of transitions between sites; detections are ordered by detection time, then "transitions"
-are identified as the period between the final detection at site x (possible "departure"), and the first detection
-(possible "arrival") at site y (ordered chronologically). Each row contains the last detection time and lat/lon
-of site x, first detection time and lat/lon of site y, distance between the site pair, time between detections,
+Creates a dataframe of transitions between sites; detections are ordered by
+detection time, then "transitions" are identified as the period between the
+final detection at site x (possible "departure"), and the first detection
+(possible "arrival") at site y (ordered chronologically). Each row contains
+the last detection time and lat/lon of site x, first detection time and
+lat/lon of site y, distance between the site pair, time between detections,
 rate of movement between detections, and bearing between site pairs.
 }
 \examples{
-You can use either a selected tbl from .motus eg. "alltags", or a data.frame, instructions to convert a .motus file to all formats are below.
-sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
-tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
-df.alltags <- tbl.alltags \%>\% collect \%>\% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+# You can use either a selected tbl from .motus eg. "alltags", or a data.frame,
+instructions to convert a .motus file to all formats are below. 
 
-View all site transitions for all detection data from tbl file tbl.alltags
-transitions <- siteTrans(tbl.alltags)
+\dontrun{
+  # download and access data from project 176 in sql format 
+  sql.motus <- tagme(176, new = TRUE, update = TRUE) 
+ 
+  # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+  tbl.alltags <- tbl(sql.motus, "alltags") 
+ 
+  ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+   df.alltags <- tbl.alltags \%>\%
+     collect \%>\%
+     as.data.frame()
 
-View site transitions for only tag 16037 from data.frame df.alltags using gpsLat/gpsLon
-transitions <- siteTrans(filter(df.alltags, motusTagID == 16037), latCoord = "gpsLat", lonCoord = "gpsLon")
+  # View all site transitions for all detection data from tbl file tbl.alltags
+  transitions <- siteTrans(tbl.alltags)
+
+  # View site transitions for only tag 16037 from data.frame df.alltags using
+  # gpsLat/gpsLon
+  transitions <- siteTrans(filter(df.alltags, motusTagID == 16037),
+                           latCoord = "gpsLat", lonCoord = "gpsLon")
+}
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

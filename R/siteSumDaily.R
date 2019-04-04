@@ -37,9 +37,22 @@
 #' daily_site_summary <- siteSumDaily(filter(df.alltags, speciesEN == "Red Knot"))
 
 siteSumDaily <- function(data, units = "hours"){
-  data <- select(data, motusTagID, sig, recvDeployName, ts) %>% distinct %>% collect %>% as.data.frame
-  data$ts <- as_datetime(data$ts, tz = "UTC")
-  data$date <- as.Date(data$ts)
+  data <- select(data, motusTagID, sig, recvDeployName, recvDeployLat, 
+                 recvDeployLon, gpsLat, gpsLon, ts) %>% distinct %>% collect %>% as.data.frame
+  data <- mutate(data,
+                 recvLat = if_else((is.na(gpsLat)|gpsLat == 0|gpsLat ==999),
+                                   recvDeployLat,
+                                   gpsLat),
+                 recvLon = if_else((is.na(gpsLon)|gpsLon == 0|gpsLon == 999),
+                                   recvDeployLon,
+                                   gpsLon),
+                 recvDeployName = paste(recvDeployName, 
+                                        round(recvLat, digits = 1), sep = "\n" ),
+                 recvDeployName = paste(recvDeployName,
+                                        round(recvLon, digits = 1), sep = ", "),
+                 ts = lubridate::as_datetime(ts, tz = "UTC"),
+                 date = as.Date(ts))
+  #data$date <- as.Date(data$ts)
   grouped <- dplyr::group_by(data, recvDeployName, date)
   site_sum <- dplyr::summarise(grouped,
                         first_ts=min(ts),
