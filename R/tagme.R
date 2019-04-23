@@ -99,8 +99,10 @@ tagme = function(projRecv, update=TRUE, new=FALSE, dir=getwd(), countOnly=FALSE,
 
     ensureDBTables(rv, projRecv, deviceID)
 
-    if (update)
-        rv = motusUpdateDB(projRecv, rv, countOnly, forceMeta)
+    if (update) {
+        rv <- motusUpdateDB(projRecv, rv, countOnly, forceMeta)
+        rv <- activity(src = rv, resume = TRUE)
+    }
 
     return(rv)
 }
