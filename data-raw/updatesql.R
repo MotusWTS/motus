@@ -294,7 +294,8 @@ UNION SELECT ambigID, motusTagID4 as motusTagID FROM tagAmbig where motusTagID4 
 UNION SELECT ambigID, motusTagID5 as motusTagID FROM tagAmbig where motusTagID5 is not null
 UNION SELECT ambigID, motusTagID6 as motusTagID FROM tagAmbig where motusTagID6 is not null"))
 
-sql_versions <- dplyr::mutate(sql_versions, date = as.POSIXct(date, tz = "UTC"))
+sql_versions <- dplyr::mutate(sql_versions, 
+                              date = lubridate::as_datetime(as.character(date), tz = "UTC"))
 usethis::use_data(sql_versions, internal = TRUE, overwrite = TRUE)
 
 
