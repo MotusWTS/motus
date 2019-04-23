@@ -13,7 +13,7 @@ serializeNoHeader(x, dropTypeLen = FALSE)
 }
 \value{
 raw vector to which x has been serialized in binary little-endian (non-XDR) format,
-but without the leading 'B\n' and three 32-bit integers of header:
+but without the leading 'B\\n' and three 32-bit integers of header:
 RDS_serialization_version
 RDS_R_writer_version
 RDS_min_R_version
