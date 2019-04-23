@@ -1,6 +1,6 @@
 # Create a small subset data frame for testing and examples
-
-tags <- tagme(projRecv = 176, new = FALSE, update = TRUE, "./inst/extdata/")
+file.remove("./inst/extdata/project-176.motus")
+tags <- tagme(projRecv = 176, new = TRUE, update = TRUE, "./inst/extdata/")
 shorebirds <- dplyr::tbl(tags, "alltags") %>%
   dplyr::collect()
 
