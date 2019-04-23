@@ -47,8 +47,8 @@
 
 .onLoad = function(...) {
     ## interim location of unprotected local data server
-
-    dataServerURL = "https://motus.org/api/sgdata"
+    motusServerURL = "https://motus.org/api"
+    dataServerURL = file.path(motusServerURL, "sgdata")
 
     ## Assign constants
 
@@ -60,9 +60,9 @@
 
         ## API entry points for the motus server (absolute URLs)
 
-        API_REGISTER_TAG = "https://motus.org/api/tag/register"
-        API_DEPLOY_TAG   = "https://motus.org/api/tag/deploy"
-        API_SEARCH_TAGS  = "https://motus.org/api/tags/search"
+        #API_REGISTER_TAG = file.path(motusServerURL, "tag/register")
+        #API_DEPLOY_TAG   = file.path(motusServerURL, "tag/deploy")
+        #API_SEARCH_TAGS  = file.path(motusServerURL, "tags/search")
 
         ## API entry points for the data server (URLs relative to dataServerURL)
         API_API_INFO                            = "custom/api_info"
