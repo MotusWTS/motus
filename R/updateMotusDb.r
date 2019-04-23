@@ -54,14 +54,14 @@ updateMotusDb <- function(rv, src) {
     
     dates <- apply(update_versions, 1, function(row) {
       message(" - ", row["descr"], sep = "")
-	  
+
 	    v <- unlist(strsplit(row["sql"], ";"))
 	    l <- lapply(v, function(sql) {
 	      
 	      if (sql != "") {
 	        e <- try(DBI::dbExecute(src$con, sql), silent = TRUE)
 	        if(e != 0) { # Deal with errors
-	          if(!stringr::str_detect(e, "duplicate column name: siteName")) {
+	          if(!stringr::str_detect(e, "duplicate column name: ")) {
 	            stop(e)
 	          }
 	        }
