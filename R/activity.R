@@ -56,6 +56,15 @@ activity <- function(src, resume = FALSE) {
     # Get first batch
     b <- srvActivityForBatches(batchID = batchID)
     
+    # If this is the last batch, check if actually new, or just the end of the record
+    if(resume && i == 1 && identical(last_batch, batches)) {
+      t <- dplyr::tbl(src$con, "activity") %>%
+        dplyr::filter(batchID == batches[i]) %>%
+        dplyr::collect() %>%
+        as.data.frame()
+     if(identical(t, b)) break 
+    }
+    
     # Only first time
     if(i == 1) message(sprintf("Project %5d:  %5d batch records to check", 
                                  p, length(batches)))
@@ -65,7 +74,6 @@ activity <- function(src, resume = FALSE) {
     
     # Get the rest of the data
     while(nrow(b) > 0) {
-      
       # Save Previous batch
       dbInsertOrReplace(sql$con, "activity", b)
       message(msg, sprintf("got %6d activity records", nrow(b)))
