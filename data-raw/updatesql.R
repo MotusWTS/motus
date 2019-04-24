@@ -5,8 +5,8 @@ sql_versions <- dplyr::tibble()
 sql_versions <- rbind(
    sql_versions,
    cbind(date = "2019-04-22",
-         descr = "Add 'utcOffSet' field to 'recvDeps' table",
-         sql = "ALTER TABLE recvDeps ADD COLUMN utcOffSet INTEGER"))
+         descr = "Add 'utcOffset' field to 'recvDeps' table",
+         sql = "ALTER TABLE recvDeps ADD COLUMN utcOffset INTEGER"))
 
 
 # Update 2019-03-13 -------------------------------------------------------
