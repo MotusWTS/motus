@@ -21,8 +21,8 @@
 #'   # First download tag data
 #'   my_tags <- tagme(176, new = TRUE)
 #'   
-#'   # Now download batch activity 
-#'   my_tags <- activity(my_tags)
+#'   # Access 'activity' table
+#'   a <- tbl(my_tags, "activity")
 #'   
 #'   # If interrupted and you want to resume
 #'   my_tags <- activity(my_tags, resume = TRUE)
