@@ -19,7 +19,7 @@
 #' @examples
 #' \dontrun{
 #'   # First download tag data
-#'   my_tags <- tagme(176, new = TRUE)
+#'   my_tags <- tagme(176, new = TRUE, update = TRUE)
 #'   
 #'   # Access 'activity' table
 #'   a <- tbl(my_tags, "activity")
