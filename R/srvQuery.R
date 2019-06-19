@@ -26,14 +26,14 @@
 #' @keywords internal
 
 srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE, 
-                      auth = TRUE, url = motus_vars$dataServerURL) {
+                      auth = TRUE, url = motus_vars$dataServerURL,
+                      timeout = 120) {
     
     url <- file.path(url, API)
     ua <- httr::user_agent(agent = "http://github.com/MotusWTS/motus")
     
     # Set curl options
     httr::set_config(httr::accept_json())
-    httr::set_config(httr::timeout(300))
     httr::set_config(httr::content_type_json())
     
     for (i in 1:2) {
@@ -59,8 +59,24 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
         
         if(show) message(json, "\n")
 
-        resp <- httr::POST(url, body = list("json" = json), encode = "form",
-                           httr::config(http_content_decoding = 0), ua)
+        resp <- try(httr::POST(url, body = list("json" = json), encode = "form",
+                               httr::config(http_content_decoding = 0), ua, 
+                               httr::timeout(timeout)),
+                    silent = TRUE)
+        
+        if(class(resp) == "try-error") {
+            if(stringr::str_detect(resp, "aborted by an application callback")){
+                stop(resp, call. = FALSE)
+            } else if (stringr::str_detect(resp, "Timeout was reached")) {
+                message("The server did not respond within ", timeout, "s. Trying again...")
+                resp <- try(httr::POST(url, body = query, encode = "form",
+                                       ua, httr::timeout(timeout)),
+                            silent = TRUE)
+                if(stringr::str_detect(resp, "Timeout was reached")) {
+                    stop("The server is not responding, please try again later.", call. = FALSE)
+                }
+            }
+        }
 
         # Catch http errors
         if(httr::http_error(resp)) {
@@ -70,7 +86,7 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
                 p <- list(errorMsg = "Internal Server Error")
             } else p <- list(errorMsg = "Unknown Error")
             
-            stop(sprintf("Motus API requrest failed [%s]\n%s",
+            stop(sprintf("Motus API request failed [%s]\n%s",
                          httr::status_code(resp),
                          p$errorMsg), 
                  call. = FALSE)
