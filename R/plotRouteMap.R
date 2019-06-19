@@ -44,7 +44,7 @@ plotRouteMap <- function(data, zoom = 3, lat = NULL, lon = NULL,
   if(class(zoom) != "numeric") stop('Numeric value between 3 and 21 required for "zoom"')
   if(class(lat) %in% c(NULL, "numeric")) stop('Numeric values required for "lat"')
   if(class(lon) %in% c(NULL, "numeric")) stop('Numeric values required for "lon"')
-  
+
   site <- tbl(data, "recvDeps")
   site <- site %>% 
     dplyr::select(name, latitude, longitude, tsStart, tsEnd) %>% 
@@ -54,15 +54,16 @@ plotRouteMap <- function(data, zoom = 3, lat = NULL, lon = NULL,
     dplyr::mutate(tsStart = lubridate::as_datetime(tsStart, tz = "UTC"),
                   tsEnd = lubridate::as_datetime(tsEnd, tz = "UTC"),
                   ## for sites with no end date, make an end date a year from now
-                  tsEnd = as.POSIXct(dplyr::if_else(is.na(tsEnd),
-                                                    as.POSIXct(format(Sys.time(), "%Y-%m-%d %H:%M:%S")) + lubridate::dyears(1),
-                                                    tsEnd), tz = "UTC", origin = "1970-01-01"),
+                  tsEnd = lubridate::as_datetime(
+                    dplyr::if_else(is.na(tsEnd),
+                                   lubridate::as_datetime(format(Sys.time(), "%Y-%m-%d %H:%M:%S")) + lubridate::dyears(1),
+                                   tsEnd), tz = "UTC"),
                   interval = lubridate::interval(tsStart, tsEnd))
   
-  if(is.null(recvStart)) recvStart <- as.POSIXct(min(site$tsStart))
-  if(is.null(recvEnd)) recvEnd <- as.POSIXct(min(site$tsEn))
+  if(is.null(recvStart)) recvStart <- min(site$tsStart)
+  if(is.null(recvEnd)) recvEnd <- max(site$tsEnd)
   dateRange <- lubridate::interval(recvStart, recvEnd) ## get time interval you are interested in
-  
+
   data <- tbl(data, "alltags")
   data <- select(data, motusTagID, ts, recvDeployLat, recvDeployLon, fullID, recvDeployName, speciesEN) %>% 
     dplyr::filter(!is.na(recvDeployLat), !is.na(recvDeployLon)) %>%
