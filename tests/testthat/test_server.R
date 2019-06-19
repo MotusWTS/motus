@@ -10,9 +10,9 @@ test_that("tagme() and tellme() access the server appropriately", {
   
   expect_error(expect_message(tagme(projRecv = 10, new = TRUE, update = TRUE), 
                               "updateMotusDb"),
-               "Internal Server Error")
+               "You do not have permission")
   
-  expect_error(tagme(projRecv = 176, new = TRUE, update = TRUE), NA)
+  expect_message(tagme(projRecv = 176, new = TRUE, update = TRUE))
   
   # Clean up
   file.remove("./project-176.motus")
