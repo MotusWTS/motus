@@ -18,3 +18,9 @@ test_that("tagme() and tellme() access the server appropriately", {
   file.remove("./project-176.motus")
   file.remove("./project-10.motus")
 })
+test_that("srvAuth handles errors informatively", {
+  sessionVariable(name = "userLogin", val = "motus.samp")
+  sessionVariable(name = "userPassword", val = "motus.samp")
+  
+  expect_error(srvAuth(), "Authentication failed")
+})
