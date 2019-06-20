@@ -46,9 +46,11 @@
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 .onLoad = function(...) {
-    ## interim location of unprotected local data server
-    motusServerURL = "https://motus.org/api"
-    dataServerURL = file.path(motusServerURL, "sgdata")
+    # default location of motus data server, unless user has already assigned
+    # a value to "motusServerURL" in the global environment
+    if(!exists("motusServerURL")) motusServerURL <- "https://motus.org/api"
+    dataServerURL <- file.path(motusServerURL, "sgdata")
+    
 
     ## Assign constants
 
