@@ -13,12 +13,12 @@ srvDeviceIDForReceiver(serno)
 a data.frame with these columns:
 \itemize{
 \item serno; character serial number, e.g. "SG-1214BBBK3999", "Lotek-8681"
-\item deviceID; integer device ID (internal to motus)
+\item deviceID; integer device ID (internal to motus); NA if the serial number
+was not valid or not known.
 }
 }
 \description{
-The deviceID is returned for any serial number of a receiver deployed
-by a project you have permissions to.
+The deviceID is returned for any valid receiver serial numbers.
 }
 \author{
 John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
