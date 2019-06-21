@@ -1,0 +1,85 @@
+<h3>
+<a id="user-content-customizing-the-motus-database" class="anchor" href="#customizing-the-motus-database" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Customizing the .motus database</h3>
+<p>The <code>motusClient</code> package is intended to be a minimal, stable layer for
+fetching runs of tag detections in incremental batches from a provider
+via the <a href="https://github.com/jbrzusto/motusClient/blob/master/inst/doc/upstream_api.md">upstream API</a>;
+e.g. a server running the <a href="https://github.com/jbrzusto/motusServer">motusServer</a> package.</p>
+<p>The API includes entries for obtaining some metadata, but users of
+motusClient will likely want to fetch metadata from elsewhere.  Also,
+the structure and semantics of these need to be more flexible to
+accomodate changing user needs.  So packages using <code>motusClient</code> will
+sometimes need to make changes to the schema of .motus files, by
+adding new columns, tables and views, and populating them.</p>
+<h3>
+<a id="user-content-hook-functions" class="anchor" href="#hook-functions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Hook functions</h3>
+<p><code>motusClient</code> supports extending the .motus schema by a set of
+function hooks, which can be used by packages to have their own
+functions called at key points in the operation of the <code>motusClient</code>
+functions.  A package can install a hook function at load-time by
+including a line like:</p>
+<div class="highlight highlight-source-r"><pre>    addHook(<span class="pl-s"><span class="pl-pds">"</span>ensureDBTables<span class="pl-pds">"</span></span>, <span class="pl-smi">f</span>)  <span class="pl-c"><span class="pl-c">#</span># `f` is the function in your package</span></pre></div>
+<p>to the <code>onLoad()</code> function of their own package. (For obscure R
+packaging reasons, <code>onLoad</code> has to be defined in a source file
+called z.onLoad.R)</p>
+<p>More than one function can be installed on a hook; they will be
+called in order of installation by the <code>motusClient</code> function.</p>
+<p>The hook function <code>f</code> will be called just before the <code>motusClient</code>
+package function returns, and <code>f</code> will be passed the same parameters
+as were received by the <code>motusClient</code> function, but with a new first
+parameter called <code>rv</code>, which is the return value the <code>motusClient</code> function
+would have provided if there were no hook function.  The return value of <code>f</code>
+becomes the return value of the <code>motusClient</code> function, so normally <code>f</code>
+should simply return its <code>rv</code> parameter.  However, if the user package needs
+to modify the return value, it can do so, and return the modified value.</p>
+<p>Only a few <code>motusClient</code> functions have hooks so far, but more can
+be added to support user needs.</p>
+<h3>
+<a id="user-content-hook-example--add-a-new-table-to-motus-files" class="anchor" href="#hook-example--add-a-new-table-to-motus-files" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Hook example;  add a new table to .motus files</h3>
+<p>In user package file <strong><code>z.onload.R</code></strong>:</p>
+<div class="highlight highlight-source-r"><pre>   <span class="pl-v">onLoad</span> <span class="pl-k">=</span> <span class="pl-k">function</span>() {
+      <span class="pl-k">...</span>
+      addHook(<span class="pl-s"><span class="pl-pds">"</span>ensureDBTables<span class="pl-pds">"</span></span>, <span class="pl-smi">ensureMyTables</span>)
+      <span class="pl-k">...</span>
+   }</pre></div>
+<p>In user package file <strong><code>ensureMyTables.R</code></strong>:</p>
+<div class="highlight highlight-source-r"><pre>   <span class="pl-v">ensureMyTables</span> <span class="pl-k">=</span> <span class="pl-k">function</span>(<span class="pl-smi">rv</span>, <span class="pl-smi">src</span>, <span class="pl-smi">projRecv</span>, <span class="pl-smi">deviceID</span>) {
+      <span class="pl-e">DBI</span><span class="pl-k">::</span>dbExecute(<span class="pl-smi">src</span><span class="pl-k">$</span><span class="pl-smi">con</span>,
+         <span class="pl-s"><span class="pl-pds">"</span>CREATE TABLE IF NOT EXISTS tagLabels (</span>
+<span class="pl-s">            motusTagID INTEGER PRIMARY KEY NOT NULL,</span>
+<span class="pl-s">            label TEXT</span>
+<span class="pl-s">         )<span class="pl-pds">"</span></span>
+      )
+   <span class="pl-k">return</span>(<span class="pl-smi">rv</span>)
+   }</pre></div>
+<p>This ensures that whenever the user calls the <code>ensureDBTables()</code> function,
+that the new function <code>ensureMyTables()</code> will also be called on the
+same database, so that the <code>tagLabels</code> table will be created if it
+doesn't already exist.</p>
+<h3>
+<a id="user-content-hook-example--add-a-new-column-to-a-motus-table" class="anchor" href="#hook-example--add-a-new-column-to-a-motus-table" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Hook example;  add a new column to a .motus table</h3>
+<p>This example shows how the user package can add a new column <code>ambigProjectID</code> to
+existing database table <code>tagAmbig</code>.</p>
+<p>In user package file <strong><code>z.onload.R</code></strong>:</p>
+<div class="highlight highlight-source-r"><pre>   <span class="pl-v">onLoad</span> <span class="pl-k">=</span> <span class="pl-k">function</span>() {
+      <span class="pl-k">...</span>
+      addHook(<span class="pl-s"><span class="pl-pds">"</span>ensureDBTables<span class="pl-pds">"</span></span>, <span class="pl-smi">ensureMyColumns</span>)
+      <span class="pl-k">...</span>
+   }</pre></div>
+<p>In user package file <strong><code>ensureMyColumns.R</code></strong>:</p>
+<div class="highlight highlight-source-r"><pre>   <span class="pl-v">ensureMyColumns</span> <span class="pl-k">=</span> <span class="pl-k">function</span>(<span class="pl-smi">rv</span>, <span class="pl-smi">src</span>, <span class="pl-smi">projRecv</span>, <span class="pl-smi">deviceID</span>) {
+      <span class="pl-k">if</span> (<span class="pl-c1">0</span> <span class="pl-k">==</span> nrow(<span class="pl-e">DBI</span><span class="pl-k">::</span>dbGetQuery(<span class="pl-s"><span class="pl-pds">"</span>select * from sqlite_master where tbl_name='tagAmbig' and sql glob '* ambigProjectID *'<span class="pl-pds">"</span></span>))) {
+         <span class="pl-e">DBI</span><span class="pl-k">::</span>dbExecute(<span class="pl-smi">src</span><span class="pl-k">$</span><span class="pl-smi">con</span>, <span class="pl-s"><span class="pl-pds">"</span>ALTER TABLE tagAmbig ADD COLUMN ambigProjectID INTEGER<span class="pl-pds">"</span></span>)
+         )
+      )
+   <span class="pl-k">return</span>(<span class="pl-smi">rv</span>)
+   }</pre></div>
+<p>Function <code>ensureMyColumns</code> checks for existence of the column
+"ambigProjectID" by querying the <code>sqlite_master</code> table.  That is a
+system table present in every sqlite database which gives the sql
+schema for each table, among other things.  The code checks whether
+there's a record for a table named <code>tagAmbig</code> whose sql matches <code>* ambigProjectID *</code> (asterisks represent any number of characters).  The
+spaces on either side assure we're matching only the full word.  If
+the <code>dbGetQuery</code> call doesn't return any rows, that means the schema
+for the table doesn't include the column <code>ambigProjectID</code>, so
+<code>ensureMyColumns</code> performs an appropriate <code>ALTER TABLE</code> query to add
+it.</p>
