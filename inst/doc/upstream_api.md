@@ -67,7 +67,7 @@ The server is at [https://sgdata.motus.org](https://sgdata.motus.org) and the UR
 
 ### api info ###
 
-   api_info (authToken)
+   api_info ()
 
    - return an object with these items:
 
@@ -136,6 +136,7 @@ These assumptions allow for simpler, more efficient database queries.
    deviceID_for_receiver (serno, authToken)
 
        - serno: array of string; receiver serial number(s)
+       - authToken: authorization token returned by authenticate_user
 
       e.g.
       curl --data-urlencode json='{"serno":"SG-1234BBBK5678","authToken":"XXX"}' https://sgdata.motus.org/data/custom/deviceID_for_receiver
@@ -151,6 +152,7 @@ These assumptions allow for simpler, more efficient database queries.
    receivers_for_project (projectID, authToken)
 
        - projectID: integer; project ID
+       - authToken: authorization token returned by authenticate_user
 
       e.g.
       curl --data-urlencode json='{"projectID":123,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/receivers_for_project
