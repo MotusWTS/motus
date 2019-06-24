@@ -450,6 +450,29 @@ CREATE UNIQUE INDEX IF NOT EXISTS runsFilters_filterID_runID_motusTagID ON runsF
 ")
 
     }
+    
+  if (! "activity" %in% tables) {
+    sql("CREATE TABLE IF NOT EXISTS activity (
+      batchID INTEGER,
+      motusDeviceID INTEGER,
+      ant TINYINT,
+      year INTEGER,
+      month INTEGER,
+      day INTEGER,
+      hourbin INTEGER,
+      numTags INTEGER,
+      pulseCounts INTEGER,
+      numRuns INTEGER,
+      numHits INTEGER,
+      run2 INTEGER,
+      run3 INTEGER,
+      run4 INTEGER,
+      run5 INTEGER,
+      run6 INTEGER,
+      run7plus INTEGER,
+      UNIQUE(batchID, ant, hourbin),
+      PRIMARY KEY (batchID, ant, hourbin));")
+  }
 
     rv = makeAllambigsView(src)
     rv = makeAlltagsView(src)
