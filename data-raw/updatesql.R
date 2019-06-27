@@ -23,7 +23,7 @@ sql_versions <- rbind(
                 day INTEGER,
                 hourbin INTEGER,
                 numTags INTEGER,
-                pulseCounts INTEGER,
+                pulseCount INTEGER,
                 numRuns INTEGER,
                 numHits INTEGER,
                 run2 INTEGER,

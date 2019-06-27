@@ -13,6 +13,20 @@ test_that("tagme() and tellme() access the server appropriately", {
                "You do not have permission")
   
   expect_message(tagme(projRecv = 176, new = TRUE, update = TRUE))
+})
+
+test_that("tagme() returns expected activity data", {
+  expect_silent(tags <- tagme(projRecv = 176, new = FALSE, update = FALSE)) %>%
+    expect_is("src_SQLiteConnection")
+  
+  # Table exists
+  expect_silent(a <- tbl(tags, "activity") %>% collect())
+  
+  # No all missing values
+  expect_false(any(sapply(a, function(x) all(is.na(x)))))
+  
+  # All numeric/integer
+  for(i in names(a)) expect_is(a[, !!i][[1]], c("integer", "numeric"))
   
   # Clean up
   file.remove("./project-176.motus")

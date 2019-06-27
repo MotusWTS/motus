@@ -461,7 +461,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS runsFilters_filterID_runID_motusTagID ON runsF
       day INTEGER,
       hourbin INTEGER,
       numTags INTEGER,
-      pulseCounts INTEGER,
+      pulseCount INTEGER,
       numRuns INTEGER,
       numHits INTEGER,
       run2 INTEGER,
