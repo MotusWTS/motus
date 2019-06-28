@@ -1,5 +1,11 @@
 sql_versions <- dplyr::tibble()
 
+# Update 2019-06-28 -------------------------------------------------------
+sql_versions <- rbind(
+   sql_versions,
+   cbind(date = "2019-06-28",
+         descr = "Add 'motusFilter' field to 'runs' table",
+         sql = "ALTER TABLE runs ADD COLUMN motusFilter INTEGER"))
 
 # Update 2019-04-22 -------------------------------------------------------
 sql_versions <- rbind(
