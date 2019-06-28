@@ -5,7 +5,7 @@
 \title{Send a query to the data server API}
 \usage{
 srvQuery(API, params = NULL, show = FALSE, JSON = FALSE,
-  auth = TRUE, url = motus_vars$dataServerURL)
+  auth = TRUE, url = motus_vars$dataServerURL, timeout = 120)
 }
 \arguments{
 \item{API}{one of the motus_vars$API_DATA_... constants}
