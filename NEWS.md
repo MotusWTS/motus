@@ -1,8 +1,9 @@
-# motus 1.5.0 (2019-03-28)
+# motus 1.5.0 (2019-06-28)
 
 ### Big Changes
 * Combined `motus` and `motusClient` packages
 * New function `activity()` adds hit activity for batches to a new `activity` table in the SQLite database. This is useful for detecting 'noisy' periods where hits may be unreliable.
+* New function `filterByActivity()` allows users to create custom filters using data from the `activity` table.
 
 ### New Features
 * Added a `NEWS.md` file to track changes to the package
