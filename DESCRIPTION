@@ -11,22 +11,22 @@ Authors@R: c(
     person("Steffi", "LaZerte", email = "steffi@steffi.ca", role = "ctb"))
 Depends:
     R (>= 3.1.0),
-    RSQLite,
-    dplyr,
-    dbplyr,
-    maptools,
-    lubridate,
-    ggplot2
+    RSQLite (>= 2.1.1),
+    dplyr (>= 0.8.1),
+    dbplyr (>= 1.4.0),
+    maptools (>= 0.9.5),
+    lubridate (>= 1.7.4),
+    ggplot2 (>= 3.2.0)
 Imports:
     DBI (>= 1.0.0),
     httr (>= 1.4.0),
     geosphere (>= 1.5.7),
-    gridExtra,
-    jsonlite,
-    lattice,
+    gridExtra (>= 2.3),
+    jsonlite (>= 1.6),
+    lattice (>= 0.20.38),
     purrr (>= 0.3.0),
     rlang (>= 0.3.1),
-    stringi,
+    stringi (>= 1.4.3),
     stringr (>= 1.4.0),
     tidyr (>= 0.8.3)
 Suggests:
