@@ -459,7 +459,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS runsFilters_filterID_runID_motusTagID ON runsF
       year INTEGER,
       month INTEGER,
       day INTEGER,
-      hourbin INTEGER,
+      hourBin INTEGER,
       numTags INTEGER,
       pulseCount INTEGER,
       numRuns INTEGER,
@@ -470,8 +470,8 @@ CREATE UNIQUE INDEX IF NOT EXISTS runsFilters_filterID_runID_motusTagID ON runsF
       run5 INTEGER,
       run6 INTEGER,
       run7plus INTEGER,
-      UNIQUE(batchID, ant, hourbin),
-      PRIMARY KEY (batchID, ant, hourbin));")
+      UNIQUE(batchID, ant, hourBin),
+      PRIMARY KEY (batchID, ant, hourBin));")
   }
 
     rv = makeAllambigsView(src)
