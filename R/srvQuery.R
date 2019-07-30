@@ -111,7 +111,7 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
             }
             stop(rv$error, call. = FALSE)
         }
-        if (! is.null(rv$data)) {
+        if ("data" %in% names(rv)) {
             return(rv$data)
         }
         return(rv)
