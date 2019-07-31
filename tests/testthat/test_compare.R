@@ -14,7 +14,7 @@ test_that("table fields match server", {
   
   expect_named(
     srvBatchesForTagProject(projectID = 176, batchID = 53)[1,],
-    DBI::dbListFields(tags, "batches"), ignore.order = TRUE)
+    c(DBI::dbListFields(tags, "batches"), "version"), ignore.order = TRUE)
   
   expect_named(
     srvHitsForTagProject(projectID = 176, batchID = 53, hitID = 45107)[1,],
