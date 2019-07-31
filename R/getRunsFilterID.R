@@ -18,33 +18,35 @@
 #'
 #' @author Denis Lepage, Bird Studies Canada
 
-getRunsFilterID <- function(src, filterName, motusProjID=NA) {
+getRunsFilterID <- function(src, filterName, motusProjID = NA) {
 
   sqlq = function(...) DBI::dbGetQuery(src$con, sprintf(...))
 
+  filterID <- NA
+  
   # if motusProjID is not specified, look for the filter name across all projects 
   if (is.na(motusProjID)) {
     motusProjID = -1
     df = sqlq("select * from filters where filterName = '%s'", filterName)
     if (nrow(df) == 0) {
-      warning("There are no filter matching this name.")
-      return()
+      warning("There are no filter matching this name.", call. = FALSE)
     } else if (nrow(df) == 1) {
-      return (df[1,]$filterID)
+      filterID <- df[1, ]$filterID
     }
-  }
-  # if a project is specified, or there are more than 1 matching name, 
-  # limit the search to a specific project (including filters unassigned to a project = -1)
-  # by default, return the filter not attached to a project
-  df = sqlq("select * from filters where filterName = '%s' and motusProjID = %d", filterName, motusProjID)
-  if (nrow(df) == 0) {
-    warning("There are no filter matching this name.")
-    return()
-  } else if (nrow(df) == 1) {
-    return (df[1,]$filterID)
   } else {
-    warning("There are more than 1 existing filters matching your request.")
-    return()
-  }    
+    # if a project is specified, or there are more than 1 matching name, 
+    # limit the search to a specific project (including filters unassigned to a project = -1)
+    # by default, return the filter not attached to a project
+    df = sqlq("select * from filters where filterName = '%s' and motusProjID = %d", filterName, motusProjID)
+    if (nrow(df) == 0) {
+      warning("There are no filter matching this name.", call. = FALSE)
+    } else if (nrow(df) == 1) {
+      filterID <- df[1,]$filterID
+    } else {
+      warning("There are more than 1 existing filters matching your request.", 
+              call. = FALSE)
+    }    
+  }  
   
+  filterID
 }
