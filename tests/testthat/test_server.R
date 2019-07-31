@@ -1,5 +1,8 @@
 context("Test Server Access")
 
+teardown(unlink("project-176.motus"))
+teardown(unlink("project-10.motus"))
+
 test_that("tagme() and tellme() access the server appropriately", {
   skip_on_cran()
   skip_on_appveyor()
@@ -27,10 +30,6 @@ test_that("tagme() returns expected activity data", {
   
   # All numeric/integer
   for(i in names(a)) expect_is(a[, !!i][[1]], c("integer", "numeric"))
-  
-  # Clean up
-  file.remove("./project-176.motus")
-  file.remove("./project-10.motus")
 })
 
 test_that("srvQuery handles time out graciously", {

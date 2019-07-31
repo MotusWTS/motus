@@ -4,7 +4,7 @@
 \alias{print.safeSQL}
 \title{safeSQL method for printing}
 \usage{
-\method{print}{safeSQL}(x)
+\method{print}{safeSQL}(x, ...)
 }
 \value{
 : invisible(NULL)

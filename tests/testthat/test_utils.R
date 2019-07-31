@@ -1,5 +1,6 @@
 context("Utility functions")
 
+teardown(unlink("project-176.motus"))
 
 test_that("checkVersion and updateMotusDb run and return messages as expected", {
   # Prep db files
@@ -36,7 +37,4 @@ test_that("checkVersion and updateMotusDb run and return messages as expected", 
                  "The admInfo table has not yet been created in your motus sqlite file.")
   expect_message(updateMotusDb(test_sql, test_sql), 
                  "updateMotusDb started \\([0-9]{1,3} versions updates\\)")
-  
-  # Clean up
-  file.remove("./project-176.motus")
 })

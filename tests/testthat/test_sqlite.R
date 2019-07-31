@@ -1,7 +1,8 @@
 context("sql tables")
 
+teardown(unlink("project-176.motus"))
+
 test_that("Missing tables recreated silently", {
-  if(file.exists("project-176.motus")) file.remove("project-176.motus")
   file.copy(system.file("extdata", "project-176.motus", package = "motus"), ".")
   tags <- tagme(176, new = FALSE, update = FALSE)
   
@@ -36,7 +37,4 @@ test_that("Missing tables recreated silently", {
       expect_equal(nrow(dplyr::collect(dplyr::tbl(tags$con, !!i))), 0)
     } 
   }
-  
-  # Clean up
-  file.remove("project-176.motus")
 })

@@ -1,5 +1,6 @@
 context("Helper functions")
 
+teardown(unlink("project-176.motus"))
 
 test_that("filterByActivity filters as expected", {
   expect_silent(
@@ -76,5 +77,4 @@ test_that("Empty activity table stops", {
   DBI::dbRemoveTable(tags$con, "activity")
   expect_error(a <- filterByActivity(tags, return = "all"),
                "'src' must contain at least tables 'activity', 'alltags',")
-  file.remove("project-176.motus")
 })

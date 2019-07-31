@@ -1,5 +1,6 @@
 context("Plotting functions")
 
+teardown(unlink("Rplots.pdf"))
 
 test_that("Plots run with no errors", {
   shorebirds_sql <- motus::tagme(176, update = FALSE, dir = system.file("extdata", package = "motus"))
@@ -28,7 +29,4 @@ test_that("Plots run with no errors", {
   
   expect_message(plotRouteMap(shorebirds_sql))
   expect_silent(plotRouteMap(shorebirds_sql, recvStart = "2016-01-01", recvEnd = "2016-12-31"))
-  
-  # Clean up
-  file.remove("Rplots.pdf")
 })
