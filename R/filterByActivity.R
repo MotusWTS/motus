@@ -12,8 +12,8 @@
 #'   `probability` column which identifies 'bad' (0) and 'good' (1) runs.
 #' @param minLen Numeric. The minimum run length to allow (equal to or below
 #'   this, all runs are 'bad')
-#' @param maxLen Numeric. The maximum run length to allow (above this, all runs
-#'   are 'good')
+#' @param maxLen Numeric. The maximum run length to allow (equal to or above
+#'   this, all runs are 'good')
 #' @param maxRuns Numeric. The cutoff of number of runs in a batch (see Details)
 #' @param ratio Numeric. The ratio cutoff of runs length 2 to number of runs in
 #'   a batch (see Details)

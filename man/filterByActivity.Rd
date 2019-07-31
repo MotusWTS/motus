@@ -17,8 +17,8 @@ filterByActivity(src, return = "good", minLen = 2, maxLen = 5,
 \item{minLen}{Numeric. The minimum run length to allow (equal to or below
 this, all runs are 'bad')}
 
-\item{maxLen}{Numeric. The maximum run length to allow (above this, all runs
-are 'good')}
+\item{maxLen}{Numeric. The maximum run length to allow (equal to or above
+this, all runs are 'good')}
 
 \item{maxRuns}{Numeric. The cutoff of number of runs in a batch (see Details)}
 
