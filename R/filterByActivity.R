@@ -62,7 +62,7 @@ filterByActivity <- function(src, return = "good",
   }
   
   tbl_runs <- dplyr::tbl(src$con, "runs") %>% 
-    dplyr::mutate(hourbin = round(tsBegin/3600, 0))
+    dplyr::mutate(hourBin = round(.data$tsBegin/3600, 0))
   
   tbl_activity <- dplyr::tbl(src$con, "activity")
   
@@ -72,7 +72,7 @@ filterByActivity <- function(src, return = "good",
 
   tbl_bad <- dplyr::left_join(tbl_runs, tbl_activity, 
                               by = c("batchIDbegin" = "batchID", 
-                                     "ant", "hourbin")) %>% 
+                                     "ant", "hourBin")) %>% 
     # Convert integers to numeric for ratio calculations
     dplyr::mutate(run2 = as.numeric(run2),
                   numRuns = as.numeric(numRuns)) %>%
