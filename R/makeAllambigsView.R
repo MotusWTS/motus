@@ -37,5 +37,5 @@ UNION SELECT ambigID, motusTagID6 as motusTagID FROM tagAmbig where motusTagID6 
 ")
     DBI::dbExecute(db$con, paste0("DROP VIEW IF EXISTS ", name))
     DBI::dbExecute(db$con, query)
-    return(tbl(db, name))
+    return(dplyr::tbl(db, name))
 }

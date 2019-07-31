@@ -36,35 +36,40 @@
 #' site_summary <- siteSum(filter(df.alltags, speciesEN == "Red Knot"))
 
 siteSum <- function(data, units = "hours"){
-  data <- select(data, motusTagID, sig, recvDeployLat, recvDeployLon, 
-                 gpsLat, gpsLon, recvDeployName, ts) %>% distinct %>% collect %>% as.data.frame
-  data <- mutate(data,
-                 recvLat = if_else((is.na(gpsLat)|gpsLat == 0|gpsLat ==999),
-                                   recvDeployLat,
-                                   gpsLat),
-                 recvLon = if_else((is.na(gpsLon)|gpsLon == 0|gpsLon == 999),
-                                   recvDeployLon,
-                                   gpsLon),
-                 recvDeployName = paste(recvDeployName, 
-                                        round(recvLat, digits = 1), sep = "_" ),
-                 recvDeployName = paste(recvDeployName,
-                                        round(recvLon, digits = 1), sep = ", "),
-                 ts = lubridate::as_datetime(ts, tz = "UTC"))
-  data <- within(data, recvDeployName <- reorder(recvDeployName, (recvLat))) ## order site by latitude
-#  data$ts <- as_datetime(data$ts, tz = "UTC")
-  grouped <- dplyr::group_by(data, recvDeployName)
+  data <- dplyr::select(data, "motusTagID", "sig", "recvDeployLat", "recvDeployLon", 
+                        "gpsLat", "gpsLon", "recvDeployName", "ts") %>% 
+    dplyr::distinct() %>% 
+    dplyr::collect() %>% 
+    dplyr::mutate(recvLat = dplyr::if_else((is.na(.data$gpsLat)|.data$gpsLat == 0|.data$gpsLat ==999),
+                                           .data$recvDeployLat,
+                                           .data$gpsLat),
+                  recvLon = dplyr::if_else((is.na(.data$gpsLon)|.data$gpsLon == 0|.data$gpsLon == 999),
+                                           .data$recvDeployLon,
+                                           .data$gpsLon),
+                  recvDeployName = paste(.data$recvDeployName, 
+                                         round(.data$recvLat, digits = 1), sep = "_" ),
+                  recvDeployName = paste(.data$recvDeployName,
+                                         round(.data$recvLon, digits = 1), sep = ", "),
+                  ts = lubridate::as_datetime(.data$ts, tz = "UTC")) %>%
+    as.data.frame()
+  
+  data <- within(data, recvDeployName <- stats::reorder(recvDeployName, (recvLat))) ## order site by latitude
+  #  data$ts <- as_datetime(data$ts, tz = "UTC")
+  grouped <- dplyr::group_by(data, .data$recvDeployName)
   data <- dplyr::summarise(grouped,
-                 first_ts=min(ts),
-                 last_ts=max(ts),
-                 tot_ts = difftime(max(ts), min(ts), units = units),
-                 num.tags = length(unique(motusTagID)),
-                 num.det = length(ts))
-  detections <- ggplot2::ggplot(data = data, ggplot2::aes(x = recvDeployName, y = num.det)) +
+                           first_ts=min(.data$ts),
+                           last_ts=max(.data$ts),
+                           tot_ts = difftime(max(.data$ts), min(.data$ts), units = units),
+                           num.tags = length(unique(.data$motusTagID)),
+                           num.det = length(.data$ts))
+  
+  detections <- ggplot2::ggplot(data = data, ggplot2::aes_string(x = "recvDeployName", y = "num.det")) +
     ggplot2::geom_bar(stat = "identity") + ggplot2::theme_bw() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)) +  ## make x-axis labels on a 45 deg angle to read more easily
     ggplot2::labs(title = "Total number of detections per recvDeployName, across all tags", x= "Site", y = "Total detections") ## changes x- and y-axis label
-  tags <- ggplot2::ggplot(data = data, ggplot2::aes(x = recvDeployName, y = num.tags)) +
-    ggplot2::geom_bar(stat = "identity") + ggplot2::theme_bw() + ## creates bar plot by recvDeployName
+  tags <- ggplot2::ggplot(data = data, ggplot2::aes_string(x = "recvDeployName", y = "num.tags")) +
+    ggplot2::geom_bar(stat = "identity") + 
+    ggplot2::theme_bw() + ## creates bar plot by recvDeployName
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)) + ## make x-axis labels on a 45 deg angle to read more easily
     ggplot2::labs(title = "Total number of tags detected per site", x= "Site", y = "Number of tags") ## changes x- and y-axis label
   gridExtra::grid.arrange(detections, tags, nrow = 2)

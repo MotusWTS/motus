@@ -86,7 +86,7 @@ motusUpdateTagDB = function(src, countOnly=FALSE, forceMeta=FALSE) {
                     ## interrupted, use dbInsertOrReplace
 
                     dbInsertOrReplace(sql$con, "runs", r)
-                    dbWriteTable(sql$con, "batchRuns", data.frame(batchID=batchID, runID=r$runID), append=TRUE, row.names=FALSE)
+                    DBI::dbWriteTable(sql$con, "batchRuns", data.frame(batchID=batchID, runID=r$runID), append=TRUE, row.names=FALSE)
                     cat(sprintf("%s: got %6d runs starting at %15.0f\r", batchMsg, nrow(r), runID), file=stderr())
                     runID = max(r$runID)
                 }
@@ -111,7 +111,7 @@ motusUpdateTagDB = function(src, countOnly=FALSE, forceMeta=FALSE) {
                         break
                     cat(sprintf("%s: got %6d hits starting at %15.0f\r", batchMsg, nrow(h), hitID), file=stderr())
                     ## add these hit records to the DB
-                    dbWriteTable(sql$con, "hits", h, append=TRUE, row.names=FALSE)
+                    DBI::dbWriteTable(sql$con, "hits", h, append=TRUE, row.names=FALSE)
                     numHits = numHits + nrow(h)
                     hitID = max(h$hitID)
                     sql("update projBatch set maxHitID=%f where tagDepProjectID=%d and batchID=%d", hitID, projectID, batchID)

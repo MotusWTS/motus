@@ -33,7 +33,7 @@ test_that("Missing tables recreated silently", {
     
     # USUALLY expect present but empty (except admInfo and views)
     if(!i %in% c("admInfo", "alltags", "allambigs", "meta")) {
-      expect_equal(nrow(collect(tbl(tags$con, !!i))), 0)
+      expect_equal(nrow(dplyr::collect(dplyr::tbl(tags$con, !!i))), 0)
     } 
   }
   

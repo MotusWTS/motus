@@ -129,18 +129,18 @@ sqliteToRDS = function(con, query, bind.data=data.frame(), out, classes = NULL, 
     ## get the result types by asking for the first row of the
     ## query
 
-    res = dbSendQuery(con, query, params=bind.data)
-    block = dbFetch(res, n=1)
+    res = DBI::dbSendQuery(con, query, params=bind.data)
+    block = DBI::dbFetch(res, n=1)
     if (nrow(block) == 0) {
         saveRDS(NULL, out)
-        dbClearResult(res)
+        DBI::dbClearResult(res)
         return(0L)
     }
 
     ## for RSQLite, at least, dbColumnInfo isn't valid until after
     ## dbFetch has been called
-    col = dbColumnInfo(res)
-    dbClearResult(res)
+    col = DBI::dbColumnInfo(res)
+    DBI::dbClearResult(res)
 
     ## make sure column names specified in parameter 'classes' exist in result:
     if (! all(names(classes) %in% col[[1]]))
@@ -170,10 +170,10 @@ sqliteToRDS = function(con, query, bind.data=data.frame(), out, classes = NULL, 
     for (f in fact) {
         if (col[[1]][f] %in% names(factorQueries)) {
             ## use user-specified query
-            colLevels[[f]] = dbGetQuery(con, factorQueries[[col[[1]][f]]])
+            colLevels[[f]] = DBI::dbGetQuery(con, factorQueries[[col[[1]][f]]])
         } else {
             ## select values from via nesting the main query (might be slow!)
-            colLevels[[f]] = dbGetQuery(con, paste0("select distinct ", col[[1]][f], " from (", query, ")"), params=bind.data)[[1]]
+            colLevels[[f]] = DBI::dbGetQuery(con, paste0("select distinct ", col[[1]][f], " from (", query, ")"), params=bind.data)[[1]]
         }
     }
 
@@ -214,9 +214,9 @@ sqliteToRDS = function(con, query, bind.data=data.frame(), out, classes = NULL, 
     ## main loop for reading result blocks and distributing them
     ## We start with a block already available in "block".
 
-    res = dbSendQuery(con, query, params=bind.data)
+    res = DBI::dbSendQuery(con, query, params=bind.data)
     while (TRUE) {
-        block = dbFetch(res, n=rowsPerBlock)
+        block = DBI::dbFetch(res, n=rowsPerBlock)
         nr = nr + nrow(block)
         resRow = block[1,] ## save a row for later
         for (i in seq_len(n)) {
@@ -233,7 +233,7 @@ sqliteToRDS = function(con, query, bind.data=data.frame(), out, classes = NULL, 
                    writeBin(block[[i]], colCon[[i]], endian="little")
                    )
         }
-        if (nrow(block) < rowsPerBlock || dbHasCompleted(res))
+        if (nrow(block) < rowsPerBlock || DBI::dbHasCompleted(res))
             break
     }
 
@@ -288,7 +288,7 @@ sqliteToRDS = function(con, query, bind.data=data.frame(), out, classes = NULL, 
     ## delete the intermediate files
     file.remove(colFiles)
 
-    dbClearResult(res)
+    DBI::dbClearResult(res)
 
     return(nr)
 }

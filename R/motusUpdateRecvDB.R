@@ -69,7 +69,7 @@ motusUpdateRecvDB = function(src, countOnly, forceMeta=FALSE) {
                 ## interrupted, use dbInsertOrReplace
 
                 dbInsertOrReplace(sql$con, "runs", r)
-                dbWriteTable(sql$con, "batchRuns", data.frame(batchID=batchID, runID=r$runID), append=TRUE, row.names=FALSE)
+                DBI::dbWriteTable(sql$con, "batchRuns", data.frame(batchID=batchID, runID=r$runID), append=TRUE, row.names=FALSE)
                 cat(sprintf("\r\nGot %d runs starting at %.0f for batch %d                 \r", nrow(r), runID, batchID), file=stderr())
                 runID = max(r$runID)
             }
@@ -89,7 +89,7 @@ motusUpdateRecvDB = function(src, countOnly, forceMeta=FALSE) {
                     break
                 cat(sprintf("\r\nGot %d hits starting at %.0f for batch %d                \r", nrow(h), hitID, batchID), file=stderr())
                 ## add these hit records to the DB
-                dbWriteTable(sql$con, "hits", h, append=TRUE, row.names=FALSE)
+                DBI::dbWriteTable(sql$con, "hits", h, append=TRUE, row.names=FALSE)
                 hitID = max(h$hitID)
             }
 
@@ -129,8 +129,8 @@ motusUpdateRecvDB = function(src, countOnly, forceMeta=FALSE) {
                     break
                 cat(sprintf("\r\nGot %d pulse counts for batch %d                \r", nrow(pc), batchID), file=stderr())
                 dbInsertOrReplace(sql$con, "pulseCounts", pc[, c("batchID", "ant", "hourBin", "count")])
-                ant = tail(pc$ant, 1)
-                hourBin = tail(pc$hourBin, 1)
+                ant = utils::tail(pc$ant, 1)
+                hourBin = utils::tail(pc$hourBin, 1)
             }
 
             ## ----------------------------------------------------------------------------

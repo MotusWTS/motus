@@ -18,8 +18,8 @@ getRunsFilters = function(src, filterName, motusProjID=NA) {
   
   id = getRunsFilterID(src, filterName, motusProjID)
   if (!is.null(id)) {
-      return(tbl(src, "runsFilters") %>% filter(filterID == id))
+    id <- dplyr::tbl(src, "runsFilters") %>% 
+      dplyr::filter(.data$filterID == id)
   }
-  return()
-  
+  id
 }

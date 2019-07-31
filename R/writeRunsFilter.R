@@ -39,6 +39,6 @@ writeRunsFilter = function(src, filterName, motusProjID=NA, df, overwrite=TRUE, 
   
   }
  
-  return(tbl(src, "runsFilters") %>% filter(filterID == id))
+  return(dplyr::tbl(src, "runsFilters") %>% dplyr::filter(.data$filterID == id))
 
 }

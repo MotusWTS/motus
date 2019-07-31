@@ -20,7 +20,7 @@ test_that("tagme() returns expected activity data", {
     expect_is("src_SQLiteConnection")
   
   # Table exists
-  expect_silent(a <- tbl(tags, "activity") %>% collect())
+  expect_silent(a <- dplyr::tbl(tags, "activity") %>% dplyr::collect())
   
   # No all missing values
   expect_false(any(sapply(a, function(x) all(is.na(x)))))

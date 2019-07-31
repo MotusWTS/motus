@@ -29,7 +29,7 @@ ensureDBTables = function(src, projRecv, deviceID) {
 
     sql("pragma page_size=4096") ## reasonably large page size; post 2011 hard drives have 4K sectors anyway
 
-    tables = src_tbls(src)
+    tables = dplyr::src_tbls(src)
 
     isRecvDB = is.character(projRecv)
 

@@ -96,20 +96,20 @@ safeSQL = function(con, busyTimeout = 300) {
     if (inherits(con, "src"))
         con = con$con
     if (is.character(con))
-        con = dbConnect(SQLite(), con)
+        con = DBI::dbConnect(RSQLite::SQLite(), con)
     isSQLite = inherits(con, "SQLiteConnection")
     if (isSQLite) {
 
         ########## RSQLite ##########
 
-        dbGetQuery(con, sprintf("pragma busy_timeout=%d", round(busyTimeout * 1000)))
+        DBI::dbGetQuery(con, sprintf("pragma busy_timeout=%d", round(busyTimeout * 1000)))
         structure(
             function(query, ..., .CLOSE=FALSE, .QUOTE=FALSE) {
                 if (.CLOSE) {
-                    dbDisconnect(con)
+                    DBI::dbDisconnect(con)
                     return(con <<- NULL)
                 }
-                queryFun = if(grepl("(?i)^[[:space:]]*select|pragma|with", query, perl=TRUE)) dbGetQuery else DBI::dbExecute
+                queryFun = if(grepl("(?i)^[[:space:]]*select|pragma|with", query, perl=TRUE)) DBI::dbGetQuery else DBI::dbExecute
                 repeat {
                     tryCatch({
                         a = list(...)
@@ -119,7 +119,7 @@ safeSQL = function(con, busyTimeout = 300) {
                             } else {
                                 if (.QUOTE) {
                                     ## there are some parameters to the query, so escape those which are strings
-                                    a = c(query, lapply(a, function(x) if (is.character(x)) dbQuoteString(con=con, x) else x ))
+                                    a = c(query, lapply(a, function(x) if (is.character(x)) DBI::dbQuoteString(con=con, x) else x ))
                                 } else {
                                     a = c(query, a)
                                 }
@@ -135,7 +135,7 @@ safeSQL = function(con, busyTimeout = 300) {
                             stop(e) ## re-throw if the error isn't due to a locked database
                     })
                     ## failed due to locked database; wait a while and retry
-                    Sys.sleep(10 * runif(1))
+                    Sys.sleep(10 * stats::runif(1))
                 }
             },
             class = "safeSQL"
@@ -143,21 +143,21 @@ safeSQL = function(con, busyTimeout = 300) {
     } else {
 
         ########## MySQL ########
-        dbGetQuery(con, "set character set 'utf8'")
+        DBI::dbGetQuery(con, "set character set 'utf8'")
         structure(
             function(..., .CLOSE=FALSE, .QUOTE=TRUE) {
                 if (.CLOSE) {
-                    dbDisconnect(con)
+                    DBI::dbDisconnect(con)
                     return(con <<- NULL)
                 }
                 a = list(...)
                 if (length(a) > 1 && .QUOTE) {
                     ## there are some parameters to the query, so escape those which are strings
-                    a = c(a[[1]], lapply(a[-1], function(x) if (is.character(x)) dbQuoteString(con=con, x) else x ))
+                    a = c(a[[1]], lapply(a[-1], function(x) if (is.character(x)) DBI::dbQuoteString(con=con, x) else x ))
                 }
                 q = do.call(sprintf, a)
                 Encoding(q) = "UTF-8"
-                queryFun = if(grepl("(?i)^[[:space:]]*select", q, perl=TRUE)) dbGetQuery else DBI::dbExecute
+                queryFun = if(grepl("(?i)^[[:space:]]*select", q, perl=TRUE)) DBI::dbGetQuery else DBI::dbExecute
                 repeat {
                     tryCatch(
                         return(queryFun(con, q)),
@@ -166,7 +166,7 @@ safeSQL = function(con, busyTimeout = 300) {
                                 stop(e) ## re-throw if error isn't due to a locked database
                         })
                     ## failed due to locked database; wait a while and retry
-                    Sys.sleep(10 * runif(1))
+                    Sys.sleep(10 * stats::runif(1))
                 }
             },
             class = "safeSQL"
@@ -197,6 +197,6 @@ safeSQL = function(con, busyTimeout = 300) {
 #'
 #' @export
 
-print.safeSQL = function(x) {
+print.safeSQL = function(x, ...) {
     cat("Safe SQL object attached to ", x$db, "\nDo ?safeSQL for more details.\n")
 }

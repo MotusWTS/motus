@@ -56,7 +56,7 @@ sessionVariable = function(name, info=name, env=motus_vars, class="character", v
             }
             if (isTRUE(nchar(v) > 0)) {
                 ## set and return value
-                return(curVal <<- as(v, class))
+                return(curVal <<- methods::as(v, class))
             }
             ## oops
             stop("session variable '", name, "' is undefined")

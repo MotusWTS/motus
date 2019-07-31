@@ -21,15 +21,24 @@
 #' simSites <- simSiteDet(df.alltags)
 
 simSiteDet <- function(data){
-  data <- data %>% distinct %>% collect %>% as.data.frame
-  data$ts <- as_datetime(data$ts, tz = "UTC")
-  tmp <- data %>% select(motusTagID, ts) %>% distinct ## get only fields we want duplicates of
+  data <- data %>% 
+    dplyr::distinct() %>% 
+    dplyr::collect() %>% 
+    as.data.frame()
+  
+  data$ts <- lubridate::as_datetime(data$ts, tz = "UTC")
+
+  tmp <- data %>% 
+    dplyr::select("motusTagID", "ts") %>% 
+    dplyr::distinct() ## get only fields we want duplicates of
+  
   tmp$dup <- duplicated(tmp[c("motusTagID","ts")]) | duplicated(tmp[c("motusTagID","ts")], fromLast = TRUE) ## label all duplicates
-  tmp <- unique(filter(tmp, dup == TRUE)) ## keep only duplicates
-  tmp <- merge(tmp, select(data, motusTagID, ts, recvDeployName), all.x = TRUE) ## merge to get sites of each duplicate ts and motusTagID
+  tmp <- unique(dplyr::filter(tmp, dup == TRUE)) ## keep only duplicates
+  tmp <- merge(tmp, dplyr::select(data, "motusTagID", "ts", "recvDeployName"), all.x = TRUE) ## merge to get sites of each duplicate ts and motusTagID
   tmp <- unique(tmp) ## remove duplicates
-  tmp <- summarise(group_by(tmp, motusTagID, ts), num.dup = length(ts)) ## determine how many times each combo of motusTagID and ts show up
-  tmp <- filter(tmp, num.dup > 1) ## remove any where number of duplicates is less than 1, because anything over 1 will have detections at more than one site
+  tmp <- dplyr::group_by(tmp, .data$motusTagID, .data$ts) %>% 
+    dplyr::summarise(num.dup = length(.data$ts)) ## determine how many times each combo of motusTagID and ts show up
+  tmp <- dplyr::filter(tmp, .data$num.dup > 1) ## remove any where number of duplicates is less than 1, because anything over 1 will have detections at more than one site
   tmp <- merge(tmp, data, all.x = TRUE) ## now merge the identified duplicates back with detection data so we have more info available
   tmp <- unique(tmp)
   return(tmp)

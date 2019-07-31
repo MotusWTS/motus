@@ -42,20 +42,20 @@
 #' tag_summary <- tagSum(filter(df.alltags, speciesEN == "Red Knot"))
 
 tagSum <- function(data){
-  data <- data %>% collect %>% as.data.frame
-  data <- mutate(data,
-                 recvLat = if_else((is.na(gpsLat)|gpsLat == 0|gpsLat ==999),
-                                   recvDeployLat,
-                                   gpsLat),
-                 recvLon = if_else((is.na(gpsLon)|gpsLon == 0|gpsLon == 999),
-                                   recvDeployLon,
-                                   gpsLon),
-                 recvDeployName = paste(recvDeployName, 
-                                        round(recvLat, digits = 1), sep = "_" ),
-                 recvDeployName = paste(recvDeployName,
-                                        round(recvLon, digits = 1), sep = ", "),
-                 ts = lubridate::as_datetime(ts, tz = "UTC"))
-  grouped <- dplyr::group_by(data, fullID)
+  data <- data %>% dplyr::collect() %>% as.data.frame()
+  data <- dplyr::mutate(data,
+                        recvLat = dplyr::if_else((is.na(.data$gpsLat)|.data$gpsLat == 0|gpsLat ==999),
+                                                 .data$recvDeployLat,
+                                                 .data$gpsLat),
+                        recvLon = dplyr::if_else((is.na(.data$gpsLon)|.data$gpsLon == 0|.data$gpsLon == 999),
+                                                 .data$recvDeployLon,
+                                                 .data$gpsLon),
+                        recvDeployName = paste(.data$recvDeployName, 
+                                               round(.data$recvLat, digits = 1), sep = "_" ),
+                        recvDeployName = paste(.data$recvDeployName,
+                                               round(.data$recvLon, digits = 1), sep = ", "),
+                        ts = lubridate::as_datetime(.data$ts, tz = "UTC"))
+  grouped <- dplyr::group_by(data, .data$fullID)
   tmp <- dplyr::summarise(grouped,
                     first_ts=min(ts),
                     last_ts=max(ts),

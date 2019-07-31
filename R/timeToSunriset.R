@@ -37,11 +37,11 @@
 #' sunrise <- timeToSunriset(df.alltags, lat = "gpsLat", lon = "gpsLon")
 
 timeToSunriset <- function(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = "ts", units = "hours"){
-  data <- data %>% collect %>% as.data.frame
-  data$ts <- as_datetime(data$ts, tz = "UTC")
+  data <- data %>% dplyr::collect() %>% as.data.frame()
+  data$ts <- lubridate::as_datetime(data$ts, tz = "UTC")
   cols <- c(lat, lon, ts) ## Select columns that can't contain NA values
-  loc_na <- data[!complete.cases(data[cols]),] ## new dataframe with NA values in lat, lon, or ts
-  loc <- data[complete.cases(data[cols]),] ## new dataframe with no NA values in lat, lon, or ts
+  loc_na <- data[!stats::complete.cases(data[cols]),] ## new dataframe with NA values in lat, lon, or ts
+  loc <- data[stats::complete.cases(data[cols]),] ## new dataframe with no NA values in lat, lon, or ts
   loc$sunrise <- maptools::sunriset(as.matrix(dplyr::select(loc,lon,lat)),loc$ts, POSIXct.out=T, direction='sunrise')$time
   loc$sunset <- maptools::sunriset(as.matrix(dplyr::select(loc,lon,lat)),loc$ts, POSIXct.out=T, direction='sunset')$time
   ## to get time difference, must take into account whether you are going to/from sunrise/sunset from the

@@ -10,32 +10,34 @@ Authors@R: c(
     person("Zoe", "Crysler", email = "zcrysler@@gmail.com", role = "ctb"),
     person("Steffi", "LaZerte", email = "steffi@steffi.ca", role = "ctb"))
 Depends:
-    R (>= 3.1.0),
-    RSQLite (>= 2.1.1),
-    dplyr (>= 0.8.1),
-    dbplyr (>= 1.4.0),
-    maptools (>= 0.9.5),
-    lubridate (>= 1.7.4),
-    ggplot2 (>= 3.2.0)
+    R (>= 3.2.0)
 Imports:
     DBI (>= 1.0.0),
+    dplyr (>= 0.8.1),
+    dbplyr (>= 1.4.0),
     httr (>= 1.4.0),
     geosphere (>= 1.5.7),
+    ggplot2 (>= 3.2.0),
     gridExtra (>= 2.3),
     jsonlite (>= 1.6),
     lattice (>= 0.20.38),
+    lubridate (>= 1.7.4),
+    maptools (>= 0.9.5),
+    methods,
     purrr (>= 0.3.0),
     rlang (>= 0.3.1),
+    RSQLite (>= 2.1.1),
     stringi (>= 1.4.3),
     stringr (>= 1.4.0),
-    tidyr (>= 0.8.3)
+    tidyr (>= 0.8.3),
+    magrittr
 Suggests:
     ggmap (>= 3.0.0),
-    testthat
+    testthat,
+    roxygen2
 License: GPL-3 + file LICENSE
 Date: 2019-03-28
 RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)
 LazyData: true
 Encoding: UTF-8
-    

@@ -66,7 +66,7 @@ siteTrans <- function(data, latCoord = "recvDeployLat", lonCoord = "recvDeployLo
     tmp = data
   } else {
     tmp = data %>% 
-      collect() %>% 
+      dplyr::collect() %>% 
       as.data.frame()
   }
   data <- dplyr::rename(tmp, lat = latCoord, lon = lonCoord) %>%

@@ -51,7 +51,7 @@ dbInsertOrReplace = function(con, name, df, replace=TRUE) {
 
     ## write all records to the temporary table
 
-    dbWriteTable(con, tmp, df, row.names=FALSE, append=TRUE)
+    DBI::dbWriteTable(con, tmp, df, row.names=FALSE, append=TRUE)
 
     ## replace/insert records from the temporary table
     ## into the target

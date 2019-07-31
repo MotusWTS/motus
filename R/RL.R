@@ -40,7 +40,7 @@
 RL = function(f, path=NULL, package=NULL) {
     f = as.character(substitute(f))
     if (is.null(package))
-        package=sub("^package:", "", grep("^package:", getAnywhere(f)$where, value=TRUE)[1])
+        package=sub("^package:", "", grep("^package:", utils::getAnywhere(f)$where, value=TRUE)[1])
     if (is.null(path))
         path = system(paste0("find ~ -path '*/", package, "/R/", f, ".R'"), intern=TRUE)
     e = new.env(emptyenv())
