@@ -22,6 +22,9 @@ already exists, and will stop with an error if it cannot find it
 in the current directory.  This is mainly to prevent inadvertent
 downloads of large amounts of data that you already have!}
 
+\item{dir}{path to the folder where you are storing databases
+Default: the current directory; i.e. \code{getwd()}}
+
 \item{countOnly}{logical scalar: if FALSE, the default, then do
 requested database updates.  Otherwise, return a count of items
 that would need to be transferred in order to update the
@@ -29,9 +32,6 @@ database.}
 
 \item{forceMeta}{logical scalar: if true, re-get metadata for tags and
 receivers, even if we already have them.}
-
-\item{dir:}{path to the folder where you are storing databases
-Default: the current directory; i.e. \code{getwd()}}
 }
 \value{
 a dplyr::src_sqlite for the (possibly updated) database, or a list

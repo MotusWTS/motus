@@ -12,7 +12,7 @@
 #' in the current directory.  This is mainly to prevent inadvertent
 #' downloads of large amounts of data that you already have!
 #'
-#' @param dir: path to the folder where you are storing databases
+#' @param dir path to the folder where you are storing databases
 #' Default: the current directory; i.e. \code{getwd()}
 #'
 #' @return a named list with these items:
