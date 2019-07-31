@@ -56,11 +56,12 @@ sql.motus <- tagme(176, update = FALSE,
                    dir = system.file("extdata", package = "motus"))
 
 # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+library(dplyr)
 tbl.alltags <- tbl(sql.motus, "alltags") 
  
 ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
  df.alltags <- tbl.alltags \%>\%
-   collect \%>\%
+   collect() \%>\%
    as.data.frame()
 
 # View all site transitions for all detection data from tbl file tbl.alltags
