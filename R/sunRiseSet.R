@@ -49,6 +49,10 @@ sunRiseSet <- function(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = 
   cols <- c(lat, lon, ts) ## Select columns that can't contain NA values
   loc_na <- data[!stats::complete.cases(data[cols]),] ## new dataframe with NA values in lat, lon, or ts
   loc <- data[stats::complete.cases(data[cols]),] ## new dataframe with no NA values in lat, lon, or ts
+  
+  if(nrow(loc) == 0)  stop("No data with coordinates '", lat, "' and '", 
+                           lon, "'", call. = FALSE)
+  
   loc$sunrise <- maptools::sunriset(as.matrix(dplyr::select(loc,lon,lat)),loc$ts, POSIXct.out=T, direction='sunrise')$time
   loc$sunset <- maptools::sunriset(as.matrix(dplyr::select(loc,lon,lat)),loc$ts, POSIXct.out=T, direction='sunset')$time
   data <- merge(loc, loc_na, all = TRUE)
