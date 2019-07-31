@@ -41,12 +41,12 @@ updateMotusDb <- function(rv, src) {
 
   # Get the current src version
   src_version <- dplyr::tbl(src$con, "admInfo") %>%
-    dplyr::filter(key == "db_version") %>%
-    dplyr::pull(value) %>%
+    dplyr::filter(.data$key == "db_version") %>%
+    dplyr::pull(.data$value) %>%
     as.POSIXct(., tz = "UTC")
   
   update_versions <- dplyr::filter(sql_versions, date > src_version) %>%
-    dplyr::arrange(date)
+    dplyr::arrange(.data$date)
 
   if (nrow(update_versions) > 0) {
     message(sprintf("updateMotusDb started (%d versions updates)", 

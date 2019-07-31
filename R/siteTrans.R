@@ -74,23 +74,23 @@ siteTrans <- function(data, latCoord = "recvDeployLat", lonCoord = "recvDeployLo
   data <- dplyr::rename(tmp, lat = latCoord, lon = lonCoord) %>%
     ## get only relevant columns
     dplyr::select("ts", "motusTagID", "tagDeployID", "lat", "lon", "recvDeployName") %>%
-    dplyr::mutate(recvDeployName = paste(recvDeployName, 
-                                         round(lat, digits = 1), sep = "_" ),
-                  recvDeployName = paste(recvDeployName,
-                                         round(lon, digits = 1), sep = ", "),
-                  ts = lubridate::as_datetime(ts, tz = "UTC")) %>% 
-    dplyr::group_by(motusTagID, tagDeployID) %>% 
+    dplyr::mutate(recvDeployName = paste(.data$recvDeployName, 
+                                         round(.data$lat, digits = 1), sep = "_" ),
+                  recvDeployName = paste(.data$recvDeployName,
+                                         round(.data$lon, digits = 1), sep = ", "),
+                  ts = lubridate::as_datetime(.data$ts, tz = "UTC")) %>% 
+    dplyr::group_by(.data$motusTagID, .data$tagDeployID) %>% 
     tidyr::nest() %>%
     dplyr::mutate(consec = purrr::map(data, consec.fun),
                   site = purrr::map(consec, site.fun))
   
-  trans <- tidyr::unnest(data, site) %>%
-    dplyr::mutate(tot_ts = difftime(ts.y, ts.x, units = "secs"),
-                  dist = latLonDist(lat.x, lon.x, lat.y, lon.y), ## distance in meters
-                  rate = dist/(as.numeric(tot_ts)), ## rate of travel in m/s
+  trans <- tidyr::unnest(data, .data$site) %>%
+    dplyr::mutate(tot_ts = difftime(.data$ts.y, .data$ts.x, units = "secs"),
+                  dist = latLonDist(.data$lat.x, .data$lon.x, .data$lat.y, .data$lon.y), ## distance in meters
+                  rate = .data$dist/(as.numeric(.data$tot_ts)), ## rate of travel in m/s
                   ## bearing (see package geosphere for help)
-                  bearing = geosphere::bearing(matrix(c(lon.x, lat.x), ncol=2),
-                                               matrix(c(lon.y, lat.y), ncol=2)))
+                  bearing = geosphere::bearing(matrix(c(.data$lon.x, .data$lat.x), ncol=2),
+                                               matrix(c(.data$lon.y, .data$lat.y), ncol=2)))
   
   trans
 }

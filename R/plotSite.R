@@ -37,25 +37,32 @@
 #' #Plot only detections for specified tags for data.frame df.alltags
 #' plotSite(filter(df.alltags, motusTagID %in% c(16047, 16037, 16039)))
 
-
 plotSite <- function(data, sitename = unique(data$recvDeployName)){
-  data = data %>% mutate(hour = 3600*round(as.numeric(ts)/3600, 0)) ## round times to the hour
-  data <- select(data, hour, antBearing, fullID, recvDeployName, recvDeployLat, recvDeployLon,
-                 gpsLat, gpsLon) %>% distinct %>% collect %>% as.data.frame
-  data <- mutate(data,
-                 recvLat = if_else((is.na(gpsLat)|gpsLat == 0|gpsLat ==999),
-                                   recvDeployLat,
-                                   gpsLat),
-                 recvLon = if_else((is.na(gpsLon)|gpsLon == 0|gpsLon == 999),
-                                   recvDeployLon,
-                                   gpsLon),
-                 recvDeployName = paste(recvDeployName, 
-                                        round(recvLat, digits = 1), sep = "\n" ),
-                 recvDeployName = paste(recvDeployName,
-                                        round(recvLon, digits = 1), sep = ", "),
-                 hour = lubridate::as_datetime(hour, tz = "UTC"))
-  p <- ggplot2::ggplot(data, ggplot2::aes(hour, fullID, col = as.factor(antBearing)))
-  p + ggplot2::geom_point() + ggplot2::theme_bw() + 
-    ggplot2::labs(title = "Detection Time vs Tag ID, coloured by antenna", x = NULL, y = "Tag ID", colour = "Antenna Bearing") +
-    ggplot2::facet_wrap(~recvDeployName) + ggplot2::theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  data <- data %>%  
+    dplyr::mutate(hour = 3600*round(as.numeric(.data$ts)/3600, 0))  %>% ## round times to the hour
+    dplyr::select("hour", "antBearing", "fullID", "recvDeployName", "recvDeployLat", "recvDeployLon",
+                  "gpsLat", "gpsLon") %>% 
+    dplyr::distinct() %>% 
+    dplyr::collect() %>% 
+    dplyr::mutate(recvLat = dplyr::if_else((is.na(.data$gpsLat)|.data$gpsLat == 0|.data$gpsLat ==999),
+                                           .data$recvDeployLat,
+                                           .data$gpsLat),
+                  recvLon =  dplyr::if_else((is.na(.data$gpsLon)|.data$gpsLon == 0|.data$gpsLon == 999),
+                                            .data$recvDeployLon,
+                                            .data$gpsLon),
+                  recvDeployName = paste(.data$recvDeployName, 
+                                         round(.data$recvLat, digits = 1), sep = "\n" ),
+                  recvDeployName = paste(.data$recvDeployName,
+                                         round(.data$recvLon, digits = 1), sep = ", "),
+                  hour = lubridate::as_datetime(.data$hour, tz = "UTC"),
+                  antBearing = as.factor(.data$antBearing)) %>%
+    as.data.frame()
+  
+  ggplot2::ggplot(data, ggplot2::aes_string(x = "hour", y = "fullID", col = "antBearing")) +
+    ggplot2::geom_point() + 
+    ggplot2::theme_bw() + 
+    ggplot2::labs(title = "Detection Time vs Tag ID, coloured by antenna", 
+                  x = NULL, y = "Tag ID", colour = "Antenna Bearing") +
+    ggplot2::facet_wrap("recvDeployName") + 
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
 }

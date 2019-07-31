@@ -43,7 +43,7 @@ plotRouteMap <- function(data, zoom = 3, lat = NULL, lon = NULL,
   if(!requireNamespace("ggmap", quietly = TRUE)) {
     stop("Package 'ggmap' required to plot route maps. ",
          "Use the code \"install.packages('ggmap')\" to install.", call. = FALSE)
-  } else if(packageVersion("ggmap") < "3.0.0") {
+  } else if(utils::packageVersion("ggmap") < "3.0.0") {
     stop("Package 'ggmap' requires version 3.0.0 to plot route maps. ",
          "Use the code \"update.packages('ggmap')\" to update to the ",
          "most recent version.", call. = FALSE)
@@ -53,39 +53,40 @@ plotRouteMap <- function(data, zoom = 3, lat = NULL, lon = NULL,
   if(class(lat) %in% c(NULL, "numeric")) stop('Numeric values required for "lat"')
   if(class(lon) %in% c(NULL, "numeric")) stop('Numeric values required for "lon"')
 
-  site <- tbl(data, "recvDeps")
+  site <- dplyr::tbl(data, "recvDeps")
   site <- site %>% 
-    dplyr::select(name, latitude, longitude, tsStart, tsEnd) %>% 
+    dplyr::select("name", "latitude", "longitude", "tsStart", "tsEnd") %>% 
     dplyr::distinct() %>% 
-    dplyr::filter(!is.na(latitude), !is.na(longitude)) %>% # Omit missing lat/lon
+    dplyr::filter(!is.na(.data$latitude), !is.na(.data$longitude)) %>% # Omit missing lat/lon
     dplyr::collect() %>%
-    dplyr::mutate(tsStart = lubridate::as_datetime(tsStart, tz = "UTC"),
-                  tsEnd = lubridate::as_datetime(tsEnd, tz = "UTC"),
+    dplyr::mutate(tsStart = lubridate::as_datetime(.data$tsStart, tz = "UTC"),
+                  tsEnd = lubridate::as_datetime(.data$tsEnd, tz = "UTC"),
                   ## for sites with no end date, make an end date a year from now
                   tsEnd = lubridate::as_datetime(
-                    dplyr::if_else(is.na(tsEnd),
+                    dplyr::if_else(is.na(.data$tsEnd),
                                    lubridate::as_datetime(format(Sys.time(), "%Y-%m-%d %H:%M:%S")) + lubridate::dyears(1),
-                                   tsEnd), tz = "UTC"),
-                  interval = lubridate::interval(tsStart, tsEnd))
+                                   .data$tsEnd), tz = "UTC"),
+                  interval = lubridate::interval(.data$tsStart, .data$tsEnd))
   
   if(is.null(recvStart)) recvStart <- min(site$tsStart)
   if(is.null(recvEnd)) recvEnd <- max(site$tsEnd)
   dateRange <- lubridate::interval(recvStart, recvEnd) ## get time interval you are interested in
 
-  data <- tbl(data, "alltags")
-  data <- select(data, motusTagID, ts, recvDeployLat, recvDeployLon, fullID, recvDeployName, speciesEN) %>% 
-    dplyr::filter(!is.na(recvDeployLat), !is.na(recvDeployLon)) %>%
+  data <- dplyr::tbl(data, "alltags")
+  data <- dplyr::select(data, "motusTagID", "ts", "recvDeployLat", 
+                        "recvDeployLon", "fullID", "recvDeployName", "speciesEN") %>% 
+    dplyr::filter(!is.na(.data$recvDeployLat), !is.na(.data$recvDeployLon)) %>%
     dplyr::distinct() %>% 
     dplyr::collect() %>%
-    dplyr::mutate(ts = lubridate::as_datetime(ts, tz = "UTC")) %>%
-    dplyr::arrange(ts)
+    dplyr::mutate(ts = lubridate::as_datetime(.data$ts, tz = "UTC")) %>%
+    dplyr::arrange(.data$ts)
   
   ## Filter data sets to date range
-  site <- dplyr::mutate(site, include = lubridate::int_overlaps(interval, dateRange)) %>%
-    dplyr::select(-interval) %>% # get around filter limitation
-    dplyr::filter(include)
+  site <- dplyr::mutate(site, include = lubridate::int_overlaps(.data$interval, dateRange)) %>%
+    dplyr::select(-"interval") %>% # get around filter limitation
+    dplyr::filter(.data$include)
   
-  data <- dplyr::filter(data, lubridate::`%within%`(ts, dateRange))
+  data <- dplyr::filter(data, lubridate::`%within%`(.data$ts, dateRange))
   
   # In case user supplies wrong order
   lon <- sort(lon)
@@ -113,11 +114,11 @@ plotRouteMap <- function(data, zoom = 3, lat = NULL, lon = NULL,
                                 zoom = zoom,
                                 maptype = maptype)
   ggmap::ggmap(gmap) +
-    ggplot2::geom_point(data = site, ggplot2::aes(x = longitude, y = latitude), 
+    ggplot2::geom_point(data = site, ggplot2::aes_string(x = "longitude", y = "latitude"), 
                         shape = 21, colour = "black", fill = "yellow") +
     ggplot2::geom_path(data = data, 
-                       ggplot2::aes(x = recvDeployLon, y = recvDeployLat, 
-                                    group = fullID, col = fullID)) +
+                       ggplot2::aes_string(x = "recvDeployLon", y = "recvDeployLat", 
+                                    group = "fullID", col = "fullID")) +
     ggplot2::labs(x = "Longitude", y = "Latitude") + 
     ggplot2::theme_bw()
 }

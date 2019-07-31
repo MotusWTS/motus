@@ -74,22 +74,23 @@ filterByActivity <- function(src, return = "good",
                               by = c("batchIDbegin" = "batchID", 
                                      "ant", "hourBin")) %>% 
     # Convert integers to numeric for ratio calculations
-    dplyr::mutate(run2 = as.numeric(run2),
-                  numRuns = as.numeric(numRuns)) %>%
+    dplyr::mutate(run2 = as.numeric(.data$run2),
+                  numRuns = as.numeric(.data$numRuns)) %>%
     dplyr::filter(.data$len < maxLen) %>% # Filter out good runs
     dplyr::filter((.data$numRuns >= maxRuns & ((.data$run2 / .data$numRuns) >= ratio)) | 
                     .data$len <= minLen) %>%
-    dplyr::select(runID) %>%
+    dplyr::select("runID") %>%
     dplyr::mutate(probability = 0)
 
   # Label runs with probability
   tbl_prob <- dplyr::tbl(src$con, "alltags") %>%
     dplyr::left_join(tbl_bad, by = "runID") %>%
-    dplyr::mutate(probability = dplyr::if_else(is.na(probability), 1, probability))
+    dplyr::mutate(probability = dplyr::if_else(is.na(.data$probability), 1, 
+                                               .data$probability))
   
   # Which to return?
-  if(return == "good") r <- dplyr::filter(tbl_prob, probability > 0)
-  if(return == "bad") r <- dplyr::filter(tbl_prob, probability == 0)
-  if(return == "all") r <- tbl_prob
+  if(return == "good") r <- dplyr::filter(tbl_prob, .data$probability > 0)
+  if(return == "bad")  r <- dplyr::filter(tbl_prob, .data$probability == 0)
+  if(return == "all")  r <- tbl_prob
   r
 }

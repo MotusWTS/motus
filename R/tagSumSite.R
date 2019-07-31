@@ -61,10 +61,10 @@ tagSumSite <- function(data, units = "hours"){
                         ts = lubridate::as_datetime(.data$ts, tz = "UTC"))
   grouped <- dplyr::group_by(data, .data$fullID, .data$recvDeployName)
   data <- dplyr::summarise(grouped,
-                    first_ts=min(ts),
-                    last_ts=max(ts),
-                    tot_ts = difftime(max(ts), min(ts), units = units),
-                    num_det = length(ts))
+                           first_ts=min(.data$ts),
+                           last_ts=max(.data$ts),
+                           tot_ts = difftime(max(.data$ts), min(.data$ts), units = units),
+                           num_det = length(.data$ts))
   data <- as.data.frame(data)
   return(data)
 }

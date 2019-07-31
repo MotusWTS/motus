@@ -51,23 +51,26 @@ plotAllTagsSite <- function(data, coordinate = "recvDeployLat", tagsPerPanel = 5
   
   data <- data %>% 
     ## round times to the hour
-    dplyr::mutate(round_ts = 3600*round(as.numeric(ts)/3600, 0)) %>%
+    dplyr::mutate(round_ts = 3600*round(as.numeric(.data$ts)/3600, 0)) %>%
     dplyr::filter(!!rlang::sym(coordinate) != 0)
   
   # Left-join summaries back in because these databases don't support mutate for mean/min/max etc.
   data <- data %>%
-    dplyr::group_by(recvDeployName) %>% 
+    dplyr::group_by(.data$recvDeployName) %>% 
     ## get mean lats by recvDeployName
     dplyr::summarize(meanlat = mean(!!rlang::sym(coordinate), na.rm = TRUE)) %>%
     dplyr::left_join(data, ., by = "recvDeployName") %>%
-    dplyr::select(mfgID, recvDeployName, round_ts, meanlat, fullID) %>% 
+    dplyr::select("mfgID", "recvDeployName", "round_ts", "meanlat", "fullID") %>% 
     dplyr::distinct() %>% 
     dplyr::collect() %>%
-    dplyr::mutate(meanlat = round(meanlat, digits = 2), ## round to 2 significant digits
+    dplyr::mutate(meanlat = round(.data$meanlat, digits = 2), ## round to 2 significant digits
                   ## new column with recvDeployName and lat
-                  sitelat = as.factor(paste(recvDeployName, meanlat, sep = " ")),
-                  sitelat = reorder(sitelat, meanlat),
-                  round_ts = lubridate::as_datetime(round_ts, tz = "UTC"))
+                  sitelat = as.factor(paste(.data$recvDeployName, .data$meanlat, sep = " ")),
+                  sitelat = stats::reorder(.data$sitelat, .data$meanlat),
+                  round_ts = lubridate::as_datetime(.data$round_ts, tz = "UTC"))
+  
+  if(nrow(data) == 0) stop("No data with coordinate '", coordinate, "'", 
+                           call. = FALSE)
   
   ## We want to plot multiple tags per panel, so sort their labels and create a grouping factor
   ## Note that labels are sorted in increasing order by ID
@@ -85,11 +88,14 @@ plotAllTagsSite <- function(data, coordinate = "recvDeployLat", tagsPerPanel = 5
   data <- data[order(data$round_ts),] ## order by time
   out <- by(data, INDICES = data$tagGroupFactor, FUN = function(m){
     m <- droplevels(m)
-    m <- ggplot2::ggplot(m, ggplot2::aes(round_ts, sitelat, colour = fullID, group = fullID))
-    p <- ggplot2::ggplot(data, ggplot2::aes(round_ts, sitelat, col = fullID, group = fullID))
-    m + ggplot2::geom_line() + ggplot2::geom_point(pch = 21) + ggplot2::theme_bw() +
-      ggplot2::labs(title = "Detection time vs Site (ordered by latitude) by Tag", x = "Date", y = paste0('Site ordered by ',coordinate), colour = "ID") +
-      ggplot2::facet_wrap("tagGroupFactor") + ggplot2::theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    m <- ggplot2::ggplot(m, ggplot2::aes_string(x = "round_ts", y = "sitelat", colour = "fullID", group = "fullID"))
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = "round_ts", y = "sitelat", col = "fullID", group = "fullID"))
+    m + ggplot2::geom_line() + ggplot2::geom_point(pch = 21) + 
+      ggplot2::theme_bw() +
+      ggplot2::labs(title = "Detection time vs Site (ordered by latitude) by Tag", 
+                    x = "Date", y = paste0('Site ordered by ',coordinate), colour = "ID") +
+      ggplot2::facet_wrap("tagGroupFactor") + 
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
   })
   do.call(gridExtra::grid.arrange, out)
 }

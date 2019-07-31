@@ -89,17 +89,20 @@ plotAllTagsCoord <- function(data, coordinate = "recvDeployLat", ts = "ts", tags
                                                                                                              collapse = ",")))
   data$tagGroupFactor = factor(tagGroupFactor, labels = tagGroupLabels, 
                                ordered = TRUE)
-  data <- unique(subset(data, select = c(hour, meanlat, 
-                                         recvDeployName, fullID, tagGroupFactor)))
+  data <- unique(subset(data, select = c("hour", "meanlat", 
+                                         "recvDeployName", "fullID", "tagGroupFactor")))
   data <- data[order(data$hour), ]
   out <- by(data, INDICES = data$tagGroupFactor, FUN = function(m) {
     m <- droplevels(m)
-    m <- ggplot2::ggplot(m, ggplot2::aes(hour, meanlat, 
-                                         colour = fullID, group = fullID))
-    m + ggplot2::geom_line() + ggplot2::geom_point(pch = 21) + 
-      ggplot2::theme_bw() + ggplot2::labs(title = "Detection time vs Latitude by Tag", 
-                                          x = "Date", y = paste0('mean_', coordinate), colour = "ID") + ggplot2::facet_wrap("tagGroupFactor") +
-      ggplot2::theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    m <- ggplot2::ggplot(m, ggplot2::aes_string(x = "hour", y = "meanlat", 
+                                                colour = "fullID", group = "fullID"))
+    m + ggplot2::geom_line() + 
+      ggplot2::geom_point(pch = 21) + 
+      ggplot2::theme_bw() +
+      ggplot2::labs(title = "Detection time vs Latitude by Tag", 
+                    x = "Date", y = paste0('mean_', coordinate), colour = "ID") + 
+      ggplot2::facet_wrap("tagGroupFactor") +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
   })
   do.call(gridExtra::grid.arrange, out)
 }

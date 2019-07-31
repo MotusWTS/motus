@@ -73,21 +73,21 @@ tagSum <- function(data){
                         ts = lubridate::as_datetime(.data$ts, tz = "UTC"))
   grouped <- dplyr::group_by(data, .data$fullID)
   tmp <- dplyr::summarise(grouped,
-                    first_ts=min(ts),
-                    last_ts=max(ts),
-                    tot_ts = difftime(max(ts), min(ts), units = "secs"),
-                    num_det = length(ts)) ## total time in seconds
+                          first_ts=min(.data$ts),
+                          last_ts=max(.data$ts),
+                          tot_ts = difftime(max(.data$ts), min(.data$ts), units = "secs"),
+                          num_det = length(.data$ts)) ## total time in seconds
   tmp <- merge(tmp, subset(data, select = c(ts, fullID, recvDeployName, recvLat, recvLon)),
                by.x = c("first_ts", "fullID"), by.y = c("ts", "fullID"), all.x = TRUE)
   tmp <- unique(merge(tmp, subset(data, select = c(ts, fullID, recvDeployName, recvLat, recvLon)),
-               by.x = c("last_ts", "fullID"), by.y = c("ts", "fullID"), all.x = TRUE))
+                      by.x = c("last_ts", "fullID"), by.y = c("ts", "fullID"), all.x = TRUE))
   tmp <- dplyr::rename(tmp, first_site = recvDeployName.x, last_site = recvDeployName.y)
   tmp$dist <- with(tmp, latLonDist(recvLat.x, recvLon.x, recvLat.y, recvLon.y)) ## distance in meters
   tmp$rate <- with(tmp, dist/(as.numeric(tot_ts))) ## rate of travel in m/s
   tmp$bearing <- with(tmp, geosphere::bearing(matrix(c(recvLon.x, recvLat.x), ncol=2),
-                                                 matrix(c(recvLon.y, recvLat.y), ncol=2))) ## bearing (see package geosphere for help)
-#  tmp$rhumbline_bearing <- with(tmp, geosphere::bearingRhumb(matrix(c(recvLon.x, recvLat.x), ncol=2),
-#                                                        matrix(c(recvLon.y, recvLat.y), ncol=2))) ## rhumbline bearing (see package geosphere for help)
+                                              matrix(c(recvLon.y, recvLat.y), ncol=2))) ## bearing (see package geosphere for help)
+  #  tmp$rhumbline_bearing <- with(tmp, geosphere::bearingRhumb(matrix(c(recvLon.x, recvLat.x), ncol=2),
+  #                                                        matrix(c(recvLon.y, recvLat.y), ncol=2))) ## rhumbline bearing (see package geosphere for help)
   return(tmp[c("fullID", "first_ts", "last_ts", "first_site", "last_site", "recvLat.x", "recvLon.x",
                "recvLat.y", "recvLon.y", "tot_ts", "dist", "rate", "bearing", "num_det")])
 }

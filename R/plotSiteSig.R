@@ -39,16 +39,17 @@ plotSiteSig <- function(data, recvDeployName){
 
   data <- data %>%
     dplyr::filter(recvDeployName == !!recvDeployName) %>%
-    dplyr::select(antBearing, ts, recvDeployLat, sig, fullID, recvDeployName) %>% 
+    dplyr::select("antBearing", "ts", "recvDeployLat", "sig", "fullID", "recvDeployName") %>% 
     dplyr::distinct() %>% 
     dplyr::collect() %>% 
-    dplyr::mutate(ts = lubridate::as_datetime(ts, tz = "UTC"))
-  
-  ggplot2::ggplot(data, ggplot2::aes(ts, sig, col = as.factor(antBearing))) + 
+    dplyr::mutate(ts = lubridate::as_datetime(.data$ts, tz = "UTC"),
+                  antBearing = as.factor(.data$antBearing))
+
+  ggplot2::ggplot(data, ggplot2::aes_string("ts", "sig", col = "antBearing")) + 
     ggplot2::geom_point() + 
     ggplot2::theme_bw() + 
-    ggplot2::theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)) + 
     ggplot2::labs(title = paste0(recvDeployName, ' tag detections by signal strength, coloured by antenna'), 
                   x = "Date", y = "Signal Strength", colour = "Antenna Bearing") +
-    ggplot2::facet_wrap(~fullID) 
+    ggplot2::facet_wrap("fullID") 
 }

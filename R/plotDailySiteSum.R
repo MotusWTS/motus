@@ -39,14 +39,16 @@ plotDailySiteSum <- function(data, recvDeployName){
   tmp <- if(any(class(data) == "data.frame")){
     tmp = data
   } else {
-    tmp = data %>% collect %>% as.data.frame
+    tmp = data %>% dplyr::collect() %>% as.data.frame()
   }
-  sitesum <- siteSumDaily(filter(data, recvDeployName == !!recvDeployName))
-  detections <- ggplot2::ggplot(sitesum, ggplot2::aes(date, num_det)) +
-    ggplot2::geom_bar(stat = "identity") + ggplot2::theme_bw() + ## creates bar plot by recvDeployName
+  sitesum <- siteSumDaily(dplyr::filter(data, .data$recvDeployName == !!recvDeployName))
+  detections <- ggplot2::ggplot(sitesum, ggplot2::aes_string(x = "date", y = "num_det")) +
+    ggplot2::geom_bar(stat = "identity") + 
+    ggplot2::theme_bw() + ## creates bar plot by recvDeployName
     ggplot2::labs(x= "Date", y = "Total detections")
-  tags <- ggplot2::ggplot(sitesum, ggplot2::aes(date, num_tags)) +
-    ggplot2::geom_bar(stat = "identity") + ggplot2::theme_bw() + ## creates line graph by recvDeployName
-    ggplot2::labs(x= "Date", y = "Number of tags")
+  tags <- ggplot2::ggplot(sitesum, ggplot2::aes_string(x = "date", y = "num_tags")) +
+    ggplot2::geom_bar(stat = "identity") + 
+    ggplot2::theme_bw() + ## creates line graph by recvDeployName
+    ggplot2::labs(x = "Date", y = "Number of tags")
   gridExtra::grid.arrange(detections, tags, nrow = 2, top = paste("Daily number of detections and tags at", recvDeployName, sep = " "))
 }

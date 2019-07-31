@@ -37,29 +37,30 @@
 plotTagSig <- function(data, motusTagID){
   tag.id <- motusTagID
   data <- data %>% 
-    dplyr::filter(motusTagID == !!tag.id) %>%
-    dplyr::select(motusTagID, sig, ts, antBearing, recvDeployLat, recvDeployLon, 
-                  gpsLat, gpsLon, fullID, recvDeployName) %>% 
+    dplyr::filter(.data$motusTagID == !!tag.id) %>%
+    dplyr::select("motusTagID", "sig", "ts", "antBearing", "recvDeployLat", "recvDeployLon", 
+                  "gpsLat", "gpsLon", "fullID", "recvDeployName") %>% 
     dplyr::distinct() %>% 
     dplyr::collect() %>%
-    dplyr::mutate(recvLat = dplyr::if_else((is.na(gpsLat)|gpsLat == 0|gpsLat ==999),
-                                           recvDeployLat,
-                                           gpsLat),
-                  recvLon = dplyr::if_else((is.na(gpsLon)|gpsLon == 0|gpsLon == 999),
-                                           recvDeployLon,
-                                           gpsLon),
-                  recvDeployName = paste0(recvDeployName, "\n",
-                                       round(recvLat, digits = 1), ", ",
-                                       round(recvLon, digits = 1)),
-                  ts = lubridate::as_datetime(ts, tz = "UTC"),
+    dplyr::mutate(recvLat = dplyr::if_else((is.na(.data$gpsLat)|.data$gpsLat == 0|.data$gpsLat ==999),
+                                           .data$recvDeployLat,
+                                           .data$gpsLat),
+                  recvLon = dplyr::if_else((is.na(.data$gpsLon)|.data$gpsLon == 0|.data$gpsLon == 999),
+                                           .data$recvDeployLon,
+                                           .data$gpsLon),
+                  recvDeployName = paste0(.data$recvDeployName, "\n",
+                                          round(.data$recvLat, digits = 1), ", ",
+                                          round(.data$recvLon, digits = 1)),
+                  ts = lubridate::as_datetime(.data$ts, tz = "UTC"),
                   ## order recvDeployName by latitude
-                  recvDeployName = reorder(recvDeployName, recvLat)) 
+                  recvDeployName = stats::reorder(.data$recvDeployName, .data$recvLat),
+                  antBearing = as.factor(.data$antBearing)) 
 
-  ggplot2::ggplot(data, ggplot2::aes(ts, sig, col = as.factor(antBearing))) +
+  ggplot2::ggplot(data, ggplot2::aes_string(x = "ts", y = "sig", col = "antBearing")) +
     ggplot2::geom_point() + 
     ggplot2::theme_bw() + 
     ggplot2::labs(title = paste("Detection Time vs Signal Strength, coloured by antenna \n ID ", motusTagID), 
                   x = "Date", y = "Signal Strength", colour = "Antenna Bearing") +
-    ggplot2::facet_grid(recvDeployName~.) + 
-    ggplot2::theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    ggplot2::facet_grid(rows = "recvDeployName") + 
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
 }
