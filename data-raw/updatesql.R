@@ -27,7 +27,7 @@ sql_versions <- rbind(
                 year INTEGER,
                 month INTEGER,
                 day INTEGER,
-                hourbin INTEGER,
+                hourBin INTEGER,
                 numTags INTEGER,
                 pulseCount INTEGER,
                 numRuns INTEGER,
@@ -38,8 +38,8 @@ sql_versions <- rbind(
                 run5 INTEGER,
                 run6 INTEGER,
                 run7plus INTEGER,
-         UNIQUE(batchID, ant, hourbin),
-         PRIMARY KEY (batchID, ant, hourbin));")
+         UNIQUE(batchID, ant, hourBin),
+         PRIMARY KEY (batchID, ant, hourBin));")
 )
 
 # Update 2018-06-12 22:00:01 ---------------------------------------------------
