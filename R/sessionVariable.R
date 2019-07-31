@@ -30,7 +30,7 @@
 #'
 #' @examples
 #'
-#'  sessionVariable("userLogin", "user login at motus.org")
+#' \dontrun{sessionVariable("userLogin", "user login at motus.org")}
 #'
 #' ## This creates an active binding for the symbol "userLogin" in the environment "motus_vars"
 #' ## If the variable \code{motus_vars$userLogin} is requested in code, the user will

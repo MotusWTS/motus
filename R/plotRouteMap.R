@@ -23,10 +23,18 @@
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @examples
-#' You must use a .motus sql file, instructions to load using tagme() are below
-#' sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
+#' # You must use a .motus sql file, instructions to load using tagme() are
+#' # below
 #' 
-#' Plot routemap of all detection data, with "terrain" maptype, and receivers active between 2016-01-01 and 2017-01-01
+#' # download and access data from project 176 in sql format
+#' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+#' 
+#' # OR use example sql file included in `motus`
+#' sql.motus <- tagme(176, update = FALSE, 
+#'                    dir = system.file("extdata", package = "motus"))
+#' 
+#' # Plot routemap of all detection data, with "terrain" maptype, and receivers
+#' # active between 2016-01-01 and 2017-01-01
 #' plotRouteMap(sql.motus, recvStart = "2016-01-01", recvEnd = "2016-12-31")
 
 plotRouteMap <- function(data, zoom = 3, lat = NULL, lon = NULL,

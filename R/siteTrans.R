@@ -37,29 +37,31 @@
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @examples
-#' # You can use either a selected tbl from .motus eg. "alltags", or a data.frame,
-#' instructions to convert a .motus file to all formats are below. 
+#' # You can use either a selected tbl from .motus eg. "alltags", or a
+#' # data.frame, instructions to convert a .motus file to all formats are below.
 #' 
-#' \dontrun{
-#'   # download and access data from project 176 in sql format 
-#'   sql.motus <- tagme(176, new = TRUE, update = TRUE) 
+#' # download and access data from project 176 in sql format
+#' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+#' 
+#' # OR use example sql file included in `motus`
+#' sql.motus <- tagme(176, update = FALSE, 
+#'                    dir = system.file("extdata", package = "motus"))
+#'
+#' # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+#' tbl.alltags <- tbl(sql.motus, "alltags") 
 #'  
-#'   # convert sql file "sql.motus" to a tbl called "tbl.alltags"
-#'   tbl.alltags <- tbl(sql.motus, "alltags") 
-#'  
-#'   ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
-#'    df.alltags <- tbl.alltags %>%
-#'      collect %>%
-#'      as.data.frame()
+#' ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+#'  df.alltags <- tbl.alltags %>%
+#'    collect %>%
+#'    as.data.frame()
 #' 
-#'   # View all site transitions for all detection data from tbl file tbl.alltags
-#'   transitions <- siteTrans(tbl.alltags)
+#' # View all site transitions for all detection data from tbl file tbl.alltags
+#' transitions <- siteTrans(tbl.alltags)
 #' 
-#'   # View site transitions for only tag 16037 from data.frame df.alltags using
-#'   # gpsLat/gpsLon
-#'   transitions <- siteTrans(filter(df.alltags, motusTagID == 16037),
+#' # View site transitions for only tag 16037 from data.frame df.alltags using
+#' # gpsLat/gpsLon
+#' transitions <- siteTrans(filter(df.alltags, motusTagID == 16037),
 #'                            latCoord = "gpsLat", lonCoord = "gpsLon")
-#' }
 
 siteTrans <- function(data, latCoord = "recvDeployLat", lonCoord = "recvDeployLon"){
   tmp <- if(any(class(data) == "data.frame")){

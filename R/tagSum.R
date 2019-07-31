@@ -27,18 +27,34 @@
 #' }
 #'
 #' @examples
-#' You can use either a selected tbl from .motus eg. "alltags", or a data.frame, instructions to convert a .motus file to all formats are below.
-#' sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
-#' tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
-#' df.alltags <- tbl.alltags %>% collect %>% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+#' # You can use either a selected tbl from .motus eg. "alltags", or a
+#' # data.frame, instructions to convert a .motus file to all formats are below.
 #' 
-#' Create tag summary for all tags within detection data using tbl file tbl.alltags
+#' # download and access data from project 176 in sql format
+#' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+#' 
+#' # use example sql file included in `motus`
+#' sql.motus <- tagme(176, update = FALSE, 
+#'                    dir = system.file("extdata", package = "motus"))
+#' 
+#' # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+#' library(dplyr)
+#' tbl.alltags <- tbl(sql.motus, "alltags") 
+#' 
+#' # convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+#' df.alltags <- tbl.alltags %>% 
+#'   collect() %>% 
+#'   as.data.frame()
+#' 
+#' # Create tag summary for all tags within detection data using tbl file
+#' # tbl.alltags
 #' tag_summary <- tagSum(tbl.alltags)
 #' 
-#' Create site summaries for only select tags using tbl file tbl.alltags
-#' tag_summary <- tagSum(filter(tbl.alltags, motusTagID %in% c(16047, 16037, 16039)))
+#' # Create site summaries for only select tags using tbl file tbl.alltags
+#' tag_summary <- tagSum(filter(tbl.alltags, 
+#'                              motusTagID %in% c(16047, 16037, 16039)))
 #'
-#' Create site summaries for only a select species using data.frame df.alltags
+#' # Create site summaries for only a select species using data.frame df.alltags
 #' tag_summary <- tagSum(filter(df.alltags, speciesEN == "Red Knot"))
 
 tagSum <- function(data){

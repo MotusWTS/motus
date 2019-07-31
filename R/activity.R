@@ -17,16 +17,20 @@
 #'   records.
 #'
 #' @examples
-#' \dontrun{
-#'   # First download tag data
-#'   my_tags <- tagme(176, new = TRUE, update = TRUE)
+#' 
+#' # download and access data from project 176 in sql format
+#' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+#' 
+#' # OR use example sql file included in `motus`
+#' sql.motus <- tagme(176, update = FALSE, 
+#'                    dir = system.file("extdata", package = "motus"))
 #'   
-#'   # Access 'activity' table
-#'   a <- tbl(my_tags, "activity")
+#' # Access 'activity' table
+#' library(dplyr)
+#' a <- tbl(sql.motus, "activity")
 #'   
-#'   # If interrupted and you want to resume
-#'   my_tags <- activity(my_tags, resume = TRUE)
-#' }
+#' # If interrupted and you want to resume
+#' \dontrun{my_tags <- activity(sql.motus, resume = TRUE)}
 #'
 #' @export
 

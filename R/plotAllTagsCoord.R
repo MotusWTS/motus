@@ -16,10 +16,24 @@
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @examples
-#' You can use either a selected tbl from .motus eg. "alltags", or a data.frame, instructions to convert a .motus file to all formats are below.
-#' sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
-#' tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
-#' df.alltags <- tbl.alltags %>% collect %>% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+#' # You can use either a selected tbl from .motus eg. "alltags", or a
+#' # data.frame, instructions to convert a .motus file to all formats are below.
+#' 
+#' # download and access data from project 176 in sql format
+#' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+#' 
+#' # OR use example sql file included in `motus`
+#' sql.motus <- tagme(176, update = FALSE, 
+#'                    dir = system.file("extdata", package = "motus"))
+#'                    
+#' # convert sql file "sql.motus" to a tbl called "tbl.alltags"                
+#' library(dplyr)
+#' tbl.alltags <- tbl(sql.motus, "alltags") 
+#' 
+#' # convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+#' df.alltags <- tbl.alltags %>% 
+#'   collect() %>% 
+#'   as.data.frame()
 #' 
 #' # Plot tbl file tbl.alltags with default GPS latitude data and 5 tags per panel
 #' plotAllTagsCoord(tbl.alltags)
@@ -27,14 +41,17 @@
 #' # Plot an sql file tbl.alltags with 10 tags per panel
 #' plotAllTagsCoord(tbl.alltags, tagsPerPanel = 10)
 #' 
-#' # Plot dataframe df.alltags using receiver deployment latitudes with default 5 tags per panel
+#' # Plot dataframe df.alltags using receiver deployment latitudes with default
+#' # 5 tags per panel
 #' plotAllTagsCoord(df.alltags, coordinate = "recvDeployLat")
 #' 
 #' # Plot dataframe df.alltags using LONGITUDES and 10 tags per panel
-#' plotAllTagsCoord(df.alltags, coordinate = "gpsLon", tagsPerPanel = 10)
+#' # But only works if non-NA "gpsLon"!
+#' \dontrun{plotAllTagsCoord(df.alltags, coordinate = "gpsLon", tagsPerPanel = 10)}
 
 #' # Plot dataframe df.alltags using lat for select motus tagIDs
-#' plotAllTagsCoord(filter(df.alltags, motusTagID %in% c(19129, 16011, 17357)), tagsPerPanel = 1)
+#' plotAllTagsCoord(filter(df.alltags, motusTagID %in% c(19129, 16011, 17357)), 
+#'                  tagsPerPanel = 1)
 
 ## grouping code taken from sensorgnome package
 
@@ -42,19 +59,22 @@ plotAllTagsCoord <- function(data, coordinate = "recvDeployLat", ts = "ts", tags
   if(class(tagsPerPanel) != "numeric") stop('Numeric value required for "tagsPerPanel"')
 
   data <- data %>%
-    dplyr::mutate(hour = 3600*round(as.numeric(ts)/3600, 0)) %>% ## round times to the hour
+    dplyr::mutate(hour = 3600*round(as.numeric(.data$ts)/3600, 0)) %>% ## round times to the hour
     dplyr::filter(!!rlang::sym(coordinate) != 0)
-  
+
   # Left-join summaries back in because these databases don't support mutate for mean/min/max etc.
   data <- data %>%
-    dplyr::group_by(recvDeployName) %>% 
+    dplyr::group_by(.data$recvDeployName) %>% 
     ## get summary of mean lats by recvDeployName
     dplyr::summarize(meanlat = mean(!!rlang::sym(coordinate), na.rm = TRUE)) %>%    
     dplyr::left_join(data, ., by = "recvDeployName") %>%
-    dplyr::select(mfgID, recvDeployName, hour, meanlat, fullID) %>% 
+    dplyr::select("mfgID", "recvDeployName", "hour", "meanlat", "fullID") %>% 
     dplyr::distinct() %>% 
     dplyr::collect() %>% 
-    dplyr::mutate(hour = lubridate::as_datetime(hour, tz = "UTC"))
+    dplyr::mutate(hour = lubridate::as_datetime(.data$hour, tz = "UTC"))
+  
+  if(nrow(data) == 0) stop("No data with coordinate '", coordinate, "'", 
+                           call. = FALSE)
 
   labs = data$fullID[order(data$mfgID, data$fullID)]
   dup = duplicated(labs)
