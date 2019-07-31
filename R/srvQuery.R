@@ -58,22 +58,26 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
         json <- jsonlite::toJSON(query, auto_unbox = TRUE, null = "null")
         
         if(show) message(json, "\n")
+        
+        try_query <- function(url, json, ua, timeout) {
+            try(httr::POST(url, body = list("json" = json), encode = "form",
+                           httr::config(http_content_decoding = 0), ua, 
+                           httr::timeout(timeout)),
+                silent = TRUE)
+        }
 
-        resp <- try(httr::POST(url, body = list("json" = json), encode = "form",
-                               httr::config(http_content_decoding = 0), ua, 
-                               httr::timeout(timeout)),
-                    silent = TRUE)
+        resp <- try_query(url, json, ua, timeout)
         
         if(class(resp) == "try-error") {
             if(stringr::str_detect(resp, "aborted by an application callback")){
                 stop(resp, call. = FALSE)
             } else if (stringr::str_detect(resp, "Timeout was reached")) {
-                message("The server did not respond within ", timeout, "s. Trying again...")
-                resp <- try(httr::POST(url, body = query, encode = "form",
-                                       ua, httr::timeout(timeout)),
-                            silent = TRUE)
+                message("The server did not respond within ", timeout, 
+                        "s. Trying again...")
+                resp <- try_query(url, json, ua, timeout)
                 if(stringr::str_detect(resp, "Timeout was reached")) {
-                    stop("The server is not responding, please try again later.", call. = FALSE)
+                    stop("The server is not responding, please try again later.", 
+                         call. = FALSE)
                 }
             }
         }
