@@ -2,10 +2,10 @@
 
 ### Big Changes
 * Combined `motus` and `motusClient` packages
-* New function `activity()` adds hit activity for batches to a new `activity` table in the SQLite database. This is useful for detecting 'noisy' periods where hits may be unreliable.
-* New function `filterByActivity()` allows users to create custom filters using data from the `activity` table.
 
 ### New Features
+* New function `activity()` adds hit activity for batches to a new `activity` table in the SQLite database. This is useful for detecting 'noisy' periods where hits may be unreliable.
+* New function `filterByActivity()` allows users to create custom filters using data from the `activity` table.
 * Added a `NEWS.md` file to track changes to the package
 * Added support for `httr` for server queries
 * Added `?motus` package documentation
@@ -14,6 +14,9 @@
 ### Bug Fixes
 * Fix references to `ggmap` to avoid having to get Google API keys
 
+### Other
+* Moved dependencies to import rather than depend, to improve attach times, and reduce conflict with user-attached packages (note that `dplyr` will have to be loaded by users now)
+* All examples are tested
 
 # motus 1.0.0
 
