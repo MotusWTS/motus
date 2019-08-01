@@ -22,6 +22,7 @@ srvAuth = function() {
     tryCatch({
         res = srvQuery(motus_vars$API_DATA_AUTHENTICATE, pars, auth=FALSE)
         motus_vars$projects = res$projects
+        motus_vars$dataVersion = res$dataVersion
         ## cat(sprintf("Got authentication token from %s  \r",motus_vars$dataServerURL))
         return(res$authToken)
     }, error = function(e) {

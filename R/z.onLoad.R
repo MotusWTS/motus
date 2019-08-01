@@ -48,7 +48,7 @@
 .onLoad = function(...) {
     # default location of motus data server, unless user has already assigned
     # a value to "motusServerURL" in the global environment
-    if(!exists("motusServerURL")) motusServerURL <- "https://motus.org/api"
+    if(!exists("motusServerURL")) motusServerURL <- "https://sandbox.motus.org/api"
     dataServerURL <- file.path(motusServerURL, "sgdata")
 
     ## Assign constants
@@ -131,8 +131,9 @@
 
     with(motus_vars,
     {
-        projects = integer(0)   ## vector of projectIDs to which user has access
-        dbDir = getwd()         ## folder where tag and receiver databases are stored
+        dataVersion = 0L  ## Current dataVersion returned by server
+        projects = 0L     ## vector of projectIDs to which user has access
+        dbDir = getwd()   ## folder where tag and receiver databases are stored
     })
     
     # CRAN Note avoidance

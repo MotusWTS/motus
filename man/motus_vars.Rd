@@ -4,7 +4,7 @@
 \name{motus_vars}
 \alias{motus_vars}
 \title{Constants and writable storage for the motus package}
-\format{An object of class \code{environment} of length 32.}
+\format{An object of class \code{environment} of length 33.}
 \usage{
 motus_vars
 }

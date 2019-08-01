@@ -1,29 +1,26 @@
-#' update a motus tag detection database
+#' Download motus tag detections to a database
 #'
-#' @param projRecv integer scalar project code from motus.org, *or*
-#' character scalar receiver serial number
-#'
-#' @param update boolean scalar: should any new data be downloaded and merged?
-#' default: TRUE, unless this is a new database (in which case you must
-#' specify \code{update=TRUE} explicitly).
-#'
-#' @param new logical scalar: is this a new database?  Default: FALSE
-#' You have to specify \code{new=TRUE} if you want a new local copy of the
-#' database to be created.  Otherwise, \code{tagme()} assumes the database
-#' already exists, and will stop with an error if it cannot find it
-#' in the current directory.  This is mainly to prevent inadvertent
-#' downloads of large amounts of data that you already have!
-#'
-#' @param dir path to the folder where you are storing databases
-#' Default: the current directory; i.e. \code{getwd()}
-#'
-#' @param countOnly logical scalar: if FALSE, the default, then do
-#'     requested database updates.  Otherwise, return a count of items
-#'     that would need to be transferred in order to update the
-#'     database.
-#'
-#' @param forceMeta logical scalar: if true, re-get metadata for tags and
-#' receivers, even if we already have them.
+#' @param projRecv integer. Project code from motus.org, *or* character
+#'   scalar receiver serial number
+#' @param update logical. Should any new data be downloaded and merged?
+#'   Defaults to TRUE unless this is a new database (in which case you must
+#'   specify `update = TRUE` explicitly).
+#' @param new logical. Is this a new database?  Default: FALSE You have to
+#'   specify `new = TRUE` if you want a new local copy of the database to be
+#'   created. Otherwise, `tagme()` assumes the database already exists,
+#'   and will stop with an error if it cannot find it in the current directory.
+#'   This is mainly to prevent inadvertent downloads of large amounts of data
+#'   that you already have!#'
+#' @param dir character. Path to the folder where you are storing databases
+#'   Defaults to current directory; i.e. `getwd()`.
+#' @param countOnly logical. If FALSE, the default, then do requested
+#'   database updates. Otherwise, return a count of items that would need to be
+#'   transferred in order to update the database.#'
+#' @param forceMeta logical. If TRUE, re-get metadata for tags and receivers,
+#'   even if we already have them.
+#' @param rename logical. If current SQLite database is of an older version,
+#'   automatically rename that database for backup purposes and download the
+#'   newest version. If FALSE (default), user is prompted for action.
 #'
 #' @examples
 #'
@@ -64,7 +61,8 @@
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
-tagme = function(projRecv, update=TRUE, new=FALSE, dir=getwd(), countOnly=FALSE, forceMeta=FALSE) {
+tagme = function(projRecv, update = TRUE, new = FALSE, dir = getwd(), 
+                 countOnly = FALSE, forceMeta = FALSE, rename = FALSE) {
     if (missing(projRecv) && ! new) {
         ## special case: update all existing databases in \code{dir}
         return(lapply(dir(dir, pattern="\\.motus$"),
@@ -95,12 +93,23 @@ tagme = function(projRecv, update=TRUE, new=FALSE, dir=getwd(), countOnly=FALSE,
         deviceID = NULL
     }
 
-    rv = dplyr::src_sqlite(dbname, create=new)
-
-    ensureDBTables(rv, projRecv, deviceID)
-
+    rv <- dplyr::src_sqlite(dbname, create=new)
+    
     if (update) {
+        
+        # Check Data Version either:
+        # - Stops (based on user input)
+        # - Archives old version and creates new database
+        # - Passes and proceeds as expected
+        rv <- checkDataVersion(rv, dbname = dbname, rename = rename)
+
+        # Ensure correct DBtables, but only if update = TRUE
+        ensureDBTables(rv, projRecv, deviceID)
+
+        # Update databse
         rv <- motusUpdateDB(projRecv, rv, countOnly, forceMeta)
+        
+        # Add activity
         rv <- activity(src = rv, resume = TRUE)
     }
 
