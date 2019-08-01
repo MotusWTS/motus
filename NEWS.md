@@ -1,4 +1,4 @@
-# motus 1.5.0 (2019-06-28)
+# motus 2.0.0 (2019-08-01)
 
 ### Big Changes
 * Combined `motus` and `motusClient` packages

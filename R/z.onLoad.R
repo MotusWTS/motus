@@ -50,7 +50,6 @@
     # a value to "motusServerURL" in the global environment
     if(!exists("motusServerURL")) motusServerURL <- "https://motus.org/api"
     dataServerURL <- file.path(motusServerURL, "sgdata")
-    
 
     ## Assign constants
 

@@ -47,11 +47,7 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
             ## auth=FALSE.  If authentication on that call fails,
             ## an error propagates up, exiting this function.
             
-            ## TODO: replace the version number by the dataVersion 
-            ## returned with the authentication
-            
-            if(stringr::str_detect(url, "sandbox")) v = 2 else v = 1           
-            query <- list(authToken = motus_vars$authToken, version = v)
+            query <- list(authToken = motus_vars$authToken, version = 1)
             
         } else {
             query <- list()
@@ -103,7 +99,7 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
         resp <- resp %>%
             httr::content(as = "raw") %>%
             memDecompress("bzip2", asChar = TRUE)
-        
+
         Encoding(resp) <- "UTF-8"
         
         if (JSON) return(resp)
