@@ -1,3 +1,9 @@
+# motus 3.0.0 
+
+### Big Changes
+* Switch to data version 2
+
+
 # motus 2.0.0 (2019-08-01)
 
 ### Big Changes
