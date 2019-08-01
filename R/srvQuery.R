@@ -59,14 +59,13 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
         
         if(show) message(json, "\n")
         
-        try_query <- function(url, json, ua, timeout) {
-            try(httr::POST(url, body = list("json" = json), encode = "form",
+        api_query <- function(url, json, ua, timeout) {
+            httr::POST(url, body = list("json" = json), encode = "form",
                            httr::config(http_content_decoding = 0), ua, 
-                           httr::timeout(timeout)),
-                silent = TRUE)
+                           httr::timeout(timeout))
         }
 
-        resp <- try_query(url, json, ua, timeout)
+        resp <- try(api_query(url, json, ua, timeout), silent = TRUE)
         
         if(class(resp) == "try-error") {
             if(stringr::str_detect(resp, "aborted by an application callback")){
@@ -74,11 +73,13 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
             } else if (stringr::str_detect(resp, "Timeout was reached")) {
                 message("The server did not respond within ", timeout, 
                         "s. Trying again...")
-                resp <- try_query(url, json, ua, timeout)
+                resp <- api_query(url, json, ua, timeout)
                 if(stringr::str_detect(resp, "Timeout was reached")) {
                     stop("The server is not responding, please try again later.", 
                          call. = FALSE)
                 }
+            } else {
+                resp <- api_query(url, json, ua, timeout)
             }
         }
 
