@@ -15,45 +15,45 @@
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 ensureDBTables = function(src, projRecv, deviceID) {
-    if (! inherits(src, "src_sql"))
-        stop("src is not a dplyr::src_sql object")
-    con = src$con
-    if (! inherits(con, "SQLiteConnection"))
-        stop("src is not open or is corrupt; underlying db connection invalid")
-
-    ## function to send a single statement to the underlying connection
-    sql = function(...) DBI::dbExecute(con, sprintf(...))
-
-    ## function to send a single query to the underlying connection
-    sqlq = function(...) DBI::dbGetQuery(con, sprintf(...))
-
-    sql("pragma page_size=4096") ## reasonably large page size; post 2011 hard drives have 4K sectors anyway
-
-    tables = dplyr::src_tbls(src)
-
-    isRecvDB = is.character(projRecv)
-
-    if (! "meta" %in% tables) {
-        if (missing(projRecv))
-            stop("you must specify a project number or receiver serial number for a new database")
-        sql("
+  if (! inherits(src, "src_sql"))
+    stop("src is not a dplyr::src_sql object")
+  con = src$con
+  if (! inherits(con, "SQLiteConnection"))
+    stop("src is not open or is corrupt; underlying db connection invalid")
+  
+  ## function to send a single statement to the underlying connection
+  sql = function(...) DBI::dbExecute(con, sprintf(...))
+  
+  ## function to send a single query to the underlying connection
+  sqlq = function(...) DBI::dbGetQuery(con, sprintf(...))
+  
+  sql("pragma page_size=4096") ## reasonably large page size; post 2011 hard drives have 4K sectors anyway
+  
+  tables = dplyr::src_tbls(src)
+  
+  isRecvDB = is.character(projRecv)
+  
+  if (! "meta" %in% tables) {
+    if (missing(projRecv))
+      stop("you must specify a project number or receiver serial number for a new database")
+    sql("
 create table meta (
 key  character not null unique primary key, -- name of key for meta data
 val  character                              -- character string giving meta data; might be in JSON format
 )
 ");
-        if (isRecvDB)  {
-            if (missing(deviceID) || ! isTRUE(is.numeric(deviceID))) {
-                stop("must specify deviceID for new receiver database")
-            }
-            if (grepl("^SG", projRecv)) {
-                type = "SENSORGNOME"
-                model = substring(projRecv, 8, 11)
-            } else {
-                type = "Lotek"
-                model = getLotekModel(projRecv)
-            }
-            sql("
+if (isRecvDB)  {
+  if (missing(deviceID) || ! isTRUE(is.numeric(deviceID))) {
+    stop("must specify deviceID for new receiver database")
+  }
+  if (grepl("^SG", projRecv)) {
+    type = "SENSORGNOME"
+    model = substring(projRecv, 8, 11)
+  } else {
+    type = "Lotek"
+    model = getLotekModel(projRecv)
+  }
+  sql("
 insert into meta (key, val)
 values
 ('dbType', 'receiver'),
@@ -62,25 +62,25 @@ values
 ('recvModel', '%s'),
 ('deviceID', '%d')
 ",
-projRecv,
-type,
-model,
-as.integer(deviceID))
-        } else if (is.numeric(projRecv)) {
-            sql("
+      projRecv,
+      type,
+      model,
+      as.integer(deviceID))
+} else if (is.numeric(projRecv)) {
+  sql("
 insert into meta (key, val)
 values
 ('dbType', 'tag'),
 ('tagProject', %d)
 ",
-projRecv)
-        } else {
-            stop("projRecv must be an integer motus project ID or a character receiver serial number")
-        }
-    }
-
-    if (! "gps" %in% tables) {
-        sql("
+      projRecv)
+} else {
+  stop("projRecv must be an integer motus project ID or a character receiver serial number")
+}
+  }
+  
+  if (! "gps" %in% tables) {
+    sql("
 create table gps (
 batchID INTEGER NOT NULL REFERENCES batches, -- batch from which this fix came
 ts      DOUBLE,                              -- system timestamp for this record
@@ -90,14 +90,14 @@ lon     DOUBLE,                              -- longitude, decimal degrees
 alt     DOUBLE,                              -- altitude, metres
 PRIMARY KEY (batchID, ts)
 )");
-
-        sql("create index gps_batchID on gps ( batchID )")
-        sql("create index gps_ts on gps ( ts )")
-
-    }
-
-    if (! "batches" %in% tables) {
-        sql("
+    
+    sql("create index gps_batchID on gps ( batchID )")
+    sql("create index gps_ts on gps ( ts )")
+    
+  }
+  
+  if (! "batches" %in% tables) {
+    sql("
 CREATE TABLE batches (
     batchID INTEGER PRIMARY KEY,       -- unique identifier for this batch
     motusDeviceID INTEGER,                    -- motus ID of this receiver (NULL means not yet
@@ -122,11 +122,11 @@ CREATE TABLE batches (
     motusJobID INT                            -- job whose processing generated this batch
 );
 ")
-    }
-
-
-    if (! "runs" %in% tables) {
-        sql("
+  }
+  
+  
+  if (! "runs" %in% tables) {
+    sql("
 CREATE TABLE runs (
     runID INTEGER PRIMARY KEY,                        -- identifier of run; unique for this receiver
     batchIDbegin INT NOT NULL,                        -- ID of batch this run begins in
@@ -141,21 +141,21 @@ CREATE TABLE runs (
 );
 
 ")
-    }
-
-    if (! "batchRuns" %in% tables) {
-        sql("
+  }
+  
+  if (! "batchRuns" %in% tables) {
+    sql("
 CREATE TABLE batchRuns (
     batchID INTEGER NOT NULL,               -- identifier of batch
     runID INTEGER NOT NULL                  -- identifier of run
 );
 ")
-        sql("create index batchRuns_batchID on batchRuns ( batchID )")
-        sql("create index batchRuns_runID on batchRuns ( runID )")
-    }
-
-    if (! "hits" %in% tables) {
-        sql("
+    sql("create index batchRuns_batchID on batchRuns ( batchID )")
+    sql("create index batchRuns_runID on batchRuns ( runID )")
+  }
+  
+  if (! "hits" %in% tables) {
+    sql("
 CREATE TABLE hits (
     hitID INTEGER PRIMARY KEY,                     -- unique ID of this hit
     runID INTEGER NOT NULL REFERENCES runs,        -- ID of run this hit belongs to
@@ -177,18 +177,18 @@ CREATE TABLE hits (
                                                    -- e.g. Lotek)
 );
 ")
-        sql("CREATE INDEX IF NOT EXISTS hits_batchID_ts on hits(batchID, ts)")
-
-    }
-
-        ## table for keeping track of which batches we already have, *by* tagDepProjectID,
-    ## and which hits we already have therein.
-    ## A single batch might require several records in this table:  an ambiguous tag
-    ## detection has (negative) tagDepProjectID, which corresponds to a unique set
-    ## of projects which might own the tag detection.
-
-    if (! "projBatch" %in% tables && ! isRecvDB) {
-        sql("
+    sql("CREATE INDEX IF NOT EXISTS hits_batchID_ts on hits(batchID, ts)")
+    
+  }
+  
+  ## table for keeping track of which batches we already have, *by* tagDepProjectID,
+  ## and which hits we already have therein.
+  ## A single batch might require several records in this table:  an ambiguous tag
+  ## detection has (negative) tagDepProjectID, which corresponds to a unique set
+  ## of projects which might own the tag detection.
+  
+  if (! "projBatch" %in% tables && ! isRecvDB) {
+    sql("
 CREATE TABLE projBatch (
     tagDepProjectID INTEGER NOT NULL, -- project ID
     batchID INTEGER NOT NULL,         -- unique identifier for batch
@@ -196,7 +196,7 @@ CREATE TABLE projBatch (
     PRIMARY KEY (tagDepProjectID, batchID)
     );
 ")
-        sql("
+    sql("
 insert
    into projBatch
    select
@@ -211,10 +211,10 @@ insert
    order by
       t1.batchID
 ", projRecv)
-    }
-
-    if (! "tagAmbig" %in% tables) {
-        sql("
+  }
+  
+  if (! "tagAmbig" %in% tables) {
+    sql("
 CREATE TABLE tagAmbig (
     ambigID INTEGER PRIMARY KEY NOT NULL,  -- identifier of group of tags which are ambiguous (identical); will be negative
     masterAmbigID INTEGER,                 -- master ID of this ambiguity group, once different receivers have been combined
@@ -227,13 +227,13 @@ CREATE TABLE tagAmbig (
     ambigProjectID INT                     -- negative ambiguity ID of deployment project. refers to key ambigProjectID in table projAmbig
 );
 ")
-    } else if (0 == nrow(sqlq("select * from sqlite_master where tbl_name='tagAmbig' and sql glob '*ambigProjectID*'"))) {
-        ## older version of tagAmbig table, without the ambigProjectID column, so add it
-        sql("ALTER TABLE tagAmbig ADD COLUMN ambigProjectID INTEGER")
-    }
-
-    if (! "projs" %in% tables) {
-        sql("
+  } else if (0 == nrow(sqlq("select * from sqlite_master where tbl_name='tagAmbig' and sql glob '*ambigProjectID*'"))) {
+    ## older version of tagAmbig table, without the ambigProjectID column, so add it
+    sql("ALTER TABLE tagAmbig ADD COLUMN ambigProjectID INTEGER")
+  }
+  
+  if (! "projs" %in% tables) {
+    sql("
 CREATE TABLE projs (
    id INTEGER PRIMARY KEY NOT NULL,
    name TEXT,
@@ -242,9 +242,9 @@ CREATE TABLE projs (
    sensorsPermissions INTEGER
 );
 ")
-    }
-    if (! "tagDeps" %in% tables) {
-        sql("
+  }
+  if (! "tagDeps" %in% tables) {
+    sql("
 CREATE TABLE tagDeps (
    deployID INTEGER PRIMARY KEY,
    tagID INTEGER,
@@ -268,11 +268,11 @@ CREATE TABLE tagDeps (
    fullID TEXT
 );
 ")
-        sql("CREATE INDEX IF NOT EXISTS tagDeps_projectID on tagDeps(projectID)")
-        sql("CREATE INDEX IF NOT EXISTS tagDeps_deployID on tagDeps(deployID)")
-}
-    if (! "tagProps" %in% tables) {
-        sql("
+    sql("CREATE INDEX IF NOT EXISTS tagDeps_projectID on tagDeps(projectID)")
+    sql("CREATE INDEX IF NOT EXISTS tagDeps_deployID on tagDeps(deployID)")
+  }
+  if (! "tagProps" %in% tables) {
+    sql("
 CREATE TABLE IF NOT EXISTS tagProps (
     tagID INTEGER NOT NULL,
     deployID INTEGER NOT NULL,
@@ -281,11 +281,11 @@ CREATE TABLE IF NOT EXISTS tagProps (
     propValue TEXT NULL
 );
 ")
-        sql("CREATE INDEX IF NOT EXISTS tagProps_deployID ON tagProps (deployID ASC)")
-}
-
-    if (! "tags" %in% tables) {
-        sql('
+    sql("CREATE INDEX IF NOT EXISTS tagProps_deployID ON tagProps (deployID ASC)")
+  }
+  
+  if (! "tags" %in% tables) {
+    sql('
 CREATE TABLE "tags" (
   "tagID" INTEGER PRIMARY KEY,
   "projectID" INTEGER,
@@ -301,11 +301,11 @@ CREATE TABLE "tags" (
   "pulseLen" REAL
 );
 ')
-        sql("CREATE INDEX IF NOT EXISTS tags_projectID on tags(projectID)")
-    }
-
-    if (! "recvDeps" %in% tables) {
-        sql("
+    sql("CREATE INDEX IF NOT EXISTS tags_projectID on tags(projectID)")
+  }
+  
+  if (! "recvDeps" %in% tables) {
+    sql("
 CREATE TABLE recvDeps (
    deployID INTEGER PRIMARY KEY,
    serno TEXT,
@@ -324,19 +324,19 @@ CREATE TABLE recvDeps (
    elevation REAL
 )
 ")
-        sql("CREATE INDEX IF NOT EXISTS recvDeps_serno on recvDeps(serno)")
-        sql("CREATE INDEX IF NOT EXISTS recvDeps_deviceID on recvDeps(deviceID)")
-        sql("CREATE INDEX IF NOT EXISTS recvDeps_projectID on recvDeps(projectID)")
-    }
-
-    if (! "recvs" %in% tables) {
-        sql("
+sql("CREATE INDEX IF NOT EXISTS recvDeps_serno on recvDeps(serno)")
+sql("CREATE INDEX IF NOT EXISTS recvDeps_deviceID on recvDeps(deviceID)")
+sql("CREATE INDEX IF NOT EXISTS recvDeps_projectID on recvDeps(projectID)")
+  }
+  
+  if (! "recvs" %in% tables) {
+    sql("
 CREATE TABLE recvs (
    deviceID INTEGER PRIMARY KEY NOT NULL,
    serno TEXT
 )
 ")
-        sql("
+sql("
 INSERT OR IGNORE
    INTO recvs
 SELECT
@@ -345,10 +345,10 @@ SELECT
 FROM
    recvDeps
 ")
-    }
-
-    if (! "antDeps" %in% tables) {
-        sql("
+  }
+  
+  if (! "antDeps" %in% tables) {
+    sql("
 CREATE TABLE antDeps (
    deployID INTEGER,
    port INTEGER,
@@ -364,12 +364,12 @@ CREATE TABLE antDeps (
    primary key(deployID, port)
 );
 ")
-        sql("CREATE INDEX IF NOT EXISTS antDeps_deployID on antDeps(deployID)")
-        sql("CREATE INDEX IF NOT EXISTS antDeps_port on antDeps(port)")
-    }
-
-    if (! "species" %in% tables) {
-        sql("
+    sql("CREATE INDEX IF NOT EXISTS antDeps_deployID on antDeps(deployID)")
+    sql("CREATE INDEX IF NOT EXISTS antDeps_port on antDeps(port)")
+  }
+  
+  if (! "species" %in% tables) {
+    sql("
 CREATE TABLE species (
    id INTEGER PRIMARY KEY NOT NULL,
    english TEXT,
@@ -379,9 +379,9 @@ CREATE TABLE species (
    \"sort\" INTEGER
 );
 ");
-    }
-    if (! "projAmbig" %in% tables) {
-        sql("
+  }
+  if (! "projAmbig" %in% tables) {
+    sql("
 CREATE TABLE  projAmbig (
    ambigProjectID INTEGER PRIMARY KEY NOT NULL,  -- identifies a set of projects which a tag detection *could* belong to; negative
    projectID1 INT NOT NULL,              -- projectID of project in set
@@ -392,11 +392,11 @@ CREATE TABLE  projAmbig (
    projectID6 INT                        -- projectID of project in set
 );
 ")
-
-    }
-
-    if (! "pulseCounts" %in% tables && isRecvDB) {
-        sql("
+    
+  }
+  
+  if (! "pulseCounts" %in% tables && isRecvDB) {
+    sql("
 CREATE TABLE pulseCounts (
    batchID INTEGER NOT NULL,             -- batchID that generated this record
    ant TINYINT NOT NULL,                 -- antenna
@@ -405,21 +405,21 @@ CREATE TABLE pulseCounts (
    PRIMARY KEY (batchID, ant, hourBin)   -- a single count for each batchID, antenna, and hourBin
 );
 ")
-    }
-    if (! "clarified" %in% tables) {
-        sql("
+  }
+  if (! "clarified" %in% tables) {
+    sql("
 CREATE TABLE clarified (
    ambigID INTEGER,
    tagID INTEGER,
    tsStart REAL,
    tsEnd REAL)
 ")
-        sql("
+    sql("
 CREATE INDEX IF NOT EXISTS clarified_ambigID_tsStart ON clarified(ambigID, tsStart)
 ")
-    }
-    if (! "filters" %in% tables) {
-      sql("
+  }
+  if (! "filters" %in% tables) {
+    sql("
 CREATE TABLE filters (
    filterID INTEGER PRIMARY KEY,            -- locally unique filterID
    userLogin TEXT NOT NULL,                 -- motus login of the user who created the filter
@@ -429,14 +429,14 @@ CREATE TABLE filters (
    lastModified TEXT NOT NULL               -- date when the filter was last modified
 );
 ");
-      sql("
+    sql("
 CREATE UNIQUE INDEX IF NOT EXISTS filters_filterName_motusProjID ON filters (filterName,motusProjID);
 ")
-
-    }
-
-    if (! "runsFilters" %in% tables) {
-      sql("
+    
+  }
+  
+  if (! "runsFilters" %in% tables) {
+    sql("
 CREATE TABLE runsFilters (
    filterID INTEGER NOT NULL,               -- locally unique filterID
    runID INTEGER NOT NULL,                  -- unique ID of the run record to which the filter applies
@@ -445,12 +445,12 @@ CREATE TABLE runsFilters (
    PRIMARY KEY(filterID,runID,motusTagID)
 );
 ");
-      sql("
+    sql("
 CREATE UNIQUE INDEX IF NOT EXISTS runsFilters_filterID_runID_motusTagID ON runsFilters (filterID, runID, motusTagID);
 ")
-
-    }
     
+  }
+  
   if (! "activity" %in% tables) {
     sql("CREATE TABLE IF NOT EXISTS activity (
       batchID INTEGER,
@@ -473,9 +473,16 @@ CREATE UNIQUE INDEX IF NOT EXISTS runsFilters_filterID_runID_motusTagID ON runsF
       UNIQUE(batchID, ant, hourBin),
       PRIMARY KEY (batchID, ant, hourBin));")
   }
-
-    rv = makeAllambigsView(src)
-    rv = makeAlltagsView(src)
-    rv = updateMotusDb(rv, src)
-    return(rv)
+  
+  if(! "admInfo" %in% tables) {
+    dplyr::copy_to(src, 
+                   df = data.frame(db_version = "1980-01-01",
+                                   data_version = motus_vars$dataVersion), 
+                   name = "admInfo")
+  }
+  
+  rv = makeAllambigsView(src)
+  rv = makeAlltagsView(src)
+  rv = updateMotusDb(rv, src)
+  return(rv)
 }
