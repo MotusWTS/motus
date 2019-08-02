@@ -17,7 +17,7 @@ allow.}
 
 \item{replace}{logical scalar; if TRUE (default), existing data replace the existing metadata with the newly acquired ones.}
 
-\item{delete}{logical scalar; Defaut = FALSE. if TRUE, the entire metadata tables are cleared (for all projects) before re-importing the metadata.}
+\item{delete}{logical scalar; Default = FALSE. if TRUE, the entire metadata tables are cleared (for all projects) before re-importing the metadata.}
 }
 \description{
 update entire metadata for receivers and tags from Motus server. Contrary to tagme,

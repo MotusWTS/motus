@@ -1,4 +1,4 @@
-#' get the motus tagIDs for amibiguity IDs
+#' Get the motus tagIDs for ambiguity IDs
 #'
 #' Ambiguity IDs ("negative tag IDs") represent sets of 2 to 6 motus tags
 #' which cannot be distinguished over some period of time.

@@ -17,7 +17,7 @@ a data.frame with these columns:
 \item first_ts: time of first detection of tag
 \item last_ts: time of last detection of tag
 \item first_site: first detection site of tag
-\item last_site: last deteciton site of tag
+\item last_site: last detection site of tag
 \item lat.x: latitude of first deteciton site of tag
 \item lon.x: longitude of first deteciton site of tag
 \item lat.y: latitude of last deteciton site of tag

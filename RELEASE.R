@@ -9,7 +9,8 @@ source("data-raw/sample_data.R")
 
 # Check spelling
 dict <- hunspell::dictionary('en_CA')
-devtools::spell_check()
+devtools::spell_check() # Fix and re-run docs as needed
+spelling::update_wordlist() # All remaining words will be added to the ignore WORDLIST file
 
 ## Finalize package version
 

@@ -7,7 +7,7 @@
 #'
 #' @param src dplyr sqlite src, as returned by \code{dplyr::src_sqlite()}
 #'
-#' @param ts.min mininum timestamp used to filter the dataframe, Default: NA 
+#' @param ts.min minimum timestamp used to filter the dataframe, Default: NA 
 #'
 #' @param ts.max maximum timestamp used to filter the dataframe, Default: NA  
 #'

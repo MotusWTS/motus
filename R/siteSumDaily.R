@@ -10,7 +10,7 @@
 #' @return a data.frame with these columns:
 #' \itemize{
 #' \item recvDeployName: site name of deployment
-#' \item date: date that is being summarised
+#' \item date: date that is being summarized
 #' \item first_ts: time of first detection on specified "date" at "recvDeployName"
 #' \item last_ts: time of last detection on specified "date" at "recvDeployName"
 #' \item tot_ts: total amount of time between first and last detection at "recvDeployName" on "date, output in specified unit (defaults to "hours")

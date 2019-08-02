@@ -28,7 +28,7 @@ get new batches for all receivers from the data server
 \details{
 this call is used to obtain batches incrementally, regardless of
 which receiver they come from.  It is only available to administrative users,
-and caling it as a non-administrative user stops with an error.
+and calling it as a non-administrative user stops with an error.
 }
 \author{
 John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
