@@ -32,6 +32,10 @@ system("cd ..; R CMD check motus_1.5.0.tar.gz --as-cran")
 #tools::dependsOnPkgs("naturecounts")
 #devtools::revdep()
 
+## Push to master branch
+
 ## Actually release it, create signed release on github
-system("git tag -s v1.5.0 -m 'v1.5.0'")
+system("git tag -s v2.0.0 -m 'v2.0.0'")
 system("git push --tags")
+
+## Edit the release on GitHub and add the newest contents of the NEWS file
