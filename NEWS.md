@@ -4,7 +4,7 @@
 * Switch to data version 2
 
 
-# motus 2.0.0 (2019-08-01)
+# motus 2.0.0 (2019-08-02)
 
 ### Big Changes
 * Combined `motus` and `motusClient` packages

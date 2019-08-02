@@ -36,7 +36,7 @@ By default, the columns in the virtual table are:
 \item{tagProjID} unique motus ID for project tag was deployed by
 \item{mfgID} manufacturer ID printed on the tag
 \item{tagType} type of tag
-\item{codeSet} for coded ID tags, the name of the codeset
+\item{codeSet} for coded ID tags, the name of the code set
 \item{mfg} tag manufacturer
 \item{tagModel} manufacturer's model name for tag
 \item{tagLifespan} estimated tag lifespan
@@ -92,7 +92,7 @@ the hit and a greatest lower bound for that timestamp in the
 deployment table.  It would be nice if there were an SQL
 "LOWER JOIN" operator, which instead of joining on exact key value,
 would join a key on the left to its greatest lower bound on the
-right.  (and similary, an "UPPER JOIN" operator to bind to the
+right.  (and similarly, an "UPPER JOIN" operator to bind to the
 least upper bound on the right.)  For keys with B-tree indexes,
 this would be as fast as an exact join.
 

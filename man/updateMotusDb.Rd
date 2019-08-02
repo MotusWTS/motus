@@ -22,7 +22,7 @@ to run the SQL on the basis of date.
 \details{
 This function adds a new admInfo table in the motus sqlite file that keeps
 track of the date at which the last correction was applied. The updateMotusDb
-function only exectute sql commands added since the last correction.
+function only executes sql commands added since the last correction.
 
 To insert a new version update modify and run the ./data-raw/updatesql.R
 script to add new sql commands to the internal data frame.

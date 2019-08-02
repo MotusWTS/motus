@@ -2,7 +2,7 @@
 % Please edit documentation in R/srvTagsForAmbiguities.R
 \name{srvTagsForAmbiguities}
 \alias{srvTagsForAmbiguities}
-\title{get the motus tagIDs for amibiguity IDs}
+\title{Get the motus tagIDs for ambiguity IDs}
 \usage{
 srvTagsForAmbiguities(ambigIDs)
 }

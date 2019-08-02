@@ -21,7 +21,7 @@
 #' @details Runs are identified by the following: 
 #' - All runs with a length >= `maxLen` are **GOOD**
 #' - All runs with a length <= `minLen` are **BAD**
-#' - Runs with a length between `minLen` and `maxLen` are **BAD** if both of the
+#' - Runs with a length between `minLen` and `maxLen` are **BAD** IF both of the
 #' following is true:
 #'   - belong to a batch where the number of runs is >= `maxRuns`
 #'   - the ratio of runs with a length of 2 to the number of runs total
@@ -40,7 +40,7 @@
 #' 
 #' 
 filterByActivity <- function(src, return = "good", 
-                             minLen = 2, maxLen = 5, 
+                             minLen = 3, maxLen = 5, 
                              maxRuns = 100, ratio = 0.85) {
   
   if(!return %in% c("good", "bad", "all")) {

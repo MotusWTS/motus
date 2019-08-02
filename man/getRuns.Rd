@@ -15,7 +15,7 @@ getRuns(src, ts.min = NA, ts.max = NA, match.partial = TRUE,
 \arguments{
 \item{src}{dplyr sqlite src, as returned by \code{dplyr::src_sqlite()}}
 
-\item{ts.min}{mininum timestamp used to filter the dataframe, Default: NA}
+\item{ts.min}{minimum timestamp used to filter the dataframe, Default: NA}
 
 \item{ts.max}{maximum timestamp used to filter the dataframe, Default: NA}
 

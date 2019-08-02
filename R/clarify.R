@@ -56,7 +56,7 @@
 #' length of the longest item.
 #'
 #' When you claim an ambiguous tag \code{T} for a period, any runs of \code{T}
-#' which overlap that period at all are claimd entirely, even if they extend
+#' which overlap that period at all are claimed entirely, even if they extend
 #' beyond the period; i.e. runs are not split.
 #'
 #' @examples

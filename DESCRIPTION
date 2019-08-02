@@ -32,6 +32,7 @@ Imports:
     tidyr (>= 0.8.3),
     magrittr
 Suggests:
+    spelling,
     ggmap (>= 3.0.0),
     testthat,
     roxygen2
@@ -41,3 +42,4 @@ RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)
 LazyData: true
 Encoding: UTF-8
+Language: en-CA

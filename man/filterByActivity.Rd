@@ -4,7 +4,7 @@
 \alias{filterByActivity}
 \title{Filter \code{alltags} by \code{activity}}
 \usage{
-filterByActivity(src, return = "good", minLen = 2, maxLen = 5,
+filterByActivity(src, return = "good", minLen = 3, maxLen = 5,
   maxRuns = 100, ratio = 0.85)
 }
 \arguments{
@@ -39,7 +39,7 @@ Runs are identified by the following:
 \itemize{
 \item All runs with a length >= \code{maxLen} are \strong{GOOD}
 \item All runs with a length <= \code{minLen} are \strong{BAD}
-\item Runs with a length between \code{minLen} and \code{maxLen} are \strong{BAD} if both of the
+\item Runs with a length between \code{minLen} and \code{maxLen} are \strong{BAD} IF both of the
 following is true:
 \itemize{
 \item belong to a batch where the number of runs is >= \code{maxRuns}

@@ -10,7 +10,7 @@
 #'
 #' @param replace logical scalar; if TRUE (default), existing data replace the existing metadata with the newly acquired ones. 
 #'
-#' @param delete logical scalar; Defaut = FALSE. if TRUE, the entire metadata tables are cleared (for all projects) before re-importing the metadata. 
+#' @param delete logical scalar; Default = FALSE. if TRUE, the entire metadata tables are cleared (for all projects) before re-importing the metadata. 
 #'
 #' @seealso \code{\link{tagme}} provides an option to update only the metadata relevant to a specific 
 #' project or receiver file.
