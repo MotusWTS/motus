@@ -47,7 +47,7 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
             ## auth=FALSE.  If authentication on that call fails,
             ## an error propagates up, exiting this function.
             
-            query <- list(authToken = motus_vars$authToken, version = 1)
+            query <- list(authToken = motus_vars$authToken, version = 2)
             
         } else {
             query <- list()
