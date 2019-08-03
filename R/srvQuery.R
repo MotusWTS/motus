@@ -58,51 +58,70 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
         json <- jsonlite::toJSON(query, auto_unbox = TRUE, null = "null")
         
         if(show) message(json, "\n")
-        
-        api_query <- function(url, json, ua, timeout) {
-            httr::POST(url, body = list("json" = json), encode = "form",
-                           httr::config(http_content_decoding = 0), ua, 
-                           httr::timeout(timeout))
-        }
 
-        resp <- try(api_query(url, json, ua, timeout), silent = TRUE)
-        
-        if(class(resp) == "try-error") {
-            if(stringr::str_detect(resp, "aborted by an application callback")){
-                stop(resp, call. = FALSE)
-            } else if (stringr::str_detect(resp, "Timeout was reached")) {
-                message("The server did not respond within ", timeout, 
-                        "s. Trying again...")
-                resp <- try(api_query(url, json, ua, timeout), silent = TRUE)
-                if(stringr::str_detect(resp, "Timeout was reached")) {
-                    stop("The server is not responding, please try again later.", 
-                         call. = FALSE)
-                }
-            } else {
-                resp <- api_query(url, json, ua, timeout)
-            }
-        }
-
-        # Catch http errors
-        if(httr::http_error(resp)) {
-            if(httr::http_type(resp) == "application/json") {
-                p <- jsonlite::fromJSON(httr::content(resp, "text"), simplifyVector = FALSE)
-            } else if (httr::status_code(resp) == 500) {
-                p <- list(errorMsg = "Internal Server Error")
-            } else p <- list(errorMsg = "Unknown Error")
+        # skip this for testing CUrl instead of httr
+        if (FALSE) {      
+          
+          api_query <- function(url, json, ua, timeout) {
             
-            stop(sprintf("Motus API request failed [%s]\n%s",
-                         httr::status_code(resp),
-                         p$errorMsg), 
-                 call. = FALSE)
+            
+              httr::POST(url, body = list("json" = json), encode = "form",
+                             httr::config(http_content_decoding = 0), ua, 
+                             httr::timeout(timeout))
+          }
+          resp <- try(api_query(url, json, ua, timeout), silent = TRUE)
+  
+          if(class(resp) == "try-error") {
+              if(stringr::str_detect(resp, "aborted by an application callback")){
+                  stop(resp, call. = FALSE)
+              } else if (stringr::str_detect(resp, "Timeout was reached")) {
+                  message("The server did not respond within ", timeout, 
+                          "s. Trying again...")
+                  resp <- try(api_query(url, json, ua, timeout), silent = TRUE)
+                  if(stringr::str_detect(resp, "Timeout was reached")) {
+                      stop("The server is not responding, please try again later.", 
+                           call. = FALSE)
+                  }
+              } else {
+                  resp <- api_query(url, json, ua, timeout)
+              }
+          }
+  
+          # Catch http errors
+          if(httr::http_error(resp)) {
+              if(httr::http_type(resp) == "application/json") {
+                  p <- jsonlite::fromJSON(httr::content(resp, "text"), simplifyVector = FALSE)
+              } else if (httr::status_code(resp) == 500) {
+                  p <- list(errorMsg = "Internal Server Error")
+              } else p <- list(errorMsg = "Unknown Error")
+              
+              stop(sprintf("Motus API request failed [%s]\n%s",
+                           httr::status_code(resp),
+                           p$errorMsg), 
+                   call. = FALSE)
+          }
+          
+          resp <- resp %>%
+              httr::content(as = "raw") %>%
+              memDecompress("bzip2", asChar = TRUE)
+
+        } else {
+          curl = RCurl::getCurlHandle()
+          RCurl::curlSetOpt(curl=curl,
+                            .opts = list(
+                              httpheader = c(
+                                "Accept"="application/json"),
+                              timeout = 300,
+                              verbose = FALSE)
+          )
+          
+          resp = RCurl::postForm(url, json=json, .encoding="utf-8", style="post", curl=curl, .contentEncodeFun=RCurl::curlPercentEncode)
+          resp = memDecompress(resp, "bzip2", asChar=TRUE)
         }
         
-        resp <- resp %>%
-            httr::content(as = "raw") %>%
-            memDecompress("bzip2", asChar = TRUE)
-
-        Encoding(resp) <- "UTF-8"
+        Encoding(resp) = "UTF-8"
         
+          
         if (JSON) return(resp)
         if (grepl("^[ \r\n]*$", resp)) return(list())
         
