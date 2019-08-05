@@ -50,7 +50,7 @@ If you get errors "cannot remove prior installation of package ..." (e.g. dplyr)
 3. in the library folder, manually delete the package that failed to remove (e.g. dplyr)
 4. restart R and manually install the package again e.g. `install.packages("dplyr")`
 
-Another possible cause of this problem relates to file permissions in your library folders (e.g. libraries installed in c:\program files\R\R-3.x.x\library\). To confirm this, you can try running R "as administrator" (right-clicking the R icon), or use `SUDO R`  (Linux/Ubuntu) and trying installation again. If this resolved your problem, you should consider setting your libraries in a new folder where your logged in user has full access:
+Another possible cause of this problem relates to file permissions in your library folders (e.g. libraries installed in c:\program files\R\R-3.x.x\library\). To confirm this, you can try running R "as administrator" (right-clicking the R icon), or use `SUDO R`  (Linux/Ubuntu) and trying installation again. If this resolves your problem, you should consider setting your libraries in a new folder where your logged in user has full access:
 
 ```R
 # confirm the libPaths location(s)
