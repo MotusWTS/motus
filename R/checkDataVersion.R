@@ -3,13 +3,13 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
   # Get current version info
   motus_vars$authToken # Prompt for authorization to get dataVersion
   server_version <- motus_vars$dataVersion
-  
-  if (dplyr::db_has_table(src$con, "admInfo")) {
+
+  if (dplyr::db_has_table(src$con, "admInfo") && 
+      "data_version" %in% DBI::dbListFields(src$con, "admInfo")) {
     local_version <- dplyr::tbl(src$con, "admInfo") %>%
-      dplyr::filter(key == "data_version") %>%
-      dplyr::pull(value)
+      dplyr::pull(.data$dataVersion)
   } else local_version <- character()
-  
+
   # If missing admInfo table OR data_version, assume is version 1
   if(length(local_version) == 0) local_version <- 1
 

@@ -33,18 +33,17 @@
 
 updateMotusDb <- function(rv, src) {
 
-  # Create and fill the admInfo table if it doesn't exist
-  DBI::dbExecute(src$con, paste0("CREATE TABLE IF NOT EXISTS admInfo ",
-                                 "(key VARCHAR PRIMARY KEY NOT NULL, value VARCHAR)"))
-  DBI::dbExecute(src$con, paste0("INSERT OR IGNORE INTO admInfo (key,value) ",
-                                 "VALUES('db_version',date('1970-01-01'))"))
+  # # Create and fill the admInfo table if it doesn't exist
+  # DBI::dbExecute(src$con, paste0("CREATE TABLE IF NOT EXISTS admInfo ",
+  #                                "(key VARCHAR PRIMARY KEY NOT NULL, value VARCHAR)"))
+  # DBI::dbExecute(src$con, paste0("INSERT OR IGNORE INTO admInfo (key,value) ",
+  #                                "VALUES('db_version',date('1970-01-01'))"))
 
   # Get the current src version
   src_version <- dplyr::tbl(src$con, "admInfo") %>%
-    dplyr::filter(.data$key == "db_version") %>%
-    dplyr::pull(.data$value) %>%
+    dplyr::pull(.data$db_version) %>%
     as.POSIXct(., tz = "UTC")
-  
+
   update_versions <- dplyr::filter(sql_versions, date > src_version) %>%
     dplyr::arrange(.data$date)
 
@@ -74,9 +73,8 @@ updateMotusDb <- function(rv, src) {
     if (length(dates) > 0) dt <- dates[length(dates)]
 
     if (dt > src_version) {
-      DBI::dbExecute(src$con, paste0("UPDATE admInfo set value = '",
-                                    strftime(dt, "%Y-%m-%d %H:%M:%S"),
-                                    "' where key = 'db_version'"))
+      DBI::dbExecute(src$con, paste0("UPDATE admInfo set db_version = '",
+                                    strftime(dt, "%Y-%m-%d %H:%M:%S"), "'"))
     }
   }
 
