@@ -7,7 +7,7 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
   if (dplyr::db_has_table(src$con, "admInfo") && 
       "data_version" %in% DBI::dbListFields(src$con, "admInfo")) {
     local_version <- dplyr::tbl(src$con, "admInfo") %>%
-      dplyr::pull(.data$dataVersion)
+      dplyr::pull(.data$data_version)
   } else local_version <- character()
 
   # If missing admInfo table OR data_version, assume is version 1
@@ -38,6 +38,7 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
     } else {
       stop(new_name, " already exists", call. = FALSE)
     }
+
     src <- dplyr::src_sqlite(dbname, create = TRUE)
   }
   
