@@ -32,8 +32,11 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
              call. = FALSE)
       }
     }
+
     n <- src[[1]]@dbname
     if(!file.exists(new_name)) {
+      DBI::dbDisconnect(src$con)
+      rm("src")
       file.rename(from = n, to = new_name)
     } else {
       stop(new_name, " already exists", call. = FALSE)
