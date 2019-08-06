@@ -476,12 +476,11 @@ CREATE UNIQUE INDEX IF NOT EXISTS runsFilters_filterID_runID_motusTagID ON runsF
       UNIQUE(batchID, ant, hourBin),
       PRIMARY KEY (batchID, ant, hourBin));")
   }
-  
+
   if(! "admInfo" %in% tables) {
-    dplyr::copy_to(src, 
-                   df = data.frame(db_version = "1980-01-01",
-                                   data_version = motus_vars$dataVersion), 
-                   name = "admInfo")
+    sql("CREATE TABLE IF NOT EXISTS admInfo (db_version INTEGER, data_version TEXT);")
+    sql("INSERT INTO admInfo (db_version, data_version) values ('1980-01-01', %d);",
+        motus_vars$dataVersion)
   }
   
   if(! "nodeData" %in% tables) {
