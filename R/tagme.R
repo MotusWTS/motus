@@ -93,7 +93,7 @@ tagme = function(projRecv, update = TRUE, new = FALSE, dir = getwd(),
         deviceID = NULL
     }
 
-    rv <- dplyr::src_sqlite(dbname, create=new)
+    rv <- dplyr::src_sqlite(dbname, create = new)
     
     if (update) {
         
@@ -101,7 +101,12 @@ tagme = function(projRecv, update = TRUE, new = FALSE, dir = getwd(),
         # - Stops (based on user input)
         # - Archives old version and creates new database
         # - Passes and proceeds as expected
-        rv <- checkDataVersion(rv, dbname = dbname, rename = rename)
+        if(!new) {
+            rv <- checkDataVersion(rv, dbname = dbname, rename = rename)
+        } else {
+            # Prompt for authorization to update dataVersion prior to filling tables
+            motus_vars$authToken 
+        }
 
         # Ensure correct DBtables, but only if update = TRUE
         ensureDBTables(rv, projRecv, deviceID)
