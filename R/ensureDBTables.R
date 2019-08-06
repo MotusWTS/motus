@@ -88,6 +88,7 @@ gpsts   DOUBLE,                              -- gps timestamp
 lat     DOUBLE,                              -- latitude, decimal degrees
 lon     DOUBLE,                              -- longitude, decimal degrees
 alt     DOUBLE,                              -- altitude, metres
+quality INTEGER,
 PRIMARY KEY (batchID, ts)
 )");
     
@@ -119,7 +120,8 @@ CREATE TABLE batches (
                                               -- Jan 1970 GMT
     motusUserID INT,                          -- user who uploaded the data leading to this batch
     motusProjectID INT,                       -- user-selected motus project ID for this batch
-    motusJobID INT                            -- job whose processing generated this batch
+    motusJobID INT,                            -- job whose processing generated this batch
+    source     TEXT                           -- tag source
 );
 ")
   }
@@ -137,7 +139,8 @@ CREATE TABLE runs (
                                                       -- table
     ant TINYINT NOT NULL,                             -- antenna number (USB Hub port # for SG; antenna port
                                                       -- # for Lotek); 11 means Lotek master antenna 'A1+A2+A3+A4'
-    len INT                                           -- length of run within batch
+    len INT,                                           -- length of run within batch
+    nodeNum TEXT                                  
 );
 
 ")
