@@ -484,6 +484,18 @@ CREATE UNIQUE INDEX IF NOT EXISTS runsFilters_filterID_runID_motusTagID ON runsF
                    name = "admInfo")
   }
   
+  if(! "nodeData" %in% tables) {
+    sql("CREATE TABLE IF NOT EXISTS nodeData (
+      id BIGINT PRIMARY KEY NOT NULL,
+      batchID INTEGER NOT NULL,
+      ts FLOAT NOT NULL,
+      nodeNum TEXT NOT NULL,
+      ant TINYINT NOT NULL,
+      sig FLOAT(24),
+      battery FLOAT,
+      temperature FLOAT);")
+  }
+
   rv = makeAllambigsView(src)
   rv = makeAlltagsView(src)
   rv = updateMotusDb(rv, src)
