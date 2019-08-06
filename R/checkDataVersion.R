@@ -43,6 +43,9 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
     }
 
     src <- dplyr::src_sqlite(dbname, create = TRUE)
+    if(length(DBI::dbListTables(src$con)) > 0) {
+      stop("Database did not archive properly", call. = FALSE)
+    }
   }
   
   src
