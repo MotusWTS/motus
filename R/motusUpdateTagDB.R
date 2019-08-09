@@ -158,6 +158,7 @@ motusUpdateTagDB = function(src, countOnly=FALSE, forceMeta=FALSE) {
         }
     }
     motusUpdateDBmetadata(sql, tagIDs, devIDs, force=forceMeta)
-    rv = src
+    src <- activity(src, resume = TRUE)
+    rv <- src
     return(rv)
 }

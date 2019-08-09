@@ -18,6 +18,15 @@ test_that("tagme() and tellme() access the server appropriately", {
   expect_message(tagme(projRecv = 176, new = TRUE, update = TRUE))
 })
 
+test_that("tagme() countOnly works as expected", {
+  sessionVariable(name = "userLogin", val = "motus.sample")
+  sessionVariable(name = "userPassword", val = "motus.sample")
+  
+  expect_silent(tagme(projRecv = 176, new = FALSE, update = TRUE, 
+                       countOnly = TRUE)) %>%
+    expect_is("data.frame")
+})
+
 test_that("tagme() returns expected activity data", {
   expect_silent(tags <- tagme(projRecv = 176, new = FALSE, update = FALSE)) %>%
     expect_is("src_SQLiteConnection")
