@@ -147,16 +147,16 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
         ## Start after the largest TS for which we already have a fix
         ## ----------------------------------------------------------------------------
         
-        ts <- sql("select ifnull(max(ts), 0) from gps where batchID = %d", batchID)[[1]]
+        gpsID <- sql(paste0("SELECT ifnull(max(gpsID), 0) ",
+                            "FROM gps WHERE batchID = %d"), batchID)[[1]]
         repeat {
           g <- srvGPSforTagProject(projectID = projectID, batchID = batchID, 
-                                   ts = ts)
+                                   gpsID = gpsID)
           if (!isTRUE(nrow(g) > 0)) break
           cat(sprintf("%s: got %6d GPS fixes                     \r", 
                       batchMsg, nrow(g)), file = stderr())
-          dbInsertOrReplace(sql$con, "gps", 
-                            g[, c("batchID", "ts", "gpsts", "lat", "lon", "alt")])
-          ts <- max(g$ts)
+          dbInsertOrReplace(sql$con, "gps", g)
+          gpsID <- max(g$gpsID)
         }
         
         ## ----------------------------------------------------------------------------

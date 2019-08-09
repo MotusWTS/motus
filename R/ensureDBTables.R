@@ -82,14 +82,14 @@ values
   if (! "gps" %in% tables) {
     sql("
 create table gps (
+gpsID   BIGINT PRIMARY KEY,                    -- id
 batchID INTEGER NOT NULL REFERENCES batches, -- batch from which this fix came
 ts      DOUBLE,                              -- system timestamp for this record
 gpsts   DOUBLE,                              -- gps timestamp
 lat     DOUBLE,                              -- latitude, decimal degrees
 lon     DOUBLE,                              -- longitude, decimal degrees
 alt     DOUBLE,                              -- altitude, metres
-quality INTEGER,
-PRIMARY KEY (batchID, ts)
+quality INTEGER
 )");
     
     sql("create index gps_batchID on gps ( batchID )")

@@ -4,19 +4,20 @@
 \alias{srvGPSforTagProject}
 \title{get the GPS fixes for a tag project from the data server}
 \usage{
-srvGPSforTagProject(projectID, batchID, ts = 0)
+srvGPSforTagProject(projectID, batchID, gpsID = 0)
 }
 \arguments{
-\item{projectID}{integer scalar motus tag project ID}
+\item{projectID}{Integer. Motus tag project ID}
 
-\item{batchID}{integer scalar batch ID}
+\item{batchID}{Integer. Batch ID}
 
-\item{ts}{real scalar processing timestamp of latest fix already owned
-Default: 0, meaning none.}
+\item{gpsID}{Numeric. GPS ID of latest fix already owned. Default: 0, meaning
+none.}
 }
 \value{
 data.frame with these columns:
 \itemize{
+\item gpsID    numeric GSP ID
 \item ts       numeric system timestamp
 \item gpsts    numeric GPS timestamp
 \item batchID  integer batch ID
@@ -37,3 +38,4 @@ detections are included, to ensure temporal coverage.
 \author{
 John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
 }
+\keyword{internal}
