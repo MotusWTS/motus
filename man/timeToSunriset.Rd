@@ -8,7 +8,7 @@ timeToSunriset(data, lat = "recvDeployLat", lon = "recvDeployLon",
   ts = "ts", units = "hours")
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
+\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data
 including at a minimum variables for date/time, latitude, and longitude}
 
 \item{lat}{variable with latitude values, defaults to recvDeployLat}
@@ -35,16 +35,33 @@ Creates and adds columns for time to, and time from sunrise/sunset based on a co
 dataframe must contain latitude, longitude, and a date/time variable
 }
 \examples{
-You can use either a selected tbl from .motus eg. "alltags", or a data.frame, instructions to convert a .motus file to all formats are below.
-sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
-tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
-df.alltags <- tbl.alltags \%>\% collect \%>\% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+# You can use either a selected tbl from .motus eg. "alltags", or a
+# data.frame, instructions to convert a .motus file to all formats are below.
 
-get sunrise and sunset information with units in minutes using tbl file tbl.alltags
+# download and access data from project 176 in sql format
+\dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+
+# OR use example sql file included in `motus`
+sql.motus <- tagme(176, update = FALSE, 
+                   dir = system.file("extdata", package = "motus"))
+
+# convert sql file "sql.motus" to a tbl called "tbl.alltags"
+library(dplyr)
+tbl.alltags <- tbl(sql.motus, "alltags") 
+
+# convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+df.alltags <- tbl.alltags \%>\% 
+collect() \%>\% 
+as.data.frame()
+
+# Get sunrise and sunset information with units in minutes using tbl file
+# tbl.alltags
 sunrise <- timeToSunriset(tbl.alltags, units = "mins")
 
-get sunrise and sunset information with units in hours using gps lat/lon using data.frame df.alltags
-sunrise <- timeToSunriset(df.alltags, lat = "gpsLat", lon = "gpsLon")
+# Get sunrise and sunset information with units in hours using gps lat/lon
+# using data.frame df.alltags. NOTE: This only works if there are non-NA
+# gpsLat/gpsLon
+\dontrun{sunrise <- timeToSunriset(df.alltags, lat = "gpsLat", lon = "gpsLon")}
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

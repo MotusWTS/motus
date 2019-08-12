@@ -4,10 +4,11 @@
 \alias{sunRiseSet}
 \title{Obtain sunrise and sunset times}
 \usage{
-sunRiseSet(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = "ts")
+sunRiseSet(data, lat = "recvDeployLat", lon = "recvDeployLon",
+  ts = "ts")
 }
 \arguments{
-\item{data}{a selected table from .motus detection data, eg. "alltags", or a data.frame of detection data 
+\item{data}{a selected table from .motus detection data, eg. "alltags", or a data.frame of detection data
 including at a minimum variables for date/time, latitude, and longitude}
 
 \item{lat}{variable with latitude values, defaults to recvDeployLat}
@@ -18,24 +19,41 @@ including at a minimum variables for date/time, latitude, and longitude}
 }
 \value{
 the original dataframe provided, with the following additional columns:
-- sunrise: sunrise time for the date and location provided by ts and lat/lon per row
-- sunset: sunset time for the date and location provided by ts and lat/lon per row
+\itemize{
+\item sunrise: sunrise time for the date and location provided by ts and lat/lon per row
+\item sunset: sunset time for the date and location provided by ts and lat/lon per row
+}
 }
 \description{
-Creates and adds a sunrise and sunset column to a data.frame containing latitude, longitude, 
+Creates and adds a sunrise and sunset column to a data.frame containing latitude, longitude,
 and a date/time as POSIXct or numeric.
 }
 \examples{
-You can use either a selected tbl from .motus eg. "alltags", or a data.frame, instructions to convert a .motus file to all formats are below.
-sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
-tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
-df.alltags <- tbl.alltags \%>\% collect \%>\% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+# You can use either a selected tbl from .motus eg. "alltags", or a
+# data.frame, instructions to convert a .motus file to all formats are below.
 
-Add sunrise and sunset columns to a data.frame from alltags
+# download and access data from project 176 in sql format
+\dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+
+# OR use example sql file included in `motus`
+sql.motus <- tagme(176, update = FALSE, 
+                   dir = system.file("extdata", package = "motus"))
+
+# convert sql file "sql.motus" to a tbl called "tbl.alltags"
+library(dplyr)
+tbl.alltags <- tbl(sql.motus, "alltags") 
+
+# convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+df.alltags <- tbl.alltags \%>\% 
+  collect() \%>\% 
+  as.data.frame() 
+
+# Add sunrise and sunset columns to a data.frame from alltags
 sun <- sunRiseSet(df.alltags)
 
-get sunrise and sunset information from tbl.alltags using gps lat/lon
-sun <- sunRiseSet(tbl.alltags, lat = "gpsLat", lon = "gpsLon")
+# Get sunrise and sunset information from tbl.alltags using gps lat/lon
+# Note this only works if there are non-NA values in gpsLat/gpsLon
+\dontrun{sun <- sunRiseSet(tbl.alltags, lat = "gpsLat", lon = "gpsLon")}
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

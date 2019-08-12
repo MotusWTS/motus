@@ -1,26 +1,45 @@
 Package: motus
-Version: 1.5.0
-Title: fetch and use data from http://motus.org
-Description: Functions to retrieve telemetry data from motus. Once supported, add motusClient and Remotes: git::https://github.com/motusWTS/motusClient
-Author: John Brzustowski <jbrzusto@fastmail.fm>, Denis Lepage <dlepage@birdscanada.org>
-Maintainer: Denis Lepage <dlepage@birdscanada.org>
+Type: Package
+Version: 2.0.0
+Title: Fetch and use data from the Motus Wildlife Tracking System
+Description: Retrieve, filter, and visualize telemetry data from the Motus 
+    Wildlife Tracking System http://motus.org.
+Authors@R: c(
+    person("John", "Brzustowski", email = "jbrzusto@fastmail.fm", role = "aut"),
+    person("Denis", "LePage", email = "dlepage@bsc-eoc.org", role = c("aut", "cre")),
+    person("Zoe", "Crysler", email = "zcrysler@@gmail.com", role = "ctb"),
+    person("Steffi", "LaZerte", email = "steffi@steffi.ca", role = "ctb"))
 Depends:
-    R (>= 3.1.0),
-    RSQLite,
-    dplyr,
-    dbplyr,
-    maptools,
-    lubridate,
-    ggplot2
+    R (>= 3.2.0)
 Imports:
-    RSQLite,
-    httr,
-    gridExtra,
-    jsonlite,
-    lattice,
-    RCurl,
-    stringi
-License: GPL-2+
-Date: 2018-01-26
-RoxygenNote: 6.0.1
+    DBI (>= 1.0.0),
+    dplyr (>= 0.8.1),
+    dbplyr (>= 1.4.0),
+    httr (>= 1.4.0),
+    geosphere (>= 1.5.7),
+    ggplot2 (>= 3.2.0),
+    gridExtra (>= 2.3),
+    jsonlite (>= 1.6),
+    lattice (>= 0.20.38),
+    lubridate (>= 1.7.4),
+    maptools (>= 0.9.5),
+    methods,
+    purrr (>= 0.3.0),
+    rlang (>= 0.3.1),
+    RSQLite (>= 2.1.1),
+    stringi (>= 1.4.3),
+    stringr (>= 1.4.0),
+    tidyr (>= 0.8.3),
+    magrittr
+Suggests:
+    spelling,
+    ggmap (>= 3.0.0),
+    testthat,
+    roxygen2
+License: GPL-3 + file LICENSE
+Date: 2019-03-28
+RoxygenNote: 6.1.1
+Roxygen: list(markdown = TRUE)
 LazyData: true
+Encoding: UTF-8
+Language: en-CA

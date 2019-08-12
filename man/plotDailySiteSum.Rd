@@ -4,29 +4,43 @@
 \alias{plotDailySiteSum}
 \title{Plots number of detections and tags, daily, for a specified site}
 \usage{
-plotDailySiteSum(data, recvDeployname)
+plotDailySiteSum(data, recvDeployName)
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-including at a minimum variables for motusTagID, sig, recvDeployname, ts}
+\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data
+including at a minimum variables for motusTagID, sig, recvDeployName, ts}
 
-\item{recvDeployname}{name of site to plot}
+\item{recvDeployName}{name of site to plot}
 }
 \description{
 Plots total number of detections across all tags, and total number of tags detected per day for
 a specified site.  Depends on siteSumDaily function.
 }
 \examples{
-You can use either a selected tbl from .motus eg. "alltags", or a data.frame, instructions to convert a .motus file to all formats are below.
-sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
-tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
-df.alltags <- tbl.alltags \%>\% collect \%>\% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+# You can use either a selected tbl from .motus eg. "alltags", or a
+# data.frame, instructions to convert a .motus file to all formats are below.
 
-Plot of all tag detections at site Longridge using dataframe df.alltags
-plotDailySiteSum(df.alltags, recvDeployname = "Longridge")
+# download and access data from project 176 in sql format
+\dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
 
-Plot of all tag detections at site Niapiskau using tbl file tbl.alltags
-plotDailySiteSum(df.alltags, recvDeployname = "Niapiskau")
+# use example sql file included in `motus`
+sql.motus <- tagme(176, update = FALSE, 
+                   dir = system.file("extdata", package = "motus"))
+
+# convert sql file "sql.motus" to a tbl called "tbl.alltags"
+library(dplyr)
+tbl.alltags <- tbl(sql.motus, "alltags") 
+
+# convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+df.alltags <- tbl.alltags \%>\% 
+  collect() \%>\% 
+  as.data.frame() 
+
+# Plot of all tag detections at site Longridge using dataframe df.alltags
+plotDailySiteSum(df.alltags, recvDeployName = "Longridge")
+
+# Plot of all tag detections at site Niapiskau using tbl file tbl.alltags
+plotDailySiteSum(df.alltags, recvDeployName = "Niapiskau")
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

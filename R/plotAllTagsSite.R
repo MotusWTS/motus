@@ -10,36 +10,68 @@
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @examples
-#' You can use either a selected tbl from .motus eg. "alltags", or a data.frame, instructions to convert a .motus file to all formats are below.
-#' sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
-#' tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
-#' df.alltags <- tbl.alltags %>% collect %>% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+#' # You can use either a selected tbl from .motus eg. "alltags", or a
+#' # data.frame, instructions to convert a .motus file to all formats are below.
 #' 
-#' Plot detections of dataframe df.alltags by site ordered by latitude, with default 5 tags per panel
+#' # download and access data from project 176 in sql format
+#' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+#' 
+#' # OR use example sql file included in `motus`
+#' sql.motus <- tagme(176, update = FALSE, 
+#'                    dir = system.file("extdata", package = "motus"))
+#' 
+#' # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+#' library(dplyr)
+#' tbl.alltags <- tbl(sql.motus, "alltags") 
+#' 
+#' # convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+#' library(dplyr)
+#' df.alltags <- tbl.alltags %>% 
+#'   collect() %>% 
+#'   as.data.frame() 
+#' 
+#' # Plot detections of dataframe df.alltags by site ordered by latitude, with
+#' # default 5 tags per panel
 #' plotAllTagsSite(df.alltags)
 #' 
-#' Plot detections of dataframe df.alltags by site ordered by latitude, with 10 tags per panel
+#' # Plot detections of dataframe df.alltags by site ordered by latitude, with
+#' # 10 tags per panel
 #' plotAllTagsSite(df.alltags, tagsPerPanel = 10)
 #' 
-#' Plot detections of tbl file tbl.alltags by site ordered by receiver deployment latitude
+#' # Plot detections of tbl file tbl.alltags by site ordered by receiver
+#' # deployment latitude
 #' plotAllTagsSite(tbl.alltags, coordinate = "recvDeployLon")
 #' 
-#' Plot tbl file tbl.alltags using gpsLat and 3 tags per panel for select species Red Knot
-#' plotAllTagsSite(filter(tbl.alltags, speciesEN == "Red Knot"), coordinate = "gpsLat", tagsPerPanel = 3)
+#' # Plot tbl file tbl.alltags using 3 tags per panel for species Red Knot
+#' plotAllTagsSite(filter(tbl.alltags, speciesEN == "Red Knot"), tagsPerPanel = 3)
 
 ## grouping code taken from sensorgnome package
 plotAllTagsSite <- function(data, coordinate = "recvDeployLat", tagsPerPanel = 5){
   if(class(tagsPerPanel) != "numeric") stop('Numeric value required for "tagsPerPanel"')
-  data = data %>% mutate(round_ts = 3600*round(as.numeric(ts)/3600, 0)) ## round times to the hour
-  #data = distinct(select(data, id, site, round_ts, lat, recvDeployLat, lon, recvDeployLon, fullID))
-  dataGrouped <- dplyr::filter_(data, paste(coordinate, "!=", 0)) %>% group_by(recvDeployName) %>% 
-    summarise_(.dots = setNames(paste0('mean(',coordinate,')'), 'meanlat')) ## get summary of mean lats by recvDeployName
-  data <- inner_join(data, dataGrouped, by = "recvDeployName") ## join grouped data with data
-  data <- select(data, mfgID, recvDeployName, round_ts, meanlat, fullID) %>% distinct %>% collect %>% as.data.frame
-  data$meanlat = round(data$meanlat, digits = 2) ## round to 2 significant digits
-  data$sitelat <- as.factor(paste(data$recvDeployName, data$meanlat, sep = " ")) ## new column with recvDeployName and lat
-  data <- within(data, sitelat <- reorder(sitelat, (meanlat))) ## order sitelat by latitude
-  data$round_ts <- lubridate::as_datetime(data$round_ts, tz = "UTC")
+  
+  data <- data %>% 
+    ## round times to the hour
+    dplyr::mutate(round_ts = 3600*round(as.numeric(.data$ts)/3600, 0)) %>%
+    dplyr::filter(!!rlang::sym(coordinate) != 0)
+  
+  # Left-join summaries back in because these databases don't support mutate for mean/min/max etc.
+  data <- data %>%
+    dplyr::group_by(.data$recvDeployName) %>% 
+    ## get mean lats by recvDeployName
+    dplyr::summarize(meanlat = mean(!!rlang::sym(coordinate), na.rm = TRUE)) %>%
+    dplyr::left_join(data, ., by = "recvDeployName") %>%
+    dplyr::select("mfgID", "recvDeployName", "round_ts", "meanlat", "fullID") %>% 
+    dplyr::distinct() %>% 
+    dplyr::collect() %>%
+    dplyr::mutate(meanlat = round(.data$meanlat, digits = 2), ## round to 2 significant digits
+                  ## new column with recvDeployName and lat
+                  sitelat = as.factor(paste(.data$recvDeployName, .data$meanlat, sep = " ")),
+                  sitelat = stats::reorder(.data$sitelat, .data$meanlat),
+                  round_ts = lubridate::as_datetime(.data$round_ts, tz = "UTC"))
+  
+  if(nrow(data) == 0) stop("No data with coordinate '", coordinate, "'", 
+                           call. = FALSE)
+  
   ## We want to plot multiple tags per panel, so sort their labels and create a grouping factor
   ## Note that labels are sorted in increasing order by ID
   labs = data$fullID[order(data$mfgID,data$fullID)]
@@ -56,11 +88,14 @@ plotAllTagsSite <- function(data, coordinate = "recvDeployLat", tagsPerPanel = 5
   data <- data[order(data$round_ts),] ## order by time
   out <- by(data, INDICES = data$tagGroupFactor, FUN = function(m){
     m <- droplevels(m)
-    m <- ggplot2::ggplot(m, ggplot2::aes(round_ts, sitelat, colour = fullID, group = fullID))
-    p <- ggplot2::ggplot(data, ggplot2::aes(round_ts, sitelat, col = fullID, group = fullID))
-    m + ggplot2::geom_line() + ggplot2::geom_point(pch = 21) + ggplot2::theme_bw() +
-      ggplot2::labs(title = "Detection time vs Site (ordered by latitude) by Tag", x = "Date", y = paste0('Site ordered by ',coordinate), colour = "ID") +
-      ggplot2::facet_wrap("tagGroupFactor") + ggplot2::theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    m <- ggplot2::ggplot(m, ggplot2::aes_string(x = "round_ts", y = "sitelat", colour = "fullID", group = "fullID"))
+    p <- ggplot2::ggplot(data, ggplot2::aes(x = "round_ts", y = "sitelat", col = "fullID", group = "fullID"))
+    m + ggplot2::geom_line() + ggplot2::geom_point(pch = 21) + 
+      ggplot2::theme_bw() +
+      ggplot2::labs(title = "Detection time vs Site (ordered by latitude) by Tag", 
+                    x = "Date", y = paste0('Site ordered by ',coordinate), colour = "ID") +
+      ggplot2::facet_wrap("tagGroupFactor") + 
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
   })
   do.call(gridExtra::grid.arrange, out)
 }

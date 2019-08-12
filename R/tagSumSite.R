@@ -10,41 +10,61 @@
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @examples
-#' You can use either a selected tbl from .motus eg. "alltags", or a data.frame, instructions to convert a .motus file to all formats are below.
-#' sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
-#' tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
-#' df.alltags <- tbl.alltags %>% collect %>% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+#' # You can use either a selected tbl from .motus eg. "alltags", or a
+#' # data.frame, instructions to convert a .motus file to all formats are below.
 #' 
-#' Create tag summaries for all tags within detection data with time in minutes with tbl file tbl.alltags
+#' # download and access data from project 176 in sql format
+#' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+#' 
+#' # use example sql file included in `motus`
+#' sql.motus <- tagme(176, update = FALSE, 
+#'                    dir = system.file("extdata", package = "motus"))
+#' 
+#' # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+#' library(dplyr)
+#' tbl.alltags <- tbl(sql.motus, "alltags") 
+#' 
+#' # convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+#' df.alltags <- tbl.alltags  %>% 
+#'   collect() %>% 
+#'   as.data.frame() 
+#' 
+#' # Create tag summaries for all tags within detection data with time in
+#' # minutes with tbl file tbl.alltags
 #' tag_site_summary <- tagSumSite(tbl.alltags, units = "mins")
 #' 
-#' Create tag summaries for only select tags with time in default hours with data.frame df.alltags
-#' tag_site_summary <- tagSumSite(filter(df.alltags, motusTagID %in% c(16047, 16037, 16039)))
+#' # Create tag summaries for only select tags with time in default hours with
+#' # data.frame df.alltags
+#' tag_site_summary <- tagSumSite(filter(df.alltags, 
+#'                                       motusTagID %in% c(16047, 16037, 16039)))
 #'
-#' Create tag summaries for only a select species with data.frame df.alltags
+#' # Create tag summaries for only a select species with data.frame df.alltags
 #' tag_site_summary <- tagSumSite(filter(df.alltags, speciesEN == "Red Knot"))
 
 tagSumSite <- function(data, units = "hours"){
-  data <- select(data, motusTagID, fullID, recvDeployName, recvDeployLat, 
-                 recvDeployLon, gpsLat, gpsLon, ts) %>% distinct %>% collect %>% as.data.frame
-  data <- mutate(data,
-                 recvLat = if_else((is.na(gpsLat)|gpsLat == 0|gpsLat ==999),
-                                   recvDeployLat,
-                                   gpsLat),
-                 recvLon = if_else((is.na(gpsLon)|gpsLon == 0|gpsLon == 999),
-                                   recvDeployLon,
-                                   gpsLon),
-                 recvDeployName = paste(recvDeployName, 
-                                        round(recvLat, digits = 1), sep = "\n" ),
-                 recvDeployName = paste(recvDeployName,
-                                        round(recvLon, digits = 1), sep = ", "),
-                 ts = lubridate::as_datetime(ts, tz = "UTC"))
-  grouped <- dplyr::group_by(data, fullID, recvDeployName)
+  data <- dplyr::select(data, "motusTagID", "fullID", "recvDeployName", "recvDeployLat", 
+                        "recvDeployLon", "gpsLat", "gpsLon", "ts") %>% 
+    dplyr::distinct() %>% 
+    dplyr::collect() %>% 
+    as.data.frame()
+  data <- dplyr::mutate(data,
+                        recvLat = dplyr::if_else((is.na(.data$gpsLat)|.data$gpsLat == 0|.data$gpsLat ==999),
+                                                 .data$recvDeployLat,
+                                                 .data$gpsLat),
+                        recvLon = dplyr::if_else((is.na(.data$gpsLon)|.data$gpsLon == 0|.data$gpsLon == 999),
+                                                 .data$recvDeployLon,
+                                                 .data$gpsLon),
+                        recvDeployName = paste(.data$recvDeployName, 
+                                               round(.data$recvLat, digits = 1), sep = "\n" ),
+                        recvDeployName = paste(.data$recvDeployName,
+                                               round(.data$recvLon, digits = 1), sep = ", "),
+                        ts = lubridate::as_datetime(.data$ts, tz = "UTC"))
+  grouped <- dplyr::group_by(data, .data$fullID, .data$recvDeployName)
   data <- dplyr::summarise(grouped,
-                    first_ts=min(ts),
-                    last_ts=max(ts),
-                    tot_ts = difftime(max(ts), min(ts), units = units),
-                    num_det = length(ts))
+                           first_ts=min(.data$ts),
+                           last_ts=max(.data$ts),
+                           tot_ts = difftime(max(.data$ts), min(.data$ts), units = units),
+                           num_det = length(.data$ts))
   data <- as.data.frame(data)
   return(data)
 }

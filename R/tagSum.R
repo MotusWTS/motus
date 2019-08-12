@@ -15,7 +15,7 @@
 #' \item first_ts: time of first detection of tag
 #' \item last_ts: time of last detection of tag
 #' \item first_site: first detection site of tag
-#' \item last_site: last deteciton site of tag
+#' \item last_site: last detection site of tag
 #' \item lat.x: latitude of first deteciton site of tag
 #' \item lon.x: longitude of first deteciton site of tag
 #' \item lat.y: latitude of last deteciton site of tag
@@ -27,51 +27,67 @@
 #' }
 #'
 #' @examples
-#' You can use either a selected tbl from .motus eg. "alltags", or a data.frame, instructions to convert a .motus file to all formats are below.
-#' sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
-#' tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
-#' df.alltags <- tbl.alltags %>% collect %>% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+#' # You can use either a selected tbl from .motus eg. "alltags", or a
+#' # data.frame, instructions to convert a .motus file to all formats are below.
 #' 
-#' Create tag summary for all tags within detection data using tbl file tbl.alltags
+#' # download and access data from project 176 in sql format
+#' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+#' 
+#' # use example sql file included in `motus`
+#' sql.motus <- tagme(176, update = FALSE, 
+#'                    dir = system.file("extdata", package = "motus"))
+#' 
+#' # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+#' library(dplyr)
+#' tbl.alltags <- tbl(sql.motus, "alltags") 
+#' 
+#' # convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+#' df.alltags <- tbl.alltags %>% 
+#'   collect() %>% 
+#'   as.data.frame()
+#' 
+#' # Create tag summary for all tags within detection data using tbl file
+#' # tbl.alltags
 #' tag_summary <- tagSum(tbl.alltags)
 #' 
-#' Create site summaries for only select tags using tbl file tbl.alltags
-#' tag_summary <- tagSum(filter(tbl.alltags, motusTagID %in% c(16047, 16037, 16039)))
+#' # Create site summaries for only select tags using tbl file tbl.alltags
+#' tag_summary <- tagSum(filter(tbl.alltags, 
+#'                              motusTagID %in% c(16047, 16037, 16039)))
 #'
-#' Create site summaries for only a select species using data.frame df.alltags
+#' # Create site summaries for only a select species using data.frame df.alltags
 #' tag_summary <- tagSum(filter(df.alltags, speciesEN == "Red Knot"))
 
 tagSum <- function(data){
-  data <- data %>% collect %>% as.data.frame
-  data <- mutate(data,
-                 recvLat = if_else((is.na(gpsLat)|gpsLat == 0|gpsLat ==999),
-                                   recvDeployLat,
-                                   gpsLat),
-                 recvLon = if_else((is.na(gpsLon)|gpsLon == 0|gpsLon == 999),
-                                   recvDeployLon,
-                                   gpsLon),
-                 recvDeployName = paste(recvDeployName, 
-                                        round(recvLat, digits = 1), sep = "_" ),
-                 recvDeployName = paste(recvDeployName,
-                                        round(recvLon, digits = 1), sep = ", "),
-                 ts = lubridate::as_datetime(ts, tz = "UTC"))
-  grouped <- dplyr::group_by(data, fullID)
+  data <- data %>% dplyr::collect() %>% as.data.frame()
+  data <- dplyr::mutate(data,
+                        recvLat = dplyr::if_else((is.na(.data$gpsLat)|.data$gpsLat == 0|gpsLat ==999),
+                                                 .data$recvDeployLat,
+                                                 .data$gpsLat),
+                        recvLon = dplyr::if_else((is.na(.data$gpsLon)|.data$gpsLon == 0|.data$gpsLon == 999),
+                                                 .data$recvDeployLon,
+                                                 .data$gpsLon),
+                        recvDeployName = paste(.data$recvDeployName, 
+                                               round(.data$recvLat, digits = 1), sep = "_" ),
+                        recvDeployName = paste(.data$recvDeployName,
+                                               round(.data$recvLon, digits = 1), sep = ", "),
+                        ts = lubridate::as_datetime(.data$ts, tz = "UTC"))
+  grouped <- dplyr::group_by(data, .data$fullID)
   tmp <- dplyr::summarise(grouped,
-                    first_ts=min(ts),
-                    last_ts=max(ts),
-                    tot_ts = difftime(max(ts), min(ts), units = "secs"),
-                    num_det = length(ts)) ## total time in seconds
+                          first_ts=min(.data$ts),
+                          last_ts=max(.data$ts),
+                          tot_ts = difftime(max(.data$ts), min(.data$ts), units = "secs"),
+                          num_det = length(.data$ts)) ## total time in seconds
   tmp <- merge(tmp, subset(data, select = c(ts, fullID, recvDeployName, recvLat, recvLon)),
                by.x = c("first_ts", "fullID"), by.y = c("ts", "fullID"), all.x = TRUE)
   tmp <- unique(merge(tmp, subset(data, select = c(ts, fullID, recvDeployName, recvLat, recvLon)),
-               by.x = c("last_ts", "fullID"), by.y = c("ts", "fullID"), all.x = TRUE))
+                      by.x = c("last_ts", "fullID"), by.y = c("ts", "fullID"), all.x = TRUE))
   tmp <- dplyr::rename(tmp, first_site = recvDeployName.x, last_site = recvDeployName.y)
   tmp$dist <- with(tmp, latLonDist(recvLat.x, recvLon.x, recvLat.y, recvLon.y)) ## distance in meters
   tmp$rate <- with(tmp, dist/(as.numeric(tot_ts))) ## rate of travel in m/s
   tmp$bearing <- with(tmp, geosphere::bearing(matrix(c(recvLon.x, recvLat.x), ncol=2),
-                                                 matrix(c(recvLon.y, recvLat.y), ncol=2))) ## bearing (see package geosphere for help)
-#  tmp$rhumbline_bearing <- with(tmp, geosphere::bearingRhumb(matrix(c(recvLon.x, recvLat.x), ncol=2),
-#                                                        matrix(c(recvLon.y, recvLat.y), ncol=2))) ## rhumbline bearing (see package geosphere for help)
+                                              matrix(c(recvLon.y, recvLat.y), ncol=2))) ## bearing (see package geosphere for help)
+  #  tmp$rhumbline_bearing <- with(tmp, geosphere::bearingRhumb(matrix(c(recvLon.x, recvLat.x), ncol=2),
+  #                                                        matrix(c(recvLon.y, recvLat.y), ncol=2))) ## rhumbline bearing (see package geosphere for help)
   return(tmp[c("fullID", "first_ts", "last_ts", "first_site", "last_site", "recvLat.x", "recvLon.x",
                "recvLat.y", "recvLon.y", "tot_ts", "dist", "rate", "bearing", "num_det")])
 }

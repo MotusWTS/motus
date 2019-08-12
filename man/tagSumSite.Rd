@@ -7,7 +7,7 @@
 tagSumSite(data, units = "hours")
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
+\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data
 including at a minimum variables for motusTagID, fullID, recvDeployName, ts}
 
 \item{units}{units to display time difference, defaults to "hours", options include "secs", "mins", "hours", "days", "weeks"}
@@ -17,18 +17,35 @@ Creates a summary for each tag of it's first and last detection time at each sit
 length of time between first and last detection of each site, and total number of detections at each site.
 }
 \examples{
-You can use either a selected tbl from .motus eg. "alltags", or a data.frame, instructions to convert a .motus file to all formats are below.
-sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
-tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
-df.alltags <- tbl.alltags \%>\% collect \%>\% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+# You can use either a selected tbl from .motus eg. "alltags", or a
+# data.frame, instructions to convert a .motus file to all formats are below.
 
-Create tag summaries for all tags within detection data with time in minutes with tbl file tbl.alltags
+# download and access data from project 176 in sql format
+\dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+
+# use example sql file included in `motus`
+sql.motus <- tagme(176, update = FALSE, 
+                   dir = system.file("extdata", package = "motus"))
+
+# convert sql file "sql.motus" to a tbl called "tbl.alltags"
+library(dplyr)
+tbl.alltags <- tbl(sql.motus, "alltags") 
+
+# convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+df.alltags <- tbl.alltags  \%>\% 
+  collect() \%>\% 
+  as.data.frame() 
+
+# Create tag summaries for all tags within detection data with time in
+# minutes with tbl file tbl.alltags
 tag_site_summary <- tagSumSite(tbl.alltags, units = "mins")
 
-Create tag summaries for only select tags with time in default hours with data.frame df.alltags
-tag_site_summary <- tagSumSite(filter(df.alltags, motusTagID \%in\% c(16047, 16037, 16039)))
+# Create tag summaries for only select tags with time in default hours with
+# data.frame df.alltags
+tag_site_summary <- tagSumSite(filter(df.alltags, 
+                                      motusTagID \%in\% c(16047, 16037, 16039)))
 
-Create tag summaries for only a select species with data.frame df.alltags
+# Create tag summaries for only a select species with data.frame df.alltags
 tag_site_summary <- tagSumSite(filter(df.alltags, speciesEN == "Red Knot"))
 }
 \author{

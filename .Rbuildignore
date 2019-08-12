@@ -1,2 +1,4 @@
+^data-raw$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+RELEASE.R

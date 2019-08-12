@@ -10,7 +10,7 @@
 #' @return a data.frame with these columns:
 #' \itemize{
 #' \item recvDeployName: site name of deployment
-#' \item date: date that is being summarised
+#' \item date: date that is being summarized
 #' \item first_ts: time of first detection on specified "date" at "recvDeployName"
 #' \item last_ts: time of last detection on specified "date" at "recvDeployName"
 #' \item tot_ts: total amount of time between first and last detection at "recvDeployName" on "date, output in specified unit (defaults to "hours")
@@ -22,44 +22,67 @@
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @examples
-#' You can use either a selected tbl from .motus eg. "alltags", or a data.frame, instructions to convert a .motus file to all formats are below.
-#' sql.motus <- tagme(176, new = TRUE, update = TRUE) # download and access data from project 176 in sql format
-#' tbl.alltags <- tbl(sql.motus, "alltags") # convert sql file "sql.motus" to a tbl called "tbl.alltags"
-#' df.alltags <- tbl.alltags %>% collect %>% as.data.frame() ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+#' # You can use either a selected tbl from .motus eg. "alltags", or a
+#' # data.frame, instructions to convert a .motus file to all formats are below.
 #' 
-#' Create site summaries for all sites within detection data with time in minutes using tbl file tbl.alltags
+#' # download and access data from project 176 in sql format
+#' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+#' 
+#' # OR use example sql file included in `motus`
+#' sql.motus <- tagme(176, update = FALSE, 
+#'                    dir = system.file("extdata", package = "motus"))
+#' 
+#' # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+#' library(dplyr)
+#' tbl.alltags <- tbl(sql.motus, "alltags")
+#' 
+#' # convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+#' df.alltags <- tbl.alltags %>% 
+#'   collect() %>% 
+#'   as.data.frame() 
+#' 
+#' # Create site summaries for all sites within detection data with time in
+#' # minutes using tbl file tbl.alltags
 #' daily_site_summary <- siteSumDaily(tbl.alltags, units = "mins")
 #' 
-#' Create site summaries for only select sites with time in minutes using tbl file tbl.alltags
-#' daily_site_summary <- siteSumDaily(filter(tbl.alltags, recvDeployName %in% c("Niapiskau", "Netitishi", "Old Cut", "Washkaugou")), units = "mins")
+#' # Create site summaries for only select sites with time in minutes using tbl
+#' # file tbl.alltags
+#' sub <- filter(tbl.alltags, recvDeployName %in% c("Niapiskau", "Netitishi", 
+#'                                                  "Old Cut", "Washkaugou"))
+#' daily_site_summary <- siteSumDaily(sub, units = "mins")
 #'
-#' Create site summaries for only a select species, Red Knot, with default time in hours using data.frame df.alltags
-#' daily_site_summary <- siteSumDaily(filter(df.alltags, speciesEN == "Red Knot"))
+#' # Create site summaries for only a select species, Red Knot, with default
+#' # time in hours using data frame df.alltags
+#' daily_site_summary <- siteSumDaily(filter(df.alltags,
+#'                                           speciesEN == "Red Knot"))
 
 siteSumDaily <- function(data, units = "hours"){
-  data <- select(data, motusTagID, sig, recvDeployName, recvDeployLat, 
-                 recvDeployLon, gpsLat, gpsLon, ts) %>% distinct %>% collect %>% as.data.frame
-  data <- mutate(data,
-                 recvLat = if_else((is.na(gpsLat)|gpsLat == 0|gpsLat ==999),
-                                   recvDeployLat,
-                                   gpsLat),
-                 recvLon = if_else((is.na(gpsLon)|gpsLon == 0|gpsLon == 999),
-                                   recvDeployLon,
-                                   gpsLon),
-                 recvDeployName = paste(recvDeployName, 
-                                        round(recvLat, digits = 1), sep = "\n" ),
-                 recvDeployName = paste(recvDeployName,
-                                        round(recvLon, digits = 1), sep = ", "),
-                 ts = lubridate::as_datetime(ts, tz = "UTC"),
-                 date = as.Date(ts))
+  data <- dplyr::select(data, "motusTagID", "sig", "recvDeployName", "recvDeployLat", 
+                        "recvDeployLon", "gpsLat", "gpsLon", "ts") %>% 
+    dplyr::distinct() %>% 
+    dplyr::collect() %>% 
+    dplyr::mutate(recvLat = dplyr::if_else((is.na(.data$gpsLat)|.data$gpsLat == 0|.data$gpsLat ==999),
+                                           .data$recvDeployLat,
+                                           .data$gpsLat),
+                  recvLon = dplyr::if_else((is.na(.data$gpsLon)|.data$gpsLon == 0|.data$gpsLon == 999),
+                                           .data$recvDeployLon,
+                                           .data$gpsLon),
+                  recvDeployName = paste(.data$recvDeployName, 
+                                         round(.data$recvLat, digits = 1), sep = "\n" ),
+                  recvDeployName = paste(.data$recvDeployName,
+                                         round(.data$recvLon, digits = 1), sep = ", "),
+                  ts = lubridate::as_datetime(.data$ts, tz = "UTC"),
+                  date = lubridate::as_date(.data$ts)) %>%
+    as.data.frame()
+  
   #data$date <- as.Date(data$ts)
-  grouped <- dplyr::group_by(data, recvDeployName, date)
+  grouped <- dplyr::group_by(data, .data$recvDeployName, .data$date)
   site_sum <- dplyr::summarise(grouped,
-                        first_ts=min(ts),
-                        last_ts=max(ts),
-                        tot_ts = difftime(max(ts), min(ts), units = units),
-                        num_tags = length(unique(motusTagID)),
-                        num_det = length(ts))
+                               first_ts=min(.data$ts),
+                               last_ts=max(.data$ts),
+                               tot_ts = difftime(max(.data$ts), min(.data$ts), units = units),
+                               num_tags = length(unique(.data$motusTagID)),
+                               num_det = length(.data$ts))
   site_sum <- as.data.frame(site_sum)
   return(site_sum)
 }

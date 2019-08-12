@@ -1,0 +1,169 @@
+<h3>
+<a id="user-content-how-the-motus-data-server-handles-ambiguous-tag-detections" class="anchor" href="#how-the-motus-data-server-handles-ambiguous-tag-detections" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How the motus data server handles ambiguous tag detections</h3>
+<h4>
+<a id="user-content-how-ambiguous-detections-arise" class="anchor" href="#how-ambiguous-detections-arise" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How ambiguous detections arise</h4>
+<p>A run of detections is <strong>ambiguous</strong> if there is more than one
+deployed tag which could be its source.  The conceptual cause is that
+there are two or more tags with the same Lotek ID code, burst
+interval, and nominal transmit frequency (i.e. two
+<strong>indistinguishable</strong> tags) deployed with overlapping lifetimes.  The
+lifetimes are modelled and so not exact, and have a 50% (as of 2017
+Oct. 5) margin of safety added, which might be too generous, but we
+wanted to err on the side of having ambiguous detections rather than
+on the side of missing detections entirely.</p>
+<h4>
+<a id="user-content-how-the-tag-finder-records-an-ambiguous-detection" class="anchor" href="#how-the-tag-finder-records-an-ambiguous-detection" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How the tag finder records an ambiguous detection</h4>
+<p>When the tag finder notices that two (or more, up to 6) deployments of
+identical tags overlap, any run of detections of the tag during the
+overlap are <strong>ambiguous</strong> and instead of arbitrarily choosing one tag
+or the other as the <em>detected</em> tag, it preserves the uncertainty by
+assigning a unique <strong>ambiguous tag ID</strong>, that represents <em>either tag A
+or tag B</em>.  For convenience, these ambiguous IDs are chosen to be
+negative; that makes them easily distinguishable from IDs of real
+tags.  So a negative <code>motusTagID</code> represents a unique set of from 2 to
+6 real (positive) motus tag IDs.  The real tag IDs represented by an
+ambiguous tag ID can be found using the API call
+<a href="https://github.com/jbrzusto/motusClient/blob/master/inst/doc/upstream_api.md#tags-for-ambiguities-ambigids-authtoken">tags_for_ambiguities</a></p>
+<h4>
+<a id="user-content-why-ambiguous-detections-were-missing-from-tag-project-databases" class="anchor" href="#why-ambiguous-detections-were-missing-from-tag-project-databases" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Why ambiguous detections were missing from tag project databases</h4>
+<p>The reason ambiguous detections failed to show up in the tag project
+databases built using the <code>*_for_tag_project</code> entries in the data API
+is that I hadn't figured out how to decide which projects should
+receive which ambiguous runs (or just forgot, more likely).  A user is
+not supposed to receive detections of other people's tags except when
+detected by the user's own receivers (and ambiguous detections <em>were</em>
+showing up in databases built with the <code>*_for_recv</code> API entries).</p>
+<h4>
+<a id="user-content-a-lightweight-solution" class="anchor" href="#a-lightweight-solution" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>A lightweight solution</h4>
+<p>One approach is to generate "ambiguous" project IDs, and assign
+ambiguous runs to those.  So for example, if a tag 123 with BI 4.3
+at 166.38 MHz (<code>123:4.1@166.38</code>) seconds was deployed by projects 5
+(as motus tag ID 5000) and 10 (as motus tag ID 6000) with overlapping
+lifespans, then runs of tag <code>123:4.3@166.38</code> in the overlap would be
+assigned a unique negative "ambiguous" tag ID (e.g. -50), representing
+"motus tag ID 5000 or 6000".  And the run of detections is assigned to
+a unique "ambiguous" project ID (e.g. -7) representing "motus project
+5 or 10" (using negative ID numbers again, for convenience).</p>
+<p>So far, that does nothing.  What makes it useful is these changes:</p>
+<h4>
+<a id="user-content-changes-to-the-api" class="anchor" href="#changes-to-the-api" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Changes to the API</h4>
+<ul>
+<li>
+<p>project P can request a list of all ambiguous projects that it belongs to.
+That's the horribly-named API entry
+<a href="https://github.com/jbrzusto/motusClient/blob/master/inst/doc/upstream_api.md#project_ambiguities_for_tag_project-projectid">project_ambiguities_for_tag_project</a></p>
+</li>
+<li>
+<p>project P is granted access to all runs of detections assigned to
+any ambiguous project that P belongs to.  In the example above,
+that means project 5 would get access to all runs of detections
+from projects 5 and -7.  And project 10 would get access to all
+runs of detections from projects 10 and -7.  This is a conceptual
+change.</p>
+</li>
+</ul>
+<h4>
+<a id="user-content-changes-to-the-motusclient-package" class="anchor" href="#changes-to-the-motusclient-package" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Changes to the <a href="https://github.com/jbrzusto/motusClient">motusClient</a> package</h4>
+<ul>
+<li>
+<p>calling <code>tagme(P)</code> now requests the list of ambiguous project IDs
+that project P has access to (P is a postive motus project ID)</p>
+</li>
+<li>
+<p>after fetching new detections for the main project, tagme() also
+fetches new detections for its related ambiguous projects.  In the
+example, tagme(5, update=TRUE) would first fetch new detections in
+project 5, and then new detections in project -10 (and in any other
+ambiguous projects on the list).  All of these fetches are
+incremental, and nothing has changed from the users's point of
+view, except that many new detections are fetched (more on that
+in another document) and stored in the <em>same</em> database, (e.g. <code>project-5.motus</code>)</p>
+</li>
+<li>
+<p>the <code>tagAmbig</code> table gains a new field <code>ambigProjectID</code> that indicates which
+ambiguous project ID these detections belong to.  For concretness, here are the
+first 5 (out of 339) lines of the augmented <code>tagAmbig</code> table:</p>
+</li>
+</ul>
+<div class="highlight highlight-source-sql"><pre>sqlite<span class="pl-k">&gt;</span> <span class="pl-k">select</span> <span class="pl-k">*</span> <span class="pl-k">from</span> tagAmbig <span class="pl-k">limit</span> <span class="pl-c1">5</span>;
+ambigID     masterAmbigID  motusTagID1  motusTagID2  motusTagID3  motusTagID4  motusTagID5  motusTagID6  ambigProjectID
+<span class="pl-c"><span class="pl-c">--</span>--------  -------------  -----------  -----------  -----------  -----------  -----------  -----------  --------------</span>
+<span class="pl-k">-</span><span class="pl-c1">331</span>         (column       <span class="pl-c1">19583</span>        <span class="pl-c1">23094</span>                                                            <span class="pl-k">-</span><span class="pl-c1">36</span>
+<span class="pl-k">-</span><span class="pl-c1">330</span>          obsolete)    <span class="pl-c1">19584</span>        <span class="pl-c1">23095</span>                                                            <span class="pl-k">-</span><span class="pl-c1">36</span>
+<span class="pl-k">-</span><span class="pl-c1">329</span>                       <span class="pl-c1">19595</span>        <span class="pl-c1">23107</span>                                                            <span class="pl-k">-</span><span class="pl-c1">36</span>
+<span class="pl-k">-</span><span class="pl-c1">312</span>                       <span class="pl-c1">15875</span>        <span class="pl-c1">22607</span>                                                            <span class="pl-k">-</span><span class="pl-c1">44</span>
+<span class="pl-k">-</span><span class="pl-c1">309</span>                       <span class="pl-c1">18284</span>        <span class="pl-c1">20128</span>                                                            <span class="pl-k">-</span><span class="pl-c1">43</span></pre></div>
+<h4>
+<a id="user-content-changes-to-the-motusserver-package" class="anchor" href="#changes-to-the-motusserver-package" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Changes to the <a href="https://github.com/jbrzusto/motusServer">motusServer</a> package</h4>
+<ul>
+<li>the <a href="https://github.com/jbrzusto/motusServer/blob/new_server/R/dataServer.R">dataServer()</a>
+now supports the <code>project_ambiguities_for_tag_project</code> API entry,
+by maintaining a new <code>projAmbig</code> table. For concreteness, here are
+5 rows of that table (from a total of 56):</li>
+</ul>
+<div class="highlight highlight-source-sql"><pre>MariaDB [motus]<span class="pl-k">&gt;</span> <span class="pl-k">select</span> <span class="pl-k">*</span> <span class="pl-k">from</span> projAmbig <span class="pl-k">where</span> ambigProjectID <span class="pl-k">in</span> (<span class="pl-k">-</span><span class="pl-c1">36</span>, <span class="pl-k">-</span><span class="pl-c1">43</span>, <span class="pl-k">-</span><span class="pl-c1">44</span>, <span class="pl-k">-</span><span class="pl-c1">50</span>, <span class="pl-k">-</span><span class="pl-c1">55</span>);
+<span class="pl-k">+</span><span class="pl-c"><span class="pl-c">--</span>--------------+------------+------------+------------+------------+------------+------------+---------+</span>
+| ambigProjectID | projectID1 | projectID2 | projectID3 | projectID4 | projectID5 | projectID6 | tsMotus |
+<span class="pl-k">+</span><span class="pl-c"><span class="pl-c">--</span>--------------+------------+------------+------------+------------+------------+------------+---------+</span>
+|            <span class="pl-k">-</span><span class="pl-c1">55</span> |         <span class="pl-c1">92</span> |        <span class="pl-c1">103</span> |       <span class="pl-k">NULL</span> |       <span class="pl-k">NULL</span> |       <span class="pl-k">NULL</span> |       <span class="pl-k">NULL</span> |      <span class="pl-k">-</span><span class="pl-c1">1</span> |
+|            <span class="pl-k">-</span><span class="pl-c1">50</span> |         <span class="pl-c1">74</span> |       <span class="pl-k">NULL</span> |       <span class="pl-k">NULL</span> |       <span class="pl-k">NULL</span> |       <span class="pl-k">NULL</span> |       <span class="pl-k">NULL</span> |      <span class="pl-k">-</span><span class="pl-c1">1</span> |
+|            <span class="pl-k">-</span><span class="pl-c1">44</span> |         <span class="pl-c1">57</span> |       <span class="pl-k">NULL</span> |       <span class="pl-k">NULL</span> |       <span class="pl-k">NULL</span> |       <span class="pl-k">NULL</span> |       <span class="pl-k">NULL</span> |      <span class="pl-k">-</span><span class="pl-c1">1</span> |
+|            <span class="pl-k">-</span><span class="pl-c1">43</span> |         <span class="pl-c1">57</span> |         <span class="pl-c1">92</span> |       <span class="pl-k">NULL</span> |       <span class="pl-k">NULL</span> |       <span class="pl-k">NULL</span> |       <span class="pl-k">NULL</span> |      <span class="pl-k">-</span><span class="pl-c1">1</span> |
+|            <span class="pl-k">-</span><span class="pl-c1">36</span> |         <span class="pl-c1">47</span> |         <span class="pl-c1">57</span> |       <span class="pl-k">NULL</span> |       <span class="pl-k">NULL</span> |       <span class="pl-k">NULL</span> |       <span class="pl-k">NULL</span> |      <span class="pl-k">-</span><span class="pl-c1">1</span> |
+<span class="pl-k">+</span><span class="pl-c"><span class="pl-c">--</span>--------------+------------+------------+------------+------------+------------+------------+---------+</span></pre></div>
+<p>So combining information from the above two tables, the pair of
+ambiguous tags 19583 and 23094 must belong to the projects 47 and
+57 because the ambiguous tag -331 is in ambiguous project -36.
+(The 6 component ID fields in each row in these two tables are in
+sorted order, so by themselves don't indicate whether tag 19583 is
+in project 57 or is in project 47.  The sorted order is easier to
+work with when building and searching these tables.)</p>
+<p>Note that some ambiguous projectIDs have only one non-null
+projectID; this represents an overlap between two or more identical
+tags in <em>the same</em> project.  For such tags, ownership of detections
+is obvious, but the same mechanism still serves to fetch ambiguous
+detections and let the user handle them appropriately.</p>
+<ul>
+<li>
+<p>the dataServer calculates which <code>ambigProjectID</code>s a given real project P
+has access to (answer: any row in which P appears in one of the <code>projectID*</code>
+fields.</p>
+</li>
+<li>
+<p>when the <a href="https://github.com/jbrzusto/find_tags">tag finder</a> runs
+and new ambiguous detections are merged into the master database,
+it checks whether the ambiguous tag ID is new, and if so, ensures
+that an appropriate entry is created in the <code>projAmbig</code> table</p>
+</li>
+</ul>
+<h4>
+<a id="user-content-summary" class="anchor" href="#summary" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Summary</h4>
+<ul>
+<li>
+<p>ambiguous project IDs are managed in analogy to ambiguous tag IDs</p>
+</li>
+<li>
+<p>a run of detections that could be either tag T1 from project P1 or tag T2 from
+project P2 generates:</p>
+<ul>
+<li>an ambiguous tagID that represents "T1 or T2"</li>
+<li>an ambiguous projectID that represents "P1 or P2"</li>
+<li>the run is of tag "T1 or T2" and is owned by "P1 or P2"</li>
+</ul>
+</li>
+<li>
+<p>when project P1 asks for its tags using <code>tagme()</code>, it will also receive tags belonging
+to project "P1 or P2"</p>
+</li>
+<li>
+<p>this approach does not duplicate batch, run, or hit records in the master database,
+but adds <code>ambigProj</code>, a small table</p>
+</li>
+<li>
+<p>the server code and API require no changes for fetching ambiguous runs (and batches, hits) that <em>could</em>
+belong to project P1.</p>
+</li>
+<li>
+<p>a separate document will describe how users can work with ambiguous detections.</p>
+</li>
+</ul>

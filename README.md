@@ -1,78 +1,68 @@
 # motus
-R package for users of data from http://motus.org
+R package for users of data from https://motus.org
+
+See the [Motus R book](https://motus.org/MotusRBook/) for detailed usage information
+
+
+## Installation
+
+### Updating
+
+If you are updating your version of `motus` from a version <1.5.0 to >= 1.5.0 (i.e. from when `motusClient` was a separate package), you will have best results if you first remove `motus` and `motusClient` and reinstall from scratch:
+
+```R
+remove.packages(c("motus", "motusClient"))
+```
+
+Now you can install v1.5.0+ as follows.
+
+### New Installation
 
 **Users**: the 'master' branch is what you want.  You can install it
 from R by doing:
 ```R
-    install.packages("devtools")              ## if you haven't already done this
-
-    install_github("motusWTS/motus@master")   ## the lastest stable version
+install.packages("remotes")              ## if you haven't already done this
+remotes::install_github("motusWTS/motus@master")   ## the lastest stable version
 ```
 
 **Developers**: the 'staging' branch is for work-in-progress.  Install it with
 ```R
-    install.packages("devtools")               ## if you haven't already done this
-
-    install_github("motusWTS/motus@staging")   ## the development version
+install.packages("remotes")               ## if you haven't already done this
+remotes::install_github("motusWTS/motus@staging")   ## the development version
 ```
 
-## Usage vignette
+### Troubleshooting
 
-A brief sketch (of `motusClient` usage) is [here](https://github.com/motusWTS/motusClient/blob/master/inst/doc/motusClient_R_package_usage.md)
+If you run into any installation errors, please ensure that your R packages are up-to-date:
 
-## What's working so far:
-
-### 2017 Sep 25
-
-- tagme() / tellme() and supporting functions are now in the [motusClient](https://github.com/motusWTS/motusClient)
-package, which is automatically installed from github the first time you do `library(motus)` after installing
-the `motus` package.  If automatic installation of `motusClient` fails, you can install it directly like so:
 ```R
-install_github("motusWTS/motusClient")
+update.packages()
 ```
 
-### 2017 Jul 28
+Some known installation problems are listed below. If all else fails, uninstalling R and/or R Studio, and reinstalling the latest R version typically works. Depending on how much customization you have made to your R configuration, this may be the quickest option available.
 
-- tagme() - for updating local copies of receiver or tag project detection databases
-- tellme() - for asking how much data will need to be transferred by the corresponding tagme() call
+**cannot remove prior installation of package**
 
-The latest version of the data server that works with this package is
-now running on a new box, but its database is only populated with data
-from 4 (!) receivers.  Raw files from other receivers will be re-run with
-the latest version of the tag finder and added to this database.  Only
-those users willing to wrestle with alpha code and not actually interested
-in getting their data should be using this package for now.
+If you get errors "cannot remove prior installation of package ..." (e.g. dplyr) while trying to install motus, this could be due to having multiple R sessions active. You can try the following:
 
-### 2017 Jun 10
+1. find out your R package library location: `Sys.getenv("R_LIBS_USER")` or `.libPaths()`
+2. close any session of R and/or R Studio
+3. in the library folder, manually delete the package that failed to remove (e.g. dplyr)
+4. restart R and manually install the package again e.g. `install.packages("dplyr")`
 
-- srvTagsForAmbiguities()
-- srvMetadataForReceivers()
+Another possible cause of this problem relates to file permissions in your library folders (e.g. libraries installed in c:\program files\R\R-3.x.x\library\). To confirm this, you can try running R "as administrator" (right-clicking the R icon), or use `SUDO R`  (Linux/Ubuntu) and trying installation again. If this resolves your problem, you should consider setting your libraries in a new folder where your logged in user has full access:
 
-### 2017 Jun 8
+```R
+# confirm the libPaths location(s)
+.libPaths()
+# add a new libPaths default location
+.libPaths("c:/users/myusername/R/win-libraries")
+```
 
-- srvGPSforTagProject()
-- srvMetadataForTags()
+**certificate errors**
 
-### 2017 Jun 6
+If you get a certificate error using the tagme() function, please ensure that your httr package is up-to-date, as there was a problem reported with one of the recent version that now appears fixed:
 
-- srvRunsForReceiverProject()
-- srvHitsForTagProject()
-- srvHitsForReceiverProject()
-- srvGPSforReceiverProject()
-
-### 2017 May 31
-
-- srvRunsForTagProject()
-- srvBatchesForTagProject()
-- srvBatchesForReceiverProject()
-
-### 2017 May 19
-
-- authentication against local data server
-
-### 2017 Feb 7
-
-- some R functions for post-processing
-
-### 2016 Dec 1
-- nothing (yes, nothing is working; in fact, nothing is working beautifully)
+```R
+remotes::install_github("r-lib/httr")
+```
