@@ -24,7 +24,7 @@ srvAuth = function() {
         motus_vars$projects = res$projects
         motus_vars$dataVersion = res$dataVersion
         if(res$dataVersion < 2) {
-            message("Server dataVersion is 1, overriding to assume 2")
+            message("Server dataVersion is ", res$dataVersion, ", overriding to assume 2")
             motus_vars$dataVersion = 2 # Until server is updated
         }
         ## cat(sprintf("Got authentication token from %s  \r",motus_vars$dataServerURL))
