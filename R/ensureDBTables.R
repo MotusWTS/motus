@@ -95,6 +95,9 @@ quality INTEGER
     sql("create index gps_batchID on gps ( batchID )")
     sql("create index gps_ts on gps ( ts )")
     
+    # Remove empty gps detections
+    sql("DELETE FROM gps where lat = 0 and lon = 0 and alt = 0;")
+    
   }
   
   if (! "batches" %in% tables) {
@@ -139,8 +142,9 @@ CREATE TABLE runs (
                                                       -- table
     ant TINYINT NOT NULL,                             -- antenna number (USB Hub port # for SG; antenna port
                                                       -- # for Lotek); 11 means Lotek master antenna 'A1+A2+A3+A4'
-    len INT,                                           -- length of run within batch
-    nodeNum TEXT                                  
+    len INT,                                          -- length of run within batch
+    nodeNum TEXT,
+    motusFilter INTEGER                               -- Probability of 'good'(1) vs. 'bad'(0) runs 
 );
 
 ")
@@ -284,7 +288,9 @@ CREATE TABLE IF NOT EXISTS tagProps (
     propValue TEXT NULL
 );
 ")
-    sql("CREATE INDEX IF NOT EXISTS tagProps_deployID ON tagProps (deployID ASC)")
+    sql("CREATE INDEX IF NOT EXISTS tagProps_deployID ON tagProps (
+          deployID ASC
+        );")
   }
   
   if (! "tags" %in% tables) {
@@ -324,7 +330,9 @@ CREATE TABLE recvDeps (
    tsStart REAL,
    tsEnd REAL,
    projectID INTEGER,
-   elevation REAL
+   elevation REAL,
+   siteName TEXT,
+   utcOffset INTEGER
 )
 ")
 sql("CREATE INDEX IF NOT EXISTS recvDeps_serno on recvDeps(serno)")
@@ -427,13 +435,15 @@ CREATE TABLE filters (
    filterID INTEGER PRIMARY KEY,            -- locally unique filterID
    userLogin TEXT NOT NULL,                 -- motus login of the user who created the filter
    filterName TEXT NOT NULL,                -- short name used to refer to the filter by the user
-   motusProjID INTEGER NOT NULL,                -- optional project ID when the filter needs to be shared with other users of a project
+   motusProjID INTEGER NOT NULL,            -- optional project ID when the filter needs to be shared with other users of a project
    descr TEXT,                              -- longer description of what the filter contains
    lastModified TEXT NOT NULL               -- date when the filter was last modified
 );
 ");
     sql("
-CREATE UNIQUE INDEX IF NOT EXISTS filters_filterName_motusProjID ON filters (filterName,motusProjID);
+CREATE UNIQUE INDEX IF NOT EXISTS filters_filterName_motusProjID ON filters (
+  filterName ASC,
+  motusProjID ASC);
 ")
     
   }
@@ -449,7 +459,11 @@ CREATE TABLE runsFilters (
 );
 ");
     sql("
-CREATE UNIQUE INDEX IF NOT EXISTS runsFilters_filterID_runID_motusTagID ON runsFilters (filterID, runID, motusTagID);
+CREATE INDEX IF NOT EXISTS runsFilters_filterID_runID_motusTagID ON runsFilters (
+  filterID ASC, 
+  runID ASC, 
+  motusTagID ASC,
+  probability ASC);
 ")
     
   }
