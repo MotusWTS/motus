@@ -8,10 +8,12 @@ test_that("checkDataVersion archives old files", {
   
   rv <- dplyr::src_sqlite("test.motus", create = TRUE)
   
-  expect_silent(checkDataVersion(rv, dbname = "test.motus", rename = TRUE)) %>%
+  expect_message(rv <- checkDataVersion(rv, dbname = "test.motus", rename = TRUE),
+                 "DATABASE UPDATE \\(data version 1 -> 2\\)") %>%
     expect_is("src_SQLiteConnection")
   expect_true(file.exists("test_v1.motus"))
   
-  expect_error(checkDataVersion(rv, dbname = "test.motus", rename = TRUE),
-               "already exists")
+  expect_error(expect_message(
+    checkDataVersion(rv, dbname = "test.motus", rename = TRUE),
+    "DATABASE UPDATE \\(data version 1 -> 2\\)"), "already exists")
 })
