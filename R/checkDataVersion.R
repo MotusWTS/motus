@@ -3,7 +3,7 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
   # Get current version info
   motus_vars$authToken # Prompt for authorization to get dataVersion
   server_version <- motus_vars$dataVersion
-
+  
   if (dplyr::db_has_table(src$con, "admInfo") && 
       "data_version" %in% DBI::dbListFields(src$con, "admInfo")) {
     local_version <- dplyr::tbl(src$con, "admInfo") %>%
@@ -34,6 +34,8 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
     }
 
     n <- src[[1]]@dbname
+    message("Renaming ", n, " to ", new_name)
+
     if(!file.exists(new_name)) {
       DBI::dbDisconnect(src$con)
       rm("src")
@@ -46,6 +48,8 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
     if(length(DBI::dbListTables(src$con)) > 0) {
       stop("Database did not archive properly", call. = FALSE)
     }
+    
+    message("Downloading new data to ", n)
   }
   
   src
