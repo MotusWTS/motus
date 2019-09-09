@@ -81,14 +81,14 @@ activity <- function(src, resume = FALSE) {
         # Save Previous batch
         dbInsertOrReplace(sql$con, "activity", b)
         message(msg, sprintf("got %6d activity records", nrow(b)))
-        
+
         # Page forward
         ant <- b$ant[nrow(b)]
         hourBin <- b$hourBin[nrow(b)]
         
-        # Try again
+        # Try again (FIX NUMERIC ANT!!!)
         b <- srvActivityForBatches(batchID = batchID, 
-                                   ant = ant, hourBin = hourBin)
+                                   ant = as.numeric(ant), hourBin = hourBin)
       }
     }
   }
