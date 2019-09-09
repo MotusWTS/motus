@@ -34,11 +34,13 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
     }
 
     n <- src[[1]]@dbname
-    message("Renaming ", n, " to ", new_name)
+    
+    message("DATABASE UPDATE (data version 1 -> 2)")
+    message(" - Archiving ", basename(n), " (v", local_version, ") to ", 
+            basename(new_name))
 
     if(!file.exists(new_name)) {
-      DBI::dbDisconnect(src$con)
-      rm("src")
+      if(DBI::dbIsValid(src$con)) DBI::dbDisconnect(src$con)
       file.rename(from = n, to = new_name)
     } else {
       stop(new_name, " already exists", call. = FALSE)
@@ -49,7 +51,7 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
       stop("Database did not archive properly", call. = FALSE)
     }
     
-    message("Downloading new data to ", n)
+    message(" - Downloading new data (v", server_version, ") to ", basename(n))
   }
   
   src
