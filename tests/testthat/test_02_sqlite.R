@@ -3,38 +3,34 @@ context("sql tables")
 teardown(unlink("project-176.motus"))
 
 test_that("Missing tables recreated silently", {
+  sessionVariable(name = "userLogin", val = "motus.sample")
+  sessionVariable(name = "userPassword", val = "motus.sample")
+  
   file.copy(system.file("extdata", "project-176.motus", package = "motus"), ".")
   tags <- tagme(176, new = FALSE, update = FALSE)
   
   t <- DBI::dbListTables(tags$con)
+  t <- t[t != "admInfo"] # Don't try removing admInfo table
   
-  #c("activity", "admInfo", "allambits", "antDeps", "batchRuns", "batches",
-  #       "clarified", "filters", "gps", "hits", "meta", "projAmbig", "projBatch",
-  #       "projs", "recvDeps", "recvs", "runs", "runsFilters", "species", "tagAmbig",
-  #       "tagDeps", "tagProps", "tags")
-  #v <- "alltags"
+  # t <- c("activity", "antDeps", "batchRuns", "batches",
+  #        "clarified", "filters", "gps", "hits", "meta", "projAmbig", "projBatch",
+  #        "projs", "recvDeps", "recvs", "runs", "runsFilters", "species", "tagAmbig",
+  #        "tagDeps", "tagProps", "tags")
+  # 
   
   for(i in t) {
-    
+  
     # Remove table
     if(!i %in% c("alltags", "allambigs")) {
       expect_silent(DBI::dbRemoveTable(tags$con, !!i))
+      expect_false(DBI::dbExistsTable(tags$con, !!i))
     } else {
-      expect_silent(DBI::dbExecute(tags$con, "DROP VIEW alltags"))
+      expect_silent(DBI::dbExecute(tags$con, paste0("DROP VIEW ", !!i)))
+      expect_false(DBI::dbExistsTable(tags$con, !!i))
     }
     
-    # Add table silently (unless admInfo)
-    if(i == "admInfo") {
-      expect_message(tags <- tagme(176, new = FALSE, update = FALSE))
-    } else {
-      expect_silent(tags <- tagme(176, new = FALSE, update = FALSE))
-    }
-    
+    # Add tables, no errors
+    expect_error(tags <- tagme(176, new = FALSE, update = TRUE), NA)
     expect_true(DBI::dbExistsTable(tags$con, !!i))
-    
-    # USUALLY expect present but empty (except admInfo and views)
-    if(!i %in% c("admInfo", "alltags", "allambigs", "meta")) {
-      expect_equal(nrow(dplyr::collect(dplyr::tbl(tags$con, !!i))), 0)
-    } 
   }
 })
