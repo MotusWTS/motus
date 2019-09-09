@@ -17,11 +17,12 @@ checkVersion <- function(src) {
   
   # If database has admin info table
   if (dplyr::db_has_table(src$con, "admInfo")) {
-    df <- DBI::dbGetQuery(src$con, "select value as date from admInfo where key = 'db_version' limit 1")
-    df$date <- as.POSIXct(df$date, tz = "UTC")
-    message("Your motus sqlite file version: ", df$date)
+    local_version <- dplyr::tbl(src$con, "admInfo") %>%
+      dplyr::pull(db_version) %>%
+      as.POSIXct(., tz = "UTC")
+    message("Your motus sqlite file version: ", local_version)
   
-    if (df$date != current_version) {
+    if (local_version != current_version) {
       message("Your motus sqlite file version does not match the package. ",
               "Please refer to the Motus R Book (troubleshooting chapter).")
     }	else {
