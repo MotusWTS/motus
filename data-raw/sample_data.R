@@ -9,4 +9,4 @@ shorebirds <- dplyr::tbl(tags, "alltags") %>%
 
 usethis::use_data(shorebirds, overwrite = TRUE)
 
-#file.remove("./data-raw/project-176.motus") # Keep this file? 9 megs... not too bad
+#file.remove("./data-raw/project-176.motus") # Keep this file?
