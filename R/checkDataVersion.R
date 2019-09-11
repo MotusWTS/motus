@@ -40,15 +40,32 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
             basename(new_name))
 
     if(!file.exists(new_name)) {
-      if(DBI::dbIsValid(src$con)) DBI::dbDisconnect(src$con)
-      file.rename(from = n, to = new_name)
+      t <- try(file.copy(from = n, to = new_name), silent = TRUE)
+      if(class(t) == "try-error") stop("Unable to archive database", 
+                                       call. = FALSE)
     } else {
       stop(new_name, " already exists", call. = FALSE)
     }
 
-    src <- dplyr::src_sqlite(dbname, create = TRUE)
-    if(length(DBI::dbListTables(src$con)) > 0) {
+    # Double check that archiving worked as expected
+    temp_db <- try(
+      DBI::dbConnect(RSQLite::SQLite(), dbname = "project-176_v1.motus"), 
+      silent = TRUE)
+    if(class(temp_db) == "try-error" || 
+       length(DBI::dbListTables(temp_db)) == 0 || 
+       tools::md5sum(n) != tools::md5sum(new_name)) {
       stop("Database did not archive properly", call. = FALSE)
+    }
+
+    # Clear current database
+    message(" - Preparing database for v", server_version, " data")
+    DBI::dbExecute(src$con, "DROP VIEW allambigs")
+    DBI::dbExecute(src$con, "DROP VIEW alltags")
+    sapply(DBI::dbListTables(src$con), 
+           FUN = function(x) DBI::dbRemoveTable(src$con, x))
+    
+    if(length(DBI::dbListTables(src$con)) > 0) {
+      stop("Unable to prepare new database", .call = FALSE)
     }
     
     message(" - Downloading new data (v", server_version, ") to ", basename(n))
