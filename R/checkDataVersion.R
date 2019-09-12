@@ -55,6 +55,8 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
        length(DBI::dbListTables(temp_db)) == 0 || 
        tools::md5sum(n) != tools::md5sum(new_name)) {
       stop("Database did not archive properly", call. = FALSE)
+    } else {
+      DBI::dbDisconnect(temp_db)
     }
 
     # Clear current database
