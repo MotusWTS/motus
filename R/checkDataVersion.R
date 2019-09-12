@@ -49,7 +49,7 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
 
     # Double check that archiving worked as expected
     temp_db <- try(
-      DBI::dbConnect(RSQLite::SQLite(), dbname = "project-176_v1.motus"), 
+      DBI::dbConnect(RSQLite::SQLite(), dbname = new_name), 
       silent = TRUE)
     if(class(temp_db) == "try-error" || 
        length(DBI::dbListTables(temp_db)) == 0 || 
