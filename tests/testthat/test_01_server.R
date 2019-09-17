@@ -3,7 +3,7 @@ context("Test Server Access")
 teardown(unlink("project-176.motus"))
 teardown(unlink("project-10.motus"))
 
-test_that("tagme() and tellme() access the server appropriately", {
+test_that("tagme() accesses the server appropriately", {
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
@@ -34,6 +34,16 @@ test_that("tagme() returns expected activity data", {
     expect_is(a[, !!i][[1]], c("integer", "numeric"))
   }
 })
+
+test_that("tagme with countOnly (tellme)", {
+  expect_silent(tagme(projRecv = 176, new = FALSE, 
+                      update = TRUE, countOnly = TRUE)) %>%
+    expect_is("data.frame")
+  
+  expect_silent(tellme(projRecv = 176, new = FALSE)) %>%
+    expect_is("data.frame")
+})
+
 
 test_that("srvQuery handles time out graciously", {
   sessionVariable(name = "userLogin", val = "motus.sample")
