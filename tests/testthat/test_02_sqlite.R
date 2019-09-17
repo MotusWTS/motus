@@ -1,12 +1,33 @@
 context("sql tables")
 
+setup(file.copy(system.file("extdata", "project-176.motus", package = "motus"), "."))
 teardown(unlink("project-176.motus"))
+
+test_that("new tables have character ant and port", {
+  tags <- DBI::dbConnect(RSQLite::SQLite(), "project-176.motus")
+  expect_is(dplyr::tbl(tags, "runs") %>% 
+              dplyr::collect() %>% 
+              dplyr::pull("ant"), 
+            "character")
+  
+  expect_is(dplyr::tbl(tags, "antDeps") %>% 
+              dplyr::collect() %>% 
+              dplyr::pull("port"), 
+            "character")
+  
+  # For receivers
+  # expect_is(dplyr::tbl(tags, "pulseCounts") %>% 
+  #             dplyr::collect() %>% 
+  #             dplyr::pull("ant"), 
+  #           "character")
+  
+})
+
 
 test_that("Missing tables recreated silently", {
   sessionVariable(name = "userLogin", val = "motus.sample")
   sessionVariable(name = "userPassword", val = "motus.sample")
   
-  file.copy(system.file("extdata", "project-176.motus", package = "motus"), ".")
   tags <- tagme(176, new = FALSE, update = FALSE)
   
   t <- DBI::dbListTables(tags$con)

@@ -85,10 +85,10 @@ activity <- function(src, resume = FALSE) {
         # Page forward
         ant <- b$ant[nrow(b)]
         hourBin <- b$hourBin[nrow(b)]
-        
-        # Try again (FIX NUMERIC ANT!!!)
+
+        # Try again
         b <- srvActivityForBatches(batchID = batchID, 
-                                   ant = as.numeric(ant), hourBin = hourBin)
+                                   ant = ant, hourBin = hourBin)
       }
     }
   }

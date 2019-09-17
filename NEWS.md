@@ -2,6 +2,7 @@
 
 ### Big Changes
 * Switch to data version 2
+    * Includes new CTT antennas
 
 
 # motus 2.0.0 (2019-08-02)

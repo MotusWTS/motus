@@ -28,8 +28,11 @@ test_that("tagme() returns expected activity data", {
   # No all missing values
   expect_false(any(sapply(a, function(x) all(is.na(x)))))
   
-  # All numeric/integer
-  for(i in names(a)) expect_is(a[, !!i][[1]], c("integer", "numeric"))
+  # All numeric/integer (except ant)
+  expect_is(a$ant, "character")
+  for(i in names(a)[names(a) != "ant"]) {
+    expect_is(a[, !!i][[1]], c("integer", "numeric"))
+  }
 })
 
 test_that("srvQuery handles time out graciously", {

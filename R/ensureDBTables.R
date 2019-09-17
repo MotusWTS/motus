@@ -140,7 +140,7 @@ CREATE TABLE runs (
     done TINYINT NOT NULL DEFAULT 0,                  -- is run finished? 0 if no, 1 if yes.
     motusTagID INT NOT NULL,                          -- ID for the tag detected; foreign key to Motus DB
                                                       -- table
-    ant TINYINT NOT NULL,                             -- antenna number (USB Hub port # for SG; antenna port
+    ant TEXT NOT NULL,                                -- antenna number (USB Hub port # for SG; antenna port
                                                       -- # for Lotek); 11 means Lotek master antenna 'A1+A2+A3+A4'
     len INT,                                          -- length of run within batch
     nodeNum TEXT,
@@ -362,7 +362,7 @@ FROM
     sql("
 CREATE TABLE antDeps (
    deployID INTEGER,
-   port INTEGER,
+   port TEXT,
    antennaType TEXT,
    bearing REAL,
    heightMeters REAL,
@@ -410,7 +410,7 @@ CREATE TABLE  projAmbig (
     sql("
 CREATE TABLE pulseCounts (
    batchID INTEGER NOT NULL,             -- batchID that generated this record
-   ant TINYINT NOT NULL,                 -- antenna
+   ant TEXT NOT NULL,                    -- antenna
    hourBin INTEGER,                      -- hour bin for this count; this is round(ts/3600)
    count   INTEGER,                      -- number of pulses for given pcode in this file
    PRIMARY KEY (batchID, ant, hourBin)   -- a single count for each batchID, antenna, and hourBin
@@ -472,7 +472,7 @@ CREATE INDEX IF NOT EXISTS runsFilters_filterID_runID_motusTagID ON runsFilters 
     sql("CREATE TABLE IF NOT EXISTS activity (
       batchID INTEGER,
       motusDeviceID INTEGER,
-      ant TINYINT,
+      ant TEXT,
       year INTEGER,
       month INTEGER,
       day INTEGER,
@@ -503,7 +503,7 @@ CREATE INDEX IF NOT EXISTS runsFilters_filterID_runID_motusTagID ON runsFilters 
       batchID INTEGER NOT NULL,
       ts FLOAT NOT NULL,
       nodeNum TEXT NOT NULL,
-      ant TINYINT NOT NULL,
+      ant TEXT NOT NULL,
       sig FLOAT(24),
       battery FLOAT,
       temperature FLOAT);")
