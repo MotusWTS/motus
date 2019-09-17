@@ -10,12 +10,12 @@
 #'   created. Otherwise, `tagme()` assumes the database already exists,
 #'   and will stop with an error if it cannot find it in the current directory.
 #'   This is mainly to prevent inadvertent downloads of large amounts of data
-#'   that you already have!#'
+#'   that you already have!
 #' @param dir character. Path to the folder where you are storing databases
 #'   Defaults to current directory; i.e. `getwd()`.
 #' @param countOnly logical. If FALSE, the default, then do requested
 #'   database updates. Otherwise, return a count of items that would need to be
-#'   transferred in order to update the database.#'
+#'   transferred in order to update the database.
 #' @param forceMeta logical. If TRUE, re-get metadata for tags and receivers,
 #'   even if we already have them.
 #' @param rename logical. If current SQLite database is of an older version,
