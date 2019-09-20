@@ -23,10 +23,6 @@ srvAuth = function() {
         res = srvQuery(motus_vars$API_DATA_AUTHENTICATE, pars, auth=FALSE)
         motus_vars$projects = res$projects
         motus_vars$dataVersion = res$dataVersion
-        if(res$dataVersion < 2) {
-            message("Server dataVersion is ", res$dataVersion, ", overriding to assume 2")
-            motus_vars$dataVersion = 2 # Until server is updated
-        }
         ## message(sprintf("Got authentication token from %s  ", motus_vars$dataServerURL))
         return(res$authToken)
     }, error = function(e) {
