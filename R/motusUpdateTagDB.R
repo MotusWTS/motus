@@ -38,7 +38,7 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
     msg <- paste0(msg, sprintf("\nand in ambiguous detection projects %s", 
                                paste(projectIDs[-1], collapse = ", ")))
   }
-  cat(msg, "\n", sep = "", file = stderr())
+  message(msg)
   
   ## keep track of items we'll need metadata for
   tagIDs <- c()
@@ -66,8 +66,7 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
       b <- subset(b, !duplicated(batchID))
       
       devIDs <- unique(c(devIDs, b$motusDeviceID))
-      cat(sprintf("Project %5d:  got %5d batch records\n", projectID, nrow(b)), 
-          file = stderr())
+      message(sprintf("Project %5d:  got %5d batch records", projectID, nrow(b)))
       
       for (bi in 1:nrow(b)) {
         batchID <- b$batchID[bi]
@@ -75,7 +74,7 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
         ## a non-empty result if we're currently grabbing data for a
         ## project with which the main project has an ambiguous tag.
         oldBatch <- sql("select * from batches where batchID = %d", batchID)
-        batchMsg <- sprintf("\nbatchID %8d (#%6d of %6d)", batchID, bi, nrow(b))
+        batchMsg <- sprintf("batchID %8d (#%6d of %6d)", batchID, bi, nrow(b))
         
         ## To handle interruption of transfers, we save a record to the batches
         ## table as the last step after acquiring runs and hits for that batch.
@@ -102,8 +101,8 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
           DBI::dbWriteTable(sql$con, "batchRuns", 
                             data.frame(batchID = batchID, runID = r$runID), 
                             append = TRUE, row.names = FALSE)
-          cat(sprintf("%s: got %6d runs starting at %15.0f\r", 
-                      batchMsg, nrow(r), runID), file = stderr())
+          message(sprintf("%s: got %6d runs starting at %15.0f\r", 
+                          batchMsg, nrow(r), runID))
           runID <- max(r$runID)
         }
         
@@ -130,8 +129,8 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
                                     hitID = hitID)
           
           if (!isTRUE(nrow(h) > 0)) break
-          cat(sprintf("%s: got %6d hits starting at %15.0f\r", 
-                      batchMsg, nrow(h), hitID), file = stderr())
+          message(sprintf("%s: got %6d hits starting at %15.0f\r", 
+                          batchMsg, nrow(h), hitID))
           
           ## add these hit records to the DB
           DBI::dbWriteTable(sql$con, "hits", h, append = TRUE, row.names = FALSE)
@@ -153,8 +152,8 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
           g <- srvGPSforTagProject(projectID = projectID, batchID = batchID, 
                                    gpsID = gpsID)
           if (!isTRUE(nrow(g) > 0)) break
-          cat(sprintf("%s: got %6d GPS fixes                     \r", 
-                      batchMsg, nrow(g)), file = stderr())
+          message(sprintf("%s: got %6d GPS fixes                     \r", 
+                          batchMsg, nrow(g)))
           dbInsertOrReplace(sql$con, "gps", g)
           gpsID <- max(g$gpsID)
         }

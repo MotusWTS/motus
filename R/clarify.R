@@ -218,7 +218,7 @@ where
                     "one from a different project.\n",
                     "In each case, the tag with the smaller motusID was used.\n")
 
-        cat("To see how ambiguous tags were resolved, you can do `clarify(s)`\n")
+        message("To see how ambiguous tags were resolved, you can do `clarify(s)`")
     } else {
         ## TODO limited claims
         idfromto = cbind(id, from, to)

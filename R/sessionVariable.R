@@ -51,7 +51,7 @@ sessionVariable = function(name, info=name, env=motus_vars, class="character", v
             if (is.function(info)) {
                 v = info()
             } else {
-                cat("Please enter a value for ", info, "\n==> ", sep="")
+                message("Please enter a value for ", info, "\n==> ")
                 v = readLines(n=1)
             }
             if (isTRUE(nchar(v) > 0)) {

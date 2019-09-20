@@ -24,5 +24,5 @@ motusLogout = function () {
     motus_vars$authToken = NULL
     motus_vars$userLogin = NULL
     motus_vars$userPassword = NULL
-    cat("\n   Salut - bye bye!\n\n")
+    message("   Salut - bye bye!")
 }

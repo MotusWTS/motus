@@ -27,7 +27,7 @@ srvAuth = function() {
             message("Server dataVersion is ", res$dataVersion, ", overriding to assume 2")
             motus_vars$dataVersion = 2 # Until server is updated
         }
-        ## cat(sprintf("Got authentication token from %s  \r",motus_vars$dataServerURL))
+        ## message(sprintf("Got authentication token from %s  ", motus_vars$dataServerURL))
         return(res$authToken)
     }, error = function(e) {
         motus_vars$userLogin = NULL

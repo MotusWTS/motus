@@ -198,5 +198,5 @@ safeSQL = function(con, busyTimeout = 300) {
 #' @export
 
 print.safeSQL = function(x, ...) {
-    cat("Safe SQL object attached to ", x$db, "\nDo ?safeSQL for more details.\n")
+    message("Safe SQL object attached to ", x$db, "\nDo ?safeSQL for more details.")
 }
