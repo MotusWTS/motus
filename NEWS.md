@@ -4,6 +4,12 @@
 * Switch to data version 2
     * Includes new CTT antennas
 
+### Small Changes
+* Replace all `cat()` with `message()` (now suppressible)
+* Add `recvUtcOffset` and `tsCorrected` to `alltags` view
+
+### Bug fixes
+* Fixed bug where `tagme(..., countOnly = TRUE)` failed
 
 # motus 2.0.0 (2019-08-02)
 
