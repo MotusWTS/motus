@@ -7,7 +7,7 @@
 site.fun(df)
 }
 \arguments{
-\item{data}{dataframe of Motus detection data containing at a minimum fullID, ts, lat, lon}
+\item{df}{dataframe of Motus detection data containing at a minimum fullID, ts, lat, lon}
 }
 \description{
 Create dataframe for siteTrans function
@@ -15,3 +15,4 @@ Create dataframe for siteTrans function
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}
 }
+\keyword{internal}

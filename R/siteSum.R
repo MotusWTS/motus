@@ -68,9 +68,10 @@ siteSum <- function(data, units = "hours"){
                   recvDeployName = paste(.data$recvDeployName,
                                          round(.data$recvLon, digits = 1), sep = ", "),
                   ts = lubridate::as_datetime(.data$ts, tz = "UTC")) %>%
+    dplyr::mutate(recvDeployName = stats::reorder(.data$recvDeployName, 
+                                                  .data$recvLat)) %>% ## order site by latitude
     as.data.frame()
   
-  data <- within(data, recvDeployName <- stats::reorder(recvDeployName, (recvLat))) ## order site by latitude
   #  data$ts <- as_datetime(data$ts, tz = "UTC")
   grouped <- dplyr::group_by(data, .data$recvDeployName)
   data <- dplyr::summarise(grouped,

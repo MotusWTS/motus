@@ -6,9 +6,15 @@
 \usage{
 \method{print}{safeSQL}(x, ...)
 }
+\arguments{
+\item{x}{safeSQL object}
+
+\item{...}{For print() compatibility}
+}
 \value{
-: invisible(NULL)
+invisible(NULL)
 }
 \description{
 safeSQL method for printing
 }
+\keyword{internal}

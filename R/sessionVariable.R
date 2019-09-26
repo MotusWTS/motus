@@ -42,7 +42,7 @@ sessionVariable = function(name, info=name, env=motus_vars, class="character", v
     getSet = function(val) {
         if ( ! missing(val)) {
             ## value supplied, so set it
-            return(invisible(curVal <<- val))
+            return(invisible(curVal <- val))
         } else if (! is.null(curVal)) {
             ## value not supplied, but already assigned
             return (curVal)

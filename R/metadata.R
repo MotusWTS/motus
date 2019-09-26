@@ -29,7 +29,7 @@
 #'                    dir = system.file("extdata", package = "motus"))
 #'                    
 #' # Add extended metadata to your file
-#' metadata(sql.motus)
+#' \dontrun{metadata(sql.motus)}
 #'   
 #' # Access different metadata tables
 #' library(dplyr)

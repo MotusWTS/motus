@@ -86,7 +86,7 @@
 #' to deadlock-prevention by the database are retried after a random wait
 #' of 0 to 10 seconds.
 #'
-#' @export
+#' @keywords internal
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
@@ -176,9 +176,10 @@ safeSQL = function(con, busyTimeout = 300) {
 
 #' safeSQL method to provide read access to some internals
 #'
+#' @param x object
 #' @param name item name; must be one of 'db' or 'con'
 #'
-#' @return: either the database filename, or the db connection
+#' @return either the database filename, or the db connection
 #'
 #' @export
 
@@ -192,10 +193,10 @@ safeSQL = function(con, busyTimeout = 300) {
 }
 
 #' safeSQL method for printing
-#'
-#' @return: invisible(NULL)
-#'
-#' @export
+#' @param x safeSQL object
+#' @param ... For print() compatibility
+#' @return invisible(NULL)
+#' @keywords internal
 
 print.safeSQL = function(x, ...) {
     message("Safe SQL object attached to ", x$db, "\nDo ?safeSQL for more details.")

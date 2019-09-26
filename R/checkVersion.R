@@ -18,7 +18,7 @@ checkVersion <- function(src) {
   # If database has admin info table
   if (dplyr::db_has_table(src$con, "admInfo")) {
     local_version <- dplyr::tbl(src$con, "admInfo") %>%
-      dplyr::pull(db_version) %>%
+      dplyr::pull(.data$db_version) %>%
       as.POSIXct(., tz = "UTC")
     message("Your motus sqlite file version: ", local_version)
   

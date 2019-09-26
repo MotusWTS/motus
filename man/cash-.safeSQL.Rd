@@ -7,10 +7,12 @@
 \method{$}{safeSQL}(x, name)
 }
 \arguments{
+\item{x}{object}
+
 \item{name}{item name; must be one of 'db' or 'con'}
 }
 \value{
-: either the database filename, or the db connection
+either the database filename, or the db connection
 }
 \description{
 safeSQL method to provide read access to some internals

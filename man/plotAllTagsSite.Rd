@@ -33,7 +33,6 @@ library(dplyr)
 tbl.alltags <- tbl(sql.motus, "alltags") 
 
 # convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
-library(dplyr)
 df.alltags <- tbl.alltags \%>\% 
   collect() \%>\% 
   as.data.frame() 

@@ -15,9 +15,8 @@ getRunsFilterID(src, filterName, motusProjID = NA)
 
 \item{filterName}{unique name given to the filter}
 
-\item{motusProjID}{optional project ID attached to the filter in order to share with other users of the same project.}
-
-\item{descr}{optional filter description detailing what the filter is meant to do}
+\item{motusProjID}{optional project ID attached to the filter in order to
+share with other users of the same project.}
 }
 \value{
 an integer filterID
@@ -32,3 +31,4 @@ return the specific one matching the project ID (including NA).
 \author{
 Denis Lepage, Bird Studies Canada
 }
+\keyword{internal}

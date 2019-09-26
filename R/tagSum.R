@@ -60,7 +60,7 @@
 tagSum <- function(data){
   data <- data %>% dplyr::collect() %>% as.data.frame()
   data <- dplyr::mutate(data,
-                        recvLat = dplyr::if_else((is.na(.data$gpsLat)|.data$gpsLat == 0|gpsLat ==999),
+                        recvLat = dplyr::if_else((is.na(.data$gpsLat)|.data$gpsLat == 0|.data$gpsLat ==999),
                                                  .data$recvDeployLat,
                                                  .data$gpsLat),
                         recvLon = dplyr::if_else((is.na(.data$gpsLon)|.data$gpsLon == 0|.data$gpsLon == 999),
@@ -77,11 +77,11 @@ tagSum <- function(data){
                           last_ts=max(.data$ts),
                           tot_ts = difftime(max(.data$ts), min(.data$ts), units = "secs"),
                           num_det = length(.data$ts)) ## total time in seconds
-  tmp <- merge(tmp, subset(data, select = c(ts, fullID, recvDeployName, recvLat, recvLon)),
+  tmp <- merge(tmp, subset(data, select = c("ts", "fullID", "recvDeployName", "recvLat", "recvLon")),
                by.x = c("first_ts", "fullID"), by.y = c("ts", "fullID"), all.x = TRUE)
-  tmp <- unique(merge(tmp, subset(data, select = c(ts, fullID, recvDeployName, recvLat, recvLon)),
+  tmp <- unique(merge(tmp, subset(data, select = c("ts", "fullID", "recvDeployName", "recvLat", "recvLon")),
                       by.x = c("last_ts", "fullID"), by.y = c("ts", "fullID"), all.x = TRUE))
-  tmp <- dplyr::rename(tmp, first_site = recvDeployName.x, last_site = recvDeployName.y)
+  tmp <- dplyr::rename(tmp, first_site = .data$recvDeployName.x, last_site = .data$recvDeployName.y)
   tmp$dist <- with(tmp, latLonDist(recvLat.x, recvLon.x, recvLat.y, recvLon.y)) ## distance in meters
   tmp$rate <- with(tmp, dist/(as.numeric(tot_ts))) ## rate of travel in m/s
   tmp$bearing <- with(tmp, geosphere::bearing(matrix(c(recvLon.x, recvLat.x), ncol=2),

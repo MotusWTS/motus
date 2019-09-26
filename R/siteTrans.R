@@ -82,8 +82,8 @@ siteTrans <- function(data, latCoord = "recvDeployLat", lonCoord = "recvDeployLo
                   ts = lubridate::as_datetime(.data$ts, tz = "UTC")) %>% 
     dplyr::group_by(.data$motusTagID, .data$tagDeployID) %>% 
     tidyr::nest() %>%
-    dplyr::mutate(consec = purrr::map(data, consec.fun),
-                  site = purrr::map(consec, site.fun))
+    dplyr::mutate(consec = purrr::map(.data$data, consec.fun),
+                  site = purrr::map(.data$consec, site.fun))
   
   trans <- tidyr::unnest(data, .data$site) %>%
     dplyr::mutate(tot_ts = difftime(.data$ts.y, .data$ts.x, units = "secs"),

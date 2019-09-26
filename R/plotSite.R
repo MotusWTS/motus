@@ -2,9 +2,12 @@
 #'
 #' Plot tag ID vs time for all tags detected by site, coloured by antenna bearing
 #'
-#' @param data a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-#' including at a minimum variables for ts, antBearing, fullID, recvDeployName
-#' @export
+#' @param data a selected table from .motus data, eg. "alltags", or a data.frame
+#'   of detection data including at a minimum variables for ts, antBearing,
+#'   fullID, recvDeployName
+#' @param sitename Character vector. Which sites to plot? Defaults to all unique
+#'   sites.
+#' 
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @examples
@@ -36,6 +39,8 @@
 #'
 #' #Plot only detections for specified tags for data.frame df.alltags
 #' plotSite(filter(df.alltags, motusTagID %in% c(16047, 16037, 16039)))
+#'
+#' @export
 
 plotSite <- function(data, sitename = unique(data$recvDeployName)){
   data <- data %>%  

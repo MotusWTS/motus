@@ -5,16 +5,13 @@
 #' return the specific one matching the project ID (including NA). 
 #'
 #' @param src dplyr sqlite src, as returned by \code{dplyr::src_sqlite()}
-#'
-#' @param filterName unique name given to the filter 
-#'
-#' @param motusProjID optional project ID attached to the filter in order to share with other users of the same project.
-#'
-#' @param descr optional filter description detailing what the filter is meant to do
+#' @param filterName unique name given to the filter
+#' @param motusProjID optional project ID attached to the filter in order to
+#'   share with other users of the same project.
 #'
 #' @return an integer filterID
 #'
-#' @export
+#' @keywords internal
 #'
 #' @author Denis Lepage, Bird Studies Canada
 

@@ -49,7 +49,7 @@ simSiteDet <- function(data){
     dplyr::distinct() ## get only fields we want duplicates of
   
   tmp$dup <- duplicated(tmp[c("motusTagID","ts")]) | duplicated(tmp[c("motusTagID","ts")], fromLast = TRUE) ## label all duplicates
-  tmp <- unique(dplyr::filter(tmp, dup == TRUE)) ## keep only duplicates
+  tmp <- unique(dplyr::filter(tmp, .data$dup == TRUE)) ## keep only duplicates
   tmp <- merge(tmp, dplyr::select(data, "motusTagID", "ts", "recvDeployName"), all.x = TRUE) ## merge to get sites of each duplicate ts and motusTagID
   tmp <- unique(tmp) ## remove duplicates
   tmp <- dplyr::group_by(tmp, .data$motusTagID, .data$ts) %>% 
