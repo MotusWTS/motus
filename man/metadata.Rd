@@ -24,6 +24,26 @@ update entire metadata for receivers and tags from Motus server. Contrary to tag
 this function retrieves the entire set of metadata for tags and receivers, and not only those
 pertinent to the detections of your local file.
 }
+\examples{
+
+# download and access data from project 176 in sql format
+\dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+
+# OR use example sql file included in `motus`
+sql.motus <- tagme(176, update = FALSE, 
+                   dir = system.file("extdata", package = "motus"))
+                   
+# Add extended metadata to your file
+\dontrun{metadata(sql.motus)}
+  
+# Access different metadata tables
+library(dplyr)
+tbl(sql.motus, "species")
+tbl(sql.motus, "projs")
+tbl(sql.motus, "tagDeps")
+# Etc.
+  
+}
 \seealso{
 \code{\link{tagme}} provides an option to update only the metadata relevant to a specific
 project or receiver file.
