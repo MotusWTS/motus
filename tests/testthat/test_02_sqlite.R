@@ -1,7 +1,30 @@
 context("sql tables")
 
 setup(file.copy(system.file("extdata", "project-176.motus", package = "motus"), "."))
-teardown(unlink("project-176.motus"))
+teardown({
+  unlink("project-176.motus")
+  unlink("temp.motus")
+})
+
+test_that("ensureDBTables() creates database", {
+  temp <- dplyr::src_sqlite("temp.motus", create = TRUE)
+  expect_length(DBI::dbListTables(temp$con), 0)
+  
+  expect_silent(ensureDBTables(temp, 176))
+  expect_silent(temp <- dplyr::src_sqlite("temp.motus", create = FALSE))
+  expect_length(t <- DBI::dbListTables(temp$con), 25)
+  
+  # Expect columns in the tables
+  for(i in t) expect_gte(ncol(dplyr::tbl(temp$con, !!i)), 2)
+
+  # Expect no data in the tables
+  for(i in t[!t %in% c("admInfo", "meta")]){
+    expect_equal(nrow(DBI::dbGetQuery(temp$con, paste0("SELECT * FROM ", !!i))),
+                 0)
+  }
+  expect_equal(nrow(DBI::dbGetQuery(temp$con, "SELECT * FROM admInfo")), 1)
+  expect_equal(nrow(DBI::dbGetQuery(temp$con, "SELECT * FROM meta")), 2)
+})
 
 test_that("new tables have character ant and port", {
   tags <- DBI::dbConnect(RSQLite::SQLite(), "project-176.motus")
