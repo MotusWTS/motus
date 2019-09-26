@@ -10,7 +10,7 @@
 #'
 #' @return data.frame with these columns:
 #' \itemize{
-#'    \item gpsID    numeric GSP ID
+#'    \item gpsID    numeric GPS ID
 #'    \item ts       numeric system timestamp
 #'    \item gpsts    numeric GPS timestamp
 #'    \item batchID  integer batch ID

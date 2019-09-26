@@ -24,6 +24,7 @@ cableLengthMeters
 cableType
 codeSet
 countOnly
+CTT
 dbConnect
 dbQuoteStrings
 dbWriteTable
@@ -56,6 +57,7 @@ geosphere
 github
 GPS
 gpsAlt
+gpsID
 gpsLat
 gpsLon
 gpsts
