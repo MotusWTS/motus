@@ -107,7 +107,10 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
             memDecompress("bzip2", asChar = TRUE)
           
         } else {
-          # previous code with CUrl
+          # previous code with RCurl
+          if(!requireNamespace("RCurl", quietly = TRUE)) {
+            stop("Package 'RCurl' required", call. = FALSE)
+          }
           curl = RCurl::getCurlHandle()
           RCurl::curlSetOpt(curl=curl,
                             .opts = list(
