@@ -48,7 +48,7 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
             ## an error propagates up, exiting this function.
             
             query <- list(authToken = motus_vars$authToken, 
-                          version = motus_vars$dataVersion)
+                          dataVersion = motus_vars$dataVersion)
             
         } else {
             query <- list()
@@ -64,8 +64,6 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
         if (TRUE) {      
           
           api_query <- function(url, json, ua, timeout) {
-            
-            
             httr::POST(url, body = list("json" = json), encode = "form",
                        httr::config(http_content_decoding = 0), ua, 
                        httr::timeout(timeout))
@@ -139,6 +137,7 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
             }
             stop(rv$error, call. = FALSE)
         }
+        
         if ("data" %in% names(rv)) {
             return(rv$data)
         }

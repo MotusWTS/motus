@@ -28,7 +28,7 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
     return(srvSizeOfUpdateForTagProject(projectID = projectID, 
                                         batchID = batchID))
   }
-  
+
   ambigProjs <- srvProjectAmbiguitiesForTagProject(projectID)
   dbInsertOrReplace(src$con, "projAmbig", ambigProjs)
   projectIDs <- unique(c(projectID, ambigProjs$ambigProjectID))
@@ -59,6 +59,13 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
       ## in order to count runs and hits
       b <- srvBatchesForTagProject(projectID = projectID, batchID = batchID)
       if (!isTRUE(nrow(b) > 0)) break
+
+      # Check that version matches (just in case)
+      if(any(b$version != dplyr::tbl(src$con, "admInfo") %>%
+             dplyr::pull(.data$data_version))) {
+        stop("Server data version doesn't match the version in this database",
+             call. = FALSE)
+      }
       
       ## temporary work-around to batches with incorrect starting timestamps
       ## (e.g. negative, or on CLOCK_MONOTONIC) that make a batch appears
