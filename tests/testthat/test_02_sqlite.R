@@ -1,6 +1,11 @@
 context("sql tables")
 
-setup(file.copy(system.file("extdata", "project-176.motus", package = "motus"), "."))
+setup({
+  unlink("project-176.motus")
+  unlink("temp.motus")
+  file.copy(system.file("extdata", "project-176.motus", package = "motus"), ".")
+})
+
 teardown({
   unlink("project-176.motus")
   unlink("temp.motus")

@@ -1,12 +1,15 @@
 context("Test Server Access")
 
-teardown(unlink("project-176.motus"))
-teardown(unlink("project-10.motus"))
+
+  unlink("project-10.motus")
+})
 
 test_that("tagme() errors appropriately", {
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
+  
+  if(file.exists("project-10.motus")) unlink("project-10.motus")
   
   sessionVariable(name = "userLogin", val = "motus.sample")
   sessionVariable(name = "userPassword", val = "motus.sample")
@@ -14,14 +17,15 @@ test_that("tagme() errors appropriately", {
   expect_error(expect_message(tagme(projRecv = 10, new = TRUE, update = TRUE), 
                               "updateMotusDb"),
                "You do not have permission")
-  
-  expect_message(tagme(projRecv = 176, new = TRUE, update = TRUE))
+  if(file.exists("project-10.motus")) unlink("project-10.motus")
 })
 
 test_that("tagme() downloads data", {
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
+  
+  if(file.exists("project-176.motus")) unlink("project-176.motus")
   
   sessionVariable(name = "userLogin", val = "motus.sample")
   sessionVariable(name = "userPassword", val = "motus.sample")
@@ -45,12 +49,13 @@ test_that("tagme() downloads data", {
 test_that("tagme with countOnly (tellme)", {
   sessionVariable(name = "userLogin", val = "motus.sample")
   sessionVariable(name = "userPassword", val = "motus.sample")
-  expect_silent(tagme(projRecv = 176, new = TRUE, 
+  expect_silent(tagme(projRecv = 176, new = FALSE, 
                       update = TRUE, countOnly = TRUE)) %>%
     expect_is("data.frame")
   
   expect_silent(tellme(projRecv = 176, new = FALSE)) %>%
     expect_is("data.frame")
+  if(file.exists("project-10.motus")) unlink("project-10.motus")
 })
 
 
