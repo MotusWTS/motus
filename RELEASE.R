@@ -35,15 +35,29 @@ devtools::check(run_dont_test = TRUE)   # Local, run long-running examples
 system("cd ..; R CMD build motus")
 system(paste0("cd ..; R CMD check motus_", v, ".tar.gz"))
 system(paste0("cd ..; R CMD check motus_", v, ".tar.gz --as-cran"))
+
 rhub::check_on_macos(show_status = FALSE)
 rhub::check_on_windows(show_status = FALSE)
-rhub::check_for_cran()
+rhub::check_for_cran(show_status = FALSE)
 
 ## Windows checks (particularly if submitting to CRAN)
 devtools::check_win_release() # Win builder
 devtools::check_win_devel()
 devtools::check_win_oldrelease()
 
+
+## Note: non-ASCII files found
+# Find them
+
+problems <- data.frame(file = list.files(recursive = TRUE, full.names = TRUE),
+                       problem = as.character(NA), stringsAsFactors = FALSE)
+problems <- dplyr::as_tibble(problems)
+for(i in 1:nrow(problems)) {
+  p <- tools::showNonASCIIfile(file = problems$file[i])
+  if(length(p) > 0) problems$problem[i] <- as.list(p)
+}
+problems <- dplyr::mutate(problems, yes = purrr::map_lgl(problem, ~length(na.omit(.)) > 0)) %>%
+  dplyr::filter(yes)
 
 ## Push to GitHub
 
