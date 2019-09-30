@@ -26,13 +26,8 @@ spelling::update_wordlist() # All remaining words will be added to the ignore WO
 
 ## Finalize package version
 # - Update DESCRIPTION - package version
-v <- "3.0.0"
-ensure_version(v)
 # - Update .onLoad - API version
-make_master()
-#make_beta()
-#make_sandbox()
-
+v <- "3.0.0"
 
 ## Checks
 devtools::check(run_dont_test = TRUE)   # Local, run long-running examples
