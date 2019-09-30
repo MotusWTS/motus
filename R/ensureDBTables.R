@@ -508,6 +508,16 @@ CREATE INDEX IF NOT EXISTS runsFilters_filterID_runID_motusTagID ON runsFilters 
       battery FLOAT,
       temperature FLOAT);")
   }
+  
+  if(! "nodeDeps" %in% tables) {
+    sql("CREATE TABLE IF NOT EXISTS nodeDeps (
+      deployID INTEGER NOT NULL,
+      nodeDeployID BIGINT PRIMARY KEY NOT NULL, 
+      latitude  FLOAT, 
+      longitude FLOAT, 
+      tsStart FLOAT NOT NULL, 
+      tsEnd FLOAT NOT NULL);")
+  }
 
   rv = makeAllambigsView(src)
   rv = makeAlltagsView(src)
