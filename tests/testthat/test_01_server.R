@@ -1,9 +1,5 @@
 context("Test Server Access")
 
-
-  unlink("project-10.motus")
-})
-
 test_that("tagme() errors appropriately", {
   skip_on_cran()
   skip_on_appveyor()
