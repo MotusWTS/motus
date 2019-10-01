@@ -13,13 +13,13 @@ getMotusDBSrc(recv = NULL, proj = NULL, create = FALSE,
 \item{proj}{integer motus project number
 exactly  one of \code{proj} or \code{recv} must be specified.}
 
-\item{create}{Is this a new database?  Default: FALSE.
-Same semantics as for src_sqlite()'s parameter of the same
-name:  the DB must already exist unless you specify \code{create=TRUE}}
+\item{create}{Is this a new database?  Default: FALSE. Same semantics as for
+\code{src_sqlite()}'s parameter of the same name:  the DB must already exist
+unless you specify \code{create = TRUE}}
 
-\item{dbDir}{path to folder with existing receiver databases
-Default: \code{motus_vars$dbDir}, which is set to the current folder
-by \code{getwd()} when this library is loaded.}
+\item{dbDir}{path to folder with existing receiver databases Default:
+\code{motus_vars$dbDir}, which is set to the current folder by
+\code{getwd()} when this library is loaded.}
 }
 \value{
 a src_sqlite for the receiver; if the receiver is new, this database

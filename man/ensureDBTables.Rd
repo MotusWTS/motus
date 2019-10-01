@@ -9,16 +9,16 @@ ensureDBTables(src, projRecv, deviceID)
 \arguments{
 \item{src}{dplyr sqlite src, as returned by \code{dplyr::src_sqlite()}}
 
-\item{projRecv}{integer scalar motus project ID number \emph{or}
-character scalar receiver serial number; must be specified if
-\code{src} does not already contain a table named \code{meta}.}
+\item{projRecv}{integer scalar motus project ID number \emph{or} character scalar
+receiver serial number; must be specified if \code{src} does not already
+contain a table named \code{meta}.}
 
-\item{deviceID}{integer scalar motus deviceID; must be specified
-when this is a new receiver database.}
+\item{deviceID}{integer scalar motus deviceID; must be specified when this is
+a new receiver database.}
 }
 \value{
-returns a dplyr::tbl representing the alltags virtual table
-which is created in \code{src}.
+returns a dplyr::tbl representing the alltags virtual table which is
+created in \code{src}.
 }
 \description{
 make sure a tag or receiver database has the required tables
@@ -26,3 +26,4 @@ make sure a tag or receiver database has the required tables
 \author{
 John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
 }
+\keyword{internal}

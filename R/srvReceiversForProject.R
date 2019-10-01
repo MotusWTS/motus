@@ -25,7 +25,7 @@
 #' }
 #' and one row for each receiver deployment by project \code{projectID}
 #'
-#' @export
+#' @keywords internal
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 

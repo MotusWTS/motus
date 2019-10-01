@@ -25,7 +25,7 @@
 #'
 #' @param rv return value
 #' @param src sqlite database source
-#' @export
+#' 
 #' @author Denis Lepage \email{dlepage@@bsc-eoc.org}
 #'
 #' @return rv

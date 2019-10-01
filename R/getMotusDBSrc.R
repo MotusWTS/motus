@@ -9,13 +9,12 @@
 #' @param proj integer motus project number
 #' exactly  one of `proj` or `recv` must be specified.
 #'
-#' @param create Is this a new database?  Default: FALSE.
-#' Same semantics as for src_sqlite()'s parameter of the same
-#' name:  the DB must already exist unless you specify \code{create=TRUE}
-#'
-#' @param dbDir path to folder with existing receiver databases
-#' Default: \code{motus_vars$dbDir}, which is set to the current folder
-#' by \code{getwd()} when this library is loaded.
+#' @param create Is this a new database?  Default: FALSE. Same semantics as for
+#'   `src_sqlite()`'s parameter of the same name:  the DB must already exist
+#'   unless you specify `create = TRUE`
+#' @param dbDir path to folder with existing receiver databases Default:
+#'   `motus_vars$dbDir`, which is set to the current folder by
+#'   `getwd()` when this library is loaded.
 #'
 #' @return a src_sqlite for the receiver; if the receiver is new, this database
 #' will be empty, but have the correct schema.

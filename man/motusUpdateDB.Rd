@@ -7,8 +7,8 @@
 motusUpdateDB(projRecv, src, countOnly, forceMeta = FALSE)
 }
 \arguments{
-\item{projRecv}{integer scalar project code from motus.org, \emph{or}
-character scalar receiver serial number}
+\item{projRecv}{integer scalar project code from motus.org, \emph{or} character
+scalar receiver serial number}
 
 \item{src}{src_sqlite object representing the database}
 
@@ -21,8 +21,8 @@ database.}
 receivers, even if we already have them.}
 }
 \value{
-\code{src} if \code{countOnly} is FALSE.  Otherwise, a list
-of counts of items available for an update.
+\code{src} if \code{countOnly} is FALSE.  Otherwise, a list of counts
+of items available for an update.
 }
 \description{
 update a motus tag detection database (backend)
@@ -37,3 +37,4 @@ motus servers.  It is not intended to be called directly by users.
 \author{
 John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
 }
+\keyword{internal}

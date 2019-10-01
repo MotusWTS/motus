@@ -23,3 +23,4 @@ The deviceID is returned for any valid receiver serial numbers.
 \author{
 John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
 }
+\keyword{internal}

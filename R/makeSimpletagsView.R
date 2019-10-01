@@ -42,7 +42,7 @@
 #'    \item recvProjID; integer unique ID of motus project that deployed receiver
 #'    \item recvProj; character; short name of motus project that deployed receiver
 #' }
-#' @export
+#' @keywords internal
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 #'

@@ -30,3 +30,4 @@ project, and only makes sense for mobile receiver deployments.
 \author{
 John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
 }
+\keyword{internal}

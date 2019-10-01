@@ -1,16 +1,16 @@
 #' make sure a tag or receiver database has the required tables
 #'
-#' @param src dplyr sqlite src, as returned by \code{dplyr::src_sqlite()}
-#'
-#' @param projRecv integer scalar motus project ID number *or*
-#'     character scalar receiver serial number; must be specified if
-#' \code{src} does not already contain a table named \code{meta}.
-#'
-#' @param deviceID integer scalar motus deviceID; must be specified
-#' when this is a new receiver database.
-#'
-#' @return returns a dplyr::tbl representing the alltags virtual table
-#' which is created in \code{src}.
+#' @param src dplyr sqlite src, as returned by `dplyr::src_sqlite()`
+#' @param projRecv integer scalar motus project ID number *or* character scalar
+#'   receiver serial number; must be specified if `src` does not already
+#'   contain a table named `meta`.
+#' @param deviceID integer scalar motus deviceID; must be specified when this is
+#'   a new receiver database.
+#'   
+#' @return returns a dplyr::tbl representing the alltags virtual table which is
+#'   created in `src`.
+#' 
+#' @keywords internal
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 

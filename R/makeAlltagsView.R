@@ -5,7 +5,6 @@
 #' receiver.
 #'
 #' @param db dplyr src_sqlite to detections database
-#'
 #' @param name character scalar; name for the virtual table.
 #'     Default: 'alltags'.
 #'
@@ -76,7 +75,7 @@
 #' name in \code{db}.  The virtual table is an SQL VIEW, which will persist in \code{db}
 #' across R sessions.
 #'
-#' @export
+#' @keywords internal
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 #'

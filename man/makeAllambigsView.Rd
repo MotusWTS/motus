@@ -21,10 +21,10 @@ By default, the columns in the virtual table are:
 }
 }
 \description{
-Creates a virtual table (really a 'view') in a motus database that
-converts the list of tags associated with ambiguous detections from columns to rows
-this is mainly used by the alltags view to expand the detections records showing each tag
-in addition to the ambigID
+Creates a virtual table (really a 'view') in a motus database that converts
+the list of tags associated with ambiguous detections from columns to rows
+this is mainly used by the alltags view to expand the detections records
+showing each tag in addition to the ambigID
 }
 \note{
 The new virtual table replaces any previous virtual table by the same
@@ -34,3 +34,4 @@ across R sessions.
 \author{
 Denis Lepage
 }
+\keyword{internal}

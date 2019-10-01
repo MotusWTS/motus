@@ -7,8 +7,8 @@
 getDBFilename(projRecv, dir = getwd())
 }
 \arguments{
-\item{projRecv}{integer scalar project code from motus.org, \emph{or}
-character scalar receiver serial number.}
+\item{projRecv}{integer scalar project code from motus.org, \emph{or} character
+scalar receiver serial number.}
 
 \item{dir}{character scalar: path to folder where databases are stored
 default: \code{getwd()}}
@@ -24,13 +24,14 @@ get the full filename for a tag project or receiver database
 }
 \examples{
 
-## getDBFilename(123) # get the path to the database for tag project 123
+# get the path to the database for tag project 123
+getDBFilename(123) 
 
-## getDBFilename("SG-1234BBBK5678") # get the path to the database
-##     for receiver SG-1234BBBK5678
+# get the path to the database for receiver SG-1234BBBK5678
+getDBFilename("SG-1234BBBK5678")
 
-## getDBFilename(5, "/home/me/mydbs") # get the path to the
-##       database for project 5, which is in folder \\code{/home/me/mydbs}
+# get the path to the database for project 5 in folder '/home/me/mydbs'
+getDBFilename(5, "/home/me/mydbs") 
 
 }
 \seealso{
@@ -39,3 +40,4 @@ get the full filename for a tag project or receiver database
 \author{
 John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
 }
+\keyword{internal}

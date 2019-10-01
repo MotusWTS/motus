@@ -14,7 +14,8 @@ dbInsertOrReplace(con, name, df, replace = TRUE)
 
 \item{df}{data from which to write data.}
 
-\item{replace}{boolean that determines whether existing records are replaced or ignored.}
+\item{replace}{boolean that determines whether existing records are replaced
+or ignored.}
 }
 \value{
 no return value
@@ -28,3 +29,4 @@ table-wise.
 \author{
 John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
 }
+\keyword{internal}

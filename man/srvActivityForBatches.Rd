@@ -28,3 +28,4 @@ data.frame with these columns:
 \description{
 get the activity of specific batches from the data server
 }
+\keyword{internal}

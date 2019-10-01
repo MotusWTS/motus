@@ -14,6 +14,8 @@
 #' \item numHits integer number of hits
 #' \item ts real processing timestamp
 #' }
+#' 
+#' @keywords internal
 
 srvActivityForBatches <- function(batchID = 0, ant = NULL, hourBin = NULL) {
   x <- srvQuery(API = motus_vars$API_ACTIVITY_FOR_BATCHES,
