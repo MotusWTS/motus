@@ -8,58 +8,43 @@
 #' 
 #' Commonly used functions:
 #'
-#' \enumerate{
-#'   \item Download telemetry data
-#'   \itemize{
-#'     \item \code{\link{tagme}()}
-#'     \item \code{\link{tellme}()}
-#'     \item \code{\link{metadata}()}
-#'     \item \code{\link{checkVersion}()}
-#'     }
+#' 1. Download telemetry data
+#'     - [tagme()]
+#'     - [tellme()]
+#'     - [metadata()]
+#'     - [checkVersion()]
 #'
-#'  \item Create data filters
-#'  \itemize{
-#'    \item \code{\link{listRunsFilters}()}
-#'    \item \code{\link{getRunsFilters}()}
-#'    \item \code{\link{getRunsFilterID}()}
-#'    \item \code{\link{createRunsFilter}()}
-#'    \item \code{\link{writeRunsFilter}()}
-#'    \item \code{\link{deleteRunsFilter}()}
-#'    }
+#' 2. Create data filters
+#'     - [listRunsFilters()]
+#'     - [getRunsFilters()]
+#'     - [createRunsFilter()]
+#'     - [writeRunsFilter()]
+#'     - [deleteRunsFilter()]
 #'
-#'  \item Summarize data
-#'  \itemize{
-#'    \item \code{\link{tagSum}()}
-#'    \item \code{\link{tagSumSite}()}
-#'    \item \code{\link{simSiteDet}()}
-#'    \item \code{\link{siteSum}()}
-#'    \item \code{\link{siteSumDaily}()}
-#'    \item \code{\link{siteTrans}()}
-#'    }
+#' 3. Summarize data
+#'     - [tagSum()]
+#'     - [tagSumSite()]
+#'     - [simSiteDet()]
+#'     - [siteSum()]
+#'     - [siteSumDaily()]
+#'     - [siteTrans()]
 #'    
-#'  \item Plot data
-#'  \itemize{
-#'    \item \code{\link{plotAllTagsCoord}()}
-#'    \item \code{\link{plotAllTagsSite}()}
-#'    \item \code{\link{plotDailySiteSum}()}
-#'    \item \code{\link{plotRouteMap}()}
-#'    \item \code{\link{plotSite}()}
-#'    \item \code{\link{plotSiteSig}()}
-#'    \item \code{\link{plotTagSig}()}
-#'    }
+#' 4. Plot data
+#'     - [plotAllTagsCoord()]
+#'     - [plotAllTagsSite()]
+#'     - [plotDailySiteSum()]
+#'     - [plotRouteMap()]
+#'     - [plotSite()]
+#'     - [plotSiteSig()]
+#'     - [plotTagSig()]
 #'    
-#'  \item Sunrises and sets
-#'  \itemize{
-#'    \item \code{\link{sunRiseSet}()}
-#'    \item \code{\link{timeToSunriset}()}
-#'    }
-#' }
+#' 5. Sunrises and sets
+#'     - [sunRiseSet()]
+#'     - [timeToSunriset()]
 #'
 #' We also include a practice data set:
 #'
-#'  \itemize{
-#'    \item \code{\link{shorebirds}}
-#'    }
+#' - [shorebirds]
 #'
 #'
 #' @references
