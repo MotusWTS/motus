@@ -18,8 +18,6 @@ test_that("tagme() errors appropriately", {
 
 test_that("tagme() downloads data", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
   
   if(file.exists("project-176.motus")) unlink("project-176.motus")
   
@@ -40,9 +38,11 @@ test_that("tagme() downloads data", {
   for(i in names(a)[names(a) != "ant"]) {
     expect_is(a[, !!i][[1]], c("integer", "numeric"))
   }
+
 })
 
 test_that("tagme with countOnly (tellme)", {
+  skip_on_cran()
   sessionVariable(name = "userLogin", val = "motus.sample")
   sessionVariable(name = "userPassword", val = "motus.sample")
   expect_silent(tagme(projRecv = 176, new = FALSE, 
@@ -51,7 +51,8 @@ test_that("tagme with countOnly (tellme)", {
   
   expect_silent(tellme(projRecv = 176, new = FALSE)) %>%
     expect_is("data.frame")
-  if(file.exists("project-10.motus")) unlink("project-10.motus")
+  
+  if(file.exists("project-176.motus")) unlink("project-10.motus")
 })
 
 
