@@ -13,7 +13,7 @@
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 #' 
-#' @keywords internal
+#' @noRd
 
 motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
   sql <- safeSQL(src)

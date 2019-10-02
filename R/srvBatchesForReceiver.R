@@ -15,7 +15,7 @@
 #' \item ts real processing timestamp
 #' }
 #'
-#' @keywords internal
+#' @noRd
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 

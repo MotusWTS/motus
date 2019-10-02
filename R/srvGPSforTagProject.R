@@ -25,7 +25,7 @@
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 #' 
-#' @keywords internal
+#' @noRd
 
 srvGPSforTagProject = function(projectID, batchID, gpsID = 0) {
     x <- srvQuery(API = motus_vars$API_GPS_FOR_TAG_PROJECT, 

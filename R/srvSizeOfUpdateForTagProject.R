@@ -13,7 +13,7 @@
 #' \item size - estimate of transfer size, in bytes
 #' }
 #'
-#' @keywords internal
+#' @noRd
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 

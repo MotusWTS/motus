@@ -14,7 +14,7 @@
 #'
 #' @return no return value
 #'
-#' @keywords internal
+#' @noRd
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 dbInsertOrReplace = function(con, name, df, replace=TRUE) {

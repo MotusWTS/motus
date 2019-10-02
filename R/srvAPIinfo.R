@@ -8,7 +8,7 @@
 #'    \item maxRows; integer; maximum number of rows returned by any API calls
 #' }
 #'
-#' @keywords internal
+#' @noRd
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 

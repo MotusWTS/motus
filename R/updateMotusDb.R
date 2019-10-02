@@ -29,7 +29,7 @@
 #' @author Denis Lepage \email{dlepage@@bsc-eoc.org}
 #'
 #' @return rv
-#' @keywords internal
+#' @noRd
 
 updateMotusDb <- function(rv, src) {
 

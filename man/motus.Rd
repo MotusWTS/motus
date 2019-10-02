@@ -4,7 +4,6 @@
 \name{motus}
 \alias{motus}
 \alias{motus-package}
-\alias{motus-pkg}
 \title{Fetch and use data from the Motus Wildlife Tracking System}
 \description{
 \code{motus} is an R package for retrieving telemetry data from the Motus

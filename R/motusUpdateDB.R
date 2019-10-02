@@ -19,7 +19,7 @@
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 #' 
-#' @keywords internal
+#' @noRd
 
 motusUpdateDB = function(projRecv, src, countOnly, forceMeta=FALSE) {
     if (! is.numeric(projRecv) && ! is.character(projRecv))

@@ -24,7 +24,7 @@
 #' \item{myProjects}{project IDs for user at motus.org}
 #' }
 #'
-#' @keywords internal
+#' @noRd
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 

@@ -20,7 +20,7 @@
 #' name in \code{db}.  The virtual table is an SQL VIEW, which will persist in \code{db}
 #' across R sessions.
 #'
-#' @keywords internal
+#' @noRd
 #'
 #' @author Denis Lepage
 #'

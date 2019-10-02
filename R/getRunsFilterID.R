@@ -1,3 +1,5 @@
+#' Return filterID matching a filter name
+#' 
 #' Returns the filterID matching a filter name (and optionally a project ID)
 #' If no project ID is specified and there is only 1 filter of the correct name,
 #' return the filterID regardless of the project it is attached to.
@@ -11,7 +13,7 @@
 #'
 #' @return an integer filterID
 #'
-#' @keywords internal
+#' @noRd
 #'
 #' @author Denis Lepage, Bird Studies Canada
 

@@ -9,7 +9,7 @@
 #'
 #' @return a character scalar with the receiver model
 #'
-#' @keywords internal
+#' @noRd
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 

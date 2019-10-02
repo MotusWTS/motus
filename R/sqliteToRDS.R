@@ -100,7 +100,9 @@
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 
-sqliteToRDS = function(con, query, bind.data=data.frame(), out, classes = NULL, rowsPerBlock=10000, stringsAsFactors = TRUE, factorQueries = NULL) {
+sqliteToRDS = function(con, query, bind.data=data.frame(), out, classes = NULL, 
+                       rowsPerBlock=10000, stringsAsFactors = TRUE, 
+                       factorQueries = NULL) {
     ## get the result types by asking for the first row of the
     ## query
 
@@ -271,7 +273,6 @@ sqliteToRDS = function(con, query, bind.data=data.frame(), out, classes = NULL, 
 #' serialize an object to a raw vector, without the "RDS" file header.
 #'
 #' @param x the R object
-#'
 #' @param dropTypeLen logical; if TRUE, also drop the initial TYPE and length fields (8 extra bytes)
 #'
 #' @return raw vector to which x has been serialized in binary little-endian (non-XDR) format,
@@ -281,8 +282,10 @@ sqliteToRDS = function(con, query, bind.data=data.frame(), out, classes = NULL, 
 #'    RDS_min_R_version
 #' So we just drop the first 14 bytes.
 #'
-#' @note this is a convenience function used by sqliteToRds, and is intended for small objects,
-#' since the serialization is done in-memory.
+#' @note this is a convenience function used by sqliteToRds, and is intended for
+#'   small objects, since the serialization is done in-memory.
+#'   
+#' @noRd
 
 serializeNoHeader = function(x, dropTypeLen=FALSE) {
     r = rawConnection(raw(), "wb")

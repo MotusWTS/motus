@@ -41,7 +41,7 @@
 #'
 #' @seealso \code{\link{motus_vars}}
 #'
-#' @keywords internal
+#' @noRd
 #' 
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 

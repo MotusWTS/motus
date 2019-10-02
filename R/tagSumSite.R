@@ -3,9 +3,11 @@
 #' Creates a summary for each tag of it's first and last detection time at each site,
 #' length of time between first and last detection of each site, and total number of detections at each site.
 #'
-#' @param data a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-#' including at a minimum variables for motusTagID, fullID, recvDeployName, ts
-#' @param units units to display time difference, defaults to "hours", options include "secs", "mins", "hours", "days", "weeks"
+#' @param data a selected table from .motus data, eg. "alltags", or a data.frame
+#'   of detection data including at a minimum variables for motusTagID, fullID,
+#'   recvDeployName, ts
+#' @param units units to display time difference, defaults to "hours", options
+#'   include "secs", "mins", "hours", "days", "weeks"
 #' @export
 #' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'

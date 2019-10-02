@@ -75,7 +75,7 @@
 #' name in \code{db}.  The virtual table is an SQL VIEW, which will persist in \code{db}
 #' across R sessions.
 #'
-#' @keywords internal
+#' @noRd
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 #'

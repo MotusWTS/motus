@@ -68,5 +68,4 @@
 #'
 #' @docType package
 #' @name motus
-#' @aliases motus-package motus-pkg
 NULL

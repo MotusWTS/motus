@@ -86,7 +86,7 @@
 #' to deadlock-prevention by the database are retried after a random wait
 #' of 0 to 10 seconds.
 #'
-#' @keywords internal
+#' @noRd
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
@@ -181,7 +181,7 @@ safeSQL = function(con, busyTimeout = 300) {
 #'
 #' @return either the database filename, or the db connection
 #'
-#' @export
+#' @noRd
 
 `$.safeSQL` = function(x, name) {
     con = environment(x)$con
@@ -196,7 +196,7 @@ safeSQL = function(con, busyTimeout = 300) {
 #' @param x safeSQL object
 #' @param ... For print() compatibility
 #' @return invisible(NULL)
-#' @keywords internal
+#' @noRd
 
 print.safeSQL = function(x, ...) {
     message("Safe SQL object attached to ", x$db, "\nDo ?safeSQL for more details.")

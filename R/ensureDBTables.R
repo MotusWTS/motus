@@ -10,7 +10,7 @@
 #' @return returns a dplyr::tbl representing the alltags virtual table which is
 #'   created in `src`.
 #' 
-#' @keywords internal
+#' @noRd
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 

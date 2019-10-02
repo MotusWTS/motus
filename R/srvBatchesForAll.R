@@ -14,7 +14,7 @@
 #' \item ts real processing timestamp
 #' }
 #'
-#' @keywords internal
+#' @noRd
 #'
 #' @details this call is used to obtain batches incrementally, regardless of
 #' which receiver they come from.  It is only available to administrative users,

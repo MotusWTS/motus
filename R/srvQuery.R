@@ -23,7 +23,7 @@
 #' @author John Brzustowski
 #'     \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 #'     
-#' @keywords internal
+#' @noRd
 
 srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE, 
                       auth = TRUE, url = motus_vars$dataServerURL,
