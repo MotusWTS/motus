@@ -82,7 +82,7 @@ values
   if (! "gps" %in% tables) {
     sql("
 create table gps (
-gpsID   BIGINT PRIMARY KEY,                    -- id
+gpsID   BIGINT PRIMARY KEY,                  -- id
 batchID INTEGER NOT NULL REFERENCES batches, -- batch from which this fix came
 ts      DOUBLE,                              -- system timestamp for this record
 gpsts   DOUBLE,                              -- gps timestamp
@@ -92,8 +92,7 @@ alt     DOUBLE,                              -- altitude, metres
 quality INTEGER
 )");
     
-    sql("create index gps_batchID on gps ( batchID )")
-    sql("create index gps_ts on gps ( ts )")
+    sql("create index gps_batchID on gps ( gpsID )")
     
     # Remove empty gps detections
     sql("DELETE FROM gps where lat = 0 and lon = 0 and alt = 0;")
