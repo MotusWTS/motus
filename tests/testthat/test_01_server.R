@@ -6,6 +6,7 @@ test_that("tagme() errors appropriately", {
   skip_on_travis()
   
   if(file.exists("project-10.motus")) unlink("project-10.motus")
+  if(file.exists("SG-3021RPI2BBB8.motus")) unlink("SG-3021RPI2BBB8.motus")
   
   sessionVariable(name = "userLogin", val = "motus.sample")
   sessionVariable(name = "userPassword", val = "motus.sample")
@@ -13,10 +14,17 @@ test_that("tagme() errors appropriately", {
   expect_error(expect_message(tagme(projRecv = 10, new = TRUE, update = TRUE), 
                               "updateMotusDb"),
                "You do not have permission")
+  
+  expect_error(expect_message(tagme(projRecv = "SG-3021RPI2BBB8", 
+                                    new = TRUE, update = TRUE), 
+                              "updateMotusDb"),
+               "don't have permission")
+  
   if(file.exists("project-10.motus")) unlink("project-10.motus")
+  if(file.exists("SG-3021RPI2BBB8.motus")) unlink("SG-3021RPI2BBB8.motus")
 })
 
-test_that("tagme() downloads data", {
+test_that("tagme() downloads data - Projects", {
   skip_on_cran()
   skip_on_appveyor()
   
@@ -41,10 +49,21 @@ test_that("tagme() downloads data", {
   for(i in names(a)[names(a) != "ant"]) {
     expect_is(a[, !!i][[1]], c("integer", "numeric"))
   }
-
 })
 
-test_that("tagme with countOnly (tellme)", {
+test_that("Receivers download - Receivers", {
+  skip_on_cran()
+  skip_on_appveyor()
+  skip_if_no_auth()
+  
+  if(file.exists("SG-3115BBBK1127.motus")) unlink("SG-3115BBBK1127.motus")
+  #warning("Login: ", motus_vars$userLogin)
+  expect_message(tagme("SG-3115BBBK1127", new = TRUE, update = TRUE)) %>%
+    expect_s3_class("src_sql")
+  if(file.exists("SG-3115BBBK1127.motus")) unlink("SG-3115BBBK1127.motus")
+})
+
+test_that("tagme with countOnly (tellme) - Projects", {
   skip_on_cran()
   sessionVariable(name = "userLogin", val = "motus.sample")
   sessionVariable(name = "userPassword", val = "motus.sample")
@@ -61,6 +80,14 @@ test_that("tagme with countOnly (tellme)", {
   if(file.exists("project-176.motus")) unlink("project-176.motus")
 })
 
+test_that("tagme with countOnly (tellme) - Receivers", {
+  skip_on_cran()
+  skip_if_no_auth()
+  
+  if(file.exists("SG-3115BBBK1127.motus")) unlink("SG-3115BBBK1127.motus")
+  expect_message(tellme("SG-3115BBBK1127", new = TRUE))
+  if(file.exists("SG-3115BBBK1127.motus")) unlink("SG-3115BBBK1127.motus")
+})
 
 test_that("srvQuery handles time out graciously", {
   sessionVariable(name = "userLogin", val = "motus.sample")

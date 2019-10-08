@@ -38,3 +38,21 @@ test_that("checkVersion and updateMotusDb run and return messages as expected", 
   # expect_message(updateMotusDb(test_sql, test_sql), 
   #                "updateMotusDb started \\([0-9]{1,3} versions updates\\)")
 })
+
+test_that("is_proj identifies projects vs. receivers", {
+  expect_true(is_proj(176))
+  expect_true(is_proj(9999))
+  expect_false(is_proj("SG-3115BBBK0782"))
+})
+
+test_that("get_projRecv pulls project name", {
+  d <- system.file("extdata", package = "motus")
+  
+  expect_equal(get_projRecv(tagme(176, update = FALSE, dir = d)), 176)
+  expect_error(get_projRecv("hello"), "src is not a dplyr::src_sql object")
+  
+  skip_if_no_auth()
+  expect_equal(get_projRecv(tagme("SG-3115BBBK0782", update = FALSE, dir = d)),
+               "SG-3115BBBK0782")
+  
+})
