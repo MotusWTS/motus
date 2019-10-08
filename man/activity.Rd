@@ -9,11 +9,11 @@ activity(src, resume = FALSE)
 \arguments{
 \item{src}{src_sqlite object representing the database}
 
-\item{resume}{Logical. Resume a download? Otherwise the activity table is
+\item{resume}{Logical. Resume a download? Otherwise the \code{activity} table is
 removed and the download is started from the beginning.}
 }
 \description{
-Download or resume a download of the 'activity' table in an existing Motus
+Download or resume a download of the \code{activity} table in an existing Motus
 database. Batch activity refers to the number of hits detected during a given
 batch. Batches with large numbers of hits may indicate interference and thus
 unreliable hits.
@@ -22,8 +22,8 @@ unreliable hits.
 This function is automatically run by the \code{\link[=tagme]{tagme()}} function with
 \code{resume = TRUE}.
 
-If an 'activity' table doesn't exist, it will be created prior to
-downloading. If there is an existing 'activity' table, this will update the
+If an \code{activity} table doesn't exist, it will be created prior to
+downloading. If there is an existing \code{activity} table, this will update the
 records.
 }
 \examples{

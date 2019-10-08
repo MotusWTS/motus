@@ -30,6 +30,8 @@ test_that("tagme() downloads data", {
   
   # Table exists
   expect_silent(a <- dplyr::tbl(tags, "activity") %>% dplyr::collect())
+  expect_silent(dplyr::tbl(tags, "nodeData"))
+  expect_silent(dplyr::tbl(tags, "nodeDeps"))
   
   # No all missing values
   expect_false(any(sapply(a, function(x) all(is.na(x)))))

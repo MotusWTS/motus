@@ -3,6 +3,7 @@
 ### Big Changes
 * Switch to data version 2
     * Includes new CTT antennas
+    * Includes `nodeData` and `nodeDeps` tables for node related data and metadata.
 
 ### Small Changes
 * Replace all `cat()` with `message()` (now suppressible)

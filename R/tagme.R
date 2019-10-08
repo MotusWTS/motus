@@ -115,8 +115,11 @@ tagme = function(projRecv, update = TRUE, new = FALSE, dir = getwd(),
         # Update databse
         rv <- motusUpdateDB(projRecv, rv, countOnly, forceMeta)
         
-        # Add activity
-        if(!countOnly) rv <- activity(src = rv, resume = TRUE)
+        # Add activity and nodeData
+        if(!countOnly) {
+            rv <- activity(src = rv, resume = TRUE)
+            rv <- nodeData(src = rv, resume = TRUE)
+        }
     }
 
     return(rv)
