@@ -53,6 +53,8 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
     ## 1. get records for all new batches
     ## Start after the latest batch we already have.
     ## ----------------------------------------------------------------------------
+
+    # Batches -----------------------------------------------------------------
     
     repeat {
       ## we always use countOnly = FALSE, because we need to obtain batchIDs
@@ -92,6 +94,8 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
         ## runs that we already have records for might be modified by
         ## each batch
         ## ----------------------------------------------------------------------------
+        
+        # Runs for Batch ------------------------------------------------------
         runID <- 0
         repeat {
           r <- srvRunsForTagProject(projectID = projectID, batchID = batchID, 
@@ -121,6 +125,7 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
         ## this batch's record).
         ## ----------------------------------------------------------------------------
         
+        # Hits for Batch ------------------------------------------------------
         hitID <- sql(paste0("select maxHitID from projBatch ",
                             "where tagDepProjectID = %d and batchID = %d"), 
                      projectID, batchID)[[1]]
@@ -153,6 +158,7 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
         ## Start after the largest TS for which we already have a fix
         ## ----------------------------------------------------------------------------
         
+        # GPS for Batch --------------------------------------------------------
         gpsID <- sql(paste0("SELECT ifnull(max(gpsID), 0) ",
                             "FROM gps WHERE batchID = %d"), batchID)[[1]]
         repeat {
@@ -169,7 +175,7 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
         ## 5. write the record for this batch
         ## This marks the transfers for this batch as complete.
         ## ----------------------------------------------------------------------------
-        
+        # Save ----------------------------------------------------------------
         ## update the number of hits; this won't necessarily be
         ## the same value as supplied by the server, since our
         ## copy of this batch has only the hits from tags in this
