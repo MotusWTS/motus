@@ -53,10 +53,10 @@ nodeData <- function(src, resume = FALSE) {
   
   pageForward <- function(b, batchID, projectID) {
     # Page forward
-    nodeID <- b$id[nrow(b)]
+    nodeDataId <- b$nodeDataId[nrow(b)]
     
     # Try again
-    srvNodes(batchID = batchID, projectID = projectID, id = nodeID) 
+    srvNodes(batchID = batchID, projectID = projectID, nodeDataId = nodeDataId) 
   }
   
   pageDataByBatch(src, table = "nodeData", resume = resume,

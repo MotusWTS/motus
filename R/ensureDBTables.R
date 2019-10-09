@@ -498,7 +498,7 @@ CREATE INDEX IF NOT EXISTS runsFilters_filterID_runID_motusTagID ON runsFilters 
   
   if(! "nodeData" %in% tables) {
     sql("CREATE TABLE IF NOT EXISTS nodeData (
-      id BIGINT PRIMARY KEY NOT NULL,
+      nodeDataId BIGINT PRIMARY KEY NOT NULL,
       batchID INTEGER NOT NULL,
       ts FLOAT NOT NULL,
       nodeNum TEXT NOT NULL,
