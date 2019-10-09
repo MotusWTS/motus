@@ -21,6 +21,10 @@
 #' @param rename logical. If current SQLite database is of an older version,
 #'   automatically rename that database for backup purposes and download the
 #'   newest version. If FALSE (default), user is prompted for action.
+#' @param skipActivity logical. Skip checking for and downloading `activity`? See
+#'   `?activity` for more details
+#' @param skipNodes logical. Skip checking for and downloading `nodeData`? See
+#'   `?nodeData` for more details
 #'
 #' @examples
 #'
@@ -62,7 +66,8 @@
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 tagme = function(projRecv, update = TRUE, new = FALSE, dir = getwd(), 
-                 countOnly = FALSE, forceMeta = FALSE, rename = FALSE) {
+                 countOnly = FALSE, forceMeta = FALSE, rename = FALSE,
+                 skipActivity = FALSE, skipNodes = FALSE) {
     if (missing(projRecv) && ! new) {
         ## special case: update all existing databases in \code{dir}
         return(lapply(dir(dir, pattern="\\.motus$"),
@@ -117,8 +122,8 @@ tagme = function(projRecv, update = TRUE, new = FALSE, dir = getwd(),
         
         # Add activity and nodeData
         if(!countOnly) {
-            rv <- activity(src = rv, resume = TRUE)
-            rv <- nodeData(src = rv, resume = TRUE)
+            if(!skipActivity) rv <- activity(src = rv, resume = TRUE)
+            if(!skipNodes) rv <- nodeData(src = rv, resume = TRUE)
         }
     }
 
