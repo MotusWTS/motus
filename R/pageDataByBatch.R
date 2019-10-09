@@ -7,7 +7,6 @@ pageDataByBatch <- function(src, table, resume = FALSE,
   
   # Check tables and update to include table if necessary
   ensureDBTables(src, projRecv = get_projRecv(src))
-  
   sql <- safeSQL(src)
   
   # Fetch/resume table download
@@ -18,6 +17,8 @@ pageDataByBatch <- function(src, table, resume = FALSE,
     batches <- getBatches(src)
   }
   
+  if(length(batches) == 0) batches <- 0
+  
   data_name <- get_projRecv(src)
   
   if(is_proj(data_name)) {
@@ -25,7 +26,7 @@ pageDataByBatch <- function(src, table, resume = FALSE,
   } else {
     projectID <- NULL
   }
-  
+
   if(resume) {
     # If updating, start with last batch downloaded (a bit of overlap)
     last_batch <- sql(paste0("select ifnull(max(batchID), 0) from ", table))[[1]]  
@@ -35,37 +36,44 @@ pageDataByBatch <- function(src, table, resume = FALSE,
     DBI::dbExecute(src$con, paste0("DELETE FROM ", table))
   }
   
-  # If this is the last batch, check if actually new, or just the end of the record
-  if(length(batches) > 0 && resume && identical(last_batch, batches)) {
+  # Get first batch
+  b <- pageInitial(batches[1], projectID)
+
+  # Check if actually new, or just the end of the record
+  if(nrow(b) > 0 && resume && identical(last_batch, batches[length(batches)])) {
     t <- dplyr::tbl(src$con, table) %>%
-      dplyr::filter(batchID == batches[1]) %>%
+      dplyr::filter(.data$batchID == batches[1]) %>%
       dplyr::collect() %>%
       as.data.frame()
-    if(identical(t, b)) batches <- numeric()
+    if(identical(t, b)) {
+      batches <- numeric()
+      b <- data.frame()
+    }
+  } else if(nrow(b) == 0) {
+    batches <- numeric()
+    b <- data.frame()
   }
   
   # Announce
   message(sprintf("%s: %5d batch records to check", 
                   table, length(batches)))
-  
   added <- 0
   if(length(batches) > 0) {
     for(i in 1:length(batches)) {
       batchID <- batches[i]
-      # Get first batch
-      b <- pageInitial(batchID, projectID)
-      
-      # Progress messages
-      msg <- sprintf("batchID %8d (#%6d of %6d): ", batchID, i, length(batches))
+      if(i != 1) b <- pageInitial(batchID, projectID)
       
       # Get the rest of the data
       while(nrow(b) > 0) {
+        
+        # Progress messages
+        msg <- sprintf("batchID %8d (#%6d of %6d): ", batchID, i, length(batches))
+        
         # Save Previous batch
         dbInsertOrReplace(sql$con, table, b)
         message(msg, sprintf("got %6d %s records", nrow(b), table))
         added <- added + nrow(b)
         b <- pageForward(b, batchID, projectID)
-
       }
     }
     message("Downloaded ", added, " ", table, " records")
