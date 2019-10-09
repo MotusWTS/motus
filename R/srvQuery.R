@@ -135,7 +135,7 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
                 motus_vars$authToken = NULL
                 next
             }
-            stop(rv$error, call. = FALSE)
+            stop("Server returned error '", rv$error, "'", call. = FALSE)
         }
         
         if ("data" %in% names(rv)) {
