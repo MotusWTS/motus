@@ -8,8 +8,7 @@ test_that("tagme() errors appropriately", {
   if(file.exists("project-10.motus")) unlink("project-10.motus")
   if(file.exists("SG-3021RPI2BBB8.motus")) unlink("SG-3021RPI2BBB8.motus")
   
-  sessionVariable(name = "userLogin", val = "motus.sample")
-  sessionVariable(name = "userPassword", val = "motus.sample")
+  sample_auth()
   
   expect_error(expect_message(tagme(projRecv = 10, new = TRUE, update = TRUE), 
                               "updateMotusDb"),
@@ -30,8 +29,7 @@ test_that("tagme() downloads data - Projects", {
   
   if(file.exists("project-176.motus")) unlink("project-176.motus")
   
-  sessionVariable(name = "userLogin", val = "motus.sample")
-  sessionVariable(name = "userPassword", val = "motus.sample")
+  sample_auth()
   
   expect_message(tags <- tagme(projRecv = 176, new = TRUE, update = TRUE)) %>%
     expect_is("src_SQLiteConnection")
@@ -57,7 +55,6 @@ test_that("Receivers download - Receivers", {
   skip_if_no_auth()
   
   if(file.exists("SG-3115BBBK1127.motus")) unlink("SG-3115BBBK1127.motus")
-  #warning("Login: ", motus_vars$userLogin)
   expect_message(tagme("SG-3115BBBK1127", new = TRUE, update = TRUE)) %>%
     expect_s3_class("src_sql")
   if(file.exists("SG-3115BBBK1127.motus")) unlink("SG-3115BBBK1127.motus")
@@ -65,8 +62,8 @@ test_that("Receivers download - Receivers", {
 
 test_that("tagme with countOnly (tellme) - Projects", {
   skip_on_cran()
-  sessionVariable(name = "userLogin", val = "motus.sample")
-  sessionVariable(name = "userPassword", val = "motus.sample")
+  
+  sample_auth()
   
   file.copy(system.file("extdata", "project-176.motus", package = "motus"), ".")
   
@@ -90,8 +87,8 @@ test_that("tagme with countOnly (tellme) - Receivers", {
 })
 
 test_that("srvQuery handles time out graciously", {
-  sessionVariable(name = "userLogin", val = "motus.sample")
-  sessionVariable(name = "userPassword", val = "motus.sample")
+  
+  sample_auth()
   
   # https://stackoverflow.com/questions/100841/artificially-create-a-connection-timeout-error
   expect_message(

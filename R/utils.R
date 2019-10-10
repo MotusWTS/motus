@@ -14,6 +14,7 @@ skip_if_no_auth <- function() {
   if (identical(Sys.getenv("motus_userLogin"), "")) {
     skip("No authentication available")
   } else {
+    suppressMessages(motusLogout())
     sessionVariable(name = "userLogin", val = Sys.getenv("motus_userLogin"))
     sessionVariable(name = "userPassword", val = Sys.getenv("motus_userPassword"))
   }
@@ -36,6 +37,7 @@ have_auth <- function() {
   if (identical(Sys.getenv("motus_userLogin"), "")) {
     auth <- FALSE
   } else {
+    suppressMessages(motusLogout())
     sessionVariable(name = "userLogin", val = Sys.getenv("motus_userLogin"))
     sessionVariable(name = "userPassword", val = Sys.getenv("motus_userPassword"))
     auth <- TRUE
@@ -44,6 +46,7 @@ have_auth <- function() {
 }
 
 sample_auth <- function() {
+  suppressMessages(motusLogout())
   sessionVariable(name = "userLogin", val = "motus.sample")
   sessionVariable(name = "userPassword", val = "motus.sample")
 }

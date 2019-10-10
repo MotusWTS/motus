@@ -53,9 +53,7 @@ test_that("new tables have character ant and port", {
 
 
 test_that("Missing tables recreated silently", {
-  sessionVariable(name = "userLogin", val = "motus.sample")
-  sessionVariable(name = "userPassword", val = "motus.sample")
-  
+
   tags <- tagme(176, new = FALSE, update = FALSE)
   
   t <- DBI::dbListTables(tags$con)
@@ -67,9 +65,9 @@ test_that("Missing tables recreated silently", {
   #        "tagDeps", "tagProps", "tags")
   # 
   
+  sample_auth()
   for(i in t) {
-  
-    # Remove table
+    # Remove table/view
     if(!i %in% c("alltags", "allambigs")) {
       expect_silent(DBI::dbRemoveTable(tags$con, !!i))
       expect_false(DBI::dbExistsTable(tags$con, !!i))
