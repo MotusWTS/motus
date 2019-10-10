@@ -36,6 +36,11 @@
 
 activity <- function(src, resume = FALSE) {
   
+  getBatches <- function(src) {
+    dplyr::tbl(src$con, "batches") %>%
+      dplyr::pull(.data$batchID)
+  }
+  
   pageInitial <- function(batchID, projectID) srvActivityForBatches(batchID = batchID)
   
   pageForward <- function(b, batchID, projectID) {
@@ -49,7 +54,6 @@ activity <- function(src, resume = FALSE) {
   }
   
   pageDataByBatch(src, table = "activity", resume = resume,
-                  getBatches = NULL,
-                  pageInitial, pageForward)
+                  getBatches, pageInitial, pageForward)
   
 }

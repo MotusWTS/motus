@@ -10,16 +10,7 @@ pageDataByBatch <- function(src, table, resume = FALSE,
   sql <- safeSQL(src)
   
   # Fetch/resume table download
-  if(is.null(getBatches)) {
-    batches <- dplyr::tbl(src$con, "batches") %>%
-      dplyr::pull(.data$batchID)
-  } else {
-    batches <- getBatches(src)
-  }
-  
-  if(length(batches) == 0) batches <- 0
-  
-  data_name <- get_projRecv(src)
+  batches <- getBatches(src)
   
   # If length zero, then no batches to get data for
   
