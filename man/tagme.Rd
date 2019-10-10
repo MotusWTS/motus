@@ -5,7 +5,8 @@
 \title{Download motus tag detections to a database}
 \usage{
 tagme(projRecv, update = TRUE, new = FALSE, dir = getwd(),
-  countOnly = FALSE, forceMeta = FALSE, rename = FALSE)
+  countOnly = FALSE, forceMeta = FALSE, rename = FALSE,
+  skipActivity = FALSE, skipNodes = FALSE)
 }
 \arguments{
 \item{projRecv}{integer. Project code from motus.org, \emph{or} character
@@ -35,6 +36,12 @@ even if we already have them.}
 \item{rename}{logical. If current SQLite database is of an older version,
 automatically rename that database for backup purposes and download the
 newest version. If FALSE (default), user is prompted for action.}
+
+\item{skipActivity}{logical. Skip checking for and downloading \code{activity}? See
+\code{?activity} for more details}
+
+\item{skipNodes}{logical. Skip checking for and downloading \code{nodeData}? See
+\code{?nodeData} for more details}
 }
 \value{
 a dplyr::src_sqlite for the (possibly updated) database, or a list
