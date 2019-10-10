@@ -82,7 +82,8 @@ test_that("tagme with countOnly (tellme) - Receivers", {
   skip_if_no_auth()
   
   if(file.exists("SG-3115BBBK1127.motus")) unlink("SG-3115BBBK1127.motus")
-  expect_message(tellme("SG-3115BBBK1127", new = TRUE))
+  expect_silent(tellme("SG-3115BBBK1127", new = TRUE)) %>%
+    expect_is("data.frame")
   if(file.exists("SG-3115BBBK1127.motus")) unlink("SG-3115BBBK1127.motus")
 })
 
