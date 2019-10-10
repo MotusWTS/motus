@@ -8,6 +8,7 @@
 ### Small Changes
 * Replace all `cat()` with `message()` (now suppressible)
 * Add `recvUtcOffset` and `tsCorrected` to `alltags` view
+* Add `gpsID` to `gps` table, `gpsID` is now the primary key and index
 
 ### Bug fixes
 * Fixed bug where `tagme(..., countOnly = TRUE)` failed

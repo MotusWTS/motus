@@ -92,7 +92,7 @@ alt     DOUBLE,                              -- altitude, metres
 quality INTEGER
 )");
     
-    sql("create index gps_batchID on gps ( gpsID )")
+    sql("create index gps_gpsID on gps ( gpsID )")
     
     # Remove empty gps detections
     sql("DELETE FROM gps where lat = 0 and lon = 0 and alt = 0;")
