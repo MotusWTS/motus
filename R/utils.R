@@ -12,7 +12,7 @@
 
 skip_if_no_auth <- function() {
   if (!have_auth()) {
-    skip("No authentication available")
+    testthat::skip("No authentication available")
   } else {
     local_auth()
   }
