@@ -11,12 +11,10 @@
 #' @noRd
 
 skip_if_no_auth <- function() {
-  if (identical(Sys.getenv("motus_userLogin"), "")) {
+  if (!have_auth()) {
     skip("No authentication available")
   } else {
-    suppressMessages(motusLogout())
-    sessionVariable(name = "userLogin", val = Sys.getenv("motus_userLogin"))
-    sessionVariable(name = "userPassword", val = Sys.getenv("motus_userPassword"))
+    local_auth()
   }
 }
 
@@ -33,16 +31,16 @@ skip_if_no_auth <- function() {
 #' 
 #' @noRd
 
-have_auth <- function() {
-  if (identical(Sys.getenv("motus_userLogin"), "")) {
-    auth <- FALSE
-  } else {
+have_auth <- function() !identical(Sys.getenv("motus_userLogin"), "")
+
+local_auth <- function() {
+  if(have_auth()) {
     suppressMessages(motusLogout())
     sessionVariable(name = "userLogin", val = Sys.getenv("motus_userLogin"))
     sessionVariable(name = "userPassword", val = Sys.getenv("motus_userPassword"))
-    auth <- TRUE
+  } else {
+    message("No local authorization")
   }
-  auth
 }
 
 sample_auth <- function() {
