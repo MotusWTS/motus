@@ -21,38 +21,44 @@ pageDataByBatch <- function(src, table, resume = FALSE,
   
   data_name <- get_projRecv(src)
   
-  if(is_proj(data_name)) {
-    projectID <- data_name
-  } else {
-    projectID <- NULL
-  }
-
-  if(resume) {
-    # If updating, start with last batch downloaded (a bit of overlap)
-    last_batch <- sql(paste0("select ifnull(max(batchID), 0) from ", table))[[1]]  
-    batches <- batches[batches >= last_batch]
-  } else {
-    # Otherwise remove all rows and start again
-    DBI::dbExecute(src$con, paste0("DELETE FROM ", table))
-  }
+  # If length zero, then no batches to get data for
   
-  # Get first batch
-  b <- pageInitial(batches[1], projectID)
-
-  # Check if actually new, or just the end of the record
-  if(nrow(b) > 0 && resume && identical(last_batch, batches[length(batches)])) {
-    t <- dplyr::tbl(src$con, table) %>%
-      dplyr::filter(.data$batchID == batches[1]) %>%
-      dplyr::collect() %>%
-      as.data.frame()
-    if(identical(t, b)) {
+  if(length(batches) > 0) {
+    data_name <- get_projRecv(src)
+    
+    if(is_proj(data_name)) {
+      projectID <- data_name
+    } else {
+      projectID <- NULL
+    }
+    
+    if(resume) {
+      # If updating, start with last batch downloaded (a bit of overlap)
+      last_batch <- sql(paste0("select ifnull(max(batchID), 0) from ", table))[[1]]  
+      batches <- batches[batches >= last_batch]
+    } else {
+      # Otherwise remove all rows and start again
+      DBI::dbExecute(src$con, paste0("DELETE FROM ", table))
+    }
+    
+    # Get first batch
+    b <- pageInitial(batches[1], projectID)
+    
+    # Check if actually new, or just the end of the record
+    if(nrow(b) > 0 && resume && identical(last_batch, batches[length(batches)])) {
+      t <- dplyr::tbl(src$con, table) %>%
+        dplyr::filter(.data$batchID == batches[1]) %>%
+        dplyr::collect() %>%
+        as.data.frame()
+      if(identical(t, b)) {
+        batches <- numeric()
+        b <- data.frame()
+      }
+    } else if(nrow(b) == 0) {
       batches <- numeric()
       b <- data.frame()
     }
-  } else if(nrow(b) == 0) {
-    batches <- numeric()
-    b <- data.frame()
-  }
+  }  
   
   # Announce
   message(sprintf("%s: %5d batch records to check", 
