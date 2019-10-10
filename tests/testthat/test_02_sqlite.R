@@ -17,7 +17,7 @@ test_that("ensureDBTables() creates database", {
   
   expect_silent(ensureDBTables(temp, 176))
   expect_silent(temp <- dplyr::src_sqlite("temp.motus", create = FALSE))
-  expect_length(t <- DBI::dbListTables(temp$con), 25)
+  expect_length(t <- DBI::dbListTables(temp$con), 26)
   
   # Expect columns in the tables
   for(i in t) expect_gte(ncol(dplyr::tbl(temp$con, !!i)), 2)
