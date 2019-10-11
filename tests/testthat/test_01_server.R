@@ -101,6 +101,7 @@ test_that("srvQuery handles time out graciously", {
 })
 
 test_that("srvAuth handles errors informatively", {
+  motusLogout()
   sessionVariable(name = "userLogin", val = "motus.samp")
   sessionVariable(name = "userPassword", val = "motus.samp")
   

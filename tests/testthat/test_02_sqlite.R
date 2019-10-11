@@ -57,7 +57,7 @@ test_that("new tables have character ant and port", {
 
 
 test_that("Missing tables recreated silently", {
-
+  sample_auth()
   tags <- tagme(176, new = FALSE, update = FALSE)
   
   t <- DBI::dbListTables(tags$con)
@@ -69,7 +69,6 @@ test_that("Missing tables recreated silently", {
   #        "tagDeps", "tagProps", "tags")
   # 
   
-  sample_auth()
   for(i in t) {
     # Remove table/view
     if(!i %in% c("alltags", "allambigs")) {
