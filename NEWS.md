@@ -1,4 +1,4 @@
-# motus 3.0.0 
+# motus 3.0.0 (2019-10-16)
 
 ### Big Changes
 * Switch to data version 2
@@ -13,7 +13,7 @@
 ### Bug fixes
 * Fixed bug where `tagme(..., countOnly = TRUE)` failed
 
-# motus 2.0.0 (2019-08-02)
+# motus 2.0.0 (2019-08-12)
 
 ### Big Changes
 * Combined `motus` and `motusClient` packages
