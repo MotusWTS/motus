@@ -21,8 +21,8 @@
 #'     \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 motusLogout = function () {
-    motus_vars$authToken = NULL
-    motus_vars$userLogin = NULL
-    motus_vars$userPassword = NULL
-    cat("\n   Salut - bye bye!\n\n")
+  sessionVariable(name = "authToken", srvAuth)
+  sessionVariable("userLogin", "login name at motus.org")
+  sessionVariable("userPassword", "password at motus.org")
+  message("   Salut - bye bye!")
 }

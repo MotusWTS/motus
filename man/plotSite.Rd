@@ -7,8 +7,12 @@
 plotSite(data, sitename = unique(data$recvDeployName))
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data
-including at a minimum variables for ts, antBearing, fullID, recvDeployName}
+\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame
+of detection data including at a minimum variables for ts, antBearing,
+fullID, recvDeployName}
+
+\item{sitename}{Character vector. Which sites to plot? Defaults to all unique
+sites.}
 }
 \description{
 Plot tag ID vs time for all tags detected by site, coloured by antenna bearing
@@ -42,6 +46,7 @@ plotSite(filter(df.alltags, recvDeployName == "Piskwamish"))
 
 #Plot only detections for specified tags for data.frame df.alltags
 plotSite(filter(df.alltags, motusTagID \%in\% c(16047, 16037, 16039)))
+
 }
 \author{
 Zoe Crysler \email{zcrysler@gmail.com}

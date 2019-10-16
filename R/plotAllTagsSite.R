@@ -25,7 +25,6 @@
 #' tbl.alltags <- tbl(sql.motus, "alltags") 
 #' 
 #' # convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
-#' library(dplyr)
 #' df.alltags <- tbl.alltags %>% 
 #'   collect() %>% 
 #'   as.data.frame() 
@@ -84,7 +83,7 @@ plotAllTagsSite <- function(data, coordinate = "recvDeployLat", tagsPerPanel = 5
   tagGroupFactor = tagGroup[as.character(data$fullID)]
   tagGroupLabels = tapply(tagGroupIDs, 1 + floor((0:(length(tagGroupIDs)-1)) / tagsPerPanel), function(data) paste("IDs:", paste(sort(unique(data)), collapse=",")))
   data$tagGroupFactor = factor(tagGroupFactor, labels=tagGroupLabels, ordered=TRUE)
-  data <- unique(subset(data, select = c(round_ts, meanlat, sitelat, fullID, tagGroupFactor))) ## get unique hourly detections for small dataframe
+  data <- unique(subset(data, select = c("round_ts", "meanlat", "sitelat", "fullID", "tagGroupFactor"))) ## get unique hourly detections for small dataframe
   data <- data[order(data$round_ts),] ## order by time
   out <- by(data, INDICES = data$tagGroupFactor, FUN = function(m){
     m <- droplevels(m)

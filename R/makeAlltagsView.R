@@ -5,7 +5,6 @@
 #' receiver.
 #'
 #' @param db dplyr src_sqlite to detections database
-#'
 #' @param name character scalar; name for the virtual table.
 #'     Default: 'alltags'.
 #'
@@ -76,7 +75,7 @@
 #' name in \code{db}.  The virtual table is an SQL VIEW, which will persist in \code{db}
 #' across R sessions.
 #'
-#' @export
+#' @noRd
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 #'
@@ -116,6 +115,7 @@ SELECT
    t1.runID as runID,
    t1.batchID as batchID,
    t1.ts as ts,
+   CASE WHEN t6.utcOffset is null then t1.ts else t1.ts - t6.utcOffset * 60 * 60 end as tsCorrected,
    t1.sig as sig,
    t1.sigSD as sigsd,
    t1.noise as noise,
@@ -143,20 +143,24 @@ SELECT
    t5.speciesID as speciesID,
    t5.markerNumber as markerNumber,
    t5.markerType as markerType,
+   t5.tsStart as tagDeployStart,
+   t5.tsEnd as tagDeployEnd,
    t5.latitude as tagDepLat,
    t5.longitude as tagDepLon,
    t5.elevation as tagDepAlt,
    t5.comments as tagDepComments,
    ifnull(t5.fullID, printf('?proj?-%d#%s:%.1f', t5.projectID, t4.mfgID, t4.bi)) as fullID,
-   t6a.deviceID as deviceID,
+   t3.motusDeviceID as deviceID,
    t6.deployID as recvDeployID,
    t6.latitude as recvDeployLat,
    t6.longitude as recvDeployLon,
    t6.elevation as recvDeployAlt,
    t6a.serno as recv,
    t6.name as recvDeployName,
+   t6.siteName as recvSiteName,
    t6.isMobile as isRecvMobile,
    t6.projectID as recvProjID,
+   t6.utcOffset as recvUtcOffset,
    t7.antennaType as antType,
    t7.bearing as antBearing,
    t7.heightMeters as antHeight,
@@ -195,7 +199,7 @@ LEFT JOIN
              AND (t5b.tsEnd IS NULL OR t5b.tsEnd >= t1.ts)
          )
 LEFT JOIN
-   recvs as t6a on t6a.deviceID =t3.motusDeviceID
+   recvs as t6a on t6a.deviceID = t3.motusDeviceID
 LEFT JOIN
    recvDeps AS t6 ON t6.deviceID = t3.motusDeviceID AND
       t6.tsStart =
@@ -204,7 +208,7 @@ LEFT JOIN
           FROM
              recvDeps AS t6b
           WHERE
-             t6b.deviceID=t3.motusDeviceID
+             t6b.deviceID = t3.motusDeviceID
              AND t6b.tsStart <= t1.ts
              AND (t6b.tsEnd IS NULL OR t6b.tsEnd >= t1.ts)
          )
@@ -225,11 +229,11 @@ LEFT JOIN
           FROM
              gps AS t11b
           WHERE
-             t11b.batchID=t3.batchID
+             t11b.batchID = t3.batchID
              AND t11b.ts <= t1.ts
-         )
+         );
 ")
-    ## DBI::dbExecute(db$con, paste0("DROP VIEW IF EXISTS ", name))
+
     DBI::dbExecute(db$con, query)
     return(dplyr::tbl(db, name))
 }

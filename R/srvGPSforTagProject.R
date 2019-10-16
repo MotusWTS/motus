@@ -3,13 +3,14 @@
 #' These are the periodic GPS fixes from receivers that detected
 #' tags from the project.
 #'
-#' @param projectID integer scalar motus tag project ID
-#' @param batchID integer scalar batch ID
-#' @param ts real scalar processing timestamp of latest fix already owned
-#' Default: 0, meaning none.
+#' @param projectID Integer. Motus tag project ID
+#' @param batchID Integer. Batch ID
+#' @param gpsID Numeric. GPS ID of latest fix already owned. Default: 0, meaning
+#'   none.
 #'
 #' @return data.frame with these columns:
 #' \itemize{
+#'    \item gpsID    numeric GPS ID
 #'    \item ts       numeric system timestamp
 #'    \item gpsts    numeric GPS timestamp
 #'    \item batchID  integer batch ID
@@ -22,11 +23,13 @@
 #' given project.  Fixes from up to 1 hour before to 1 hour after the
 #' detections are included, to ensure temporal coverage.
 #'
-#' @export
-#'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
+#' 
+#' @noRd
 
-srvGPSforTagProject = function(projectID, batchID, ts=0) {
-    x = srvQuery(API=motus_vars$API_GPS_FOR_TAG_PROJECT, params=list(projectID=projectID, batchID=batchID, ts=ts))
-    return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
+srvGPSforTagProject = function(projectID, batchID, gpsID = 0) {
+    x <- srvQuery(API = motus_vars$API_GPS_FOR_TAG_PROJECT, 
+                 params = list(projectID = projectID, batchID = batchID, 
+                               gpsID = gpsID))
+    return (structure(x, class = "data.frame", row.names = seq(along = x[[1]])))
 }

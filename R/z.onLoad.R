@@ -41,7 +41,7 @@
 #'
 #' @seealso \code{\link{motus_vars}}
 #'
-#' @keywords internal
+#' @noRd
 #' 
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
@@ -82,6 +82,8 @@
         API_PULSE_COUNTS_FOR_RECEIVER           = "custom/pulse_counts_for_receiver"
         API_METADATA_FOR_TAGS                   = "custom/metadata_for_tags"
         API_METADATA_FOR_RECEIVERS              = "custom/metadata_for_receivers"
+        API_NODES_FOR_TAG_PROJECT               = "custom/nodes_for_tag_project"
+        API_NODES_FOR_RECEIVER                  = "custom/nodes_for_receiver"
         API_RECV_METADATA_FOR_PROJECTS          = "custom/recv_metadata_for_projects"
         API_TAG_METADATA_FOR_PROJECTS           = "custom/tag_metadata_for_projects"
         API_TAGS_FOR_AMBIGUITIES                = "custom/tags_for_ambiguities"
@@ -131,8 +133,9 @@
 
     with(motus_vars,
     {
-        projects = integer(0)   ## vector of projectIDs to which user has access
-        dbDir = getwd()         ## folder where tag and receiver databases are stored
+        dataVersion = 0L  ## Current dataVersion returned by server
+        projects = 0L     ## vector of projectIDs to which user has access
+        dbDir = getwd()   ## folder where tag and receiver databases are stored
     })
     
     # CRAN Note avoidance

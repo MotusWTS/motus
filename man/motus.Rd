@@ -4,7 +4,6 @@
 \name{motus}
 \alias{motus}
 \alias{motus-package}
-\alias{motus-pkg}
 \title{Fetch and use data from the Motus Wildlife Tracking System}
 \description{
 \code{motus} is an R package for retrieving telemetry data from the Motus
@@ -15,58 +14,51 @@ For a detailed walk-though and instructions check out the
 \href{https://motus.org/MotusRBook/}{Motus R Book}
 
 Commonly used functions:
-
 \enumerate{
 \item Download telemetry data
 \itemize{
-\item \code{\link{tagme}()}
-\item \code{\link{tellme}()}
-\item \code{\link{metadata}()}
-\item \code{\link{checkVersion}()}
+\item \code{\link[=tagme]{tagme()}}
+\item \code{\link[=tellme]{tellme()}}
+\item \code{\link[=metadata]{metadata()}}
+\item \code{\link[=checkVersion]{checkVersion()}}
 }
-
 \item Create data filters
 \itemize{
-\item \code{\link{listRunsFilters}()}
-\item \code{\link{getRunsFilters}()}
-\item \code{\link{getRunsFilterID}()}
-\item \code{\link{createRunsFilter}()}
-\item \code{\link{writeRunsFilter}()}
-\item \code{\link{deleteRunsFilter}()}
+\item \code{\link[=listRunsFilters]{listRunsFilters()}}
+\item \code{\link[=getRunsFilters]{getRunsFilters()}}
+\item \code{\link[=createRunsFilter]{createRunsFilter()}}
+\item \code{\link[=writeRunsFilter]{writeRunsFilter()}}
+\item \code{\link[=deleteRunsFilter]{deleteRunsFilter()}}
 }
-
 \item Summarize data
 \itemize{
-\item \code{\link{tagSum}()}
-\item \code{\link{tagSumSite}()}
-\item \code{\link{simSiteDet}()}
-\item \code{\link{siteSum}()}
-\item \code{\link{siteSumDaily}()}
-\item \code{\link{siteTrans}()}
+\item \code{\link[=tagSum]{tagSum()}}
+\item \code{\link[=tagSumSite]{tagSumSite()}}
+\item \code{\link[=simSiteDet]{simSiteDet()}}
+\item \code{\link[=siteSum]{siteSum()}}
+\item \code{\link[=siteSumDaily]{siteSumDaily()}}
+\item \code{\link[=siteTrans]{siteTrans()}}
 }
-
 \item Plot data
 \itemize{
-\item \code{\link{plotAllTagsCoord}()}
-\item \code{\link{plotAllTagsSite}()}
-\item \code{\link{plotDailySiteSum}()}
-\item \code{\link{plotRouteMap}()}
-\item \code{\link{plotSite}()}
-\item \code{\link{plotSiteSig}()}
-\item \code{\link{plotTagSig}()}
+\item \code{\link[=plotAllTagsCoord]{plotAllTagsCoord()}}
+\item \code{\link[=plotAllTagsSite]{plotAllTagsSite()}}
+\item \code{\link[=plotDailySiteSum]{plotDailySiteSum()}}
+\item \code{\link[=plotRouteMap]{plotRouteMap()}}
+\item \code{\link[=plotSite]{plotSite()}}
+\item \code{\link[=plotSiteSig]{plotSiteSig()}}
+\item \code{\link[=plotTagSig]{plotTagSig()}}
 }
-
 \item Sunrises and sets
 \itemize{
-\item \code{\link{sunRiseSet}()}
-\item \code{\link{timeToSunriset}()}
+\item \code{\link[=sunRiseSet]{sunRiseSet()}}
+\item \code{\link[=timeToSunriset]{timeToSunriset()}}
 }
 }
 
 We also include a practice data set:
-
 \itemize{
-\item \code{\link{shorebirds}}
+\item \link{shorebirds}
 }
 }
 \references{

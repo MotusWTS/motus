@@ -1,3 +1,18 @@
+# motus 3.0.0 (2019-10-16)
+
+### Big Changes
+* Switch to data version 2
+    * Includes new CTT antennas
+    * Includes `nodeData` and `nodeDeps` tables for node related data and metadata.
+
+### Small Changes
+* Replace all `cat()` with `message()` (now suppressible)
+* Add `recvUtcOffset` and `tsCorrected` to `alltags` view
+* Add `gpsID` to `gps` table, `gpsID` is now the primary key and index
+
+### Bug fixes
+* Fixed bug where `tagme(..., countOnly = TRUE)` failed
+
 # motus 2.0.0 (2019-08-12)
 
 ### Big Changes

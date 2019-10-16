@@ -47,7 +47,7 @@
 #'    }
 #' }
 #'
-#' @export
+#' @noRd
 #'
 #' @author Denis Lepage, Bird Studies Canada
 
@@ -56,6 +56,7 @@ srvRecvMetadataForProjects = function(projectIDs) {
     return (list(
         recvDeps = structure(x$recvDeps, class = "data.frame", row.names=seq(along=x$recvDeps[[1]])),
         antDeps = structure(x$antDeps, class = "data.frame", row.names=seq(along=x$antDeps[[1]])),
+        nodeDeps = structure(x$nodeDeps, class = "data.frame", row.names=seq(along=x$nodeDeps[[1]])),
         projs = structure(x$projs, class = "data.frame", row.names=seq(along=x$projs[[1]]))
     ))
 }

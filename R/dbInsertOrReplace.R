@@ -7,17 +7,14 @@
 #' table-wise.
 #'
 #' @param con DBI database connection
-#'
 #' @param name name of table to insert or replace records into
-#'
 #' @param df data from which to write data.
-#'
-#' @param replace boolean that determines whether existing records are replaced or ignored.
+#' @param replace boolean that determines whether existing records are replaced
+#'   or ignored.
 #'
 #' @return no return value
 #'
-#' @export
-#'
+#' @noRd
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 dbInsertOrReplace = function(con, name, df, replace=TRUE) {

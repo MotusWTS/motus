@@ -16,7 +16,7 @@
 #'    \item count    integer number of pulses seen by antenna in this hour bin
 #' }
 #'
-#' @export
+#' @noRd
 #'
 #' @note Paging for this query is handled by passing the last ant and hourBin values
 #' received to the next call of this function.  Values are returned sorted by

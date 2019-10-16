@@ -63,7 +63,7 @@
 #' }
 #' }
 #'
-#' @export
+#' @noRd
 #'
 #' @author Denis Lepage, Bird Studies Canada
 

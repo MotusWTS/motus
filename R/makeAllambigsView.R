@@ -1,13 +1,11 @@
 #' create a virtual table that transposes the tagAmbig table
 #'
-#' Creates a virtual table (really a 'view') in a motus database that
-#' converts the list of tags associated with ambiguous detections from columns to rows
-#' this is mainly used by the alltags view to expand the detections records showing each tag
-#' in addition to the ambigID
-#'
+#' Creates a virtual table (really a 'view') in a motus database that converts
+#' the list of tags associated with ambiguous detections from columns to rows
+#' this is mainly used by the alltags view to expand the detections records
+#' showing each tag in addition to the ambigID
 #'
 #' @param db dplyr src_sqlite to detections database
-#'
 #' @param name character scalar; name for the virtual table.
 #'     Default: 'allambigs'.
 #'
@@ -22,7 +20,7 @@
 #' name in \code{db}.  The virtual table is an SQL VIEW, which will persist in \code{db}
 #' across R sessions.
 #'
-#' @export
+#' @noRd
 #'
 #' @author Denis Lepage
 #'

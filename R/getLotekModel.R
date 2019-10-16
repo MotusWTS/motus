@@ -4,13 +4,12 @@
 #' for a few receivers, additional fields from the .DTA file are needed.
 #'
 #' @param serno character scalar; receiver serial number, e.g. "Lotek-123"
-#'
 #' @param extra a named character vector of additional .DTA file fields
-#' Currently, this parameter is ignored.
+#'   Currently, this parameter is ignored.
 #'
 #' @return a character scalar with the receiver model
 #'
-#' @export
+#' @noRd
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 

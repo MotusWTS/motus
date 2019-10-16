@@ -2,3 +2,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 RELEASE.R
+^appveyor.yml$
+^.*\SG-.*$

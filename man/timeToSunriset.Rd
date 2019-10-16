@@ -47,16 +47,19 @@ sql.motus <- tagme(176, update = FALSE,
 
 # convert sql file "sql.motus" to a tbl called "tbl.alltags"
 library(dplyr)
-tbl.alltags <- tbl(sql.motus, "alltags") 
+tbl.alltags <- tbl(sql.motus, "alltags")
 
 # convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
+# let's also filter down to one day
 df.alltags <- tbl.alltags \%>\% 
-collect() \%>\% 
-as.data.frame()
+  collect() \%>\% 
+  mutate(time = lubridate::as_datetime(tsCorrected),
+         date = lubridate::as_date(time)) \%>\%
+  filter(date == "2015-10-31") \%>\%
+  as.data.frame()
 
-# Get sunrise and sunset information with units in minutes using tbl file
-# tbl.alltags
-sunrise <- timeToSunriset(tbl.alltags, units = "mins")
+# Get sunrise and sunset information with units in minutse
+sunrise <- timeToSunriset(df.alltags, units = "mins")
 
 # Get sunrise and sunset information with units in hours using gps lat/lon
 # using data.frame df.alltags. NOTE: This only works if there are non-NA

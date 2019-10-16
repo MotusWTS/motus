@@ -9,7 +9,7 @@
 #'
 #' @seealso \code{\link{motus_vars}}
 #'
-#' @export
+#' @noRd
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
@@ -22,7 +22,8 @@ srvAuth = function() {
     tryCatch({
         res = srvQuery(motus_vars$API_DATA_AUTHENTICATE, pars, auth=FALSE)
         motus_vars$projects = res$projects
-        ## cat(sprintf("Got authentication token from %s  \r",motus_vars$dataServerURL))
+        motus_vars$dataVersion = res$dataVersion
+        ## message(sprintf("Got authentication token from %s  ", motus_vars$dataServerURL))
         return(res$authToken)
     }, error = function(e) {
         motus_vars$userLogin = NULL

@@ -1,3 +1,5 @@
+#' Return filterID matching a filter name
+#' 
 #' Returns the filterID matching a filter name (and optionally a project ID)
 #' If no project ID is specified and there is only 1 filter of the correct name,
 #' return the filterID regardless of the project it is attached to.
@@ -5,16 +7,13 @@
 #' return the specific one matching the project ID (including NA). 
 #'
 #' @param src dplyr sqlite src, as returned by \code{dplyr::src_sqlite()}
-#'
-#' @param filterName unique name given to the filter 
-#'
-#' @param motusProjID optional project ID attached to the filter in order to share with other users of the same project.
-#'
-#' @param descr optional filter description detailing what the filter is meant to do
+#' @param filterName unique name given to the filter
+#' @param motusProjID optional project ID attached to the filter in order to
+#'   share with other users of the same project.
 #'
 #' @return an integer filterID
 #'
-#' @export
+#' @noRd
 #'
 #' @author Denis Lepage, Bird Studies Canada
 

@@ -1,22 +1,24 @@
-##
-## translated from: http://www.movable-type.co.uk/scripts/latlong-vincenty.html
-##
-## /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
-## /* Vincenty Inverse Solution of Geodesics on the Ellipsoid (c) Chris Veness 2002-2012             */
-## /*                                                                                                */
-## /* from: Vincenty inverse formula - T Vincenty, "Direct and Inverse Solutions of Geodesics on the */
-## /*       Ellipsoid with application of nested equations", Survey Review, vol XXII no 176, 1975    */
-## /*       http://www.ngs.noaa.gov/PUBS_LIB/inverse.pdf                                             */
-## /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
-
-## /**
-##  * Calculates geodetic distance between two points specified by latitude/longitude using 
-##  * Vincenty inverse formula for ellipsoids
-##  *
-##  * @param   {Number} lat1, lon1: first point in decimal degrees
-##  * @param   {Number} lat2, lon2: second point in decimal degrees
-##  * @returns (Number} distance in metres between points
-##  */
+#' Calculate geodetic distance between two points
+#' 
+#' Calculates geodetic distance between two points specified by
+#' latitude/longitude using Vincenty inverse formula for ellipsoids
+#'
+#' @param Number lat1, lon1: first point in decimal degrees
+#' @param Number lat2, lon2: second point in decimal degrees
+#' 
+#' @return Distance in metres between points
+#' 
+#' @note Translated from:
+#'   http://www.movable-type.co.uk/scripts/latlong-vincenty.html
+#'   
+#'   Vincenty Inverse Solution of Geodesics on the Ellipsoid (c) Chris Veness
+#'   2002-2012
+#'   
+#'   Vincenty inverse formula - T Vincenty, "Direct and Inverse Solutions of
+#'   Geodesics on the Ellipsoid with application of nested equations", Survey
+#'   Review, vol XXII no 176, 1975 http://www.ngs.noaa.gov/PUBS_LIB/inverse.pdf
+#'   
+#' @noRd
 
 latLonDist = function(lat1, lon1, lat2, lon2) {
   a = 6378137

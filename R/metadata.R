@@ -18,12 +18,33 @@
 #' @export
 #'
 #' @author Denis Lepage, Bird Studies Canada
+#' 
+#' @examples 
+#' 
+#' # download and access data from project 176 in sql format
+#' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+#' 
+#' # OR use example sql file included in `motus`
+#' sql.motus <- tagme(176, update = FALSE, 
+#'                    dir = system.file("extdata", package = "motus"))
+#'                    
+#' # Add extended metadata to your file
+#' \dontrun{metadata(sql.motus)}
+#'   
+#' # Access different metadata tables
+#' library(dplyr)
+#' tbl(sql.motus, "species")
+#' tbl(sql.motus, "projs")
+#' tbl(sql.motus, "tagDeps")
+#' # Etc.
+#'   
+
 
 metadata = function(src, projectIDs=NULL, replace=TRUE, delete=FALSE) {
-
-    sql = function(...) DBI::dbExecute(src$con, sprintf(...))
-    if (delete) {
-      cat("Deleting local copy of Motus metadata\r\n")
+   
+   sql = function(...) DBI::dbExecute(src$con, sprintf(...))
+   if (delete) {
+      message("Deleting local copy of Motus metadata")
       sql("delete from species")
       sql("delete from projs")
       sql("delete from tagDeps")
@@ -32,28 +53,29 @@ metadata = function(src, projectIDs=NULL, replace=TRUE, delete=FALSE) {
       sql("delete from antDeps")
       sql("delete from recvDeps")
       sql("delete from recvs")
-    }
-    
-    cat("Loading complete Motus metadata\r\n")
-    if (!is.null(projectIDs))
-      cat(sprintf("Project # %s\r\n", paste(projectIDs,collapse=", ")))
-    
-    ## get metadata for tags, their deployments, and species names
-    tmeta = srvTagMetadataForProjects(projectIDs=projectIDs)
-  	dbInsertOrReplace(src$con, "tags", tmeta$tags, replace)
-  	dbInsertOrReplace(src$con, "tagDeps", tmeta$tagDeps, replace)
-  	dbInsertOrReplace(src$con, "tagProps", tmeta$tagProps, replace)
-  	dbInsertOrReplace(src$con, "species", tmeta$species, replace)
-  	dbInsertOrReplace(src$con, "projs", tmeta$projs, replace)
-  	## update tagDeps.fullID
-  	DBI::dbExecute(src$con, "update tagDeps set fullID = (select printf('%s#%s:%.1f@%g(M.%d)', t3.label, t2.mfgID, t2.bi, t2.nomFreq, t2.tagID)
+   }
+   
+   message("Loading complete Motus metadata")
+   if (!is.null(projectIDs))
+      message(sprintf("Project # %s", paste(projectIDs, collapse = ", ")))
+
+   ## get metadata for tags, their deployments, and species names
+   tmeta = srvTagMetadataForProjects(projectIDs=projectIDs)
+   dbInsertOrReplace(src$con, "tags", tmeta$tags, replace)
+   dbInsertOrReplace(src$con, "tagDeps", tmeta$tagDeps, replace)
+   dbInsertOrReplace(src$con, "tagProps", tmeta$tagProps, replace)
+   dbInsertOrReplace(src$con, "species", tmeta$species, replace)
+   dbInsertOrReplace(src$con, "projs", tmeta$projs, replace)
+   ## update tagDeps.fullID
+   DBI::dbExecute(src$con, "update tagDeps set fullID = (select printf('%s#%s:%.1f@%g(M.%d)', t3.label, t2.mfgID, t2.bi, t2.nomFreq, t2.tagID)
       from tags as t2 join projs as t3 on t3.id = tagDeps.projectID where t2.tagID = tagDeps.tagID limit 1)")
 
-    ## get metadata for receivers and their antennas
-  	rmeta = srvRecvMetadataForProjects(projectIDs)
-  	dbInsertOrReplace(src$con, "recvDeps", rmeta$recvDeps, replace)
-  	dbInsertOrReplace(src$con, "recvs", rmeta$recvDeps[,c("deviceID", "serno")], replace)
-  	dbInsertOrReplace(src$con, "antDeps", rmeta$antDeps, replace)
-  	dbInsertOrReplace(src$con, "projs", rmeta$projs, replace)
-  	cat("Done\r\n")
+   ## get metadata for receivers and their antennas
+   rmeta = srvRecvMetadataForProjects(projectIDs)
+   dbInsertOrReplace(src$con, "recvDeps", rmeta$recvDeps, replace)
+   dbInsertOrReplace(src$con, "recvs", rmeta$recvDeps[,c("deviceID", "serno")], replace)
+   dbInsertOrReplace(src$con, "antDeps", rmeta$antDeps, replace)
+   dbInsertOrReplace(src$con, "nodeDeps", rmeta$nodeDeps, replace)
+   dbInsertOrReplace(src$con, "projs", rmeta$projs, replace)
+   message("Done")
 }

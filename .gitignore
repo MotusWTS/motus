@@ -4,3 +4,4 @@ nohup.out
 .Rproj.user
 .Rhistory
 .RData
+tests/spelling.R

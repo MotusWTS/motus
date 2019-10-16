@@ -1,114 +1,89 @@
 #' Export results of an sqlite query to an .rds file using limited
 #' memory (Linux, OS X; not Windows)
 #'
-#' @details Typically, exporting the contents of an sqlite database
-#'     table as an R .rds file has meant reading the entire table into
-#'     R as a data.frame, then using \code{saveRDS()}.  This requires
-#'     memory proportional to the size of the data.frame, but with a sufficiently
-#'     large swap partition, this will still work.  However, our experience on
-#'     an Intel core-i7 server with 4 cores @ 3.4 GHz, 32 G RAM, and a 256 SSD swap
-#'     shows that our largest sites still slow the server down to a grind when
-#'     processing one site at a time.  To permit this all to work on a lower
-#'     spec server with multiple sites potentially being processed at once, we
-#'     need to do this with a much smaller memory footprint, even at the expense
-#'     of considerably longer running time.
+#' @details Typically, exporting the contents of an sqlite database table as an
+#'   R .rds file has meant reading the entire table into R as a data.frame, then
+#'   using `saveRDS()`.  This requires memory proportional to the size of the
+#'   data.frame, but with a sufficiently large swap partition, this will still
+#'   work.  However, our experience on an Intel core-i7 server with 4 cores @
+#'   3.4 GHz, 32 G RAM, and a 256 SSD swap shows that our largest sites still
+#'   slow the server down to a grind when processing one site at a time.  To
+#'   permit this all to work on a lower spec server with multiple sites
+#'   potentially being processed at once, we need to do this with a much smaller
+#'   memory footprint, even at the expense of considerably longer running time.
 #'
-#' This function serializes the results of an SQLite query as a
-#' data.frame into an .rds file, using a fixed amount of memory that
-#' does not depend on the size of the results.  Because sqlite stores
-#' data row-by-row, while .rds files store them column by column, the
-#' main challenge is to transpose the data without having it all in
-#' memory.  We do this with a single run of the query, distributing
-#' columns to their own files, then concatenating and compressing
-#' these into the final .rds file via a shell command.
+#'   This function serializes the results of an SQLite query as a data.frame
+#'   into an .rds file, using a fixed amount of memory that does not depend on
+#'   the size of the results.  Because sqlite stores data row-by-row, while .rds
+#'   files store them column by column, the main challenge is to transpose the
+#'   data without having it all in memory.  We do this with a single run of the
+#'   query, distributing columns to their own files, then concatenating and
+#'   compressing these into the final .rds file via a shell command.
 #'
-#' @note End users should really be working with an on-disk .sqlite
-#'     version of their data, but we want to maintain some backward
-#'     compatibility with users' existing code.  Also, the details of
-#'     the algorithm in this function depend on the encoding inherent
-#'     in the files serialize.c and Rinternals.h from the R source
-#'     tree.
+#' @note End users should really be working with an on-disk .sqlite version of
+#'   their data, but we want to maintain some backward compatibility with users'
+#'   existing code.  Also, the details of the algorithm in this function depend
+#'   on the encoding inherent in the files serialize.c and Rinternals.h from the
+#'   R source tree.
 #'
-#' @note The resulting .rds file uses bzip2 compression, which works with
-#' recent versions of R, but might break `readRDS()` in older versions.
+#'   The resulting .rds file uses bzip2 compression, which works with recent
+#'   versions of R, but might break `readRDS()` in older versions.
 #'
-#' The algorithm, ignoring headers and footers, is:
+#'   The algorithm, ignoring headers and footers, is:
 #'
-#' \itemize{
+#'   - for each column in the query result, open a temporary output file 
+#'   - while there are results remaining
+#'       - fetch a block of query results 
+#'       - distribute data in the block among the column files 
+#'   - when all blocks have been distributed, close the temporary files and
+#'   concatenate them on disk into the target .rds file
 #'
-#' \item for each column in the query result, open a temporary output
-#' file
+#'   The result is an .rds file in non-XDR little-endian format, which
+#'   should read more quickly into memory.
 #'
-#' \item while there are results remaining
-#' \itemize{
+#'   Data types are converted as so: 
+#'   - sqlite real: written as 8-byte doubles
+#'   - sqlite int: written as 4-byte signed integers or logical (see below)
+#'   - sqlite text: written as a factor
 #'
-#' \item fetch a block of query results
-#'
-#' \item distribute data in the block among the column files
-#'
-#' }
-#'
-#' \item when all blocks have been distributed, close the temporary
-#' files and concatenate them on disk into the target .rds file
-#'
-#' }
-#'
-#' The result is an .rds file in non-XDR little-endian format, which should
-#' read more quickly into memory.
-#'
-#' Data types are converted as so:
-#' \itemize{
-#'  \item sqlite real: written as 8-byte doubles
-#'  \item sqlite int: written as 4-byte signed integers or logical (see below)
-#'  \item sqlite text: written as a factor
-#' }
-#'
-#' Additionally, class() attributes can be specified for any of the columns.
-#' If "logical" or "integer" is specified for a column, it is
-#' written as a native vector of that type.
+#'   Additionally, `class()` attributes can be specified for any of the columns.
+#'   If "logical" or "integer" is specified for a column, it is written as a
+#'   native vector of that type.
 #'
 #' @param con connection to sqlite database
-#'
-#' @param query character scalar; query on con; the entire results of
-#'     the query will be written to the .rds file, but the query can
-#'     include 'limit' and 'offset' phrases.
-#'
+#' @param query character scalar; query on con; the entire results of the query
+#'   will be written to the .rds file, but the query can include 'limit' and
+#'   'offset' phrases.
 #' @param bind.data values for query parameters, if any; see
-#' [DBI::dbGetQuery()].  Defaults to \code{data.frame(x=0L)},
-#' i.e. a trivial data.frame meant only to pass the sanity checks
-#' imposed by \code{dbGetQuery()}
+#'   [DBI::dbGetQuery()].  Defaults to `data.frame(x=0L)`, i.e. a trivial
+#'   data.frame meant only to pass the sanity checks imposed by
+#'   `dbGetQuery()`
+#' @param out character scalar; name of file to which the query results will be
+#'   saved.  Should end in ".rds".
+#' @param classes named list of character vectors; classes for a subset of the
+#'   columns in parameter `query`
+#' @param rowsPerBlock maximum number of rows fetched from the DB at a time;
+#'   this limits the maximum memory consumed by this function. Default: 10000
 #'
-#' @param out character scalar; name of file to which the query
-#'     results will be saved.  Should end in ".rds".
+#' @param stringsAsFactors should string columns be exported as factors?  With
+#'   the default value of TRUE, size on disk and size in memory of the
+#'   data.frame upon subsequent read will both be smaller, but at the cost of
+#'   having to run a separate query on each string column to determine the
+#'   levels.  These separate queries might be just as expensive as the full
+#'   query, in which case you should specify simpler queries for obtaining
+#'   factor levels using `factorQueries`.  You can specify FALSE here and still
+#'   request that specific text columns be exported as factors by including
+#'   `'factor'` in the appropriate slot of the `classes` parameter.
 #'
-#' @param classes named list of character vectors; classes for a
-#'     subset of the columns in parameter \code{query}
-#'
-#' @param rowsPerBlock maximum number of rows fetched from the DB at a
-#'     time; this limits the maximum memory consumed by this function.
-#' Default: 10000
-#'
-#' @param stringsAsFactors should string columns be exported as
-#'     factors?  With the default value of TRUE, size on disk and size
-#'     in memory of the data.frame upon subsequent read will both be
-#'     smaller, but at the cost of having to run a separate query on
-#'     each string column to determine the levels.  These separate
-#'     queries might be just as expensive as the full query, in which
-#'     case you should specify simpler queries for obtaining factor
-#'     levels using \code{factorQueries}.  You can specify FALSE here
-#'     and still request that specific text columns be exported as
-#'     factors by including \code{'factor'} in the appropriate slot of
-#'     the \code{'classes'} parameter.
-#'
-#' @param factorQueries a named character vector of queries for quickly obtaining the
-#' levels for those columns you wish to be factors.  This list will be consulted
-#' for any string column, if `stringsAsFactors` is TRUE, and for any column
-#' whose entry in \code{classes} is `factor`.  Names of this list are
-#' column names, and values are the query to perform to get the factor levels
-#' for that column.  The query should return a distinct set of levels.
-#' You don't have to specify `factorQueries`, but if you don't, \code{sqliteToRDS}
-#' might take $N+1$ times as long to run as it would otherwise, where $N$ is the
-#' number of factor columns.
+#' @param factorQueries a named character vector of queries for quickly
+#'   obtaining the levels for those columns you wish to be factors.  This list
+#'   will be consulted for any string column, if `stringsAsFactors` is TRUE, and
+#'   for any column whose entry in `classes` is `factor`.  Names of this list
+#'   are column names, and values are the query to perform to get the factor
+#'   levels for that column.  The query should return a distinct set of levels.
+#'   You don't have to specify `factorQueries`, but if you don't, `sqliteToRDS`
+#'   might take $N+1$ times as long to run as it would otherwise, where $N$ is
+#'   the number of factor columns.
 #'
 #' @return integer scalar; the number of result rows written to file \code{out}.
 #'
@@ -125,7 +100,9 @@
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 
-sqliteToRDS = function(con, query, bind.data=data.frame(), out, classes = NULL, rowsPerBlock=10000, stringsAsFactors = TRUE, factorQueries = NULL) {
+sqliteToRDS = function(con, query, bind.data=data.frame(), out, classes = NULL, 
+                       rowsPerBlock=10000, stringsAsFactors = TRUE, 
+                       factorQueries = NULL) {
     ## get the result types by asking for the first row of the
     ## query
 
@@ -296,7 +273,6 @@ sqliteToRDS = function(con, query, bind.data=data.frame(), out, classes = NULL, 
 #' serialize an object to a raw vector, without the "RDS" file header.
 #'
 #' @param x the R object
-#'
 #' @param dropTypeLen logical; if TRUE, also drop the initial TYPE and length fields (8 extra bytes)
 #'
 #' @return raw vector to which x has been serialized in binary little-endian (non-XDR) format,
@@ -306,8 +282,10 @@ sqliteToRDS = function(con, query, bind.data=data.frame(), out, classes = NULL, 
 #'    RDS_min_R_version
 #' So we just drop the first 14 bytes.
 #'
-#' @note this is a convenience function used by sqliteToRds, and is intended for small objects,
-#' since the serialization is done in-memory.
+#' @note this is a convenience function used by sqliteToRds, and is intended for
+#'   small objects, since the serialization is done in-memory.
+#'   
+#' @noRd
 
 serializeNoHeader = function(x, dropTypeLen=FALSE) {
     r = rawConnection(raw(), "wb")
