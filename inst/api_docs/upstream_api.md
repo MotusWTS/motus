@@ -16,6 +16,7 @@ it is to work with this package.
 - **runs:** [for tag project](#runs-for-tag-project); [for receiver](#runs-for-receiver)
 - **hits:** [for tag project](#hits-for-tag-project); [for receiver](#hits-for-receiver)
 - **gps:** [for tag project](#gps-for-tag-project); [for receiver](#gps-for-receiver)
+- **nodes:** [for tag project](#nodes-for-tag-project); [for receiver](#nodes-for-receiver)
 - **pulse counts:** [for_receiver](#pulse-counts-for-receiver)
 - **metadata:** [for tags](#metadata-for-tags); [for receivers](#metadata-for-receivers)
 - **ambiguities:** [among tags](#tags-for-ambiguities); [among projects](#project-ambiguities-for-tag-project)
@@ -25,24 +26,15 @@ it is to work with this package.
 ### Request ###
  - requests are sent by the HTTP POST method
  - the request has header `Content-Type: application/x-www-form-urlencoded`
- - can have an optional header `Accept-Encoding: gzip` in which case the reply
-   will be gzip-compressed, rather then bzip2-compressed (see below)
- - the POST data has a single item called `json`, which is a JSON-encoded object.
+ - the POST data has a single item called `json`
  - the fields of `json` are the parameters listed for each API entrypoint below.
  - most requests require an `authToken` value, which can be obtained by a call
    to `authenticate_user`
- - if a request indicates that a parameter should be an array, then
-   a scalar of the same type can be provided instead, and is treated as an array of length 1.
-   i.e. the API doesn't distinguish between `"par":X` and `"par":[X]` if `X` is a double, integer,
-   boolean or string
 
 ### Reply ###
- - is a JSON-encoded object: header `Content-Type = application/json`
- - is bzip2-compressed: header `Content-Encoding = bzip2`.  To support browsers and other
-   contexts without native bzip2 decompression, if the request had a
-   header called `Accept-Encoding` that includes the string "gzip", then the
-   reply is gzip-compressed, with header `Content-Encoding: gzip`.
- - most returned objects have fields which are arrays of
+ - is a json object: header `Content-Type = application/json`
+ - is bzip2-compressed: header `Content-Encoding = bzip2`
+ - most return values are an object whose fields are arrays of
    equal length, which is the natural JSON encoding of an R data.frame
  - errors are indicated by including a field called `error` in the reply; other
    fields might be present, giving additional information.  If no field `error`
@@ -67,7 +59,7 @@ The server is at [https://sgdata.motus.org](https://sgdata.motus.org) and the UR
 
 ### api info ###
 
-   api_info ()
+   api_info (authToken)
 
    - return an object with these items:
 
@@ -136,14 +128,13 @@ These assumptions allow for simpler, more efficient database queries.
    deviceID_for_receiver (serno, authToken)
 
        - serno: array of string; receiver serial number(s)
-       - authToken: authorization token returned by authenticate_user
 
       e.g.
       curl --data-urlencode json='{"serno":"SG-1234BBBK5678","authToken":"XXX"}' https://sgdata.motus.org/data/custom/deviceID_for_receiver
 
    - return a list of receiver device IDs for the given serial numbers
 
-   - fields in the returned object are arrays:
+   - fields in the return value are arrays:
       - serno: string; serial number, as specified
       - deviceID: integer; motus device ID, or NA where the serial number was not found
 
@@ -152,7 +143,6 @@ These assumptions allow for simpler, more efficient database queries.
    receivers_for_project (projectID, authToken)
 
        - projectID: integer; project ID
-       - authToken: authorization token returned by authenticate_user
 
       e.g.
       curl --data-urlencode json='{"projectID":123,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/receivers_for_project
@@ -190,17 +180,13 @@ These assumptions allow for simpler, more efficient database queries.
      where the batchID is > `batchID`
 
    - fields in the returned object are arrays:
-      - batchID: integer;
-      - motusDeviceID: integer; motus device ID
-      - monoBN: integer; corrected boot count for device (where available)
-      - tsStart: double; unix timestamp (seconds since 1 Jan 1970 GMT) for start of raw data processed in this batch
-      - tsEnd: double; unix timestamp for end of raw data processed in this batch
-      - numHits: integer; count of detections on all antennas in this batch
-      - ts: double; unix timestamp at which processing of this batch completed
-      - motusUserID: integer; motus ID of user who submitted top-level job; e.g. who uploaded files; might be null
-      - motusProjectID; integer; motus ID of project that user selected for products resulting from the upload
-        might be null;
-      - motusJobID; integer; ID of processing job on data server.
+      - batchID
+      - deviceID
+      - monoBN
+      - tsBegin
+      - tsEnd
+      - numHits
+      - ts
 
 Paging for this query is achieved by using the largest returned value of `batchID`
 as `batchID` on subsequent calls.  When there are no further batches, the API
@@ -221,16 +207,13 @@ returns an empty list.
      project projectID, where the batchID is > `batchID`
 
    - the returned object has these array fields:
-      - batchID
-      - deviceID
-      - monoBN
-      - tsStart
-      - tsEnd
-      - numHits
-      - ts
-      - motusUserID
-      - motusProjectID
-      - motusJobID
+      - batchID: integer;
+      - deviceID: integer; motus device ID
+      - monoBN: integer; corrected boot count for device (where available)
+      - tsBegin: double; unix timestamp (seconds since 1 Jan 1970 GMT) for start of raw data processed in this batch
+      - tsEnd: double; unix timestamp for end of raw data processed in this batch
+      - numHits: integer; count of detections on all antennas in this batch
+      - ts: double; unix timestamp at which processing of this batch completed
 
 Paging for this query is achieved by using the largest returned value of `batchID`
 as `batchID` on subsequent calls.  When there are no further batches, the API
@@ -250,15 +233,12 @@ returns an empty list.
 
    - fields in the returned object are arrays:
       - batchID
-      - motusDeviceID
+      - deviceID
       - monoBN
-      - tsStart
+      - tsBegin
       - tsEnd
       - numHits
       - ts
-      - motusUserID
-      - motusProjectID
-      - motusJobID
 
 Paging for this query is achieved by using the largest returned value of `batchID`
 as `batchID` on subsequent calls.  When there are no further batches, the API
@@ -279,28 +259,22 @@ detections.  Currently, that means only administrative users.
       e.g.
       curl --data-urlencode json='{"projectID":123,"batchID":111,"runID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/runs_for_tag_project
 
-   - return a list of all runs of a tag in project `projectID`, that began,
-     were extended or ended in batch `batchID`, and with run ID > `runID`
+   - return a list of all runs of a tag in project `projectID`, from batch
+     `batchID` and with run ID > `runID`
 
    - fields in the returned object are arrays:
-      - runID: big integer; unique ID of run
-      - batchIDbegin: integer; id of batch in which run began
-      - tsBegin: double; unix timestamp of first detection in run
-      - tsEnd: double; unix timestamp of last detection in run (*so far*, if `done` is 0)
-      - done: integer; 0 if the run might continue; 1 if it has finished
-      - motusTagID: integer; ID of tag whose run of detections this is
-      - ant: integer; antenna port number; (-1) indicates "A1+A2+A3+A4" (Lotek)
-      - len: integer; length of run (*so far*, if `done` is 0)
+      - runID
+      - batchIDbegin
+      - tsBegin
+      - tsEnd
+      - done
+      - motusTagID
+      - ant
+      - len
 
 Paging for this query is achieved by using the last returned value of `runID`
 as `runID` on subsequent calls.  When there are no further runs, the API
 returns an empty list.
-
-If a run's `done` field is zero, then later processing of data from
-the same receiver by the server might extend the run.  In that case the
-same run might be returned by later calls to the same API, but with a
-different batchID; and the run's `tsEnd`, `len`, or `done`
-fields could change if the run were extended or known to have ended.
 
 ### runs for receiver ###
 
@@ -313,33 +287,21 @@ fields could change if the run were extended or known to have ended.
       e.g.
       curl --data-urlencode json='{"projectID":123,"batchID":111,"runID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/runs_for_receiver
 
-   - return a list of all runs begun, extended, or ended in batch `batchID` with run ID > `runID`
+   - return a list of all runs from batch `batchID` with run ID > `runID`
 
    - fields in the returned object are arrays:
-      - runID: big integer; unique ID of run
-      - batchIDbegin: integer; id of batch in which run began
-      - tsBegin: double; unix timestamp of first detection in run
-      - tsEnd: double; unix timestamp of last detection in run (*so far*, if `done` is 0)
-      - done: integer; 0 if the run might continue; 1 if it has finished
-      - motusTagID: integer; ID of tag whose run of detections this is
-      - ant: integer; antenna port number; (-1) indicates "A1+A2+A3+A4" (Lotek)
-      - len: integer; length of run (*so far*, if `done` is 0)
+      - runID
+      - batchIDbegin
+      - tsBegin
+      - tsEnd
+      - done
+      - motusTagID
+      - ant
+      - len
 
 Paging for this query is achieved by using the last returned value of `runID`
 as `runID` on subsequent calls.  When there are no further runs, the API
 returns an empty list.
-
-For regular users, this only returns runs if the user has permission for
-the project which owns the receiver deployment covering this batch.
-
-For admin users, *all* runs are returned, regardless of batch ownership
-(or lack thereof).
-
-If a run's `done` field is zero, then later processing of data from
-the same receiver by the server might extend the run.  In that case the
-same run might be returned by later calls to the same API, but with a
-different batchID; and the run's `tsEnd`, `len`, or `done`
-fields could change if the run were extended or known to have ended.
 
 ### hits for tag project ###
 
@@ -403,12 +365,6 @@ Paging for this query is achieved by using the last returned value of `hitID`
 as `hitID` on subsequent calls.  When there are no further hits, the API
 returns an empty list.
 
-For regular users, this only returns hits if the user has permission for
-the project which owns the receiver deployment covering this batch.
-
-For admin users, *all* hits are returned, regardless of batch ownership
-(or lack thereof).
-
 ### gps for tag project ###
 
    gps_for_tag_project (projectID, batchID, ts, authToken)
@@ -432,10 +388,7 @@ For admin users, *all* hits are returned, regardless of batch ownership
      the project's tags.
 
    - fields in the returned object are arrays:
-     - ts receiver timestamp (seconds since 1 Jan 1970, GMT)
-     - gpsts if present, timestamp reported by GPS; not necessarily identical to `ts`, as
-       receiver clock tracks gps by rate slewing, rather than stepping, so adjustments
-       are gradual and never negative.
+     - ts
      - batchID (optional; this is just batchID)
      - lat
      - lon
@@ -460,9 +413,6 @@ returns an empty list.
 
    - fields in the returned object are arrays:
      - ts
-     - gpsts if present, timestamp reported by GPS; not necessarily identical to `ts`, as
-       receiver clock tracks gps by rate slewing, rather than stepping, so adjustments
-       are gradual and never negative.
      - batchID (optional; this is just batchID)
      - lat
      - lon
@@ -472,11 +422,58 @@ Paging for this query is achieved by using the last returned value of `ts`
 as `ts` on subsequent calls.  When there are no further GPS fixes, the API
 returns an empty list.
 
-For regular users, this only returns gps records if the user has permission for
-the project which owns the receiver deployment covering this batch.
 
-For admin users, *all* gps records are returned, regardless of batch ownership
-(or lack thereof).
+### nodes for tag project ###
+
+   nodes_for_tag_project (projectID, batchID, nodeDataID, authToken)
+
+       - projectID: integer; project ID of tags
+       - batchID: integer; batchID where tags from projectID were detected
+       - nodeDataID: largest nodeDateID  we *already* have for this batch
+       - authToken: authorization token returned by authenticate_user
+
+      e.g.
+      curl --data-urlencode json='{"projectID":123,"batchID":111,"nodeDataID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/nodes_for_tag_project
+
+   - return all CTT node data  from batch `batchID` whose nodeDataID is greater than
+     passed `nodeDataID` attribute and "relevant to" detections of a tag deployment
+     from project `projectID. 
+
+   - fields in the returned object are arrays:
+     - nodeDataID
+     - nodeNum
+     - batchID (optional; this is just batchID)
+     - lat
+     - lon
+     
+
+Paging for this query is achieved by using the last returned value of `nodeDataID`
+as `nodeDataID` on subsequent calls.  When there are no further node records, the API
+returns an empty list.
+
+### nodes for receiver ###
+
+   nodes_for_receiver (batchID, nodedataID, authToken)
+
+       - batchID: integer; batchID
+       - nodeDataID: largest nodeDateID  we *already* have for this batch
+       - authToken: authorization token returned by authenticate_user
+
+      e.g.
+      curl --data-urlencode json='{"batchID":111,"nodeDataID":0,"authToken":"XXX"}' https://sgdata.motus.org/data/custom/nodes_for_receiver
+
+   - return all CTT node records associated with batch batchID whose nodeDataID is greater than `nodedataID`
+
+   - fields in the returned object are arrays:
+     - nodeDataID
+     - nodeNum
+     - batchID (optional; this is just batchID)
+     - lat
+     - lon
+
+Paging for this query is achieved by using the last returned value of `nodeDataID`
+as `nodeDataID` on subsequent calls.  When there are no further node records, the API
+returns an empty list.
 
 ### metadata for tags ###
 
@@ -582,6 +579,8 @@ For admin users, *all* gps records are returned, regardless of batch ownership
          - polarization2: double; angle giving tilt from "normal" position, in degrees
          - polarization1: double; angle giving rotation of antenna about own axis, in degrees.
 
+      - nodeDeps; an object with CTT node metadata fields as arrays (field list to be updated)
+      
       - projs; a object with these array fields:
          - id: integer; motus project id
          - name; string; full name of motus project
@@ -650,12 +649,6 @@ For admin users, *all* gps records are returned, regardless of batch ownership
       - numHits
       - numGPS
       - numBytes: estimated uncompressed size of data transfer
-
-For regular users, this only counts items where the user has permission for
-the project which owns the receiver deployment covering the batch.
-
-For admin users, *all* items are counted, regardless of batch ownership
-(or lack thereof).
 
 ### project ambiguities for tag project ###
 
@@ -729,9 +722,3 @@ Paging for this query is achieved by using the last returned values of
 there are no further pulse counts, the API returns an empty list.
 
 Note that this API returns pulses sorted by hourBin within antenna for each batch.
-
-For regular users, this only returns pulse counts if the user has permission for
-the project which owns the receiver deployment covering this batch.
-
-For admin users, *all* pulse counts are returned, regardless of batch ownership
-(or lack thereof).

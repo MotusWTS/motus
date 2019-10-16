@@ -109,6 +109,7 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
           if(!requireNamespace("RCurl", quietly = TRUE)) {
             stop("Package 'RCurl' required", call. = FALSE)
           }
+
           curl = RCurl::getCurlHandle()
           RCurl::curlSetOpt(curl=curl,
                             .opts = list(
@@ -124,6 +125,7 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
         
         Encoding(resp) = "UTF-8"
         
+          
         if (JSON) return(resp)
         if (grepl("^[ \r\n]*$", resp)) return(list())
         
