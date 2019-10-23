@@ -1,3 +1,8 @@
+# motus 3.0.1
+
+### Bug fix
+* Receivers updating to the new version errored on the download start
+
 # motus 3.0.0 (2019-10-16)
 
 ### Big Changes

@@ -15,7 +15,7 @@ teardown({
 })
 
 test_that("Database updates as expected (projects)", {
-  if(packageVersion("motus") == 3) {
+  if(utils::packageVersion("motus") >= 3) {
     sessionVariable(name = "userLogin", val = "motus.sample")
     sessionVariable(name = "userPassword", val = "motus.sample")
     
@@ -49,7 +49,7 @@ test_that("Database updates as expected (projects)", {
 })
 
 test_that("Update fails if backup present (projects)", {
-  if(packageVersion("motus") == 3 && file.exists("project-176_v1.motus")) {
+  if(utils::packageVersion("motus") >= 3 && file.exists("project-176_v1.motus")) {
     unlink("project-176.motus") 
     file.copy("project-176_v1.motus", "project-176.motus")
     
@@ -60,7 +60,7 @@ test_that("Update fails if backup present (projects)", {
 })
 
 test_that("Database updates as expected (receivers)", {
-  if(packageVersion("motus") == 3 && have_auth()) {
+  if(utils::packageVersion("motus") >= 3 && have_auth()) {
     
     local_auth()
     
@@ -95,7 +95,7 @@ test_that("Database updates as expected (receivers)", {
 test_that("Update fails if backup present (receivers)", {
   
   if(have_auth() && 
-     packageVersion("motus") == 3 && 
+     utils::packageVersion("motus") >= 3 && 
      file.exists("SG-3115BBBK1127_v1.motus")) {
     
     local_auth()
