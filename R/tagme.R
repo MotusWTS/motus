@@ -109,6 +109,11 @@ tagme = function(projRecv, update = TRUE, new = FALSE, dir = getwd(),
         # - Passes and proceeds as expected
         if(!new) {
             rv <- checkDataVersion(rv, dbname = dbname, rename = rename)
+            # For receivers, if starting fresh, get the device ID again
+            if(length(DBI::dbListTables(rv$con)) == 0 && 
+               is.null(deviceID) && !is_proj(projRecv)) {
+                deviceID <- srvDeviceIDForReceiver(projRecv)[[2]]
+            }
         } else {
             # Prompt for authorization to update dataVersion prior to filling tables
             motus_vars$authToken 
