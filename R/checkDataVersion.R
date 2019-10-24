@@ -40,15 +40,36 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
             basename(new_name))
 
     if(!file.exists(new_name)) {
-      if(file.size(n) > 1073741824 && !rename) {
-        choice <- utils::menu(choices = c("Yes, proceed with the archiving", "No, I'll do it myself"), title = "This is a large database (> 1 gig) so archiving may take a while and shouldn't be interrupted.\nAlternatively, you can manually archive your project by moving it to a different folder\nand starting a new database ('new = TRUE, update = TRUE').\nAre you ready to proceed?")
-        if(choice == 2) {
-          stop("No changes made", call. = FALSE)
+      
+      # First try renaming
+      DBI::dbDisconnect(src$con)
+      t <- try(file.rename(from = n, to = new_name), silent = TRUE)
+      
+      
+      # If renaming succeeds, create new database
+      if(class(t) != "try-error") {
+        src <- dbplyr::src_dbi(con = DBI::dbConnect(RSQLite::SQLite(), n))
+        
+      } else {  # If renaming fails, then try copying
+        message("    File rename failed (common on Windows), copying file to archive instead (this may take longer)")
+      
+        if(file.size(n) > 1073741824 && !rename) {
+          t <- paste0("This is a large database (> 1 gig) so archiving may take a while and shouldn't be interrupted.\n",
+                      "Alternatively, you can manually archive your project by closing R and renaming your database file to '", 
+                      basename(new_name), 
+                      "'.\nThen restart the tagme() function with 'new = TRUE' and 'update = TRUE'.\n",
+                      "Are you ready to proceed?")
+          choice <- utils::menu(choices = c("Yes, proceed with the archiving", "No, I'll do it myself"), 
+                                title = t)
+          if(choice == 2) {
+            stop("No changes made", call. = FALSE)
+          }
         }
+        
+        t <- try(file.copy(from = n, to = new_name), silent = TRUE)
+        if(class(t) == "try-error") stop("Unable to archive database", 
+                                         call. = FALSE)
       }
-      t <- try(file.copy(from = n, to = new_name), silent = TRUE)
-      if(class(t) == "try-error") stop("Unable to archive database", 
-                                       call. = FALSE)
     } else {
       stop(new_name, " already exists", call. = FALSE)
     }
@@ -67,13 +88,17 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
 
     # Clear current database
     message(" - Preparing database for v", server_version, " data")
-    DBI::dbExecute(src$con, "DROP VIEW allambigs")
-    DBI::dbExecute(src$con, "DROP VIEW alltags")
-    sapply(DBI::dbListTables(src$con), 
-           FUN = function(x) DBI::dbRemoveTable(src$con, x))
     
     if(length(DBI::dbListTables(src$con)) > 0) {
-      stop("Unable to prepare new database", .call = FALSE)
+      DBI::dbExecute(src$con, "DROP VIEW allambigs")
+      DBI::dbExecute(src$con, "DROP VIEW alltags")
+      
+      sapply(DBI::dbListTables(src$con), 
+             FUN = function(x) DBI::dbRemoveTable(src$con, x))
+    
+      if(length(DBI::dbListTables(src$con)) > 0) {
+        stop("Unable to prepare new database", .call = FALSE)
+      }
     }
     
     message(" - Downloading new data (v", server_version, ") to ", basename(n))
