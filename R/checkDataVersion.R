@@ -40,6 +40,12 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
             basename(new_name))
 
     if(!file.exists(new_name)) {
+      if(file.size(n) > 1073741824 && !rename) {
+        choice <- utils::menu(choices = c("Yes, proceed with the archiving", "No, I'll do it myself"), title = "This is a large database (> 1 gig) so archiving may take a while and shouldn't be interrupted.\nAlternatively, you can manually archive your project by moving it to a different folder\nand starting a new database ('new = TRUE, update = TRUE').\nAre you ready to proceed?")
+        if(choice == 2) {
+          stop("No changes made", call. = FALSE)
+        }
+      }
       t <- try(file.copy(from = n, to = new_name), silent = TRUE)
       if(class(t) == "try-error") stop("Unable to archive database", 
                                        call. = FALSE)
