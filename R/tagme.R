@@ -86,8 +86,11 @@ tagme = function(projRecv, update = TRUE, new = FALSE, dir = getwd(),
              "If you *really* want to create a new database, specify 'new=TRUE'\n",
              "But maybe you just need to specify 'dir=' to tell me where to find it?"
              )
-    if (new && have)
-        warning("Database ", dbname, " already exists, so I'm ignoring the 'new=TRUE' option")
+    if (new && have) {
+        warning("Database ", dbname, " already exists, so I'm ignoring the ",
+                "'new=TRUE' option", immediate. = TRUE)
+        new <- FALSE
+    }
     if (new && missing(update))
         update = FALSE
     if (! have && is.character(projRecv)) {
