@@ -91,6 +91,7 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
 
     # Clear current database
     message(" - Preparing database for v", server_version, " data")
+    src <- dbplyr::src_dbi(con = DBI::dbConnect(RSQLite::SQLite(), n))
     
     if(length(DBI::dbListTables(src$con)) > 0) {
       DBI::dbExecute(src$con, "DROP VIEW allambigs")
