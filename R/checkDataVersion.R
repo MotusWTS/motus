@@ -38,13 +38,16 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
     message("DATABASE UPDATE (data version 1 -> 2)")
     message(" - Archiving ", basename(n), " (v", local_version, ") to ", 
             basename(new_name))
+    
+    orig_md5sum <- tools::md5sum(n)
 
     if(!file.exists(new_name)) {
-      
+
       # First try renaming
       DBI::dbDisconnect(src$con)
+      rm(src)
+      gc()
       t <- try(file.rename(from = n, to = new_name), silent = TRUE)
-      
       
       # If renaming succeeds, create new database
       if(class(t) != "try-error") {
@@ -80,7 +83,7 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
       silent = TRUE)
     if(class(temp_db) == "try-error" || 
        length(DBI::dbListTables(temp_db)) == 0 || 
-       tools::md5sum(n) != tools::md5sum(new_name)) {
+       orig_md5sum != tools::md5sum(new_name)) {
       stop("Database did not archive properly", call. = FALSE)
     } else {
       DBI::dbDisconnect(temp_db)
