@@ -58,7 +58,7 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
       
         if(file.size(n) > 1073741824 && !rename) {
           t <- paste0("This is a large database (> 1 gig) so archiving may take a while and shouldn't be interrupted.\n",
-                      "Alternatively, you can manually archive your project by closing R and renaming your database file to '", 
+                      "Alternatively, a faster option is to manually archive your project by closing R and renaming your database file to '", 
                       basename(new_name), 
                       "'.\nThen restart the tagme() function with 'new = TRUE' and 'update = TRUE'.\n",
                       "Are you ready to proceed?")
