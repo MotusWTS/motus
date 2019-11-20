@@ -3,10 +3,6 @@ setup({
   unlink("project-176_v1.motus")
   unlink("SG-3115BBBK1127.motus")
   unlink("SG-3115BBBK1127_v1.motus")
-  
-  # Copy the old version here for now
-  file.copy(system.file("extdata", "project-176_v1.motus", package = "motus"),
-            "./project-176.motus")
 })
 
 teardown({
@@ -24,7 +20,18 @@ test_that("Database updates as expected (projects)", {
     
     expect_false(file.exists("project-176_v1.motus")) # No backup
     
+    file.copy(system.file("extdata", "project-176_v1.motus", package = "motus"),
+              "./project-176.motus")
     expect_warning(tagme(176, new = TRUE, update = TRUE, rename = TRUE), 
+                   "already exists")
+    expect_true(file.exists("project-176_v1.motus"))  # Backup
+    unlink("project-176.motus")
+    unlink("project-176_v1.motus")
+    
+    file.copy(system.file("extdata", "project-176_v1.motus", package = "motus"),
+              "./project-176.motus")
+    expect_warning(tagme(176, new = TRUE, update = TRUE, forceMeta = TRUE,
+                         rename = TRUE), 
                    "already exists")
     expect_true(file.exists("project-176_v1.motus"))  # Backup
     unlink("project-176.motus")
