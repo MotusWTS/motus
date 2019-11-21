@@ -14,4 +14,7 @@ usethis::use_data(shorebirds, overwrite = TRUE)
 if(have_auth()) {
   file.remove("./inst/extdata/SG-3115BBBK0782.motus")
   tagme("SG-3115BBBK0782", new = TRUE, update = TRUE, dir = "./inst/extdata/")
+  
+  file.remove("./inst/extdata/project-4.motus")
+  tagme(4, new = TRUE, update = TRUE, dir = "./inst/extdata/")
 }

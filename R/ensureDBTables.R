@@ -508,9 +508,10 @@ CREATE INDEX IF NOT EXISTS runsFilters_filterID_runID_motusTagID ON runsFilters 
       tsEnd FLOAT NOT NULL);")
   }
 
+  updateMotusDb(src)
   rv = makeAllambigsView(src)
   rv = makeAlltagsView(src)
-  rv = updateMotusDb(rv, src)
+  rv = makeAlltagsGPSView(src)
   return(rv)
 }
 
