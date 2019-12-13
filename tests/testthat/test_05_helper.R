@@ -2,6 +2,9 @@ context("Helper functions")
 
 teardown(unlink("project-176.motus"))
 
+
+# filterByActivity --------------------------------------------------------
+
 test_that("filterByActivity filters as expected", {
   expect_silent(
     shorebirds_sql <- tagme(176, update = FALSE, 
@@ -78,3 +81,194 @@ test_that("Empty activity table stops", {
   expect_error(a <- filterByActivity(tags, return = "all"),
                "'src' must contain at least tables 'activity', 'alltags',")
 })
+
+
+# getGPS ------------------------------------------------------------------
+
+test_that("getGPS() runs as expected with no data", {
+  file.copy(system.file("extdata", "project-176.motus", package = "motus"), ".")
+  file.copy(system.file("extdata", "gps_sample.motus", package = "motus"), ".")
+  
+  # No GPS data
+  tags <- tagme(projRecv = 176, new = FALSE, update = FALSE)
+  expect_silent(g <- getGPS(src = tags)) %>%
+    expect_is("data.frame")
+  expect_equal(nrow(g), 0) # No GPS points
+  
+  unlink("project-176.motus")
+})
+
+
+test_that("prepAlltags() handles both data.frame and src", {
+  file.copy(system.file("extdata", "gps_sample.motus", package = "motus"), ".")
+  tags <- DBI::dbConnect(RSQLite::SQLite(), "gps_sample.motus")
+  alltags <- dplyr::tbl(tags, "alltags") %>%
+    dplyr::filter(batchID == 667134)
+  
+  expect_silent(a <- prepAlltags(tags, alltags)) %>%
+    expect_is("tbl_sql")
+  
+  expect_silent(a <- prepAlltags(tags, dplyr::collect(alltags))) %>%
+    expect_is("data.frame")
+  
+  # errors
+  expect_error(prepAlltags(tags, dplyr::select(alltags, -hitID)),
+               "'alltags' must be a subset of the 'alltags' view")
+  
+  unlink("gps_sample.motus")
+})
+
+test_that("calcGPS() matches GPS", {
+  file.copy(system.file("extdata", "gps_sample.motus", package = "motus"), ".")
+  
+  # GPS data (1 day)
+  tags <- DBI::dbConnect(RSQLite::SQLite(), "gps_sample.motus")
+  
+  # Daily Join
+  expect_silent(g <- calcGPS(prepGPS(tags), prepAlltags(tags))) %>%
+    expect_is("data.frame")
+  expect_gt(nrow(g), 0) # GPS points
+  expect_equal(nrow(g[is.na(g$gpsLat),]), 0) # No missing GPS points
+  expect_equal(max(table(g$hitID)), 1) # No duplicate hitIDs
+  expect_equal(unique(g$timeBin), 18170)
+  g <- dplyr::select(g, -hitID, -ts) %>% dplyr::distinct() %>% as.data.frame()
+  expect_equal(nrow(g), length(unique(g$batchID)))
+  
+  expect_silent(getGPS(tags, by = "daily")) %>%
+    expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt"))
+  
+  # By = 60
+  expect_silent(g <- calcGPS(prepGPS(tags), prepAlltags(tags), by = 60)) %>%
+    expect_is("data.frame")
+  expect_gt(nrow(g), 0) # GPS points
+  expect_equal(nrow(g[is.na(g$gpsLat),]), 0) # No missing GPS points
+  expect_equal(max(table(g$hitID)), 1) # No duplicate hitIDs
+  expect_length(unique(g$timeBin), 24)
+  expect_equal(g$gpsID_min, g$gpsID_max) # No medians
+  g1 <- dplyr::left_join(dplyr::select(g, hitts = ts, gpsID = gpsID_min, 
+                                       gpsLat, gpsLon, gpsAlt), 
+                          dplyr::collect(dplyr::tbl(tags, "gps")))
+  expect_equal(g1$gpsLat, g1$lat)
+  expect_equal(g1$gpsLon, g1$lon)
+  expect_equal(g1$gpsAlt, g1$alt)
+  expect_true(all(abs(g1$hitts - g1$ts) <= 60 * 60))
+  
+  expect_silent(getGPS(tags, by = 60)) %>%
+    expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt"))
+  
+  # By = 5 seconds
+  expect_silent(g <- calcGPS(prepGPS(tags), prepAlltags(tags), by = 5/60)) %>%
+    expect_is("data.frame")
+  expect_gt(nrow(g), 0) # GPS points
+  expect_equal(nrow(g[is.na(g$gpsLat),]), 0) # No missing GPS points
+  expect_equal(max(table(g$hitID)), 1) # No duplicate hitIDs
+  expect_length(unique(g$timeBin), 4)
+  expect_equal(g$gpsID_min, g$gpsID_max) # No medians
+  g1 <- dplyr::left_join(dplyr::select(g, hitts = ts, gpsID = gpsID_min, 
+                                       gpsLat, gpsLon, gpsAlt), 
+                         dplyr::collect(dplyr::tbl(tags, "gps")))
+  expect_equal(g1$gpsLat, g1$lat)
+  expect_equal(g1$gpsLon, g1$lon)
+  expect_equal(g1$gpsAlt, g1$alt)
+  expect_true(all(abs(g1$hitts - g1$ts) <= 5))
+  
+  expect_silent(getGPS(tags, by = 5/60)) %>%
+    expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt"))
+  
+  
+  # By = "closest"
+  expect_message(g <- calcGPS(prepGPS(tags), prepAlltags(tags), by = "closest"),
+                 "Max time difference") %>%
+    expect_is("data.frame")
+  expect_gt(nrow(g), 0) # GPS points
+  expect_equal(nrow(g[is.na(g$gpsLat),]), 0) # No missing GPS points
+  expect_equal(max(table(g$hitID)), 1) # No duplicate hitIDs
+  expect_true("gpsID" %in% names(g)) # exact match with gpsID, not range
+  g1 <- dplyr::left_join(dplyr::select(g, hitts = ts, gpsID,
+                                       gpsLat, gpsLon, gpsAlt), 
+                         dplyr::collect(dplyr::tbl(tags, "gps")))
+  expect_equal(g1$gpsLat, g1$lat)
+  expect_equal(g1$gpsLon, g1$lon)
+  expect_equal(g1$gpsAlt, g1$alt)
+  expect_true(all(abs(g1$hitts - g1$ts) <= 33*60))
+
+  expect_message(getGPS(tags, by = "closest"), "Max time difference") %>%
+    expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt"))
+  
+  DBI::dbDisconnect(tags)
+  unlink("gps_sample.motus")
+})   
+
+test_that("getGPS errors", {
+  expect_error(getGPS(tags, by = "daaaaily"))
+})
+
+test_that("calcGPS() matches GPS with subset", {
+  file.copy(system.file("extdata", "gps_sample.motus", package = "motus"), ".")
+  
+  # GPS data (1 day)
+  tags <- DBI::dbConnect(RSQLite::SQLite(), "gps_sample.motus")
+  alltags <- dplyr::tbl(tags, "alltags") %>%
+    dplyr::filter(batchID == 667134) %>%
+    dplyr::collect()
+  
+  # Daily Join
+  expect_silent(g <- calcGPS(prepGPS(tags), prepAlltags(tags, alltags))) %>%
+    expect_is("data.frame")
+  expect_gt(nrow(g), 0) # GPS points
+  expect_equal(nrow(g[is.na(g$gpsLat),]), 0) # No missing GPS points
+  expect_equal(max(table(g$hitID)), 1) # No duplicate hitIDs
+  expect_equal(unique(g$timeBin), 18170)
+  g <- dplyr::select(g, -hitID, -ts) %>% dplyr::distinct() %>% as.data.frame()
+  expect_equal(nrow(g), length(unique(g$batchID)))
+  
+  expect_silent(getGPS(tags, by = "daily")) %>%
+    expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt"))
+  
+  # By = 60
+  expect_silent(g <- calcGPS(prepGPS(tags), prepAlltags(tags, alltags), by = 60)) %>%
+    expect_is("data.frame")
+  expect_gt(nrow(g), 0) # GPS points
+  expect_equal(nrow(g[is.na(g$gpsLat),]), 0) # No missing GPS points
+  expect_equal(max(table(g$hitID)), 1) # No duplicate hitIDs
+  expect_length(unique(g$timeBin), 1)
+  expect_equal(g$gpsID_min, g$gpsID_max) # No medians
+  g1 <- dplyr::left_join(dplyr::select(g, hitts = ts, gpsID = gpsID_min, 
+                                       gpsLat, gpsLon, gpsAlt), 
+                         dplyr::collect(dplyr::tbl(tags, "gps")))
+  expect_equal(g1$gpsLat, g1$lat)
+  expect_equal(g1$gpsLon, g1$lon)
+  expect_equal(g1$gpsAlt, g1$alt)
+  expect_true(all(abs(g1$hitts - g1$ts) <= 60 * 60))
+  
+  expect_silent(getGPS(tags, by = 60)) %>%
+    expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt"))
+  
+  # By = 5 seconds
+  expect_silent(g <- calcGPS(prepGPS(tags), prepAlltags(tags, alltags), by = 5/60)) %>%
+    expect_is("data.frame")
+  expect_equal(nrow(g), 0) # No GPS points
+  
+  
+  # By = "closest"
+  expect_message(g <- calcGPS(prepGPS(tags), prepAlltags(tags, alltags), by = "closest"),
+                 "Max time difference") %>%
+    expect_is("data.frame")
+  expect_gt(nrow(g), 0) # GPS points
+  expect_equal(nrow(g[is.na(g$gpsLat),]), 0) # No missing GPS points
+  expect_equal(max(table(g$hitID)), 1) # No duplicate hitIDs
+  expect_true("gpsID" %in% names(g)) # exact match with gpsID, not range
+  g1 <- dplyr::left_join(dplyr::select(g, hitts = ts, gpsID,
+                                       gpsLat, gpsLon, gpsAlt), 
+                         dplyr::collect(dplyr::tbl(tags, "gps")))
+  expect_equal(g1$gpsLat, g1$lat)
+  expect_equal(g1$gpsLon, g1$lon)
+  expect_equal(g1$gpsAlt, g1$alt)
+  expect_true(all(abs(g1$hitts - g1$ts) <= 33*60))
+  
+  expect_message(getGPS(tags, by = "closest"), "Max time difference") %>%
+    expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt"))
+  
+  DBI::dbDisconnect(tags)
+  unlink("gps_sample.motus")
+})   
