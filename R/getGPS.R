@@ -113,11 +113,11 @@ calcGPS <- function(gps, alltags, by = "daily") {
     gps <- gps %>%
       dplyr::mutate(timeBin = as.integer(.data$ts / by)) %>%
       dplyr::group_by(.data$batchID, .data$timeBin) %>%
-      dplyr::summarize(gpsID_min = min(gpsID),
-                       gpsID_max = max(gpsID),
-                       gpsLat = median(.data$gpsLat),
-                       gpsLon = median(.data$gpsLon),
-                       gpsAlt = median(.data$gpsAlt)) %>%
+      dplyr::summarize(gpsID_min = min(.data$gpsID),
+                       gpsID_max = max(.data$gpsID),
+                       gpsLat = stats::median(.data$gpsLat),
+                       gpsLon = stats::median(.data$gpsLon),
+                       gpsAlt = stats::median(.data$gpsAlt)) %>%
       dplyr::ungroup() %>%
       dplyr::inner_join(alltags, ., by = c("batchID", "timeBin"))
     
