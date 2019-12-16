@@ -4,8 +4,8 @@
 \alias{filterByActivity}
 \title{Filter \code{alltags} by \code{activity}}
 \usage{
-filterByActivity(src, return = "good", minLen = 3, maxLen = 5,
-  maxRuns = 100, ratio = 0.85)
+filterByActivity(src, return = "good", view = "alltags", minLen = 3,
+  maxLen = 5, maxRuns = 100, ratio = 0.85)
 }
 \arguments{
 \item{src}{src_sqlite object representing the database}
@@ -13,6 +13,9 @@ filterByActivity(src, return = "good", minLen = 3, maxLen = 5,
 \item{return}{Character. One of "good" (return only 'good' runs), "bad"
 (return only 'bad' runs), "all" (return all runs, but with a new
 \code{probability} column which identifies 'bad' (0) and 'good' (1) runs.}
+
+\item{view}{Character. Which view to use, one of "alltags" (faster) or
+"alltagsGPS" (with GPS data).}
 
 \item{minLen}{Numeric. The minimum run length to allow (equal to or below
 this, all runs are 'bad')}

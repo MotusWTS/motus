@@ -10,6 +10,8 @@
 #' @param return Character. One of "good" (return only 'good' runs), "bad"
 #'   (return only 'bad' runs), "all" (return all runs, but with a new
 #'   `probability` column which identifies 'bad' (0) and 'good' (1) runs.
+#' @param view Character. Which view to use, one of "alltags" (faster) or
+#'   "alltagsGPS" (with GPS data).
 #' @param minLen Numeric. The minimum run length to allow (equal to or below
 #'   this, all runs are 'bad')
 #' @param maxLen Numeric. The maximum run length to allow (equal to or above
@@ -45,12 +47,15 @@
 #' tbl_all <- filterByActivity(sql.motus, return = "all")
 #' 
 #' 
-filterByActivity <- function(src, return = "good", 
+filterByActivity <- function(src, return = "good", view = "alltags",
                              minLen = 3, maxLen = 5, 
                              maxRuns = 100, ratio = 0.85) {
   
   if(!return %in% c("good", "bad", "all")) {
     stop("'return' must be one of 'good', 'bad', or 'all'", call. = FALSE)
+  }
+  if(!view %in% c("alltags", "alltagsGPS")) {
+    stop("'view' must be one of 'alltags' or 'alltagsGPS'", call. = FALSE)
   }
   if(any(!is.numeric(c(minLen, maxLen, maxRuns, ratio)))) {
     stop("'minLen', 'maxLen', 'maxRuns', and 'ratio' must all be numeric", call. = FALSE)
@@ -63,8 +68,9 @@ filterByActivity <- function(src, return = "good",
   
   t <- DBI::dbListTables(src$con)
   
-  if(any(!c("runs", "activity", "alltags") %in% t)) {
-    stop("'src' must contain at least tables 'activity', 'alltags', and 'runs'", call. = FALSE)
+  if(any(!c("runs", "activity", view) %in% t)) {
+    stop(paste0("'src' must contain at least tables 'activity', '", view, 
+                "', and 'runs'"), call. = FALSE)
   }
   
   tbl_runs <- dplyr::tbl(src$con, "runs") %>% 
@@ -89,7 +95,7 @@ filterByActivity <- function(src, return = "good",
     dplyr::mutate(probability = 0)
 
   # Label runs with probability
-  tbl_prob <- dplyr::tbl(src$con, "alltags") %>%
+  tbl_prob <- dplyr::tbl(src$con, view) %>%
     dplyr::left_join(tbl_bad, by = "runID") %>%
     dplyr::mutate(probability = dplyr::if_else(is.na(.data$probability), 1, 
                                                .data$probability))
