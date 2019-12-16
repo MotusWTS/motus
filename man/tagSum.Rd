@@ -7,8 +7,10 @@
 tagSum(data)
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data
-including at a minimum variables for motusTagID, fullID, recvDeployLat, recvDeployLon, recvDeployName, ts}
+\item{data}{a selected table from .motus data, eg. "alltagsGPS", or a
+data.frame of detection data including at a minimum variables for
+motusTagID, fullID, recvDeployLat, recvDeployLon, recvDeployName, ts,
+gpsLat, gpsLon}
 }
 \value{
 a data.frame with these columns:
@@ -29,12 +31,13 @@ a data.frame with these columns:
 }
 }
 \description{
-Creates a summary for each tag of it's first and last detection time, first and last detection site,
-length of time between first and last detection,  straight line distance between first and last detection site,
-rate of movement, and bearing
+Creates a summary for each tag of it's first and last detection time, first
+and last detection site, length of time between first and last detection,
+straight line distance between first and last detection site, rate of
+movement, and bearing
 }
 \examples{
-# You can use either a selected tbl from .motus eg. "alltags", or a
+# You can use either a selected tbl from .motus eg. "alltagsGPS", or a
 # data.frame, instructions to convert a .motus file to all formats are below.
 
 # download and access data from project 176 in sql format
@@ -46,7 +49,7 @@ sql.motus <- tagme(176, update = FALSE,
 
 # convert sql file "sql.motus" to a tbl called "tbl.alltags"
 library(dplyr)
-tbl.alltags <- tbl(sql.motus, "alltags") 
+tbl.alltags <- tbl(sql.motus, "alltagsGPS") 
 
 # convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
 df.alltags <- tbl.alltags \%>\% 
