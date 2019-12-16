@@ -29,7 +29,7 @@
 #'
 #' @noRd
 
-updateMotusDb <- function(src) {
+updateMotusDb <- function(src, quiet = FALSE) {
 
   # # Create and fill the admInfo table if it doesn't exist
   # DBI::dbExecute(src$con, paste0("CREATE TABLE IF NOT EXISTS admInfo ",
@@ -46,15 +46,15 @@ updateMotusDb <- function(src) {
     dplyr::arrange(.data$date)
 
   if (nrow(update_versions) > 0) {
-    message(sprintf("updateMotusDb started (%d version update(s))", 
-                    nrow(update_versions)))
+    if(!quiet) message(sprintf("updateMotusDb started (%d version update(s))", 
+                               nrow(update_versions)))
     
     dates <- apply(update_versions, 1, function(row) {
-      message(" - ", row["descr"], sep = "")
-
-	    v <- unlist(strsplit(row["sql"], ";"))
-	    l <- lapply(v, function(sql) {
-	      if (sql != "") {
+      if(!quiet) message(" - ", row["descr"], sep = "")
+      
+      v <- unlist(strsplit(row["sql"], ";"))
+      l <- lapply(v, function(sql) {
+        if (sql != "") {
 
 	        e <- try(DBI::dbExecute(src$con, sql), silent = TRUE)
 	        if(class(e) == "try-error") { # Deal with errors

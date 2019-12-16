@@ -123,7 +123,7 @@ tagme = function(projRecv, update = TRUE, new = FALSE, dir = getwd(),
         }
 
         # Ensure correct DBtables, but only if update = TRUE
-        ensureDBTables(rv, projRecv, deviceID)
+        ensureDBTables(rv, projRecv, deviceID, quiet = new)
 
         # Update databse
         rv <- motusUpdateDB(projRecv, rv, countOnly, forceMeta)

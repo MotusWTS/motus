@@ -14,7 +14,7 @@
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
-ensureDBTables = function(src, projRecv, deviceID) {
+ensureDBTables = function(src, projRecv, deviceID, quiet = FALSE) {
   if (! inherits(src, "src_sql"))
     stop("src is not a dplyr::src_sql object")
   con = src$con
@@ -508,7 +508,7 @@ CREATE INDEX IF NOT EXISTS runsFilters_filterID_runID_motusTagID ON runsFilters 
       tsEnd FLOAT NOT NULL);")
   }
 
-  updateMotusDb(src)
+  updateMotusDb(src, quiet = quiet)
   rv = makeAllambigsView(src)
   rv = makeAlltagsView(src)
   rv = makeAlltagsGPSView(src)
