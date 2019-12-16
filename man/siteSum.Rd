@@ -37,6 +37,7 @@ tags, and total number of tags detected at each site.
 # data.frame, instructions to convert a .motus file to all formats are below.
 
 # download and access data from project 176 in sql format
+# usename and password are both "motus.sample"
 \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
 
 # OR use example sql file included in `motus`

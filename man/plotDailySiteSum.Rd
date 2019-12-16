@@ -22,6 +22,7 @@ detected per day for a specified site.  Depends on siteSumDaily function.
 # data.frame, instructions to convert a .motus file to all formats are below.
 
 # download and access data from project 176 in sql format
+# usename and password are both "motus.sample"
 \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
 
 # use example sql file included in `motus`
