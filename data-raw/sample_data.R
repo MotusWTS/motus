@@ -4,7 +4,7 @@ sample_auth()
 
 file.remove("./inst/extdata/project-176.motus")
 tags <- tagme(projRecv = 176, new = TRUE, update = TRUE, "./inst/extdata/")
-shorebirds <- dplyr::tbl(tags, "alltags") %>%
+shorebirds <- dplyr::tbl(tags, "alltagsGPS") %>%
   dplyr::collect()
 
 usethis::use_data(shorebirds, overwrite = TRUE)
@@ -12,11 +12,12 @@ usethis::use_data(shorebirds, overwrite = TRUE)
 #file.remove("./data-raw/project-176.motus") # Keep this file?
 
 if(have_auth()) {
+  local_auth()
   file.remove("./inst/extdata/SG-3115BBBK0782.motus")
   tagme("SG-3115BBBK0782", new = TRUE, update = TRUE, dir = "./inst/extdata/")
   
-  file.remove("./inst/extdata/project-4.motus")
-  tagme(4, new = TRUE, update = TRUE, dir = "./inst/extdata/")
+  #file.remove("./inst/extdata/project-4.motus")
+  #tagme(4, new = TRUE, update = TRUE, dir = "./inst/extdata/")
   
   # Create small sample for GPS tests
   file.copy("./inst/extdata/project-4.motus", "./inst/extdata/gps_sample.motus", overwrite = TRUE)

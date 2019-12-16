@@ -72,7 +72,7 @@ test_that("Missing tables recreated silently", {
   
   for(i in t) {
     # Remove table/view
-    if(!i %in% c("alltags", "allambigs")) {
+    if(!i %in% c("alltags", "allambigs", "alltagsGPS")) {
       expect_silent(DBI::dbRemoveTable(tags$con, !!i))
       expect_false(DBI::dbExistsTable(tags$con, !!i))
     } else {

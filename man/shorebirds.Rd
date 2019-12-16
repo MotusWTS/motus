@@ -4,11 +4,17 @@
 \name{shorebirds}
 \alias{shorebirds}
 \title{Example shorebirds tags download from Motus}
-\format{A data frame with 108826 rows and 60 variables:}
+\format{A data frame with 108826 rows and 62 variables:}
 \usage{
 shorebirds
 }
 \description{
 An example data frame of shorebirds data (project 176)
+}
+\details{
+Create with the following code:\preformatted{tags <- tagme(projRecv = 176, new = TRUE, update = TRUE)
+shorebirds <- dplyr::tbl(tags, "alltagsGPS") \%>\%
+  dplyr::collect()
+}
 }
 \keyword{datasets}
