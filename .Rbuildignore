@@ -7,3 +7,4 @@ RELEASE.R
 ^.*project-4.motus$
 ^\.travis\.yml$
 ^codecov\.yml$
+^LICENSE\.md$
