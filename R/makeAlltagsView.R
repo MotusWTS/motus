@@ -1,4 +1,4 @@
-#' create a virtual table of tag detections linked with all metadata.
+#' Create a virtual table of tag detections linked with all metadata.
 #'
 #' Creates a virtual table (really a 'view') in a motus database that
 #' links each tag detection to all metadata available for the tag and
@@ -66,9 +66,6 @@
 #'    \item{speciesGroup} species group
 #'    \item{tagProjName} short label of project that deployed tag
 #'    \item{recvProjName} short label of project that deployed receiver
-#'    \item{gpsLat} latitude of receiver at tag detection time (decimal degrees)
-#'    \item{gpsLon} longitude of receiver at tag detection time (decimal degrees)
-#'    \item{gpsAlt} altitude of receiver at tag detection time (metres)
 #' }
 #'
 #' @note The new virtual table replaces any previous virtual table by the same
@@ -169,10 +166,7 @@ SELECT
    t8.scientific as speciesSci,
    t8.`group` as speciesGroup,
    t9.label as tagProjName,
-   t10.label as recvProjName,
-   t11.lat as gpsLat,
-   t11.lon as gpsLon,
-   t11.alt as gpsAlt
+   t10.label as recvProjName
 FROM
    hits AS t1
 LEFT JOIN
@@ -220,18 +214,7 @@ LEFT JOIN
 LEFT JOIN
    projs AS t9 ON t9.ID = t5.projectID
 LEFT JOIN
-   projs AS t10 ON t10.ID = t6.projectID
-LEFT JOIN
-   gps AS t11 ON t11.batchID = t3.batchID
-      AND t11.ts =
-         (SELECT
-             max(t11b.ts)
-          FROM
-             gps AS t11b
-          WHERE
-             t11b.batchID = t3.batchID
-             AND t11b.ts <= t1.ts
-         );
+   projs AS t10 ON t10.ID = t6.projectID;
 ")
 
     DBI::dbExecute(db$con, query)

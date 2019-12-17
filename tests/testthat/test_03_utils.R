@@ -16,7 +16,7 @@ test_that("checkVersion and updateMotusDb run and return messages as expected", 
   # Normal database
   expect_message(checkVersion(shorebirds_sql), 
                  "Your motus sqlite file is up-to-date with the package.")
-  expect_silent(updateMotusDb(shorebirds_sql, shorebirds_sql))
+  expect_silent(updateMotusDb(shorebirds_sql))
   
   # Old version database
   # expect_message(checkVersion(test_sql), 

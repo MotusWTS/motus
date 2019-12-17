@@ -7,10 +7,12 @@
 siteSumDaily(data, units = "hours")
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data
-including at a minimum variables for motusTagID, sig, recvDeployName, ts}
+\item{data}{a selected table from .motus data, eg. "alltagsGPS", or a
+data.frame of detection data including at a minimum variables for
+motusTagID, sig, recvDeployName, ts}
 
-\item{units}{units to display time difference, defaults to "hours", options include "secs", "mins", "hours", "days", "weeks"}
+\item{units}{units to display time difference, defaults to "hours", options
+include "secs", "mins", "hours", "days", "weeks"}
 }
 \value{
 a data.frame with these columns:
@@ -19,20 +21,24 @@ a data.frame with these columns:
 \item date: date that is being summarized
 \item first_ts: time of first detection on specified "date" at "recvDeployName"
 \item last_ts: time of last detection on specified "date" at "recvDeployName"
-\item tot_ts: total amount of time between first and last detection at "recvDeployName" on "date, output in specified unit (defaults to "hours")
+\item tot_ts: total amount of time between first and last detection at
+"recvDeployName" on "date, output in specified unit (defaults to "hours")
 \item num.tags: total number of unique tags detected at "recvDeployName", on "date"
 \item num.det: total number of detections at "recvDeployName", on "date"
 }
 }
 \description{
-Creates a summary of the first and last daily detection at a site, the length of time between first and last detection,
-the number of tags, and the total number of detections at a site for each day. Same as siteSum, but daily by site.
+Creates a summary of the first and last daily detection at a site, the length
+of time between first and last detection, the number of tags, and the total
+number of detections at a site for each day. Same as siteSum, but daily by
+site.
 }
 \examples{
-# You can use either a selected tbl from .motus eg. "alltags", or a
+# You can use either a selected tbl from .motus eg. "alltagsGPS", or a
 # data.frame, instructions to convert a .motus file to all formats are below.
 
 # download and access data from project 176 in sql format
+# usename and password are both "motus.sample"
 \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
 
 # OR use example sql file included in `motus`
@@ -41,7 +47,7 @@ sql.motus <- tagme(176, update = FALSE,
 
 # convert sql file "sql.motus" to a tbl called "tbl.alltags"
 library(dplyr)
-tbl.alltags <- tbl(sql.motus, "alltags")
+tbl.alltags <- tbl(sql.motus, "alltagsGPS")
 
 # convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
 df.alltags <- tbl.alltags \%>\% 

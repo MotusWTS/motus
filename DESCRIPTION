@@ -34,7 +34,8 @@ Suggests:
     RCurl,
     roxygen2,
     spelling,
-    testthat
+    testthat,
+    covr
 License: GPL-3 + file LICENSE
 Date: 2019-03-28
 RoxygenNote: 6.1.1

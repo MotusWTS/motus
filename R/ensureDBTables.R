@@ -14,7 +14,7 @@
 #'
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
-ensureDBTables = function(src, projRecv, deviceID) {
+ensureDBTables = function(src, projRecv, deviceID, quiet = FALSE) {
   if (! inherits(src, "src_sql"))
     stop("src is not a dplyr::src_sql object")
   con = src$con
@@ -220,19 +220,9 @@ insert
   }
   
   if (! "tagAmbig" %in% tables) {
-    sql("
-CREATE TABLE tagAmbig (
-    ambigID INTEGER PRIMARY KEY NOT NULL,  -- identifier of group of tags which are ambiguous (identical); will be negative
-    masterAmbigID INTEGER,                 -- master ID of this ambiguity group, once different receivers have been combined
-    motusTagID1 INT NOT NULL,              -- motus ID of tag in group (not null because there have to be at least 2)
-    motusTagID2 INT NOT NULL,              -- motus ID of tag in group.(not null because there have to be at least 2)
-    motusTagID3 INT,                       -- motus ID of tag in group.
-    motusTagID4 INT,                       -- motus ID of tag in group.
-    motusTagID5 INT,                       -- motus ID of tag in group.
-    motusTagID6 INT,                       -- motus ID of tag in group.
-    ambigProjectID INT                     -- negative ambiguity ID of deployment project. refers to key ambigProjectID in table projAmbig
-);
-")
+    
+    sql(makeTables(type = "tagAmbig"))
+    
   } else if (0 == nrow(sqlq("select * from sqlite_master where tbl_name='tagAmbig' and sql glob '*ambigProjectID*'"))) {
     ## older version of tagAmbig table, without the ambigProjectID column, so add it
     sql("ALTER TABLE tagAmbig ADD COLUMN ambigProjectID INTEGER")
@@ -518,8 +508,27 @@ CREATE INDEX IF NOT EXISTS runsFilters_filterID_runID_motusTagID ON runsFilters 
       tsEnd FLOAT NOT NULL);")
   }
 
+  updateMotusDb(src, quiet = quiet)
   rv = makeAllambigsView(src)
   rv = makeAlltagsView(src)
-  rv = updateMotusDb(rv, src)
+  rv = makeAlltagsGPSView(src)
   return(rv)
+}
+
+
+makeTables <- function(type, name = type) {
+  if(type == "tagAmbig") {
+    s <- paste0("CREATE TABLE ", name, " (
+    ambigID INTEGER PRIMARY KEY NOT NULL,  -- identifier of group of tags which are ambiguous (identical). Will be negative
+    masterAmbigID INTEGER,                 -- master ID of this ambiguity group, once different receivers have been combined
+    motusTagID1 INT,                       -- motus ID of tag in group.
+    motusTagID2 INT,                       -- motus ID of tag in group.
+    motusTagID3 INT,                       -- motus ID of tag in group.
+    motusTagID4 INT,                       -- motus ID of tag in group.
+    motusTagID5 INT,                       -- motus ID of tag in group.
+    motusTagID6 INT,                       -- motus ID of tag in group.
+    ambigProjectID INT                     -- negative ambiguity ID of deployment project. refers to key ambigProjectID in table projAmbig
+);")
+  } else s <- character()
+  s
 }

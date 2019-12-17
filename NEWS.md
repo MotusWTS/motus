@@ -1,3 +1,15 @@
+# motus 3.0.1
+
+
+### Small Changes
+* Move GPS fields from `alltags` to `alltagsGPS`
+* New function `getGPS()` adds GPS fields to data
+* Remove NOT NULL constraint on `motusTagID`s in ambiguous tag view
+
+### Bug fix
+* Receivers updating to the new version errored on the download start
+* Allow renaming (if possible) of large databases on data updates
+
 # motus 3.0.0 (2019-10-16)
 
 ### Big Changes
