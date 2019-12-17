@@ -1,3 +1,8 @@
+<!-- badges: start -->
+[![Travis build status](https://travis-ci.org/MotusWTS/motus.svg?branch=master)](https://travis-ci.org/MotusWTS/motus)
+[![Codecov test coverage](https://codecov.io/gh/MotusWTS/motus/branch/master/graph/badge.svg)](https://codecov.io/gh/MotusWTS/motus?branch=master)
+<!-- badges: end -->
+
 # motus
 R package for users of data from https://motus.org
 

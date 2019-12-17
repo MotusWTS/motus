@@ -5,3 +5,5 @@ RELEASE.R
 ^appveyor.yml$
 ^.*\SG-.*$
 ^.*project-4.motus$
+^\.travis\.yml$
+^codecov\.yml$
