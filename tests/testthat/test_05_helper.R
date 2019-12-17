@@ -201,6 +201,8 @@ test_that("calcGPS() matches GPS", {
 
 test_that("getGPS errors", {
   expect_error(getGPS(tags, by = "daaaaily"))
+  expect_error(getGPS(tags, by = 0))
+  expect_error(getGPS(tags, by = -100))
 })
 
 test_that("calcGPS() matches GPS with subset", {
