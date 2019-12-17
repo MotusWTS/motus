@@ -1,3 +1,35 @@
+
+# Notes -------------------------------------------------------------------
+
+# The motus project works with three(ish) main branches:
+#
+# - master - currently released version of motus (e.g., v3.0.0)
+# - betaX - minor work for the next minor release (e.g., beta3 = v3.0.1)
+# - sandbox - major work for the next major release (e.g., v4.0.0)
+#
+# Merges may occur as follows:  
+#
+#  beta --> master
+#  beta --> sandbox
+#  sandbox --> master
+# 
+# When merging changes to master: 
+# 
+# - Make changes, push changes, test changes (beta/sandbox branch)
+# - git checkout master  (master branch)
+# - git merge betaX --no-ff --no-commit  (master branch)
+# - Revert API url to (i.e. should be main url, not point to beta/sandbox APIs)
+# - Committ changes as merge with betaX/sandbox
+#
+# # When merging changes in beta to sandbox: 
+# 
+# - Make changes, push changes, test changes (beta branch)
+# - git checkout sandbox  (sandbox branch)
+# - git merge betaX --no-ff --no-commit  (sandbox branch)
+# - Revert API url to (i.e. should be sandbox url, not point to beta)
+# - Revert VERSION number (i.e. keep sandbox version, not beta version)
+# - Committ changes as merge with betaX
+
 # Steps/Commands to run before a package release -----------------------------
 
 ## Install required packages (if they don't already exist)
@@ -27,7 +59,8 @@ spelling::update_wordlist() # All remaining words will be added to the ignore WO
 ## Finalize package version
 # - Update DESCRIPTION - package version
 # - Update .onLoad - API version
-v <- "3.0.0"
+v <- "3.0.1"
+v <- packageVersion("motus") # If dev version loaded with devtools::load_all()
 
 ## Checks
 devtools::check(run_dont_test = TRUE)   # Local, run long-running examples
