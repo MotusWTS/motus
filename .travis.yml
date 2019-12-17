@@ -2,3 +2,8 @@
 
 language: R
 cache: packages
+
+script: 
+  - |
+    R CMD build .
+    travis_wait 20 R CMD check motus*tar.gz
