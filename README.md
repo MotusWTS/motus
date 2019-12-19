@@ -1,4 +1,5 @@
 <!-- badges: start -->
+[![Build status](https://ci.appveyor.com/api/projects/status/d33qyiunqjexdepy?svg=true)](https://ci.appveyor.com/project/steffilazerte/motus)
 [![Travis build status](https://travis-ci.org/MotusWTS/motus.svg?branch=master)](https://travis-ci.org/MotusWTS/motus)
 [![Codecov test coverage](https://codecov.io/gh/MotusWTS/motus/branch/master/graph/badge.svg)](https://codecov.io/gh/MotusWTS/motus?branch=master)
 <!-- badges: end -->

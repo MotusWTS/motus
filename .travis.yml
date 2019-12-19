@@ -7,6 +7,12 @@ script:
   - |
     R CMD build .
     travis_wait 20 R CMD check motus*tar.gz
-    
+
+r_packages:
+  - covr
+
+after_success:
+  - Rscript -e 'library(covr); codecov()'
+
 after_failure:
   - ./travis-tool.sh dump_logs

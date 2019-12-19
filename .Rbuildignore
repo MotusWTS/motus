@@ -8,3 +8,4 @@ RELEASE.R
 ^\.travis\.yml$
 ^codecov\.yml$
 ^LICENSE\.md$
+^appveyor\.yml$
