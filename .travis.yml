@@ -7,3 +7,6 @@ script:
   - |
     R CMD build .
     travis_wait 20 R CMD check motus*tar.gz
+    
+after_failure:
+  - ./travis-tool.sh dump_logs
