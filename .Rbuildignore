@@ -9,3 +9,4 @@ RELEASE.R
 ^codecov\.yml$
 ^LICENSE\.md$
 ^appveyor\.yml$
+^codecov\.R$

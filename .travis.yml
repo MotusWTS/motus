@@ -12,7 +12,7 @@ r_packages:
   - covr
 
 after_success:
-  - Rscript -e 'library(covr); codecov()'
+  - travis_wait 20 Rscript codecov.R
 
 after_failure:
   - ./travis-tool.sh dump_logs
