@@ -30,6 +30,9 @@ test_that("ensureDBTables() creates database", {
   }
   expect_equal(nrow(DBI::dbGetQuery(temp$con, "SELECT * FROM admInfo")), 1)
   expect_equal(nrow(DBI::dbGetQuery(temp$con, "SELECT * FROM meta")), 2)
+  
+  # Expect new columns age/sex in tagDeps
+  expect_true(all(c("age", "sex") %in% DBI::dbListFields(temp$con, "tagDeps")))
 })
 
 test_that("new tables have character ant and port", {
