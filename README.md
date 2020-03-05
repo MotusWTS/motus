@@ -31,10 +31,10 @@ install.packages("remotes")              ## if you haven't already done this
 remotes::install_github("motusWTS/motus@master")   ## the lastest stable version
 ```
 
-**Developers**: the 'staging' branch is for work-in-progress.  Install it with
+**Developers**: the 'betaX' branches are for work-in-progress.  Install the one you want
 ```R
-install.packages("remotes")               ## if you haven't already done this
-remotes::install_github("motusWTS/motus@staging")   ## the development version
+install.packages("remotes")                       ## if you haven't already done this
+remotes::install_github("motusWTS/motus@beta3")   ## the beta branch for version 3+
 ```
 
 ### Troubleshooting
@@ -67,7 +67,7 @@ Another possible cause of this problem relates to file permissions in your libra
 
 **certificate errors**
 
-If you get a certificate error using the tagme() function, please ensure that your httr package is up-to-date, as there was a problem reported with one of the recent version that now appears fixed:
+If you get a certificate error using the `tagme()` function, please ensure that your httr package is up-to-date, as there was a problem reported with one of the recent version that now appears fixed:
 
 ```R
 remotes::install_github("r-lib/httr")
