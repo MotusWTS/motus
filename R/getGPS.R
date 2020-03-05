@@ -52,6 +52,9 @@ getGPS <- function(src, alltags = NULL, by = "daily") {
   if(!is.numeric(by) && !by %in% c("daily", "closest")) {
     stop("'by' must be either a number, 'daily' or 'closest'", call. = FALSE)
   }
+  if(is.numeric(by) && by <= 0) {
+    stop("'by' must be a number greater than zero", call. = FALSE)
+  }
   
   gps <- prepGPS(src)
   if(nrow(gps) == 0) return(gps)

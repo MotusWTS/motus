@@ -36,7 +36,7 @@ Suggests:
     spelling,
     testthat,
     covr
-License: GPL-3 + file LICENSE
+License: GPL-3
 Date: 2019-03-28
 RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)

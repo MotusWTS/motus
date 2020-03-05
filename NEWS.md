@@ -1,7 +1,7 @@
 # motus 3.0.1
 
-
 ### Small Changes
+* Receiver downloads now have similar progress messages to Project downloads
 * Move GPS fields from `alltags` to `alltagsGPS`
 * New function `getGPS()` adds GPS fields to data
 * Remove NOT NULL constraint on `motusTagID`s in ambiguous tag view

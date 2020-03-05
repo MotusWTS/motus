@@ -69,6 +69,7 @@ system("cd ..; R CMD build motus")
 system(paste0("cd ..; R CMD check motus_", v, ".tar.gz"))
 system(paste0("cd ..; R CMD check motus_", v, ".tar.gz --as-cran"))
 
+rhub::check_on_linux(show_status = FALSE)
 rhub::check_on_macos(show_status = FALSE)
 rhub::check_on_windows(show_status = FALSE)
 rhub::check_for_cran(show_status = FALSE)

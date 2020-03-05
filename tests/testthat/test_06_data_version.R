@@ -13,13 +13,11 @@ teardown({
   unlink("SG-3115BBBK1127_v1.motus")
 })
 
-test_that("Database updates as expected (projects)", {
+test_that("Database updates as expected (proj) - new = TRUE", {
   if(utils::packageVersion("motus") >= 3) {
-    sessionVariable(name = "userLogin", val = "motus.sample")
-    sessionVariable(name = "userPassword", val = "motus.sample")
+    sample_auth()
     
     expect_false(file.exists("project-176_v1.motus")) # No backup
-    
     file.copy(system.file("extdata", "project-176_v1.motus", package = "motus"),
               "./project-176.motus")
     expect_warning(tagme(176, new = TRUE, update = TRUE, rename = TRUE), 
@@ -27,7 +25,9 @@ test_that("Database updates as expected (projects)", {
     expect_true(file.exists("project-176_v1.motus"))  # Backup
     unlink("project-176.motus")
     unlink("project-176_v1.motus")
-    
+
+    # With forceMeta = TRUE
+    expect_false(file.exists("project-176_v1.motus")) # No backup
     file.copy(system.file("extdata", "project-176_v1.motus", package = "motus"),
               "./project-176.motus")
     expect_warning(tagme(176, new = TRUE, update = TRUE, forceMeta = TRUE,
@@ -36,10 +36,17 @@ test_that("Database updates as expected (projects)", {
     expect_true(file.exists("project-176_v1.motus"))  # Backup
     unlink("project-176.motus")
     unlink("project-176_v1.motus")
+  }
+})
+
+test_that("Database updates as expected (proj) - new = FALSE", {
+  if(utils::packageVersion("motus") >= 3) {
+    sample_auth()
     
+    expect_false(file.exists("project-176_v1.motus")) # No backup
     file.copy(system.file("extdata", "project-176_v1.motus", package = "motus"),
               "./project-176.motus")
-    expect_error(tagme(176, new = FALSE, update = TRUE, rename = TRUE), NA)
+    expect_message(tagme(176, new = FALSE, update = TRUE, rename = TRUE))
     expect_true(file.exists("project-176_v1.motus"))  # Backup
     
     # Expect old and new to have different admInfo
@@ -67,7 +74,7 @@ test_that("Database updates as expected (projects)", {
   }
 })
 
-test_that("Update fails if backup present (projects)", {
+test_that("Update fails if backup present (proj)", {
   if(utils::packageVersion("motus") >= 3 && file.exists("project-176_v1.motus")) {
     unlink("project-176.motus") 
     file.copy("project-176_v1.motus", "project-176.motus")
