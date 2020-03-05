@@ -5,6 +5,7 @@
 * Move GPS fields from `alltags` to `alltagsGPS`
 * New function `getGPS()` adds GPS fields to data
 * Remove NOT NULL constraint on `motusTagID`s in ambiguous tag view
+* Add `age` and `sex` to metadata in `tagDeps` table
 
 ### Bug fix
 * Receivers updating to the new version errored on the download start

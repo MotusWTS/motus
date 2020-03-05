@@ -261,7 +261,9 @@ CREATE TABLE tagDeps (
    bi REAL,
    tsStartCode INTEGER,
    tsEndCode INTEGER,
-   fullID TEXT
+   fullID TEXT,
+   age TEXT,
+   sex TEXT
 );
 ")
     sql("CREATE INDEX IF NOT EXISTS tagDeps_projectID on tagDeps(projectID)")

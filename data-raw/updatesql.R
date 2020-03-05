@@ -2,6 +2,13 @@ sql_versions <- dplyr::tibble()
 
 sql_versions <- rbind(
   sql_versions,
+  cbind(date = "2020-02-06",
+        descr = "Add 'sex' and 'age' metadata to 'tagDeps' table",
+        sql = paste0("ALTER TABLE tagDeps ADD COLUMN sex TEXT;",
+                     "ALTER TABLE tagDeps ADD COLUMN age TEXT;")))
+
+sql_versions <- rbind(
+  sql_versions,
   cbind(date = "2019-11-20",
         descr = "Drop IS NOT NULL constraint on allambigs",
         sql = paste0("DROP VIEW IF EXISTS allambigs;",   # Remove Views so we can delete the table
