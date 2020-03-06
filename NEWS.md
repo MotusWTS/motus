@@ -9,6 +9,7 @@
 ### Bug fix
 * Receivers updating to the new version errored on the download start
 * Allow renaming (if possible) of large databases on data updates
+* Continue checking for activity even if first batch returns 0
 
 # motus 3.0.0 (2019-10-16)
 

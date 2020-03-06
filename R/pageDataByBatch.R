@@ -4,7 +4,7 @@
 pageDataByBatch <- function(src, table, resume = FALSE,
                             getBatches = NULL,
                             pageInitial, pageForward) {
-  
+
   # Check tables and update to include table if necessary
   ensureDBTables(src, projRecv = get_projRecv(src))
   sql <- safeSQL(src)
@@ -12,8 +12,17 @@ pageDataByBatch <- function(src, table, resume = FALSE,
   # Fetch/resume table download
   batches <- getBatches(src)
   
-  # If length zero, then no batches to get data for
+  # Check where to start
+  if(resume) {
+    # If updating, start with last batch downloaded (a bit of overlap)
+    last_batch <- sql(paste0("select ifnull(max(batchID), 0) from ", table))[[1]]  
+    batches <- batches[batches >= last_batch]
+  } else {
+    # Otherwise remove all rows and start again
+    DBI::dbExecute(src$con, paste0("DELETE FROM ", table))
+  }
   
+  # If length zero, then no batches to get data for
   if(length(batches) > 0) {
     data_name <- get_projRecv(src)
     
@@ -22,16 +31,7 @@ pageDataByBatch <- function(src, table, resume = FALSE,
     } else {
       projectID <- NULL
     }
-    
-    if(resume) {
-      # If updating, start with last batch downloaded (a bit of overlap)
-      last_batch <- sql(paste0("select ifnull(max(batchID), 0) from ", table))[[1]]  
-      batches <- batches[batches >= last_batch]
-    } else {
-      # Otherwise remove all rows and start again
-      DBI::dbExecute(src$con, paste0("DELETE FROM ", table))
-    }
-    
+
     # Get first batch
     b <- pageInitial(batches[1], projectID)
     
@@ -45,12 +45,9 @@ pageDataByBatch <- function(src, table, resume = FALSE,
         batches <- numeric()
         b <- data.frame()
       }
-    } else if(nrow(b) == 0) {
-      batches <- numeric()
-      b <- data.frame()
     }
   }  
-  
+
   # Announce
   message(sprintf("%s: %5d batch records to check", 
                   table, length(batches)))
@@ -59,7 +56,7 @@ pageDataByBatch <- function(src, table, resume = FALSE,
     for(i in 1:length(batches)) {
       batchID <- batches[i]
       if(i != 1) b <- pageInitial(batchID, projectID)
-      
+
       # Get the rest of the data
       while(nrow(b) > 0) {
         
