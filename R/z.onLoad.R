@@ -46,6 +46,9 @@
 #' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 .onLoad = function(...) {
+    
+    options(motus.test.max = 15)
+    
     # default location of motus data server, unless user has already assigned
     # a value to "motusServerURL" in the global environment
     if(!exists("motusServerURL")) motusServerURL <- "https://beta.motus.org/api"

@@ -18,6 +18,10 @@ skip_if_no_auth <- function() {
   }
 }
 
+is_testing <- function() {
+  identical(Sys.getenv("TESTTHAT"), "true")
+}
+
 #' Test for local authorization
 #' 
 #' This is a helper function for testing and applying local authorizations when

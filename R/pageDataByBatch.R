@@ -72,6 +72,8 @@ pageDataByBatch <- function(src, table, resume = FALSE,
         added <- added + nrow(b)
         b <- pageForward(b, batchID, projectID)
       }
+      # If testing, break out after x batches
+      if(i >= getOption("motus.test.max") && is_testing()) break
     }
     message("Downloaded ", added, " ", table, " records")
   }
