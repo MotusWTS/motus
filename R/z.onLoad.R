@@ -138,6 +138,7 @@
     {
         dataVersion = 0L  ## Current dataVersion returned by server
         projects = 0L     ## vector of projectIDs to which user has access
+        receivers = 0L
         dbDir = getwd()   ## folder where tag and receiver databases are stored
     })
     

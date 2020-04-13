@@ -71,3 +71,22 @@ get_projRecv <- function(src) {
   }
   projRecv
 }
+
+
+#' Return accessible projects and receivers
+#'
+#' Return the projects and receivers which are accessible by the given
+#' credentials
+#'
+#' @examples
+#' \dontrun{
+#' access()
+#' }
+#' 
+#' @export
+
+access <- function() {
+  motus_vars$authToken # Prompt for authorization
+  message("Projects: ", paste0(motus_vars$dataVersion, collapse = ", "), "\n",
+          "Receivers: ", paste0(motus_vars$receivers, collapse = ", "))
+}

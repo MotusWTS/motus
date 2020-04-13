@@ -3,6 +3,7 @@
 export("%>%")
 export(":=")
 export(.data)
+export(access)
 export(activity)
 export(checkVersion)
 export(clarify)
