@@ -80,12 +80,12 @@ get_projRecv <- function(src) {
 #'
 #' @examples
 #' \dontrun{
-#' access()
+#' getAccess()
 #' }
 #' 
 #' @export
 
-access <- function() {
+getAccess <- function() {
   motus_vars$authToken # Prompt for authorization
   message("Projects: ", paste0(motus_vars$dataVersion, collapse = ", "), "\n",
           "Receivers: ", paste0(motus_vars$receivers, collapse = ", "))
