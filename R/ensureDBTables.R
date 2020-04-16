@@ -263,7 +263,8 @@ CREATE TABLE tagDeps (
    tsEndCode INTEGER,
    fullID TEXT,
    age TEXT,
-   sex TEXT
+   sex TEXT,
+   test INTEGER
 );
 ")
     sql("CREATE INDEX IF NOT EXISTS tagDeps_projectID on tagDeps(projectID)")

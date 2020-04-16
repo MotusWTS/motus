@@ -4,7 +4,7 @@ sql_versions <- rbind(
   sql_versions,
   cbind(date = "2020-04-13",
         descr = "Add 'test' metadata to 'tagDeps' table",
-        sql = "ALTER TABLE tagDeps ADD COLUMN test TEXT;"))
+        sql = "ALTER TABLE tagDeps ADD COLUMN test INTEGER;"))
 
 sql_versions <- rbind(
   sql_versions,

@@ -47,6 +47,10 @@ test_that("tagme() downloads data - Projects", {
   for(i in names(a)[names(a) != "ant"]) {
     expect_is(a[, !!i][[1]], c("integer", "numeric"))
   }
+  
+  b <- dplyr::tbl(tags, "tagDeps") %>% dplyr::collect()
+  expect_true("test" %in% DBI::dbListFields(tags$con, "tagDeps"))
+  expect_is(dplyr::tbl(tags$con, "tagDeps") %>% select(test), "numeric")
 })
 
 test_that("Receivers download - Receivers", {

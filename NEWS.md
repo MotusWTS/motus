@@ -1,3 +1,7 @@
+# motus 4.0.0
+### Small Changes
+* Add `test` to metadata in `tagDeps` table
+
 # motus 3.0.1
 
 ### Small Changes
