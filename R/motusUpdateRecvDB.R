@@ -157,6 +157,9 @@ motusUpdateRecvDB <- function(src, countOnly, forceMeta=FALSE) {
 
             ## dbWriteTable(sql$con, "batches", b[bi,], append=TRUE, row.names=FALSE)
             dbInsertOrReplace(sql$con, "batches", b[bi,], replace=FALSE)
+            
+            # If testing, break out after x batches
+            if(bi >= getOption("motus.test.max") && is_testing()) break
         }
         batchID = max(b$batchID)
     }

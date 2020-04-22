@@ -18,6 +18,15 @@ skip_if_no_auth <- function() {
   }
 }
 
+is_testing <- function() {
+  identical(Sys.getenv("TESTTHAT"), "true")
+}
+
+set_testing <- function(set = TRUE) {
+  if(set) Sys.setenv("TESTTHAT" = "true")
+  if(!set) Sys.setenv("TESTHAT" = "")
+}
+
 #' Test for local authorization
 #' 
 #' This is a helper function for testing and applying local authorizations when
@@ -66,4 +75,23 @@ get_projRecv <- function(src) {
     stop("Database is not a recognized motus project", call. = FALSE)
   }
   projRecv
+}
+
+
+#' Return accessible projects and receivers
+#'
+#' Return the projects and receivers which are accessible by the given
+#' credentials
+#'
+#' @examples
+#' \dontrun{
+#' getAccess()
+#' }
+#' 
+#' @export
+
+getAccess <- function() {
+  motus_vars$authToken # Prompt for authorization
+  message("Projects: ", paste0(motus_vars$dataVersion, collapse = ", "), "\n",
+          "Receivers: ", paste0(motus_vars$receivers, collapse = ", "))
 }

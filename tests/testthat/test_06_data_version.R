@@ -1,3 +1,5 @@
+context("Data version updates correctly")
+
 setup({
   unlink("project-176.motus")
   unlink("project-176_v1.motus")
@@ -49,28 +51,41 @@ test_that("Database updates as expected (proj) - new = FALSE", {
     expect_message(tagme(176, new = FALSE, update = TRUE, rename = TRUE))
     expect_true(file.exists("project-176_v1.motus"))  # Backup
     
-    # Expect old and new to have different admInfo
+   
     old <- DBI::dbConnect(RSQLite::SQLite(), dbname = "project-176_v1.motus")
     new <- DBI::dbConnect(RSQLite::SQLite(), dbname = "project-176.motus")
+    
+    # Limit data when testing:
+    b <- dplyr::tbl(new, "batches") %>% 
+      dplyr::pull(batchID) %>% 
+      dplyr::last()
+   
+    # Expect old and new to have different admInfo 
     expect_named(dplyr::tbl(old, "admInfo") %>% dplyr::collect(), 
                  expected = c("key", "value"))
     expect_named(dplyr::tbl(new, "admInfo") %>% dplyr::collect(), 
                  expected = c("db_version", "data_version"))  # New version
     
-    expect_equal(dplyr::tbl(old, "tags") %>% dplyr::collect(),
-                 dplyr::tbl(new, "tags") %>% dplyr::collect())
-    
-    expect_equal(dplyr::tbl(old, "activity") %>% dplyr::collect() 
-                 %>% dplyr::mutate(ant = as.character(.data$ant)),
+    expect_equal(dplyr::tbl(old, "activity") %>% 
+                   dplyr::filter(batchID <= b) %>%
+                   dplyr::collect() %>%
+                   dplyr::mutate(ant = as.character(.data$ant)),
                  dplyr::tbl(new, "activity") %>% dplyr::collect())
     
-    expect_equal(dplyr::tbl(old, "hits") %>% dplyr::collect(),
+    expect_equal(dplyr::tbl(old, "hits") %>% 
+                   dplyr::filter(batchID <= b) %>%
+                   dplyr::collect(),
                  dplyr::tbl(new, "hits") %>% dplyr::collect())
     
-    expect_equal(dplyr::tbl(old, "runs") %>% dplyr::collect() %>% 
+    expect_equal(dplyr::tbl(old, "runs") %>% 
+                   dplyr::filter(batchIDbegin <= b) %>%
+                   dplyr::collect() %>% 
                    dplyr::mutate(ant = as.character(.data$ant)),
                  dplyr::tbl(new, "runs") %>% dplyr::collect() %>% 
                    dplyr::select(-nodeNum))
+    
+    DBI::dbDisconnect(old)
+    DBI::dbDisconnect(new)
   }
 })
 
@@ -115,18 +130,30 @@ test_that("Database updates as expected (receivers)", {
     old <- DBI::dbConnect(RSQLite::SQLite(), dbname = "SG-3115BBBK1127_v1.motus")
     new <- DBI::dbConnect(RSQLite::SQLite(), dbname = "SG-3115BBBK1127.motus")
     
-    expect_equal(dplyr::tbl(old, "tags") %>% dplyr::collect(),
-                 dplyr::tbl(new, "tags") %>% dplyr::collect())
+    # Limit data when testing:
+    b <- dplyr::tbl(new, "batches") %>% 
+      dplyr::pull(batchID) %>% 
+      dplyr::last()
     
-    expect_equal(dplyr::tbl(old, "activity") %>% dplyr::collect() 
-                 %>% dplyr::mutate(ant = as.character(.data$ant)),
+    expect_equal(dplyr::tbl(old, "activity") %>% 
+                   dplyr::filter(batchID <= b) %>%
+                   dplyr::collect() %>% 
+                   dplyr::mutate(ant = as.character(.data$ant)),
                  dplyr::tbl(new, "activity") %>% dplyr::collect())
     
-    expect_equal(dplyr::tbl(old, "hits") %>% dplyr::collect(),
+    expect_equal(dplyr::tbl(old, "hits")  %>% 
+                   dplyr::filter(batchID <= b) %>%
+                   dplyr::collect(),
                  dplyr::tbl(new, "hits") %>% dplyr::collect())
     
-    expect_equal(dplyr::tbl(old, "runs") %>% dplyr::collect(),
+    expect_equal(dplyr::tbl(old, "runs")  %>% 
+                   dplyr::filter(batchIDbegin <= b) %>%
+                   dplyr::collect(),
                  dplyr::tbl(new, "runs") %>% dplyr::collect())
+    
+    
+    DBI::dbDisconnect(old)
+    DBI::dbDisconnect(new)
   }
 })
 
