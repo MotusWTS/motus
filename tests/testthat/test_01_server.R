@@ -33,20 +33,7 @@ test_that("tagme() downloads data - Projects", {
   
   expect_message(tags <- tagme(projRecv = 176, new = TRUE, update = TRUE)) %>%
     expect_is("src_SQLiteConnection")
-  
-  # Table exists
-  expect_silent(a <- dplyr::tbl(tags, "activity") %>% dplyr::collect())
-  expect_silent(dplyr::tbl(tags, "nodeData"))
-  expect_silent(dplyr::tbl(tags, "nodeDeps"))
-  
-  # No all missing values
-  expect_false(any(sapply(a, function(x) all(is.na(x)))))
-  
-  # All numeric/integer (except ant)
-  expect_is(a$ant, "character")
-  for(i in names(a)[names(a) != "ant"]) {
-    expect_is(a[, !!i][[1]], c("integer", "numeric"))
-  }
+
 })
 
 test_that("Receivers download - Receivers", {
