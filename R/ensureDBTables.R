@@ -487,15 +487,7 @@ CREATE INDEX IF NOT EXISTS runsFilters_filterID_runID_motusTagID ON runsFilters 
   }
   
   if(! "nodeData" %in% tables) {
-    sql("CREATE TABLE IF NOT EXISTS nodeData (
-      nodeDataId BIGINT PRIMARY KEY NOT NULL,
-      batchID INTEGER NOT NULL,
-      ts FLOAT NOT NULL,
-      nodeNum TEXT NOT NULL,
-      ant TEXT NOT NULL,
-      sig FLOAT(24),
-      battery FLOAT,
-      temperature FLOAT);")
+    sql(makeTables(type = "nodeData"))
   }
   
   if(! "nodeDeps" %in% tables) {
@@ -529,6 +521,16 @@ makeTables <- function(type, name = type) {
     motusTagID6 INT,                       -- motus ID of tag in group.
     ambigProjectID INT                     -- negative ambiguity ID of deployment project. refers to key ambigProjectID in table projAmbig
 );")
+  } else if(type == "nodeData") {
+  s <- paste0("CREATE TABLE IF NOT EXISTS ", name, " (",
+    "nodeDataId BIGINT PRIMARY KEY NOT NULL,",
+    "batchID INTEGER NOT NULL,",
+    "ts FLOAT NOT NULL,",
+    "nodeNum TEXT NOT NULL,",
+    "ant TEXT NOT NULL,",
+    "sig FLOAT(24),",
+    "battery FLOAT,",
+    "temperature FLOAT);")
   } else s <- character()
   s
 }

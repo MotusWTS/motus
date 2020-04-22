@@ -2,6 +2,16 @@ sql_versions <- dplyr::tibble()
 
 sql_versions <- rbind(
   sql_versions,
+  cbind(date = "2020-04-22",
+        descr = "Rename nodeDataId to nodeDataID in nodeData",
+        sql = paste0("ALTER TABLE nodeData RENAME TO nodeData2;",
+                     makeTables(type = "nodeData"),
+                     "INSERT INTO nodeData SELECT * FROM nodeData2;",
+                     "DROP TABLE nodeData2;"))
+)
+
+sql_versions <- rbind(
+  sql_versions,
   cbind(date = "2019-11-20",
         descr = "Drop IS NOT NULL constraint on allambigs",
         sql = paste0("DROP VIEW IF EXISTS allambigs;",   # Remove Views so we can delete the table
