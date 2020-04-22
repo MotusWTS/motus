@@ -9,7 +9,8 @@
 ### Bug fix
 * Receivers updating to the new version errored on the download start
 * Allow renaming (if possible) of large databases on data updates
-* Continue checking for activity even if first batch returns 0
+* Continue checking for activity/nodeData even if first batch returns 0
+* `nodeDataId` is corrected to `nodeDataID`
 
 # motus 3.0.0 (2019-10-16)
 
