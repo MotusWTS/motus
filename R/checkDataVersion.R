@@ -13,7 +13,7 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
   # If missing admInfo table OR data_version, assume is version 1
   if(length(local_version) == 0) local_version <- 1
 
-  if(local_version < server_version) {
+  if(length(DBI::dbListTables(src$con)) > 1 && local_version < server_version) {
 
     new_name <- stringr::str_replace(src[[1]]@dbname, 
                                      ".motus$", 
