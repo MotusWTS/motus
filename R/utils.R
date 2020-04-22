@@ -22,6 +22,11 @@ is_testing <- function() {
   identical(Sys.getenv("TESTTHAT"), "true")
 }
 
+set_testing <- function(set = TRUE) {
+  if(set) Sys.setenv("TESTTHAT" = "true")
+  if(!set) Sys.setenv("TESTHAT" = "")
+}
+
 #' Test for local authorization
 #' 
 #' This is a helper function for testing and applying local authorizations when
