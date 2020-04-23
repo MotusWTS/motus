@@ -38,5 +38,12 @@ test_that("Data returned as expected", {
   expect_true("nodeDataID" %in% names(a)) # check correct field name
   expect_false(any(sapply(a, function(x) all(is.na(x))))) # No all missing values
   
+  #tagDeps
+  expect_silent(a <- dplyr::tbl(tags$con, "tagDeps") %>% dplyr::collect())
+  expect_true("test" %in% names(a))
+  expect_is(a$test, "integer")
+  expect_true("tagDeployTest" %in% DBI::dbListFields(tags$con, "alltags"))
+  
+  
   options(motus.test.max = orig)
 })

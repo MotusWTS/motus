@@ -2,25 +2,28 @@ sql_versions <- dplyr::tibble()
 
 sql_versions <- rbind(
   sql_versions,
+  cbind(date = "2020-04-24",
+        descr = "Add 'test' metadata to 'tagDeps' table",
+        sql = paste0("ALTER TABLE tagDeps ADD COLUMN test INTEGER;",
+                     # Dropped views are recreated in later steps
+                     "DROP VIEW IF EXISTS alltags;",
+                     "DROP VIEW IF EXISTS alltagsGPS;")))
+
+sql_versions <- rbind(
+  sql_versions,
+  cbind(date = "2020-04-23",
+        descr = "Add 'sex' and 'age' metadata to 'tagDeps' table",
+        sql = paste0("ALTER TABLE tagDeps ADD COLUMN sex TEXT;",
+                     "ALTER TABLE tagDeps ADD COLUMN age TEXT;")))
+
+sql_versions <- rbind(
+  sql_versions,
   cbind(date = "2020-04-22",
         descr = "Rename nodeDataId to nodeDataID in nodeData",
         sql = paste0("ALTER TABLE nodeData RENAME TO nodeData2;",
                      makeTables(type = "nodeData"),
                      "INSERT INTO nodeData SELECT * FROM nodeData2;",
                      "DROP TABLE nodeData2;")))
-
-sql_versions <- rbind(
-  sql_versions,
-  cbind(date = "2020-04-13",
-        descr = "Add 'test' metadata to 'tagDeps' table",
-        sql = "ALTER TABLE tagDeps ADD COLUMN test INTEGER;"))
-
-sql_versions <- rbind(
-  sql_versions,
-  cbind(date = "2020-02-06",
-        descr = "Add 'sex' and 'age' metadata to 'tagDeps' table",
-        sql = paste0("ALTER TABLE tagDeps ADD COLUMN sex TEXT;",
-                     "ALTER TABLE tagDeps ADD COLUMN age TEXT;")))
 
 sql_versions <- rbind(
   sql_versions,

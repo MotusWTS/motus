@@ -149,6 +149,7 @@ SELECT
    t5.longitude as tagDepLon,
    t5.elevation as tagDepAlt,
    t5.comments as tagDepComments,
+   t5.test as tagDeployTest,
    ifnull(t5.fullID, printf('?proj?-%d#%s:%.1f', t5.projectID, t4.mfgID, t4.bi)) as fullID,
    t3.motusDeviceID as deviceID,
    t6.deployID as recvDeployID,

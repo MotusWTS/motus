@@ -41,6 +41,10 @@ pkgs_to_install <- pkgs[!(pkgs %in% installed.packages()[, "Package"])]
 if(length(pkgs_to_install)) install.packages(pkgs_to_install)
 
 
+## IF MERGING SANDBOX
+# - Make sure that updatesql.R updates unique to sandbox have a date later than
+#   beta updates (otherwise they won't trigger)
+
 ## Update internal data files
 source("data-raw/updatesql.R")
 source("data-raw/sample_data.R")
@@ -94,12 +98,6 @@ problems <- dplyr::mutate(problems, yes = purrr::map_lgl(problem, ~length(na.omi
   dplyr::filter(yes)
 
 ## Push to GitHub
-
-
-## Check Reverse Dependencies (are there any?)
-#tools::dependsOnPkgs("naturecounts")
-#devtools::revdep()
-
 
 ## Push to master branch (pull request, etc.)
 
