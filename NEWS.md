@@ -1,4 +1,4 @@
-# motus 3.0.1
+# motus 3.1.0
 
 ### Small Changes
 * Receiver downloads now have similar progress messages to Project downloads
