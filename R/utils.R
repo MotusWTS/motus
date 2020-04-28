@@ -23,8 +23,8 @@ is_testing <- function() {
 }
 
 set_testing <- function(set = TRUE) {
-  if(set) Sys.setenv("TESTTHAT" = "true")
-  if(!set) Sys.setenv("TESTHAT" = "")
+  if(set) Sys.setenv(TESTTHAT = "true")
+  if(!set) Sys.unsetenv("TESTTHAT")
 }
 
 #' Test for local authorization
