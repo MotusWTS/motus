@@ -40,10 +40,12 @@ test_that("Data returned as expected", {
   
   #tagDeps
   expect_silent(a <- dplyr::tbl(tags$con, "tagDeps") %>% dplyr::collect())
-  expect_true("test" %in% names(a))
+  expect_true(all(c("test", "age", "sex") %in% names(a)))
+  expect_is(a$age, "character")
+  expect_is(a$sex, "character")
   expect_is(a$test, "integer")
   expect_true("tagDeployTest" %in% DBI::dbListFields(tags$con, "alltags"))
-  
+  expect_true("tagDeployTest" %in% DBI::dbListFields(tags$con, "alltagsGPS"))
   
   options(motus.test.max = orig)
 })

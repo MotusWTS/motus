@@ -1,6 +1,7 @@
 # motus 4.0.0
 ### Small Changes
-* Add `test` to metadata in `tagDeps` table
+* Add `test` to metadata in `tagDeps` table (`tagDeployTest` in `alltags` and
+  `alltagsGPS` views)
 * Add `age` and `sex` to metadata in `tagDeps` table
 
 # motus 3.0.1
