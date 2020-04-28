@@ -24,8 +24,7 @@ test_that("table fields match server (sample auth)", {
     DBI::dbListFields(tags, "projAmbig"), ignore.order = TRUE)
   
   expect_named(
-    cbind(srvRunsForTagProject(projectID = 176, batchID = 53, runID = 8886)[1,],
-          "nodeNum" = NA),
+    srvRunsForTagProject(projectID = 176, batchID = 53, runID = 8886)[1,],
     DBI::dbListFields(tags, "runs"), ignore.order = TRUE)
   
   expect_named(
