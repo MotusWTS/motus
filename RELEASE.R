@@ -46,6 +46,7 @@ if(length(pkgs_to_install)) install.packages(pkgs_to_install)
 #   beta updates (otherwise they won't trigger)
 
 ## Update internal data files
+set_testing(set = FALSE) # Make sure to download full sets
 source("data-raw/updatesql.R")
 source("data-raw/sample_data.R")
 

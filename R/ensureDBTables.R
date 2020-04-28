@@ -526,7 +526,7 @@ makeTables <- function(type, name = type) {
 );")
   } else if(type == "nodeData") {
   s <- paste0("CREATE TABLE IF NOT EXISTS ", name, " (",
-    "nodeDataId BIGINT PRIMARY KEY NOT NULL,",
+    "nodeDataID BIGINT PRIMARY KEY NOT NULL,",
     "batchID INTEGER NOT NULL,",
     "ts FLOAT NOT NULL,",
     "nodeNum TEXT NOT NULL,",
