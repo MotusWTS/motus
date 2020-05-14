@@ -46,6 +46,10 @@ updateMotusDb <- function(src, quiet = FALSE) {
     dplyr::arrange(.data$date)
 
   if (nrow(update_versions) > 0) {
+    
+    # Check if there are custom views to be concerned about
+    checkViews(src, dplyr::pull(update_versions, "sql"))
+    
     if(!quiet) message(sprintf("updateMotusDb started (%d version update(s))", 
                                nrow(update_versions)))
     
@@ -74,5 +78,38 @@ updateMotusDb <- function(src, quiet = FALSE) {
       DBI::dbExecute(src$con, paste0("UPDATE admInfo set db_version = '",
                                     strftime(dt, "%Y-%m-%d %H:%M:%S"), "'"))
     }
+  }
+}
+
+
+checkViews <- function(src, update_sql) {
+  motus_views <- c("alltags", "alltagsGPS", "allambigs")
+  motus_views_str <- stringr::regex(
+    paste0("\\b", paste0(motus_views, collapse = "\\b|\\b"), "\\b"), 
+    ignore_case = TRUE)
+  motus_views_sql <- stringr::regex(
+    paste0(paste0("(DROP VIEW IF EXISTS ", motus_views, "\\b)"), collapse = "|"),
+    ignore_case = TRUE)
+  
+  # Check if any motus views in update_sql
+  motus_views <- stringr::str_extract_all(update_sql, motus_views_sql) %>%
+    unlist() %>%
+    stringr::str_extract(motus_views_str) %>%
+    unique()
+  
+  db_views <- DBI::dbGetQuery(
+    src$con, 
+    "SELECT name, sql FROM sqlite_master WHERE type = 'view'") %>%
+    dplyr::filter(!name %in% motus_views) %>%
+    dplyr::mutate(motus_views = stringr::str_detect(.data$sql, motus_views_str)) %>%
+    dplyr::filter(motus_views == TRUE)
+
+  if(nrow(db_views) > 0) {
+    stop(stringr::str_wrap(
+      paste0("This SQLite database contains some custom views (", 
+             paste0(db_views$name, collapse = ", "),") which ",
+             "will have to be removed before the update can proceed."),
+      exdent = 7),
+      call. = FALSE)
   }
 }

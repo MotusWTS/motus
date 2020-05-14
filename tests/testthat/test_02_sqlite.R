@@ -56,7 +56,6 @@ test_that("new tables have character ant and port", {
   
 })
 
-
 test_that("Missing tables recreated silently", {
   sample_auth()
   tags <- tagme(176, new = FALSE, update = FALSE)
@@ -85,3 +84,16 @@ test_that("Missing tables recreated silently", {
     expect_true(DBI::dbExistsTable(tags$con, !!i))
   }
 })
+
+
+test_that("check for custom views before update", {
+  sample_auth()
+  tags <- DBI::dbConnect(RSQLite::SQLite(), "project-176.motus")
+  DBI::dbExecute(
+    tags, 
+    "CREATE VIEW alltags_fast AS SELECT hitID, runID, ts FROM alltags WHERE sig = 52;")
+  DBI::dbExecute(tags, "UPDATE admInfo SET db_version = '2019-01-01 00:00:00'")
+  DBI::dbDisconnect(tags)
+  expect_error(tagme(176, update = TRUE), "contains some custom views")
+})
+
