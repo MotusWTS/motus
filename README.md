@@ -57,7 +57,7 @@ remotes::update_packages("motus")
 remotes::update_packages()
 ```
 
-3. Update R <https://cran.r-project.org/>. (You may after have to reinstall packages)
+3. Update R <https://cran.r-project.org/>. (You may have to reinstall packages)
 
 
 #### Specific Problems 
