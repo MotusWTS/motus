@@ -3,6 +3,7 @@ context("sql tables")
 setup({
   unlink("project-176.motus")
   unlink("temp.motus")
+  unlink(list.files(pattern = "project-176_custom_views"))
   file.copy(system.file("extdata", "project-176.motus", package = "motus"), ".")
 })
 
@@ -94,6 +95,18 @@ test_that("check for custom views before update", {
     "CREATE VIEW alltags_fast AS SELECT hitID, runID, ts FROM alltags WHERE sig = 52;")
   DBI::dbExecute(tags, "UPDATE admInfo SET db_version = '2019-01-01 00:00:00'")
   DBI::dbDisconnect(tags)
-  expect_error(tagme(176, update = TRUE), "contains some custom views")
+  
+  tags <- tagme(176, update = FALSE)
+  expect_error(checkViews(src = tags, update_sql = sql_versions$sql, response = 2),
+               "Cannot update local database if conflicting custom views")
+  expect_true("alltags_fast" %in% DBI::dbListTables(tags$con))
+  expect_message(checkViews(src = tags, update_sql = sql_versions$sql, response = 1),
+                 "Deleting custom views: alltags_fast")
+  expect_true(file.exists(paste0("project-176_custom_views_", Sys.Date(), ".log")))
+  expect_false("alltags_fast" %in% DBI::dbListTables(tags$con))
+   
+  expect_message(tagme(176, update = TRUE), "updateMotusDb started")
+  
+  unlink(paste0("project-176_custom_views_", Sys.Date(), ".log"))
 })
 

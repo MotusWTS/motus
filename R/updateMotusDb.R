@@ -82,7 +82,7 @@ updateMotusDb <- function(src, quiet = FALSE) {
 }
 
 
-checkViews <- function(src, update_sql) {
+checkViews <- function(src, update_sql, response = NULL) {
   motus_views <- c("alltags", "alltagsGPS", "allambigs")
   motus_views_str <- stringr::regex(
     paste0("\\b", paste0(motus_views, collapse = "\\b|\\b"), "\\b"), 
@@ -105,11 +105,34 @@ checkViews <- function(src, update_sql) {
     dplyr::filter(motus_views == TRUE)
 
   if(nrow(db_views) > 0) {
-    stop(stringr::str_wrap(
-      paste0("This SQLite database contains some custom views (", 
-             paste0(db_views$name, collapse = ", "),") which ",
-             "will have to be removed before the update can proceed."),
-      exdent = 7),
-      call. = FALSE)
+    
+    sql_name <- file.path(
+      dirname(src[[1]]@dbname), 
+      paste0(stringr::str_remove(basename(src[[1]]@dbname), ".motus"),
+             "_custom_views_", Sys.Date(), ".log"))
+    
+    readr::write_lines(db_views$sql, path = sql_name, sep = "\r\n\r\n\r\n\r\n\r\n")
+    
+    msg <- paste0(stringr::str_wrap(paste0("This database contains custom views which ",
+                  "have to be removed before the update can proceed: \n",
+                  paste0(db_views$name, collapse = ", "))), "\n", 
+                  "The SQLite commands to create the views have been saved to\n", 
+                  sql_name, "\n\n",
+                  "Allow motus to delete the views and continue with the update?")
+    
+    if(is.null(response) && is_testing()) response <- 1
+    if(is.null(response)) {
+      choice <- utils::menu(choices = c("Yes, delete them", 
+                                        "No, I'll deal with it"), 
+                            title = msg)
+    } else choice <- response
+    if(choice == 2) {
+      stop("Cannot update local database if conflicting custom views are present",
+           call. = FALSE)
+    }
+    
+    # Delete the views before proceeding
+    message("Deleting custom views: ", paste0(db_views$name, collapse = ", "))
+    for(v in db_views$name) DBI::dbExecute(src$con, paste0("DROP VIEW ", v))
   }
 }
