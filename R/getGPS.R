@@ -26,6 +26,8 @@
 #' @param by Numeric/Character Either the time in minutes overwhich to join GPS
 #'   locations to hits, or "daily" or "closest". To join GPS locations by daily
 #'   timeblocks or by the closest temporal match (see Details).
+#' @param keepAll Logical Return all hits regardless of whether they have a GPS
+#'   match? Defaults to FALSE.
 #'
 #' @return Data frame linking hitID to gpsLat, gpsLon and gpsAlt
 #' @export
@@ -40,27 +42,40 @@
 #' sql.motus <- tagme(176, update = FALSE, 
 #'                    dir = system.file("extdata", package = "motus"))
 #' 
-#' getGPS(sql.motus)
+#' my_gps <- getGPS(sql.motus)
+#' my_gps
 #' 
-#' # Note that the sample data doesn't have GPS hits so this will always be an 
-#' # empty data frame.
+#' # Note that the sample data doesn't have GPS hits so this will be an 
+#' # empty data frame for project 176.
+#' 
+#' # To return all hits, regardless of whether they match a GPS record
+#' 
+#' my_gps <- getGPS(sql.motus, keepAll = TRUE)
+#' my_gps
 #' 
 #' # Alternatively, use the alltagsGPS view:
 #' dplyr::tbl(sql.motus, "alltagsGPS")
 
-getGPS <- function(src, alltags = NULL, by = "daily") {
+getGPS <- function(src, alltags = NULL, by = "daily", keepAll = FALSE) {
   if(!is.numeric(by) && !by %in% c("daily", "closest")) {
     stop("'by' must be either a number, 'daily' or 'closest'", call. = FALSE)
   }
   if(is.numeric(by) && by <= 0) {
     stop("'by' must be a number greater than zero", call. = FALSE)
   }
-  
   gps <- prepGPS(src)
-  if(nrow(gps) == 0) return(gps)
+  if(nrow(gps) == 0 && !keepAll) return(gps)
   
   alltags <- prepAlltags(src, alltags)
-  gps <- calcGPS(gps, alltags, by)
+  if(nrow(gps) == 0 && keepAll) {
+    return(dplyr::select(alltags, "hitID") %>%
+             dplyr::collect() %>%
+             dplyr::mutate(gpsLat = as.numeric(NA),
+                           gpsLon = as.numeric(NA),
+                           gpsAlt = as.numeric(NA)))
+  }
+  
+  gps <- calcGPS(gps, alltags, by, keepAll = keepAll)
   
   dplyr::select(gps, "hitID", "gpsLat", "gpsLon", "gpsAlt")
 }
@@ -92,28 +107,33 @@ prepAlltags <- function(src, alltags = NULL) {
   dplyr::select(alltags, "hitID", "batchID", "ts")
 }
 
-calcGPS <- function(gps, alltags, by = "daily") {
+calcGPS <- function(gps, alltags, by = "daily", keepAll = FALSE) {
   if(by == "closest") {
-    gps <- dplyr::collect(alltags) %>%
+    gps_sub <- dplyr::collect(alltags) %>%
       dplyr::mutate(
         gpsID = purrr::map2_int(
           .data$batchID, .data$ts, 
           ~getClosest(ts1 = gps$ts[gps$batchID == .x], 
                       ts2 = .y, 
-                      ids = gps$gpsID[gps$batchID == .x]))) %>%
-      dplyr::inner_join(dplyr::rename(gps, "gpsts" = "ts"), by = c("batchID", "gpsID"))
+                      ids = gps$gpsID[gps$batchID == .x])))
+    
+    if(!keepAll) gps <- dplyr::inner_join(gps_sub, 
+                                          dplyr::rename(gps, "gpsts" = "ts"), 
+                                          by = c("batchID", "gpsID"))
+    if(keepAll) gps <- dplyr::left_join(gps_sub, 
+                                        dplyr::rename(gps, "gpsts" = "ts"), 
+                                        by = c("batchID", "gpsID"))
     
     message("Max time difference between GPS location and hit is: ", 
             round(max(abs(gps$ts - gps$gpsts), na.rm = TRUE)/60, 2), " min")
   } else {
-    
     if(by == "daily") by <- 24 * 3600 else by <- by * 60
-
+    
     alltags <- alltags %>%
       dplyr::mutate(timeBin = as.integer(.data$ts / by)) %>%
       dplyr::collect()
     
-    gps <- gps %>%
+    gps_sub <- gps %>%
       dplyr::mutate(timeBin = as.integer(.data$ts / by)) %>%
       dplyr::group_by(.data$batchID, .data$timeBin) %>%
       dplyr::summarize(gpsID_min = min(.data$gpsID),
@@ -121,13 +141,17 @@ calcGPS <- function(gps, alltags, by = "daily") {
                        gpsLat = stats::median(.data$gpsLat),
                        gpsLon = stats::median(.data$gpsLon),
                        gpsAlt = stats::median(.data$gpsAlt)) %>%
-      dplyr::ungroup() %>%
-      dplyr::inner_join(alltags, ., by = c("batchID", "timeBin"))
+      dplyr::ungroup()
     
+    if(!keepAll) gps <- dplyr::inner_join(alltags, gps_sub, 
+                                          by = c("batchID", "timeBin"))
+    
+    if(keepAll) gps <- dplyr::left_join(alltags, gps_sub,
+                                        by = c("batchID", "timeBin"))
   }
   gps
 }
-    
+
 getClosest <- function(ts1, ts2, ids) {
   
   if(length(ts1) == 0) {

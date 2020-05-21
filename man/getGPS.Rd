@@ -51,10 +51,10 @@ closest \code{batchID}/\code{hitID} timestamp.
 sql.motus <- tagme(176, update = FALSE, 
                    dir = system.file("extdata", package = "motus"))
 
-getGPS(sql.motus)
+my_gps <- getGPS(sql.motus)
 
-# Note that the sample data doesn't have GPS hits so this will always be an 
-# empty data frame.
+# Note that the sample data doesn't have GPS hits so this will be an 
+# empty data frame for project 176.
 
 # Alternatively, use the alltagsGPS view:
 dplyr::tbl(sql.motus, "alltagsGPS")
