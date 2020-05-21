@@ -34,7 +34,6 @@
 #'}
 #'
 #' @export
-#' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @examples
 #' # You can use either a selected tbl from .motus eg. "alltagsGPS", or a

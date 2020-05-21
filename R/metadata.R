@@ -16,8 +16,6 @@
 #' project or receiver file.
 #'
 #' @export
-#'
-#' @author Denis Lepage, Bird Studies Canada
 #' 
 #' @examples 
 #' 

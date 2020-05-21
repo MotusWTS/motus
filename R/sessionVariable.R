@@ -31,8 +31,6 @@
 #' ## This creates an active binding for the symbol "userLogin" in the environment "motus_vars"
 #' ## If the variable \code{motus_vars$userLogin} is requested in code, the user will
 #' ## be prompted to enter a value if there is no current value.
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 #' 
 #' @noRd
 

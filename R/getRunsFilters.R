@@ -11,8 +11,6 @@
 #' @return a dplyr sqlite object 
 #'
 #' @export
-#'
-#' @author Denis Lepage, Bird Studies Canada
 
 getRunsFilters = function(src, filterName, motusProjID=NA) {
   

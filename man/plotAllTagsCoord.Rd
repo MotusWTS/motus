@@ -63,6 +63,3 @@ plotAllTagsCoord(df.alltags, coordinate = "recvDeployLat")
 plotAllTagsCoord(filter(df.alltags, motusTagID \%in\% c(19129, 16011, 17357)), 
                  tagsPerPanel = 1)
 }
-\author{
-Zoe Crysler \email{zcrysler@gmail.com}
-}

@@ -14,6 +14,3 @@ checkVersion(src)
 Verifies the version of the package against the admInfo table of a motus file. Those should match
 if the updateMotusDb function has been properly loaded by the tagme function.
 }
-\author{
-Denis Lepage \email{dlepage@bsc-eoc.org}
-}

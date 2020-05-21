@@ -24,6 +24,3 @@ an integer filterID
 \description{
 Create a new filter records that can be applied to runs
 }
-\author{
-Denis Lepage, Bird Studies Canada
-}

@@ -5,8 +5,6 @@
 #' @return a dataframe 
 #'
 #' @export
-#'
-#' @author Denis Lepage, Bird Studies Canada
 
 listRunsFilters = function(src) {
   

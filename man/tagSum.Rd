@@ -68,6 +68,3 @@ tag_summary <- tagSum(filter(tbl.alltags,
 # Create site summaries for only a select species using data.frame df.alltags
 tag_summary <- tagSum(filter(df.alltags, speciesEN == "Red Knot"))
 }
-\author{
-Zoe Crysler \email{zcrysler@gmail.com}
-}

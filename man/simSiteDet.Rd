@@ -43,6 +43,3 @@ simSites <- simSiteDet(tbl.alltags)
 # df.alltags
 simSites <- simSiteDet(df.alltags)
 }
-\author{
-Zoe Crysler \email{zcrysler@gmail.com}
-}

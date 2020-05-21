@@ -6,7 +6,6 @@
 #' including at a minimum variables for antBearing, ts, recvDeployLat, sig, fullID, recvDeployName
 #' @param recvDeployName name of recvDeployName
 #' @export
-#' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @examples
 #' # You can use either a selected tbl from .motus eg. "alltags", or a

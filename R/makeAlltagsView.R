@@ -74,8 +74,6 @@
 #'
 #' @noRd
 #'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
-#'
 #' @details Implementation details:
 #'
 #' For both tags and receivers, deployment meta-data has to be looked

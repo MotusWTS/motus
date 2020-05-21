@@ -12,8 +12,6 @@
 #'     indirectly calls this function.
 #'     
 #' @noRd
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 motusUpdateRecvDB <- function(src, countOnly, forceMeta=FALSE) {
     sql = safeSQL(src)

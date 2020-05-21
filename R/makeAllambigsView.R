@@ -22,8 +22,6 @@
 #'
 #' @noRd
 #'
-#' @author Denis Lepage
-#'
 makeAllambigsView = function(db, name="allambigs") {
     query = paste0("CREATE VIEW ", name, " AS
 SELECT ambigID, motusTagID1 as motusTagID FROM tagAmbig where motusTagID1 is not null

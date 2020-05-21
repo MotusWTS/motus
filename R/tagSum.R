@@ -10,7 +10,6 @@
 #'   motusTagID, fullID, recvDeployLat, recvDeployLon, recvDeployName, ts,
 #'   gpsLat, gpsLon
 #' @export
-#' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @return a data.frame with these columns:
 #' \itemize{

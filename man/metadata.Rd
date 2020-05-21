@@ -49,6 +49,3 @@ tbl(sql.motus, "tagDeps")
 \code{\link{tagme}} provides an option to update only the metadata relevant to a specific
 project or receiver file.
 }
-\author{
-Denis Lepage, Bird Studies Canada
-}

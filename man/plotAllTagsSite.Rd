@@ -53,6 +53,3 @@ plotAllTagsSite(tbl.alltags, coordinate = "recvDeployLon")
 # Plot tbl file tbl.alltags using 3 tags per panel for species Red Knot
 plotAllTagsSite(filter(tbl.alltags, speciesEN == "Red Knot"), tagsPerPanel = 3)
 }
-\author{
-Zoe Crysler \email{zcrysler@gmail.com}
-}

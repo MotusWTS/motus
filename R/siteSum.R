@@ -12,7 +12,6 @@
 #' @param units units to display time difference, defaults to "hours", options
 #'   include "secs", "mins", "hours", "days", "weeks"
 #' @export
-#' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @return a data.frame with these columns:
 #' \itemize{

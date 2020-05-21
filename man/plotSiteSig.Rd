@@ -43,6 +43,3 @@ plotSiteSig(tbl.alltags, recvDeployName = "Piskwamish")
 plotSiteSig(filter(df.alltags, motusTagID \%in\% c(16037, 16039, 16035)), 
   recvDeployName = "Netitishi")
 }
-\author{
-Zoe Crysler \email{zcrysler@gmail.com}
-}

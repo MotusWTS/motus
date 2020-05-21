@@ -87,8 +87,6 @@
 #' of 0 to 10 seconds.
 #'
 #' @noRd
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 safeSQL = function(con, busyTimeout = 300) {
     if (inherits(con, "safeSQL"))

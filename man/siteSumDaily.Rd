@@ -69,6 +69,3 @@ daily_site_summary <- siteSumDaily(sub, units = "mins")
 daily_site_summary <- siteSumDaily(filter(df.alltags,
                                           speciesEN == "Red Knot"))
 }
-\author{
-Zoe Crysler \email{zcrysler@gmail.com}
-}

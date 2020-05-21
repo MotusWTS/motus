@@ -96,8 +96,6 @@
 #'     Windows platforms.
 #'
 #' @export
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 
 sqliteToRDS = function(con, query, bind.data=data.frame(), out, classes = NULL, 

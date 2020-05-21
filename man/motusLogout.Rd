@@ -24,7 +24,3 @@ This function just resets these items to NULL:
 Due to their active bindings, subsequent calls to
 any functions that need them will prompt for a login.
 }
-\author{
-John Brzustowski
-\email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
-}

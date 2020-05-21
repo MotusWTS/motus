@@ -21,8 +21,6 @@
 #' @note Paging for this query is handled by passing the last ant and hourBin values
 #' received to the next call of this function.  Values are returned sorted by
 #' \code{hourBin} \emph{within} \code{ant} for each batchID.
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 srvPulseCountsforReceiver = function(batchID, ant, hourBin=0) {
     x = srvQuery(API=motus_vars$API_PULSE_COUNTS_FOR_RECEIVER, params=list(batchID=batchID, ant=ant, hourBin=hourBin))

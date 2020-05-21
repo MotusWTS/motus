@@ -19,8 +19,6 @@
 #' @details this call is used to obtain batches incrementally, regardless of
 #' which receiver they come from.  It is only available to administrative users,
 #' and calling it as a non-administrative user stops with an error.
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 srvBatchesForAll = function(batchID=0) {
     x = srvQuery(API=motus_vars$API_BATCHES_FOR_ALL, params=list(batchID=batchID))

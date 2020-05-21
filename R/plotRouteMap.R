@@ -20,7 +20,6 @@
 #' @details By default this function uses Stamen maps
 #' 
 #' @export
-#' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @examples
 #' # You must use a .motus sql file, instructions to load using tagme() are

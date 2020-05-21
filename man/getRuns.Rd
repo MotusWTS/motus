@@ -36,6 +36,3 @@ when they entirely contained in the specified range). When match.partial is
 TRUE, \code{runID}'s are returned whenever the run partially matches the specified
 period.
 }
-\author{
-Denis Lepage, Bird Studies Canada
-}

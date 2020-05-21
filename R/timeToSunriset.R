@@ -15,8 +15,6 @@
 #'
 #' @export
 #'
-#' @author Zoe Crysler \email{zcrysler@@gmail.com}
-#'
 #' @return the original dataframe provided, with the following additional columns:
 #' - sunrise: sunrise time for the date and location provided by ts and
 #' recvDeployLat/recvDeployLon per row

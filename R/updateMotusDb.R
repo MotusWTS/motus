@@ -24,8 +24,6 @@
 #' function. i.e., it will be called each time that a motus file is opened.
 #'
 #' @param src sqlite database source
-#' 
-#' @author Denis Lepage \email{dlepage@@bsc-eoc.org}
 #'
 #' @noRd
 

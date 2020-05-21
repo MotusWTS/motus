@@ -56,6 +56,3 @@ sun <- sunRiseSet(df.alltags)
 # Note this only works if there are non-NA values in gpsLat/gpsLon
 \dontrun{sun <- sunRiseSet(tbl.alltags, lat = "gpsLat", lon = "gpsLon")}
 }
-\author{
-Zoe Crysler \email{zcrysler@gmail.com}
-}

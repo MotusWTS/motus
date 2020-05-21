@@ -15,6 +15,3 @@ a dataframe
 \description{
 Returns a dataframe of the filters stored in the local database.
 }
-\author{
-Denis Lepage, Bird Studies Canada
-}

@@ -48,8 +48,6 @@
 #' }
 #'
 #' @noRd
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 srvMetadataForReceivers = function(deviceIDs) {
     x = srvQuery(API=motus_vars$API_METADATA_FOR_RECEIVERS, params=list(deviceIDs=deviceIDs))

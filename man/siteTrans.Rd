@@ -73,6 +73,3 @@ transitions <- siteTrans(tbl.alltags)
 transitions <- siteTrans(filter(df.alltags, motusTagID == 16037),
                            latCoord = "gpsLat", lonCoord = "gpsLon")
 }
-\author{
-Zoe Crysler \email{zcrysler@gmail.com}
-}

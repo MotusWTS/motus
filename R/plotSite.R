@@ -7,8 +7,6 @@
 #'   antBearing, fullID, recvDeployName
 #' @param sitename Character vector. Which sites to plot? Defaults to all unique
 #'   sites.
-#' 
-#' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @examples
 #' # You can use either a selected tbl from .motus eg. "alltagsGPS", or a
