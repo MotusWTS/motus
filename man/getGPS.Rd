@@ -4,7 +4,7 @@
 \alias{getGPS}
 \title{Get GPS variables}
 \usage{
-getGPS(src, alltags = NULL, by = "daily")
+getGPS(src, alltags = NULL, by = "daily", keepAll = FALSE)
 }
 \arguments{
 \item{src}{src_sqlite object representing the database}
@@ -15,6 +15,9 @@ view. Must have \code{ts}, \code{hitID} and \code{batchID} at the minimum.}
 \item{by}{Numeric/Character Either the time in minutes overwhich to join GPS
 locations to hits, or "daily" or "closest". To join GPS locations by daily
 timeblocks or by the closest temporal match (see Details).}
+
+\item{keepAll}{Logical Return all hits regardless of whether they have a GPS
+match? Defaults to FALSE.}
 }
 \value{
 Data frame linking hitID to gpsLat, gpsLon and gpsAlt
@@ -52,9 +55,15 @@ sql.motus <- tagme(176, update = FALSE,
                    dir = system.file("extdata", package = "motus"))
 
 my_gps <- getGPS(sql.motus)
+my_gps
 
 # Note that the sample data doesn't have GPS hits so this will be an 
 # empty data frame for project 176.
+
+# To return all hits, regardless of whether they match a GPS record
+
+my_gps <- getGPS(sql.motus, keepAll = TRUE)
+my_gps
 
 # Alternatively, use the alltagsGPS view:
 dplyr::tbl(sql.motus, "alltagsGPS")

@@ -98,7 +98,7 @@ checkViews <- function(src, update_sql, response = NULL) {
   db_views <- DBI::dbGetQuery(
     src$con, 
     "SELECT name, sql FROM sqlite_master WHERE type = 'view'") %>%
-    dplyr::filter(!name %in% motus_views) %>%
+    dplyr::filter(!.data$name %in% motus_views) %>%
     dplyr::mutate(motus_views = stringr::str_detect(.data$sql, motus_views_str)) %>%
     dplyr::filter(motus_views == TRUE)
 
