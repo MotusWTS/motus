@@ -103,6 +103,10 @@ test_that("check for custom views before update", {
   expect_message(checkViews(src = tags, update_sql = sql_versions$sql, response = 1),
                  "Deleting custom views: alltags_fast")
   expect_true(file.exists(paste0("project-176_custom_views_", Sys.Date(), ".log")))
+  
+  expect_true(any(stringr::str_detect(readLines(paste0("project-176_custom_views_", 
+                                                       Sys.Date(), ".log")),
+                                      "CREATE VIEW alltags_fast")))
   expect_false("alltags_fast" %in% DBI::dbListTables(tags$con))
    
   expect_message(tagme(176, update = TRUE), "updateMotusDb started")

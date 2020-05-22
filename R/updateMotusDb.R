@@ -109,7 +109,7 @@ checkViews <- function(src, update_sql, response = NULL) {
       paste0(stringr::str_remove(basename(src[[1]]@dbname), ".motus"),
              "_custom_views_", Sys.Date(), ".log"))
     
-    readr::write_lines(db_views$sql, path = sql_name, sep = "\r\n\r\n\r\n\r\n\r\n")
+    writeLines(db_views$sql, con = sql_name, sep = "\r\n\r\n\r\n\r\n\r\n")
     
     msg <- paste0(stringr::str_wrap(paste0("This database contains custom views which ",
                   "have to be removed before the update can proceed: \n",
