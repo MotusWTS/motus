@@ -364,6 +364,7 @@ CREATE TABLE antDeps (
    mountBearing REAL,
    polarization2 REAL,
    polarization1 REAL,
+   antFreq REAL,
    primary key(deployID, port)
 );
 ")

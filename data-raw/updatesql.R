@@ -2,6 +2,12 @@ sql_versions <- dplyr::tibble()
 
 sql_versions <- rbind(
   sql_versions,
+  cbind(date = "2020-05-22",
+        descr = "Add 'antFreq' 'antDeps' table",
+        sql = "ALTER TABLE antDeps ADD COLUMN antFreq REAL;"))
+
+sql_versions <- rbind(
+  sql_versions,
   cbind(date = "2020-04-24",
         descr = "Add 'test' metadata to 'tagDeps' table",
         sql = paste0("ALTER TABLE tagDeps ADD COLUMN test INTEGER;",
