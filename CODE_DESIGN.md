@@ -47,7 +47,7 @@ This is a collection of developer notes and is by no means exhaustive or correct
 
 ## Data Files
 - Sample data for examples and testing, created in `./data-raw/sample_data.R`
-  - 
+  - INCOMPLETE
 - `updatesql.R`
 
 ## Testing
