@@ -8,6 +8,7 @@ This is a collection of developer notes and is by no means exhaustive or correct
 - [Special Files](#special-files)
 - [Data Files](#data-files)
 - [Testing](#testing)
+- [Adding and Updating](#adding-and-updating)
 
 ## Naming Conventions
 - Each function in a single file
@@ -65,3 +66,16 @@ projects/receivers.
 
 - `is_testing()` is an internal function that checks if a test is being run
 - `set_testing()` is an internal function for declaring that testing is being performed (for interactive testing, use `set_testing()` to start and `set_testing(set = FALSE)` to stop)
+
+## Adding and Updating
+
+### Adding a new field/column
+- Make change to `ensureDBTables()`
+- Add update to `data-raw/updatesql.R` (run script)
+- Add test to make sure new field is added
+- Update internal data `source("data-raw/sample_data.R")`
+- Push!
+
+
+
+
