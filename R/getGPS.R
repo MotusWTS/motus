@@ -13,8 +13,8 @@
 #' combos, all related to timestamps (`ts`).
 #' 
 #'  1. `by = X` Where `X` is a duration in minutes. `ts` is converted to a
-#'  specific timeblock of duration `X`. Median GPS lat/longs for the timeblock
-#'  are returned, matching associated `batchID`/`hitID` timeblocks.
+#'  specific time block of duration `X`. Median GPS lat/longs for the time block
+#'  are returned, matching associated `batchID`/`hitID` time blocks.
 #'  2. `by = "daily"` (the default). Similar to `by = X` except the duration is
 #'  24hr.
 #'  3. `by = "closest"` Individual GPS lat/lons are returned, matching the
@@ -23,9 +23,9 @@
 #' @param src src_sqlite object representing the database 
 #' @param alltags src_sqlite object or data.frame Optional subset of the alltags
 #'   view. Must have `ts`, `hitID` and `batchID` at the minimum.
-#' @param by Numeric/Character Either the time in minutes overwhich to join GPS
+#' @param by Numeric/Character Either the time in minutes over which to join GPS
 #'   locations to hits, or "daily" or "closest". To join GPS locations by daily
-#'   timeblocks or by the closest temporal match (see Details).
+#'   time blocks or by the closest temporal match (see Details).
 #' @param keepAll Logical Return all hits regardless of whether they have a GPS
 #'   match? Defaults to FALSE.
 #'

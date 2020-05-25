@@ -12,9 +12,9 @@ getGPS(src, alltags = NULL, by = "daily", keepAll = FALSE)
 \item{alltags}{src_sqlite object or data.frame Optional subset of the alltags
 view. Must have \code{ts}, \code{hitID} and \code{batchID} at the minimum.}
 
-\item{by}{Numeric/Character Either the time in minutes overwhich to join GPS
+\item{by}{Numeric/Character Either the time in minutes over which to join GPS
 locations to hits, or "daily" or "closest". To join GPS locations by daily
-timeblocks or by the closest temporal match (see Details).}
+time blocks or by the closest temporal match (see Details).}
 
 \item{keepAll}{Logical Return all hits regardless of whether they have a GPS
 match? Defaults to FALSE.}
@@ -36,8 +36,8 @@ There are three different methods for matching GPS data to \code{bachID}/\code{h
 combos, all related to timestamps (\code{ts}).
 \enumerate{
 \item \code{by = X} Where \code{X} is a duration in minutes. \code{ts} is converted to a
-specific timeblock of duration \code{X}. Median GPS lat/longs for the timeblock
-are returned, matching associated \code{batchID}/\code{hitID} timeblocks.
+specific time block of duration \code{X}. Median GPS lat/longs for the time block
+are returned, matching associated \code{batchID}/\code{hitID} time blocks.
 \item \code{by = "daily"} (the default). Similar to \code{by = X} except the duration is
 24hr.
 \item \code{by = "closest"} Individual GPS lat/lons are returned, matching the
