@@ -11,6 +11,7 @@
 * Allow renaming (if possible) of large databases on data updates
 * Continue checking for activity/nodeData even if first batch returns 0
 * `nodeDataId` is corrected to `nodeDataID`
+* Warn users with custom views if they need to be removed prior to updating
 
 # motus 3.0.0 (2019-10-16)
 
