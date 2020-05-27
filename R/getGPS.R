@@ -4,7 +4,7 @@
 #' such as `gpsLat`, `gpsLon`, or `gpsAlt`. There is a `alltagsGPS` view that
 #' does include GPS-related variables, but this will take time to load. This
 #' function accepts a source and returns the GPS data associated with the
-#' `bachID`/`hitID` combos in the `alltags` view. Optionally, users can supply a
+#' `batchID`/`hitID` combos in the `alltags` view. Optionally, users can supply a
 #' subset of the `alltags` view to return only GPS data associated with the
 #' specific `batchID`/`hitID` combos present in the subset.
 #' 
