@@ -27,12 +27,12 @@ To improve speed, the \code{alltags} view doesn't include GPS-related variables
 such as \code{gpsLat}, \code{gpsLon}, or \code{gpsAlt}. There is a \code{alltagsGPS} view that
 does include GPS-related variables, but this will take time to load. This
 function accepts a source and returns the GPS data associated with the
-\code{bachID}/\code{hitID} combos in the \code{alltags} view. Optionally, users can supply a
+\code{batchID}/\code{hitID} combos in the \code{alltags} view. Optionally, users can supply a
 subset of the \code{alltags} view to return only GPS data associated with the
 specific \code{batchID}/\code{hitID} combos present in the subset.
 }
 \details{
-There are three different methods for matching GPS data to \code{bachID}/\code{hitID}
+There are three different methods for matching GPS data to \code{batchID}/\code{hitID}
 combos, all related to timestamps (\code{ts}).
 \enumerate{
 \item \code{by = X} Where \code{X} is a duration in minutes. \code{ts} is converted to a
