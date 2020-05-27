@@ -9,7 +9,7 @@
 #' specific `batchID`/`hitID` combos present in the subset.
 #' 
 #' @details 
-#' There are three different methods for matching GPS data to `bachID`/`hitID`
+#' There are three different methods for matching GPS data to `batchID`/`hitID`
 #' combos, all related to timestamps (`ts`).
 #' 
 #'  1. `by = X` Where `X` is a duration in minutes. `ts` is converted to a
