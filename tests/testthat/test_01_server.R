@@ -84,7 +84,7 @@ test_that("srvQuery handles time out graciously", {
   expect_message(
     expect_error(srvQuery(API = motus_vars$API_PROJECT_AMBIGUITIES_FOR_TAG_PROJECT, 
                           params = list(projectID = 176),
-                          url = "10.255.255.1", timeout = 1),
+                          url = "http://beta.motus.org:80", timeout = 1),
                  "The server is not responding"),
     "The server did not respond within 1s. Trying again...")
 })

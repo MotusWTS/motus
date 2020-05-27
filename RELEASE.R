@@ -65,6 +65,8 @@ v <- packageVersion("motus") # If dev version loaded with devtools::load_all()
 
 ## Checks
 devtools::check(run_dont_test = TRUE)   # Local, run long-running examples
+devtools::check(run_dont_test = FALSE)
+
 
 system("cd ..; R CMD build motus")
 system(paste0("cd ..; R CMD check motus_", v, ".tar.gz"))

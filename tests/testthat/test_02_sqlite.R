@@ -47,9 +47,9 @@ test_that("new tables have character ant and port", {
   
   # For receivers
   skip_if_no_auth()
-  tags <- DBI::dbConnect(RSQLite::SQLite(), 
-                         system.file("extdata", "SG-3115BBBK0782.motus", 
-                                     package = "motus"))
+  f <- system.file("extdata", "SG-3115BBBK0782.motus", package = "motus")
+  skip_if_no_file(f)
+  tags <- DBI::dbConnect(RSQLite::SQLite(), f)
   expect_is(dplyr::tbl(tags, "pulseCounts") %>% 
               dplyr::collect() %>% 
               dplyr::pull("ant"), 
