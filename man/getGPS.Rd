@@ -4,12 +4,12 @@
 \alias{getGPS}
 \title{Get GPS variables}
 \usage{
-getGPS(src, alltags = NULL, by = "daily", keepAll = FALSE)
+getGPS(src, data = NULL, by = "daily", keepAll = FALSE)
 }
 \arguments{
 \item{src}{src_sqlite object representing the database}
 
-\item{alltags}{src_sqlite object or data.frame Optional subset of the alltags
+\item{data}{src_sqlite object or data.frame Optional subset of the \code{alltags}
 view. Must have \code{ts}, \code{hitID} and \code{batchID} at the minimum.}
 
 \item{by}{Numeric/Character Either the time in minutes over which to join GPS

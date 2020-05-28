@@ -1,10 +1,8 @@
-context("Helper functions")
-
 teardown(unlink("project-176.motus"))
 
 
 # filterByActivity --------------------------------------------------------
-
+context("filterByActivity")
 test_that("filterByActivity filters as expected", {
   expect_silent(
     shorebirds_sql <- tagme(176, update = FALSE, 
@@ -80,11 +78,13 @@ test_that("Empty activity table stops", {
   DBI::dbRemoveTable(tags$con, "activity")
   expect_error(a <- filterByActivity(tags, return = "all"),
                "'src' must contain at least tables 'activity', 'alltags',")
+  
+  DBI::dbDisconnect(tags$con)
 })
 
 
 # getGPS ------------------------------------------------------------------
-
+context("getGPS")
 test_that("getGPS() runs as expected with no data", {
   file.copy(system.file("extdata", "project-176.motus", package = "motus"), ".")
   file.copy(system.file("extdata", "gps_sample.motus", package = "motus"), ".")
@@ -104,22 +104,23 @@ test_that("getGPS() runs as expected with no data", {
 })
 
 
-test_that("prepAlltags() handles both data.frame and src", {
+test_that("prepData() handles both data.frame and src", {
   file.copy(system.file("extdata", "gps_sample.motus", package = "motus"), ".")
   tags <- DBI::dbConnect(RSQLite::SQLite(), "gps_sample.motus")
   alltags <- dplyr::tbl(tags, "alltags") %>%
     dplyr::filter(batchID == 667134)
   
-  expect_silent(a <- prepAlltags(tags, alltags)) %>%
+  expect_silent(a <- prepData(tags, alltags)) %>%
     expect_is("tbl_sql")
   
-  expect_silent(a <- prepAlltags(tags, dplyr::collect(alltags))) %>%
+  expect_silent(a <- prepData(tags, dplyr::collect(alltags))) %>%
     expect_is("data.frame")
   
   # errors
-  expect_error(prepAlltags(tags, dplyr::select(alltags, -hitID)),
-               "'alltags' must be a subset of the 'alltags' view")
+  expect_error(prepData(tags, dplyr::select(alltags, -hitID)),
+               "'data' must be a subset of the 'alltags' view")
   
+  DBI::dbDisconnect(tags)
   unlink("gps_sample.motus")
 })
 
@@ -130,7 +131,7 @@ test_that("calcGPS() matches GPS", {
   tags <- DBI::dbConnect(RSQLite::SQLite(), "gps_sample.motus")
   
   # Daily Join
-  expect_silent(g <- calcGPS(prepGPS(tags), prepAlltags(tags))) %>%
+  expect_silent(g <- calcGPS(prepGPS(tags), prepData(tags))) %>%
     expect_is("data.frame")
   expect_gt(nrow(g), 0) # GPS points
   expect_equal(nrow(g[is.na(g$gpsLat),]), 0) # No missing GPS points
@@ -143,7 +144,7 @@ test_that("calcGPS() matches GPS", {
     expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt"))
   
   # By = 60
-  expect_silent(g <- calcGPS(prepGPS(tags), prepAlltags(tags), by = 60)) %>%
+  expect_silent(g <- calcGPS(prepGPS(tags), prepData(tags), by = 60)) %>%
     expect_is("data.frame")
   expect_gt(nrow(g), 0) # GPS points
   expect_equal(nrow(g[is.na(g$gpsLat),]), 0) # No missing GPS points
@@ -162,7 +163,7 @@ test_that("calcGPS() matches GPS", {
     expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt"))
   
   # By = 5 seconds
-  expect_silent(g <- calcGPS(prepGPS(tags), prepAlltags(tags), by = 5/60)) %>%
+  expect_silent(g <- calcGPS(prepGPS(tags), prepData(tags), by = 5/60)) %>%
     expect_is("data.frame")
   expect_gt(nrow(g), 0) # GPS points
   expect_equal(nrow(g[is.na(g$gpsLat),]), 0) # No missing GPS points
@@ -182,7 +183,7 @@ test_that("calcGPS() matches GPS", {
   
   
   # By = "closest"
-  expect_message(g <- calcGPS(prepGPS(tags), prepAlltags(tags), by = "closest"),
+  expect_message(g <- calcGPS(prepGPS(tags), prepData(tags), by = "closest"),
                  "Max time difference") %>%
     expect_is("data.frame")
   expect_gt(nrow(g), 0) # GPS points
@@ -220,7 +221,7 @@ test_that("calcGPS() matches GPS with subset", {
     dplyr::collect()
   
   # Daily Join
-  expect_silent(g <- calcGPS(prepGPS(tags), prepAlltags(tags, alltags))) %>%
+  expect_silent(g <- calcGPS(prepGPS(tags), prepData(tags, alltags))) %>%
     expect_is("data.frame")
   expect_gt(nrow(g), 0) # GPS points
   expect_equal(nrow(g[is.na(g$gpsLat),]), 0) # No missing GPS points
@@ -233,7 +234,7 @@ test_that("calcGPS() matches GPS with subset", {
     expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt"))
   
   # By = 60
-  expect_silent(g <- calcGPS(prepGPS(tags), prepAlltags(tags, alltags), by = 60)) %>%
+  expect_silent(g <- calcGPS(prepGPS(tags), prepData(tags, alltags), by = 60)) %>%
     expect_is("data.frame")
   expect_gt(nrow(g), 0) # GPS points
   expect_equal(nrow(g[is.na(g$gpsLat),]), 0) # No missing GPS points
@@ -252,13 +253,13 @@ test_that("calcGPS() matches GPS with subset", {
     expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt"))
   
   # By = 5 seconds
-  expect_silent(g <- calcGPS(prepGPS(tags), prepAlltags(tags, alltags), by = 5/60)) %>%
+  expect_silent(g <- calcGPS(prepGPS(tags), prepData(tags, alltags), by = 5/60)) %>%
     expect_is("data.frame")
   expect_equal(nrow(g), 0) # No GPS points
   
   
   # By = "closest"
-  expect_message(g <- calcGPS(prepGPS(tags), prepAlltags(tags, alltags), by = "closest"),
+  expect_message(g <- calcGPS(prepGPS(tags), prepData(tags, alltags), by = "closest"),
                  "Max time difference") %>%
     expect_is("data.frame")
   expect_gt(nrow(g), 0) # GPS points
@@ -288,48 +289,48 @@ test_that("calcGPS() keepAll = TRUE", {
   tags <- DBI::dbConnect(RSQLite::SQLite(), "gps_sample.motus")
   
   # Daily Join
-  expect_silent(g1 <- calcGPS(prepGPS(tags), prepAlltags(tags))) %>%
+  expect_silent(g1 <- calcGPS(prepGPS(tags), prepData(tags))) %>%
     expect_is("data.frame")
-  expect_silent(g2 <- calcGPS(prepGPS(tags), prepAlltags(tags), keepAll = TRUE)) %>%
+  expect_silent(g2 <- calcGPS(prepGPS(tags), prepData(tags), keepAll = TRUE)) %>%
     expect_is("data.frame")
   
   expect_gt(nrow(g2), nrow(g1))
   expect_true(all(is.na(dplyr::anti_join(g2, g1, by = "hitID")$gpsLat)))
   expect_false(any(is.na(g2$hitID)))
-  expect_equal(dplyr::collect(prepAlltags(tags))$hitID,
+  expect_equal(dplyr::collect(prepData(tags))$hitID,
                g2$hitID)
   
   # By = 60
-  expect_silent(g1 <- calcGPS(prepGPS(tags), prepAlltags(tags), by = 60)) %>%
+  expect_silent(g1 <- calcGPS(prepGPS(tags), prepData(tags), by = 60)) %>%
     expect_is("data.frame")
-  expect_silent(g2 <- calcGPS(prepGPS(tags), prepAlltags(tags), by = 60, 
+  expect_silent(g2 <- calcGPS(prepGPS(tags), prepData(tags), by = 60, 
                               keepAll = TRUE)) %>%
     expect_is("data.frame")
   
   expect_gt(nrow(g2), nrow(g1))
   expect_true(all(is.na(dplyr::anti_join(g2, g1, by = "hitID")$gpsLat)))
   expect_false(any(is.na(g2$hitID)))
-  expect_equal(dplyr::collect(prepAlltags(tags))$hitID,
+  expect_equal(dplyr::collect(prepData(tags))$hitID,
                g2$hitID)
   
   # By = 5 seconds
-  expect_silent(g1 <- calcGPS(prepGPS(tags), prepAlltags(tags), by = 5/60)) %>%
+  expect_silent(g1 <- calcGPS(prepGPS(tags), prepData(tags), by = 5/60)) %>%
     expect_is("data.frame")
-  expect_silent(g2 <- calcGPS(prepGPS(tags), prepAlltags(tags), by = 5/60,
+  expect_silent(g2 <- calcGPS(prepGPS(tags), prepData(tags), by = 5/60,
                               keepAll = TRUE)) %>%
     expect_is("data.frame")
   
   expect_gt(nrow(g2), nrow(g1))
   expect_true(all(is.na(dplyr::anti_join(g2, g1, by = "hitID")$gpsLat)))
   expect_false(any(is.na(g2$hitID)))
-  expect_equal(dplyr::collect(prepAlltags(tags))$hitID,
+  expect_equal(dplyr::collect(prepData(tags))$hitID,
                g2$hitID)
   
   # By = "closest"
-  expect_message(g1 <- calcGPS(prepGPS(tags), prepAlltags(tags), by = "closest"),
+  expect_message(g1 <- calcGPS(prepGPS(tags), prepData(tags), by = "closest"),
                  "Max time difference") %>%
     expect_is("data.frame")
-  expect_message(g2 <- calcGPS(prepGPS(tags), prepAlltags(tags), by = "closest", 
+  expect_message(g2 <- calcGPS(prepGPS(tags), prepData(tags), by = "closest", 
                                keepAll = TRUE),
                  "Max time difference") %>%
     expect_is("data.frame")
@@ -337,7 +338,7 @@ test_that("calcGPS() keepAll = TRUE", {
   expect_gt(nrow(g2), nrow(g1))
   expect_true(all(is.na(dplyr::anti_join(g2, g1, by = "hitID")$gpsLat)))
   expect_false(any(is.na(g2$hitID)))
-  expect_equal(dplyr::collect(prepAlltags(tags))$hitID,
+  expect_equal(dplyr::collect(prepData(tags))$hitID,
                g2$hitID)
   
   DBI::dbDisconnect(tags)

@@ -21,7 +21,7 @@
 #'  closest `batchID`/`hitID` timestamp.
 #'
 #' @param src src_sqlite object representing the database 
-#' @param alltags src_sqlite object or data.frame Optional subset of the alltags
+#' @param data src_sqlite object or data.frame Optional subset of the `alltags`
 #'   view. Must have `ts`, `hitID` and `batchID` at the minimum.
 #' @param by Numeric/Character Either the time in minutes over which to join GPS
 #'   locations to hits, or "daily" or "closest". To join GPS locations by daily
@@ -56,7 +56,7 @@
 #' # Alternatively, use the alltagsGPS view:
 #' dplyr::tbl(sql.motus, "alltagsGPS")
 
-getGPS <- function(src, alltags = NULL, by = "daily", keepAll = FALSE) {
+getGPS <- function(src, data = NULL, by = "daily", keepAll = FALSE) {
   if(!is.numeric(by) && !by %in% c("daily", "closest")) {
     stop("'by' must be either a number, 'daily' or 'closest'", call. = FALSE)
   }
@@ -66,16 +66,16 @@ getGPS <- function(src, alltags = NULL, by = "daily", keepAll = FALSE) {
   gps <- prepGPS(src)
   if(nrow(gps) == 0 && !keepAll) return(gps)
   
-  alltags <- prepAlltags(src, alltags)
+  data <- prepData(src, data)
   if(nrow(gps) == 0 && keepAll) {
-    return(dplyr::select(alltags, "hitID") %>%
+    return(dplyr::select(data, "hitID") %>%
              dplyr::collect() %>%
              dplyr::mutate(gpsLat = as.numeric(NA),
                            gpsLon = as.numeric(NA),
                            gpsAlt = as.numeric(NA)))
   }
   
-  gps <- calcGPS(gps, alltags, by, keepAll = keepAll)
+  gps <- calcGPS(gps, data, by, keepAll = keepAll)
   
   dplyr::select(gps, "hitID", "gpsLat", "gpsLon", "gpsAlt")
 }
@@ -94,22 +94,22 @@ prepGPS <- function(src) {
   as.data.frame(gps)
 }
 
-prepAlltags <- function(src, alltags = NULL) {
-  if(is.null(alltags)) {
-    alltags <- dplyr::tbl(src, "alltags")
+prepData <- function(src, data = NULL) {
+  if(is.null(data)) {
+    data <- dplyr::tbl(src, "alltags")
   } else {
     # Check for correct columns
-    if(!all(c("hitID", "batchID", "ts") %in% colnames(alltags))) {
-      stop("'alltags' must be a subset of the 'alltags' view, containing ",
+    if(!all(c("hitID", "batchID", "ts") %in% colnames(data))) {
+      stop("'data' must be a subset of the 'alltags' view, containing ",
            "at least columns 'hitID', 'batchID' and 'ts'", call. = FALSE)
     }
   }
-  dplyr::select(alltags, "hitID", "batchID", "ts")
+  dplyr::select(data, "hitID", "batchID", "ts")
 }
 
-calcGPS <- function(gps, alltags, by = "daily", keepAll = FALSE) {
+calcGPS <- function(gps, data, by = "daily", keepAll = FALSE) {
   if(by == "closest") {
-    gps_sub <- dplyr::collect(alltags) %>%
+    gps_sub <- dplyr::collect(data) %>%
       dplyr::mutate(
         gpsID = purrr::map2_int(
           .data$batchID, .data$ts, 
@@ -129,7 +129,7 @@ calcGPS <- function(gps, alltags, by = "daily", keepAll = FALSE) {
   } else {
     if(by == "daily") by <- 24 * 3600 else by <- by * 60
     
-    alltags <- alltags %>%
+    data <- data %>%
       dplyr::mutate(timeBin = as.integer(.data$ts / by)) %>%
       dplyr::collect()
     
@@ -143,10 +143,10 @@ calcGPS <- function(gps, alltags, by = "daily", keepAll = FALSE) {
                        gpsAlt = stats::median(.data$gpsAlt)) %>%
       dplyr::ungroup()
     
-    if(!keepAll) gps <- dplyr::inner_join(alltags, gps_sub, 
+    if(!keepAll) gps <- dplyr::inner_join(data, gps_sub, 
                                           by = c("batchID", "timeBin"))
     
-    if(keepAll) gps <- dplyr::left_join(alltags, gps_sub,
+    if(keepAll) gps <- dplyr::left_join(data, gps_sub,
                                         by = c("batchID", "timeBin"))
   }
   gps
