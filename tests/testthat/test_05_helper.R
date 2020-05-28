@@ -137,6 +137,8 @@ test_that("calcGPS() matches GPS", {
   expect_equal(nrow(g[is.na(g$gpsLat),]), 0) # No missing GPS points
   expect_equal(max(table(g$hitID)), 1) # No duplicate hitIDs
   expect_equal(unique(g$timeBin), 18170)
+  expect_true(all(abs(g$gpsTs_min - g$ts) <= 24*60*60))
+  expect_true(all(abs(g$gpsTs_max - g$ts) <= 24*60*60))
   g <- dplyr::select(g, -hitID, -ts) %>% dplyr::distinct() %>% as.data.frame()
   expect_equal(nrow(g), length(unique(g$batchID)))
   
@@ -151,6 +153,9 @@ test_that("calcGPS() matches GPS", {
   expect_equal(max(table(g$hitID)), 1) # No duplicate hitIDs
   expect_length(unique(g$timeBin), 24)
   expect_equal(g$gpsID_min, g$gpsID_max) # No medians
+  expect_true(all(abs(g$gpsTs_min - g$ts) <= 60*60))
+  expect_true(all(abs(g$gpsTs_max - g$ts) <= 60*60))
+  
   g1 <- dplyr::left_join(dplyr::select(g, hitts = ts, gpsID = gpsID_min, 
                                        gpsLat, gpsLon, gpsAlt), 
                           dplyr::collect(dplyr::tbl(tags, "gps")))
@@ -170,6 +175,8 @@ test_that("calcGPS() matches GPS", {
   expect_equal(max(table(g$hitID)), 1) # No duplicate hitIDs
   expect_length(unique(g$timeBin), 4)
   expect_equal(g$gpsID_min, g$gpsID_max) # No medians
+  expect_true(all(abs(g$gpsTs_min - g$ts) <= 5))
+  expect_true(all(abs(g$gpsTs_max - g$ts) <= 5))
   g1 <- dplyr::left_join(dplyr::select(g, hitts = ts, gpsID = gpsID_min, 
                                        gpsLat, gpsLon, gpsAlt), 
                          dplyr::collect(dplyr::tbl(tags, "gps")))
@@ -190,16 +197,24 @@ test_that("calcGPS() matches GPS", {
   expect_equal(nrow(g[is.na(g$gpsLat),]), 0) # No missing GPS points
   expect_equal(max(table(g$hitID)), 1) # No duplicate hitIDs
   expect_true("gpsID" %in% names(g)) # exact match with gpsID, not range
-  g1 <- dplyr::left_join(dplyr::select(g, hitts = ts, gpsID,
+  expect_false(all(abs(g$ts - g$gpsTs) <= 15*60, na.rm = TRUE)) # Expect long time between matches
+  g1 <- dplyr::left_join(dplyr::select(g, hitts = ts, gpsID, gpsTs,
                                        gpsLat, gpsLon, gpsAlt), 
                          dplyr::collect(dplyr::tbl(tags, "gps")))
   expect_equal(g1$gpsLat, g1$lat)
   expect_equal(g1$gpsLon, g1$lon)
   expect_equal(g1$gpsAlt, g1$alt)
+  expect_equal(g1$gpsTs, g1$ts)
   expect_true(all(abs(g1$hitts - g1$ts) <= 33*60))
 
   expect_message(getGPS(tags, by = "closest"), "Max time difference") %>%
     expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt"))
+  
+  # By = "closest", cutoff not NULL
+  expect_silent(g <- calcGPS(prepGPS(tags), prepData(tags), by = "closest",
+                              cutoff = 15)) %>%
+    expect_is("data.frame")
+  expect_true(all(abs(g$ts - g$gpsTs) <= 15*60, na.rm = TRUE))
   
   DBI::dbDisconnect(tags)
   unlink("gps_sample.motus")
@@ -227,6 +242,8 @@ test_that("calcGPS() matches GPS with subset", {
   expect_equal(nrow(g[is.na(g$gpsLat),]), 0) # No missing GPS points
   expect_equal(max(table(g$hitID)), 1) # No duplicate hitIDs
   expect_equal(unique(g$timeBin), 18170)
+  expect_true(all(abs(g$gpsTs_min - g$ts) <= 24*60*60))
+  expect_true(all(abs(g$gpsTs_max - g$ts) <= 24*60*60))
   g <- dplyr::select(g, -hitID, -ts) %>% dplyr::distinct() %>% as.data.frame()
   expect_equal(nrow(g), length(unique(g$batchID)))
   
@@ -240,6 +257,8 @@ test_that("calcGPS() matches GPS with subset", {
   expect_equal(nrow(g[is.na(g$gpsLat),]), 0) # No missing GPS points
   expect_equal(max(table(g$hitID)), 1) # No duplicate hitIDs
   expect_length(unique(g$timeBin), 1)
+  expect_true(all(abs(g$gpsTs_min - g$ts) <= 60*60))
+  expect_true(all(abs(g$gpsTs_max - g$ts) <= 60*60))
   expect_equal(g$gpsID_min, g$gpsID_max) # No medians
   g1 <- dplyr::left_join(dplyr::select(g, hitts = ts, gpsID = gpsID_min, 
                                        gpsLat, gpsLon, gpsAlt), 
