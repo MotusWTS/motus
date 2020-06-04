@@ -133,8 +133,9 @@ getGPS <- function(src, data = NULL, by = "daily", cutoff = NULL,
   gps <- calcGPS(gps, data, by, cutoff = cutoff, batches = batches, keepAll = keepAll)
   
   dplyr::select(gps, "hitID", 
-                tidyselect::any_of(c("gpsID", "gpsTs", "gpsTs_min", 
-                                     "gpsTs_max", "gpsLat", "gpsLon", "gpsAlt")))
+                tidyselect::any_of(c("gpsID")),
+                tidyselect::any_of(c("gpsLat", "gpsLon", "gpsAlt")),
+                tidyselect::any_of(c("gpsTs", "gpsTs_min", "gpsTs_max")))
 }
 
 prepGPS <- function(src) {
