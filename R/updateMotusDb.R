@@ -81,27 +81,40 @@ updateMotusDb <- function(src, quiet = FALSE) {
 
 
 checkViews <- function(src, update_sql, response = NULL) {
+  # Motus views in database
   motus_views <- c("alltags", "alltagsGPS", "allambigs")
   motus_views_str <- stringr::regex(
     paste0("\\b", paste0(motus_views, collapse = "\\b|\\b"), "\\b"), 
     ignore_case = TRUE)
+  
+  # Any custom views in database?
+  db_views <- DBI::dbGetQuery(
+    src$con, 
+    "SELECT name, sql FROM sqlite_master WHERE type = 'view'") %>%
+    dplyr::filter(!.data$name %in% motus_views)
+  
+  # If none, stop here
+  if(nrow(db_views) == 0) return()
+  
+  # Check if any motus views in update_sql
   motus_views_sql <- stringr::regex(
     paste0(paste0("(DROP VIEW IF EXISTS ", motus_views, "\\b)"), collapse = "|"),
     ignore_case = TRUE)
   
-  # Check if any motus views in update_sql
-  motus_views <- stringr::str_extract_all(update_sql, motus_views_sql) %>%
+  motus_views_update <- stringr::str_extract_all(update_sql, motus_views_sql) %>%
     unlist() %>%
     stringr::str_extract(motus_views_str) %>%
     unique()
   
-  db_views <- DBI::dbGetQuery(
-    src$con, 
-    "SELECT name, sql FROM sqlite_master WHERE type = 'view'") %>%
-    dplyr::filter(!.data$name %in% motus_views) %>%
+  # If none, stop here
+  if(length(motus_views_update) == 0) return()
+  
+  # If some are modified, check if custom views affected
+  db_views <- db_views %>%
     dplyr::mutate(motus_views = stringr::str_detect(.data$sql, motus_views_str)) %>%
     dplyr::filter(motus_views == TRUE)
 
+  # If yes, inform user
   if(nrow(db_views) > 0) {
     
     sql_name <- file.path(
