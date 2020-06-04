@@ -24,30 +24,36 @@ if(have_auth()) {
   tags <- DBI::dbConnect(RSQLite::SQLite(), "./inst/extdata/gps_sample.motus")
   
   # Find good data section
-  xlim <- c(18170, 18171)
+  xlim <- c(434800, 434850)
   gps <- dplyr::tbl(tags, "gps") %>%
-    dplyr::mutate(ts2 = as.integer(ts/(24*3600))) %>%
+    dplyr::mutate(ts2 = as.integer(ts/(3600))) %>%
     dplyr::filter(ts2 >= !!xlim[1], ts2 <= !!xlim[2]) %>%
     dplyr::collect()
   hits <- dplyr::tbl(tags, "hits") %>%
-    dplyr::filter(batchID %in% !!gps$batchID) %>%
-    dplyr::mutate(ts2 = as.integer(ts/(24*3600))) %>%
+    dplyr::mutate(ts2 = as.integer(ts/(3600))) %>%
     dplyr::filter(ts2 >= !!xlim[1], ts2 <= !!xlim[2]) %>%
     dplyr::collect()
 
   library(ggplot2)
   ggplot(data = gps, aes(x = ts2)) +
     geom_histogram(fill = "red", alpha = 0.3, colour = "black", binwidth = 1) +
-    geom_histogram(data = hits, fill = "blue", alpha = 0.3, colour = "black", binwidth = 1) +
-    coord_cartesian(ylim = c(0, 20))
+    geom_histogram(data = hits, fill = "blue", alpha = 0.3, colour = "black", binwidth = 1) #+
+    #coord_cartesian(ylim = c(0, 20))
 
-  xlim * (24*3600)
+  # xlim *3600
+  # use ts limits of 805000 and 850000
   ## Use ts limits of 1569888000 1569974400
+  # Use batchID liimits of 805000, 850000
                                                                         
-  DBI::dbExecute(tags, "DELETE FROM hits WHERE ts < 1569888000 OR ts > 1569974400")
-  DBI::dbExecute(tags, "DELETE FROM gps WHERE ts < 1569888000 OR ts > 1569974400")
-  DBI::dbExecute(tags, "DELETE FROM batches WHERE ts < 1569888000 OR ts > 1569974400")
-  DBI::dbExecute(tags, "DELETE FROM runs WHERE tsBegin < 1569888000 OR tsEnd > 1569974400")
+  # DBI::dbExecute(tags, "DELETE FROM hits WHERE batchID < 805000 OR batchID > 850000")
+  # DBI::dbExecute(tags, "DELETE FROM gps WHERE batchID < 805000 OR batchID > 850000")
+  # DBI::dbExecute(tags, "DELETE FROM batches WHERE batchID < 805000 OR batchID > 850000")
+  # DBI::dbExecute(tags, "DELETE FROM runs WHERE batchIDbegin < 805000 OR batchIDbegin > 850000")
+  DBI::dbExecute(tags, "DELETE FROM hits WHERE ts < 1565280000 OR ts > 1565460000")
+  b <- dplyr::tbl(tags, "hits") %>% dplyr::pull(batchID) %>% unique() %>% paste0(., collapse = ",")
+  DBI::dbExecute(tags, paste0("DELETE FROM gps WHERE batchID NOT IN (", b, ")"))
+  DBI::dbExecute(tags, paste0("DELETE FROM batches WHERE batchID NOT IN (", b, ")"))
+  DBI::dbExecute(tags, paste0("DELETE FROM runs WHERE batchIDbegin NOT IN (", b, ")"))
   DBI::dbRemoveTable(tags, "activity")
   DBI::dbExecute(tags, "VACUUM")
   DBI::dbDisconnect(tags)  

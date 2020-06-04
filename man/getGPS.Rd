@@ -8,10 +8,10 @@ getGPS(src, data = NULL, by = "daily", cutoff = NULL,
   keepAll = FALSE)
 }
 \arguments{
-\item{src}{src_sqlite object representing the database}
+\item{src}{src_sqlite object representing the motus database}
 
 \item{data}{src_sqlite object or data.frame. Optional subset of the \code{alltags}
-view. Must have \code{ts}, \code{hitID} and \code{batchID} at the minimum.}
+view. Must have \code{ts}, \code{batchID} and \code{hitID} at the minimum.}
 
 \item{by}{Numeric/Character. Either the time in minutes over which to join GPS
 locations to hits, or "daily" or "closest". To join GPS locations by daily
@@ -25,28 +25,44 @@ GPS timestamps when matching hits to GPS with \code{by = 'closest'}. Defaults to
 match? Defaults to FALSE.}
 }
 \value{
-Data frame linking hitID to gpsLat, gpsLon and gpsAlt
+Data frame linking hitID to gpsLat, gpsLon and gpsAlt.
+When \code{by = 'daily'} or \code{by = 'X'}, output includes:
+\itemize{
+\item \code{hitID} - the ID associated with the hit
+\item \code{gpsLat} \ \code{gpsLon} \ \code{gpsAlt} - the median location calculated from the
+available GPS points
+\item \code{gpsTs_min} \ \code{gps_Ts_max} - the range of GPS timestamps associated with
+the GPS points binned
+}
+
+When \code{by = 'closest'} or \code{by = 'X'}, output includes:
+\itemize{
+\item \code{hitID} - the ID associated with the hit
+\item \code{gpsID} - the ID of the closest GPS point aligned with the \code{hitID}
+\item \code{gpsLat} \ \code{gpsLon} \ \code{gpsAlt} - the location of the GPS point
+\item \code{gpsTs} - the timestamp of the GPS point
+}
 }
 \description{
 To improve speed, the \code{alltags} view doesn't include GPS-related variables
 such as \code{gpsLat}, \code{gpsLon}, or \code{gpsAlt}. There is a \code{alltagsGPS} view that
 does include GPS-related variables, but this will take time to load. This
 function accepts a source and returns the GPS data associated with the
-\code{batchID}/\code{hitID} combos in the \code{alltags} view. Optionally, users can supply a
+\code{hitID}s in the \code{alltags} view. Optionally, users can supply a
 subset of the \code{alltags} view to return only GPS data associated with the
-specific \code{batchID}/\code{hitID} combos present in the subset.
+specific \code{hitID}s present in the subset.
 }
 \details{
-There are three different methods for matching GPS data to \code{batchID}/\code{hitID}
-combos, all related to timestamps (\code{ts}).
+There are three different methods for matching GPS data to \code{hitID}s
+all related to timestamps (\code{ts}).
 \enumerate{
 \item \code{by = X} Where \code{X} is a duration in minutes. \code{ts} is converted to a
 specific time block of duration \code{X}. Median GPS lat/longs for the time block
-are returned, matching associated \code{batchID}/\code{hitID} time blocks.
+are returned, matching associated \code{hitID} time blocks.
 \item \code{by = "daily"} (the default). Similar to \code{by = X} except the duration is
 24hr.
 \item \code{by = "closest"} Individual GPS lat/lons are returned, matching the
-closest \code{batchID}/\code{hitID} timestamp. Use \code{cutoff} to specify the maximum
+closest \code{hitID} timestamp. Use \code{cutoff} to specify the maximum
 allowable time between timestamps (defaults to none).
 }
 }
