@@ -66,7 +66,7 @@ test_that("Database updates as expected (proj) - new = FALSE", {
   # Limit data when testing:
   b <- dplyr::tbl(new, "batches") %>% 
     dplyr::pull(batchID) %>% 
-    dplyr::last()
+    unique()
   
   # Expect old and new to have different admInfo 
   expect_named(dplyr::tbl(old, "admInfo") %>% dplyr::collect(), 
@@ -75,18 +75,18 @@ test_that("Database updates as expected (proj) - new = FALSE", {
                expected = c("db_version", "data_version"))  # New version
   
   expect_equal(dplyr::tbl(old, "activity") %>% 
-                 dplyr::filter(batchID <= b) %>%
+                 dplyr::filter(batchID %in% b) %>%
                  dplyr::collect() %>%
                  dplyr::mutate(ant = as.character(.data$ant)),
                dplyr::tbl(new, "activity") %>% dplyr::collect())
   
   expect_equal(dplyr::tbl(old, "hits") %>% 
-                 dplyr::filter(batchID <= b) %>%
+                 dplyr::filter(batchID %in% b) %>%
                  dplyr::collect(),
                dplyr::tbl(new, "hits") %>% dplyr::collect())
   
   expect_equal(dplyr::tbl(old, "runs") %>% 
-                 dplyr::filter(batchIDbegin <= b) %>%
+                 dplyr::filter(batchIDbegin %in% b) %>%
                  dplyr::collect() %>% 
                  dplyr::mutate(ant = as.character(.data$ant)),
                dplyr::tbl(new, "runs") %>% dplyr::collect() %>% 
