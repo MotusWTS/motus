@@ -13,7 +13,8 @@ teardown({
 })
 
 test_that("ensureDBTables() creates database", {
-  temp <- dplyr::src_sqlite("temp.motus", create = TRUE)
+  expect_warning(temp <- dplyr::src_sqlite("temp.motus", create = TRUE), 
+                  "test")
   expect_length(DBI::dbListTables(temp$con), 0)
   
   expect_message(ensureDBTables(temp, 176, quiet = FALSE))
@@ -31,6 +32,7 @@ test_that("ensureDBTables() creates database", {
   }
   expect_equal(nrow(DBI::dbGetQuery(temp$con, "SELECT * FROM admInfo")), 1)
   expect_equal(nrow(DBI::dbGetQuery(temp$con, "SELECT * FROM meta")), 2)
+  unlink("temp.motus")
 })
 
 test_that("new tables have character ant and port", {
