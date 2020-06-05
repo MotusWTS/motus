@@ -13,13 +13,12 @@ teardown({
 })
 
 test_that("ensureDBTables() creates database", {
-  expect_warning(temp <- dplyr::src_sqlite("temp.motus", create = TRUE), 
-                  "test")
+  expect_silent(temp <- dbplyr::src_dbi(DBI::dbConnect(RSQLite::SQLite(), "temp.motus")))
   expect_length(DBI::dbListTables(temp$con), 0)
   
   expect_message(ensureDBTables(temp, 176, quiet = FALSE))
   expect_silent(ensureDBTables(temp, 176, quiet = TRUE))
-  expect_silent(temp <- dplyr::src_sqlite("temp.motus", create = FALSE))
+  expect_silent(temp <- dbplyr::src_dbi(DBI::dbConnect(RSQLite::SQLite(), "temp.motus")))
   expect_length(t <- DBI::dbListTables(temp$con), 27)
   
   # Expect columns in the tables
