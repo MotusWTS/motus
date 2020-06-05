@@ -270,7 +270,7 @@ test_that("calcGPS() matches GPS by = 'closest'", {
   expect_false(all(abs(g1$hitts - g1$ts) <= 10*60)) # More than 10 min between gps and hit
 
   expect_message(getGPS(tags, by = "closest"), "Max time difference") %>%
-    expect_named(c("hitID", "gpsID", "gpsTs", "gpsLat", "gpsLon", "gpsAlt"))
+    expect_named(c("hitID", "gpsID", "gpsLat", "gpsLon", "gpsAlt", "gpsTs"))
   
   # By = "closest", cutoff not NULL
   expect_silent(g <- calcGPS(prepGPS(tags), 
@@ -282,7 +282,7 @@ test_that("calcGPS() matches GPS by = 'closest'", {
   expect_true(all(abs(g$ts - g$gpsTs) <= 10*60, na.rm = TRUE))
   
   expect_silent(getGPS(tags, by = "closest", cutoff = 10)) %>%
-    expect_named(c("hitID", "gpsID", "gpsTs", "gpsLat", "gpsLon", "gpsAlt"))
+    expect_named(c("hitID", "gpsID", "gpsLat", "gpsLon", "gpsAlt", "gpsTs"))
   
   DBI::dbDisconnect(tags$con)
   unlink("gps_sample.motus")
@@ -435,7 +435,7 @@ test_that("calcGPS() matches GPS with subset - closest", {
   expect_false(all(abs(g1$hitts - g1$ts) <= 10*60)) # But greater than 10
   
   expect_message(getGPS(tags, by = "closest"), "Max time difference") %>%
-    expect_named(c("hitID", "gpsID", "gpsTs", "gpsLat", "gpsLon", "gpsAlt"))
+    expect_named(c("hitID", "gpsID", "gpsLat", "gpsLon", "gpsAlt", "gpsTs"))
   
   # By = "closest", cutoff not NULL
   expect_silent(g <- calcGPS(prepGPS(tags), 
@@ -447,7 +447,7 @@ test_that("calcGPS() matches GPS with subset - closest", {
   expect_true(all(abs(g$ts - g$gpsTs) <= 10*60, na.rm = TRUE))
   
   expect_silent(getGPS(tags, by = "closest", cutoff = 10)) %>%
-    expect_named(c("hitID", "gpsID", "gpsTs", "gpsLat", "gpsLon", "gpsAlt"))
+    expect_named(c("hitID", "gpsID", "gpsLat", "gpsLon", "gpsAlt", "gpsTs"))
   
   
   
