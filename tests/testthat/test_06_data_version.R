@@ -74,23 +74,23 @@ test_that("Database updates as expected (proj) - new = FALSE", {
   expect_named(dplyr::tbl(new, "admInfo") %>% dplyr::collect(), 
                expected = c("db_version", "data_version"))  # New version
   
-  expect_equal(dplyr::tbl(old, "activity") %>% 
-                 dplyr::filter(batchID %in% b) %>%
-                 dplyr::collect() %>%
-                 dplyr::mutate(ant = as.character(.data$ant)),
-               dplyr::tbl(new, "activity") %>% dplyr::collect())
+  expect_true(dplyr::all_equal(dplyr::tbl(old, "activity") %>% 
+                                 dplyr::filter(batchID %in% b) %>%
+                                 dplyr::collect() %>%
+                                 dplyr::mutate(ant = as.character(.data$ant)),
+                               dplyr::tbl(new, "activity") %>% dplyr::collect()))
+              
+  expect_true(dplyr::all_equal(dplyr::tbl(old, "hits") %>% 
+                                 dplyr::filter(batchID %in% b) %>%
+                                 dplyr::collect(),
+                               dplyr::tbl(new, "hits") %>% dplyr::collect()))
   
-  expect_equal(dplyr::tbl(old, "hits") %>% 
-                 dplyr::filter(batchID %in% b) %>%
-                 dplyr::collect(),
-               dplyr::tbl(new, "hits") %>% dplyr::collect())
-  
-  expect_equal(dplyr::tbl(old, "runs") %>% 
-                 dplyr::filter(batchIDbegin %in% b) %>%
-                 dplyr::collect() %>% 
-                 dplyr::mutate(ant = as.character(.data$ant)),
-               dplyr::tbl(new, "runs") %>% dplyr::collect() %>% 
-                 dplyr::select(-nodeNum))
+  expect_true(dplyr::all_equal(dplyr::tbl(old, "runs") %>% 
+                                 dplyr::filter(batchIDbegin %in% b) %>%
+                                 dplyr::collect() %>% 
+                                 dplyr::mutate(ant = as.character(.data$ant)),
+                               dplyr::tbl(new, "runs") %>% dplyr::collect() %>% 
+                                 dplyr::select(-nodeNum)))
   
   DBI::dbDisconnect(old)
   DBI::dbDisconnect(new)
