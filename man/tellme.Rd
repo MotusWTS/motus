@@ -44,6 +44,3 @@ it will be created (but empty).
 \seealso{
 \code{\link{tellme}}, which is a synonym for \code{tagme(..., countOnly=TRUE)}
 }
-\author{
-John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
-}

@@ -24,6 +24,7 @@
 #' @examples
 #' 
 #' # download and access data from project 176 in sql format
+#' # usename and password are both "motus.sample"
 #' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
 #' 
 #' # OR use example sql file included in `motus`
@@ -53,10 +54,10 @@ nodeData <- function(src, resume = FALSE) {
   
   pageForward <- function(b, batchID, projectID) {
     # Page forward
-    nodeDataId <- b$nodeDataId[nrow(b)]
+    nodeDataID <- b$nodeDataID[nrow(b)]
     
     # Try again
-    srvNodes(batchID = batchID, projectID = projectID, nodeDataId = nodeDataId) 
+    srvNodes(batchID = batchID, projectID = projectID, nodeDataID = nodeDataID) 
   }
   
   pageDataByBatch(src, table = "nodeData", resume = resume,

@@ -121,6 +121,3 @@ because we use shell commands \code{cat} and \code{bzip2}.  The author
 would appreciate information on how to implement this for
 Windows platforms.
 }
-\author{
-John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
-}

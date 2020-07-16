@@ -17,8 +17,6 @@
 #'     indirectly calls this function.
 #'     
 #' @noRd
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 motusUpdateDBmetadata = function(sql, tagIDs=NULL, deviceIDs=NULL, force=FALSE) {
     if (!inherits(sql, "safeSQL"))

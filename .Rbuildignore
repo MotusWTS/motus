@@ -1,6 +1,13 @@
 ^data-raw$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-RELEASE.R
+^RELEASE\.R$
 ^appveyor.yml$
 ^.*\SG-.*$
+^.*project-4.motus$
+^\.travis\.yml$
+^codecov\.yml$
+^LICENSE\.md$
+^appveyor\.yml$
+^codecov\.R$
+^CODE_DESIGN\.md$

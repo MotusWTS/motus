@@ -29,6 +29,3 @@ a dplyr sqlite object refering to the filter created
 \description{
 Write to the local database the probabilities associated with runs for a filter
 }
-\author{
-Denis Lepage, Bird Studies Canada
-}

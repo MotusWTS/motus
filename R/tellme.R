@@ -34,8 +34,6 @@
 #' @seealso \code{\link{tellme}}, which is a synonym for \code{tagme(..., countOnly=TRUE)}
 #'
 #' @export
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 
 tellme = function(projRecv, new=FALSE, dir=getwd()) {

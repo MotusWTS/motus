@@ -22,8 +22,6 @@
 #' @return a dataframe containing the runID, the motusTagID and the ambigID (if applicable) of runs
 #'
 #' @export
-#'
-#' @author Denis Lepage, Bird Studies Canada
 
 getRuns = function(src, ts.min=NA, ts.max=NA, match.partial=TRUE, 
                    motusTagID=c(), ambigID=c()) {

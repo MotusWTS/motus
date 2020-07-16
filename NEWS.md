@@ -1,3 +1,18 @@
+# motus 3.1.0
+
+### Small Changes
+* Receiver downloads now have similar progress messages to Project downloads
+* Move GPS fields from `alltags` to `alltagsGPS`
+* New function `getGPS()` adds GPS fields to data
+* Remove NOT NULL constraint on `motusTagID`s in ambiguous tag view
+
+### Bug fixes
+* Receivers updating to the new version errored on the download start
+* Allow renaming (if possible) of large databases on data updates
+* Continue checking for activity/nodeData even if first batch returns 0
+* `nodeDataId` is corrected to `nodeDataID`
+* Warn users with custom views if they need to be removed prior to updating
+
 # motus 3.0.0 (2019-10-16)
 
 ### Big Changes

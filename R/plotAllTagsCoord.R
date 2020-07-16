@@ -13,13 +13,13 @@
 #'   default it is set to recvDeployLat
 #' @param ts column for a date/time object as numeric or POSIXct, defaults to ts
 #' @export
-#' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @examples
 #' # You can use either a selected tbl from .motus eg. "alltags", or a
 #' # data.frame, instructions to convert a .motus file to all formats are below.
 #' 
 #' # download and access data from project 176 in sql format
+#' # usename and password are both "motus.sample"
 #' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
 #' 
 #' # OR use example sql file included in `motus`

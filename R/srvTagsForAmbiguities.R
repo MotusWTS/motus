@@ -18,8 +18,6 @@
 #' with one row per ambigID
 #'
 #' @noRd
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 srvTagsForAmbiguities = function(ambigIDs) {
     x = srvQuery(API=motus_vars$API_TAGS_FOR_AMBIGUITIES, params=list(ambigIDs=ambigIDs))

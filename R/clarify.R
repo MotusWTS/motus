@@ -85,8 +85,6 @@
 #' }
 #'
 #' @export
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 clarify = function(s, id, from, to, all.mine=FALSE) {
     sql = safeSQL(s$con)

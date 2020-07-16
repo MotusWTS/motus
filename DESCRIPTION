@@ -1,6 +1,6 @@
 Package: motus
 Type: Package
-Version: 3.0.0
+Version: 3.1.0
 Title: Fetch and use data from the Motus Wildlife Tracking System
 Description: Retrieve, filter, and visualize telemetry data from the Motus 
     Wildlife Tracking System http://motus.org.
@@ -29,13 +29,15 @@ Imports:
     RSQLite (>= 2.1.1),
     stringr (>= 1.4.0),
     tidyr (>= 0.8.3),
+    tidyselect (>= 1.0.0)
 Suggests:
     ggmap (>= 3.0.0),
     RCurl,
     roxygen2,
     spelling,
-    testthat
-License: GPL-3 + file LICENSE
+    testthat,
+    covr
+License: GPL-3
 Date: 2019-03-28
 RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)

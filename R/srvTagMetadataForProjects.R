@@ -64,8 +64,6 @@
 #' }
 #'
 #' @noRd
-#'
-#' @author Denis Lepage, Bird Studies Canada
 
 srvTagMetadataForProjects = function(projectIDs) {
     x = srvQuery(API=motus_vars$API_TAG_METADATA_FOR_PROJECTS, params=list(projectIDs=projectIDs))

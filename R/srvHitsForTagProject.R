@@ -21,8 +21,6 @@
 #' }
 #'
 #' @noRd
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 srvHitsForTagProject = function(projectID, batchID, hitID=0) {
     x = srvQuery(API=motus_vars$API_HITS_FOR_TAG_PROJECT, params=list(projectID=projectID, batchID=batchID, hitID=hitID))

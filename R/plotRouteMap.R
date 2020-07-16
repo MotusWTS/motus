@@ -20,13 +20,13 @@
 #' @details By default this function uses Stamen maps
 #' 
 #' @export
-#' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @examples
 #' # You must use a .motus sql file, instructions to load using tagme() are
 #' # below
 #' 
 #' # download and access data from project 176 in sql format
+#' # usename and password are both "motus.sample"
 #' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
 #' 
 #' # OR use example sql file included in `motus`

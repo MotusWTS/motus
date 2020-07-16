@@ -1,4 +1,4 @@
-#' create a virtual table that transposes the tagAmbig table
+#' Create a virtual table that transposes the tagAmbig table
 #'
 #' Creates a virtual table (really a 'view') in a motus database that converts
 #' the list of tags associated with ambiguous detections from columns to rows
@@ -21,8 +21,6 @@
 #' across R sessions.
 #'
 #' @noRd
-#'
-#' @author Denis Lepage
 #'
 makeAllambigsView = function(db, name="allambigs") {
     query = paste0("CREATE VIEW ", name, " AS

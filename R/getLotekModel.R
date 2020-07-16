@@ -10,8 +10,6 @@
 #' @return a character scalar with the receiver model
 #'
 #' @noRd
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 getLotekModel = function(serno, extra) {
 

@@ -10,8 +10,6 @@
 #' @seealso \code{\link{motus_vars}}
 #'
 #' @noRd
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 srvAuth = function() {
     ## force lookup of userLogin and userPassword using their active bindings.
@@ -22,6 +20,7 @@ srvAuth = function() {
     tryCatch({
         res = srvQuery(motus_vars$API_DATA_AUTHENTICATE, pars, auth=FALSE)
         motus_vars$projects = res$projects
+        motus_vars$receivers = res$receivers
         motus_vars$dataVersion = res$dataVersion
         ## message(sprintf("Got authentication token from %s  ", motus_vars$dataServerURL))
         return(res$authToken)

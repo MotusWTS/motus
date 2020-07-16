@@ -16,9 +16,6 @@
 #' any functions that need them will prompt for a login.
 #'
 #' @export
-#'
-#' @author John Brzustowski
-#'     \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 motusLogout = function () {
   sessionVariable(name = "authToken", srvAuth)

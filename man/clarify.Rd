@@ -95,6 +95,3 @@ one copy.
 ##   January 2 through May 6, 2017, as mine
 
 }
-\author{
-John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
-}

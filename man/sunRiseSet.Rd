@@ -33,6 +33,7 @@ and a date/time as POSIXct or numeric.
 # data.frame, instructions to convert a .motus file to all formats are below.
 
 # download and access data from project 176 in sql format
+# usename and password are both "motus.sample"
 \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
 
 # OR use example sql file included in `motus`
@@ -54,7 +55,4 @@ sun <- sunRiseSet(df.alltags)
 # Get sunrise and sunset information from tbl.alltags using gps lat/lon
 # Note this only works if there are non-NA values in gpsLat/gpsLon
 \dontrun{sun <- sunRiseSet(tbl.alltags, lat = "gpsLat", lon = "gpsLon")}
-}
-\author{
-Zoe Crysler \email{zcrysler@gmail.com}
 }

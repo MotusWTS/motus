@@ -22,6 +22,3 @@ the integer filterID of the filter deleted
 \description{
 Delete a filter  matching a filter name (and optionally a project ID)
 }
-\author{
-Denis Lepage, Bird Studies Canada
-}

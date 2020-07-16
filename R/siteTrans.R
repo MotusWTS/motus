@@ -8,9 +8,9 @@
 #' lat/lon of site y, distance between the site pair, time between detections,
 #' rate of movement between detections, and bearing between site pairs.
 #'
-#' @param data a selected table from .motus data, eg. "alltags", or a data.frame
-#'   of detection data including at a minimum variables for ts, motusTagID,
-#'   tagDeployID, recvDeployName, and a latitude/longitude
+#' @param data a selected table from .motus data, eg. "alltagsGPS", or a
+#'   data.frame of detection data including at a minimum variables for ts,
+#'   motusTagID, tagDeployID, recvDeployName, and a latitude/longitude
 #' @param latCoord a variable with numeric latitude values, defaults to
 #'   recvDeployLat
 #' @param lonCoord a variable with numeric longitude values, defaults to
@@ -34,13 +34,13 @@
 #'}
 #'
 #' @export
-#' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @examples
-#' # You can use either a selected tbl from .motus eg. "alltags", or a
+#' # You can use either a selected tbl from .motus eg. "alltagsGPS", or a
 #' # data.frame, instructions to convert a .motus file to all formats are below.
 #' 
 #' # download and access data from project 176 in sql format
+#' # usename and password are both "motus.sample"
 #' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
 #' 
 #' # OR use example sql file included in `motus`
@@ -49,7 +49,7 @@
 #'
 #' # convert sql file "sql.motus" to a tbl called "tbl.alltags"
 #' library(dplyr)
-#' tbl.alltags <- tbl(sql.motus, "alltags") 
+#' tbl.alltags <- tbl(sql.motus, "alltagsGPS") 
 #'  
 #' ## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
 #'  df.alltags <- tbl.alltags %>%

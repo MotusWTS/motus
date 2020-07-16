@@ -42,10 +42,11 @@
 #' @seealso \code{\link{motus_vars}}
 #'
 #' @noRd
-#' 
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 .onLoad = function(...) {
+    
+    options(motus.test.max = 15)
+    
     # default location of motus data server, unless user has already assigned
     # a value to "motusServerURL" in the global environment
     if(!exists("motusServerURL")) motusServerURL <- "https://motus.org/api"
@@ -135,6 +136,7 @@
     {
         dataVersion = 0L  ## Current dataVersion returned by server
         projects = 0L     ## vector of projectIDs to which user has access
+        receivers = 0L
         dbDir = getwd()   ## folder where tag and receiver databases are stored
     })
     

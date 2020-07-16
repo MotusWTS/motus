@@ -16,8 +16,6 @@
 #' }
 #'
 #' @noRd
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 srvBatchesForReceiver = function(deviceID, batchID=0) {
     x = srvQuery(API=motus_vars$API_BATCHES_FOR_RECEIVER, params=list(deviceID=deviceID, batchID=batchID))

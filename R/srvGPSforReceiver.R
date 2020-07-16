@@ -18,8 +18,6 @@
 #' }
 #'
 #' @noRd
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 srvGPSforReceiver = function(batchID, ts=0) {
     x = srvQuery(API=motus_vars$API_GPS_FOR_RECEIVER, params=list(batchID=batchID, ts=ts))

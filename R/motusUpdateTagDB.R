@@ -11,8 +11,6 @@
 #' @seealso \code{\link{tagme}}, which is intended for most users, and
 #'     indirectly calls this function.
 #'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
-#' 
 #' @noRd
 
 motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
@@ -193,6 +191,9 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
           sql("update batches set numHits = numHits + %f where batchID = %d", 
               numHits, batchID)
         }
+        
+        # If testing, break out after x batches
+        if(bi >= getOption("motus.test.max") && is_testing()) break
       }
       batchID <- max(b$batchID)
     }

@@ -9,7 +9,6 @@
 #' @param lon variable with longitude values, defaults to recvDeployLon
 #' @param ts variable with time in UTC as numeric or POSIXct, defaults to ts
 #' @export
-#' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @return the original dataframe provided, with the following additional columns:
 #' - sunrise: sunrise time for the date and location provided by ts and lat/lon per row
@@ -20,6 +19,7 @@
 #' # data.frame, instructions to convert a .motus file to all formats are below.
 #' 
 #' # download and access data from project 176 in sql format
+#' # usename and password are both "motus.sample"
 #' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
 #' 
 #' # OR use example sql file included in `motus`

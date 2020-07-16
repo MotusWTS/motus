@@ -19,9 +19,6 @@
 #'
 #' @note If you have not already entered your motus login credentials
 #'     in this R session, you will be prompted for them.
-#'
-#' @author John Brzustowski
-#'     \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 #'     
 #' @noRd
 
@@ -77,7 +74,8 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
               message("The server did not respond within ", timeout, 
                       "s. Trying again...")
               resp <- try(api_query(url, json, ua, timeout), silent = TRUE)
-              if(stringr::str_detect(resp, "Timeout was reached")) {
+              if(class(resp) == "try-error" && 
+                 stringr::str_detect(resp, "Timeout was reached")) {
                 stop("The server is not responding, please try again later.", 
                      call. = FALSE)
               }

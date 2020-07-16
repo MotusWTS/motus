@@ -1,34 +1,36 @@
 #' Obtain time to and from sunrise/sunset for a dataframe containing POSIXct times
 #'
-#' Creates and adds columns for time to, and time from sunrise/sunset based on a column of POSIXct dates/times
-#' dataframe must contain latitude, longitude, and a date/time variable
+#' Creates and adds columns for time to, and time from sunrise/sunset based on a
+#' column of POSIXct dates/times dataframe must contain latitude, longitude, and
+#' a date/time variable
 #'
-#' @param data a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-#' including at a minimum variables for date/time, latitude, and longitude
+#' @param data a selected table from .motus data, eg. "alltagsGPS", or a
+#'   data.frame of detection data including at a minimum variables for
+#'   date/time, latitude, and longitude
 #' @param lat variable with latitude values, defaults to recvDeployLat
 #' @param lon variable with longitude values, defaults to recvDeployLon
 #' @param ts variable with time in UTC as numeric or POSIXct, defaults to ts
-#' @param units units to display time difference, defaults to "hours", options include "secs", "mins", "hours", "days", "weeks"
+#' @param units units to display time difference, defaults to "hours", options
+#'   include "secs", "mins", "hours", "days", "weeks"
 #'
 #' @export
 #'
-#' @author Zoe Crysler \email{zcrysler@@gmail.com}
-#'
 #' @return the original dataframe provided, with the following additional columns:
-#' \itemize{
-#' \item sunrise: sunrise time for the date and location provided by ts and recvDeployLat/recvDeployLon per row
-#' \item sunset: sunset time for the date and location provided by ts and recvDeployLat/recvDeployLon per row
-#' \item ts_to_set: time to next sunset after "ts", units default to "hours"
-#' \item ts_since_set: time to previous sunset since "ts", units default to "hours"
-#' \item ts_to_rise: time to next sunrise after "ts", units default to "hours"
-#' \item ts_since_rise: time to previous sunrise since "ts", units default to "hours"
-#' }
+#' - sunrise: sunrise time for the date and location provided by ts and
+#' recvDeployLat/recvDeployLon per row
+#' - sunset: sunset time for the date and location provided by ts and
+#' recvDeployLat/recvDeployLon per row
+#' - ts_to_set: time to next sunset after "ts", units default to "hours"
+#' - ts_since_set: time to previous sunset since "ts", units default to "hours"
+#' - ts_to_rise: time to next sunrise after "ts", units default to "hours"
+#' - ts_since_rise: time to previous sunrise since "ts", units default to "hours"
 #'
 #' @examples
-#' # You can use either a selected tbl from .motus eg. "alltags", or a
+#' # You can use either a selected tbl from .motus eg. "alltagsGPS", or a
 #' # data.frame, instructions to convert a .motus file to all formats are below.
 #' 
 #' # download and access data from project 176 in sql format
+#' # usename and password are both "motus.sample"
 #' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
 #' 
 #' # OR use example sql file included in `motus`
@@ -37,7 +39,7 @@
 #' 
 #' # convert sql file "sql.motus" to a tbl called "tbl.alltags"
 #' library(dplyr)
-#' tbl.alltags <- tbl(sql.motus, "alltags")
+#' tbl.alltags <- tbl(sql.motus, "alltagsGPS")
 #' 
 #' # convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
 #' # let's also filter down to one day

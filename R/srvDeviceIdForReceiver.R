@@ -13,8 +13,6 @@
 #' }
 #'
 #' @noRd
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 srvDeviceIDForReceiver = function(serno) {
     x = srvQuery(API=motus_vars$API_DEVICE_ID_FOR_RECEIVER, params=list(serno=serno))

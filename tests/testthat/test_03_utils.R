@@ -16,7 +16,7 @@ test_that("checkVersion and updateMotusDb run and return messages as expected", 
   # Normal database
   expect_message(checkVersion(shorebirds_sql), 
                  "Your motus sqlite file is up-to-date with the package.")
-  expect_silent(updateMotusDb(shorebirds_sql, shorebirds_sql))
+  expect_silent(updateMotusDb(shorebirds_sql))
   
   # Old version database
   # expect_message(checkVersion(test_sql), 
@@ -52,6 +52,7 @@ test_that("get_projRecv pulls project name", {
   expect_error(get_projRecv("hello"), "src is not a dplyr::src_sql object")
   
   skip_if_no_auth()
+  skip_if_no_file(system.file("extdata", "SG-3115BBBK0782.motus", package = "motus"))
   expect_equal(get_projRecv(tagme("SG-3115BBBK0782", update = FALSE, dir = d)),
                "SG-3115BBBK0782")
   
