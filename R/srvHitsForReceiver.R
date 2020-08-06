@@ -20,8 +20,6 @@
 #' }
 #'
 #' @noRd
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 srvHitsForReceiver = function(batchID, hitID=0) {
     x = srvQuery(API=motus_vars$API_HITS_FOR_RECEIVER, params=list(batchID=batchID, hitID=hitID))

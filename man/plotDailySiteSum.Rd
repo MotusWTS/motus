@@ -44,6 +44,3 @@ plotDailySiteSum(df.alltags, recvDeployName = "Longridge")
 # Plot of all tag detections at site Niapiskau using tbl file tbl.alltags
 plotDailySiteSum(df.alltags, recvDeployName = "Niapiskau")
 }
-\author{
-Zoe Crysler \email{zcrysler@gmail.com}
-}

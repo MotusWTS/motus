@@ -24,8 +24,6 @@
 #' @seealso \code{\link{tagme}}
 #'
 #' @noRd
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 getDBFilename = function(projRecv, dir = getwd()) {
     if (is.numeric(projRecv)) {

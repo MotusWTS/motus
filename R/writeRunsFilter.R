@@ -18,8 +18,6 @@
 #' @return a dplyr sqlite object refering to the filter created
 #'
 #' @export
-#'
-#' @author Denis Lepage, Bird Studies Canada
 
 writeRunsFilter = function(src, filterName, motusProjID=NA, df, overwrite=TRUE, delete=FALSE) {
 

@@ -11,7 +11,6 @@
 #' @param units units to display time difference, defaults to "hours", options
 #'   include "secs", "mins", "hours", "days", "weeks"
 #' @export
-#' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @examples
 #' # You can use either a selected tbl from .motus eg. "alltagsGPS", or a

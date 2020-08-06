@@ -7,7 +7,6 @@
 #' @param tagsPerPanel number of tags in each panel of the plot, default is 5
 #' @param coordinate column of receiver latitude/longitude values to use, defaults to recvDeployLat
 #' @export
-#' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @examples
 #' # You can use either a selected tbl from .motus eg. "alltags", or a

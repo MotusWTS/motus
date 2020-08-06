@@ -13,7 +13,6 @@
 #'   default it is set to recvDeployLat
 #' @param ts column for a date/time object as numeric or POSIXct, defaults to ts
 #' @export
-#' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @examples
 #' # You can use either a selected tbl from .motus eg. "alltags", or a

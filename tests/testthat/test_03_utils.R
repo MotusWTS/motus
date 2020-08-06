@@ -52,6 +52,7 @@ test_that("get_projRecv pulls project name", {
   expect_error(get_projRecv("hello"), "src is not a dplyr::src_sql object")
   
   skip_if_no_auth()
+  skip_if_no_file(system.file("extdata", "SG-3115BBBK0782.motus", package = "motus"))
   expect_equal(get_projRecv(tagme("SG-3115BBBK0782", update = FALSE, dir = d)),
                "SG-3115BBBK0782")
   

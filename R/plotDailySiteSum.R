@@ -8,8 +8,7 @@
 #'   motusTagID, sig, recvDeployName, ts
 #' @param recvDeployName name of site to plot
 #' @export
-#' @author Zoe Crysler \email{zcrysler@@gmail.com}
-#'
+#' 
 #' @examples
 #' # You can use either a selected tbl from .motus eg. "alltagsGPS", or a
 #' # data.frame, instructions to convert a .motus file to all formats are below.

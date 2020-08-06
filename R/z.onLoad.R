@@ -42,8 +42,6 @@
 #' @seealso \code{\link{motus_vars}}
 #'
 #' @noRd
-#' 
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 .onLoad = function(...) {
     

@@ -22,8 +22,6 @@
 #' @note: this returns fixes from receivers which detected tags from the
 #' given project.  Fixes from up to 1 hour before to 1 hour after the
 #' detections are included, to ensure temporal coverage.
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 #' 
 #' @noRd
 

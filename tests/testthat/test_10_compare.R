@@ -35,10 +35,9 @@ test_that("table fields match server (sample auth)", {
 test_that("table fields match server (local auth)", {
 
   skip_if_no_auth()
+  skip_if_no_file(f <- system.file("extdata", "project-4.motus", package = "motus"))
   
-  tags <- DBI::dbConnect(
-    RSQLite::SQLite(), 
-    system.file("extdata", "project-4.motus", package = "motus"))
+  tags <- DBI::dbConnect(RSQLite::SQLite(), f)
   
   expect_named(
     srvActivityForBatches(batchID = 53)[1,],

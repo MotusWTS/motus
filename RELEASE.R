@@ -64,11 +64,13 @@ spelling::update_wordlist() # All remaining words will be added to the ignore WO
 ## Finalize package version
 # - Update DESCRIPTION - package version
 # - Update .onLoad - API version
-v <- "3.0.1"
+v <- "3.1.0"
 v <- packageVersion("motus") # If dev version loaded with devtools::load_all()
 
 ## Checks
 devtools::check(run_dont_test = TRUE)   # Local, run long-running examples
+devtools::check(run_dont_test = FALSE)
+
 
 system("cd ..; R CMD build motus")
 system(paste0("cd ..; R CMD check motus_", v, ".tar.gz"))

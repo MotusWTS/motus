@@ -65,6 +65,3 @@ site_summary <- siteSum(sub, units = "mins")
 # Create site summaries for only a select species, Red Knot
 site_summary <- siteSum(filter(df.alltags, speciesEN == "Red Knot"))
 }
-\author{
-Zoe Crysler \email{zcrysler@gmail.com}
-}

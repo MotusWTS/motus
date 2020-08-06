@@ -18,8 +18,6 @@
 #' }
 #'
 #' @noRd
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 srvRunsForTagProject = function(projectID, batchID, runID = 0) {
   x <- srvQuery(API = motus_vars$API_RUNS_FOR_TAG_PROJECT, 

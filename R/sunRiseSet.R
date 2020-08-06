@@ -9,7 +9,6 @@
 #' @param lon variable with longitude values, defaults to recvDeployLon
 #' @param ts variable with time in UTC as numeric or POSIXct, defaults to ts
 #' @export
-#' @author Zoe Crysler \email{zcrysler@@gmail.com}
 #'
 #' @return the original dataframe provided, with the following additional columns:
 #' - sunrise: sunrise time for the date and location provided by ts and lat/lon per row

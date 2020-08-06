@@ -44,6 +44,3 @@ plotTagSig(df.alltags, motusTagID = 16047)
 # Plot signal strength of a specified tag using tbl file tbl.alltags
 plotTagSig(tbl.alltags, motusTagID = 16035)
 }
-\author{
-Zoe Crysler \email{zcrysler@gmail.com}
-}

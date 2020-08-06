@@ -14,8 +14,6 @@
 #' }
 #'
 #' @noRd
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 srvSizeOfUpdateForReceiver = function(deviceID, batchID=0) {
     x = srvQuery(API=motus_vars$API_SIZE_OF_UPDATE_FOR_RECEIVER, params=list(deviceID=deviceID, batchID=batchID))

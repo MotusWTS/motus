@@ -4,41 +4,66 @@
 \alias{getGPS}
 \title{Get GPS variables}
 \usage{
-getGPS(src, alltags = NULL, by = "daily")
+getGPS(src, data = NULL, by = "daily", cutoff = NULL,
+  keepAll = FALSE)
 }
 \arguments{
-\item{src}{src_sqlite object representing the database}
+\item{src}{src_sqlite object representing the motus database}
 
-\item{alltags}{src_sqlite object or data.frame Optional subset of the alltags
-view. Must have \code{ts}, \code{hitID} and \code{batchID} at the minimum.}
+\item{data}{src_sqlite object or data.frame. Optional subset of the \code{alltags}
+view. Must have \code{ts}, \code{batchID} and \code{hitID} at the minimum.}
 
-\item{by}{Numeric/Character Either the time in minutes overwhich to join GPS
+\item{by}{Numeric/Character. Either the time in minutes over which to join GPS
 locations to hits, or "daily" or "closest". To join GPS locations by daily
-timeblocks or by the closest temporal match (see Details).}
+time blocks or by the closest temporal match (see Details).}
+
+\item{cutoff}{Numeric. The maximum allowable time in minutes between hit and
+GPS timestamps when matching hits to GPS with \code{by = 'closest'}. Defaults to
+\code{NULL} (no maximum).}
+
+\item{keepAll}{Logical. Return all hits regardless of whether they have a GPS
+match? Defaults to FALSE.}
 }
 \value{
-Data frame linking hitID to gpsLat, gpsLon and gpsAlt
+Data frame linking hitID to gpsLat, gpsLon and gpsAlt.
+When \code{by = 'daily'} or \code{by = 'X'}, output includes:
+\itemize{
+\item \code{hitID} - the ID associated with the hit
+\item \code{gpsLat} \ \code{gpsLon} \ \code{gpsAlt} - the median location calculated from the
+available GPS points
+\item \code{gpsTs_min} \ \code{gps_Ts_max} - the range of GPS timestamps associated with
+the GPS points binned
+}
+
+When \code{by = 'closest'} or \code{by = 'X'}, output includes:
+\itemize{
+\item \code{hitID} - the ID associated with the hit
+\item \code{gpsID} - the ID of the closest GPS point aligned with the \code{hitID}
+\item \code{gpsLat} \ \code{gpsLon} \ \code{gpsAlt} - the location of the GPS point
+\item \code{gpsTs} - the timestamp of the GPS point
+}
 }
 \description{
 To improve speed, the \code{alltags} view doesn't include GPS-related variables
 such as \code{gpsLat}, \code{gpsLon}, or \code{gpsAlt}. There is a \code{alltagsGPS} view that
 does include GPS-related variables, but this will take time to load. This
 function accepts a source and returns the GPS data associated with the
-\code{bachID}/\code{hitID} combos in the \code{alltags} view. Optionally, users can supply a
+\code{hitID}s in the \code{alltags} view. Optionally, users can supply a
 subset of the \code{alltags} view to return only GPS data associated with the
-specific \code{batchID}/\code{hitID} combos present in the subset.
+specific \code{hitID}s present in the subset.
 }
 \details{
-There are three different methods for matching GPS data to \code{bachID}/\code{hitID}
-combos, all related to timestamps (\code{ts}).
+There are three different methods for matching GPS data to \code{hitID}s
+all related to timestamps (\code{ts}).
 \enumerate{
 \item \code{by = X} Where \code{X} is a duration in minutes. \code{ts} is converted to a
-specific timeblock of duration \code{X}. Median GPS lat/longs for the timeblock
-are returned, matching associated \code{batchID}/\code{hitID} timeblocks.
+specific time block of duration \code{X}. Median GPS lat/longs for the time block
+are returned, matching associated \code{hitID} time blocks.
 \item \code{by = "daily"} (the default). Similar to \code{by = X} except the duration is
 24hr.
 \item \code{by = "closest"} Individual GPS lat/lons are returned, matching the
-closest \code{batchID}/\code{hitID} timestamp.
+closest \code{hitID} timestamp. Use \code{cutoff} to specify the maximum
+allowable time between timestamps (defaults to none).
 }
 }
 \examples{
@@ -51,10 +76,30 @@ closest \code{batchID}/\code{hitID} timestamp.
 sql.motus <- tagme(176, update = FALSE, 
                    dir = system.file("extdata", package = "motus"))
 
-getGPS(sql.motus)
+# Match hits to GPS within 24hrs (daily) of each other
+my_gps <- getGPS(sql.motus)
+my_gps
 
-# Note that the sample data doesn't have GPS hits so this will always be an 
-# empty data frame.
+# Note that the sample data doesn't have GPS hits so this will be an 
+# empty data frame for project 176.
+
+# Match hits to GPS within 15min of each other
+my_gps <- getGPS(sql.motus, by = 15)
+my_gps
+
+# Match hits to GPS according to the closest timestamp
+my_gps <- getGPS(sql.motus, by = "closest")
+my_gps
+
+# Match hits to GPS according to the closest timestamp, but limit to within
+# 20min of each other
+my_gps <- getGPS(sql.motus, by = "closest", cutoff = 20)
+my_gps
+
+# To return all hits, regardless of whether they match a GPS record
+
+my_gps <- getGPS(sql.motus, keepAll = TRUE)
+my_gps
 
 # Alternatively, use the alltagsGPS view:
 dplyr::tbl(sql.motus, "alltagsGPS")

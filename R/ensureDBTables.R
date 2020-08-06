@@ -11,8 +11,6 @@
 #'   created in `src`.
 #' 
 #' @noRd
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 ensureDBTables = function(src, projRecv, deviceID, quiet = FALSE) {
   if (! inherits(src, "src_sql"))

@@ -18,6 +18,13 @@ skip_if_no_auth <- function() {
   }
 }
 
+
+skip_if_no_file <- function(file) {
+  if(!file.exists(file)) {
+    testthat::skip("File not available")
+  }
+}
+
 is_testing <- function() {
   identical(Sys.getenv("TESTTHAT"), "true")
 }

@@ -21,6 +21,3 @@ a dplyr sqlite object
 Returns a dataframe of the runFilters records matching a filter name (and
 optionally a project ID) stored in the local database.
 }
-\author{
-Denis Lepage, Bird Studies Canada
-}

@@ -11,8 +11,6 @@
 #' @seealso \code{\link{tagme}}, which is intended for most users, and
 #'     indirectly calls this function.
 #'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
-#' 
 #' @noRd
 
 motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {

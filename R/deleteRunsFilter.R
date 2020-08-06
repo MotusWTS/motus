@@ -12,8 +12,6 @@
 #' @return the integer filterID of the filter deleted
 #'
 #' @export
-#'
-#' @author Denis Lepage, Bird Studies Canada
 
 deleteRunsFilter = function(src, filterName, motusProjID=NA, clearOnly=FALSE) {
 

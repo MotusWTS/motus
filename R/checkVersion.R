@@ -3,7 +3,6 @@
 #'
 #' @param src motus sqlite database source
 #' @export
-#' @author Denis Lepage \email{dlepage@@bsc-eoc.org}
 #'
 
 checkVersion <- function(src) {

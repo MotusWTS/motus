@@ -72,6 +72,3 @@ sunrise <- timeToSunriset(df.alltags, units = "mins")
 # gpsLat/gpsLon
 \dontrun{sunrise <- timeToSunriset(df.alltags, lat = "gpsLat", lon = "gpsLon")}
 }
-\author{
-Zoe Crysler \email{zcrysler@gmail.com}
-}

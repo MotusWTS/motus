@@ -19,9 +19,6 @@
 #'
 #' @note If you have not already entered your motus login credentials
 #'     in this R session, you will be prompted for them.
-#'
-#' @author John Brzustowski
-#'     \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 #'     
 #' @noRd
 

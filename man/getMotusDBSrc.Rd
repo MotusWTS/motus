@@ -30,6 +30,3 @@ Receiver database files have names like "SG-1234BBBK06EA.motus" or
 "Lotek-12345.motus", and project database files have names like
 "project-52.motus".
 }
-\author{
-John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
-}

@@ -49,6 +49,3 @@ plotSite(filter(df.alltags, recvDeployName == "Piskwamish"))
 plotSite(filter(df.alltags, motusTagID \%in\% c(16047, 16037, 16039)))
 
 }
-\author{
-Zoe Crysler \email{zcrysler@gmail.com}
-}

@@ -20,8 +20,6 @@
 #' will be empty, but have the correct schema.
 #'
 #' @export
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 getMotusDBSrc = function(recv=NULL, proj=NULL, create = FALSE, dbDir = motus_vars$dbDir) {
     if (missing(recv) + missing(proj) != 1)

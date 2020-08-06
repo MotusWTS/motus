@@ -13,8 +13,6 @@
 #' @return an integer filterID
 #'
 #' @export
-#'
-#' @author Denis Lepage, Bird Studies Canada
 
 createRunsFilter = function(src, filterName, motusProjID=NA, descr=NA, update=FALSE) {
 

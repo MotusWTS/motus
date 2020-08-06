@@ -64,8 +64,6 @@
 #' }
 #'
 #' @noRd
-#'
-#' @author John Brzustowski \email{jbrzusto@@REMOVE_THIS_PART_fastmail.fm}
 
 srvMetadataForTags = function(motusTagIDs) {
     x = srvQuery(API=motus_vars$API_METADATA_FOR_TAGS, params=list(motusTagIDs=motusTagIDs))

@@ -12,11 +12,12 @@
 * New function `getGPS()` adds GPS fields to data
 * Remove NOT NULL constraint on `motusTagID`s in ambiguous tag view
 
-### Bug fix
+### Bug fixes
 * Receivers updating to the new version errored on the download start
 * Allow renaming (if possible) of large databases on data updates
 * Continue checking for activity/nodeData even if first batch returns 0
 * `nodeDataId` is corrected to `nodeDataID`
+* Warn users with custom views if they need to be removed prior to updating
 
 # motus 3.0.0 (2019-10-16)
 

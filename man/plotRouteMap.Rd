@@ -51,6 +51,3 @@ sql.motus <- tagme(176, update = FALSE,
 # active between 2016-01-01 and 2017-01-01
 plotRouteMap(sql.motus, recvStart = "2016-01-01", recvEnd = "2016-12-31")
 }
-\author{
-Zoe Crysler \email{zcrysler@gmail.com}
-}

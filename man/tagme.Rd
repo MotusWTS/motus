@@ -84,6 +84,3 @@ Download motus tag detections to a database
 \seealso{
 \code{\link{tellme}}, which is a synonym for \code{tagme(..., update=TRUE, countOnly=TRUE)}
 }
-\author{
-John Brzustowski \email{jbrzusto@REMOVE_THIS_PART_fastmail.fm}
-}

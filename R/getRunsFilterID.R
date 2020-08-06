@@ -14,8 +14,6 @@
 #' @return an integer filterID
 #'
 #' @noRd
-#'
-#' @author Denis Lepage, Bird Studies Canada
 
 getRunsFilterID <- function(src, filterName, motusProjID = NA) {
 
