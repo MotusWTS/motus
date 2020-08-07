@@ -11,14 +11,14 @@
 #'
 #' @noRd
 
-srvAuth = function() {
+srvAuth = function(verbose = FALSE) {
     ## force lookup of userLogin and userPassword using their active bindings.
     ## (we don't want to use lazy evaluation here by instead passing the list(...)
     ## expression to srvQuery
 
     pars = list(user=motus_vars$userLogin, password=motus_vars$userPassword)
     tryCatch({
-        res = srvQuery(motus_vars$API_DATA_AUTHENTICATE, pars, auth=FALSE)
+        res = srvQuery(motus_vars$API_DATA_AUTHENTICATE, pars, auth=FALSE, verbose = verbose)
         motus_vars$projects = res$projects
         motus_vars$receivers = res$receivers
         motus_vars$dataVersion = res$dataVersion

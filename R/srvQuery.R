@@ -24,7 +24,7 @@
 
 srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE, 
                       auth = TRUE, url = motus_vars$dataServerURL,
-                      timeout = 120) {
+                      timeout = 120, verbose = FALSE) {
   
     url <- file.path(url, API)
     ua <- httr::user_agent(agent = "http://github.com/MotusWTS/motus")
@@ -32,6 +32,7 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
     # Set curl options
     httr::set_config(httr::accept_json())
     httr::set_config(httr::content_type_json())
+    if(verbose) httr::set_config(httr::verbose()) # Set as needed for debugging
     
     for (i in 1:2) {
         ## at most two iterations; the second allows for
@@ -59,6 +60,8 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
 
         # set to FALSE  for testing CUrl instead of httr
         if (TRUE) {      
+          
+          if(verbose) message(url, "\n", json)
           
           api_query <- function(url, json, ua, timeout) {
             httr::POST(url, body = list("json" = json), encode = "form",

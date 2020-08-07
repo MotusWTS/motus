@@ -27,7 +27,9 @@
 #'
 #' @noRd
 
-srvReceiversForProject = function(projectID) {
-    x = srvQuery(API=motus_vars$API_RECEIVERS_FOR_PROJECT, params=list(projectID=projectID))
+srvReceiversForProject = function(projectID, verbose = FALSE) {
+    x = srvQuery(API=motus_vars$API_RECEIVERS_FOR_PROJECT, 
+                 params=list(projectID=projectID), 
+                 verbose = verbose)
     return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
 }

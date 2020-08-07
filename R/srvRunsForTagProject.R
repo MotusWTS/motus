@@ -19,10 +19,11 @@
 #'
 #' @noRd
 
-srvRunsForTagProject = function(projectID, batchID, runID = 0) {
+srvRunsForTagProject = function(projectID, batchID, runID = 0, verbose = FALSE) {
   x <- srvQuery(API = motus_vars$API_RUNS_FOR_TAG_PROJECT, 
                 params = list(projectID = projectID, 
                               batchID = batchID, 
-                              runID = runID))
+                              runID = runID),
+                verbose = verbose)
   return (structure(x, class = "data.frame", row.names = seq(along = x[[1]])))
 }

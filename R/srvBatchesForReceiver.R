@@ -17,7 +17,9 @@
 #'
 #' @noRd
 
-srvBatchesForReceiver = function(deviceID, batchID=0) {
-    x = srvQuery(API=motus_vars$API_BATCHES_FOR_RECEIVER, params=list(deviceID=deviceID, batchID=batchID))
+srvBatchesForReceiver = function(deviceID, batchID=0, verbose = FALSE) {
+    x = srvQuery(API=motus_vars$API_BATCHES_FOR_RECEIVER, 
+                 params=list(deviceID=deviceID, batchID=batchID),
+                 verbose = verbose)
     return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
 }

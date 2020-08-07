@@ -21,7 +21,9 @@
 #'
 #' @noRd
 
-srvHitsForReceiver = function(batchID, hitID=0) {
-    x = srvQuery(API=motus_vars$API_HITS_FOR_RECEIVER, params=list(batchID=batchID, hitID=hitID))
+srvHitsForReceiver = function(batchID, hitID=0, verbose = FALSE) {
+    x = srvQuery(API=motus_vars$API_HITS_FOR_RECEIVER, 
+                 params=list(batchID=batchID, hitID=hitID),
+                 verbose = verbose)
     return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
 }

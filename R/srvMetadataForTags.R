@@ -65,8 +65,10 @@
 #'
 #' @noRd
 
-srvMetadataForTags = function(motusTagIDs) {
-    x = srvQuery(API=motus_vars$API_METADATA_FOR_TAGS, params=list(motusTagIDs=motusTagIDs))
+srvMetadataForTags = function(motusTagIDs, verbose = FALSE) {
+    x = srvQuery(API=motus_vars$API_METADATA_FOR_TAGS, 
+                 params=list(motusTagIDs=motusTagIDs),
+                 verbose = verbose)
     return (list(
         tags = structure(x$tags, class = "data.frame", row.names=seq(along=x$tags[[1]])),
         tagDeps = structure(x$tagDeps, class = "data.frame", row.names=seq(along=x$tagDeps[[1]])),
