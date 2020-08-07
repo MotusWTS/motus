@@ -78,6 +78,8 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
                  stringr::str_detect(resp, "Timeout was reached")) {
                 stop("The server is not responding, please try again later.", 
                      call. = FALSE)
+              } else if(class(resp) == "try-error") {
+                stop(resp, call. = FALSE)
               }
             } else {
               resp <- api_query(url, json, ua, timeout)
