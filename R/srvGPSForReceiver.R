@@ -19,7 +19,7 @@
 #'
 #' @noRd
 
-srvGPSforReceiver = function(batchID, ts=0) {
+srvGPSForReceiver = function(batchID, ts=0) {
     x = srvQuery(API=motus_vars$API_GPS_FOR_RECEIVER, params=list(batchID=batchID, ts=ts))
     return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
 }

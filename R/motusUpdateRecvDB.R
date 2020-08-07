@@ -109,7 +109,7 @@ motusUpdateRecvDB <- function(src, countOnly, forceMeta=FALSE) {
 
             ts = sql("select ifnull(max(ts), 0) from gps where batchID=%d", batchID)[[1]]
             repeat {
-                g = srvGPSforReceiver(batchID=batchID, ts=ts)
+                g = srvGPSForReceiver(batchID=batchID, ts=ts)
                 if (! isTRUE(nrow(g) > 0)) break
                 message(sprintf("%s: got %6d GPS fixes                     \r", 
                                 batchMsg, nrow(g)))

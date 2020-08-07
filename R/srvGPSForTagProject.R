@@ -25,7 +25,7 @@
 #' 
 #' @noRd
 
-srvGPSforTagProject = function(projectID, batchID, gpsID = 0) {
+srvGPSForTagProject = function(projectID, batchID, gpsID = 0) {
     x <- srvQuery(API = motus_vars$API_GPS_FOR_TAG_PROJECT, 
                  params = list(projectID = projectID, batchID = batchID, 
                                gpsID = gpsID))

@@ -88,8 +88,8 @@ SQLiteConnection
 src
 srvBatchesForReceiverProject
 srvBatchesForTagProject
-srvGPSforReceiverProject
-srvGPSforTagProject
+srvGPSForReceiverProject
+srvGPSForTagProject
 srvHitsForReceiverProject
 srvHitsForTagProject
 srvMetadataForReceivers

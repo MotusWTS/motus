@@ -160,7 +160,7 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
         gpsID <- sql(paste0("SELECT ifnull(max(gpsID), 0) ",
                             "FROM gps WHERE batchID = %d"), batchID)[[1]]
         repeat {
-          g <- srvGPSforTagProject(projectID = projectID, batchID = batchID, 
+          g <- srvGPSForTagProject(projectID = projectID, batchID = batchID, 
                                    gpsID = gpsID)
           if (!isTRUE(nrow(g) > 0)) break
           message(sprintf("%s: got %6d GPS fixes                     \r", 

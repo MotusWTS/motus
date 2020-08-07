@@ -28,7 +28,7 @@ test_that("table fields match server (sample auth)", {
     DBI::dbListFields(tags, "runs"), ignore.order = TRUE)
   
   expect_named(
-    srvGPSforTagProject(projectID = 176, batchID = 53, gpsID = 0)[1,],
+    srvGPSForTagProject(projectID = 176, batchID = 53, gpsID = 0)[1,],
     DBI::dbListFields(tags, "gps"), ignore.order = TRUE)
 })
 
@@ -60,7 +60,7 @@ test_that("table fields match server (local auth)", {
     DBI::dbListFields(tags, "runs"), ignore.order = TRUE)
   
   expect_named(
-    srvGPSforTagProject(projectID = 4, batchID = 53, gpsID = 0)[1,],
+    srvGPSForTagProject(projectID = 4, batchID = 53, gpsID = 0)[1,],
     DBI::dbListFields(tags, "gps"), ignore.order = TRUE)
 })
 
