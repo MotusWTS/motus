@@ -20,9 +20,10 @@ test_that("Data returned as expected", {
     expect_is("src_SQLiteConnection")
   
   # Tables exists
-  expect_true("activity" %in% DBI::dbListTables(tags$con))
-  expect_true("nodeData" %in% DBI::dbListTables(tags$con))
-  expect_true("nodeDeps" %in% DBI::dbListTables(tags$con))
+  for(i in c("activity", "nodeData", "nodeDeps", "gps", 
+             "hits", "runs", "batches")) {
+    expect_true(!!i %in% DBI::dbListTables(tags$con))
+  }
   
   #activity
   expect_silent(a <- dplyr::tbl(tags$con, "activity") %>% dplyr::collect())
@@ -39,6 +40,8 @@ test_that("Data returned as expected", {
   expect_true(nrow(a) > 0)
   expect_true("nodeDataID" %in% names(a)) # check correct field name
   expect_false(any(sapply(a, function(x) all(is.na(x))))) # No all missing values
+  expect_true(all(c("nodets", "firmware", "solarVolt", "solarCurrent", 
+                    "solarCurrentCumul", "lat", "lon") %in% names(a)))
   
   #tagDeps
   expect_silent(a <- dplyr::tbl(tags$con, "tagDeps") %>% dplyr::collect())
@@ -53,6 +56,14 @@ test_that("Data returned as expected", {
   expect_silent(a <- dplyr::tbl(tags$con, "antDeps") %>% dplyr::collect())
   expect_true(all(c("antFreq") %in% names(a)))
   expect_is(a$antFreq, "numeric")
+  
+  #gps
+  expect_silent(a <- dplyr::tbl(tags$con, "gps") %>% dplyr::collect())
+  expect_true(all(c("lat_mean", "lon_mean", "n_fixes") %in% names(a)))
+  
+  #hits
+  expect_silent(a <- dplyr::tbl(tags$con, "hits") %>% dplyr::collect())
+  expect_true(all(c("validated") %in% names(a)))
   
   options(motus.test.max = orig)
 })

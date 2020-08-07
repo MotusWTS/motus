@@ -1,5 +1,31 @@
 sql_versions <- dplyr::tibble()
 
+
+sql_versions <- rbind(
+  sql_versions,
+  cbind(date = "2020-08-07",
+        descr = "Rename nodeDataId to nodeDataID in nodeData",
+        sql = paste0("ALTER TABLE nodeData RENAME TO nodeData2;",
+                     makeTables(type = "nodeData"),
+                     "INSERT INTO nodeData SELECT * FROM nodeData2;",
+                     "DROP TABLE nodeData2;")))
+
+sql_versions <- rbind(
+  sql_versions,
+  cbind(date = "2020-08-06", 
+        descr = "Add new CTT V2 fields to 'gps', 'nodeData' and 'hits' tables",
+        sql = paste0("ALTER TABLE gps ADD COLUMN lat_mean FLOAT;",
+                     "ALTER TABLE gps ADD COLUMN lon_mean FLOAT;",
+                     "ALTER TABLE gps ADD COLUMN n_fixes INTEGER;",
+                     "ALTER TABLE nodeData ADD COLUMN nodets FLOAT;",
+                     "ALTER TABLE nodeData ADD COLUMN firmware VARCHAR(20);",
+                     "ALTER TABLE nodeData ADD COLUMN solarVolt FLOAT;",
+                     "ALTER TABLE nodeData ADD COLUMN solarCurrent FLOAT;",
+                     "ALTER TABLE nodeData ADD COLUMN solarCurrentCumul FLOAT;",
+                     "ALTER TABLE nodeData ADD COLUMN lat FLOAT;",
+                     "ALTER TABLE nodeData ADD COLUMN lon FLOAT;",
+                     "ALTER TABLE hits ADD COLUMN validated TINYINT;")))
+
 sql_versions <- rbind(
   sql_versions,
   cbind(date = "2020-05-22",
@@ -21,15 +47,6 @@ sql_versions <- rbind(
         descr = "Add 'sex' and 'age' metadata to 'tagDeps' table",
         sql = paste0("ALTER TABLE tagDeps ADD COLUMN sex TEXT;",
                      "ALTER TABLE tagDeps ADD COLUMN age TEXT;")))
-
-sql_versions <- rbind(
-  sql_versions,
-  cbind(date = "2020-04-22",
-        descr = "Rename nodeDataId to nodeDataID in nodeData",
-        sql = paste0("ALTER TABLE nodeData RENAME TO nodeData2;",
-                     makeTables(type = "nodeData"),
-                     "INSERT INTO nodeData SELECT * FROM nodeData2;",
-                     "DROP TABLE nodeData2;")))
 
 sql_versions <- rbind(
   sql_versions,
