@@ -8,6 +8,14 @@ test_that("table fields match server (sample auth)", {
     system.file("extdata", "project-176.motus", package = "motus"))
 
   expect_named(
+    srvActivityForAll(batchID = 53)[1,],
+    DBI::dbListFields(tags, "activity"), ignore.order = TRUE)
+  
+  expect_named(
+    srvActivityForAll(batchID = 53)[1,],
+    DBI::dbListFields(tags, "activityAll"), ignore.order = TRUE)
+  
+  expect_named(
     srvActivityForBatches(batchID = 53)[1,],
     DBI::dbListFields(tags, "activity"), ignore.order = TRUE)
   

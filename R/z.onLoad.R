@@ -25,6 +25,8 @@
 #' \item{API_TAG_METADATA_FOR_PROJECTS}{URL to call for getting tag metadata by projects}
 #' \item{API_TAGS_FOR_AMBIGIUITIES}{URL to call for getting motus tagIDs represented by an ambiguity ID}
 #' \item{API_PROJECT_AMBIGUITIES_FOR_TAG_PROJECT}{URL to call for getting list of ambiguous project IDs for a project}
+#' \item{API_ACTIVITY_FOR_ALL}{URL to call for getting activity for all projects/receivers}
+#' \item{API_GPS_FOR_RECIEVER_ALL}{URL to call for getting GPS fixes for all receivers}
 #' \item{FLOAT_FIELDS}{list of API fieldnames requiring floating point values}
 #' \item{FLOAT_REGEX}{regex to recognize fields requiring fixups in API queries}
 #' }
@@ -91,6 +93,8 @@
         API_SIZE_OF_UPDATE_FOR_TAG_PROJECT      = "custom/size_of_update_for_tag_project"
         API_SIZE_OF_UPDATE_FOR_RECEIVER         = "custom/size_of_update_for_receiver"
         API_PROJECT_AMBIGUITIES_FOR_TAG_PROJECT = "custom/project_ambiguities_for_tag_project"
+        API_ACTIVITY_FOR_ALL                    = "custom/activity_for_all"
+        API_GPS_FOR_RECIEVER_ALL                = "custom/gps_for_receiver_all"
 
         ## a list of field names which must be formatted as floats so that the
         ## motus API recognizes them correctly.  This means that if they happen
