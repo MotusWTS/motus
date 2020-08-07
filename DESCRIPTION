@@ -8,7 +8,8 @@ Authors@R: c(
     person("John", "Brzustowski", email = "jbrzusto@fastmail.fm", role = "aut"),
     person("Denis", "LePage", email = "dlepage@bsc-eoc.org", role = c("aut", "cre")),
     person("Zoe", "Crysler", email = "zcrysler@@gmail.com", role = "ctb"),
-    person("Steffi", "LaZerte", email = "steffi@steffi.ca", role = "ctb"))
+    person("Steffi", "LaZerte", email = "steffi@steffi.ca", role = "ctb"),
+    person("Birds Canada", role = "fnd", email = "motus@birdscanada.org"))
 Depends:
     R (>= 3.2.0)
 Imports:
