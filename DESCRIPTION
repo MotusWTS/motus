@@ -33,6 +33,7 @@ Imports:
     tidyselect (>= 1.0.0)
 Suggests:
     ggmap (>= 3.0.0),
+    mockery,
     RCurl,
     roxygen2,
     spelling,

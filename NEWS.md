@@ -9,6 +9,14 @@
     * Add `nodets`, `firmware`, `solarVolt`, `solarCurrent`, `solarCurrentCumul`, `lat`, and `lon` to `nodeData` table
     * Add `validated` to `hits` table
 
+### Bug fixes
+* Downloading hits no longer fails if extra columns are supplied by the server
+
+### Internal changes
+* Internal workings of major `motusUpdateXXX()` functions split into multiple
+  smaller functions to make testing more efficient
+* Added mockery package for mock testing
+
 # motus 3.0.1
 
 ### Small Changes
