@@ -39,7 +39,6 @@ test_that("Data returned as expected", {
   expect_silent(a <- dplyr::tbl(tags$con, "nodeData") %>% dplyr::collect())
   expect_true(nrow(a) > 0)
   expect_true("nodeDataID" %in% names(a)) # check correct field name
-  expect_false(any(sapply(a, function(x) all(is.na(x))))) # No all missing values
   expect_true(all(c("nodets", "firmware", "solarVolt", "solarCurrent", 
                     "solarCurrentCumul", "lat", "lon") %in% names(a)))
   
@@ -71,6 +70,9 @@ test_that("Data returned as expected", {
 test_that("Data returned as expected", {
   skip_on_cran()
   skip_if_no_auth()
+  
+  orig <- getOption("motus.test.max")
+  options(motus.test.max = 60)
   
   expect_message(tags <- tagme(projRecv = "SG-3115BBBK0782", new = TRUE, update = TRUE)) %>%
     expect_is("src_SQLiteConnection")
