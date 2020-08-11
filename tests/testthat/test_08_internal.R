@@ -44,8 +44,10 @@ test_that("hitsByBatchProject doesn't fail on extra columns", {
 
 test_that("hitsByBatchReceiver doesn't fail on extra columns", {
   skip_if_no_auth()
+  f <- system.file("extdata", "SG-3115BBBK0782.motus", package = "motus")
+  skip_if_no_file(f)
   
-  file.copy(system.file("extdata", "SG-3115BBBK0782.motus", package = "motus"), ".")
+  file.copy(f, ".")
   tags <- safeSQL(tagme("SG-3115BBBK0782", new = FALSE, update = FALSE))
   DBI::dbExecute(tags$con, "DELETE FROM hits")
   
