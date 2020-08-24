@@ -140,7 +140,8 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
                 motus_vars$authToken = NULL
                 next
             }
-            stop("Server returned error '", rv$error, "'", call. = FALSE)
+          er <- stringr::str_replace_all(rv$error, "\\&\\#47\\;", "/")
+          stop("Server returned error '", er, "'", call. = FALSE)
         }
         
         if ("data" %in% names(rv)) {
