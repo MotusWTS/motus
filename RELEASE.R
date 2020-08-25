@@ -33,12 +33,7 @@
 # Steps/Commands to run before a package release -----------------------------
 
 ## Install required packages (if they don't already exist)
-pkgs <- c("DBI", "dplyr", "dbplyr", "httr", "geosphere", "ggplot2", "gridExtra",
-          "jsonlite", "lubridate", "magrittr", "maptools", "methods", "purrr",
-          "rlang", "RSQLite", "stringr", "tidyr", "ggmap", "RCurl", "roxygen2",
-          "spelling", "testthat")
-pkgs_to_install <- pkgs[!(pkgs %in% installed.packages()[, "Package"])]
-if(length(pkgs_to_install)) install.packages(pkgs_to_install)
+remotes::install_deps()
 
 
 ## IF MERGING SANDBOX
@@ -64,7 +59,7 @@ spelling::update_wordlist() # All remaining words will be added to the ignore WO
 ## Finalize package version
 # - Update DESCRIPTION - package version
 # - Update .onLoad - API version
-v <- "4.0.0"
+v <- "4.0.0.9000"
 v <- packageVersion("motus") # If dev version loaded with devtools::load_all()
 
 ## Checks
@@ -76,10 +71,10 @@ system("cd ..; R CMD build motus")
 system(paste0("cd ..; R CMD check motus_", v, ".tar.gz"))
 system(paste0("cd ..; R CMD check motus_", v, ".tar.gz --as-cran"))
 
-rhub::check_on_linux(show_status = FALSE)
-rhub::check_on_macos(show_status = FALSE)
-rhub::check_on_windows(show_status = FALSE)
-rhub::check_for_cran(show_status = FALSE)
+rhub::check_on_linux(paste0("../motus_", v, ".tar.gz"), show_status = FALSE)
+rhub::check_on_macos(paste0("../motus_", v, ".tar.gz"), show_status = FALSE)
+rhub::check_on_windows(paste0("../motus_", v, ".tar.gz"), show_status = FALSE)
+rhub::check_for_cran(paste0("../motus_", v, ".tar.gz"), show_status = FALSE)
 
 ## Windows checks (particularly if submitting to CRAN)
 devtools::check_win_release() # Win builder

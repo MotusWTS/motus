@@ -4,8 +4,7 @@
 \alias{getGPS}
 \title{Get GPS variables}
 \usage{
-getGPS(src, data = NULL, by = "daily", cutoff = NULL,
-  keepAll = FALSE)
+getGPS(src, data = NULL, by = "daily", cutoff = NULL, keepAll = FALSE)
 }
 \arguments{
 \item{src}{src_sqlite object representing the motus database}

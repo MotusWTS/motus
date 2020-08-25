@@ -4,8 +4,14 @@
 \alias{getRuns}
 \title{Returns a dataframe containing runs}
 \usage{
-getRuns(src, ts.min = NA, ts.max = NA, match.partial = TRUE,
-  motusTagID = c(), ambigID = c())
+getRuns(
+  src,
+  ts.min = NA,
+  ts.max = NA,
+  match.partial = TRUE,
+  motusTagID = c(),
+  ambigID = c()
+)
 }
 \arguments{
 \item{src}{dplyr sqlite src, as returned by \code{dplyr::src_sqlite()}}

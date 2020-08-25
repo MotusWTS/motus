@@ -4,8 +4,12 @@
 \alias{getMotusDBSrc}
 \title{Get the src_sqlite for a receiver or tag database}
 \usage{
-getMotusDBSrc(recv = NULL, proj = NULL, create = FALSE,
-  dbDir = motus_vars$dbDir)
+getMotusDBSrc(
+  recv = NULL,
+  proj = NULL,
+  create = FALSE,
+  dbDir = motus_vars$dbDir
+)
 }
 \arguments{
 \item{recv}{receiver serial number}
