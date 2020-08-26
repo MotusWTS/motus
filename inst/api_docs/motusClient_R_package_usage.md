@@ -104,7 +104,7 @@ db = tagme("SG-1013BB000626", update=FALSE)
 tagme() ## with no recveiver or project
 
 ```
-Each of these functions returns a `dplyr::src_sqlite` that refers to the
+Each of these functions returns a `dbplyr::src_dbi` that refers to the
 database file on disk.  So you can use all the dplyr functions to
 filter and summarize your data.  The format of tables in these databases
 is described elsewhere.  Most users will find the table called `alltags`

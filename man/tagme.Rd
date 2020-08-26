@@ -4,9 +4,17 @@
 \alias{tagme}
 \title{Download motus tag detections to a database}
 \usage{
-tagme(projRecv, update = TRUE, new = FALSE, dir = getwd(),
-  countOnly = FALSE, forceMeta = FALSE, rename = FALSE,
-  skipActivity = FALSE, skipNodes = FALSE)
+tagme(
+  projRecv,
+  update = TRUE,
+  new = FALSE,
+  dir = getwd(),
+  countOnly = FALSE,
+  forceMeta = FALSE,
+  rename = FALSE,
+  skipActivity = FALSE,
+  skipNodes = FALSE
+)
 }
 \arguments{
 \item{projRecv}{integer. Project code from motus.org, \emph{or} character
@@ -77,7 +85,7 @@ Download motus tag detections to a database
 
 # t = tagme("SG-1234BBBK4567", dir="Projects/gulls")
 
-## update all existing project and receiver databases in \\code{dir}
+## update all existing project and receiver databases in \code{dir}
 # tagme()
 
 }

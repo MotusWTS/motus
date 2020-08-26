@@ -4,8 +4,15 @@
 \alias{plotRouteMap}
 \title{Map of tag routes and sites coloured by id}
 \usage{
-plotRouteMap(data, zoom = 3, lat = NULL, lon = NULL,
-  maptype = "terrain", recvStart = NULL, recvEnd = NULL)
+plotRouteMap(
+  data,
+  zoom = 3,
+  lat = NULL,
+  lon = NULL,
+  maptype = "terrain",
+  recvStart = NULL,
+  recvEnd = NULL
+)
 }
 \arguments{
 \item{data}{a .motus sql file}

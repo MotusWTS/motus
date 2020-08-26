@@ -1,4 +1,23 @@
-# motus 3.1.0
+# motus 4.0.0
+
+### Small Changes
+* Add `test` to metadata in `tagDeps` table to identify test deployments 
+  (`tagDeployTest` in `alltags` and `alltagsGPS` views)
+* Add `age` and `sex` to metadata in `tagDeps` table
+* For CTT SensorStation V2
+    * Add `lat_mean`, `lon_mean`, and `n_fixes` to `gps` table
+    * Add `nodets`, `firmware`, `solarVolt`, `solarCurrent`, `solarCurrentCumul`, `lat`, and `lon` to `nodeData` table
+    * Add `validated` to `hits` table
+
+### Bug fixes
+* Downloading hits no longer fails if extra columns are supplied by the server
+
+### Internal changes
+* Internal workings of major `motusUpdateXXX()` functions split into multiple
+  smaller functions to make testing more efficient
+* Added mockery package for mock testing
+
+# motus 3.0.1
 
 ### Small Changes
 * Receiver downloads now have similar progress messages to Project downloads

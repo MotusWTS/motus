@@ -5,9 +5,16 @@
 \title{Export results of an sqlite query to an .rds file using limited
 memory (Linux, OS X; not Windows)}
 \usage{
-sqliteToRDS(con, query, bind.data = data.frame(), out, classes = NULL,
-  rowsPerBlock = 10000, stringsAsFactors = TRUE,
-  factorQueries = NULL)
+sqliteToRDS(
+  con,
+  query,
+  bind.data = data.frame(),
+  out,
+  classes = NULL,
+  rowsPerBlock = 10000,
+  stringsAsFactors = TRUE,
+  factorQueries = NULL
+)
 }
 \arguments{
 \item{con}{connection to sqlite database}

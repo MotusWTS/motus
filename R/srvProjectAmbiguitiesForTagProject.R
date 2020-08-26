@@ -17,7 +17,9 @@
 #'
 #' @noRd
 
-srvProjectAmbiguitiesForTagProject = function(projectID) {
-    x = srvQuery(API=motus_vars$API_PROJECT_AMBIGUITIES_FOR_TAG_PROJECT, params=list(projectID=projectID))
+srvProjectAmbiguitiesForTagProject = function(projectID, verbose = FALSE) {
+    x = srvQuery(API=motus_vars$API_PROJECT_AMBIGUITIES_FOR_TAG_PROJECT,
+                 params=list(projectID=projectID),
+                 verbose = verbose)
     return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
 }

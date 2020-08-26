@@ -4,7 +4,9 @@
 \name{shorebirds}
 \alias{shorebirds}
 \title{Example shorebirds tags download from Motus}
-\format{A data frame with 108826 rows and 62 variables:}
+\format{
+A data frame with 108826 rows and 62 variables:
+}
 \usage{
 shorebirds
 }

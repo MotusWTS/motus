@@ -87,7 +87,10 @@ gpsts   DOUBLE,                              -- gps timestamp
 lat     DOUBLE,                              -- latitude, decimal degrees
 lon     DOUBLE,                              -- longitude, decimal degrees
 alt     DOUBLE,                              -- altitude, metres
-quality INTEGER
+quality INTEGER,
+lat_mean DOUBLE,
+lon_mean DOUBLE,
+n_fixes INTEGER
 )");
     
     sql("create index gps_gpsID on gps ( gpsID )")
@@ -177,8 +180,9 @@ CREATE TABLE hits (
                                                    -- e.g. Lotek)
     slop FLOAT(24),                                -- discrepancy of pulse timing, in msec (NULL okay;
                                                    -- e.g. Lotek)
-    burstSlop FLOAT (24)                           -- discrepancy of burst timing, in msec (NULL okay;
+    burstSlop FLOAT (24),                          -- discrepancy of burst timing, in msec (NULL okay;
                                                    -- e.g. Lotek)
+    validated TINYINT
 );
 ")
     sql("CREATE INDEX IF NOT EXISTS hits_batchID_ts on hits(batchID, ts)")
@@ -259,7 +263,10 @@ CREATE TABLE tagDeps (
    bi REAL,
    tsStartCode INTEGER,
    tsEndCode INTEGER,
-   fullID TEXT
+   fullID TEXT,
+   age TEXT,
+   sex TEXT,
+   test INTEGER
 );
 ")
     sql("CREATE INDEX IF NOT EXISTS tagDeps_projectID on tagDeps(projectID)")
@@ -359,6 +366,7 @@ CREATE TABLE antDeps (
    mountBearing REAL,
    polarization2 REAL,
    polarization1 REAL,
+   antFreq REAL,
    primary key(deployID, port)
 );
 ")
@@ -528,7 +536,14 @@ makeTables <- function(type, name = type) {
     "ant TEXT NOT NULL,",
     "sig FLOAT(24),",
     "battery FLOAT,",
-    "temperature FLOAT);")
+    "temperature FLOAT,",
+    "nodets FLOAT,",
+    "firmware VARCHAR(20),",
+    "solarVolt FLOAT,",
+    "solarCurrent FLOAT,",
+    "solarCurrentCumul FLOAT,",
+    "lat FLOAT,",
+    "lon FLOAT);")
   } else s <- character()
   s
 }

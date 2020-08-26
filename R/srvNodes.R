@@ -20,17 +20,19 @@
 #' 
 #' @noRd
 
-srvNodes = function(batchID, projectID = NULL, nodeDataID = 0) {
+srvNodes = function(batchID, projectID = NULL, nodeDataID = 0, verbose = FALSE) {
 
   if(is.null(projectID)) {
     x <- srvQuery(API = motus_vars$API_NODES_FOR_RECEIVER, 
                   params = list(batchID = batchID, 
-                                nodeDataID = nodeDataID))
+                                nodeDataID = nodeDataID),
+                  verbose = verbose)
   } else {
     x <- srvQuery(API = motus_vars$API_NODES_FOR_TAG_PROJECT, 
                   params = list(projectID = projectID, 
                                 batchID = batchID, 
-                                nodeDataID = nodeDataID))
+                                nodeDataID = nodeDataID),
+                  verbose = verbose)
   }
   if(length(x) > 0) {
     x <- structure(x, class = "data.frame", 

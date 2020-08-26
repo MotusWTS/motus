@@ -4,8 +4,7 @@
 \alias{createRunsFilter}
 \title{Create a new filter records that can be applied to runs}
 \usage{
-createRunsFilter(src, filterName, motusProjID = NA, descr = NA,
-  update = FALSE)
+createRunsFilter(src, filterName, motusProjID = NA, descr = NA, update = FALSE)
 }
 \arguments{
 \item{src}{dplyr sqlite src, as returned by \code{dplyr::src_sqlite()}}

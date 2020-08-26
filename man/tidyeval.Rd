@@ -13,7 +13,7 @@ character vector.
 \item \code{\link[rlang]{expr}()} and \code{\link[rlang]{quo}()} quote
 one expression. \code{quo()} wraps the quoted expression in a quosure.
 
-The plural variants \code{\link[rlang:exprs]{rlang::exprs()}} and
+The plural variants \code{\link[rlang:nse-defuse]{rlang::exprs()}} and
 \code{\link[rlang]{quos}()} return a list of quoted expressions or
 quosures.
 \item \code{\link[rlang]{enexpr}()} and \code{\link[rlang]{enquo}()}

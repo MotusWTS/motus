@@ -49,8 +49,10 @@
 #'
 #' @noRd
 
-srvRecvMetadataForProjects = function(projectIDs) {
-    x = srvQuery(API=motus_vars$API_RECV_METADATA_FOR_PROJECTS, params=list(projectIDs=projectIDs))
+srvRecvMetadataForProjects = function(projectIDs, verbose = FALSE) {
+    x = srvQuery(API=motus_vars$API_RECV_METADATA_FOR_PROJECTS,
+                 params=list(projectIDs=projectIDs),
+                 verbose = verbose)
     return (list(
         recvDeps = structure(x$recvDeps, class = "data.frame", row.names=seq(along=x$recvDeps[[1]])),
         antDeps = structure(x$antDeps, class = "data.frame", row.names=seq(along=x$antDeps[[1]])),

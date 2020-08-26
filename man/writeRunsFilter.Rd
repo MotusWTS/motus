@@ -4,8 +4,14 @@
 \alias{writeRunsFilter}
 \title{Write to the local database the probabilities associated with runs for a filter}
 \usage{
-writeRunsFilter(src, filterName, motusProjID = NA, df,
-  overwrite = TRUE, delete = FALSE)
+writeRunsFilter(
+  src,
+  filterName,
+  motusProjID = NA,
+  df,
+  overwrite = TRUE,
+  delete = FALSE
+)
 }
 \arguments{
 \item{src}{dplyr sqlite src, as returned by \code{dplyr::src_sqlite()}}

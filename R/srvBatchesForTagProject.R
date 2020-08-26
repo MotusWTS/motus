@@ -17,7 +17,9 @@
 #'
 #' @noRd
 
-srvBatchesForTagProject = function(projectID, batchID=0) {
-    x = srvQuery(API=motus_vars$API_BATCHES_FOR_TAG_PROJECT, params=list(projectID=projectID, batchID=batchID))
+srvBatchesForTagProject = function(projectID, batchID=0, verbose = FALSE) {
+    x = srvQuery(API = motus_vars$API_BATCHES_FOR_TAG_PROJECT, 
+                 params = list(projectID = projectID, batchID = batchID),
+                 verbose = verbose)
     return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
 }

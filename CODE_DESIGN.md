@@ -71,9 +71,10 @@ projects/receivers.
 
 ### Adding a new field/column
 - Make change to `ensureDBTables()`
-- Add update to `data-raw/updatesql.R` (run script)
-- Add test to make sure new field is added
+- Add update to `data-raw/updatesql.R` (run script, re-build package locally)
+- Add test to make sure new field is added (test_sqlite and test_data_returned)
 - Update internal data `source("data-raw/sample_data.R")`
+- Update NEWS.md
 - Push!
 
 

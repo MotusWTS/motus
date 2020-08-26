@@ -140,9 +140,9 @@ test_that("getBatches() returns batch subset", {
   expect_null(getBatches(tags, cutoff = NULL))
   expect_silent(b1 <- getBatches(tags, cutoff = 15)) %>%
     expect_is("data.frame")
-  expect_false(all(purrr::map_int(b1$b, length) == 48))
+  expect_false(length(unique(purrr::map_int(b1$b, length))) == 1)
   expect_silent(b2 <- getBatches(tags, cutoff = 1000))
-  expect_true(all(purrr::map_int(b2$b, length) == 48))
+  expect_true(length(unique(purrr::map_int(b2$b, length))) == 1)
   
   b <- dplyr::tbl(tags, "batches") %>% 
     dplyr::collect()
@@ -230,9 +230,10 @@ test_that("calcGPS() matches GPS by = 5", {
   expect_equal(g$gpsTs_min, g$gpsTs_max) # No medians
   expect_true(all(abs(g$gpsTs_min - g$ts) <= 5))
   expect_true(all(abs(g$gpsTs_max - g$ts) <= 5))
-  g1 <- dplyr::left_join(dplyr::select(g, hitts = ts, ts = gpsTs_min, 
+  g1 <- dplyr::left_join(dplyr::select(g, batchID, hitts = ts, ts = gpsTs_min, 
                                        gpsLat, gpsLon, gpsAlt), 
-                         dplyr::collect(dplyr::tbl(tags, "gps")), by = "ts")
+                         dplyr::collect(dplyr::tbl(tags, "gps")), by = c("ts", "batchID")) %>%
+    dplyr::filter(!is.na(lat), !is.na(lon))
   expect_equal(g1$gpsLat, g1$lat)
   expect_equal(g1$gpsLon, g1$lon)
   expect_equal(g1$gpsAlt, g1$alt)
@@ -289,12 +290,10 @@ test_that("calcGPS() matches GPS by = 'closest'", {
 })   
 
 test_that("getGPS errors", {
-
   tags <- dbplyr::src_dbi(con = DBI::dbConnect(RSQLite::SQLite(), 
-                                               "temp.motus"))
+                                               ":memory:"))
   expect_error(getGPS(tags))
   DBI::dbDisconnect(tags$con)
-  unlink("temp.motus")
 
   file.copy(system.file("extdata", "gps_sample.motus", package = "motus"), ".")  
   tags <- dbplyr::src_dbi(con = DBI::dbConnect(RSQLite::SQLite(), "gps_sample.motus"))

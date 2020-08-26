@@ -20,7 +20,9 @@
 #' which receiver they come from.  It is only available to administrative users,
 #' and calling it as a non-administrative user stops with an error.
 
-srvBatchesForAll = function(batchID=0) {
-    x = srvQuery(API=motus_vars$API_BATCHES_FOR_ALL, params=list(batchID=batchID))
+srvBatchesForAll = function(batchID=0, verbose = FALSE) {
+    x = srvQuery(API=motus_vars$API_BATCHES_FOR_ALL, 
+                 params=list(batchID=batchID),
+                 verbose = verbose)
     return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
 }

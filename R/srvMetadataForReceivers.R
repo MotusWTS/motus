@@ -49,8 +49,10 @@
 #'
 #' @noRd
 
-srvMetadataForReceivers = function(deviceIDs) {
-    x = srvQuery(API=motus_vars$API_METADATA_FOR_RECEIVERS, params=list(deviceIDs=deviceIDs))
+srvMetadataForReceivers = function(deviceIDs, verbose = FALSE) {
+    x = srvQuery(API=motus_vars$API_METADATA_FOR_RECEIVERS, 
+                 params=list(deviceIDs=deviceIDs),
+                 verbose = verbose)
     return (list(
         recvDeps = structure(x$recvDeps, class = "data.frame", row.names=seq(along=x$recvDeps[[1]])),
         antDeps = structure(x$antDeps, class = "data.frame", row.names=seq(along=x$antDeps[[1]])),

@@ -17,8 +17,9 @@
 #' 
 #' @noRd
 
-srvActivityForBatches <- function(batchID = 0, ant = NULL, hourBin = NULL) {
+srvActivityForBatches <- function(batchID = 0, ant = NULL, hourBin = NULL, verbose = FALSE) {
   x <- srvQuery(API = motus_vars$API_ACTIVITY_FOR_BATCHES,
-                params = list(batchID = batchID, ant = ant, hourBin = hourBin))
+                params = list(batchID = batchID, ant = ant, hourBin = hourBin),
+                verbose = verbose)
   return (structure(x, class = "data.frame", row.names = seq(along = x[[1]])))
 }

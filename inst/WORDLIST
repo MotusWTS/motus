@@ -76,6 +76,7 @@ Rinternals
 runFilters
 runID
 sensorgnome
+SensorStation
 Sep
 SG
 sig
@@ -108,5 +109,6 @@ updateMotusDb
 userLogin
 userPassword
 v1
+V2
 watercolor
 XDR

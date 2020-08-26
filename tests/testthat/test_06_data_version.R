@@ -80,10 +80,13 @@ test_that("Database updates as expected (proj) - new = FALSE", {
                                  dplyr::mutate(ant = as.character(.data$ant)),
                                dplyr::tbl(new, "activity") %>% dplyr::collect()))
               
-  expect_true(dplyr::all_equal(dplyr::tbl(old, "hits") %>% 
-                                 dplyr::filter(batchID %in% b) %>%
-                                 dplyr::collect(),
-                               dplyr::tbl(new, "hits") %>% dplyr::collect()))
+  # Ignore new columns
+  h <- dplyr::tbl(old, "hits") %>% 
+    dplyr::filter(batchID %in% b) %>%
+    dplyr::collect()
+  expect_true(dplyr::all_equal(h, dplyr::tbl(new, "hits") %>% 
+                                 dplyr::select(tidyselect::any_of(names(h))) %>%
+                                 dplyr::collect()))
   
   expect_true(dplyr::all_equal(dplyr::tbl(old, "runs") %>% 
                                  dplyr::filter(batchIDbegin %in% b) %>%

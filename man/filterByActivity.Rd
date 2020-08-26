@@ -4,8 +4,15 @@
 \alias{filterByActivity}
 \title{Filter \code{alltags} by \code{activity}}
 \usage{
-filterByActivity(src, return = "good", view = "alltags", minLen = 3,
-  maxLen = 5, maxRuns = 100, ratio = 0.85)
+filterByActivity(
+  src,
+  return = "good",
+  view = "alltags",
+  minLen = 3,
+  maxLen = 5,
+  maxRuns = 100,
+  ratio = 0.85
+)
 }
 \arguments{
 \item{src}{src_sqlite object representing the database}

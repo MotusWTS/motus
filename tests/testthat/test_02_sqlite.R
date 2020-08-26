@@ -31,7 +31,24 @@ test_that("ensureDBTables() creates database", {
   }
   expect_equal(nrow(DBI::dbGetQuery(temp$con, "SELECT * FROM admInfo")), 1)
   expect_equal(nrow(DBI::dbGetQuery(temp$con, "SELECT * FROM meta")), 2)
+  
+  # Expect new columns age/sex in tagDeps
+  expect_true(all(c("age", "sex") %in% DBI::dbListFields(temp$con, "tagDeps")))
+  
+  # Expect new columns in gps
+  expect_true(all(c("lat_mean", "lon_mean", "n_fixes") %in% 
+                    DBI::dbListFields(temp$con, "gps")))
+  
+  # Expect new columns in nodeData
+  expect_true(all(c("nodets", "firmware", "solarVolt", "solarCurrent", 
+                    "solarCurrentCumul", "lat", "lon") %in% 
+                    DBI::dbListFields(temp$con, "nodeData")))
+  
+  # Expect new columns in hits
+  expect_true(all(c("validated") %in% DBI::dbListFields(temp$con, "hits")))
+
   unlink("temp.motus")
+
 })
 
 test_that("new tables have character ant and port", {
