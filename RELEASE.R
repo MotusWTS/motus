@@ -37,7 +37,7 @@ remotes::install_deps()
 
 
 ## IF MERGING SANDBOX
-# - Make sure that updatesql.R updates unique to sandbox have a date later than
+# - Make sure that data-raw/updatesql.R updates unique to sandbox have a date later than
 #   beta updates (otherwise they won't trigger)
 
 ## Update internal data files
@@ -59,7 +59,7 @@ spelling::update_wordlist() # All remaining words will be added to the ignore WO
 ## Finalize package version
 # - Update DESCRIPTION - package version
 # - Update .onLoad - API version
-v <- "4.0.0.9000"
+v <- "4.0.0"
 v <- packageVersion("motus") # If dev version loaded with devtools::load_all()
 
 ## Checks
