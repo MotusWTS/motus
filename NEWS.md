@@ -1,10 +1,10 @@
 # motus 4.0.0
 
 ### Small Changes
-* Add `test` to metadata in `tagDeps` table (`tagDeployTest` in `alltags` and
-  `alltagsGPS` views)
+* Add `test` to metadata in `tagDeps` table to identify test deployments 
+  (`tagDeployTest` in `alltags` and `alltagsGPS` views)
 * Add `age` and `sex` to metadata in `tagDeps` table
-* For CTT V2
+* For CTT SensorStation V2
     * Add `lat_mean`, `lon_mean`, and `n_fixes` to `gps` table
     * Add `nodets`, `firmware`, `solarVolt`, `solarCurrent`, `solarCurrentCumul`, `lat`, and `lon` to `nodeData` table
     * Add `validated` to `hits` table
