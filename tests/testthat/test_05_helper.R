@@ -290,12 +290,10 @@ test_that("calcGPS() matches GPS by = 'closest'", {
 })   
 
 test_that("getGPS errors", {
-
   tags <- dbplyr::src_dbi(con = DBI::dbConnect(RSQLite::SQLite(), 
-                                               "temp.motus"))
+                                               ":memory:"))
   expect_error(getGPS(tags))
   DBI::dbDisconnect(tags$con)
-  unlink("temp.motus")
 
   file.copy(system.file("extdata", "gps_sample.motus", package = "motus"), ".")  
   tags <- dbplyr::src_dbi(con = DBI::dbConnect(RSQLite::SQLite(), "gps_sample.motus"))
