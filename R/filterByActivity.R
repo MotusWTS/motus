@@ -74,7 +74,7 @@ filterByActivity <- function(src, return = "good", view = "alltags",
   }
   
   tbl_runs <- dplyr::tbl(src$con, "runs") %>% 
-    dplyr::mutate(hourBin = round(.data$tsBegin/3600, 0))
+    dplyr::mutate(hourBin = floor(.data$tsBegin/3600))
   
   tbl_activity <- dplyr::tbl(src$con, "activity")
   
