@@ -13,15 +13,15 @@ teardown({
 test_that("hitsByBatchProject doesn't fail on extra columns", {
   sample_auth()
   file.copy(system.file("extdata", "project-176.motus", package = "motus"), ".")
-  tags <- safeSQL(tagme(176, new = FALSE, update = FALSE))
+  tags <- tagme(176, new = FALSE, update = FALSE)
   DBI::dbExecute(tags$con, "DELETE FROM projBatch")
   DBI::dbExecute(tags$con, "DELETE FROM hits")
-  
+  tags_sql <- safeSQL(tags)
   
   expect_silent(h0 <- srvHitsForTagProject(projectID = 176, 
                                            batchID = 53, 
                                            hitID = 0))
-  expect_message(h1 <- hitsForBatchProject(sql = tags, 
+  expect_message(h1 <- hitsForBatchProject(sql = tags_sql, 
                                            projectID = 176, 
                                            batchID = 53,
                                            batchMsg = "temp"))
@@ -36,7 +36,7 @@ test_that("hitsByBatchProject doesn't fail on extra columns", {
   DBI::dbExecute(tags$con, "DELETE FROM hits")
   m <- mockery::mock(dplyr::mutate(h0, EXTRA_COL = 0), data.frame())
   with_mock("motus:::srvHitsForTagProject" = m,
-            expect_message(hitsForBatchProject(sql = tags, 
+            expect_message(hitsForBatchProject(sql = tags_sql, 
                                                projectID = 176, 
                                                batchID = 53,
                                                batchMsg = "temp")))
@@ -48,12 +48,13 @@ test_that("hitsByBatchReceiver doesn't fail on extra columns", {
   skip_if_no_file(f)
   
   file.copy(f, ".")
-  tags <- safeSQL(tagme("SG-3115BBBK0782", new = FALSE, update = FALSE))
+  tags <- tagme("SG-3115BBBK0782", new = FALSE, update = FALSE)
   DBI::dbExecute(tags$con, "DELETE FROM hits")
+  tags_sql <- safeSQL(tags)
   
   expect_silent(h0 <- srvHitsForReceiver(batchID = 417054, 
                                          hitID = 0))
-  expect_message(hitsForBatchReceiver(sql = tags, 
+  expect_message(hitsForBatchReceiver(sql = tags_sql, 
                                       batchID = 417054,
                                       batchMsg = "temp"))
   expect_true(dplyr::all_equal(h0, dplyr::tbl(tags$con, "hits") %>% 
@@ -65,7 +66,7 @@ test_that("hitsByBatchReceiver doesn't fail on extra columns", {
   DBI::dbExecute(tags$con, "DELETE FROM hits")
   m <- mockery::mock(dplyr::mutate(h0, EXTRA_COL = 0), data.frame())
   with_mock("motus:::srvHitsForReceiver" = m,
-            expect_message(hitsForBatchReceiver(sql = tags, 
+            expect_message(hitsForBatchReceiver(sql = tags_sql, 
                                                 batchID = 53,
                                                 batchMsg = "temp")))
 })

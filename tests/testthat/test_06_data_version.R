@@ -74,11 +74,8 @@ test_that("Database updates as expected (proj) - new = FALSE", {
   expect_named(dplyr::tbl(new, "admInfo") %>% dplyr::collect(), 
                expected = c("db_version", "data_version"))  # New version
   
-  expect_true(dplyr::all_equal(dplyr::tbl(old, "activity") %>% 
-                                 dplyr::filter(batchID %in% b) %>%
-                                 dplyr::collect() %>%
-                                 dplyr::mutate(ant = as.character(.data$ant)),
-                               dplyr::tbl(new, "activity") %>% dplyr::collect()))
+  expect_true(all(sort(DBI::dbListFields(old, "activity")) %in%
+                    sort(DBI::dbListFields(new, "activity"))))
               
   # Ignore new columns
   h <- dplyr::tbl(old, "hits") %>% 
@@ -88,12 +85,8 @@ test_that("Database updates as expected (proj) - new = FALSE", {
                                  dplyr::select(tidyselect::any_of(names(h))) %>%
                                  dplyr::collect()))
   
-  expect_true(dplyr::all_equal(dplyr::tbl(old, "runs") %>% 
-                                 dplyr::filter(batchIDbegin %in% b) %>%
-                                 dplyr::collect() %>% 
-                                 dplyr::mutate(ant = as.character(.data$ant)),
-                               dplyr::tbl(new, "runs") %>% dplyr::collect() %>% 
-                                 dplyr::select(-nodeNum)))
+  expect_true(all(sort(DBI::dbListFields(old, "runs")) %in%
+                    sort(DBI::dbListFields(new, "runs"))))
   
   DBI::dbDisconnect(old)
   DBI::dbDisconnect(new)
