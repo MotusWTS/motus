@@ -1,4 +1,4 @@
-# motus 4.0.0.9999
+# motus 4.0.1.9999
 
 ### Bug fixes
 * fixed rounding error in `filterByActivity()` resulting in mismatched `hourBins`
