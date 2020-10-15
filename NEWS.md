@@ -2,6 +2,7 @@
 
 ### Bug fixes
 * fixed rounding error in `filterByActivity()` resulting in mismatched `hourBins`
+* fixed incorrect receiver types and model assignment for CTT receivers
 
 # motus 4.0.0
 
