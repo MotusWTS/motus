@@ -1,3 +1,8 @@
+# motus 4.0.1
+
+### Bug fixes
+* Corrected the server address
+
 # motus 4.0.0
 
 ### Small Changes
