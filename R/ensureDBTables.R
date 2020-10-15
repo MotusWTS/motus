@@ -85,20 +85,18 @@ ensureDBTables = function(src, projRecv, deviceID, quiet = FALSE) {
   }
   
   if (! "gps" %in% tables) {
-    sql("
-create table gps (
-gpsID   BIGINT PRIMARY KEY,                  -- id
-batchID INTEGER NOT NULL REFERENCES batches, -- batch from which this fix came
-ts      DOUBLE,                              -- system timestamp for this record
-gpsts   DOUBLE,                              -- gps timestamp
-lat     DOUBLE,                              -- latitude, decimal degrees
-lon     DOUBLE,                              -- longitude, decimal degrees
-alt     DOUBLE,                              -- altitude, metres
-quality INTEGER,
-lat_mean DOUBLE,
-lon_mean DOUBLE,
-n_fixes INTEGER
-)");
+    sql(paste("create table gps (",
+              "gpsID   BIGINT PRIMARY KEY,                  -- id",
+              "batchID INTEGER NOT NULL REFERENCES batches, -- batch from which this fix came",
+              "ts      DOUBLE,                              -- system timestamp for this record",
+              "gpsts   DOUBLE,                              -- gps timestamp",
+              "lat     DOUBLE,                              -- latitude, decimal degrees",
+              "lon     DOUBLE,                              -- longitude, decimal degrees",
+              "alt     DOUBLE,                              -- altitude, metres",
+              "quality INTEGER,",
+              "lat_mean DOUBLE,",
+              "lon_mean DOUBLE,",
+              "n_fixes INTEGER);", sep = "\n"))
     
     sql("create index gps_gpsID on gps ( gpsID )")
     
@@ -108,32 +106,30 @@ n_fixes INTEGER
   }
   
   if (! "batches" %in% tables) {
-    sql("
-CREATE TABLE batches (
-    batchID INTEGER PRIMARY KEY,       -- unique identifier for this batch
-    motusDeviceID INTEGER,                    -- motus ID of this receiver (NULL means not yet
-                                              -- registered or not yet looked-up)  In a receiver
-                                              -- database, this will be a constant column, but
-                                              -- that way it has the same schema as in the master
-                                              -- database.
-    monoBN INT,                               -- boot number for this receiver; (NULL
-                                              -- okay; e.g. Lotek)
-    tsStart FLOAT(53),                        -- timestamp for start of period
-                                              -- covered by batch; unix-style:
-                                              -- seconds since 1 Jan 1970 GMT
-    tsEnd FLOAT(53),                          -- timestamp for end of period
-                                              -- covered by batch; unix-style:
-                                              -- seconds since 1 Jan 1970 GMT
-    numHits BIGINT,                           -- count of hits in this batch
-    ts FLOAT(53),                             -- timestamp when this batch record was
-                                              -- added; unix-style: seconds since 1
-                                              -- Jan 1970 GMT
-    motusUserID INT,                          -- user who uploaded the data leading to this batch
-    motusProjectID INT,                       -- user-selected motus project ID for this batch
-    motusJobID INT,                            -- job whose processing generated this batch
-    source     TEXT                           -- tag source
-);
-")
+    sql(paste("CREATE TABLE batches (",
+              "batchID INTEGER PRIMARY KEY,              -- unique identifier for this batch",
+              "motusDeviceID INTEGER,                    -- motus ID of this receiver (NULL means not yet",
+              "                                          -- registered or not yet looked-up)  In a receiver",
+              "                                          -- database, this will be a constant column, but",
+              "                                          -- that way it has the same schema as in the master",
+              "                                          -- database.",
+              "monoBN INT,                               -- boot number for this receiver; (NULL",
+              "                                          -- okay; e.g. Lotek)",
+              "tsStart FLOAT(53),                        -- timestamp for start of period",
+              "                                          -- covered by batch; unix-style:",
+              "                                          -- seconds since 1 Jan 1970 GMT",
+              "tsEnd FLOAT(53),                          -- timestamp for end of period",
+              "                                          -- covered by batch; unix-style:",
+              "                                          -- seconds since 1 Jan 1970 GMT",
+              "numHits BIGINT,                           -- count of hits in this batch",
+              "ts FLOAT(53),                             -- timestamp when this batch record was",
+              "                                          -- added; unix-style: seconds since 1",
+              "                                          -- Jan 1970 GMT",
+              "motusUserID INT,                          -- user who uploaded the data leading to this batch",
+              "motusProjectID INT,                       -- user-selected motus project ID for this batch",
+              "motusJobID INT,                           -- job whose processing generated this batch",
+              "source     TEXT                           -- tag source",
+              ");", sep = "\n"))
   }
   
   
