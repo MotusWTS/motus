@@ -130,7 +130,7 @@ safeSQL = function(con, busyTimeout = 300) {
                     },
                     error = function(e) {
                         if (! grepl("database is locked", as.character(e)))
-                            stop(e) ## re-throw if the error isn't due to a locked database
+                            stop(e, call. = FALSE) ## re-throw if the error isn't due to a locked database
                     })
                     ## failed due to locked database; wait a while and retry
                     Sys.sleep(10 * stats::runif(1))
@@ -161,7 +161,7 @@ safeSQL = function(con, busyTimeout = 300) {
                         return(queryFun(con, q)),
                         error = function(e) {
                             if (! grepl("Deadlock.*try restarting transaction", as.character(e), perl=TRUE))
-                                stop(e) ## re-throw if error isn't due to a locked database
+                                stop(e, call. = FALSE) ## re-throw if error isn't due to a locked database
                         })
                     ## failed due to locked database; wait a while and retry
                     Sys.sleep(10 * stats::runif(1))

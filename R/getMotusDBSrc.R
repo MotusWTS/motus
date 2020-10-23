@@ -23,7 +23,7 @@
 
 getMotusDBSrc = function(recv=NULL, proj=NULL, create = FALSE, dbDir = motus_vars$dbDir) {
     if (missing(recv) + missing(proj) != 1)
-        stop("Must specify exactly one of `recv` or `proj`")
+        stop("Must specify exactly one of `recv` or `proj`", call. = FALSE)
     name = if(missing(proj)) recv else sprintf("project-%d", proj)
     src = dplyr::src_sqlite(file.path(dbDir, paste0(name, ".motus")), create)
     ensureDBTables(src, recv, proj)

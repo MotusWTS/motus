@@ -49,9 +49,9 @@ plotRouteMap <- function(data, zoom = 3, lat = NULL, lon = NULL,
          "most recent version.", call. = FALSE)
   }
   
-  if(class(zoom) != "numeric") stop('Numeric value between 3 and 21 required for "zoom"')
-  if(class(lat) %in% c(NULL, "numeric")) stop('Numeric values required for "lat"')
-  if(class(lon) %in% c(NULL, "numeric")) stop('Numeric values required for "lon"')
+  if(class(zoom) != "numeric") stop('Numeric value between 3 and 21 required for "zoom"', call. = FALSE)
+  if(class(lat) %in% c(NULL, "numeric")) stop('Numeric values required for "lat"', call. = FALSE)
+  if(class(lon) %in% c(NULL, "numeric")) stop('Numeric values required for "lon"', call. = FALSE)
 
   site <- dplyr::tbl(data, "recvDeps")
   site <- site %>% 

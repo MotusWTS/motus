@@ -74,7 +74,7 @@ tagme = function(projRecv, update = TRUE, new = FALSE, dir = getwd(),
                       }))
     }
     if (length(projRecv) != 1 || (! is.numeric(projRecv) && ! is.character(projRecv)))
-        stop("You must specify one integer project ID or character receiver serial number.")
+        stop("You must specify one integer project ID or character receiver serial number.", call. = FALSE)
     if (is.character(projRecv) && grepl("\\.motus$", projRecv, ignore.case=TRUE))
         projRecv = gsub("\\.motus$", projRecv, ignore.case=TRUE)
     dbname = getDBFilename(projRecv, dir)
@@ -82,8 +82,8 @@ tagme = function(projRecv, update = TRUE, new = FALSE, dir = getwd(),
     if (! new && ! have)
         stop("Database ", dbname, " does not exist.\n",
              "If you *really* want to create a new database, specify 'new=TRUE'\n",
-             "But maybe you just need to specify 'dir=' to tell me where to find it?"
-             )
+             "But maybe you just need to specify 'dir=' to tell me where to find it?", 
+             call. = FALSE)
     if (new && have) {
         warning("Database ", dbname, " already exists, so I'm ignoring the ",
                 "'new=TRUE' option", immediate. = TRUE)

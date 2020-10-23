@@ -14,10 +14,10 @@
 
 ensureDBTables = function(src, projRecv, deviceID, quiet = FALSE) {
   if (! inherits(src, "src_sql"))
-    stop("src is not a dplyr::src_sql object")
+    stop("src is not a dplyr::src_sql object", call. = FALSE)
   con = src$con
   if (! inherits(con, "SQLiteConnection"))
-    stop("src is not open or is corrupt; underlying db connection invalid")
+    stop("src is not open or is corrupt; underlying db connection invalid", call. = FALSE)
   
   ## function to send a single statement to the underlying connection
   sql = function(...) DBI::dbExecute(con, sprintf(...))
@@ -31,14 +31,14 @@ ensureDBTables = function(src, projRecv, deviceID, quiet = FALSE) {
   
   isRecvDB = is.character(projRecv)
   if (! "meta" %in% tables) {
-    if (missing(projRecv)) stop("you must specify a project number or receiver serial number for a new database")
+    if (missing(projRecv)) stop("you must specify a project number or receiver serial number for a new database", call. = FALSE)
     sql(paste("create table meta (",
                "key  character not null unique primary key, -- name of key for meta data",
                "val  character                              -- character string giving meta data; might be in JSON format)",
                ");", sep = "\n"))
     if (isRecvDB)  {
       if (missing(deviceID) || ! isTRUE(is.numeric(deviceID))) {
-        stop("must specify deviceID for new receiver database")
+        stop("must specify deviceID for new receiver database", call. = FALSE)
       }
       type <- tolower(stringr::str_remove(projRecv, "-(.)*$"))
       
@@ -80,7 +80,7 @@ ensureDBTables = function(src, projRecv, deviceID, quiet = FALSE) {
                  "('tagProject', %d)", sep = "\n"),
           projRecv)
     } else {
-      stop("projRecv must be an integer motus project ID or a character receiver serial number")
+      stop("projRecv must be an integer motus project ID or a character receiver serial number", call. = FALSE)
     }
   }
   

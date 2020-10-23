@@ -119,11 +119,13 @@ sqliteToRDS = function(con, query, bind.data=data.frame(), out, classes = NULL,
 
     ## make sure column names specified in parameter 'classes' exist in result:
     if (! all(names(classes) %in% col[[1]]))
-        stop("You specified classes for these columns which are not in the result:\n", paste(setdiff(names(classes), col[[1]]), collapse=", "))
+        stop("You specified classes for these columns which are not in the result:\n", 
+             paste(setdiff(names(classes), col[[1]]), collapse=", "), call. = FALSE)
 
     ## make sure column names specified in parameter 'factorQueries' exist in result:
     if (! all(names(factorQueries) %in% col[[1]]))
-        stop("You specified factor queries for these columns which are not in the result:\n", paste(setdiff(names(factorQueries), col[[1]]), collapse=", "))
+        stop("You specified factor queries for these columns which are not in the result:\n", 
+             paste(setdiff(names(factorQueries), col[[1]]), collapse=", "), call. = FALSE)
 
     n = nrow(col)
 
