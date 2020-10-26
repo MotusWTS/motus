@@ -49,8 +49,8 @@ pageDataByBatch <- function(src, table, resume = FALSE,
   }  
 
   # Announce
-  message(sprintf("%s: %5d batch records to check", 
-                  table, length(batches)))
+  message(sprintf("%s: %5d %s batch records to check", 
+                  table, length(batches), dplyr::if_else(resume, "new", "")))
   added <- 0
   if(length(batches) > 0) {
     for(i in 1:length(batches)) {
@@ -69,6 +69,13 @@ pageDataByBatch <- function(src, table, resume = FALSE,
         added <- added + nrow(b)
         b <- pageForward(b, batchID, projectID)
       }
+      
+      # Progress messages
+      if(nrow(b) == 0) { 
+        message(sprintf("batchID %8d (#%6d of %6d): got %6d %s records", 
+                        batchID, i, length(batches), 0, table))
+      }
+      
       # If testing, break out after x batches
       if(i >= getOption("motus.test.max") && is_testing()) break
     }
