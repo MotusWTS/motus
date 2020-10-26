@@ -34,7 +34,6 @@ Imports:
 Suggests:
     ggmap (>= 3.0.0),
     mockery,
-    RCurl,
     roxygen2,
     spelling,
     testthat,
