@@ -6,7 +6,7 @@ test_that("table fields match server (sample auth)", {
   tags <- DBI::dbConnect(
     RSQLite::SQLite(), 
     system.file("extdata", "project-176.motus", package = "motus"))
-
+  
   expect_true(
     all(names(srvActivityForBatches(batchID = 53)[1,]) %in%
           DBI::dbListFields(tags, "activity")))
@@ -15,9 +15,9 @@ test_that("table fields match server (sample auth)", {
     all(names(srvBatchesForTagProject(projectID = 176, batchID = 53)[1,]) %in%
           c(DBI::dbListFields(tags, "batches"), "version")))
   
-  expect_named(
-    srvHitsForTagProject(projectID = 176, batchID = 53, hitID = 45107)[1,],
-    DBI::dbListFields(tags, "hits"), ignore.order = TRUE)
+  expect_true(
+    all(names(srvHitsForTagProject(projectID = 176, batchID = 53, hitID = 45107)[1,]) %in%
+              DBI::dbListFields(tags, "hits"), ignore.order = TRUE))
   
   expect_true(
     all(names(srvProjectAmbiguitiesForTagProject(projectID = 176)) %in%

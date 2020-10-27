@@ -15,15 +15,24 @@
 # 
 # When merging changes to master: 
 # 
-# - Make changes, push changes, test changes (beta/sandbox branch)
-# - git checkout master  (master branch)
-# - git merge betaX --no-ff --no-commit  (master branch)
-# - Revert API url to (i.e. should be main url, not point to beta/sandbox APIs)
-# - Committ changes as merge with betaX/sandbox
+# - Change api url to https://motus.org/api
+# - Change version to correct (non-dev) version
+# - Test changes (beta/sandbox branch)
+# - Push
+# - GitHub pull request, make sure tests pass, merge
+# - Sign release
 #
+# # When merging changes from master to sandbox:
+#
+# - git checkout sandbox  (sandbox branch)
+# - git merge master --no-ff --no-commit  (sandbox branch)
+# - Revert API url to (i.e. should be sandbox url, not point to master)
+# - Revert VERSION number (i.e. keep sandbox version, not master version)
+# - Commit changes as merge with master
+# - Check dates on updatesql, sandbox changes should be 'later' than beta
+# 
 # # When merging changes in beta to sandbox: 
 # 
-# - Make changes, push changes, test changes (beta branch)
 # - git checkout sandbox  (sandbox branch)
 # - git merge betaX --no-ff --no-commit  (sandbox branch)
 # - Revert API url to (i.e. should be sandbox url, not point to beta)

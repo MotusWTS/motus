@@ -14,10 +14,10 @@
 
 ensureDBTables = function(src, projRecv, deviceID, quiet = FALSE) {
   if (! inherits(src, "src_sql"))
-    stop("src is not a dplyr::src_sql object")
+    stop("src is not a dplyr::src_sql object", call. = FALSE)
   con = src$con
   if (! inherits(con, "SQLiteConnection"))
-    stop("src is not open or is corrupt; underlying db connection invalid")
+    stop("src is not open or is corrupt; underlying db connection invalid", call. = FALSE)
   
   ## function to send a single statement to the underlying connection
   sql = function(...) DBI::dbExecute(con, sprintf(...))
@@ -30,68 +30,73 @@ ensureDBTables = function(src, projRecv, deviceID, quiet = FALSE) {
   tables = dplyr::src_tbls(src)
   
   isRecvDB = is.character(projRecv)
-  
   if (! "meta" %in% tables) {
-    if (missing(projRecv))
-      stop("you must specify a project number or receiver serial number for a new database")
-    sql("
-create table meta (
-key  character not null unique primary key, -- name of key for meta data
-val  character                              -- character string giving meta data; might be in JSON format
-)
-");
-if (isRecvDB)  {
-  if (missing(deviceID) || ! isTRUE(is.numeric(deviceID))) {
-    stop("must specify deviceID for new receiver database")
-  }
-  if (grepl("^SG", projRecv)) {
-    type = "SENSORGNOME"
-    model = substring(projRecv, 8, 11)
-  } else {
-    type = "Lotek"
-    model = getLotekModel(projRecv)
-  }
-  sql("
-insert into meta (key, val)
-values
-('dbType', 'receiver'),
-('recvSerno', '%s'),
-('recvType', '%s'),
-('recvModel', '%s'),
-('deviceID', '%d')
-",
-      projRecv,
-      type,
-      model,
-      as.integer(deviceID))
-} else if (is.numeric(projRecv)) {
-  sql("
-insert into meta (key, val)
-values
-('dbType', 'tag'),
-('tagProject', %d)
-",
-      projRecv)
-} else {
-  stop("projRecv must be an integer motus project ID or a character receiver serial number")
-}
+    if (missing(projRecv)) stop("you must specify a project number or receiver serial number for a new database", call. = FALSE)
+    sql(paste("create table meta (",
+               "key  character not null unique primary key, -- name of key for meta data",
+               "val  character                              -- character string giving meta data; might be in JSON format)",
+               ");", sep = "\n"))
+    if (isRecvDB)  {
+      if (missing(deviceID) || ! isTRUE(is.numeric(deviceID))) {
+        stop("must specify deviceID for new receiver database", call. = FALSE)
+      }
+      type <- tolower(stringr::str_remove(projRecv, "-(.)*$"))
+      
+      if (type == "sg") {
+        type <- "SENSORGNOME"
+        model <- substring(projRecv, 8, 11)
+      } else if(type == "lotek") {
+        type <- "Lotek"
+        model <- getLotekModel(projRecv)
+      } else if(type == "ctt") {
+        type <- "CTT"
+        n <- nchar(projRecv)
+        if(n == 15 + 4) {
+          model <- "V1"
+        } else if(n == 12 + 4) {
+          model <- "V2"
+        } else stop("Unexpected model for CTT receivers: ", projRecv, call. = FALSE)
+      } else {
+        stop("Unexpected receiver type: ", type, call. = FALSE)
+      }
+        
+      sql(paste("insert into meta (key, val)",
+                 "values",
+                 "('dbType', 'receiver'),",
+                 "('recvSerno', '%s'),",
+                 "('recvType', '%s'),",
+                 "('recvModel', '%s'),",
+                 "('deviceID', '%d')", sep = "\n"),
+          projRecv,
+          type,
+          model,
+          as.integer(deviceID))
+
+      
+    } else if (is.numeric(projRecv)) {
+      sql(paste("insert into meta (key, val)", 
+                 "values",
+                 "('dbType', 'tag'),",
+                 "('tagProject', %d)", sep = "\n"),
+          projRecv)
+    } else {
+      stop("projRecv must be an integer motus project ID or a character receiver serial number", call. = FALSE)
+    }
   }
   
   if (! "gps" %in% tables) {
-    sql("
-create table gps (
-gpsID   BIGINT PRIMARY KEY,                  -- id
-batchID INTEGER NOT NULL REFERENCES batches, -- batch from which this fix came
-ts      DOUBLE,                              -- system timestamp for this record
-gpsts   DOUBLE,                              -- gps timestamp
-lat     DOUBLE,                              -- latitude, decimal degrees
-lon     DOUBLE,                              -- longitude, decimal degrees
-alt     DOUBLE,                              -- altitude, metres
-quality INTEGER,
-lat_mean DOUBLE,
-lon_mean DOUBLE,
-n_fixes INTEGER
-)");
+    sql(paste("create table gps (",
+              "gpsID   BIGINT PRIMARY KEY,                  -- id",
+              "batchID INTEGER NOT NULL REFERENCES batches, -- batch from which this fix came",
+              "ts      DOUBLE,                              -- system timestamp for this record",
+              "gpsts   DOUBLE,                              -- gps timestamp",
+              "lat     DOUBLE,                              -- latitude, decimal degrees",
+              "lon     DOUBLE,                              -- longitude, decimal degrees",
+              "alt     DOUBLE,                              -- altitude, metres",
+              "quality INTEGER,",
+              "lat_mean DOUBLE,",
+              "lon_mean DOUBLE,",
+              "n_fixes INTEGER);", sep = "\n"))
     
     sql("create index gps_gpsID on gps ( gpsID )")
     
@@ -101,32 +106,30 @@ n_fixes INTEGER
   }
   
   if (! "batches" %in% tables) {
-    sql("
-CREATE TABLE batches (
-    batchID INTEGER PRIMARY KEY,       -- unique identifier for this batch
-    motusDeviceID INTEGER,                    -- motus ID of this receiver (NULL means not yet
-                                              -- registered or not yet looked-up)  In a receiver
-                                              -- database, this will be a constant column, but
-                                              -- that way it has the same schema as in the master
-                                              -- database.
-    monoBN INT,                               -- boot number for this receiver; (NULL
-                                              -- okay; e.g. Lotek)
-    tsStart FLOAT(53),                        -- timestamp for start of period
-                                              -- covered by batch; unix-style:
-                                              -- seconds since 1 Jan 1970 GMT
-    tsEnd FLOAT(53),                          -- timestamp for end of period
-                                              -- covered by batch; unix-style:
-                                              -- seconds since 1 Jan 1970 GMT
-    numHits BIGINT,                           -- count of hits in this batch
-    ts FLOAT(53),                             -- timestamp when this batch record was
-                                              -- added; unix-style: seconds since 1
-                                              -- Jan 1970 GMT
-    motusUserID INT,                          -- user who uploaded the data leading to this batch
-    motusProjectID INT,                       -- user-selected motus project ID for this batch
-    motusJobID INT,                            -- job whose processing generated this batch
-    source     TEXT                           -- tag source
-);
-")
+    sql(paste("CREATE TABLE batches (",
+              "batchID INTEGER PRIMARY KEY,              -- unique identifier for this batch",
+              "motusDeviceID INTEGER,                    -- motus ID of this receiver (NULL means not yet",
+              "                                          -- registered or not yet looked-up)  In a receiver",
+              "                                          -- database, this will be a constant column, but",
+              "                                          -- that way it has the same schema as in the master",
+              "                                          -- database.",
+              "monoBN INT,                               -- boot number for this receiver; (NULL",
+              "                                          -- okay; e.g. Lotek)",
+              "tsStart FLOAT(53),                        -- timestamp for start of period",
+              "                                          -- covered by batch; unix-style:",
+              "                                          -- seconds since 1 Jan 1970 GMT",
+              "tsEnd FLOAT(53),                          -- timestamp for end of period",
+              "                                          -- covered by batch; unix-style:",
+              "                                          -- seconds since 1 Jan 1970 GMT",
+              "numHits BIGINT,                           -- count of hits in this batch",
+              "ts FLOAT(53),                             -- timestamp when this batch record was",
+              "                                          -- added; unix-style: seconds since 1",
+              "                                          -- Jan 1970 GMT",
+              "motusUserID INT,                          -- user who uploaded the data leading to this batch",
+              "motusProjectID INT,                       -- user-selected motus project ID for this batch",
+              "motusJobID INT,                           -- job whose processing generated this batch",
+              "source     TEXT                           -- tag source",
+              ");", sep = "\n"))
   }
   
   
@@ -516,7 +519,7 @@ CREATE INDEX IF NOT EXISTS runsFilters_filterID_runID_motusTagID ON runsFilters 
 
 makeTables <- function(type, name = type) {
   if(type == "tagAmbig") {
-    s <- paste0("CREATE TABLE ", name, " (
+    s <- paste("CREATE TABLE ", name, " (
     ambigID INTEGER PRIMARY KEY NOT NULL,  -- identifier of group of tags which are ambiguous (identical). Will be negative
     masterAmbigID INTEGER,                 -- master ID of this ambiguity group, once different receivers have been combined
     motusTagID1 INT,                       -- motus ID of tag in group.
@@ -528,7 +531,7 @@ makeTables <- function(type, name = type) {
     ambigProjectID INT                     -- negative ambiguity ID of deployment project. refers to key ambigProjectID in table projAmbig
 );")
   } else if(type == "nodeData") {
-  s <- paste0("CREATE TABLE IF NOT EXISTS ", name, " (",
+  s <- paste("CREATE TABLE IF NOT EXISTS ", name, " (",
     "nodeDataID BIGINT PRIMARY KEY NOT NULL,",
     "batchID INTEGER NOT NULL,",
     "ts FLOAT NOT NULL,",

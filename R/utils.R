@@ -71,7 +71,7 @@ is_proj <- function(x) stringr::str_detect(x, "^[0-9]+$")
 # Get project or receiver from source name
 get_projRecv <- function(src) {
   if (! inherits(src, "src_sql"))
-    stop("src is not a dplyr::src_sql object")
+    stop("src is not a dplyr::src_sql object", call. = FALSE)
   
   projRecv <- basename(src[[1]]@dbname)
   if(stringr::str_detect(projRecv, "project-[0-9]+.motus")) {

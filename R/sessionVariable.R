@@ -55,7 +55,7 @@ sessionVariable = function(name, info=name, env=motus_vars, class="character", v
                 return(curVal <<- methods::as(v, class))
             }
             ## oops
-            stop("session variable '", name, "' is undefined")
+            stop("session variable '", name, "' is undefined", call. = FALSE)
         }
     }
     e = new.env(emptyenv())

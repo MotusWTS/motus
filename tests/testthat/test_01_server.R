@@ -5,8 +5,8 @@ test_that("tagme() errors appropriately", {
   skip_on_appveyor()
   skip_on_travis()
   
-  if(file.exists("project-10.motus")) unlink("project-10.motus")
-  if(file.exists("SG-3021RPI2BBB8.motus")) unlink("SG-3021RPI2BBB8.motus")
+  unlink("project-10.motus")
+  unlink("CTT-5031194D3168")
   
   sample_auth()
   
@@ -14,20 +14,20 @@ test_that("tagme() errors appropriately", {
                               "updateMotusDb"),
                "You do not have permission")
   
-  expect_error(expect_message(tagme(projRecv = "SG-3021RPI2BBB8", 
+  expect_error(expect_message(tagme(projRecv = "CTT-5031194D3168", 
                                     new = TRUE, update = TRUE), 
                               "updateMotusDb"),
-               "don't have permission")
+               "Either") #...
   
-  if(file.exists("project-10.motus")) unlink("project-10.motus")
-  if(file.exists("SG-3021RPI2BBB8.motus")) unlink("SG-3021RPI2BBB8.motus")
+  unlink("project-10.motus")
+  unlink("CTT-5031194D3168.motus")
 })
 
 test_that("tagme() downloads data - Projects", {
   skip_on_cran()
   skip_on_appveyor()
   
-  if(file.exists("project-176.motus")) unlink("project-176.motus")
+  unlink("project-176.motus")
   
   sample_auth()
   
@@ -41,10 +41,10 @@ test_that("Receivers download - Receivers", {
   skip_on_appveyor()
   skip_if_no_auth()
   
-  if(file.exists("SG-3115BBBK1127.motus")) unlink("SG-3115BBBK1127.motus")
+  unlink("SG-3115BBBK1127.motus")
   expect_message(tagme("SG-3115BBBK1127", new = TRUE, update = TRUE)) %>%
     expect_s3_class("src_sql")
-  if(file.exists("SG-3115BBBK1127.motus")) unlink("SG-3115BBBK1127.motus")
+  unlink("SG-3115BBBK1127.motus")
 })
 
 test_that("tagme with countOnly (tellme) - Projects", {
@@ -62,7 +62,7 @@ test_that("tagme with countOnly (tellme) - Projects", {
   expect_silent(tellme(projRecv = 176, new = FALSE)) %>%
     expect_is("data.frame")
   
-  if(file.exists("project-176.motus")) unlink("project-176.motus")
+  unlink("project-176.motus")
 })
 
 test_that("tagme with countOnly (tellme) - Receivers", {
@@ -70,10 +70,10 @@ test_that("tagme with countOnly (tellme) - Receivers", {
   skip_on_cran()
   skip_if_no_auth()
   
-  if(file.exists("SG-3115BBBK1127.motus")) unlink("SG-3115BBBK1127.motus")
+  unlink("SG-3115BBBK1127.motus")
   expect_silent(tellme("SG-3115BBBK1127", new = TRUE)) %>%
     expect_is("data.frame")
-  if(file.exists("SG-3115BBBK1127.motus")) unlink("SG-3115BBBK1127.motus")
+  unlink("SG-3115BBBK1127.motus")
 })
 
 test_that("srvQuery handles time out graciously", {

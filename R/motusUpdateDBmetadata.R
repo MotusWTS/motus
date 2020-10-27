@@ -20,7 +20,8 @@
 
 motusUpdateDBmetadata = function(sql, tagIDs=NULL, deviceIDs=NULL, force=FALSE) {
     if (!inherits(sql, "safeSQL"))
-        stop("sql must be a database connection of type 'safeSQL'.\nPerhaps use tagme() instead of this function?")
+        stop("sql must be a database connection of type 'safeSQL'.\n",
+             "Perhaps use tagme() instead of this function?", call. = FALSE)
 
     if (is.null(tagIDs))
         tagIDs = sql("select distinct motusTagID from runs")[[1]]

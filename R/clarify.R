@@ -220,6 +220,6 @@ where
     } else {
         ## TODO limited claims
         idfromto = cbind(id, from, to)
-        stop("Not yet implemented")
+        stop("Not yet implemented", call. = FALSE)
     }
 }

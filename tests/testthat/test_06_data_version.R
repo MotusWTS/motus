@@ -63,11 +63,6 @@ test_that("Database updates as expected (proj) - new = FALSE", {
   old <- DBI::dbConnect(RSQLite::SQLite(), dbname = "project-176_v1.motus")
   new <- DBI::dbConnect(RSQLite::SQLite(), dbname = "project-176.motus")
   
-  # Limit data when testing:
-  b <- dplyr::tbl(new, "batches") %>% 
-    dplyr::pull(batchID) %>% 
-    unique()
-  
   # Expect old and new to have different admInfo 
   expect_named(dplyr::tbl(old, "admInfo") %>% dplyr::collect(), 
                expected = c("key", "value"))
@@ -77,16 +72,9 @@ test_that("Database updates as expected (proj) - new = FALSE", {
   expect_true(all(sort(DBI::dbListFields(old, "activity")) %in%
                     sort(DBI::dbListFields(new, "activity"))))
               
-  # Ignore new columns
-  h <- dplyr::tbl(old, "hits") %>% 
-    dplyr::filter(batchID %in% b) %>%
-    dplyr::collect()
-  expect_true(dplyr::all_equal(h, dplyr::tbl(new, "hits") %>% 
-                                 dplyr::select(tidyselect::any_of(names(h))) %>%
-                                 dplyr::collect()))
-  
-  expect_true(all(sort(DBI::dbListFields(old, "runs")) %in%
-                    sort(DBI::dbListFields(new, "runs"))))
+  expect_gt(DBI::dbGetQuery(new, "SELECT * FROM activity") %>% nrow(), 0)
+  expect_gt(DBI::dbGetQuery(new, "SELECT * FROM hits") %>% nrow(), 0)
+  expect_gt(DBI::dbGetQuery(new, "SELECT * FROM runs") %>% nrow(), 0)
   
   DBI::dbDisconnect(old)
   DBI::dbDisconnect(new)
@@ -129,6 +117,7 @@ test_that("Database updates as expected (receivers)", {
   unlink("SG-3115BBBK1127_v1.motus")
   
   # Create dummy version 1
+  orig <- options(motus.test.max = 30)
   tags <- tagme("SG-3115BBBK1127", new = TRUE, update = TRUE)
   DBI::dbExecute(tags$con, "UPDATE admInfo set data_version = 1")
   DBI::dbDisconnect(tags$con)
@@ -138,34 +127,15 @@ test_that("Database updates as expected (receivers)", {
   expect_true(file.exists("SG-3115BBBK1127_v1.motus"))  # Backup
   DBI::dbDisconnect(t$con)
   
-  # Expect nearly the same data though
-  old <- DBI::dbConnect(RSQLite::SQLite(), dbname = "SG-3115BBBK1127_v1.motus")
+  # Expect data
   new <- DBI::dbConnect(RSQLite::SQLite(), dbname = "SG-3115BBBK1127.motus")
   
-  # Limit data when testing:
-  b <- dplyr::tbl(new, "batches") %>% 
-    dplyr::pull(batchID) %>% 
-    dplyr::last()
+  expect_gt(DBI::dbGetQuery(new, "SELECT * FROM activity") %>% nrow(), 0)
+  expect_gt(DBI::dbGetQuery(new, "SELECT * FROM hits") %>% nrow(), 0)
+  expect_gt(DBI::dbGetQuery(new, "SELECT * FROM runs") %>% nrow(), 0)
   
-  expect_equal(dplyr::tbl(old, "activity") %>% 
-                 dplyr::filter(batchID <= b) %>%
-                 dplyr::collect() %>% 
-                 dplyr::mutate(ant = as.character(.data$ant)),
-               dplyr::tbl(new, "activity") %>% dplyr::collect())
-  
-  expect_equal(dplyr::tbl(old, "hits")  %>% 
-                 dplyr::filter(batchID <= b) %>%
-                 dplyr::collect(),
-               dplyr::tbl(new, "hits") %>% dplyr::collect())
-  
-  expect_equal(dplyr::tbl(old, "runs")  %>% 
-                 dplyr::filter(batchIDbegin <= b) %>%
-                 dplyr::collect(),
-               dplyr::tbl(new, "runs") %>% dplyr::collect())
-  
-  
-  DBI::dbDisconnect(old)
   DBI::dbDisconnect(new)
+  options(orig)
 
 })
 
