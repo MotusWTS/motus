@@ -31,7 +31,7 @@ test_that("checkVersion and updateMotusDb run and return messages as expected", 
   # expect_length(dplyr::tbl(test_sql, "admInfo") %>% dplyr::pull(value), 1)
   
   # No admInfo Table
-  dplyr::db_drop_table(test_sql$con, "admInfo")
+  DBI::dbRemoveTable(test_sql$con, "admInfo")
   
   expect_message(checkVersion(test_sql), 
                  "The admInfo table has not yet been created in your motus sqlite file.")
