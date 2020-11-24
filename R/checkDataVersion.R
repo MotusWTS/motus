@@ -4,7 +4,7 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
   motus_vars$authToken # Prompt for authorization to get dataVersion
   server_version <- motus_vars$dataVersion
   
-  if (dplyr::db_has_table(src$con, "admInfo") && 
+  if (DBI::dbExistsTable(src$con, "admInfo") && 
       "data_version" %in% DBI::dbListFields(src$con, "admInfo")) {
     local_version <- dplyr::tbl(src$con, "admInfo") %>%
       dplyr::pull(.data$data_version)
