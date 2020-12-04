@@ -1,4 +1,9 @@
-# motus 4.0.2.9000
+# motus 4.0.3.9000
+
+# motus 4.0.3
+
+### Bug fixes
+* fixed bug resulting in error "no applicable method for 'db_has_table'..."
 
 # motus 4.0.2
 
