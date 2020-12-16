@@ -105,6 +105,23 @@ test_that("getGPS() runs as expected with no data", {
   unlink("project-176.motus")
 })
 
+test_that("getGPS() handels date/time in ts gracefully", {
+  file.copy(system.file("extdata", "gps_sample.motus", package = "motus"), ".")
+  
+  tags <- tagme("gps_sample", new = FALSE, update = FALSE)
+  d <- dplyr::tbl(tags, "alltags") %>%
+    dplyr::filter(ts < 1565300000) %>%
+    dplyr::collect() %>%
+    dplyr::mutate(ts = lubridate::as_datetime(ts))
+  
+  expect_silent(g <- getGPS(src = tags, data = d)) %>%
+    expect_is("data.frame")
+  expect_gt(nrow(g), 10000)
+  expect_lt(nrow(g), 20000)
+  
+  unlink("gps_sample.motus")
+})
+
 
 test_that("prepData() handles both data.frame and src", {
   file.copy(system.file("extdata", "gps_sample.motus", package = "motus"), ".")
