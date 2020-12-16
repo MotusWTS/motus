@@ -82,6 +82,7 @@ filterByActivity <- function(src, return = "good", view = "alltags",
     stop("'activity' table is empty, cannot filter by activity", call. = FALSE)
   }
 
+  # Get "bad" activity runIDs
   tbl_bad <- dplyr::left_join(tbl_runs, tbl_activity, 
                               by = c("batchIDbegin" = "batchID", 
                                      "ant", "hourBin")) %>% 
@@ -91,18 +92,25 @@ filterByActivity <- function(src, return = "good", view = "alltags",
     dplyr::filter(.data$len < maxLen) %>% # Filter out good runs
     dplyr::filter((.data$numRuns >= maxRuns & ((.data$run2 / .data$numRuns) >= ratio)) | 
                     .data$len <= minLen) %>%
-    dplyr::select("runID") %>%
+    dplyr::select("runID")
+  
+  # Label "bad" alltags 
+  tbl_bad <- dplyr::tbl(src$con, view) %>%
+    dplyr::left_join(tbl_bad, ., by = "runID") %>%
     dplyr::mutate(probability = 0)
 
-  # Label runs with probability
-  tbl_prob <- dplyr::tbl(src$con, view) %>%
-    dplyr::left_join(tbl_bad, by = "runID") %>%
-    dplyr::mutate(probability = dplyr::if_else(is.na(.data$probability), 1, 
-                                               .data$probability))
-  
+  # All others are "good"
+  tbl_good <- dplyr::tbl(src$con, view) %>%
+    dplyr::anti_join(tbl_bad, by = "runID") %>%
+    dplyr::mutate(probability = 1)
+
   # Which to return?
-  if(return == "good") r <- dplyr::filter(tbl_prob, .data$probability > 0)
-  if(return == "bad")  r <- dplyr::filter(tbl_prob, .data$probability == 0)
-  if(return == "all")  r <- tbl_prob
+  if(return == "good") r <- dplyr::collect(tbl_good)
+  if(return == "bad")  r <- dplyr::collect(tbl_bad)
+  if(return == "all")  {
+    r <- dplyr::collect(tbl_good) %>%
+      dplyr::bind_rows(dplyr::collect(tbl_bad)) %>%
+      dplyr::arrange(.data$ts)
+  }
   r
 }

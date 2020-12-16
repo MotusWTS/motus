@@ -19,10 +19,11 @@ test_that("filterByActivity filters as expected", {
     expect_is("tbl")
   
   # 'good' and 'bad' should be subsets of 'all'
-  expect_equal(dplyr::filter(a, probability == 1) %>% dplyr::collect(), 
-               dplyr::collect(g))
-  expect_equal(dplyr::filter(a, probability == 0) %>% dplyr::collect(), 
-               dplyr::collect(b))
+  expect_equal(nrow(a <- dplyr::collect(a)), 
+               nrow(g <- dplyr::collect(g)) + nrow(b <- dplyr::collect(b)))
+                 
+  expect_true(dplyr::all_equal(dplyr::filter(a, probability == 1), g))
+  expect_true(dplyr::all_equal(dplyr::filter(a, probability == 0), b))
   
   # Matches motusFilter results
   runs <- dplyr::tbl(shorebirds_sql, "runs") %>%
@@ -33,8 +34,7 @@ test_that("filterByActivity filters as expected", {
   a <- a %>%
     dplyr::mutate(motusFilter = as.integer(probability)) %>%
     dplyr::select(runID, batchID, runLen, motusFilter) %>%
-    dplyr::distinct() %>%
-    dplyr::collect()
+    dplyr::distinct()
   
   expect_true(dplyr::all_equal(runs, a))
 })
