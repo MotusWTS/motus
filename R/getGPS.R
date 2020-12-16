@@ -165,7 +165,7 @@ prepData <- function(src, data = NULL) {
     # Convert back to numeric in case user has changed it to date/time
     if(is.data.frame(data)) {
       if(lubridate::is.POSIXct(data$ts)) {
-        data <- dplyr::mutate(data, ts = as.numeric(ts))
+        data <- dplyr::mutate(data, ts = as.numeric(.data$ts))
       } else if(!is.numeric(data$ts)) {
         stop("'ts' column in 'data' must either be a numeric time stamp or ",
              "in POSIXct date/time format", call. = FALSE)
