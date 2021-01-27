@@ -154,15 +154,16 @@ gpsForBatchProject <- function(sql, batchID, batchMsg, projectID) {
 #'
 #' @noRd
 gpsForBatchReceiver <- function(sql, batchID, batchMsg) {
-  ts <- sql("select ifnull(max(ts), 0) from gps where batchID=%d", batchID)[[1]]
+  gpsID <- sql(paste0("SELECT ifnull(max(gpsID), 0) ",
+                      "FROM gps WHERE batchID = %d"), batchID)[[1]]
   repeat {
-    g <- srvGPSForReceiver(batchID = batchID, ts = ts)
+    g <- srvGPSForReceiver(batchID = batchID, gpsID = gpsID)
     if (!isTRUE(nrow(g) > 0)) break
     message(sprintf("%s: got %6d GPS fixes                     \r", 
                     batchMsg, nrow(g)))
     dbInsertOrReplace(sql$con, "gps", 
                       g[, c("batchID", "ts", "gpsts", "lat", "lon", "alt")])
-    ts <- max(g$ts)
+    gpsID <- max(g$gpsID)
   } 
 }
 
