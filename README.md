@@ -2,6 +2,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/d33qyiunqjexdepy/branch/master?svg=true)](https://ci.appveyor.com/project/steffilazerte/motus)
 [![Travis build status](https://travis-ci.org/MotusWTS/motus.svg?branch=master)](https://travis-ci.org/MotusWTS/motus)
 [![Codecov test coverage](https://codecov.io/gh/MotusWTS/motus/branch/master/graph/badge.svg)](https://codecov.io/gh/MotusWTS/motus?branch=master)
+[![R build status](https://github.com/MotusWTS/motus/workflows/R-CMD-check/badge.svg)](https://github.com/MotusWTS/motus/actions)
 <!-- badges: end -->
 
 # motus
