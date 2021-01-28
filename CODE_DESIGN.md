@@ -2,6 +2,7 @@
 
 This is a collection of developer notes and is by no means exhaustive or correct
 
+- [Versioning](#versioning)
 - [Naming Conventions](#naming-conventions)
 - [SQLite databases](#sqlite-databases)
 - [Special data downloads](#special-data-downloads)
@@ -9,6 +10,15 @@ This is a collection of developer notes and is by no means exhaustive or correct
 - [Data Files](#data-files)
 - [Testing](#testing)
 - [Adding and Updating](#adding-and-updating)
+
+## Versioning
+There 3-4 different `motus` versions on GitHub at any one time:
+
+- `master` branch - Current release - e.g., v4.0.3
+- `betaX` branch - Current minor dev - e.g., v4.0.3.9000
+- `sandbox` branch - Current major dev - e.g., v4.0.3.9999
+- `hotfix-` branch - Current quick fixes to merge in to master quickly v4.0.3.9001 (increments one greater than `betaX`)
+
 
 ## Naming Conventions
 - Each function in a single file

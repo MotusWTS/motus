@@ -52,15 +52,19 @@ test_that("hitsByBatchReceiver doesn't fail on extra columns", {
   DBI::dbExecute(tags$con, "DELETE FROM hits")
   tags_sql <- safeSQL(tags)
   
-  expect_silent(h0 <- srvHitsForReceiver(batchID = 417054, 
+  expect_silent(h0 <- srvHitsForReceiver(batchID = 417056, 
                                          hitID = 0))
+  
+  # message means there is data
   expect_message(hitsForBatchReceiver(sql = tags_sql, 
-                                      batchID = 417054,
+                                      batchID = 417056,
                                       batchMsg = "temp"))
-  expect_true(dplyr::all_equal(h0, dplyr::tbl(tags$con, "hits") %>% 
-                                 dplyr::collect() %>% 
-                                 as.data.frame(), 
-                               convert = TRUE))
+  
+  h1 <- dplyr::tbl(tags$con, "hits") %>% 
+    dplyr::collect() %>%
+    as.data.frame()
+  
+  expect_true(dplyr::all_equal(h0, as.data.frame(h1), convert = TRUE))
   
   # Expect extra columns to NOT result in an error
   DBI::dbExecute(tags$con, "DELETE FROM hits")
@@ -69,4 +73,5 @@ test_that("hitsByBatchReceiver doesn't fail on extra columns", {
             expect_message(hitsForBatchReceiver(sql = tags_sql, 
                                                 batchID = 53,
                                                 batchMsg = "temp")))
+  unlink("SG-3115BBBK0782.motus")
 })

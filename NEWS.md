@@ -1,3 +1,7 @@
+# motus 4.0.4
+### Bug fixes
+* fixed bug resulting in occasional unending download loop of GPS fixes for receivers
+
 # motus 4.0.3
 
 ### Bug fixes
