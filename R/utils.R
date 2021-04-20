@@ -102,3 +102,11 @@ getAccess <- function() {
   message("Projects: ", paste0(motus_vars$dataVersion, collapse = ", "), "\n",
           "Receivers: ", paste0(motus_vars$receivers, collapse = ", "))
 }
+
+requiredCols <- function(x, req, name = "data") {
+  cols <- colnames(x)
+  if(any(!req %in% cols)) {
+    stop("Required columns/fields missing from '", name, "': ",
+         paste0(req[!req %in% cols], collapse = ", "))
+  }
+}

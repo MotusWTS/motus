@@ -507,3 +507,49 @@ test_that("calcGPS() keepAll = TRUE", {
   unlink("gps_sample.motus")
 })   
 
+
+# sunRiseSet --------------------------------------------------------------
+
+test_that("sunRiseSet() returns sunset times", {
+  
+  file.copy(system.file("extdata", "project-176.motus", package = "motus"), 
+            to = ".")
+  t <- tagme(176, update = FALSE, new = FALSE)
+  
+  expect_message(s1 <- sunRiseSet(t), "'data' is a complete motus data base")
+  expect_silent(s2 <- sunRiseSet(dplyr::tbl(t, "alltags")))
+  expect_silent(s3 <- sunRiseSet(dplyr::tbl(t, "alltags") %>% dplyr::collect()))
+  
+  expect_equal(s1, s2)
+  expect_equal(s1, s3)
+  expect_s3_class(s1, "data.frame")
+  
+  expect_true(all(c("sunrise", "sunset") %in% names(s1)))
+  expect_s3_class(s1$sunrise, "POSIXct")
+  expect_s3_class(s1$sunset, "POSIXct")
+  
+  # Only added sunrise and sunset
+  expect_equal(dplyr::tbl(t$con, "alltags") %>% 
+                 dplyr::collect() %>%
+                 dplyr::mutate(ts = lubridate::as_datetime(.data$ts, tz = "UTC")) %>%
+                 dplyr::arrange(tsCorrected, hitID, runID, batchID), 
+               dplyr::select(s1, -"sunrise", -"sunset") %>%
+                 dplyr::arrange(tsCorrected, hitID, runID, batchID))
+  
+  # If missing lat/lon missing sunrise
+  expect_equal(sum(is.na(s1$sunrise)), 
+               sum(is.na(s1$recvDeployLat) | is.na(s1$recvDeployLon)))
+  expect_equal(sum(is.na(s1$sunset)), 
+               sum(is.na(s1$recvDeployLat) | is.na(s1$recvDeployLon)))
+  
+  s1_sub <- dplyr::filter(s1, !is.na(sunrise), !is.na(sunset)) %>%
+    dplyr::mutate(ts = lubridate::as_datetime(ts, tz = "UTC"))
+  expect_true(all(abs(difftime(s1_sub$ts, s1_sub$sunrise, units = "hours")) < 24))
+  expect_true(all(abs(difftime(s1_sub$ts, s1_sub$sunset, units = "hours")) < 24))
+
+  # Require lutz
+  mockery::stub(sunRiseSet, "requireNamespace", FALSE)
+  expect_error(sunRiseSet(t))
+  
+  unlink("project-176.motus")
+})
