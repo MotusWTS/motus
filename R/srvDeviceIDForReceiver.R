@@ -15,8 +15,8 @@
 #' @noRd
 
 srvDeviceIDForReceiver = function(serno, verbose = FALSE) {
-    x = srvQuery(API=motus_vars$API_DEVICE_ID_FOR_RECEIVER, 
-                 params=list(serno=serno),
+    x <- srvQuery(API = motus_vars$API_DEVICE_ID_FOR_RECEIVER, 
+                 params = list(serno = serno),
                  verbose = verbose)
-    return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
+    structure(x, class = "data.frame", row.names=seq(along=x[[1]]))
 }
