@@ -37,7 +37,8 @@ Suggests:
     roxygen2,
     spelling,
     testthat,
-    covr
+    covr,
+    rmarkdown
 License: GPL-3
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
