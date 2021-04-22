@@ -1,3 +1,8 @@
+# motus 4.0.6
+### Bug fixes
+* fixed bug resulting in missing metadata tables, and permission errors resulting
+from JSON formatting
+
 # motus 4.0.5
 ### Bug fixes
 * removed not null constraint on tsEnd in nodeDeps
