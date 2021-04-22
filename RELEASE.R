@@ -90,6 +90,10 @@ devtools::check_win_release() # Win builder
 devtools::check_win_devel()
 devtools::check_win_oldrelease()
 
+## Update motus website
+pkgdown::build_site()
+pkgdown::build_home()
+
 
 ## Note: non-ASCII files found
 # Find them
