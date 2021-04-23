@@ -9,9 +9,9 @@ title: "Getting started"
 
 ## Summary: download, access, and export data {#importSummary}
 
-Throughout the book we will predominantly be working with the `alltags` table in flat format. Although described in detail above, here we include a quick summary of how you download, access, and convert the sample data for use in the rest of the book. In later sections of the book, we include additional recommended modifications and filtering of unnecessary variables, more information is available in section \@ref(loadDetectionsCleaning) in Chapter \@ref(dataCleaning).
+Throughout the book we will predominantly be working with the `alltags` table in flat format. Although described in detail above, here we include a quick summary of how you download, access, and convert the sample data for use in the rest of the book. In later sections of the book, we include additional recommended modifications and filtering of unnecessary variables, more information is available in [Chapter 5 - Data Cleaning][05-data-cleaning.html].
  
-```{r summaryDownload, eval = FALSE}
+```{r eval = FALSE}
 # set proj.num to 176 for sample data
 proj.num <- 176
 
@@ -36,13 +36,6 @@ For your own data we suggest creating a script with the following workflow:
 1. download and/or update your data 
 2. select variables of interest for the table you are working with (typically `alltags`)
 3. include any initial cleaning
-4. save the resulting data as an .rds file as described in section \@ref(exportDetections). We suggest using RDS instead of CSV, because the RDS format preserves the underlying structure of the data (e.g. POSIX times stay as POSIX times). If you want to export your data to another program, then a CSV format might be preferred.  
+4. save the resulting data as an .rds file as described . We suggest using RDS instead of CSV, because the RDS format preserves the underlying structure of the data (e.g. POSIX times stay as POSIX times). If you want to export your data to another program, then a CSV format might be preferred.  
 
 We caution that producing a flat file using the full suite of fields can use a lot of memory, and can slow R down considerably when dealing with large datasets. For some combinations of data sets and computers, it may be impossible to directly use data frames in R. If that is the case, then this is the point in your workflow where you should carefully consider the information you need from within your data set (for example, how it is aggregated) and simplify it. You can always return to this script and creating a new RDS file with different variables, or aggregated at a different scale.  
-
-To read in a saved RDS file you can run:
-
-```{r readRDS1, eval = TRUE}
-# reads in your file "df.alltags.rds" saved in the data folder
-df.alltags.saved <- readRDS("./data/df_alltags.rds") 
-```
