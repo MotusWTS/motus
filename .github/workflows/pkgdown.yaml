@@ -36,7 +36,7 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE)
           install.packages(c("tidyverse", "pkgdown", "maps", "mapproj", "geosphere",
-          "pander"), type = "binary")
+          "pander", "circular"), type = "binary")
         shell: Rscript {0}
 
       - name: Install package
