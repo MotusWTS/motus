@@ -5,7 +5,7 @@ author: Tara L. Crewe, Zoe Crysler, and Philip Taylor
 
 ```{r setup, include = FALSE}
 # Get and update sample data to avoid messages later
-sql.motus <- get_sample_data()
+sql.motus <- motus:::get_sample_data()
 ```
 
 
