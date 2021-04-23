@@ -4,7 +4,8 @@ author: Tara L. Crewe, Zoe Crysler, and Philip Taylor
 ---
 
 ```{r setup, include = FALSE}
-source("00_helper.R") # Load data
+# Get and update sample data to avoid messages later
+sql.motus <- get_sample_data()
 ```
 
 

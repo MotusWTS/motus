@@ -4,7 +4,8 @@ author: Tara L. Crewe, Zoe Crysler, and Philip Taylor. Revisions by Catherine Ja
 ---
 
 ```{r setup, include = FALSE}
-source("00_helper.R") # Load data
+# Get and update sample data to avoid messages later
+sql.motus <- get_sample_data()
 ```
 
 There are three sources of 'error' that can result in tag detections appearing in your database that are incorrect.

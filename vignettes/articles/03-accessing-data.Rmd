@@ -4,7 +4,8 @@ author: Tara L. Crewe, Zoe Crysler, and Philip Taylor. Revisions by Steffi LaZer
 ---
 
 ```{r setup, include = FALSE}
-source("00_helper.R") # Load data
+# Get and update sample data to avoid messages later
+sql.motus <- get_sample_data()
 ```
 
 **Before downloading your detection data, please ensure that you have no pending metadata issues through the online [Data Issues page](https://motus.org/data/issues)**
