@@ -37,6 +37,7 @@ jobs:
           remotes::install_deps(dependencies = TRUE)
           install.packages(c("tidyverse", "pkgdown", "maps", "mapproj", "geosphere",
           "pander", "circular"), type = "binary")
+          remotes::install_github("MotusWTS/motusData")
         shell: Rscript {0}
 
       - name: Install package
