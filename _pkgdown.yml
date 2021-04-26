@@ -1,7 +1,12 @@
 template:
   params:
     bootswatch: cosmo
-    
+
+navbar:
+  structure:
+    left:  [home, intro, reference, articles, news]
+    right: [github]
+
 articles:
 - title: Complete walk-through
   desc: This is a complete walk-through, originally compiled as the Motus R book.
