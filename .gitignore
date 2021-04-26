@@ -5,5 +5,4 @@ nohup.out
 .Rhistory
 .RData
 tests/spelling.R
-docs/*
-!docs/.gitkeep 
+docs
