@@ -68,7 +68,7 @@ spelling::update_wordlist() # All remaining words will be added to the ignore WO
 ## Finalize package version
 # - Update DESCRIPTION - package version
 # - Update .onLoad - API version
-v <- "4.0.0"
+v <- "4.0.6"
 v <- packageVersion("motus") # If dev version loaded with devtools::load_all()
 
 ## Checks

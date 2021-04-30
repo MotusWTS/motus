@@ -187,7 +187,7 @@ pulseForBatchReceiver <- function(sql, batchID, batchMsg) {
   }
   
   repeat {
-    pc <- srvPulseCountsforReceiver(batchID = batchID, ant = ant, hourBin = hourBin)
+    pc <- srvPulseCountsForReceiver(batchID = batchID, ant = ant, hourBin = hourBin)
     if (!isTRUE(nrow(pc) > 0)) break
     message(sprintf("%s: got %6d pulse counts                     \r", 
                     batchMsg, nrow(pc)))

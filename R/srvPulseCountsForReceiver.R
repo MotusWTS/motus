@@ -22,9 +22,9 @@
 #' received to the next call of this function.  Values are returned sorted by
 #' \code{hourBin} \emph{within} \code{ant} for each batchID.
 
-srvPulseCountsforReceiver = function(batchID, ant, hourBin=0, verbose = FALSE) {
-    x = srvQuery(API=motus_vars$API_PULSE_COUNTS_FOR_RECEIVER, 
-                 params=list(batchID=batchID, ant=ant, hourBin=hourBin),
+srvPulseCountsForReceiver <- function(batchID, ant, hourBin = 0, verbose = FALSE) {
+    x <- srvQuery(API = motus_vars$API_PULSE_COUNTS_FOR_RECEIVER, 
+                 params = list(batchID = batchID, ant = ant, hourBin = hourBin),
                  verbose = verbose)
-    return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
+    structure(x, class = "data.frame", row.names = seq(along = x[[1]]))
 }
