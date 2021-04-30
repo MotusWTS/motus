@@ -2,6 +2,8 @@
 ### Bug fixes
 * fixed bug resulting in missing metadata tables, and permission errors resulting
 from JSON formatting
+* fixed bug where `forceMeta` didn't force metadata download for previously downloaded tags
+* fixed warnings produced by `plotRouteMap()` on old versions of R
 
 # motus 4.0.5
 ### Bug fixes
