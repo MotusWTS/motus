@@ -51,10 +51,11 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
         } else {
             query <- list()
         }
-        
+
         query <- c(query, params)
 
         json <- jsonlite::toJSON(query, auto_unbox = TRUE, null = "null")
+        if(json == "[]") json <- "NULL"
         
         if(show) message(json, "\n")
         

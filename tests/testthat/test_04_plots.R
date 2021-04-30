@@ -16,8 +16,6 @@ test_that("Plots run with no errors", {
   expect_silent(plotDailySiteSum(shorebirds, "Longridge"))
   expect_silent(plotDailySiteSum(dplyr::tbl(shorebirds_sql, "alltagsGPS"), "Longridge"))
   
-  expect_error(expect_warning(plotRouteMap(shorebirds_sql, recvStart = "2016-01-01", recvEnd = "2016-12-31"), NA), NA)
-  
   expect_silent(plotSite(shorebirds))
   expect_silent(plotSite(dplyr::tbl(shorebirds_sql, "alltagsGPS")))
   
