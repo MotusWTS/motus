@@ -49,13 +49,13 @@
 #'
 #' @noRd
 
-srvMetadataForReceivers = function(deviceIDs, verbose = FALSE) {
-    x = srvQuery(API=motus_vars$API_METADATA_FOR_RECEIVERS, 
-                 params=list(deviceIDs=deviceIDs),
-                 verbose = verbose)
-    return (list(
-        recvDeps = structure(x$recvDeps, class = "data.frame", row.names=seq(along=x$recvDeps[[1]])),
-        antDeps = structure(x$antDeps, class = "data.frame", row.names=seq(along=x$antDeps[[1]])),
-        projs = structure(x$projs, class = "data.frame", row.names=seq(along=x$projs[[1]]))
-    ))
+srvMetadataForReceivers <- function(deviceIDs, verbose = FALSE) {
+  x <- srvQuery(API = motus_vars$API_METADATA_FOR_RECEIVERS, 
+                params = list(deviceIDs = I(deviceIDs)),
+                verbose = verbose)
+  list(
+    recvDeps = structure(x$recvDeps, class = "data.frame", row.names=seq(along=x$recvDeps[[1]])),
+    antDeps = structure(x$antDeps, class = "data.frame", row.names=seq(along=x$antDeps[[1]])),
+    projs = structure(x$projs, class = "data.frame", row.names=seq(along=x$projs[[1]]))
+  )
 }

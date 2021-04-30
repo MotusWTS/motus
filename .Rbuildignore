@@ -12,3 +12,7 @@
 ^codecov\.R$
 ^CODE_DESIGN\.md$
 ^\.github$
+^vignettes/articles$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

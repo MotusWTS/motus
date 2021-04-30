@@ -1,0 +1,31 @@
+template:
+  params:
+    bootswatch: cosmo
+
+navbar:
+  structure:
+    left:  [home, intro, reference, articles, news]
+    right: [github]
+
+articles:
+- title: Complete walk-through
+  desc: This is a complete walk-through, originally compiled as the Motus R book.
+  navbar: ~
+  contents:
+  - articles/01-introduction
+  - articles/02-installing-packages
+  - articles/03-accessing-data
+  - articles/04-deployments
+  - articles/05-data-cleaning
+  - articles/06-exploring-data
+- title: Other topics
+  desc: Specific tutorials for different tasks
+  contents:
+  - articles/troubleshooting
+  - articles/vanishing-bearings
+  - articles/advanced-modelling
+- title: Understanding Motus data
+  desc: Articles aimed to give you a deeper understanding of Motus data and databases
+  contents:
+  - articles/birds-eye-view
+  - articles/sqlite-views

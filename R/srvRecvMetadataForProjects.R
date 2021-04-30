@@ -49,14 +49,14 @@
 #'
 #' @noRd
 
-srvRecvMetadataForProjects = function(projectIDs, verbose = FALSE) {
-    x = srvQuery(API=motus_vars$API_RECV_METADATA_FOR_PROJECTS,
-                 params=list(projectIDs=projectIDs),
-                 verbose = verbose)
-    return (list(
-        recvDeps = structure(x$recvDeps, class = "data.frame", row.names=seq(along=x$recvDeps[[1]])),
-        antDeps = structure(x$antDeps, class = "data.frame", row.names=seq(along=x$antDeps[[1]])),
-        nodeDeps = structure(x$nodeDeps, class = "data.frame", row.names=seq(along=x$nodeDeps[[1]])),
-        projs = structure(x$projs, class = "data.frame", row.names=seq(along=x$projs[[1]]))
-    ))
+srvRecvMetadataForProjects <- function(projectIDs, verbose = FALSE) {
+  x <- srvQuery(API = motus_vars$API_RECV_METADATA_FOR_PROJECTS,
+               params = list(projectIDs = I(projectIDs)),
+               verbose = verbose)
+  list(
+    recvDeps = structure(x$recvDeps, class = "data.frame", row.names=seq(along=x$recvDeps[[1]])),
+    antDeps = structure(x$antDeps, class = "data.frame", row.names=seq(along=x$antDeps[[1]])),
+    nodeDeps = structure(x$nodeDeps, class = "data.frame", row.names=seq(along=x$nodeDeps[[1]])),
+    projs = structure(x$projs, class = "data.frame", row.names=seq(along=x$projs[[1]]))
+  )
 }

@@ -1,0 +1,41 @@
+---
+title: "Getting started"
+---
+
+
+<!-- This was originally at the end of Chapter 3 - Accessing Data -->
+
+
+
+## Summary: download, access, and export data {#importSummary}
+
+Throughout the book we will predominantly be working with the `alltags` table in flat format. Although described in detail above, here we include a quick summary of how you download, access, and convert the sample data for use in the rest of the book. In later sections of the book, we include additional recommended modifications and filtering of unnecessary variables, more information is available in [Chapter 5 - Data Cleaning][05-data-cleaning.html].
+ 
+```{r eval = FALSE}
+# set proj.num to 176 for sample data
+proj.num <- 176
+
+# - download and load detection data from the sample project and save in data folder
+# - login and password for sample data is "motus.sample"
+# - if you are accessing already-downloaded data, use new = FALSE; if you don't
+#   want to update your data, also set update = FALSE
+sql.motus <- tagme(proj.num, new = TRUE, update = TRUE, dir = "./data/")
+
+# access the "alltags" table within the SQLite file
+tbl.alltags <- tbl(sql.motus, "alltags")
+
+# convert "tbl.alltags" to a flat dataframe and change numeric time to a datetime object
+df.alltags <- tbl.alltags %>%
+              collect() %>%
+              as.data.frame() %>%
+              mutate(ts = as_datetime(ts, tz = "UTC", origin = "1970-01-01"))
+```
+ 
+For your own data we suggest creating a script with the following workflow:
+
+1. download and/or update your data 
+2. select variables of interest for the table you are working with (typically `alltags`)
+3. include any initial cleaning
+4. save the resulting data as an .rds file as described . We suggest using RDS instead of CSV, because the RDS format preserves the underlying structure of the data (e.g. POSIX times stay as POSIX times). If you want to export your data to another program, then a CSV format might be preferred.  
+
+We caution that producing a flat file using the full suite of fields can use a lot of memory, and can slow R down considerably when dealing with large datasets. For some combinations of data sets and computers, it may be impossible to directly use data frames in R. If that is the case, then this is the point in your workflow where you should carefully consider the information you need from within your data set (for example, how it is aggregated) and simplify it. You can always return to this script and creating a new RDS file with different variables, or aggregated at a different scale.  

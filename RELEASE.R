@@ -68,7 +68,7 @@ spelling::update_wordlist() # All remaining words will be added to the ignore WO
 ## Finalize package version
 # - Update DESCRIPTION - package version
 # - Update .onLoad - API version
-v <- "4.0.0"
+v <- "4.0.6"
 v <- packageVersion("motus") # If dev version loaded with devtools::load_all()
 
 ## Checks
@@ -89,6 +89,11 @@ rhub::check_for_cran(paste0("../motus_", v, ".tar.gz"), show_status = FALSE)
 devtools::check_win_release() # Win builder
 devtools::check_win_devel()
 devtools::check_win_oldrelease()
+
+## Update motus website
+pkgdown::build_site()
+pkgdown::build_home()
+pkgdown::build_articles()
 
 
 ## Note: non-ASCII files found

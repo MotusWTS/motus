@@ -1,6 +1,6 @@
 Package: motus
 Type: Package
-Version: 4.0.4.9000
+Version: 4.0.6.9000
 Title: Fetch and use data from the Motus Wildlife Tracking System
 Description: Retrieve, filter, and visualize telemetry data from the Motus 
     Wildlife Tracking System <http://motus.org>.
@@ -37,7 +37,8 @@ Suggests:
     roxygen2,
     spelling,
     testthat,
-    covr
+    covr,
+    rmarkdown
 License: GPL-3
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)

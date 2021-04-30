@@ -1,0 +1,19 @@
+---
+title: "Advanced modelling and analysis"
+---
+
+Numerous investigators have been developing more advanced tools for analyzing movement and behavioural data using Motus such as triangulation, position error and probability of detection, state-space movement modelling, and calculation of tag life histories (stopover duration, movement between subsequent sites, etc.). 
+Aspects of some of these processes have been touched on in previous chapters. For investigators wishing to delve more into these subjects in more detail see:
+
+[Baldwin, Justin W., Katie Leap, John T. Finn, and Jennifer R. Smetzer. “Bayesian State-Space Models Reveal Unobserved off-Shore Nocturnal Migration from Motus Data.” Ecological Modelling 386 (October 24, 2018): 38–46.](https://doi.org/10.1016/j.ecolmodel.2018.08.006)
+Researchers propose new biologically informed Bayesian state-space models for animal movement in JAGS that include informed assumptions about behaviour. Building from the bsam package in R a simple localization routine predicts bird location and spatial uncertainty.
+
+[Baldwin, Justin. “Modelling Bird Migration with Motus Data and Bayesian State-Space Models.” University of Massachusetts Amherst, 2017.](http://scholarworks.umass.edu/masters_theses_2/565)
+New biologically informed Bayesian state-space models are proposed for animal movements in JAGS that include informed assumptions about behaviour. The models are evaluated using a simulation study, and are then applied by employing a localization routine on a Motus data set to estimate unobserved locations and behaviours.
+
+[Janaswamy, Ramakrishna, Pamela H. Loring, and James D. McLaren. “A State Space Technique for Wildlife Position Estimation Using Non-Simultaneous Signal Strength Measurements.” ArXiv.org, May 28, 2018.](https://arxiv.org/pdf/1805.11171.pdf)
+Combining a movement model to ensure biologically-consistent trajectories in three-dimensions, and an observation model to account for the effect of range, altitude, and bearing angle on the received signal strength, this novel state-space technique can estimate the location of airborne movements of VHF tags within the Motus array.
+
+As more advanced analysis and modelling tools become available they will be posted here.
+
+We strongly encourage participants to offer sample scripts and functions that can be integrated into this book. 
