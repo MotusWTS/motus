@@ -48,10 +48,10 @@ plotRouteMap <- function(data, zoom = 3, lat = NULL, lon = NULL,
          "Use the code \"update.packages('ggmap')\" to update to the ",
          "most recent version.", call. = FALSE)
   }
-  
-  if(class(zoom) != "numeric") stop('Numeric value between 3 and 21 required for "zoom"', call. = FALSE)
-  if(class(lat) %in% c(NULL, "numeric")) stop('Numeric values required for "lat"', call. = FALSE)
-  if(class(lon) %in% c(NULL, "numeric")) stop('Numeric values required for "lon"', call. = FALSE)
+
+  if(!is.numeric(zoom)) stop('Numeric value between 3 and 21 required for "zoom"', call. = FALSE)
+  if(!is.null(lat) && !is.numeric(lat)) stop('Numeric values required for "lat"', call. = FALSE)
+  if(!is.null(lon) && !is.numeric(lon)) stop('Numeric values required for "lon"', call. = FALSE)
 
   site <- dplyr::tbl(data, "recvDeps")
   site <- site %>% 
@@ -87,10 +87,6 @@ plotRouteMap <- function(data, zoom = 3, lat = NULL, lon = NULL,
     dplyr::filter(.data$include)
   
   data <- dplyr::filter(data, lubridate::`%within%`(.data$ts, dateRange))
-  
-  # In case user supplies wrong order
-  lon <- sort(lon)
-  lat <- sort(lat)
 
   # Calculate bounds from data if NULL
   if(any(is.null(lon))) {
@@ -99,7 +95,7 @@ plotRouteMap <- function(data, zoom = 3, lat = NULL, lon = NULL,
     # Add a bit of wiggle room to the edges
     lon[1] <- lon[1] - abs(lon[2]-lon[1])*0.05
     lon[2] <- lon[2] + abs(lon[2]-lon[1])*0.05
-  }
+  } else lon <- sort(lon)     # In case user supplies wrong order
     
   if(any(is.null(lat))) {
     lat <- c(min(c(data$recvDeployLat, site$latitude)),
@@ -107,7 +103,7 @@ plotRouteMap <- function(data, zoom = 3, lat = NULL, lon = NULL,
     # Add a bit of wiggle room to the edges
     lat[1] <- lat[1] - abs(lat[2]-lat[1])*0.05
     lat[2] <- lat[2] + abs(lat[2]-lat[1])*0.05 
-  }
+  } else lat <- sort(lat) # In case user supplies wrong order
   
   gmap <-  ggmap::get_stamenmap(bbox = c(left = lon[1], right = lon[2],
                                          bottom = lat[1], top = lat[2]),
