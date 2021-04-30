@@ -5,3 +5,4 @@ nohup.out
 .Rhistory
 .RData
 tests/spelling.R
+docs

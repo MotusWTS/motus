@@ -65,15 +65,15 @@
 #'
 #' @noRd
 
-srvMetadataForTags = function(motusTagIDs, verbose = FALSE) {
-    x = srvQuery(API=motus_vars$API_METADATA_FOR_TAGS, 
-                 params=list(motusTagIDs=motusTagIDs),
-                 verbose = verbose)
-    return (list(
-        tags = structure(x$tags, class = "data.frame", row.names=seq(along=x$tags[[1]])),
-        tagDeps = structure(x$tagDeps, class = "data.frame", row.names=seq(along=x$tagDeps[[1]])),
-        tagProps = structure(x$tagProps, class = "data.frame", row.names=seq(along=x$tagProps[[1]])),
-        species = structure(x$species, class = "data.frame", row.names=seq(along=x$species[[1]])),
-        projs = structure(x$projs, class = "data.frame", row.names=seq(along=x$projs[[1]]))
-    ))
+srvMetadataForTags <- function(motusTagIDs, verbose = FALSE) {
+  x <- srvQuery(API = motus_vars$API_METADATA_FOR_TAGS, 
+                params = list(motusTagIDs = I(motusTagIDs)),
+                verbose = verbose)
+  list(
+    tags = structure(x$tags, class = "data.frame", row.names=seq(along=x$tags[[1]])),
+    tagDeps = structure(x$tagDeps, class = "data.frame", row.names=seq(along=x$tagDeps[[1]])),
+    tagProps = structure(x$tagProps, class = "data.frame", row.names=seq(along=x$tagProps[[1]])),
+    species = structure(x$species, class = "data.frame", row.names=seq(along=x$species[[1]])),
+    projs = structure(x$projs, class = "data.frame", row.names=seq(along=x$projs[[1]]))
+  )
 }

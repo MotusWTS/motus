@@ -19,9 +19,9 @@
 #'
 #' @noRd
 
-srvTagsForAmbiguities = function(ambigIDs, verbose = FALSE) {
-    x = srvQuery(API=motus_vars$API_TAGS_FOR_AMBIGUITIES, 
-                 params=list(ambigIDs=ambigIDs), 
-                 verbose = verbose)
-    return(structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
+srvTagsForAmbiguities <- function(ambigIDs, verbose = FALSE) {
+  x <- srvQuery(API = motus_vars$API_TAGS_FOR_AMBIGUITIES, 
+                params = list(ambigIDs = I(ambigIDs)), 
+                verbose = verbose)
+  structure(x, class = "data.frame", row.names = seq(along = x[[1]]))
 }

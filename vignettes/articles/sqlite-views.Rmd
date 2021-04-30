@@ -1,0 +1,16 @@
+---
+title: "SQLite Views"
+---
+
+## `alltags` and `alltagsGPS` structure
+
+```{r include = FALSE}
+library(pander)
+```
+
+The following variables are included in `alltags` and `alltagsGPS` view in the SQLite file (note that the final three `gps` related fields are only available in `alltagsGPS`).
+
+```{r. echo = FALSE}
+param.table <- dplyr::select(read.csv("./data/DatabaseParameters.csv", stringsAsFactors = FALSE), 1:2)
+pander(param.table, split.cell = 50, split.table = Inf) 
+```

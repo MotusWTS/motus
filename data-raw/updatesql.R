@@ -3,6 +3,21 @@ sql_versions <- dplyr::tibble()
 
 sql_versions <- rbind(
   sql_versions,
+  cbind(date = "2021-02-25",
+        descr = "Drop IS NOT NULL constraint on nodeDeps ts",
+        sql = paste0("CREATE TABLE IF NOT EXISTS nodeDeps2 (
+                      deployID INTEGER NOT NULL,
+                      nodeDeployID BIGINT PRIMARY KEY NOT NULL, 
+                      latitude  FLOAT, 
+                      longitude FLOAT, 
+                      tsStart FLOAT NOT NULL, 
+                      tsEnd FLOAT);
+                      INSERT INTO nodeDeps2 SELECT * FROM nodeDeps;
+                      DROP TABLE nodeDeps;
+                      ALTER TABLE nodeDeps2 RENAME TO nodeDeps;")))
+
+sql_versions <- rbind(
+  sql_versions,
   cbind(date = "2020-08-07",
         descr = "Rename nodeDataId to nodeDataID in nodeData",
         sql = paste0("ALTER TABLE nodeData RENAME TO nodeData2;",

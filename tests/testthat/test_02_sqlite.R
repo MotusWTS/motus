@@ -44,6 +44,12 @@ test_that("ensureDBTables() creates database", {
                     "solarCurrentCumul", "lat", "lon") %in% 
                     DBI::dbListFields(temp$con, "nodeData")))
   
+  # Expect no NOT NULL in nodeDeps tsEnd
+  expect_equal(DBI::dbGetQuery(temp$con, "PRAGMA table_info(nodeDeps)") %>%
+                 dplyr::filter(name == "tsEnd") %>%
+                 dplyr::pull(notnull), 
+               0)
+  
   # Expect new columns in hits
   expect_true(all(c("validated") %in% DBI::dbListFields(temp$con, "hits")))
 

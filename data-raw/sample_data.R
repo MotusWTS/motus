@@ -19,7 +19,7 @@ if(have_auth()) {
   # Update project 4
   #file.remove("./inst/extdata/project-4.motus")
   #tagme(4, new = TRUE, update = TRUE, dir = "./inst/extdata/")
-  tagme(4, new = FALSE, update = TRUE, dir = "./inst/extdata/")
+  tagme(4, new = FALSE, update = FALSE, dir = "./inst/extdata/")
   
   # Create small sample for GPS tests
   file.copy("./inst/extdata/project-4.motus", "./inst/extdata/gps_sample.motus", overwrite = TRUE)

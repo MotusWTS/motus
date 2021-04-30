@@ -76,34 +76,30 @@ plotAllTagsCoord <- function(data, coordinate = "recvDeployLat", ts = "ts", tags
   if(nrow(data) == 0) stop("No data with coordinate '", coordinate, "'", 
                            call. = FALSE)
 
-  labs = data$fullID[order(data$mfgID, data$fullID)]
-  dup = duplicated(labs)
-  tagLabs = labs[!dup]
-  tagGroupIDs = data$mfgID[order(data$mfgID, data$fullID)][!dup]
-  tagGroup = 1 + floor((0:length(tagLabs))/tagsPerPanel)
-  ngroup = length(tagGroup)
-  names(tagGroup) = tagLabs
-  tagGroupFactor = tagGroup[as.character(data$fullID)]
-  tagGroupLabels = tapply(tagGroupIDs, 1 + floor((0:(length(tagGroupIDs) - 
+  labs <- data$fullID[order(data$mfgID, data$fullID)]
+  dup <- duplicated(labs)
+  tagLabs <- unique(labs)
+  tagGroupIDs <- data$mfgID[order(data$mfgID, data$fullID)][!dup]
+  tagGroup <- 1 + floor((0:length(tagLabs))/tagsPerPanel)
+  ngroup <- length(tagGroup)
+  names(tagGroup) <- tagLabs
+  tagGroupFactor <- tagGroup[as.character(data$fullID)]
+  tagGroupLabels <- tapply(tagGroupIDs, 1 + floor((0:(length(tagGroupIDs) - 
                                                        1))/tagsPerPanel), function(data) paste("IDs:", paste(sort(unique(data)), 
                                                                                                              collapse = ",")))
-  data$tagGroupFactor = factor(tagGroupFactor, labels = tagGroupLabels, 
-                               ordered = TRUE)
+  data$tagGroupFactor <- tagGroupLabels[tagGroupFactor]
   data <- unique(subset(data, select = c("hour", "meanlat", 
                                          "recvDeployName", "fullID", "tagGroupFactor")))
   data <- data[order(data$hour), ]
-  out <- by(data, INDICES = data$tagGroupFactor, FUN = function(m) {
-    m <- droplevels(m)
-    m <- ggplot2::ggplot(m, ggplot2::aes_string(x = "hour", y = "meanlat", 
-                                                colour = "fullID", group = "fullID"))
-    m + ggplot2::geom_line() + 
-      ggplot2::geom_point(pch = 21) + 
-      ggplot2::theme_bw() +
-      ggplot2::labs(title = "Detection time vs Latitude by Tag", 
-                    x = "Date", y = paste0('mean_', coordinate), colour = "ID") + 
-      ggplot2::facet_wrap("tagGroupFactor") +
-      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
-  })
-  do.call(gridExtra::grid.arrange, out)
+  
+  ggplot2::ggplot(data, ggplot2::aes_string(x = "hour", y = "meanlat", 
+                                            colour = "fullID", group = "fullID")) +
+    ggplot2::geom_line() + 
+    ggplot2::geom_point(pch = 21) + 
+    ggplot2::theme_bw() +
+    ggplot2::labs(title = "Detection time vs Latitude by Tag", 
+                  x = "Date", y = paste0('mean_', coordinate), colour = "ID") + 
+    ggplot2::facet_wrap("tagGroupFactor", ncol = 1, scales = "free") +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
 }
 

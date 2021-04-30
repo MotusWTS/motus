@@ -103,10 +103,22 @@ getAccess <- function() {
           "Receivers: ", paste0(motus_vars$receivers, collapse = ", "))
 }
 
+
 requiredCols <- function(x, req, name = "data") {
   cols <- colnames(x)
   if(any(!req %in% cols)) {
     stop("Required columns/fields missing from '", name, "': ",
          paste0(req[!req %in% cols], collapse = ", "))
   }
+}
+
+get_sample_data <- function() {
+  sample_auth() # Use motus sample authorizations
+  unlink("project-176.motus")
+  if(!dir.exists("./data/")) dir.create("./data/")
+  message("Copying sample project")
+  file.copy(system.file("extdata", "project-176.motus", package = "motus"), 
+            "./data/")
+  message("Loading sample project")
+  tagme(projRecv = 176, new = FALSE, update = TRUE, dir = "./data/")
 }

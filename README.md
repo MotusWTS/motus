@@ -1,14 +1,12 @@
 <!-- badges: start -->
-[![Build status](https://ci.appveyor.com/api/projects/status/d33qyiunqjexdepy/branch/master?svg=true)](https://ci.appveyor.com/project/steffilazerte/motus)
-[![Travis build status](https://travis-ci.org/MotusWTS/motus.svg?branch=master)](https://travis-ci.org/MotusWTS/motus)
-[![Codecov test coverage](https://codecov.io/gh/MotusWTS/motus/branch/master/graph/badge.svg)](https://codecov.io/gh/MotusWTS/motus?branch=master)
 [![R build status](https://github.com/MotusWTS/motus/workflows/R-CMD-check/badge.svg)](https://github.com/MotusWTS/motus/actions)
+[![Codecov test coverage](https://codecov.io/gh/MotusWTS/motus/branch/master/graph/badge.svg)](https://codecov.io/gh/MotusWTS/motus?branch=master)
 <!-- badges: end -->
 
 # motus
 R package for users of data from https://motus.org
 
-See the [Motus R book](https://motus.org/MotusRBook/) for detailed usage information
+See the [motus package site](https://MotusWTS.github.io/motus) for detailed usage information
 
 
 ## Installation
@@ -81,12 +79,4 @@ Another possible cause of this problem relates to file permissions in your libra
 .libPaths()
 # add a new libPaths default location
 .libPaths("c:/users/myusername/R/win-libraries")
-```
-
-**certificate errors**
-
-If you get a certificate error using the `tagme()` function, please ensure that your `httr` package is up-to-date, as there was a problem reported with one of the recent version that now appears fixed:
-
-```R
-remotes::install_github("r-lib/httr")
 ```

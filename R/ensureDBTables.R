@@ -506,7 +506,7 @@ CREATE INDEX IF NOT EXISTS runsFilters_filterID_runID_motusTagID ON runsFilters 
       latitude  FLOAT, 
       longitude FLOAT, 
       tsStart FLOAT NOT NULL, 
-      tsEnd FLOAT NOT NULL);")
+      tsEnd FLOAT);")
   }
 
   updateMotusDb(src, quiet = quiet)
