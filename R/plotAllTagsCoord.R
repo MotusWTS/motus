@@ -82,13 +82,12 @@ plotAllTagsCoord <- function(data, coordinate = "recvDeployLat", ts = "ts", tags
   tagGroupIDs <- data$mfgID[order(data$mfgID, data$fullID)][!dup]
   tagGroup <- 1 + floor((0:length(tagLabs))/tagsPerPanel)
   ngroup <- length(tagGroup)
-  names(tagGroup) <-tagLabs
+  names(tagGroup) <- tagLabs
   tagGroupFactor <- tagGroup[as.character(data$fullID)]
   tagGroupLabels <- tapply(tagGroupIDs, 1 + floor((0:(length(tagGroupIDs) - 
                                                        1))/tagsPerPanel), function(data) paste("IDs:", paste(sort(unique(data)), 
                                                                                                              collapse = ",")))
-  data$tagGroupFactor <- factor(tagGroupFactor, labels = tagGroupLabels, 
-                                ordered = TRUE)
+  data$tagGroupFactor <- tagGroupLabels[tagGroupFactor]
   data <- unique(subset(data, select = c("hour", "meanlat", 
                                          "recvDeployName", "fullID", "tagGroupFactor")))
   data <- data[order(data$hour), ]
