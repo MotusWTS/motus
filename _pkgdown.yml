@@ -1,7 +1,7 @@
 development:
   mode: devel
-  versino_label: info
-  version_tooltip: "Documentation Hoverhaul"
+  version_label: info
+  version_tooltip: "Documentation overhaul"
   
 template:
   params:
@@ -29,6 +29,7 @@ articles:
   - articles/motus
   - articles/troubleshooting
   - articles/filtering
+  - articles/gps
   - articles/vanishing-bearings
   - articles/advanced-modelling
 - title: Understanding Motus data
