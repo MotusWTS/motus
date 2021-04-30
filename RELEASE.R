@@ -93,7 +93,7 @@ devtools::check_win_oldrelease()
 ## Update motus website
 pkgdown::build_site()
 pkgdown::build_home()
-pkgdown::build_articles()
+pkgdown::build_articles(lazy = TRUE)
 
 
 ## Note: non-ASCII files found

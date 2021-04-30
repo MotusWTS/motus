@@ -1,3 +1,8 @@
+development:
+  mode: devel
+  versino_label: info
+  version_tooltip: "Documentation Hoverhaul"
+  
 template:
   params:
     bootswatch: cosmo
@@ -21,7 +26,9 @@ articles:
 - title: Other topics
   desc: Specific tutorials for different tasks
   contents:
+  - articles/motus
   - articles/troubleshooting
+  - articles/filtering
   - articles/vanishing-bearings
   - articles/advanced-modelling
 - title: Understanding Motus data

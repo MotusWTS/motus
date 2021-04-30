@@ -1,0 +1,130 @@
+---
+title: "Working with GPS points"
+---
+
+```{r, include = FALSE}
+motus:::get_sample_data()
+```
+
+The `alltagsGPS` view is the same as the `alltags` view but includes GPS points. 
+Because of this, the `alltagsGPS` view can be slower to work with, particularly if you have a large database.
+
+If your data base is relatively small you can consider using the `alltagsGPS` view directly.
+
+```{r}
+alltagsGPS <- tbl(sql.motus, "alltagsGPS")
+```
+
+Further, the `filterByActivity()` function (see the [filtering article](filtering.html)) takes the argument `view` which is `alltags` by default but can be specified as `alltagsGPS`. 
+
+Otherwise you may wish to first filter your data and then add GPS points in with the `getGPS()` function.
+
+## Adding GPS to a data subset
+
+GPS data is stored in the `gps` table.
+
+```{r}
+library(dplyr)
+tags <- tagme(176, update = TRUE, new = FALSE, dir = "./data")
+
+tbl(tags, "gps")
+```
+
+Unfortunately, the sample data has no GPS points.
+However, the following examples illustrate the steps to take if you want to add GPS data to a subset of your `alltags` data.
+
+For example, let's work with a subset of the sample data, including only Dunlins.
+
+```{r}
+dunlin <- tbl(tags, "alltags") %>%
+  filter(speciesEN == "Dunlin")
+```
+
+Now let's retrieve the daily median location of GPS points for these data.
+Note that we use both the original database `tags` as well as the data subset `dunlin`. 
+
+```{r}
+index_GPS <- getGPS(src = tags, data = dunlin)
+```
+
+This table is an index matching GPS points to specific `hitID`, so the next step is to join it into your data subset using the `left_join()` function from the `dplyr` package.
+Note that at this point, we need to ensure that `dunlin` is 'flat' (i.e. a data frame, not a database; see [Converting to flat data](03-accessing-data.html#converting-to-flat-data) for more details).
+
+```{r}
+dunlin_GPS <- left_join(dunlin, index_GPS, by = "hitID")
+```
+
+
+### More ways of matching GPS points
+
+By default, `getGPS()` matches GPS points to hits by date. 
+However, we can match GPS locations to `hitID`s according to one of several different time values, specified by the `by` argument.
+
+`by` can be one of three options:
+
+1. the median location within **`by = X`** minutes of a `hitID`
+    - here, `X` can be any number greater than zero and represents the size of the time block in minutes over which to calculate a median location
+    - be aware that you should ideally not chose a period smaller than the frequency at which GPS fixes are recorded, or some hits will not be associated with GPS
+
+For example, the median location within 60 minutes of a `hitID`.
+```{r}
+index_GPS <- getGPS(src = tags, data = dunlin, by = 60)
+```    
+    
+    
+2. **`by = "daily"`** median location (**default**, used in first example)
+    - similar to `by = X` except the duration is 24hr (same as `by = 1440`)
+    - this method is most suitable for receiver deployments at fixed location.
+    
+```{r}
+index_GPS <- getGPS(src = tags, data = dunlin, by = "daily")
+```
+    
+3. or the **`by = "closest"`** location in time
+    - individual GPS lat/lons are returned, matching the closest `hitID` timestamp
+    - this method is most accurate for mobile deployments, but is potentially slower than `by = X`.
+    - you can also specify a `cutoff` which will only match GPS records which are within `cutoff = X` minutes of the hit. This way you can avoid having situations where the 'closest' GPS record is actually days away.
+
+For example, the closest location in time noted within 2 hours of a hit.
+```{r}
+index_GPS <- getGPS(src = tags, data = dunlin, by = "closest", cutoff = 120)
+```
+
+To keep all `hitID`s, regardless of whether they match to GPS data or not, use the argument `keepAll = TRUE`.
+This results in `NA` for `gpsLat`, `gpsLon` and `gpsAlt` where there is no corresponding GPS hit (otherwise the hit is omitted). 
+
+```{r}
+index_GPS <- getGPS(src = tags, data = dunlin, keepAll = TRUE)
+index(dunlin_GPS)
+```
+
+
+
+
+## GPS clean up
+
+Now that we have our GPS data (either through loading `alltagsGPS` or using the `getGPS()` function), we can finish by cleaning up the data base a bit more. 
+
+First we'll create receiver latitude and longitude variables (`recvLat`, `recvLon`, `recvAlt`) based on the coordinates recorded by the receiver GPS (`gpsLat`, `gpsLon`, `gpsAlt`), and where those are not available, infilled with coordinates from the receiver deployment metadata (`recvDeployLat`, `recvDeployLon`, `recvDeployAlt`). 
+Missing GPS coordinates may appear as `NA` if they are missing, or as `0` or `999` if there was a problem with the unit recording.
+
+Finally, we create 'receiver names' by adding rounded `recvLat` and `recvLon` to the `recvDeployName` for those receivers in the database that do not have these values filled in.
+As more users explore (and fix!) their metadata, these missing values should begin to disappear. 
+We'll fix this here as sometimes if there is missing metadata (ie. a missing receiver deployment spanning some of your detections), you will get `NA`s which can lead to problems later on.  
+
+```{r}
+df.alltagsGPS <- tbl(tags, "alltagsGPS") %>%
+  mutate(recvLat = if_else((is.na(gpsLat)|gpsLat == 0|gpsLat == 999), 
+                           recvDeployLat, gpsLat),
+         recvLon = if_else((is.na(gpsLon)|gpsLon == 0|gpsLon == 999), 
+                           recvDeployLon, gpsLon),
+         recvAlt = if_else(is.na(gpsAlt), recvDeployAlt, gpsAlt)) %>%
+  collect() %>%
+  mutate(recvLat = plyr::round_any(recvLat, 0.05), 
+         recvLon = plyr::round_any(recvLon, 0.05),
+         recvDeployName = if_else(is.na(recvDeployName), 
+                                  paste(recvLat, recvLon, sep=":"), 
+                                  recvDeployName))
+
+select(df.alltagsGPS, hitID, runID, batchID, ts, recvDeployID, recvLat, recvLon)
+```

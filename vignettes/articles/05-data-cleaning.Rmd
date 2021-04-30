@@ -8,6 +8,20 @@ author: Tara L. Crewe, Zoe Crysler, and Philip Taylor. Revisions by Catherine Ja
 sql.motus <- motus:::get_sample_data()
 ```
 
+> This chapter walks you through checking and cleaning tag detections by
+> by filtering out noisy data, visually exploring your data, and checking ambiguous 
+> detections.
+>
+> Some extra, more advanced topics not addressed in this chapter are available as supplementary articles.
+>
+> **Advanced Topics:**  
+> - [In-depth detections filtering](filtering.html)
+> - [Working with GPS points](gps.html)
+
+
+
+
+
 There are three sources of 'error' that can result in tag detections appearing in your database that are incorrect.
 
 First, random radio noise ('static') can be detected and interpreted to be the transmission of a tag.
@@ -27,14 +41,18 @@ Please contact us if you think you have some of these Aliased tag detections in 
 The *goal of this chapter* is to provide you with the tools you need to check your data for false detections, and remove them from your data. 
 We do so by providing example workflows that deal with 'false positives' and 'ambiguous tags' in the following steps: 
 
-1) **Run a preliminary filter to remove all detections with `runLen` of 3 or less, and detections with intermediate `runLen`s made during periods of high noise/activity.**   
-A run is a group of consecutive detections of a tag detected on a single antenna at a single receiver. In general, a detection with a run length of 2 or 3 (i.e., 2 or 3 bursts) has a high probability of being a false positive detection. With the exception of a few 'quiet' stations with little noise, we generally recommend that you filter out all detections with a run length of 3 or less. However, because you will likely lose some true detections in the process, we also recommend that after a full analysis of your data, you return to these detections and examine them individually, to determine (usually contextually) if they can be considered real. Stations that are particularly noisy may also have false detections with longer `runLen`s.
+1. **Preliminary Filter**  
+A run is a group of consecutive detections of a tag detected on a single antenna at a single receiver. 
+Very short runs and relatively short runs at noisy stations both have a high probability of being false positive detections.
+These can be omitted using the `motusFilter`. However, because you will likely lose some true detections in the process, we also recommend that after a full analysis of your data, you return to these detections and examine them individually, to determine (usually contextually) if they can be considered real.
 
-2) **Determine how many of your tag detections may be ambiguous detections**
+2. **Examine individual tags**  
+Examine indiviudal tags and determine if runs in those tags are errors
 
-3) **Provide a workflow for examining individual tags, and determine if runs in those tags are errors**
+3. **Ambiguous Detections**  
+Determine how many of your tag detections may be ambiguous detections
 
-4) **Filter errors from your data**
+4. **Remove false detections from your data**
 
 
 ## Load required packages
@@ -72,219 +90,78 @@ Study designs that incorporate strategic placement of receivers to meet project 
 3) Missing or incorrect tag deployment metadata in the Motus database can result in the data processing algorithm not 'looking' for your tag at the time the tag was deployed, or at all. 
 Please ensure your tag metadata are entered correctly. 
 
-Before going further, **please check whether any of your tags were deployed more than once**, as described in section \@ref(checkNumberTagDeployments). 
+Before going further, **please check whether any of your tags were deployed more than once**, as described in [Chapter 4 - Number of deployments per tag](#number-of-deployments-per-tag). 
 If so, you will need to use `tagDeployID` or a combination of `motusTagID` and `tagDeployID` to uniquely define detections associated with a tag deployment (either will do, but combining the two fields will let you know which tagID is associated with each deployment). 
 
 In the sample data, all tags were deployed only once, and so we use the `motusTagID` as a unique identifier for a tag deployment in all R code throughout the book. 
 
-Using the `count()` function we can see that there are detections for 18 tags deployed by the sample project.
-
-```{r}
-tbl(sql.motus, "alltags") %>%
-  filter(tagProjID == 176) %>% # subset to include only tags registered to project
-  count(motusTagID) %>%
-  as.data.frame()
-```
-
-If we break down these counts by run length using the following code we further see that many have run lengths of 3 (the `run 3` column).
-
-```{r}
-tbl(sql.motus, "alltags") %>%
-  filter(tagProjID == 176) %>% # subset to include only tags registered to project
-  mutate(rl.gt.3 = if_else(runLen == 3, "run 3", "run > 3")) %>%
-  count(motusTagID, rl.gt.3) %>%
-  collect() %>%
-  spread(key = rl.gt.3, value = n)
-```
-
-Although some of these may be valid detections, we have found it simpler to just remove them from our analysis, and possibly revisit them at a later stage. 
-In the next few sections we will explore a series of filters that do just this.
-
 ## Preliminary filtering
-We can perform some preliminary filtering based on run length (`runLen`).
+Invariably you will run into some false detections in your tag detection data. 
+Sometimes these may be due to random glitches or noisy radio conditions. 
+The various outputs on the Motus web site are pre-filtered, but data downloaded via the `motus` R package provides access to **all** detections, allowing users more control over which detections to keep or omit. 
+Therefore, it is important to filter these out as part of your data cleaning process.
+
 As runs are composed of sequences of hits, the longer the run the more confident we can be that it represents a true detection. 
-However, local conditions at an individual receiver may vary in their exposure to background radio noise. 
-Sites with relatively more background noise may be more prone to reporting false detections. 
-Therefore the standard motus filter relies both on the length of the run, and the amount of radio activity at a given site.
-This value is stored as a field called `motusFilter` in the `runs` table. 
-An additional table (`activity`) allows users to calculate a filter based on different criteria if they want. 
+However, local conditions at an individual receiver may vary in their exposure to background radio noise/interference. 
+Sites with relatively more background noise may be more prone to generating a high number of very short runs that are in reality spurious data. 
 
-### Understanding the `motusFilter`
-Starting in July 2019, data downloaded from motus with the `tagme()` function will include a standard filter value that can be used to identify detections that we believe have a higher probability of being false hits. 
-The various outputs on the motus web site are pre-filtered, but the R package provides access to all detections, allowing users more control over which detections to keep or omit. 
-The `motusFilter` field in the `runs` table represents the probability that the run is a true detection. 
+There are two filtering options in the `motus` R package that follow these ideas:
+
+1. Easiest is the field/column called `motusFilter` found in the `runs` table
+2. More customizable, is the function called `filterByActivity()`
+
+> Here we will continue with the `motusFilter` column, and encourage users to check out the article on [In-depth detections filtering](filtering.html) for more details on how the `motusFilter` is calculated and how to customize filtering with the `filterByActivity()` function
+
+`motusFilter` is a column in the `runs` table and is a good first option for identifying detections that have a higher probability of being false. 
 Currently the `motusFilter` contains just two values `0` or `1`. 
-Runs with a `motusFilter` of `0` have a low probability of being true detections.
-
-### How the `motusFilter` is generated
-The `motusFilter` is based the number of detections of different run lengths at a given site, across all motus projects.
-Periods with lots of radio interference will typically generate a high number of very short runs that are in reality spurious data. 
-In the presence of a high ratio of runs with length = 2 at a given time, we consider that site as 'noisy' and increase the minimum threshold for run lengths that we consider to be valid detections.
-
-In general, a detection with a run length of 2 or 3 (i.e., 2 or 3 bursts) has a relatively high probability of being a false positive detection. 
-Therefore, runs with a length 3 or less are conservatively assigned a `motusFilter` of 0. 
-For runs greater than length 3, data in the `activity` table provides a method of assessing the relative amount of background noise at a site which can be used to assess the probability of these runs being true detections.
-The `activity` table provides the number of runs of various lengths for each hour (called `hourBin`) within each batch and for each antenna. 
-A high number of detections within an hour (e.g., >= 100) with a high proportion of short runs (e.g., length 2 >= 85%) are indicative of a noisy environment, more likely to generate false positives. 
-For those periods, we treat the intermediate run lengths (3 < `runLen` < 5) as invalid (`motusFilter` = 0). 
-Intermediate run lengths are otherwise considered valid (`motusFilter` = 1).
-
-The `motusFilter` values in the `runs` table have been calculated on the basis of the above criteria, which were determined through some empirical examination of data.
-If you are working with a dataset downloaded through `tagme()` prior to July 2019 it will not include those values.
-In those cases, you will either need to download a new copy of the entire dataset for your project or receiver, or to use the `filterByActivity()` function described below to calculate the missing values.
-
-To omit runs identified as dubious by `motusFilter` we can use an anti-join.
+Runs with a `motusFilter` of `0` are considered "invalid" (i.e. have a low probability of being true detections) and could therefore be omitted. 
 
 ```{r}
-# Number of rows with runs 3 hits or less
-filter(tbl(sql.motus, "alltags"), runLen <= 3) %>% 
-  collect() %>% 
-  nrow()
+tbl(sql.motus, "runs")
+```
 
-# Identify runs to remove
-to_remove <- tbl(sql.motus, "runs") %>%
-  select(runID, motusFilter) %>%
+To omit runs identified as dubious by `motusFilter` we can use an `anti_join()` from the `dplyr` package.
+
+First identify invalid runs with a `motusFilter` of 0
+```{r}
+bad_runs <- tbl(sql.motus, "runs") %>%
   filter(motusFilter == 0)
-
-# Use anti-join to remove those runs from the alltags
-tbl_filtered <- anti_join(tbl(sql.motus, "alltags"), to_remove, by = "runID")
-
-# Number of rows with runs 3 hits or less after being filtered
-filter(tbl_filtered, runLen <= 3) %>% 
-  collect() %>% 
-  nrow()
 ```
 
-
-### Custom filters with the `filterByActivity()` function
-The `motusFilter` is one method of determining false detections, but motus users are encouraged to explore alternative filter parameters. 
-The `motus` R-package includes a `filterByActivity()` function that allows users to specify custom parameters used to identify false positives based on the `activity` table. 
-Users can return either just the "true" positives (`return = "good"`), just the "false" positives (`return = "bad"`) or all hits (`return = "all"`) but with a new column, "probability", which reflects either 0 (expected false positive) or 1 (expected true positive).
-
-For example, the following code, adds a `probability` column to the sample project data, which is identical to the `motusFilter` column (i.e., by default `filterByActivity()` uses the same conditions).
-
-**Note** that this function requires the SQLite database connection (not a flat data frame), but returns a data.frame of the `alltags` view (not a SQLite database connection).
-
+Now use `anti_join()` to remove those runs from the `alltags` view
 ```{r}
-tbl_motusFilter <- filterByActivity(sql.motus, return = "all")
+tbl.alltags.sub <- anti_join(tbl(sql.motus, "alltags"), 
+                           bad_runs, 
+                           by = "runID")
 ```
 
-Users can adjust these parameters to be less strict (i.e., exclude fewer detections). 
-This example excludes all runs of length 2 or less and will exclude any runs less than length 4 from `hourBin`s which have more than 500 runs and where at least 95% of those runs have a run length of 2.
-
+To double check we can filter for short runs in the original `alltags` view
 ```{r}
-tbl_relaxed <- filterByActivity(sql.motus, minLen = 2, maxLen = 4, 
-                                maxRuns = 500, ratio = 0.95, return = "all")
+tbl(sql.motus, "alltags") %>%
+  select(hitID, runID, batchID, motusTagID, runLen) %>%
+  filter(runLen <= 3)
 ```
 
-These parameters can also be more strict (i.e., exclude more detections). 
-This next example excludes all runs of length 4 or less and will exclude any runs less than length 10 from `hourBin`s which have more than 50 runs and where at least 75% of those runs have a run length of 2. 
-
+And compare this to our newly created filtered table `tbl.alltags.sub`
 ```{r}
-tbl_strict <- filterByActivity(sql.motus, minLen = 4, maxLen = 10, 
-                               maxRuns = 50, ratio = 0.75, return = "all")
+tbl.alltags.sub %>%
+  select(hitID, runID, batchID, motusTagID, runLen) %>%
+  filter(runLen <= 3)
 ```
+
 
 Note that the filters may exclude some true detections in the process. 
 Therefore, we recommend that after a full analysis of your data, you return to these detections and examine them individually, to determine (usually contextually) if they can be considered real.
 
-
-## Preparing the data
-When accessing the `alltags` view, we filter the data and remove some unnecessary variables to reduce the overall size of the data set and make it easier to work with. 
-**This is particularly important for large, unwieldy projects**; 
-details on how to view the variables in a `tbl`, and how to filter and subset prior to collecting data into a dataframe can be found in Chapter \@ref(convertToFlat). 
-
-### Label detections by probability
-First we will use the `filterByActivity()` function to label dubious detections. 
-This returns all the data in the `alltags` view with a new `probability` column.
+With that in mind, let's keep track of the detections we've just removed.
 
 ```{r}
-tbl.alltags <- filterByActivity(sql.motus, return = "all")
-```
-
-Alternatively we can change the default, so the `filterByActivity()` function uses the `alltagsGPS` view. 
-**However,** on very large databases this could be slow.
-
-```{r}
-tbl.alltags.gps <- filterByActivity(sql.motus, return = "all", view = "alltagsGPS")
-```
-
-
-### Clean up
-
-Let's filter to the 'good' detections. We will filter to `1` for detections to keep and `0` for dubious detections. 
-Then we'll use the `collect()` and `as.data.frame()` functions to transform the dataframe into a 'flat' (i.e. non SQLite) file, and then transform all time stamp variables from seconds since January 1 1970 to datetime (POSIXct) format. 
-
-```{r}
-df.alltags.sub <- tbl.alltags %>% 
-  filter(probability == 1) %>%
-  collect() %>%
-  as.data.frame() %>%
-  mutate(ts = as_datetime(ts),  # work with dates AFTER transforming to flat file
-         tagDeployStart = as_datetime(tagDeployStart),
-         tagDeployEnd = as_datetime(tagDeployEnd))
-```
-
-Let us also save the excluded detections for later analysis.
-```{r}
-df.block.0 <- filter(tbl.alltags, probability == 0) %>%
+df.block.0 <- bad_runs %>%
   select(motusTagID, runID) %>%
   distinct() %>%
-  collect() %>%
-  data.frame()
+  collect()
 ```
 
-### Add GPS data
-
-The `filterByActivity()` function can use the `alltagsGPS` view, but this may be slow. 
-A way around this speed problem is to use the `getGPS()` function to retrieve the GPS values of a data subset (`data`) after the data has been filtered.
-
-> Note that in this example, the sample dataset doesn't have GPS data
-
-```{r}
-# Retrieve GPS data for each hitID
-gps_index <- getGPS(sql.motus, data = df.alltags.sub, by = "closest")
-
-# Merge GPS points in with our data
-df.alltags.sub <- left_join(df.alltags.sub, gps_index, by = "hitID")
-```
-
-We match GPS locations to `hitID`s according to one of several different time values, specified by the `by` argument.
-This can be the `closest` location in time, the `daily` median location, or the median location within `X` minutes of a `hitID` (here, `X` can be any number greater than zero and represents the size of the time block in minutes over which to calculate a median location).
-If using the `closest` option, you can also specify a `cutoff` which will only match GPS records which are within `cutoff = X` minutes of the hit. This way you can avoid having situations where the 'closest' GPS record is actually days away (see also Chapter \@ref(addGPS)).
-
-We then create receiver latitude and longitude variables (`recvLat`, `recvLon`, `recvAlt`) based on the coordinates recorded by the receiver GPS (`gpsLat`, `gpsLon`, `gpsAlt`), and where those are not available, infilled with coordinates from the receiver deployment metadata (`recvDeployLat`, `recvDeployLon`, `recvDeployAlt`). 
-Missing GPS coordinates may appear as `NA` if they are missing, or as `0` or `999` if there was a problem with the unit recording.
-
-Finally, we create 'receiver names' by adding rounded `recvLat` and `recvLon` to the `recvDeployName` for those receivers in the database that do not have these values filled in.
-As more users explore (and fix!) their metadata, these missing values should begin to disappear. 
-We'll fix this here as sometimes if there is missing metadata (ie. a missing receiver deployment spanning some of your detections), you will get `NA`s which can lead to problems later on.  
-
-```{r}
-df.alltags.sub <- df.alltags.sub %>% 
-  mutate(recvLat = if_else((is.na(gpsLat)|gpsLat == 0|gpsLat == 999), 
-                           recvDeployLat, gpsLat),
-         recvLon = if_else((is.na(gpsLon)|gpsLon == 0|gpsLon == 999), 
-                           recvDeployLon, gpsLon),
-         recvAlt = if_else(is.na(gpsAlt), recvDeployAlt, gpsAlt)) %>%
-  select(-noise, -slop, -burstSlop, -done, -bootnum, -mfgID, 
-         -codeSet, -mfg, -nomFreq, -markerNumber, -markerType, 
-         -tagDepComments, -fullID, -deviceID, -recvDeployLat, 
-         -recvDeployLon, -recvDeployAlt, -speciesGroup, -gpsLat, 
-         -gpsLon, -recvAlt, -recvSiteName) %>%
-  mutate(recvLat = plyr::round_any(recvLat, 0.05), 
-         recvLon = plyr::round_any(recvLon, 0.05),
-         recvDeployName = if_else(is.na(recvDeployName), 
-                                  paste(recvLat, recvLon, sep=":"), 
-                                  recvDeployName))
-
-# Note that in the select statement, you can just select the variables you need
-# e.g.: select(runID, ts, sig, freqsd, motusTagID, ambigID, runLen, tagProjID, 
-#              tagDeployStart, tagDeployEnd, etc.)
-# As opposed to those you don't need (-done, -bootnum, etc.)
-```
-
-Now we have a nice clean data frame!
 
 ## Preliminary data checks
 
@@ -301,12 +178,12 @@ We'll do this by creating a little function here, since we will use this operati
 Note that we will need to remove about 150 detections, because there is no geographic data associated with the receiver metadata, and so no way to determine the location of those detections. 
 Do a simple check to see if these receivers belong to you, and if so, please **fix the metadata online**! 
 
-For example, here we can see which receivers are missing (`is.na(recvLat)`).
+For example, here we can see which receivers are missing (`is.na(recvDeployLat)`).
 
 ```{r}
-df.alltags.sub %>%
-  filter(is.na(recvLat)) %>%
-  select(recvLat, recvLon, recvDeployName, recvDeployID, recv, 
+tbl.alltags.sub %>%
+  filter(is.na(recvDeployLat)) %>%
+  select(recvDeployLat, recvDeployLon, recvDeployName, recvDeployID, recv, 
          recvProjID, recvProjName) %>%
   distinct()
 ```
@@ -318,22 +195,21 @@ If you want to summarize at a finer/coarser scale, you can also create other gro
 The simplest alternative is a rounded timestamp variable; for example by using `mutate(ts.h = plyr::round_any(ts, 3600)`.
 Other options are to just use date (e.g `date = as_date(ts)`).
 
-Here is an advanced example creating a function so we can re-use this simplification later.
+Here we create a summary data frame that we can filter to produce different plots
 
 ```{r eval = TRUE}
-fun.getpath <- function(df) {
-  df %>%
-    filter(tagProjID == 176, # keep only tags registered to the sample project
-           !is.na(recvLat) | !(recvLat == 0)) %>% # drops data without lon/lat
-    group_by(motusTagID, runID, recvDeployName, ambigID, 
-             tagDepLon, tagDepLat, recvLat, recvLon) %>%
-    #summarizing by runID to get max run length and mean time stamp:
-    summarize(max.runLen = max(runLen), ts.h = mean(ts)) %>% 
-    arrange(motusTagID, ts.h)
-} # end of function
-
-df.alltags.path <- fun.getpath(df.alltags.sub)
-                    
+df.plot <- tbl.alltags.sub %>%
+  filter(tagProjID == 176, # keep only tags registered to the sample project
+         !is.na(recvDeployLat) | !(recvDeployLat == 0)) %>% # drops data without lon/lat
+  group_by(motusTagID, runID, recvDeployName, ambigID, 
+           tagDepLon, tagDepLat, recvDeployLat, recvDeployLon) %>%
+  #summarizing by runID to get max run length and mean time stamp:
+  summarize(max.runLen = max(runLen, na.rm = TRUE), 
+            ts = mean(ts, na.rm = TRUE), .groups = "drop") %>% 
+  arrange(motusTagID, ts) %>%
+  collect() %>%
+  mutate(ts = plyr::round_any(ts, 3600),
+         ts = as_datetime(ts, tz = "UTC", origin = "1970-01-01"))
 ```
 
 We would initially plot a subset of tags by either latitude or longitude, to get an overview of where there might be issues. 
@@ -341,85 +217,69 @@ Here, to simplify the example, we plot only six tags.
 We avoid examining the ambiguous tags for now. 
 
 ```{r}
-ggplot(data = filter(df.alltags.path, 
+ggplot(data = filter(df.plot,
                      motusTagID %in% c(16011, 16035, 16036, 16037, 16038, 16039)), 
-       aes(x = ts.h, y = recvLat)) +
+       aes(x = ts, y = recvDeployLat)) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) + 
   geom_point() + 
   geom_path() +
-  facet_wrap(~ motusTagID, scales = "free", ncol = 2)
+  facet_wrap(~ motusTagID, scales = "free", ncol = 2) +
+  scale_x_datetime(date_labels = "%Y-%m-%d")
 ```
 
 Although there don't seem to be any immediate problems, let's take a look at the tags showing up around 44 degrees during September. 
 Let's examine these tags in more detail by examining the runs in the data frame that are associated with detections in September.
 
 ```{r}
-df.alltags.sub %>%
-  filter(month(ts) %in% c(9),
-         motusTagID %in% c(16035, 16037, 16039),
-         recvLat < 44) %>% 
-  group_by(recvDeployName, month(ts), runLen) %>%
+tbl.alltags.sub %>%
+  filter(motusTagID %in% c(16035, 16037, 16039),
+         recvDeployLat < 44) %>% 
+  collect() %>%
+  mutate(ts = as_datetime(ts, tz = "UTC", origin = "1970-01-01")) %>%
+  filter(month(ts) == 9) %>%
+  group_by(recvDeployName, month = month(ts), runLen) %>%
   summarize(n = length(ts), 
-            n.tags = length(unique(motusTagID))) %>%
+            n.tags = length(unique(motusTagID)), 
+            .groups = "drop") %>%
   arrange(runLen)
 ```
 
-Since we have already filtered dubious detections, these remaining ones don't seem immediately unreliable (all with runs of at least 6). 
+Since we have already filtered dubious detections, these remaining ones don't seem immediately unreliable (all with high `runLen`). 
 If you are interested, you can re-run the code above, but on the full data frame (`tbl(sql.motus, "alltags")`) containing run lengths of 2 or 3. 
 You will see that there are likely false positive detections at these sites, that were already eliminated by filtering. 
-These additional detections provide further evidence that these sites experienced some radio noise during these particular months, resulting in some false positive detections.
 
-You may also be interested more generally in exploring which data have only short run lengths.
-For example, the following code shows the maximum run length at all sites by month (for those runs which haven't been removed by filtering).
+Hypothetically, if we decided that those detections in September were false positives, we could create a data frame that contains the `motusTagID`s and `runID`s for them.
 
 ```{r}
-df.alltags.sub %>%
-  mutate(month = month(ts)) %>%
-  group_by(recvDeployName, month) %>%
-  summarize(max.rl = max(runLen)) %>%
-  spread(key = month, value = max.rl)
-```
-
-Alternatively, you can produce a list of sites where the maximum run length of detections was never greater than (say) 4, which may sometimes (but not always!) indicate they are simply false detections.
-
-```{r}
-df.alltags.sub %>%
-  mutate(month = month(ts)) %>%
-  group_by(recvDeployName, month) %>%
-  summarize(max.rl = max(runLen)) %>%
-  filter(max.rl < 5) %>%
-  spread(key = month, value = max.rl)
-```
-
-It is impossible to go through every possible issue that you may encounter here. 
-Users are strongly encouraged to explore their data fully, and make reasoned decisions on which detections are unlikely or indeterminate.
-Through the rest of this chapter we will show you how to collect these runs, and apply them to your data prior to analysis.
-
-To start, if we decided that those detections in September were false positives, we could create a data frame that contains the `motusTagID`s and `runID`s for them.
-
-We could then re-create the plot with the newly filtered data.
-
-```{r}
-# Collect dubious detections
-df.block.1 <- df.alltags.sub %>%
-  filter(month(ts) %in% 9,
-         motusTagID %in% c(16035, 16037, 16039)) %>%
+df.block.1 <- tbl.alltags.sub %>%
+  filter(motusTagID %in% c(16035, 16037, 16039)) %>%
+  collect() %>%
+  mutate(ts = as_datetime(ts, tz = "UTC", origin = "1970-01-01")) %>%
+  filter(month(ts) == 9) %>%
   select(motusTagID, runID) %>%
   distinct()
+```
 
-# use the function we created earlier to make a new 'path' data frame for plotting
-df.alltags.path <- fun.getpath(filter(df.alltags.sub, 
-                                      motusTagID %in% c(16011, 16035, 16036, 
-                                                        16037, 16038, 16039), 
-                                      !(runID %in% df.block.1$runID)))
+Remove them from our plotting data frame
 
-ggplot(data = df.alltags.path, aes(x = ts.h, y = recvLat)) +
+```{r}
+df.plot.sub <- df.plot %>%
+  anti_join(df.block.1, by = c("motusTagID", "runID"))
+```
+
+
+And then plot our data again, having omitted those detections
+```{r}
+ggplot(data = filter(df.plot.sub,
+                     motusTagID %in% c(16011, 16035, 16036, 16037, 16038, 16039)), 
+       aes(x = ts, y = recvDeployLat)) +
   theme_bw() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) + 
   geom_point() + 
-  geom_path() + 
-  facet_wrap(~ motusTagID, scales = "free", ncol = 2)
+  geom_path() +
+  facet_wrap(~ motusTagID, scales = "free", ncol = 2) +
+  scale_x_datetime(date_labels = "%Y-%m-%d")
 ```
 
 The reader is encouraged to explore the rest of the tags within this group, to determine if there are additional false positives. 
@@ -445,40 +305,34 @@ The `fullID` fields list the project names associated with the duplicate tags (e
 Let's get a data frame of these, and do some plots to see where there may be issues. 
 
 ```{r}
-df.ambigTags <- df.alltags.sub %>%
-  select(ambigID, motusTagID) %>%
-  filter(!is.na(ambigID)) %>%
-  distinct() 
-```
-
-Using our `getpath()` function, we'll create paths and then plot these detections. 
-We'll add some information to the plot, showing where (in time) the tags are actually ambiguous. 
-We can then inspect the overall plots (or portions of them) to determine if we can contextually unambiguously assign a detection of an ambiguous tag to a single deployment.  
-
-```{r}
-df.alltags.path <- fun.getpath(filter(df.alltags.sub, 
-                                      motusTagID %in% df.ambigTags$motusTagID, 
-                                      tagProjID == 176)) %>%
-  # create a boolean variable for ambiguous detections:
-  mutate(Ambiguous = !(is.na(ambigID))) 
-
-# to put all ambiguous tags from the same project on the same plot together, we
-# need to create a new 'ambig tag' variable we call 'newID.
-
-ambigTags.2 <- filter(df.alltags.sub) %>%
+df.ambigTags <- tbl.alltags.sub %>%
   select(ambigID, motusTagID) %>%
   filter(!is.na(ambigID)) %>%
   distinct() %>%
-  group_by(ambigID) %>%
-  summarize(newID = paste(unique(ambigID), toString(motusTagID), sep = ": ")) %>%
-  left_join(df.ambigTags, by = "ambigID")
+  collect() %>%
+  mutate(newID = paste0(ambigID, ": ", motusTagID))
+```
 
-# and merge that with df.alltags.path
-df.alltags.path <- left_join(df.alltags.path, ambigTags.2, by = "motusTagID") %>%
-  arrange(ts.h)
+Using our `df.plot`, data frame we can filter these detections.
 
-ggplot(data = df.alltags.path, 
-       aes(x = ts.h, y = recvLat, group = Ambiguous, colour = Ambiguous)) +
+```{r}
+df.plot.ambig <- filter(df.plot, motusTagID %in% df.ambigTags$motusTagID)
+```
+
+ 
+Create new ids showing links between ambiguous and non-ambiguous tags.
+```{r}
+df.plot.ambig <- mutate(df.plot.ambig,
+                        ambig = !is.na(ambigID), # Ambiguous or not? TRUE/FALSE
+                        newID = if_else(ambig, paste0(ambigID, ": ", motusTagID), NA_character_)) 
+```
+
+Plot the results! 
+We'll add some information to the plot, showing where (in time) the tags are actually ambiguous. 
+We can then inspect the overall plots (or portions of them) to determine if we can contextually unambiguously assign a detection of an ambiguous tag to a single deployment.  
+```{r}
+ggplot(data = df.plot.ambig, 
+       aes(x = ts, y = recvDeployLat, colour = ambig)) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) + 
   geom_point() + 

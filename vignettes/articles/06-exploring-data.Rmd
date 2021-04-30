@@ -82,7 +82,7 @@ df.alltags.sub <- left_join(tbl.alltags, tbl.filter, by = c("runID", "motusTagID
 
 **Note that if your project is very large, you may want to convert only a portion of it to the dataframe, to avoid memory issues.** 
 
-Details on filtering the tbl prior to collecting as a dataframe are available in [Converting to flat file in Chapter 3](03-accessing-data.html#converting-to-flat-file).  
+Details on filtering the tbl prior to collecting as a dataframe are available in [Converting to flat data in Chapter 3](03-accessing-data.html#converting-to-flat-data).  
 
 Here we do so by adding a filter to the above command, in this case, only creating a dataframe for `motusTagID` 16047, but you can decide how to best subset your data based on your need (e.g. by species or year):
 

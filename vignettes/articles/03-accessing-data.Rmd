@@ -8,6 +8,15 @@ author: Tara L. Crewe, Zoe Crysler, and Philip Taylor. Revisions by Steffi LaZer
 sql.motus <- motus:::get_sample_data()
 ```
 
+> This chapter walks you through the motus data format, downloading, exporting, and updating your detections, as well as dealing with metadata. 
+>
+> Some extra, more advanced topics not addressed in this chapter are available as supplementary articles.
+>
+> **Advanced Topics:**  
+> - **WIP** `.motus` data base tables
+> - [Working with GPS points](gps.html)
+
+
 **Before downloading your detection data, please ensure that you have no pending metadata issues through the online [Data Issues page](https://motus.org/data/issues)**
 
 This chapter will begin with an introduction to the structure of the detections database, followed by instructions on how to download and access the data.
@@ -300,64 +309,10 @@ tbl.alltags %>%
   names() # list the variable names in the table
 ```
 
-### Adding GPS Data
 
-If GPS data is required, users will either have to use the `alltagsGPS` view, or will have to add GPS values to a data subset. 
+If you want access to GPS data you can either use the `alltagsGPS` view, or, after filtering your data (see [Chapter 5 - Data cleaning](05-data-cleaning.html) and the article [In-depth detections filtering](filtering.html)) you can use the `getGPS()` function (see [Working with GPS points](gps.html)).
 
-To use the `alltagsGPS` view (note that this can be slow, which is why GPS data is excluded by default):
-```{r}
-tbl.alltagsGPS <- tbl(sql.motus, "alltagsGPS")
-```
-
-Alternatively, to speed things up you can first [filter your data](05-data-cleaning.html), then use the `getGPS()` function to retrieve GPS values.
-
-```{r}
-# Filter the data
-tbl.Dunlin <- tbl(sql.motus, "alltags") %>%
-  filter(speciesEN == "Dunlin") %>%
-  collect()
-
-# Get the daily median location of GPS points for these data
-Dunlin.GPS <- getGPS(src = sql.motus, data = tbl.Dunlin)
-```
-
-We match GPS locations to `hitID`s according to one of several different time values, specified by the `by` argument.
-
-This can be one of three options:
-
-1. the median location within **`by = X`** minutes of a `hitID`
-    - here, `X` can be any number greater than zero and represents the size of the time block in minutes over which to calculate a median location
-    - be aware that you should ideally not chose a period smaller than the frequency at which GPS fixes are recorded, or some hits will not be associated with GPS
-2. **`by = "daily"`** median location (**default**, implied in the above example)
-    - similar to `by = X` except the duration is 24hr (same as `by = 1440`)
-    - this method is most suitable for receiver deployments at fixed location.
-3. or the **`by = "closest"`** location in time
-    - individual GPS lat/lons are returned, matching the closest `hitID` timestamp
-    - this method is most accurate for mobile deployments, but is potentially slower than `by = X`.
-    - you can also specify a `cutoff` which will only match GPS records which are within `cutoff = X` minutes of the hit. This way you can avoid having situations where the 'closest' GPS record is actually days away.
-
-```{r}
-Dunlin.GPS <- getGPS(src = sql.motus, data = tbl.Dunlin, by = 60)
-Dunlin.GPS <- getGPS(src = sql.motus, data = tbl.Dunlin, by = "closest", cutoff = 120)
-```
-
-To keep all `hitID`s, regardless of whether they GPS data or not, use the argument `keepAll = TRUE`.
-
-```{r}
-Dunlin.GPS <- getGPS(src = sql.motus, data = tbl.Dunlin, keepAll = TRUE)
-```
-
-
-Finally, use the `left_join()` function to add GPS to your data subset. 
-Note that this sample data doesn't actually have GPS values so these examples are for illustration only.
-
-```{r}
-tbl.Dunlin.GPS <- left_join(tbl.Dunlin, Dunlin.GPS, by = "hitID")
-```
-
-As there is no GPS data in this example data set, we'll continue with our original `tbl.alltags` file. 
-
-### Converting to flat file
+### Converting to flat data
 To convert the `alltags` view or other table in the .motus file into a typical 'flat' format, i.e., with every record for each field filled in, use the `collect()` and `as.data.frame()` functions.
 The output can then be further manipulated, or used to generate a RDS file of your data for archiving or export. 
 
@@ -367,7 +322,7 @@ df.alltags <- tbl.alltags %>%
   as.data.frame()
 ```
 
-Now we have a flat dataframe of the alltags table called `df.alltags`. 
+Now we have flat data of the alltags table called `df.alltags`. 
 We can look at some metrics of the file:
 
 ```{r quickLook, eval = FALSE}
