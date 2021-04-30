@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">motus</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.6</span>
       </span>
     </div>
 
@@ -143,12 +143,25 @@
       
     </div>
 
-    <div id="motus-405" class="section level1">
-<h1 class="page-header" data-toc-text="4.0.5">
-<a href="#motus-405" class="anchor"></a>motus 4.0.5</h1>
+    <div id="motus-406" class="section level1">
+<h1 class="page-header" data-toc-text="4.0.6">
+<a href="#motus-406" class="anchor"></a>motus 4.0.6</h1>
 <div id="bug-fixes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>Bug fixes</h3>
+<ul>
+<li>fixed bug resulting in missing metadata tables, and permission errors resulting from JSON formatting</li>
+<li>fixed bug where <code>forceMeta</code> didn’t force metadata download for previously downloaded tags</li>
+<li>fixed warnings produced by <code><a href="../reference/plotRouteMap.html">plotRouteMap()</a></code> on old versions of R</li>
+</ul>
+</div>
+</div>
+    <div id="motus-405" class="section level1">
+<h1 class="page-header" data-toc-text="4.0.5">
+<a href="#motus-405" class="anchor"></a>motus 4.0.5</h1>
+<div id="bug-fixes-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h3>
 <ul>
 <li>removed not null constraint on tsEnd in nodeDeps</li>
 </ul>
@@ -157,9 +170,9 @@
     <div id="motus-404" class="section level1">
 <h1 class="page-header" data-toc-text="4.0.4">
 <a href="#motus-404" class="anchor"></a>motus 4.0.4</h1>
-<div id="bug-fixes-1" class="section level3">
+<div id="bug-fixes-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h3>
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h3>
 <ul>
 <li>fixed bug resulting in occasional unending download loop of GPS fixes for receivers</li>
 </ul>
@@ -168,9 +181,9 @@
     <div id="motus-403" class="section level1">
 <h1 class="page-header" data-toc-text="4.0.3">
 <a href="#motus-403" class="anchor"></a>motus 4.0.3</h1>
-<div id="bug-fixes-2" class="section level3">
+<div id="bug-fixes-3" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h3>
+<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h3>
 <ul>
 <li>fixed bug resulting in error “no applicable method for ‘db_has_table’…”</li>
 </ul>
@@ -179,9 +192,9 @@
     <div id="motus-402" class="section level1">
 <h1 class="page-header" data-toc-text="4.0.2">
 <a href="#motus-402" class="anchor"></a>motus 4.0.2</h1>
-<div id="bug-fixes-3" class="section level3">
+<div id="bug-fixes-4" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h3>
+<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h3>
 <ul>
 <li>fixed rounding error in <code><a href="../reference/filterByActivity.html">filterByActivity()</a></code> resulting in mismatched <code>hourBins</code>
 </li>
@@ -192,9 +205,9 @@
     <div id="motus-401" class="section level1">
 <h1 class="page-header" data-toc-text="4.0.1">
 <a href="#motus-401" class="anchor"></a>motus 4.0.1</h1>
-<div id="bug-fixes-4" class="section level3">
+<div id="bug-fixes-5" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h3>
+<a href="#bug-fixes-5" class="anchor"></a>Bug fixes</h3>
 <ul>
 <li>Corrected the server address</li>
 </ul>
@@ -218,9 +231,9 @@
 </li>
 </ul>
 </div>
-<div id="bug-fixes-5" class="section level3">
+<div id="bug-fixes-6" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-5" class="anchor"></a>Bug fixes</h3>
+<a href="#bug-fixes-6" class="anchor"></a>Bug fixes</h3>
 <ul>
 <li>Downloading hits no longer fails if extra columns are supplied by the server</li>
 </ul>
@@ -248,9 +261,9 @@
 <li>Remove NOT NULL constraint on <code>motusTagID</code>s in ambiguous tag view</li>
 </ul>
 </div>
-<div id="bug-fixes-6" class="section level3">
+<div id="bug-fixes-7" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-6" class="anchor"></a>Bug fixes</h3>
+<a href="#bug-fixes-7" class="anchor"></a>Bug fixes</h3>
 <ul>
 <li>Receivers updating to the new version errored on the download start</li>
 <li>Allow renaming (if possible) of large databases on data updates</li>
@@ -286,9 +299,9 @@
 <li>Add <code>gpsID</code> to <code>gps</code> table, <code>gpsID</code> is now the primary key and index</li>
 </ul>
 </div>
-<div id="bug-fixes-7" class="section level3">
+<div id="bug-fixes-8" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-7" class="anchor"></a>Bug fixes</h3>
+<a href="#bug-fixes-8" class="anchor"></a>Bug fixes</h3>
 <ul>
 <li>Fixed bug where <code><a href="../reference/tagme.html">tagme(..., countOnly = TRUE)</a></code> failed</li>
 </ul>
@@ -316,9 +329,9 @@
 <li>Added unit testing</li>
 </ul>
 </div>
-<div id="bug-fixes-8" class="section level3">
+<div id="bug-fixes-9" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-8" class="anchor"></a>Bug Fixes</h3>
+<a href="#bug-fixes-9" class="anchor"></a>Bug Fixes</h3>
 <ul>
 <li>Fix references to <code>ggmap</code> to avoid having to get Google API keys</li>
 </ul>
