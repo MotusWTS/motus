@@ -48,9 +48,7 @@ plotRouteMap <- function(data, zoom = 3, lat = NULL, lon = NULL,
          "Use the code \"update.packages('ggmap')\" to update to the ",
          "most recent version.", call. = FALSE)
   }
-  
-  browser()
-  
+
   if(!is.numeric(zoom)) stop('Numeric value between 3 and 21 required for "zoom"', call. = FALSE)
   if(!is.null(lat) && !is.numeric(lat)) stop('Numeric values required for "lat"', call. = FALSE)
   if(!is.null(lon) && !is.numeric(lon)) stop('Numeric values required for "lon"', call. = FALSE)
