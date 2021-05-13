@@ -43,6 +43,19 @@ There 3-4 different `motus` versions on GitHub at any one time:
   `updatesql.R` as well as by `ensureDBTables()` without duplicating the process. 
 - `checkDataVersion()` is used to update data versions (not database versions)
 
+## Talk to the API - Boxing/Unboxing JSON parameters
+- The API requires that some parameters be boxed (i.e. `[parameter]`) and some
+be unboxed (i.e., `parameter`)
+- In `srvQuery.R`, `jsonlite::toJSON()` unboxes all single value parameters
+- If you have a parameter that should NOT be unboxed
+  (usually a single value parameter that could have more), you must go to its
+  `srvXXXX.R` file, and add `I(parameter)` (e.g., `srvTagsForAmbiguities.R`)
+- However, `I()` won't work on `NULL` values, so we need to get creative
+  if it can have either NULL or values (e.g., `srvTagMetadataForProjects.R`)
+- Potentially worth rethinking whether to force boxing via class/type
+  BEFORE gets sent as a parameter...
+
+
 ## Special data downloads
 - Data that is downloaded by `batchID` after the main runs download
 - `pageDataByBatch()` is a function that sets up the process

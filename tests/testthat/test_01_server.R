@@ -92,8 +92,8 @@ test_that("srvXXX work as expected", {
     expect_s3_class("data.frame")
   expect_equal(nrow(s), 0)  ## TEST WITH SOMETHING MORE 
   
-  # srvPulseCountsForReceiver - CTT-5031194D3168
-  expect_silent(s <- srvPulseCountsForReceiver(batchID = 1941719, ant = 0)) %>%
+  # srvPulseCountsForReceiver - CTT-5031194D3168 - PulseCounts table
+  expect_silent(s <- srvPulseCountsForReceiver(batchID = 1582469, ant = 0)) %>%
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
   
@@ -112,8 +112,17 @@ test_that("srvXXX work as expected", {
   expect_gt(nrow(s$nodeDeps), 0)
   expect_gt(nrow(s$projs), 0)
   
+  expect_silent(s <- srvRecvMetadataForProjects(projectIDs = NULL)) %>%
+    expect_type("list")
+  expect_named(s, c("recvDeps", "antDeps", "nodeDeps", "projs"))
+  expect_gt(nrow(s$recvDeps), 0)
+  expect_gt(length(unique(s$recvDeps$projectID)), 10)
+  expect_gt(nrow(s$antDeps), 0)
+  expect_gt(nrow(s$nodeDeps), 0)
+  expect_gt(nrow(s$projs), 0)
+  
   # srvRunsForReceiver - CTT-5031194D3168
-  expect_silent(s <- srvRunsForReceiver(batchID = 1941719, runID = 0)) %>%
+  expect_silent(s <- srvRunsForReceiver(batchID = 1582469, runID = 0)) %>%
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
   
@@ -137,6 +146,15 @@ test_that("srvXXX work as expected", {
     expect_type("list")
   expect_gt(nrow(s$tags), 0)
   expect_true(all(s$tags$projectID == 25))
+  expect_gt(nrow(s$tagDeps), 0)
+  expect_gt(nrow(s$tagProps), 0)
+  expect_gt(nrow(s$species), 0)
+  expect_gt(nrow(s$projs), 0)
+  
+  expect_silent(s <- srvTagMetadataForProjects(projectIDs = NULL)) %>%
+    expect_type("list")
+  expect_gt(nrow(s$tags), 0)
+  expect_gt(length(unique(s$tags$projectID)), 10)
   expect_gt(nrow(s$tagDeps), 0)
   expect_gt(nrow(s$tagProps), 0)
   expect_gt(nrow(s$species), 0)
@@ -200,7 +218,6 @@ test_that("Receivers download - Receivers", {
 })
 
 test_that("tagme with countOnly (tellme) - Projects", {
-  skip("Temp")
   skip_on_cran()
   
   sample_auth()
@@ -218,7 +235,6 @@ test_that("tagme with countOnly (tellme) - Projects", {
 })
 
 test_that("tagme with countOnly (tellme) - Receivers", {
-  skip("Temp")
   skip_on_cran()
   skip_if_no_auth()
   
@@ -247,4 +263,18 @@ test_that("srvAuth handles errors informatively", {
   sessionVariable(name = "userPassword", val = "motus.samp")
   
   expect_error(srvAuth(), "Authentication failed")
+})
+
+test_that("metadata()", {
+  skip_on_cran()
+  sample_auth()
+  
+  file.copy(system.file("extdata", "project-176.motus", package = "motus"), ".")
+  tags <- tagme(176, new = FALSE, update = FALSE)
+  expect_message(metadata(tags), "Loading complete")
+  
+  expect_message(metadata(tags, projectIDs = 45), "Loading complete")
+  
+  unlink("project-176.motus")
+  
 })
