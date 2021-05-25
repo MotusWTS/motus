@@ -26,7 +26,9 @@
 #'    \item{motusTagID} unique motus ID for this physical tag
 #'    \item{ambigID} unique ID linking ambiguous tag detections
 #'    \item{port} antenna port number
+#'    \item{nodeNum} node number (if applicable)
 #'    \item{runLen} length of run (# of bursts detected)
+#'    \item{motusFilter} motus default filter value
 #'    \item{bootnum} boot session of receiver for SG; NA for Lotek
 #'    \item{tagProjID} unique motus ID for project tag was deployed by
 #'    \item{mfgID} manufacturer ID printed on the tag
@@ -122,7 +124,9 @@ SELECT
    CASE WHEN t12.motusTagID is null then t2.motusTagID else t12.motusTagID end as motusTagID,
    t12.ambigID as ambigID,
    t2.ant as port,
+   t2.nodeNum as nodeNum,
    t2.len as runLen,
+   t2.motusFilter as motusFilter,
    t3.monoBN as bootnum,
    t4.projectID as tagProjID,
    t4.mfgID as mfgID,
