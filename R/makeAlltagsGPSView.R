@@ -235,6 +235,7 @@ LEFT JOIN
          );
 ")
 
+    DBI::dbExecute(db$con, paste0("DROP VIEW IF EXISTS ", name))
     DBI::dbExecute(db$con, query)
     return(dplyr::tbl(db, name))
 }
