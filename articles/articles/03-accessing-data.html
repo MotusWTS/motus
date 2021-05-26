@@ -374,14 +374,14 @@
 ##   .. .. ..@ loadable.extensions: logi TRUE
 ##   .. .. ..@ flags              : int 70
 ##   .. .. ..@ vfs                : chr ""
-##   .. .. ..@ ref                :&lt;environment: 0x7fa66831abf8&gt; 
+##   .. .. ..@ ref                :&lt;environment: 0x7fd3dd164ff8&gt; 
 ##   .. .. ..@ bigint             : chr "integer64"
 ##   .. .. ..@ extended_types     : logi FALSE
 ##   ..$ disco: NULL
 ##   ..- attr(*, "class")= chr [1:4] "src_SQLiteConnection" "src_dbi" "src_sql" "src"
 ##  $ ops:List of 2
 ##   ..$ x   : 'ident' chr "alltags"
-##   ..$ vars: chr [1:60] "hitID" "runID" "batchID" "ts" ...
+##   ..$ vars: chr [1:62] "hitID" "runID" "batchID" "ts" ...
 ##   ..- attr(*, "class")= chr [1:3] "op_base_remote" "op_base" "op"
 ##  - attr(*, "class")= chr [1:5] "tbl_SQLiteConnection" "tbl_dbi" "tbl_sql" "tbl_lazy" ...</code></pre>
 <p>The first part of the list, <code>src</code>, is a list that provides details of the SQLiteConnection, including the directory where the database is stored. The second part is a list that includes the underlying table. Thus, the R object <code>alltags</code> is a <em>virtual</em> table that stores the database structure and information required to connect to the underlying data in the <code>.motus</code> file. As stated above, the advantage of storing the data in this way is that it saves memory when accessing very large databases, and functions within the dplyr package can be used to manipulate and summarize the tables before collecting the results into a typical ‘flat’ format dataframe.</p>
@@ -394,17 +394,18 @@
 ##  [5] "tsCorrected"    "sig"            "sigsd"          "noise"         
 ##  [9] "freq"           "freqsd"         "slop"           "burstSlop"     
 ## [13] "done"           "motusTagID"     "ambigID"        "port"          
-## [17] "runLen"         "bootnum"        "tagProjID"      "mfgID"         
-## [21] "tagType"        "codeSet"        "mfg"            "tagModel"      
-## [25] "tagLifespan"    "nomFreq"        "tagBI"          "pulseLen"      
-## [29] "tagDeployID"    "speciesID"      "markerNumber"   "markerType"    
-## [33] "tagDeployStart" "tagDeployEnd"   "tagDepLat"      "tagDepLon"     
-## [37] "tagDepAlt"      "tagDepComments" "tagDeployTest"  "fullID"        
-## [41] "deviceID"       "recvDeployID"   "recvDeployLat"  "recvDeployLon" 
-## [45] "recvDeployAlt"  "recv"           "recvDeployName" "recvSiteName"  
-## [49] "isRecvMobile"   "recvProjID"     "recvUtcOffset"  "antType"       
-## [53] "antBearing"     "antHeight"      "speciesEN"      "speciesFR"     
-## [57] "speciesSci"     "speciesGroup"   "tagProjName"    "recvProjName"</code></pre>
+## [17] "nodeNum"        "runLen"         "motusFilter"    "bootnum"       
+## [21] "tagProjID"      "mfgID"          "tagType"        "codeSet"       
+## [25] "mfg"            "tagModel"       "tagLifespan"    "nomFreq"       
+## [29] "tagBI"          "pulseLen"       "tagDeployID"    "speciesID"     
+## [33] "markerNumber"   "markerType"     "tagDeployStart" "tagDeployEnd"  
+## [37] "tagDepLat"      "tagDepLon"      "tagDepAlt"      "tagDepComments"
+## [41] "tagDeployTest"  "fullID"         "deviceID"       "recvDeployID"  
+## [45] "recvDeployLat"  "recvDeployLon"  "recvDeployAlt"  "recv"          
+## [49] "recvDeployName" "recvSiteName"   "isRecvMobile"   "recvProjID"    
+## [53] "recvUtcOffset"  "antType"        "antBearing"     "antHeight"     
+## [57] "speciesEN"      "speciesFR"      "speciesSci"     "speciesGroup"  
+## [61] "tagProjName"    "recvProjName"</code></pre>
 </div>
 <div id="adding-gps-data" class="section level3">
 <h3 class="hasAnchor">
