@@ -218,14 +218,13 @@ test_that("tagme with countOnly (tellme) - Projects", {
 })
 
 test_that("tagme with countOnly (tellme) - Receivers", {
-  skip("Temp")
   skip_on_cran()
   skip_if_no_auth()
   
-  unlink("SG-3115BBBK1127.motus")
-  expect_silent(tellme("SG-3115BBBK1127", new = TRUE)) %>%
+  unlink("SG-1116BBBK0C40.motus")
+  expect_silent(tellme("SG-1116BBBK0C40", new = TRUE)) %>%
     expect_is("data.frame")
-  unlink("SG-3115BBBK1127.motus")
+  unlink("SG-1116BBBK0C40.motus")
 })
 
 test_that("srvQuery handles time out graciously", {

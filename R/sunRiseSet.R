@@ -65,36 +65,42 @@ sunRiseSet <- function(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = 
     stop("The package 'lutz' is required to calculate sunrise/sunset times.\n", 
          "You can install it with 'install.packages(\"lutz\")'", call. = FALSE)
   }
-    
+
   requiredCols(data, req = c(lat, lon, ts))
 
   data <- dplyr::collect(data) %>%
-    dplyr::mutate(ts := lubridate::as_datetime(.data[[ts]], tz = "UTC"))
-
-  data_date <- data %>% 
+    dplyr::mutate(time := lubridate::as_datetime(.data[[ts]], tz = "UTC"))
+  
+  if(all(is.na(data[[lat]])) | all(is.na(data[[lon]]))) {
+    stop("No data with non-missing coordinates in '", lat, "' and '", lon, "'", 
+         call. = FALSE)
+  }
+  
+  tz <- data %>%
+    dplyr::select("hitID", !!lat, !!lon) %>%
+    dplyr::distinct() %>%
+    dplyr::filter(!is.na(.data[[lat]]) & !is.na(.data[[lon]])) %>%
     dplyr::mutate(tz = lutz::tz_lookup_coords(.data[[lat]], .data[[lon]], warn = FALSE)) %>%
     tidyr::nest(data = c(-"tz")) %>%
-    dplyr::mutate(date = purrr::map2(.data$data, .data$tz, ~get_date(.x[[ts]], .y))) %>%
-    tidyr::unnest(c(date, data)) %>%
-    dplyr::select(-"tz")
-
+    dplyr::mutate(tz = purrr::map_dbl(tz, ~lutz::tz_offset("2021-01-01", .)$utc_offset_h)) %>%
+    tidyr::unnest("data")
   
-  if(sum(!is.na(data_date$date)) == 0)  stop("No data with non-missing coordinates in '", 
-                                             lat, "' and '", lon, "'", call. = FALSE)
+  data <- data %>%
+    dplyr::left_join(dplyr::select(tz, "tz", "hitID"), by = "hitID") %>%
+    dplyr::mutate(date = lubridate::floor_date(time + lubridate::hours(tz), unit = "day"))
   
-  sun <- data_date %>%
+  sun <- data %>%
     dplyr::select(.data[[lon]], .data[[lat]], .data$date) %>%
     dplyr::filter(!is.na(.data$date), !is.na(.data[[lon]]), !is.na(.data[[lat]])) %>%
     dplyr::distinct() %>%
     dplyr::mutate(sunrise = sunriset(.data[[lon]], .data[[lat]], .data$date, 
                                      direction = "sunrise"),
                   sunset = sunriset(.data[[lon]], .data[[lat]], .data$date,
-                                    direction = "sunset")) %>%
-    dplyr::select("date", .data[[lon]], .data[[lat]], "sunrise", "sunset")
+                                    direction = "sunset"))
                   
-  data_date %>%
+  data %>%
     dplyr::left_join(sun, by = c(lat, lon, "date")) %>%
-    dplyr::select(-"date")
+    dplyr::select(-"date", -"tz", -"time")
 }
 
 sunriset <- function(lon, lat, time, direction) {
