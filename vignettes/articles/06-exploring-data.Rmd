@@ -34,7 +34,7 @@ If you followed along with the the previous Chapter ([Chapter 5 - Data cleaning]
 
 Otherwise, if you saved your data as an RDS file, you can load it using:
 
-```{r}
+```{r, echo = FALSE}
 df.alltags.sub <- readRDS("./data/dfAlltagsSub.rds") # change dir to local directory
 ```
 
