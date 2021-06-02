@@ -1,6 +1,5 @@
 ---
 title: "Chapter 3 - Accessing detections data"
-author: Tara L. Crewe, Zoe Crysler, and Philip Taylor. Revisions by Steffi LaZerte and Denis Lepage
 ---
 
 ```{r setup, include = FALSE}

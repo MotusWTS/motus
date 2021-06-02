@@ -1,6 +1,5 @@
 ---
 title: "Chapter 2 - Installing packages"
-author: Tara L. Crewe, Zoe Crysler, and Philip Taylor. Revisions by Steffi LaZerte and Denis Lepage
 ---
 
 ```{r setup, include = FALSE}

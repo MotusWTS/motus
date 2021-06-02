@@ -1,6 +1,5 @@
 ---
 title: "Chapter 4 - Tag and receiver deployments"
-author: Tara L. Crewe, Zoe Crysler, and Philip Taylor
 ---
 
 ```{r setup, include = FALSE}

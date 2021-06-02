@@ -1,6 +1,5 @@
 ---
 title: "Chapter 5 - Data Cleaning"
-author: Tara L. Crewe, Zoe Crysler, and Philip Taylor. Revisions by Catherine Jardine, Steffi LaZerte and Denis Lepage
 ---
 
 ```{r setup, include = FALSE}

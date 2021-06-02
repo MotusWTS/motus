@@ -1,6 +1,5 @@
 ---
 title: "Chapter 1 - Introduction"
-author: Tara L. Crewe, Zoe Crysler, and Philip Taylor
 ---
 
 ```{r fig1, echo=FALSE, fig.align='center'}
@@ -81,7 +80,7 @@ Department of Biology, Western University, Canada
 
 ## Acknowledgements
 
-These articles are largely based on earlier work by [Crewe et al. 2018](https://motus.org/motusRBook/archives/MotusRBook2018-01.pdf), and has since been supplemented by various people on the Motus team.
+These articles are largely based on the original Motus R Book by [Crewe et al. 2018](https://motus.org/motusRBook/archives/MotusRBook2018-01.pdf), and have since been supplemented by various people on the Motus team.
 
 Some of the text included in these articles was adapted from John Brzustowski's GitHub repository for the `motus` R package at: <https://github.com/jbrzusto/motus>.
 
