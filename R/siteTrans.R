@@ -85,13 +85,12 @@ siteTrans <- function(data, latCoord = "recvDeployLat", lonCoord = "recvDeployLo
     dplyr::mutate(consec = purrr::map(.data$data, consec.fun),
                   site = purrr::map(.data$consec, site.fun))
   
-  trans <- tidyr::unnest(data, .data$site) %>%
+  tidyr::unnest(data, .data$site) %>%
     dplyr::mutate(tot_ts = difftime(.data$ts.y, .data$ts.x, units = "secs"),
                   dist = latLonDist(.data$lat.x, .data$lon.x, .data$lat.y, .data$lon.y), ## distance in meters
                   rate = .data$dist/(as.numeric(.data$tot_ts)), ## rate of travel in m/s
                   ## bearing (see package geosphere for help)
                   bearing = geosphere::bearing(matrix(c(.data$lon.x, .data$lat.x), ncol=2),
-                                               matrix(c(.data$lon.y, .data$lat.y), ncol=2)))
-  
-  trans
+                                               matrix(c(.data$lon.y, .data$lat.y), ncol=2))) %>%
+    dplyr::ungroup()
 }
