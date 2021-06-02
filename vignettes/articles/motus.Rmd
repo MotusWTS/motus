@@ -2,40 +2,75 @@
 title: "Getting started"
 ---
 
+<!-- Parts of this were originally at the end of Chapter 3 - Accessing Data -->
 
-<!-- This was originally at the end of Chapter 3 - Accessing Data -->
+```{r setup, include = FALSE}
+# Get and update sample data to avoid messages later
+sql.motus <- motus:::get_sample_data()
+```
 
+This is a quick introduction to downloading Motus data. Definitely check out the various [articles](../index.html) for more details!
 
+Let's get started by loading the packages we'll use (see also [Chapter 2 - Installing packages](02-installing-packages.html).)
+```{r, message = FALSE}
+library(motus)
+library(dplyr)
+library(lubridate)
+```
 
-## Summary: download, access, and export data {#importSummary}
+Now we'll download some data. 
+Here we're downloading project 176 (sample data, use user name and password 'motus.sample').
+You can use your own project number or receiver name.
 
-Throughout the book we will predominantly be working with the `alltags` table in flat format. Although described in detail above, here we include a quick summary of how you download, access, and convert the sample data for use in the rest of the book. In later sections of the book, we include additional recommended modifications and filtering of unnecessary variables, more information is available in [Chapter 5 - Data Cleaning][05-data-cleaning.html].
- 
-```{r eval = FALSE}
-# set proj.num to 176 for sample data
-proj.num <- 176
+We use the `tagme()` function to download the data
+```{r}
+sql.motus <- tagme(176, new = FALSE, update = TRUE, dir = "./data/")
+```
 
-# - download and load detection data from the sample project and save in data folder
-# - login and password for sample data is "motus.sample"
-# - if you are accessing already-downloaded data, use new = FALSE; if you don't
-#   want to update your data, also set update = FALSE
-sql.motus <- tagme(proj.num, new = TRUE, update = TRUE, dir = "./data/")
+`tagme()` includes several options. Here we're using:
 
-# access the "alltags" table within the SQLite file
+- `new = FALSE` means the data base already exists, if it doesn't, change `FALSE` to `TRUE`
+- `dir = "./data/"` means the data base will be stored in the `data` folder inside your current working directory
+
+`tagme()` stores a `project-176.motus` SQLite data base in `./data/`.
+
+We can access parts of the data base by referencing the SQL object we created, `sql.motus`
+
+Here, we'll retrieve the `alltags` view from the SQLite database using the `tbl()` function from the `dplyr` package
+```{r}
 tbl.alltags <- tbl(sql.motus, "alltags")
+```
 
-# convert "tbl.alltags" to a flat dataframe and change numeric time to a datetime object
+Next, we can convert this to a data frame (a flat file; see [Converting to flat data in Chapter 3](03-accessing-data.html#converting-to-flat-data))
+
+Convert to flat (`collect()`) and transform the time stamps into date/time format
+```{r}
 df.alltags <- tbl.alltags %>%
               collect() %>%
-              as.data.frame() %>%
-              mutate(ts = as_datetime(ts, tz = "UTC", origin = "1970-01-01"))
+              mutate(ts = as_datetime(ts))
 ```
  
-For your own data we suggest creating a script with the following workflow:
+If you want to save this flat file, you can export as RDS (see [Exporting detections in Chapter 3](03-accessing-data.html#exporting-detections))
+```{r}
+saveRDS(df.alltags, "my_motus_data.rds")
+```
 
-1. download and/or update your data 
-2. select variables of interest for the table you are working with (typically `alltags`)
-3. include any initial cleaning
-4. save the resulting data as an .rds file as described . We suggest using RDS instead of CSV, because the RDS format preserves the underlying structure of the data (e.g. POSIX times stay as POSIX times). If you want to export your data to another program, then a CSV format might be preferred.  
 
-We caution that producing a flat file using the full suite of fields can use a lot of memory, and can slow R down considerably when dealing with large datasets. For some combinations of data sets and computers, it may be impossible to directly use data frames in R. If that is the case, then this is the point in your workflow where you should carefully consider the information you need from within your data set (for example, how it is aggregated) and simplify it. You can always return to this script and creating a new RDS file with different variables, or aggregated at a different scale.  
+## Workflow summary
+ 
+For your own data we suggest creating a script (or scripts) with the following workflow:
+
+1. Download/update your data (see [Chapter 2 - Installing packages](02-installing-packages.html), [Chapter 3 - Accessing detections data](03-accessing-data.html))
+2. Select variables of interest for the table you are working with (typically `alltags`) (see [Chapter 3 - Accessing detections data](03-accessing-data.html), [Chapter 4 - Tag and receiver deployments](04-deployments.html))
+3. Initial cleaning (see [Chapter 4 - Tag and receiver deployments](04-deployments.html) and [Chapter 5 - Data cleaning](05-data-cleaning.html))
+4. Output the resulting data as an .rds file (see [Exporting detections in Chapter 3](03-accessing-data.html#exporting-detections)). 
+We suggest using RDS instead of CSV, because the RDS format preserves the underlying structure of the data (e.g. times stay as times). If you want to export your data to another program, then a CSV format might be preferred.  
+
+We caution that producing a flat file using the full suite of fields can use a lot of memory, and can slow R down considerably when dealing with large datasets. For some combinations of data sets and computers, it may be impossible to directly use data frames in R. If that is the case, then this is the point in your workflow where you should carefully consider the information you need from within your data set (for example, how it is aggregated) and simplify it. You can always return to this script and creating a new RDS file with different variables, or aggregated at a different scale.
+
+> **What next?** [Check out the in-depth walkthrough starting with Chapter 1 - Introduction](01-introduction.html)
+
+```{r include = FALSE}
+unlink("my_motus_data.rds")
+```
+
