@@ -93,8 +93,11 @@ devtools::check_win_oldrelease()
 ## Update motus website
 pkgdown::build_site()
 pkgdown::build_home()
-pkgdown::build_articles()
+pkgdown::build_articles(lazy = TRUE)
+pkgdown::build_article("articles/05-data-cleaning")
 
+# Check/update URLS
+urlchecker::url_check()
 
 ## Note: non-ASCII files found
 # Find them
