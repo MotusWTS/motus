@@ -121,7 +121,7 @@ The following parameters are available for the `tagme()` function:
 - **`dir`**: Your .motus data is automatically saved to your working directory, unless you specify a different location using this parameter.
 - **`forceMeta`**: if set to `TRUE`, it will force an update of metadata to an existing .motus file. 
 
-Throughout this book we use [sample data](01-introduction.html#sample-datasets) which have been assigned to project 176.
+Throughout these articles we use [sample data](01-introduction.html#sample-datasets) which have been assigned to project 176.
 
 Let's get started by downloading data by project - this will include all detections of your tags on any receiver.
 
@@ -202,7 +202,6 @@ This will download a file to your working directory named `SG-123BBBK1234.motus`
 
 Some users may wish to work directly with the .motus SQLite file. 
 However, since many users are more familiar with a 'flat' dataframe format, instructions to view the the data as a flat dataframe within R, and on how to export the flat file to .csv or .rds format, are included below.
-Throughout the majority of this book, we use a flat dataframe format.
 
 ### Downloading multiple receivers at the same time
 If you have a large number of receivers in your project, and wish to get receiver specific data for each one, rather than downloading them one by one as above, we can download them with a simple loop.
@@ -503,7 +502,7 @@ metadata(sql.motus, projectIDs = c(176, 1))
 
 When you call the tagme function to load the sqlite database, the version of the R package used to download the data is stored in an admInfo table. 
 Over time, changes will be made to the functionality of the R package that may require adding new tables, views or fields to the database. 
-If your version of the database does not match the version of the R package, some of the examples contained in this book may not work. 
+If your version of the database does not match the version of the R package, some of the examples contained in these articles may not work. 
 The following call will check that your database has been updated to the version matching the current version of the `motus` R package. 
 If your database does not match the most current version of the R package, use `tagme()` with `update = TRUE` to update your database to the correct format. 
 Refer to Appendix B if the `checkVersion()` call returns a warning.
@@ -515,15 +514,14 @@ checkVersion(sql.motus)
 
 ## R object naming convention
 
-Throughout this chapter and the rest of the book, we name R objects according to their structure and the source of the data contained in the object.
+Throughout this chapter and the rest of the articles, we name R objects according to their structure and the source of the data contained in the object.
 So, SQLite objects will be prefixed with `sql.`, 
 virtual table objects will be prefixed with `tbl.`, 
 and dataframe objects will be prefixed with `df.`; 
 the rest of the name will include the name of the .motus table that the data originates from.
-Throughout the rest of the book we will be relying on and referencing the naming formats below; 
-please ensure that you are familiar with these before continuing to the next chapter. 
+
 The following code assumes you have already downloaded the sample data and do not need to update it;
-if you have not downloaded the data, see section \@ref(downloadData) for instructions on initial download:
+if you have not downloaded the data, see the section on [downloading data for the first time](#download) for instructions on initial download.
 
 ```{r eval = FALSE}
 # SQLite R object, which links to the .motus file:

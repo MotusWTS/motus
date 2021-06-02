@@ -90,7 +90,8 @@ Please ensure your tag metadata are entered correctly.
 Before going further, **please check whether any of your tags were deployed more than once**, as described in [Chapter 4 - Number of deployments per tag](#number-of-deployments-per-tag). 
 If so, you will need to use `tagDeployID` or a combination of `motusTagID` and `tagDeployID` to uniquely define detections associated with a tag deployment (either will do, but combining the two fields will let you know which tagID is associated with each deployment). 
 
-In the sample data, all tags were deployed only once, and so we use the `motusTagID` as a unique identifier for a tag deployment in all R code throughout the book. 
+In the sample data, all tags were deployed only once, and so we use the `motusTagID` as a unique identifier for a tag deployment in all R code throughout these articles 
+
 
 ## Preliminary filtering
 Invariably you will run into some false detections in your tag detection data. 

@@ -126,7 +126,7 @@ without deployment metadata, detections for registered but 'undeployed' tags wil
 A tag might be deployed more than once, for example, if a previously deployed tag was recovered, and then later re-deployed on another individual.
 When tags are deployed more than once, the detections data should be considered independently for each deployment. 
 
-Throughout this book we use the `motusTagID` as a unique identifier for a deployment.
+Throughout these articles we use the `motusTagID` as a unique identifier for a deployment.
 However, when a tag is deployed more than once, the `motusTagID` will remain consistent between deployments, and we instead need to use the `tagDeployID`, or combination of `motusTagID` and `tagDeployID` to distinguish which detections belong to which deployment. 
 
 Here, we check whether there are any tags with more than one deployment in the sample data (there are none), and then show you how to make a combined tagID/deployID variable to use in place of the `motusTagID` if you have multiple deployments of a tag in your own data:
@@ -147,7 +147,7 @@ df.alltags %>%
 ```
 
 If you do have multiple deployments for a tag, we recommend creating a `motusTagDepID` to use in place of the `motusTagID` to define unique deployments of a tag. 
-Moving forward, you would use `motusTagDepID` in place of `motusTagID` as you work through the rest of the book:
+Moving forward, you would use `motusTagDepID` in place of `motusTagID` as you work through the rest of these articles:
 
 ```{r}
 df.alltags <- df.alltags %>%

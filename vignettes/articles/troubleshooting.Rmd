@@ -84,7 +84,7 @@ If you get this message while updating your `.motus` file, use `tagme()` again t
 This error may occur if you are attempting to download multiple projects simultaneously from the same user account.
 If you get this error, we suggest [logging out](#loggint-out-of-motus) of the motus package and then [resuming your download](#resume-data-download).
 
-### I get an error "Object 'xxxx' not found", referring to a table or field name, or some of your examples in the book do not work.  
+### I get an error "Object 'xxxx' not found", referring to a table or field name, or some of your examples in the articles do not work.  
 
 Be sure to start the steps from the top of the chapter and run them in sequential order.
 Another possibility is that your `.motus` database hasn't been updated to support the latest version of the `motus` package.
