@@ -7,6 +7,8 @@ title: "Chapter 4 - Tag and receiver deployments"
 sql.motus <- motus:::get_sample_data()
 ```
 
+> In this chapter, we'll go through checking retrieving and checking tag and receiver deployments. 
+> We'll summarize and visualize as we go to check for problems before we start more detailed data cleaning in [Chapter 5](05-data-cleaning.html).
 
 Before working with your detection data, a first step is to summarize and visualize the metadata for tag and receiver deployments registered to your project.
 Summarizing and plotting your deployments can be an effective way to find any errors in tag or receiver deployment metadata, which can in turn influence the completeness of the detections data for your project and the projects of others with detections of their own tags on your receivers. 
@@ -532,4 +534,4 @@ Remember that any missing metadata needs to be corrected online.
 Metadata corrected online will automatically be corrected in your detection files.
 If you have already downloaded your detection data, you can update the existing file to include this new data (see [Updating a database in Chapter 3](03-accessing-data.html#updating-a-database).
 
-**Next:** [Chapter 5 - Data cleaning](05-data-cleaning.html)
+> **Next** [Chapter 5 - Data cleaning](05-data-cleaning.html)

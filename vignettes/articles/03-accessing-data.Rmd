@@ -7,11 +7,12 @@ title: "Chapter 3 - Accessing detections data"
 sql.motus <- motus:::get_sample_data()
 ```
 
-> This chapter walks you through the motus data format, downloading, exporting, and updating your detections, as well as dealing with metadata. 
+> In this chapter we'll walk through the motus data format, downloading, exporting and updating your detections, as well as dealing with metadata. 
 >
-> Some extra, more advanced topics not addressed in this chapter are available as supplementary articles.
+> Some extra, more advanced topics *not* addressed in this chapter are available as supplementary articles.
 >
 > **Advanced Topics:**  
+>
 > - **WIP** `.motus` data base tables
 > - [Working with GPS points](gps.html)
 
@@ -536,8 +537,7 @@ df.alltags <- tbl.alltags %>%
                 mutate(ts = as_datetime(ts, tz = "UTC", origin = "1970-01-01"))              
 ```
 
-
-**Next:** [Chapter 4 - Project Deployments](04-project-deployments.html)
+> **Next** [Chapter 4 - Project Deployments](04-deployments.html)
 
 ```{r, include = FALSE}
 # Clean up!

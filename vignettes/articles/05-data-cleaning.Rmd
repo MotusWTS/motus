@@ -7,18 +7,16 @@ title: "Chapter 5 - Data Cleaning"
 sql.motus <- motus:::get_sample_data()
 ```
 
-> This chapter walks you through checking and cleaning tag detections by
+> In this chapter we'll go through checking and cleaning tag detections by
 > by filtering out noisy data, visually exploring your data, and checking ambiguous 
 > detections.
 >
 > Some extra, more advanced topics not addressed in this chapter are available as supplementary articles.
 >
 > **Advanced Topics:**  
+>
 > - [In-depth detections filtering](filtering.html)
 > - [Working with GPS points](gps.html)
-
-
-
 
 
 There are three sources of 'error' that can result in tag detections appearing in your database that are incorrect.

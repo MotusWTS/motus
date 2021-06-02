@@ -6,6 +6,7 @@ title: "Chapter 2 - Installing packages"
 knitr::opts_chunk$set(eval = FALSE) # Don't eval any chunks here
 ```
 
+> In this chapter we'll install Motus R packages as well as other packages we'll be using throughout these chapters.
 
 ## Installing Motus R packages
 Two R packages have been developed for Motus users:
@@ -128,3 +129,5 @@ As an animal moves within the detection range of a Motus station, radio transmis
 These raw detection data are either uploaded to the Motus database instantaneously via internet connection, or downloaded from the receiver and uploaded to Motus manually.
 Behind the scenes, various functions read and process the raw detections data to produce the tag detections file that users access using the R package (see [Chapter 3 - Accessing Data](03-accessing-data.html)). 
 While most users will not need to call on the internal data processing functions, a complete list of functions within the Motus server R package can be found on the GitHub [motusServer repository](https://github.com/MotusWTS/motusServer). 
+
+> **Next** [Chapter 3 - Accessing detections data](03-accessing-data.html)
