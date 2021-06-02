@@ -4,7 +4,7 @@
 #' Wildlife Tracking System \url{http://motus.org}.
 #' 
 #' For a detailed walk-though and instructions check out the 
-#' \href{https://motus.org/MotusRBook/}{Motus R Book}
+#' \href{https://MotusWTS.github.io/motus}{walk-throughs and articles}
 #' 
 #' Commonly used functions:
 #'
