@@ -1,0 +1,20 @@
+pandoc: 2.7.3
+pkgdown: 1.6.1
+pkgdown_sha: ~
+articles:
+  articles/01-introduction: 01-introduction.html
+  articles/02-installing-packages: 02-installing-packages.html
+  articles/03-accessing-data: 03-accessing-data.html
+  articles/04-deployments: 04-deployments.html
+  articles/05-data-cleaning: 05-data-cleaning.html
+  articles/06-exploring-data: 06-exploring-data.html
+  articles/advanced-modelling: advanced-modelling.html
+  articles/birds-eye-view: birds-eye-view.html
+  articles/filtering: filtering.html
+  articles/gps: gps.html
+  articles/motus: motus.html
+  articles/sqlite-views: sqlite-views.html
+  articles/troubleshooting: troubleshooting.html
+  articles/vanishing-bearings: vanishing-bearings.html
+last_built: 2021-06-02T21:27Z
+
