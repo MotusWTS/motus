@@ -93,9 +93,9 @@ test_that("srvXXX work as expected", {
   expect_equal(nrow(s), 0)  ## TEST WITH SOMETHING MORE 
   
   # srvPulseCountsForReceiver - CTT-5031194D3168
-  expect_silent(s <- srvPulseCountsForReceiver(batchID = 1941719, ant = 0)) %>%
-    expect_s3_class("data.frame")
-  expect_gt(nrow(s), 0)
+  # expect_silent(s <- srvPulseCountsForReceiver(batchID = 1941719, ant = 0)) %>%
+  #   expect_s3_class("data.frame")
+  # expect_gt(nrow(s), 0)
   
   # srvReceiversForProject
   expect_silent(s <- srvReceiversForProject(projectID = 204)) %>%
@@ -113,9 +113,9 @@ test_that("srvXXX work as expected", {
   expect_gt(nrow(s$projs), 0)
   
   # srvRunsForReceiver - CTT-5031194D3168
-  expect_silent(s <- srvRunsForReceiver(batchID = 1941719, runID = 0)) %>%
-    expect_s3_class("data.frame")
-  expect_gt(nrow(s), 0)
+  # expect_silent(s <- srvRunsForReceiver(batchID = 1941719, runID = 0)) %>%
+  #   expect_s3_class("data.frame")
+  # expect_gt(nrow(s), 0)
   
   # srvRunsForTagProject
   expect_silent(s <- srvRunsForTagProject(projectID = 4, batchID = 120474)) %>%
