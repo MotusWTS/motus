@@ -21,7 +21,7 @@ test_that("srvXXX work as expected", {
   # srvAPIinfo
   expect_silent(s <- srvAPIinfo()) %>%
     expect_type("list")
-  expect_named(s, c("maxRows", "dataVersion"))
+  expect_named(s, c("maxRows", "dataVersion", "currentPkgVersion"))
   expect_gt(s$maxRows, 0)
   expect_gt(s$dataVersion, 0)
   
