@@ -54,10 +54,10 @@ tbl.alltagsGPS <- tbl(sql.motus, "alltagsGPS")
 sun <- sunRiseSet(tbl.alltagsGPS)
 
 # Or, submit a flattened data frame:
-df.alltags <- collect(tbl.alltags)
+df.alltagsGPS <- collect(tbl.alltagsGPS)
 
 # Add sunrise/sunset
-sun <- sunRiseSet(df.alltags)
+sun <- sunRiseSet(df.alltagsGPS)
 
 # Get sunrise and sunset information from tbl.alltags using gps lat/lon
 # Note this only works if there are non-NA values in gpsLat/gpsLon
