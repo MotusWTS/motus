@@ -87,7 +87,9 @@ sunRiseSet <- function(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = 
   
   data <- data %>%
     dplyr::left_join(dplyr::select(tz, "tz", "hitID"), by = "hitID") %>%
-    dplyr::mutate(date = lubridate::floor_date(time + lubridate::hours(tz), unit = "day"))
+    dplyr::mutate(date = lubridate::floor_date(.data$time + 
+                                                 lubridate::hours(.data$tz), 
+                                               unit = "day"))
   
   sun <- data %>%
     dplyr::select(.data[[lon]], .data[[lat]], .data$date) %>%
