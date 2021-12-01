@@ -262,7 +262,7 @@
 <li>
 <code>skip_if_not_auth()</code> is used in tests to a) implement local authorizations if present and b) skip the test if they are not present</li>
 </ul>
-<p><code>motusUpdateTagDB()</code> and <code>pageDataByBatch()</code> have checks in them that will halt a download after <code><a href="https://rdrr.io/r/base/options.html">getOption("motus.test.max")</a></code> batches IF in a testing environment. This way testing can be done much more quickly on a variety of projects/receivers.</p>
+<p><code>motusUpdateTagDB()</code> and <code>pageDataByBatch()</code> have checks in them that will halt a download after <code>getOption("motus.test.max")</code> batches IF in a testing environment. This way testing can be done much more quickly on a variety of projects/receivers.</p>
 <ul>
 <li>
 <code>is_testing()</code> is an internal function that checks if a test is being run</li>
@@ -281,7 +281,7 @@
 </li>
 <li>Add update to <code>data-raw/updatesql.R</code> (run script, re-build package locally)</li>
 <li>Add test to make sure new field is added (test_sqlite and test_data_returned)</li>
-<li>Update internal data <code><a href="https://rdrr.io/r/base/source.html">source("data-raw/sample_data.R")</a></code>
+<li>Update internal data <code>source("data-raw/sample_data.R")</code>
 </li>
 <li>Update NEWS.md</li>
 <li>Push!</li>

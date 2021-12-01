@@ -262,7 +262,7 @@
 <p><strong>Note:</strong> You’ll need to use the <strong>username</strong> <code>motus.sample</code> and the <strong>password</strong> <code>motus.sample</code> to access this data (see <a href="#login">login</a> for more details)!</p>
 </blockquote>
 <p>Using <code><a href="../../reference/tagme.html">tagme()</a></code> as shown above will download a file to your working or specified directory called <code>project-176.motus</code> for the sample data (the number in the file name corresponds to the project number). The progress of the download process should print on the console; if you are not seeing it, try scrolling down your screen while <code><a href="../../reference/tagme.html">tagme()</a></code> is running.</p>
-<p>In the event that your connection to the Motus server fails prior to a complete download (e.g., due to a poor internet connection), use <code><a href="../../reference/tagme.html">tagme(proj.num, update = TRUE)</a></code> to continue the download from where it left off, ensuring you specify a directory if it is saved outside the working directory.</p>
+<p>In the event that your connection to the Motus server fails prior to a complete download (e.g., due to a poor internet connection), use <code>tagme(proj.num, update = TRUE)</code> to continue the download from where it left off, ensuring you specify a directory if it is saved outside the working directory.</p>
 </div>
 <div id="user-authentication" class="section level3">
 <h3 class="hasAnchor">
@@ -304,11 +304,11 @@
 <span class="fu"><a href="../../reference/metadata.html">metadata</a></span><span class="op">(</span><span class="va">sql.motus</span>, <span class="fl">176</span><span class="op">)</span>
 <span class="va">tbl.recvDeps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">sql.motus</span>, <span class="st">"recvDeps"</span><span class="op">)</span>
 
-<span class="va">df.serno</span> <span class="op">&lt;-</span> <span class="va">tbl.recvDeps</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">projectID</span> <span class="op">==</span> <span class="fl">176</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">serno</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<span class="va">df.serno</span> <span class="op">&lt;-</span> <span class="va">tbl.recvDeps</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">projectID</span> <span class="op">==</span> <span class="fl">176</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">serno</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="co"># loop through each receiver (may take a while!)</span>
@@ -384,7 +384,7 @@
 ##   .. .. ..@ loadable.extensions: logi TRUE
 ##   .. .. ..@ flags              : int 70
 ##   .. .. ..@ vfs                : chr ""
-##   .. .. ..@ ref                :&lt;environment: 0x7fe9b1267600&gt; 
+##   .. .. ..@ ref                :&lt;environment: 0x7fce36d97a00&gt; 
 ##   .. .. ..@ bigint             : chr "integer64"
 ##   .. .. ..@ extended_types     : logi FALSE
 ##   ..$ disco: NULL
@@ -397,8 +397,8 @@
 <p>The first part of the list, <code>src</code>, is a list that provides details of the SQLiteConnection, including the directory where the database is stored. The second part is a list that includes the underlying table. Thus, the R object <code>alltags</code> is a <em>virtual</em> table that stores the database structure and information required to connect to the underlying data in the <code>.motus</code> file. As stated above, the advantage of storing the data in this way is that it saves memory when accessing very large databases, and functions within the dplyr package can be used to manipulate and summarize the tables before collecting the results into a typical ‘flat’ format dataframe.</p>
 <p>If you want to use familiar functions to get access to components of the underlying data frame, then use the <code><a href="https://dplyr.tidyverse.org/reference/compute.html">collect()</a></code> function. For example, to look at the names of the variables in the alltags table:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tbl.alltags</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<code class="sourceCode R"><span class="va">tbl.alltags</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># list the variable names in the table</span></code></pre></div>
 <pre><code>##  [1] "hitID"          "runID"          "batchID"        "ts"            
 ##  [5] "tsCorrected"    "sig"            "sigsd"          "noise"         
@@ -423,8 +423,8 @@
 <a href="#converting-to-flat-data" class="anchor"></a>Converting to flat data</h3>
 <p>To convert the <code>alltags</code> view or other table in the .motus file into a typical ‘flat’ format, i.e., with every record for each field filled in, use the <code><a href="https://dplyr.tidyverse.org/reference/compute.html">collect()</a></code> and <code><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame()</a></code> functions. The output can then be further manipulated, or used to generate a RDS file of your data for archiving or export.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">df.alltags</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<code class="sourceCode R"><span class="va">df.alltags</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>Now we have flat data of the alltags table called <code>df.alltags</code>. We can look at some metrics of the file:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
@@ -434,10 +434,10 @@
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">df.alltags</span><span class="op">)</span>   <span class="co"># summary of each column in your df</span></code></pre></div>
 <p>Note that the format of the time stamp (ts) field is numeric and represents seconds since January 1 1970. We recommend that when you transform your tables into flat dataframes, that you format the time stamp using the lubridate package at that time, e.g.:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">df.alltags</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>     <span class="co"># for all fields in the df (data frame)</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>ts <span class="op">=</span> <span class="fu"><a href="http://lubridate.tidyverse.org/reference/as_date.html">as_datetime</a></span><span class="op">(</span><span class="va">ts</span>, tz <span class="op">=</span> <span class="st">"UTC"</span>, origin <span class="op">=</span> <span class="st">"1970-01-01"</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">df.alltags</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>     <span class="co"># for all fields in the df (data frame)</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>ts <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html">as_datetime</a></span><span class="op">(</span><span class="va">ts</span>, tz <span class="op">=</span> <span class="st">"UTC"</span>, origin <span class="op">=</span> <span class="st">"1970-01-01"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># the tz = "UTC" is not necessary here, provided you have set your system time to UTC</span>
 <span class="co"># ... but it serves as a useful reminder!</span></code></pre></div>
@@ -449,43 +449,43 @@
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># to grab a subset of variables, in this case a unique list of Motus tag IDs at</span>
 <span class="co"># each receiver and antenna.</span>
-<span class="va">df.alltagsSub</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">recv</span>, <span class="va">port</span>, <span class="va">motusTagID</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<span class="va">df.alltagsSub</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">recv</span>, <span class="va">port</span>, <span class="va">motusTagID</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> </code></pre></div>
 <ol start="2" style="list-style-type: decimal">
 <li>To select certain tag IDs:</li>
 </ol>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># filter to include only motusTagIDs 16011, 23316</span>
-<span class="va">df.alltagsSub</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">motusTagID</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">16011</span>, <span class="fl">23316</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>    
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>ts <span class="op">=</span> <span class="fu"><a href="http://lubridate.tidyverse.org/reference/as_date.html">as_datetime</a></span><span class="op">(</span><span class="va">ts</span>, tz <span class="op">=</span> <span class="st">"UTC"</span>, origin <span class="op">=</span> <span class="st">"1970-01-01"</span><span class="op">)</span><span class="op">)</span>    </code></pre></div>
+<span class="va">df.alltagsSub</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">motusTagID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">16011</span>, <span class="fl">23316</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>    
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>ts <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html">as_datetime</a></span><span class="op">(</span><span class="va">ts</span>, tz <span class="op">=</span> <span class="st">"UTC"</span>, origin <span class="op">=</span> <span class="st">"1970-01-01"</span><span class="op">)</span><span class="op">)</span>    </code></pre></div>
 <ol start="3" style="list-style-type: decimal">
 <li>To select a specific species:</li>
 </ol>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># filter to only Red Knot (using speciesID)</span>
-<span class="va">df.4670</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">speciesID</span> <span class="op">==</span> <span class="fl">4670</span><span class="op">)</span> <span class="op">%&gt;%</span>  
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>    
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>ts <span class="op">=</span> <span class="fu"><a href="http://lubridate.tidyverse.org/reference/as_date.html">as_datetime</a></span><span class="op">(</span><span class="va">ts</span>, tz <span class="op">=</span> <span class="st">"UTC"</span>, origin <span class="op">=</span> <span class="st">"1970-01-01"</span><span class="op">)</span><span class="op">)</span>  
+<span class="va">df.4670</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">speciesID</span> <span class="op">==</span> <span class="fl">4670</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>  
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>    
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>ts <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html">as_datetime</a></span><span class="op">(</span><span class="va">ts</span>, tz <span class="op">=</span> <span class="st">"UTC"</span>, origin <span class="op">=</span> <span class="st">"1970-01-01"</span><span class="op">)</span><span class="op">)</span>  
 
 <span class="co"># filter to only Red Knot (using English name)</span>
-<span class="va">df.redKnot</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">speciesEN</span> <span class="op">==</span> <span class="st">"Red Knot"</span><span class="op">)</span> <span class="op">%&gt;%</span>   
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>    
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>ts <span class="op">=</span> <span class="fu"><a href="http://lubridate.tidyverse.org/reference/as_date.html">as_datetime</a></span><span class="op">(</span><span class="va">ts</span>, tz <span class="op">=</span> <span class="st">"UTC"</span>, origin <span class="op">=</span> <span class="st">"1970-01-01"</span><span class="op">)</span><span class="op">)</span>    </code></pre></div>
+<span class="va">df.redKnot</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">speciesEN</span> <span class="op">==</span> <span class="st">"Red Knot"</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>   
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>    
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>ts <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html">as_datetime</a></span><span class="op">(</span><span class="va">ts</span>, tz <span class="op">=</span> <span class="st">"UTC"</span>, origin <span class="op">=</span> <span class="st">"1970-01-01"</span><span class="op">)</span><span class="op">)</span>    </code></pre></div>
 <p>Using <code>dplyr</code>, your virtual table can also be summarized before converting to a flat file. For example, to find the number of different detections for each tag at each receiver:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">df.detectSum</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">motusTagID</span>, <span class="va">recv</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<code class="sourceCode R"><span class="va">df.detectSum</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">motusTagID</span>, <span class="va">recv</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> </code></pre></div>
 <p>In later chapter(s) we will show you additional ways of summarizing and working with your data.</p>
 </div>
@@ -589,10 +589,10 @@
 
 <span class="co"># virtual table object of the alltags table in the sample.motus file:</span>
 <span class="va">tbl.alltags</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">sql.motus</span>, <span class="st">"alltags"</span><span class="op">)</span>  
-<span class="va">df.alltags</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op">%&gt;%</span>
-                <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-                <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="co"># dataframe ("flat") object of alltags table</span>
-                <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>ts <span class="op">=</span> <span class="fu"><a href="http://lubridate.tidyverse.org/reference/as_date.html">as_datetime</a></span><span class="op">(</span><span class="va">ts</span>, tz <span class="op">=</span> <span class="st">"UTC"</span>, origin <span class="op">=</span> <span class="st">"1970-01-01"</span><span class="op">)</span><span class="op">)</span>              </code></pre></div>
+<span class="va">df.alltags</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
+                <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
+                <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span> <span class="co"># dataframe ("flat") object of alltags table</span>
+                <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>ts <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html">as_datetime</a></span><span class="op">(</span><span class="va">ts</span>, tz <span class="op">=</span> <span class="st">"UTC"</span>, origin <span class="op">=</span> <span class="st">"1970-01-01"</span><span class="op">)</span><span class="op">)</span>              </code></pre></div>
 <blockquote>
 <p><strong>Next</strong> <a href="04-deployments.html">Chapter 4 - Project Deployments</a></p>
 </blockquote>

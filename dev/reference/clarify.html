@@ -190,7 +190,7 @@ over any period specified by <code>from</code> and <code>to</code>.</p></td>
 ambiguous detections of tag(s) <code>id</code>.  If missing, you are
 claiming all detections up to <code>to</code>.  <code>from</code> can be a
 numeric timestamp, or a character string compatible with
-<code><a href='http://lubridate.tidyverse.org/reference/ymd.html'>lubridate::ymd</a></code></p></td>
+<code><a href='https://lubridate.tidyverse.org/reference/ymd.html'>lubridate::ymd</a></code></p></td>
     </tr>
     <tr>
       <th>to</th>
@@ -198,7 +198,7 @@ numeric timestamp, or a character string compatible with
 detections of tag(s) <code>id</code>.  If missing, you are claiming
 all detections after <code>from</code>.  <code>to</code> can be a numeric
 timestamp, or a character string compatible with
-<code><a href='http://lubridate.tidyverse.org/reference/ymd.html'>lubridate::ymd</a></code></p></td>
+<code><a href='https://lubridate.tidyverse.org/reference/ymd.html'>lubridate::ymd</a></code></p></td>
     </tr>
     <tr>
       <th>all.mine</th>
@@ -248,15 +248,16 @@ unsure, copy the .motus file first, then run <code>clarify</code> on only
 one copy.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>## s = tagme(57) ## get a dplyr::src to the tag database for project 57</span>
-<span class='co'>## clarify(s)  ## report on the ambiguous tag detections in s</span>
-<span class='co'>## clarify(all.mine=TRUE) ## claim all ambiguous tag detections as mine</span>
-<span class='co'>## clarify(id = -57) ## claim all detections of ambiguous tag -57 as mine</span>
-<span class='co'>## clarify(id = c(-72, -88, -91), from=("2017-01-02"), to=("2017-05-06")) </span>
-<span class='co'>## claim all detections of ambiguous tags -72, -88, and -91 from</span>
-<span class='co'>##   January 2 through May 6, 2017, as mine</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'>## s = tagme(57) ## get a dplyr::src to the tag database for project 57</span></span>
+<span class='r-in'><span class='co'>## clarify(s)  ## report on the ambiguous tag detections in s</span></span>
+<span class='r-in'><span class='co'>## clarify(all.mine=TRUE) ## claim all ambiguous tag detections as mine</span></span>
+<span class='r-in'><span class='co'>## clarify(id = -57) ## claim all detections of ambiguous tag -57 as mine</span></span>
+<span class='r-in'><span class='co'>## clarify(id = c(-72, -88, -91), from=("2017-01-02"), to=("2017-05-06")) </span></span>
+<span class='r-in'><span class='co'>## claim all detections of ambiguous tags -72, -88, and -91 from</span></span>
+<span class='r-in'><span class='co'>##   January 2 through May 6, 2017, as mine</span></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

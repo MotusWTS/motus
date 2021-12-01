@@ -122,10 +122,10 @@
 <p>As runs are composed of sequences of hits, the longer the run the more confident we can be that it represents a true detection.</p>
 <p>Run lengths are <code>runLen</code> in the <code>alltags</code> view.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">tags</span>, <span class="st">"alltags"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">tags</span>, <span class="st">"alltags"</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">motusTagID</span>, <span class="va">runLen</span><span class="op">)</span></code></pre></div>
 <pre><code>## # Source:   lazy query [?? x 5]
-## # Database: sqlite 3.35.5
+## # Database: sqlite 3.36.0
 ## #   [/Users/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
 ##     hitID runID batchID motusTagID runLen
 ##     &lt;int&gt; &lt;int&gt;   &lt;int&gt;      &lt;int&gt;  &lt;int&gt;
@@ -143,10 +143,10 @@
 <p>However, local conditions at an individual receiver may vary in their exposure to background radio noise/interference. Sites with relatively more background noise may be more prone to generating a high number of very short runs that are in reality spurious data.</p>
 <p>The <code>activity</code> table contains information on the number of runs (<code>numRuns</code>) and how many of these runs were particularly short (i.e. 2 hits <code>run2</code> or 3 hits <code>run3</code>, etc.)</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">tags</span>, <span class="st">"activity"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">tags</span>, <span class="st">"activity"</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">batchID</span>, <span class="va">motusDeviceID</span>, <span class="va">ant</span>, <span class="va">year</span>, <span class="va">month</span>, <span class="va">day</span>, <span class="va">hourBin</span>, <span class="va">numRuns</span>, <span class="va">run2</span>, <span class="va">run3</span><span class="op">)</span></code></pre></div>
 <pre><code>## # Source:   lazy query [?? x 10]
-## # Database: sqlite 3.35.5
+## # Database: sqlite 3.36.0
 ## #   [/Users/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
 ##    batchID motusDeviceID ant    year month   day hourBin numRuns  run2  run3
 ##      &lt;int&gt;         &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt;
@@ -196,36 +196,36 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">tags</span>, <span class="st">"runs"</span><span class="op">)</span></code></pre></div>
 <pre><code>## # Source:   table&lt;runs&gt; [?? x 10]
-## # Database: sqlite 3.35.5
+## # Database: sqlite 3.36.0
 ## #   [/Users/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
-##     runID batchIDbegin   tsBegin    tsEnd  done motusTagID ant     len nodeNum motusFilter
-##     &lt;int&gt;        &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;      &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt;         &lt;int&gt;
-##  1   8886           53    1.45e9   1.45e9     1      16047 3         5 &lt;NA&gt;              1
-##  2  23305           64    1.45e9   1.45e9     1      16047 1        11 &lt;NA&gt;              1
-##  3  23306           64    1.45e9   1.45e9     1      16047 3         6 &lt;NA&gt;              1
-##  4  23307           64    1.45e9   1.45e9     1      16047 2         5 &lt;NA&gt;              1
-##  5  23308           64    1.45e9   1.45e9     1      16047 2         5 &lt;NA&gt;              1
-##  6 104118          141    1.45e9   1.45e9     1      16047 2         3 &lt;NA&gt;              0
-##  7 104119          141    1.45e9   1.45e9     1      16047 3         3 &lt;NA&gt;              0
-##  8 104120          141    1.45e9   1.45e9     1      16047 -1        2 &lt;NA&gt;              0
-##  9 104131           97    1.45e9   1.45e9     1      16047 2         4 &lt;NA&gt;              1
-## 10 104132           97    1.45e9   1.45e9     1      16047 3         5 &lt;NA&gt;              1
+##     runID batchIDbegin     tsBegin  tsEnd  done motusTagID ant     len nodeNum motusFilter
+##     &lt;int&gt;        &lt;int&gt;       &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt;      &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt;         &lt;int&gt;
+##  1   8886           53 1445858390. 1.45e9     1      16047 3         5 &lt;NA&gt;              1
+##  2  23305           64 1445857924. 1.45e9     1      16047 1        11 &lt;NA&gt;              1
+##  3  23306           64 1445858341. 1.45e9     1      16047 3         6 &lt;NA&gt;              1
+##  4  23307           64 1445858497. 1.45e9     1      16047 2         5 &lt;NA&gt;              1
+##  5  23308           64 1445858826. 1.45e9     1      16047 2         5 &lt;NA&gt;              1
+##  6 104118          141 1445858904. 1.45e9     1      16047 2         3 &lt;NA&gt;              0
+##  7 104119          141 1445858875. 1.45e9     1      16047 3         3 &lt;NA&gt;              0
+##  8 104120          141 1445858933. 1.45e9     1      16047 -1        2 &lt;NA&gt;              0
+##  9 104131           97 1445855802. 1.45e9     1      16047 2         4 &lt;NA&gt;              1
+## 10 104132           97 1445855812. 1.45e9     1      16047 3         5 &lt;NA&gt;              1
 ## # … with more rows</code></pre>
 <p>To omit runs identified as dubious by <code>motusFilter</code> we can use an <code><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">anti_join()</a></code> from the <code>dplyr</code> package.</p>
 <p>First identify invalid runs with a <code>motusFilter</code> of 0</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">bad_runs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">tags</span>, <span class="st">"runs"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<code class="sourceCode R"><span class="va">bad_runs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">tags</span>, <span class="st">"runs"</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">motusFilter</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
 <p>Now use <code><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">anti_join()</a></code> to remove those runs from the <code>alltags</code> view</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">alltags_filtered</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">anti_join</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">tags</span>, <span class="st">"alltags"</span><span class="op">)</span>, <span class="va">bad_runs</span>, by <span class="op">=</span> <span class="st">"runID"</span><span class="op">)</span></code></pre></div>
 <p>To double check we can filter for short runs in the original <code>alltags</code> view</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">tags</span>, <span class="st">"alltags"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">motusTagID</span>, <span class="va">runLen</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">tags</span>, <span class="st">"alltags"</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">motusTagID</span>, <span class="va">runLen</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">runLen</span> <span class="op">&lt;=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code>## # Source:   lazy query [?? x 5]
-## # Database: sqlite 3.35.5
+## # Database: sqlite 3.36.0
 ## #   [/Users/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
 ##     hitID  runID batchID motusTagID runLen
 ##     &lt;int&gt;  &lt;int&gt;   &lt;int&gt;      &lt;int&gt;  &lt;int&gt;
@@ -242,11 +242,11 @@
 ## # … with more rows</code></pre>
 <p>And compare this to our newly created <code>alltags_filtered</code> table</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">alltags_filtered</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">motusTagID</span>, <span class="va">runLen</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<code class="sourceCode R"><span class="va">alltags_filtered</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">motusTagID</span>, <span class="va">runLen</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">runLen</span> <span class="op">&lt;=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code>## # Source:   lazy query [?? x 5]
-## # Database: sqlite 3.35.5
+## # Database: sqlite 3.36.0
 ## #   [/Users/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
 ## # … with 5 variables: hitID &lt;int&gt;, runID &lt;int&gt;, batchID &lt;int&gt;, motusTagID &lt;lgl&gt;,
 ## #   runLen &lt;int&gt;</code></pre>
@@ -264,15 +264,15 @@
 <p><strong>Note</strong> that <code><a href="../../reference/filterByActivity.html">filterByActivity()</a></code> requires the SQLite database connection (not a flat data frame).</p>
 <p>If we compare hits, runs, and batches, we see that the two filtered data sets are identical (although this won’t always be the case<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>).</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">test1</span> <span class="op">&lt;-</span> <span class="va">alltags_filtered</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<code class="sourceCode R"><span class="va">test1</span> <span class="op">&lt;-</span> <span class="va">alltags_filtered</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="va">test2</span> <span class="op">&lt;-</span> <span class="va">alltags_filtered2</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<span class="va">test2</span> <span class="op">&lt;-</span> <span class="va">alltags_filtered2</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="fu">waldo</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/waldo/man/compare.html">compare</a></span><span class="op">(</span><span class="va">test1</span>, <span class="va">test2</span><span class="op">)</span></code></pre></div>
+<span class="fu">waldo</span><span class="fu">::</span><span class="fu"><a href="https://waldo.r-lib.org/reference/compare.html">compare</a></span><span class="op">(</span><span class="va">test1</span>, <span class="va">test2</span><span class="op">)</span></code></pre></div>
 <pre><code>## ✔ No differences</code></pre>
 <p>Alternatively we can change the default view used, so the <code><a href="../../reference/filterByActivity.html">filterByActivity()</a></code> function uses the <code>alltagsGPS</code> view. <strong>However</strong>, on very large databases this could be slow.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
@@ -284,12 +284,12 @@
 <p>The <code><a href="../../reference/filterByActivity.html">filterByActivity()</a></code> function uses the <code>activity</code> table to identify potentially problematic runs. As above, you can return just the “true” positives (<code>return = "good"</code>), but you can also return just the “false” positives (<code>return = "bad"</code>) or all runs (<code>return = "all"</code>). If you return <code>all</code> runs, you will also get a new column, <code>probability</code>, which reflects either 0 (expected false positive) or 1 (expected true positive), similar to the <a href="#motusfilter"><code>motusFilter</code> column</a>.</p>
 <p>For example, the following code adds a <code>probability</code> column to the sample project data.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">alltags_filtered4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/filterByActivity.html">filterByActivity</a></span><span class="op">(</span><span class="va">tags</span>, return <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<code class="sourceCode R"><span class="va">alltags_filtered4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/filterByActivity.html">filterByActivity</a></span><span class="op">(</span><span class="va">tags</span>, return <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">motusTagID</span>, <span class="va">runLen</span>, <span class="va">probability</span><span class="op">)</span>
 
 <span class="va">alltags_filtered4</span></code></pre></div>
 <pre><code>## # Source:   lazy query [?? x 6]
-## # Database: sqlite 3.35.5
+## # Database: sqlite 3.36.0
 ## #   [/Users/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
 ##     hitID runID batchID motusTagID runLen probability
 ##     &lt;int&gt; &lt;int&gt;   &lt;int&gt;      &lt;int&gt;  &lt;int&gt;       &lt;dbl&gt;
@@ -322,28 +322,28 @@
 <h2 class="hasAnchor">
 <a href="#exploring-problematic-detections" class="anchor"></a>Exploring problematic detections</h2>
 <p>You may also be interested more generally in exploring which data have only short run lengths. For example, the following code shows the maximum run length at all sites by month (for those runs which haven’t been removed by filtering).</p>
-<p>Here we will collect and summarize by receiver and month maximum run lengths. We’ll convert <code>ts</code> to a datetime format with <code><a href="http://lubridate.tidyverse.org/reference/as_date.html">as_datetime()</a></code> from the lubridate package and we’ll use the <code><a href="http://lubridate.tidyverse.org/reference/month.html">month()</a></code> function to pull out months.</p>
+<p>Here we will collect and summarize by receiver and month maximum run lengths. We’ll convert <code>ts</code> to a datetime format with <code><a href="https://lubridate.tidyverse.org/reference/as_date.html">as_datetime()</a></code> from the lubridate package and we’ll use the <code><a href="https://lubridate.tidyverse.org/reference/month.html">month()</a></code> function to pull out months.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">max_runlen</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">tags</span>, <span class="st">"alltags"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>ts <span class="op">=</span> <span class="fu"><a href="http://lubridate.tidyverse.org/reference/as_date.html">as_datetime</a></span><span class="op">(</span><span class="va">ts</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span>, <span class="co"># convert ts to POSIXct format</span>
-         month <span class="op">=</span> <span class="fu"><a href="http://lubridate.tidyverse.org/reference/month.html">month</a></span><span class="op">(</span><span class="va">ts</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">recvDeployName</span>, <span class="va">month</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<code class="sourceCode R"><span class="va">max_runlen</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">tags</span>, <span class="st">"alltags"</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>ts <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html">as_datetime</a></span><span class="op">(</span><span class="va">ts</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span>, <span class="co"># convert ts to POSIXct format</span>
+         month <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/month.html">month</a></span><span class="op">(</span><span class="va">ts</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">recvDeployName</span>, <span class="va">month</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>max.rl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">runLen</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## `summarise()` has grouped output by 'recvDeployName'. You can override using the `.groups` argument.</code></pre>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">ggplot</span><span class="op">(</span><span class="va">max_runlen</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">recvDeployName</span>, y <span class="op">=</span> <span class="va">max.rl</span>, fill <span class="op">=</span> <span class="va">month</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_col</span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_fill_viridis_c</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">coord_flip</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">max_runlen</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">recvDeployName</span>, y <span class="op">=</span> <span class="va">max.rl</span>, fill <span class="op">=</span> <span class="va">month</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="filtering_files/figure-html/unnamed-chunk-16-1.png" width="50%"></p>
 <p>Alternatively, you can produce a list of sites where the maximum run length of detections was never greater than (say) 4, which may sometimes (but not always!) indicate they are simply false detections.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">ggplot</span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">max_runlen</span>, <span class="va">max.rl</span> <span class="op">&lt;</span> <span class="fl">5</span><span class="op">)</span>, 
-       <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">recvDeployName</span>, y <span class="op">=</span> <span class="va">max.rl</span>, fill <span class="op">=</span> <span class="va">month</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_col</span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_fill_viridis_c</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">coord_flip</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">max_runlen</span>, <span class="va">max.rl</span> <span class="op">&lt;</span> <span class="fl">5</span><span class="op">)</span>, 
+       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">recvDeployName</span>, y <span class="op">=</span> <span class="va">max.rl</span>, fill <span class="op">=</span> <span class="va">month</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="filtering_files/figure-html/unnamed-chunk-17-1.png" width="50%"></p>
 <p>It is impossible to go through every possible issue that you may encounter here. Users are strongly encouraged to explore their data fully, and make reasoned decisions on which detections are unlikely or indeterminate.</p>
 </div>

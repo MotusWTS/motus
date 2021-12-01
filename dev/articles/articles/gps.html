@@ -116,7 +116,7 @@
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org">lubridate</a></span><span class="op">)</span>
 
 <span class="va">gps_tags</span></code></pre></div>
-<pre><code>## src:  sqlite 3.35.5 [/Users/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus]
+<pre><code>## src:  sqlite 3.36.0 [/Users/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus]
 ## tbls: activityAll, admInfo, allambigs, alltags, alltagsGPS, antDeps, batches,
 ##   batchRuns, clarified, filters, gps, gpsAll, hits, meta, nodeData, nodeDeps,
 ##   projAmbig, projBatch, projs, recvDeps, recvs, runs, runsFilters, species,
@@ -128,7 +128,7 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">gps_tags</span>, <span class="st">"gps"</span><span class="op">)</span></code></pre></div>
 <pre><code>## # Source:   table&lt;gps&gt; [?? x 11]
-## # Database: sqlite 3.35.5
+## # Database: sqlite 3.36.0
 ## #   [/Users/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus]
 ##       gpsID batchID         ts gpsts   lat   lon   alt quality lat_mean lon_mean
 ##       &lt;int&gt;   &lt;int&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;int&gt;    &lt;dbl&gt;    &lt;dbl&gt;
@@ -156,10 +156,10 @@
 <a href="#alltagsgps-view" class="anchor"></a><code>alltagsGPS</code> view</h3>
 <p>The <code>alltagsGPS</code> view combines hits and GPS points</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">gps_tags</span>, <span class="st">"alltagsGPS"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">gps_tags</span>, <span class="st">"alltagsGPS"</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">ts</span>, <span class="va">gpsLat</span>, <span class="va">gpsLon</span>, <span class="va">gpsAlt</span><span class="op">)</span></code></pre></div>
 <pre><code>## # Source:   lazy query [?? x 7]
-## # Database: sqlite 3.35.5
+## # Database: sqlite 3.36.0
 ## #   [/Users/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus]
 ##         hitID    runID batchID          ts gpsLat gpsLon gpsAlt
 ##         &lt;int&gt;    &lt;int&gt;   &lt;int&gt;       &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
@@ -176,11 +176,11 @@
 ## # … with more rows</code></pre>
 <p>Note that not all hits have a GPS point associated, but we can filter to those that do:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">gps_tags</span>, <span class="st">"alltagsGPS"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">ts</span>, <span class="va">gpsLat</span>, <span class="va">gpsLon</span>, <span class="va">gpsAlt</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">gps_tags</span>, <span class="st">"alltagsGPS"</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">ts</span>, <span class="va">gpsLat</span>, <span class="va">gpsLon</span>, <span class="va">gpsAlt</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">gpsLat</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## # Source:   lazy query [?? x 7]
-## # Database: sqlite 3.35.5
+## # Database: sqlite 3.36.0
 ## #   [/Users/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus]
 ##         hitID    runID batchID          ts gpsLat gpsLon gpsAlt
 ##         &lt;int&gt;    &lt;int&gt;   &lt;int&gt;       &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
@@ -204,7 +204,7 @@
 <a href="#filtering-then-adding-gps-data" class="anchor"></a>Filtering then adding GPS data</h3>
 <p>For example, let’s work with a subset of the alltags view, including only Red Knots.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">gps_tags</span>, <span class="st">"alltags"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<code class="sourceCode R"><span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">gps_tags</span>, <span class="st">"alltags"</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">speciesEN</span> <span class="op">==</span> <span class="st">"Red Knot"</span><span class="op">)</span></code></pre></div>
 <p>Now let’s retrieve the daily median location of GPS points for these data. Note that we use both the original database <code>gps_tags</code> as well as the data subset <code>knots</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -214,21 +214,21 @@
 <code class="sourceCode R"><span class="va">knots_GPS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="va">knots</span><span class="op">)</span>, <span class="va">index_GPS</span>, by <span class="op">=</span> <span class="st">"hitID"</span><span class="op">)</span></code></pre></div>
 <p>We can subset the columns to see if it worked as expected</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">knots_GPS</span> <span class="op">%&gt;%</span>
+<code class="sourceCode R"><span class="va">knots_GPS</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">ts</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">contains</a></span><span class="op">(</span><span class="st">"gps"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 849 x 9
-##        hitID    runID batchID        ts gpsLat gpsLon gpsAlt gpsTs_min gpsTs_max
-##      &lt;int64&gt;    &lt;int&gt;   &lt;int&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-##  1       1e9 51412006  795408    1.57e9   32.6  -80.1   12.8    1.57e9    1.57e9
-##  2       1e9 51412006  795408    1.57e9   32.6  -80.1   12.8    1.57e9    1.57e9
-##  3       1e9 51412007  795408    1.57e9   32.6  -80.1   12.8    1.57e9    1.57e9
-##  4       1e9 51412007  795408    1.57e9   32.6  -80.1   12.8    1.57e9    1.57e9
-##  5       1e9 51412008  795408    1.57e9   32.6  -80.1   12.8    1.57e9    1.57e9
-##  6       1e9 51412008  795408    1.57e9   32.6  -80.1   12.8    1.57e9    1.57e9
-##  7       1e9 51412163  795408    1.57e9   32.6  -80.1   12.8    1.57e9    1.57e9
-##  8       1e9 51412163  795408    1.57e9   32.6  -80.1   12.8    1.57e9    1.57e9
-##  9       1e9 51412164  795408    1.57e9   32.6  -80.1   12.8    1.57e9    1.57e9
-## 10       1e9 51412164  795408    1.57e9   32.6  -80.1   12.8    1.57e9    1.57e9
+<pre><code>## # A tibble: 849 × 9
+##         hitID    runID batchID       ts gpsLat gpsLon gpsAlt gpsTs_min gpsTs_max
+##       &lt;int64&gt;    &lt;int&gt;   &lt;int&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+##  1 1283703132 51412006  795408   1.57e9   32.6  -80.1   12.8    1.57e9    1.57e9
+##  2 1283703133 51412006  795408   1.57e9   32.6  -80.1   12.8    1.57e9    1.57e9
+##  3 1283703134 51412007  795408   1.57e9   32.6  -80.1   12.8    1.57e9    1.57e9
+##  4 1283703135 51412007  795408   1.57e9   32.6  -80.1   12.8    1.57e9    1.57e9
+##  5 1283703136 51412008  795408   1.57e9   32.6  -80.1   12.8    1.57e9    1.57e9
+##  6 1283703137 51412008  795408   1.57e9   32.6  -80.1   12.8    1.57e9    1.57e9
+##  7 1283704910 51412163  795408   1.57e9   32.6  -80.1   12.8    1.57e9    1.57e9
+##  8 1283704911 51412163  795408   1.57e9   32.6  -80.1   12.8    1.57e9    1.57e9
+##  9 1283704912 51412164  795408   1.57e9   32.6  -80.1   12.8    1.57e9    1.57e9
+## 10 1283704913 51412164  795408   1.57e9   32.6  -80.1   12.8    1.57e9    1.57e9
 ## # … with 839 more rows</code></pre>
 <div id="more-ways-of-matching-gps-points" class="section level4">
 <h4 class="hasAnchor">
@@ -247,7 +247,7 @@
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">index_GPS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/getGPS.html">getGPS</a></span><span class="op">(</span>src <span class="op">=</span> <span class="va">gps_tags</span>, data <span class="op">=</span> <span class="va">knots</span>, by <span class="op">=</span> <span class="fl">60</span><span class="op">)</span>
 <span class="va">index_GPS</span></code></pre></div>
-<pre><code>## # A tibble: 849 x 6
+<pre><code>## # A tibble: 849 × 6
 ##         hitID gpsLat gpsLon gpsAlt  gpsTs_min  gpsTs_max
 ##       &lt;int64&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
 ##  1 1283703132   32.6  -80.1    4.9 1565285386 1565286652
@@ -273,7 +273,7 @@
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">index_GPS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/getGPS.html">getGPS</a></span><span class="op">(</span>src <span class="op">=</span> <span class="va">gps_tags</span>, data <span class="op">=</span> <span class="va">knots</span>, by <span class="op">=</span> <span class="st">"daily"</span><span class="op">)</span>
 <span class="va">index_GPS</span></code></pre></div>
-<pre><code>## # A tibble: 849 x 6
+<pre><code>## # A tibble: 849 × 6
 ##         hitID gpsLat gpsLon gpsAlt  gpsTs_min  gpsTs_max
 ##       &lt;int64&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
 ##  1 1283703132   32.6  -80.1   12.8 1565223439 1565308252
@@ -300,7 +300,7 @@
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">index_GPS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/getGPS.html">getGPS</a></span><span class="op">(</span>src <span class="op">=</span> <span class="va">gps_tags</span>, data <span class="op">=</span> <span class="va">knots</span>, by <span class="op">=</span> <span class="st">"closest"</span>, cutoff <span class="op">=</span> <span class="fl">120</span><span class="op">)</span>
 <span class="va">index_GPS</span></code></pre></div>
-<pre><code>## # A tibble: 849 x 6
+<pre><code>## # A tibble: 849 × 6
 ##         hitID    gpsID gpsLat gpsLon gpsAlt      gpsTs
 ##       &lt;int64&gt;    &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;
 ##  1 1283703132 25452618   32.6  -80.1  -14.1 1565283052
@@ -335,30 +335,30 @@
 <pre><code>## activity:     0 new batch records to check</code></pre>
 <pre><code>## nodeData:     0 new batch records to check</code></pre>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">df.alltagsGPS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">sql.motus</span>, <span class="st">"alltagsGPS"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>recvLat <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">gpsLat</span><span class="op">)</span> <span class="op">|</span> <span class="va">gpsLat</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">999</span><span class="op">)</span>, 
+<code class="sourceCode R"><span class="va">df.alltagsGPS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">sql.motus</span>, <span class="st">"alltagsGPS"</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>recvLat <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">gpsLat</span><span class="op">)</span> <span class="op">|</span> <span class="va">gpsLat</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">999</span><span class="op">)</span>, 
                            <span class="va">recvDeployLat</span>, <span class="va">gpsLat</span><span class="op">)</span>,
-         recvLon <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">gpsLon</span><span class="op">)</span> <span class="op">|</span> <span class="va">gpsLon</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">999</span><span class="op">)</span>, 
+         recvLon <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">gpsLon</span><span class="op">)</span> <span class="op">|</span> <span class="va">gpsLon</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">999</span><span class="op">)</span>, 
                            <span class="va">recvDeployLon</span>, <span class="va">gpsLon</span><span class="op">)</span>,
-         recvAlt <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">gpsAlt</span><span class="op">)</span>, <span class="va">recvDeployAlt</span>, <span class="va">gpsAlt</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+         recvAlt <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">gpsAlt</span><span class="op">)</span>, <span class="va">recvDeployAlt</span>, <span class="va">gpsAlt</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># Flatten the data</span>
 
 <span class="co"># Take a look</span>
 <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">df.alltagsGPS</span>, <span class="va">hitID</span>, <span class="va">recvLat</span>, <span class="va">recvLon</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 108,826 x 3
-##     hitID recvLat recvLon
-##     &lt;int&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-##  1  45107    42.6   -72.7
-##  2  45108    42.6   -72.7
-##  3  45109    42.6   -72.7
-##  4  45110    42.6   -72.7
-##  5  45111    42.6   -72.7
-##  6 199885    42.7   -72.5
-##  7 199886    42.7   -72.5
-##  8 199887    42.7   -72.5
-##  9 199888    42.7   -72.5
-## 10 199889    42.7   -72.5
-## # … with 108,816 more rows</code></pre>
+<pre><code>## # A tibble: 188,354 × 3
+##      hitID recvLat recvLon
+##    &lt;int64&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1   45107    42.6   -72.7
+##  2   45108    42.6   -72.7
+##  3   45109    42.6   -72.7
+##  4   45110    42.6   -72.7
+##  5   45111    42.6   -72.7
+##  6  199885    42.7   -72.5
+##  7  199886    42.7   -72.5
+##  8  199887    42.7   -72.5
+##  9  199888    42.7   -72.5
+## 10  199889    42.7   -72.5
+## # … with 188,344 more rows</code></pre>
 <p><a href="05-data-cleaning.html#checking-receivers">Continuing on in Chapter 5</a> with these values, you would then replace all instances of <code>recvDeployLat</code> with <code>recvLat</code> and <code>recevDeployLon</code> with <code>recvLon</code>.</p>
 <p>You would also use this flattened data frame, <code>df.alltagsGPS</code>, rather than the un-flattened <code>tbl.alltagsGPS</code>.</p>
 </div>
