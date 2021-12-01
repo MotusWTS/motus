@@ -93,7 +93,7 @@ If so, you will need to use `tagDeployID` or a combination of `motusTagID` and `
 In the sample data, all tags were deployed only once, and so we use the `motusTagID` as a unique identifier for a tag deployment in all R code throughout these articles 
 
 
-## Preliminary filtering
+## Preliminary filtering {#preliminary-filtering}
 Invariably you will run into some false detections in your tag detection data. 
 Sometimes these may be due to random glitches or noisy radio conditions. 
 The various outputs on the Motus web site are pre-filtered, but data downloaded via the `motus` R package provides access to **all** detections, allowing users more control over which detections to keep or omit. 
@@ -300,7 +300,7 @@ ggplot(data = filter(df.plot.sub,
 
 The reader is encouraged to explore the rest of the tags within this group, to determine if there are additional false positives. 
 
-## Examining ambiguous detections
+## Examining ambiguous detections {#ambiguous}
 
 Before we go further, we need to check to see if any tags have ambiguous detections.
 If there are, we will need to explore them, and create additional filters to remove detections from our database. 
