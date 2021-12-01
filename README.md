@@ -6,8 +6,7 @@
 # motus
 R package for handling [Motus](https://motus.org) automated radio-telemetry data.
 
-
-[![Birds Canada Logo](https://github.com/MotusWTS/motus/blob/master/inst/assets/birds_canada_logo.png?raw=true)](https://birdscanada.org)
+[!<img src = "https://github.com/MotusWTS/motus/blob/master/inst/assets/birds_canada_logo.png?raw=true" alt = "Birds Canada Logo with text 'Birds Canada' and 'Oiseaux Canada' on either side of a grey and yellow bird perched on a branch" width = "45%">](https://birdscanada.org)
 
 [![Motus Logo](https://github.com/MotusWTS/motus/blob/master/inst/assets/motus_logo.png?raw=true)](https://motus.org/)
 
