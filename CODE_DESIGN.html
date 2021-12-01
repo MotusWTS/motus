@@ -212,6 +212,17 @@
 <code>checkDataVersion()</code> is used to update data versions (not database versions)</li>
 </ul>
 </div>
+<div id="talk-to-the-api---boxingunboxing-json-parameters" class="section level2">
+<h2 class="hasAnchor">
+<a href="#talk-to-the-api---boxingunboxing-json-parameters" class="anchor"></a>Talk to the API - Boxing/Unboxing JSON parameters</h2>
+<ul>
+<li>The API requires that some parameters be boxed (i.e. <code>[parameter]</code>) and some be unboxed (i.e., <code>parameter</code>)</li>
+<li>In <code>srvQuery.R</code>, <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">jsonlite::toJSON()</a></code> unboxes all single value parameters</li>
+<li>If you have a parameter that should NOT be unboxed (usually a single value parameter that could have more), you must go to its <code>srvXXXX.R</code> file, and add <code>I(parameter)</code> (e.g., <code>srvTagsForAmbiguities.R</code>)</li>
+<li>However, <code><a href="https://rdrr.io/r/base/AsIs.html">I()</a></code> won’t work on <code>NULL</code> values, so we need to get creative if it can have either NULL or values (e.g., <code>srvTagMetadataForProjects.R</code>)</li>
+<li>Potentially worth rethinking whether to force boxing via class/type BEFORE gets sent as a parameter…</li>
+</ul>
+</div>
 <div id="special-data-downloads" class="section level2">
 <h2 class="hasAnchor">
 <a href="#special-data-downloads" class="anchor"></a>Special data downloads</h2>
@@ -262,7 +273,7 @@
 <li>
 <code>skip_if_not_auth()</code> is used in tests to a) implement local authorizations if present and b) skip the test if they are not present</li>
 </ul>
-<p><code>motusUpdateTagDB()</code> and <code>pageDataByBatch()</code> have checks in them that will halt a download after <code><a href="https://rdrr.io/r/base/options.html">getOption("motus.test.max")</a></code> batches IF in a testing environment. This way testing can be done much more quickly on a variety of projects/receivers.</p>
+<p><code>motusUpdateTagDB()</code> and <code>pageDataByBatch()</code> have checks in them that will halt a download after <code>getOption("motus.test.max")</code> batches IF in a testing environment. This way testing can be done much more quickly on a variety of projects/receivers.</p>
 <ul>
 <li>
 <code>is_testing()</code> is an internal function that checks if a test is being run</li>
@@ -281,7 +292,7 @@
 </li>
 <li>Add update to <code>data-raw/updatesql.R</code> (run script, re-build package locally)</li>
 <li>Add test to make sure new field is added (test_sqlite and test_data_returned)</li>
-<li>Update internal data <code><a href="https://rdrr.io/r/base/source.html">source("data-raw/sample_data.R")</a></code>
+<li>Update internal data <code>source("data-raw/sample_data.R")</code>
 </li>
 <li>Update NEWS.md</li>
 <li>Push!</li>

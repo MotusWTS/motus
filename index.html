@@ -157,11 +157,11 @@
 <p><strong>cannot remove prior installation of package</strong></p>
 <p>If you get errors “cannot remove prior installation of package …” (e.g. <code>dplyr</code>) while trying to install motus, this could be due to having multiple R sessions active. You can try the following:</p>
 <ol>
-<li>find out your R package library location: <code><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv("R_LIBS_USER")</a></code> or <code><a href="https://rdrr.io/r/base/libPaths.html">.libPaths()</a></code>
+<li>find out your R package library location: <code>Sys.getenv("R_LIBS_USER")</code> or <code><a href="https://rdrr.io/r/base/libPaths.html">.libPaths()</a></code>
 </li>
 <li>close any session of R and/or R Studio</li>
 <li>in the library folder, manually delete the package that failed to remove (e.g. <code>dplyr</code>)</li>
-<li>restart R and manually install the package again e.g. <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("dplyr")</a></code>
+<li>restart R and manually install the package again e.g. <code>install.packages("dplyr")</code>
 </li>
 </ol>
 <p>Another possible cause of this problem relates to file permissions in your library folders (e.g. libraries installed in c:\program files\R\R-3.x.x\library). To confirm this, you can try running R “as administrator” (right-clicking the R icon), or use <code>SUDO R</code> (Linux/Ubuntu) and trying installation again. If this resolves your problem, you should consider setting your libraries in a new folder where your logged in user has full access:</p>

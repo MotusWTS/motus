@@ -228,88 +228,87 @@ allowable time between timestamps (defaults to none).</p></li>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># download and access data from project 176 in sql format</span>
-<span class='co'># usename and password are both "motus.sample"</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='va'>sql.motus</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tagme.html'>tagme</a></span><span class='op'>(</span><span class='fl'>176</span>, new <span class='op'>=</span> <span class='cn'>TRUE</span>, update <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
-<span class='co'># OR use example sql file included in `motus`</span>
-<span class='va'>sql.motus</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tagme.html'>tagme</a></span><span class='op'>(</span><span class='fl'>176</span>, update <span class='op'>=</span> <span class='cn'>FALSE</span>, 
-                   dir <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, package <span class='op'>=</span> <span class='st'>"motus"</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='co'># Match hits to GPS within 24hrs (daily) of each other</span>
-<span class='va'>my_gps</span> <span class='op'>&lt;-</span> <span class='fu'>getGPS</span><span class='op'>(</span><span class='va'>sql.motus</span><span class='op'>)</span>
-<span class='va'>my_gps</span>
-</div><div class='output co'>#&gt; [1] hitID  gpsTs  gpsLat gpsLon gpsAlt
-#&gt; &lt;0 rows&gt; (or 0-length row.names)</div><div class='input'>
-<span class='co'># Note that the sample data doesn't have GPS hits so this will be an </span>
-<span class='co'># empty data frame for project 176.</span>
-
-<span class='co'># Match hits to GPS within 15min of each other</span>
-<span class='va'>my_gps</span> <span class='op'>&lt;-</span> <span class='fu'>getGPS</span><span class='op'>(</span><span class='va'>sql.motus</span>, by <span class='op'>=</span> <span class='fl'>15</span><span class='op'>)</span>
-<span class='va'>my_gps</span>
-</div><div class='output co'>#&gt; [1] hitID  gpsTs  gpsLat gpsLon gpsAlt
-#&gt; &lt;0 rows&gt; (or 0-length row.names)</div><div class='input'>
-<span class='co'># Match hits to GPS according to the closest timestamp</span>
-<span class='va'>my_gps</span> <span class='op'>&lt;-</span> <span class='fu'>getGPS</span><span class='op'>(</span><span class='va'>sql.motus</span>, by <span class='op'>=</span> <span class='st'>"closest"</span><span class='op'>)</span>
-<span class='va'>my_gps</span>
-</div><div class='output co'>#&gt; [1] hitID  gpsTs  gpsLat gpsLon gpsAlt
-#&gt; &lt;0 rows&gt; (or 0-length row.names)</div><div class='input'>
-<span class='co'># Match hits to GPS according to the closest timestamp, but limit to within</span>
-<span class='co'># 20min of each other</span>
-<span class='va'>my_gps</span> <span class='op'>&lt;-</span> <span class='fu'>getGPS</span><span class='op'>(</span><span class='va'>sql.motus</span>, by <span class='op'>=</span> <span class='st'>"closest"</span>, cutoff <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span>
-<span class='va'>my_gps</span>
-</div><div class='output co'>#&gt; [1] hitID  gpsTs  gpsLat gpsLon gpsAlt
-#&gt; &lt;0 rows&gt; (or 0-length row.names)</div><div class='input'>
-<span class='co'># To return all hits, regardless of whether they match a GPS record</span>
-
-<span class='va'>my_gps</span> <span class='op'>&lt;-</span> <span class='fu'>getGPS</span><span class='op'>(</span><span class='va'>sql.motus</span>, keepAll <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='va'>my_gps</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 108,826 x 4</span>
-#&gt;     hitID gpsLat gpsLon gpsAlt
-#&gt;     <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'> 1</span>  <span style='text-decoration: underline;'>45</span>107     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>
-#&gt; <span style='color: #BCBCBC;'> 2</span>  <span style='text-decoration: underline;'>45</span>108     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>
-#&gt; <span style='color: #BCBCBC;'> 3</span>  <span style='text-decoration: underline;'>45</span>109     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>
-#&gt; <span style='color: #BCBCBC;'> 4</span>  <span style='text-decoration: underline;'>45</span>110     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>
-#&gt; <span style='color: #BCBCBC;'> 5</span>  <span style='text-decoration: underline;'>45</span>111     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>
-#&gt; <span style='color: #BCBCBC;'> 6</span> <span style='text-decoration: underline;'>199</span>885     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>
-#&gt; <span style='color: #BCBCBC;'> 7</span> <span style='text-decoration: underline;'>199</span>886     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>
-#&gt; <span style='color: #BCBCBC;'> 8</span> <span style='text-decoration: underline;'>199</span>887     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>
-#&gt; <span style='color: #BCBCBC;'> 9</span> <span style='text-decoration: underline;'>199</span>888     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>
-#&gt; <span style='color: #BCBCBC;'>10</span> <span style='text-decoration: underline;'>199</span>889     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>
-#&gt; <span style='color: #949494;'># … with 108,816 more rows</span></div><div class='input'>
-<span class='co'># Alternatively, use the alltagsGPS view:</span>
-<span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/tbl.html'>tbl</a></span><span class='op'>(</span><span class='va'>sql.motus</span>, <span class='st'>"alltagsGPS"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># Source:   table&lt;alltagsGPS&gt; [?? x 63]</span>
-#&gt; <span style='color: #949494;'># Database: sqlite 3.35.5
-#&gt; #   [/Users/runner/work/_temp/Library/motus/extdata/project-176.motus]</span>
-#&gt;     hitID runID batchID      ts tsCorrected   sig sigsd noise  freq freqsd  slop
-#&gt;     <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'> 1</span>  <span style='text-decoration: underline;'>45</span>107  <span style='text-decoration: underline;'>8</span>886      53  1.45<span style='color: #949494;'>e</span>9 <span style='text-decoration: underline;'>1</span>445<span style='text-decoration: underline;'>858</span>390.    52     0   -<span style='color: #BB0000;'>96</span>     4      0  1<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-4</span>
-#&gt; <span style='color: #BCBCBC;'> 2</span>  <span style='text-decoration: underline;'>45</span>108  <span style='text-decoration: underline;'>8</span>886      53  1.45<span style='color: #949494;'>e</span>9 <span style='text-decoration: underline;'>1</span>445<span style='text-decoration: underline;'>858</span>429.    54     0   -<span style='color: #BB0000;'>96</span>     4      0  1<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-4</span>
-#&gt; <span style='color: #BCBCBC;'> 3</span>  <span style='text-decoration: underline;'>45</span>109  <span style='text-decoration: underline;'>8</span>886      53  1.45<span style='color: #949494;'>e</span>9 <span style='text-decoration: underline;'>1</span>445<span style='text-decoration: underline;'>858</span>477.    55     0   -<span style='color: #BB0000;'>96</span>     4      0  1<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-4</span>
-#&gt; <span style='color: #BCBCBC;'> 4</span>  <span style='text-decoration: underline;'>45</span>110  <span style='text-decoration: underline;'>8</span>886      53  1.45<span style='color: #949494;'>e</span>9 <span style='text-decoration: underline;'>1</span>445<span style='text-decoration: underline;'>858</span>516.    52     0   -<span style='color: #BB0000;'>96</span>     4      0  1<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-4</span>
-#&gt; <span style='color: #BCBCBC;'> 5</span>  <span style='text-decoration: underline;'>45</span>111  <span style='text-decoration: underline;'>8</span>886      53  1.45<span style='color: #949494;'>e</span>9 <span style='text-decoration: underline;'>1</span>445<span style='text-decoration: underline;'>858</span>564.    49     0   -<span style='color: #BB0000;'>96</span>     4      0  1<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-4</span>
-#&gt; <span style='color: #BCBCBC;'> 6</span> <span style='text-decoration: underline;'>199</span>885 <span style='text-decoration: underline;'>23</span>305      64  1.45<span style='color: #949494;'>e</span>9 <span style='text-decoration: underline;'>1</span>445<span style='text-decoration: underline;'>857</span>924.    33     0   -<span style='color: #BB0000;'>96</span>     4      0  1<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-4</span>
-#&gt; <span style='color: #BCBCBC;'> 7</span> <span style='text-decoration: underline;'>199</span>886 <span style='text-decoration: underline;'>23</span>305      64  1.45<span style='color: #949494;'>e</span>9 <span style='text-decoration: underline;'>1</span>445<span style='text-decoration: underline;'>857</span>983.    41     0   -<span style='color: #BB0000;'>96</span>     4      0  1<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-4</span>
-#&gt; <span style='color: #BCBCBC;'> 8</span> <span style='text-decoration: underline;'>199</span>887 <span style='text-decoration: underline;'>23</span>305      64  1.45<span style='color: #949494;'>e</span>9 <span style='text-decoration: underline;'>1</span>445<span style='text-decoration: underline;'>858</span>041.    29     0   -<span style='color: #BB0000;'>96</span>     4      0  1<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-4</span>
-#&gt; <span style='color: #BCBCBC;'> 9</span> <span style='text-decoration: underline;'>199</span>888 <span style='text-decoration: underline;'>23</span>305      64  1.45<span style='color: #949494;'>e</span>9 <span style='text-decoration: underline;'>1</span>445<span style='text-decoration: underline;'>858</span>089.    41     0   -<span style='color: #BB0000;'>96</span>     4      0  1<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-4</span>
-#&gt; <span style='color: #BCBCBC;'>10</span> <span style='text-decoration: underline;'>199</span>889 <span style='text-decoration: underline;'>23</span>305      64  1.45<span style='color: #949494;'>e</span>9 <span style='text-decoration: underline;'>1</span>445<span style='text-decoration: underline;'>858</span>147.    45     0   -<span style='color: #BB0000;'>96</span>     4      0  1<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-4</span>
-#&gt; <span style='color: #949494;'># … with more rows, and 52 more variables: burstSlop &lt;dbl&gt;, done &lt;int&gt;,</span>
-#&gt; <span style='color: #949494;'>#   motusTagID &lt;int&gt;, ambigID &lt;int&gt;, port &lt;chr&gt;, runLen &lt;int&gt;, bootnum &lt;int&gt;,</span>
-#&gt; <span style='color: #949494;'>#   tagProjID &lt;int&gt;, mfgID &lt;chr&gt;, tagType &lt;chr&gt;, codeSet &lt;chr&gt;, mfg &lt;chr&gt;,</span>
-#&gt; <span style='color: #949494;'>#   tagModel &lt;chr&gt;, tagLifespan &lt;int&gt;, nomFreq &lt;dbl&gt;, tagBI &lt;dbl&gt;,</span>
-#&gt; <span style='color: #949494;'>#   pulseLen &lt;dbl&gt;, tagDeployID &lt;int&gt;, speciesID &lt;int&gt;, markerNumber &lt;chr&gt;,</span>
-#&gt; <span style='color: #949494;'>#   markerType &lt;chr&gt;, tagDeployStart &lt;dbl&gt;, tagDeployEnd &lt;dbl&gt;,</span>
-#&gt; <span style='color: #949494;'>#   tagDepLat &lt;dbl&gt;, tagDepLon &lt;dbl&gt;, tagDepAlt &lt;dbl&gt;, tagDepComments &lt;chr&gt;,</span>
-#&gt; <span style='color: #949494;'>#   tagDeployTest &lt;int&gt;, fullID &lt;chr&gt;, deviceID &lt;int&gt;, recvDeployID &lt;int&gt;,</span>
-#&gt; <span style='color: #949494;'>#   recvDeployLat &lt;dbl&gt;, recvDeployLon &lt;dbl&gt;, recvDeployAlt &lt;dbl&gt;, recv &lt;chr&gt;,</span>
-#&gt; <span style='color: #949494;'>#   recvDeployName &lt;chr&gt;, recvSiteName &lt;chr&gt;, isRecvMobile &lt;int&gt;,</span>
-#&gt; <span style='color: #949494;'>#   recvProjID &lt;int&gt;, recvUtcOffset &lt;int&gt;, antType &lt;chr&gt;, antBearing &lt;dbl&gt;,</span>
-#&gt; <span style='color: #949494;'>#   antHeight &lt;dbl&gt;, speciesEN &lt;chr&gt;, speciesFR &lt;chr&gt;, speciesSci &lt;chr&gt;,</span>
-#&gt; <span style='color: #949494;'>#   speciesGroup &lt;chr&gt;, tagProjName &lt;chr&gt;, recvProjName &lt;chr&gt;, gpsLat &lt;dbl&gt;,</span>
-#&gt; <span style='color: #949494;'>#   gpsLon &lt;dbl&gt;, gpsAlt &lt;dbl&gt;</span></div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'># download and access data from project 176 in sql format</span></span>
+<span class='r-in'><span class='co'># usename and password are both "motus.sample"</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='va'>sql.motus</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tagme.html'>tagme</a></span><span class='op'>(</span><span class='fl'>176</span>, new <span class='op'>=</span> <span class='cn'>TRUE</span>, update <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># OR use example sql file included in `motus`</span></span>
+<span class='r-in'><span class='va'>sql.motus</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tagme.html'>tagme</a></span><span class='op'>(</span><span class='fl'>176</span>, update <span class='op'>=</span> <span class='cn'>FALSE</span>, </span>
+<span class='r-in'>                   dir <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, package <span class='op'>=</span> <span class='st'>"motus"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Match hits to GPS within 24hrs (daily) of each other</span></span>
+<span class='r-in'><span class='va'>my_gps</span> <span class='op'>&lt;-</span> <span class='fu'>getGPS</span><span class='op'>(</span><span class='va'>sql.motus</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>my_gps</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] hitID  gpsTs  gpsLat gpsLon gpsAlt</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;0 rows&gt; (or 0-length row.names)</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Note that the sample data doesn't have GPS hits so this will be an </span></span>
+<span class='r-in'><span class='co'># empty data frame for project 176.</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Match hits to GPS within 15min of each other</span></span>
+<span class='r-in'><span class='va'>my_gps</span> <span class='op'>&lt;-</span> <span class='fu'>getGPS</span><span class='op'>(</span><span class='va'>sql.motus</span>, by <span class='op'>=</span> <span class='fl'>15</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>my_gps</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] hitID  gpsTs  gpsLat gpsLon gpsAlt</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;0 rows&gt; (or 0-length row.names)</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Match hits to GPS according to the closest timestamp</span></span>
+<span class='r-in'><span class='va'>my_gps</span> <span class='op'>&lt;-</span> <span class='fu'>getGPS</span><span class='op'>(</span><span class='va'>sql.motus</span>, by <span class='op'>=</span> <span class='st'>"closest"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>my_gps</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] hitID  gpsTs  gpsLat gpsLon gpsAlt</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;0 rows&gt; (or 0-length row.names)</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Match hits to GPS according to the closest timestamp, but limit to within</span></span>
+<span class='r-in'><span class='co'># 20min of each other</span></span>
+<span class='r-in'><span class='va'>my_gps</span> <span class='op'>&lt;-</span> <span class='fu'>getGPS</span><span class='op'>(</span><span class='va'>sql.motus</span>, by <span class='op'>=</span> <span class='st'>"closest"</span>, cutoff <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>my_gps</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] hitID  gpsTs  gpsLat gpsLon gpsAlt</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;0 rows&gt; (or 0-length row.names)</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># To return all hits, regardless of whether they match a GPS record</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>my_gps</span> <span class='op'>&lt;-</span> <span class='fu'>getGPS</span><span class='op'>(</span><span class='va'>sql.motus</span>, keepAll <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>my_gps</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 108,826 × 4</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     hitID gpsLat gpsLon gpsAlt</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span>  <span style='text-decoration: underline;'>45</span>107     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span>  <span style='text-decoration: underline;'>45</span>108     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span>  <span style='text-decoration: underline;'>45</span>109     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span>  <span style='text-decoration: underline;'>45</span>110     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span>  <span style='text-decoration: underline;'>45</span>111     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span> <span style='text-decoration: underline;'>199</span>885     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span> <span style='text-decoration: underline;'>199</span>886     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span> <span style='text-decoration: underline;'>199</span>887     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span> <span style='text-decoration: underline;'>199</span>888     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span> <span style='text-decoration: underline;'>199</span>889     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span>     <span style='color: #BB0000;'>NA</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 108,816 more rows</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Alternatively, use the alltagsGPS view:</span></span>
+<span class='r-in'><span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/tbl.html'>tbl</a></span><span class='op'>(</span><span class='va'>sql.motus</span>, <span class='st'>"alltagsGPS"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># Source:   table&lt;alltagsGPS&gt; [?? x 63]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># Database: sqlite 3.36.0</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   [/Users/runner/work/_temp/Library/motus/extdata/project-176.motus]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     hitID runID batchID      ts tsCorrected   sig sigsd noise  freq freqsd  slop</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span>  <span style='text-decoration: underline;'>45</span>107  <span style='text-decoration: underline;'>8</span>886      53  1.45<span style='color: #949494;'>e</span>9 <span style='text-decoration: underline;'>1</span>445<span style='text-decoration: underline;'>858</span>390.    52     0   -<span style='color: #BB0000;'>96</span>     4      0  1<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-4</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span>  <span style='text-decoration: underline;'>45</span>108  <span style='text-decoration: underline;'>8</span>886      53  1.45<span style='color: #949494;'>e</span>9 <span style='text-decoration: underline;'>1</span>445<span style='text-decoration: underline;'>858</span>429.    54     0   -<span style='color: #BB0000;'>96</span>     4      0  1<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-4</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span>  <span style='text-decoration: underline;'>45</span>109  <span style='text-decoration: underline;'>8</span>886      53  1.45<span style='color: #949494;'>e</span>9 <span style='text-decoration: underline;'>1</span>445<span style='text-decoration: underline;'>858</span>477.    55     0   -<span style='color: #BB0000;'>96</span>     4      0  1<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-4</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span>  <span style='text-decoration: underline;'>45</span>110  <span style='text-decoration: underline;'>8</span>886      53  1.45<span style='color: #949494;'>e</span>9 <span style='text-decoration: underline;'>1</span>445<span style='text-decoration: underline;'>858</span>516.    52     0   -<span style='color: #BB0000;'>96</span>     4      0  1<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-4</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span>  <span style='text-decoration: underline;'>45</span>111  <span style='text-decoration: underline;'>8</span>886      53  1.45<span style='color: #949494;'>e</span>9 <span style='text-decoration: underline;'>1</span>445<span style='text-decoration: underline;'>858</span>564.    49     0   -<span style='color: #BB0000;'>96</span>     4      0  1<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-4</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span> <span style='text-decoration: underline;'>199</span>885 <span style='text-decoration: underline;'>23</span>305      64  1.45<span style='color: #949494;'>e</span>9 <span style='text-decoration: underline;'>1</span>445<span style='text-decoration: underline;'>857</span>924.    33     0   -<span style='color: #BB0000;'>96</span>     4      0  1<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-4</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span> <span style='text-decoration: underline;'>199</span>886 <span style='text-decoration: underline;'>23</span>305      64  1.45<span style='color: #949494;'>e</span>9 <span style='text-decoration: underline;'>1</span>445<span style='text-decoration: underline;'>857</span>983.    41     0   -<span style='color: #BB0000;'>96</span>     4      0  1<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-4</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span> <span style='text-decoration: underline;'>199</span>887 <span style='text-decoration: underline;'>23</span>305      64  1.45<span style='color: #949494;'>e</span>9 <span style='text-decoration: underline;'>1</span>445<span style='text-decoration: underline;'>858</span>041.    29     0   -<span style='color: #BB0000;'>96</span>     4      0  1<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-4</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span> <span style='text-decoration: underline;'>199</span>888 <span style='text-decoration: underline;'>23</span>305      64  1.45<span style='color: #949494;'>e</span>9 <span style='text-decoration: underline;'>1</span>445<span style='text-decoration: underline;'>858</span>089.    41     0   -<span style='color: #BB0000;'>96</span>     4      0  1<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-4</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span> <span style='text-decoration: underline;'>199</span>889 <span style='text-decoration: underline;'>23</span>305      64  1.45<span style='color: #949494;'>e</span>9 <span style='text-decoration: underline;'>1</span>445<span style='text-decoration: underline;'>858</span>147.    45     0   -<span style='color: #BB0000;'>96</span>     4      0  1<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-4</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with more rows, and 52 more variables: burstSlop &lt;dbl&gt;, done &lt;int&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   motusTagID &lt;int&gt;, ambigID &lt;int&gt;, port &lt;chr&gt;, runLen &lt;int&gt;, bootnum &lt;int&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   tagProjID &lt;int&gt;, mfgID &lt;chr&gt;, tagType &lt;chr&gt;, codeSet &lt;chr&gt;, mfg &lt;chr&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   tagModel &lt;chr&gt;, tagLifespan &lt;int&gt;, nomFreq &lt;dbl&gt;, tagBI &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   pulseLen &lt;dbl&gt;, tagDeployID &lt;int&gt;, speciesID &lt;int&gt;, markerNumber &lt;chr&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   markerType &lt;chr&gt;, tagDeployStart &lt;dbl&gt;, tagDeployEnd &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   tagDepLat &lt;dbl&gt;, tagDepLon &lt;dbl&gt;, tagDepAlt &lt;dbl&gt;, tagDepComments &lt;chr&gt;, …</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
