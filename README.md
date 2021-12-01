@@ -4,7 +4,12 @@
 <!-- badges: end -->
 
 # motus
-R package for users of data from https://motus.org
+R package for handling [Motus](https://motus.org) automated radio-telemetry data.
+
+<p align = "center">
+  <a href = "https://birdscanada.org"><img src = "https://github.com/MotusWTS/motus/blob/master/inst/assets/birds_canada_logo.png?raw=true" alt = "Birds Canada Logo showing grey text 'Birds Canada' and 'Oiseaux Canada' on either side of a grey and yellow bird perched on a branch" width = "40%"></a>
+  <a href = "https://motus.org"><img src = "https://github.com/MotusWTS/motus/blob/master/inst/assets/motus_logo.png?raw=true" alt = "Motus Logo showing blue text 'Motus Wildlife Tracking System' to the right of pale green images of a bat, bird and dragonfly at the ends of green curved lines"></a>
+</p>
 
 See the [motus package site](https://MotusWTS.github.io/motus) for detailed usage information
 
