@@ -1,0 +1,73 @@
+---
+title: "Database Variables"
+---
+
+```{r, include = FALSE}
+motus:::get_sample_data()
+options(width = 90)
+
+library(motus)
+library(tidyverse)
+library(lubridate)
+library(kableExtra)
+library(glue)
+
+tags <- tagme(176, update = TRUE, new = FALSE, dir = "./data")
+```
+
+## Variables
+
+This table lists all variables present in .motus SQLite databases. 
+
+**Notes:**
+
+- `Variable Name` refers to the name of a variable (column/field) in a table
+- `Table Name` reflects the tables (actual database tables) where that variable can be found
+- `View`s refer to the database 'views' where that variable can be found 
+  (views do not contain data themselves, but show data collected and arranged 
+  from various tables)
+- `Variable Name in View` reflects the name of the variable in a view. 
+  Variables often are given new names in views
+  - e.g., `alt` is a variable in the `gps` table, 
+  but when put into the `alltagsGPS` view, it is called `gpsAlt`
+- `Creation Comments` are specific comments about how a particular variable was
+  created. This applies mostly to variables which are created on the fly, or, 
+  might come for different tables. 
+  
+> Use the Search bar to narrow results down to a particular variable (e.g., `latitude`),
+> table (e.g., `recvDeps`), or view (e.g., `alltags`)
+
+
+```{r, echo = FALSE}
+t <- tibble(table = DBI::dbListTables(tags$con)) %>%
+  mutate(name_table = map(table, ~DBI::dbListFields(tags$con, .))) %>%
+  unnest(name_table)
+
+v <- system.file("extdata/fields_glossary.csv", package = "motus") %>%
+  read.csv(skip = 1) %>%
+  bind_rows(t) %>%
+  arrange(name_table, view) %>%
+  select(name_table, table, view, name_view, comment, description) %>%
+  mutate(name_view = replace_na(name_view, "--"),
+         view = replace_na(view, "--"),
+         comment = replace_na(comment, "")) %>%
+  group_by(name_table) %>%
+  summarize(table = paste(unique(table), collapse = ", "),
+            view = paste(unique(view), collapse = ", "),
+            name_view = paste(unique(name_view), collapse = ", "), 
+            comment = paste(unique(comment), collapse = ", ")) %>%
+  mutate(name_view = str_remove_all(name_view, "(, --)|(--, )"),
+         view = str_remove_all(view, "(, --)|(--, )"),
+         comment = str_remove_all(comment, ", $"),
+         name_table = replace_na(name_table, "--"),
+         table = replace_na(table, "--"))
+
+v %>%
+  rename("Variable name" = "name_table", 
+         "Table name" = "table",
+         "Variable name in view" = "name_view",
+         "Creation comments" = "comment") %>%
+  rename_all(tools::toTitleCase) %>%
+  DT::datatable(options = list(pageLength = nrow(v), dom = "ft"), 
+                rownames = FALSE)
+```
