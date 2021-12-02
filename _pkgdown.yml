@@ -13,12 +13,21 @@ navbar:
     right: [github]
 
 articles:
+
+- title: Basics
+  desc: Covering the basics of the motus R package as well as Motus data
+  navbar: ~
+  contents:
+  - articles/motus
+  - articles/troubleshooting
+  - articles/motus-data
+  - articles/database-variables
+
 - title: Complete walk-through
   desc: "This is a complete walk-through, originally compiled as the Motus R book.
         These articles are largely based on the original Motus R Book by 
         [Crewe et al. 2018](https://motus.org/motusRBook/archives/MotusRBook2018-01.pdf), 
         and have since been supplemented by [various people on the Motus team](articles/01-introduction.html#acknowledgements)."
-  navbar: ~
   contents:
   - articles/01-introduction
   - articles/02-installing-packages
@@ -26,17 +35,12 @@ articles:
   - articles/04-deployments
   - articles/05-data-cleaning
   - articles/06-exploring-data
+  
 - title: Other topics
   desc: Specific tutorials for different tasks
   contents:
-  - articles/motus
-  - articles/troubleshooting
   - articles/filtering
   - articles/gps
   - articles/vanishing-bearings
   - articles/advanced-modelling
-- title: Understanding Motus data
-  desc: Articles aimed to give you a deeper understanding of Motus data and databases
-  contents:
-  - articles/birds-eye-view
-  - articles/sqlite-views
+  - articles/signal-strength
