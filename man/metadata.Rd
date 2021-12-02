@@ -2,27 +2,29 @@
 % Please edit documentation in R/metadata.R
 \name{metadata}
 \alias{metadata}
-\title{update entire metadata for receivers and tags from Motus server. Contrary to tagme,
-this function retrieves the entire set of metadata for tags and receivers, and not only those
-pertinent to the detections of your local file.}
+\title{Update all metadata}
 \usage{
 metadata(src, projectIDs = NULL, replace = TRUE, delete = FALSE)
 }
 \arguments{
-\item{src}{src_sqlite object representing the database (either tag or receiver)}
+\item{src}{src_sqlite object representing the database (either tag or
+receiver)}
 
-\item{projectIDs}{optional integer vector of Motus projects IDs for which metadata should
-be obtained; default: NULL, meaning obtain metadata for all tags and receivers that your permissions
-allow.}
+\item{projectIDs}{optional integer vector of Motus projects IDs for which
+metadata should be obtained; default: NULL, meaning obtain metadata for all
+tags and receivers that your permissions allow.}
 
-\item{replace}{logical scalar; if TRUE (default), existing data replace the existing metadata with the newly acquired ones.}
+\item{replace}{logical scalar; if TRUE (default), existing data replace the
+existing metadata with the newly acquired ones.}
 
-\item{delete}{logical scalar; Default = FALSE. if TRUE, the entire metadata tables are cleared (for all projects) before re-importing the metadata.}
+\item{delete}{logical scalar; Default = FALSE. if TRUE, the entire metadata
+tables are cleared (for all projects) before re-importing the metadata.}
 }
 \description{
-update entire metadata for receivers and tags from Motus server. Contrary to tagme,
-this function retrieves the entire set of metadata for tags and receivers, and not only those
-pertinent to the detections of your local file.
+Updates the entire metadata for receivers and tags from Motus server.
+Contrary to tagme, this function retrieves the entire set of metadata for
+tags and receivers, and not only those pertinent to the detections in your
+local file.
 }
 \examples{
 
@@ -46,6 +48,6 @@ tbl(sql.motus, "tagDeps")
   
 }
 \seealso{
-\code{\link{tagme}} provides an option to update only the metadata relevant to a specific
-project or receiver file.
+\code{\link{tagme}} provides an option to update only the metadata
+relevant to a specific project or receiver file.
 }

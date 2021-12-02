@@ -66,9 +66,13 @@
 #' @noRd
 
 srvTagMetadataForProjects <- function(projectIDs, verbose = FALSE) {
+
+  if(!is.null(projectIDs)) projectIDs <- I(projectIDs)
+  
   x <- srvQuery(API = motus_vars$API_TAG_METADATA_FOR_PROJECTS, 
-               params = list(projectIDs = I(projectIDs)),
+               params = list(projectIDs = projectIDs),
                verbose = verbose)
+  
   list(
     tags = structure(x$tags, class = "data.frame", row.names=seq(along=x$tags[[1]])),
     tagDeps = structure(x$tagDeps, class = "data.frame", row.names=seq(along=x$tagDeps[[1]])),

@@ -50,13 +50,17 @@
 #' @noRd
 
 srvRecvMetadataForProjects <- function(projectIDs, verbose = FALSE) {
+
+  if(!is.null(projectIDs)) projectIDs <- I(projectIDs)
+  
   x <- srvQuery(API = motus_vars$API_RECV_METADATA_FOR_PROJECTS,
-               params = list(projectIDs = I(projectIDs)),
+               params = list(projectIDs = projectIDs),
                verbose = verbose)
+
   list(
-    recvDeps = structure(x$recvDeps, class = "data.frame", row.names=seq(along=x$recvDeps[[1]])),
-    antDeps = structure(x$antDeps, class = "data.frame", row.names=seq(along=x$antDeps[[1]])),
-    nodeDeps = structure(x$nodeDeps, class = "data.frame", row.names=seq(along=x$nodeDeps[[1]])),
-    projs = structure(x$projs, class = "data.frame", row.names=seq(along=x$projs[[1]]))
+    recvDeps = as.data.frame(x$recvDeps),
+    antDeps = as.data.frame(x$antDeps),
+    nodeDeps = as.data.frame(x$nodeDeps),
+    projs = as.data.frame(x$projs)
   )
 }
