@@ -5,7 +5,7 @@ template:
 navbar:
   structure:
     left:  [home, intro, reference, articles, news]
-    right: [release, dev, github]
+    right: [release, dev, github, english, french]
   components:
     release:
       icon: fa-check-circle
@@ -13,8 +13,14 @@ navbar:
       aria-label: Release Version
     dev:
       icon: fa-exclamation-circle
-      href: https://motusWTS.github.io/motus/dev/
+      href: https://motusWTS.github.io/motus/dev_en/
       aria-label: Development Version
+    english:
+      text: EN
+      href: https://motusWTS.github.io/motus/dev_en
+    french:
+      text: FR
+      href: https://motusWTS.github.io/motus/dev_fr
 
 articles:
 
