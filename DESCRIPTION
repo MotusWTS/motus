@@ -10,6 +10,7 @@ Authors@R: c(
     person("Zoe", "Crysler", email = "zcrysler@@gmail.com", role = "ctb"),
     person("Steffi", "LaZerte", email = "steffi@steffi.ca", role = "ctb"),
     person("Birds Canada", role = "fnd", email = "motus@birdscanada.org"))
+URL: https://github.com/motusWTS/motus, https://motusWTS.github.io/motus, https://motus.org
 Depends:
     R (>= 3.2.0)
 Imports:
