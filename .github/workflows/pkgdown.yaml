@@ -21,15 +21,16 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
           extra-packages: >
-            tidyverse
+            circular
+            DT
+            geosphere
             kableExtra
+            pander
             pkgdown
             maps
             mapproj
-            geosphere
-            pander
-            circular
             remotes
+            tidyverse
           needs: website
 
       - name: Install dependencies
