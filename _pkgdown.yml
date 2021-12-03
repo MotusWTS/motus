@@ -1,8 +1,3 @@
-development:
-  mode: devel
-  version_label: info
-  version_tooltip: "Documentation overhaul"
-  
 template:
   params:
     bootswatch: cosmo
@@ -10,7 +5,16 @@ template:
 navbar:
   structure:
     left:  [home, intro, reference, articles, news]
-    right: [github]
+    right: [release, dev, github]
+  components:
+    release:
+      icon: fa-check-circle
+      href: https://motusWTS.github.io/motus/release/
+      aria-label: Release Version
+    dev:
+      icon: fa-exclamation-circle
+      href: https://motusWTS.github.io/motus/dev/
+      aria-label: Development Version
 
 articles:
 
