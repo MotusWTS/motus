@@ -25,10 +25,11 @@ jobs:
             DT
             geosphere
             kableExtra
-            pander
-            pkgdown
             maps
             mapproj
+            pander
+            patchwork
+            pkgdown
             remotes
             tidyverse
           needs: website
