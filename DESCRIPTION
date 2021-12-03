@@ -6,8 +6,8 @@ Description: Retrieve, filter, and visualize telemetry data from the Motus
     Wildlife Tracking System <http://motus.org>.
 Authors@R: c(
     person("John", "Brzustowski", email = "jbrzusto@fastmail.fm", role = "aut"),
-    person("Denis", "LePage", email = "dlepage@bsc-eoc.org", role = c("aut", "cre")),
-    person("Zoe", "Crysler", email = "zcrysler@@gmail.com", role = "ctb"),
+    person("Denis", "Lepage", email = "dlepage@birdscanada.org", role = c("aut", "cre")),
+    person("Zoe", "Crysler", email = "zcrysler@gmail.com", role = "ctb"),
     person("Steffi", "LaZerte", email = "steffi@steffi.ca", role = "ctb"),
     person("Birds Canada", role = "fnd", email = "motus@birdscanada.org"))
 Depends:
