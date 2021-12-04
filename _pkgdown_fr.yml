@@ -1,4 +1,7 @@
-url: https://MotusWTS.github.io/motus/
+url: https://MotusWTS.github.io/motus/dev_fr
+
+destination: dev_fr
+lang: fr
 
 template:
   params:
@@ -7,27 +10,19 @@ template:
 navbar:
   structure:
     left:  [home, intro, reference, articles, news]
-    right: [release, dev, github, english, french]
+    right: [github, english, french]
   components:
-    release:
-      icon: fa-check-circle
-      href: https://motusWTS.github.io/motus/release/
-      aria-label: Release Version
-    dev:
-      icon: fa-exclamation-circle
-      href: https://motusWTS.github.io/motus/dev_en/
-      aria-label: Development Version
     english:
       text: EN
-      href: https://motusWTS.github.io/motus/dev_en
+      href: ../dev_en/index.html
     french:
       text: FR
-      href: https://motusWTS.github.io/motus/dev_fr
+      href: ../dev_fr/index.html
 
 articles:
 
-- title: Basics
-  desc: Covering the basics of the motus R package as well as Motus data
+- title: Notions de base
+  desc: Couvrant les bases du package motus R ainsi que les données Motus
   navbar: ~
   contents:
   - articles/motus
@@ -35,7 +30,7 @@ articles:
   - articles/motus-data
   - articles/database-variables
 
-- title: Complete walk-through
+- title: Visite complète
   desc: "This is a complete walk-through, originally compiled as the Motus R book.
         These articles are largely based on the original Motus R Book by 
         [Crewe et al. 2018](https://motus.org/motusRBook/archives/MotusRBook2018-01.pdf), 
@@ -48,7 +43,7 @@ articles:
   - articles/05-data-cleaning
   - articles/06-exploring-data
   
-- title: Other topics
+- title: Autres sujets
   desc: Specific tutorials for different tasks
   contents:
   - articles/filtering

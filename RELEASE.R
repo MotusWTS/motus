@@ -90,11 +90,23 @@ devtools::check_win_release() # Win builder
 devtools::check_win_devel()
 devtools::check_win_oldrelease()
 
-## Update motus website
-pkgdown::build_site()
-pkgdown::build_home()
-pkgdown::build_articles(lazy = TRUE)
-pkgdown::build_article("articles/05-data-cleaning")
+## Test motus website
+
+# English
+file.rename("_pkgdown_en.yml", "_pkgdown.yml")
+pkgdown::build_site(lazy = TRUE)
+file.rename("_pkgdown.yml", "_pkgdown_en.yml")
+
+# French
+file.rename("pkgdown/README_fr.md", "pkgdown/index.md")
+file.rename("_pkgdown_fr.yml", "_pkgdown.yml")
+pkgdown::build_site(lazy = TRUE)
+file.rename("pkgdown/index.md", "pkgdown/README_fr.md")
+file.rename("_pkgdown.yml", "_pkgdown_fr.yml")
+
+
+
+
 
 # Check/update URLS
 urlchecker::url_check()

@@ -46,10 +46,11 @@ jobs:
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
-          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE, 
-               override = list(destination = "dev_en", 
-                               url = "https://MotusWTS.github.io/motus/dev_en"))'
-          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE, 
-               override = list(lang = "fr", 
-                               destination = "dev_fr",
-                               url = "https://MotusWTS.github.io/motus/dev_fr"))'
+          mv _pkgdown_en.yml _pkgdown.yml
+          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
+          mv _pkgdown.yml _pkgdown_en.yml
+          mv _pkgdown_fr.yml _pkgdown.yml
+          mv pkgdown/README_fr.md pkgdown/index.md
+          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
+          mv _pkgdown.yml _pkgdown_fr.yml
+          mv pkgdown/index.md pkgdown/README_fr.md
