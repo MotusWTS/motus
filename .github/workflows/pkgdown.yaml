@@ -42,15 +42,19 @@ jobs:
       - name: Install package
         run: R CMD INSTALL .
 
-      - name: Deploy Site
+      - name: Deploy English Docs
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           mv _pkgdown_en.yml _pkgdown.yml
-          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
+          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE, lazy = TRUE)'
           mv _pkgdown.yml _pkgdown_en.yml
+      - name: Deploy French Docs
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
           mv _pkgdown_fr.yml _pkgdown.yml
           mv pkgdown/README_fr.md pkgdown/index.md
-          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
+          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE, lazy = TRUE)'
           mv _pkgdown.yml _pkgdown_fr.yml
           mv pkgdown/index.md pkgdown/README_fr.md
