@@ -7,5 +7,4 @@ nohup.out
 tests/spelling.R
 vignettes/articles/data/*
 docs
-dev_en
-dev_fr
+vignettes/articles/*cache/

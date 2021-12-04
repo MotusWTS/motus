@@ -1,7 +1,13 @@
 url: https://MotusWTS.github.io/motus/dev_fr
 
-destination: dev_fr
+destination: docs/dev_fr  # Only for local builds, ignored by GA
 lang: fr
+
+# Co-op the dev option to create different language versions
+development:
+  mode: devel
+  destination: dev_fr
+  version_label: default
 
 template:
   params:
