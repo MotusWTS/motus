@@ -1,18 +1,24 @@
 pandoc: 2.7.3
-pkgdown: 1.6.1
+pkgdown: 2.0.1
 pkgdown_sha: ~
 articles:
-  articles/01-introduction: 01-introduction.html
-  articles/02-installing-packages: 02-installing-packages.html
-  articles/03-accessing-data: 03-accessing-data.html
-  articles/04-deployments: 04-deployments.html
-  articles/05-data-cleaning: 05-data-cleaning.html
-  articles/06-exploring-data: 06-exploring-data.html
-  articles/advanced-modelling: advanced-modelling.html
-  articles/birds-eye-view: birds-eye-view.html
-  articles/motus: motus.html
-  articles/sqlite-views: sqlite-views.html
-  articles/troubleshooting: troubleshooting.html
-  articles/vanishing-bearings: vanishing-bearings.html
-last_built: 2021-12-01T18:21Z
+  01-introduction: 01-introduction.html
+  02-installing-packages: 02-installing-packages.html
+  03-accessing-data: 03-accessing-data.html
+  04-deployments: 04-deployments.html
+  05-data-cleaning: 05-data-cleaning.html
+  06-exploring-data: 06-exploring-data.html
+  advanced-modelling: advanced-modelling.html
+  database-variables: database-variables.html
+  filtering: filtering.html
+  gps: gps.html
+  motus-data: motus-data.html
+  motus: motus.html
+  signal-strength: signal-strength.html
+  troubleshooting: troubleshooting.html
+  vanishing-bearings: vanishing-bearings.html
+last_built: 2021-12-04T17:29Z
+urls:
+  reference: https://MotusWTS.github.io/motus/reference
+  article: https://MotusWTS.github.io/motus/articles
 
