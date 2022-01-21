@@ -93,9 +93,11 @@ devtools::check_win_oldrelease()
 ## Test motus website
 
 # English
-file.rename("_pkgdown_en.yml", "_pkgdown.yml")
+file.copy("_pkgdown_en.yml", "_pkgdown.yml")
 pkgdown::build_site(lazy = TRUE)
-file.rename("_pkgdown.yml", "_pkgdown_en.yml")
+#pkgdown::build_home_index()
+#pkgdown::init_site()
+unlink("_pkgdown.yml")
 
 # French
 file.rename("pkgdown/README_fr.md", "pkgdown/index.md")

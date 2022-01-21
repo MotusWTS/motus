@@ -3,10 +3,16 @@ url: https://MotusWTS.github.io/motus/
 destination: docs/en  # Only for local builds, ignored by GA
 lang: en
 
+development:
+  mode: release
+  version_label: default
+
 template:
   bootstrap: 5
+  bootswatch: cosmo
 
 navbar:
+  bg: dark
   structure:
     left:  [home, intro, reference, articles, news]
     right: [search, github, english, french]

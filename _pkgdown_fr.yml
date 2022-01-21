@@ -11,8 +11,10 @@ development:
 
 template:
   bootstrap: 5
+  bootswatch: cosmo
 
 navbar:
+  bg: dark
   structure:
     left:  [home, intro, reference, articles, news]
     right: [search, github, english, french]
