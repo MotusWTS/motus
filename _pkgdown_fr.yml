@@ -10,13 +10,13 @@ development:
   version_label: default
 
 template:
-  params:
-    bootswatch: cosmo
+  bootstrap: 5
+  bootswatch: cosmo
 
 navbar:
   structure:
     left:  [home, intro, reference, articles, news]
-    right: [github, english, french]
+    right: [search, github, english, french]
   components:
     english:
       text: EN
