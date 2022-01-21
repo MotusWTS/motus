@@ -11,10 +11,10 @@ The Motus Wildlife Tracking System ([Motus](https://www.motus.org); [Taylor et a
 Motus was developed at Acadia University in 2012-2013. 
 In 2014, a major infrastructure expansion was made possible through a Canada Foundation for Innovation grant to Western University, The University of Guelph, and Acadia University. 
 Since then, Motus has grown through the [collaboration of independent researchers and organizations](https://motus.org/about/). 
-It is now managed as a program of [Birds Canada](https://www.birdscanada.org) (formally Bird Studies Canada) in partnership with Acadia University. 
+It is now managed as a program of [Birds Canada](https://www.birdscanada.org) (formerly Bird Studies Canada) in partnership with Acadia University. 
 
-Motus is unique among automated telemetry arrays in that all researchers in a geographic region (e.g., the Americas or Europe) use a shared radio frequency. 
-This allows tagged animals to be detected by any receiving station across the network, greatly broadening the spatial scope of potential research questions. 
+Motus is unique among automated telemetry arrays in that all researchers in a geographic region (e.g., the Americas or Europe) use a shared radio frequencies. 
+This allows tagged animals to be detected by receiving stations across the network, greatly broadening the spatial scope of potential research questions. 
 Motus users also use a shared data infrastructure and web portal: all data collected from across the network are centrally stored and archived, which allows users to access detections of their tags by anyone's receiver in the network, and individuals that maintain receivers have access to all detections of anyone's tags on those receivers.
 
 Having a shared data infrastructure also means that users can benefit from R functions written specifically for Motus data by any and all users. 
@@ -26,14 +26,14 @@ Those interested in contributing code to the `motus` R package or examples/tutor
 
 ## What is not covered
 
-These articles does not cover how to register radio tags with Motus, manage tags and station deployments, or upload raw detections data for processing.
+These articles do not cover how to register radio tags with Motus, manage tag and station deployments, or upload raw detection data for processing.
 Information to guide you through those tasks can be found under the [resources](https://motus.org/resources/) tab on the Motus website.  
 Please remember to register your tags **prior to deployment**, and enter tag and station metadata online in a timely manner. 
 Please also review the [Motus collaboration policy, tag registration, and fee schedule](https://motus.org/policy/).
 
 ## Prerequisites
 
-These articles assumes that you have a basic understanding of R. 
+These articles assume that you have a basic understanding of R. 
 Regardless of whether you are new to R or not, we highly recommend that you become familiar with [R for Data Science](http://r4ds.had.co.nz/) by Garrett Grolemund and Hadley Wickham. 
 Their book covers how to import, visualize, and summarize data in R using the [tidyverse](https://www.tidyverse.org/) collection of R packages. 
 It also provides an invaluable framework for [organizing your workflow](http://r4ds.had.co.nz/workflow-projects.html) to create clean, reproducible code. 
@@ -46,12 +46,12 @@ We recommend that you run through the sample code in each chapter with the sampl
 
 ### James Bay Shorebird Project
 Chapters 2 through 6 use a subset of data from the James Bay Shorebird Project. 
-The James Bay Shorebird Project conducts monitoring and research on shorebirds staging along the James Bay coast, and is a collaborative effort among the Ontario Ministry of Natural Resources and Forestry, Bird Studies Canada, Trent University, and Environment and Climate Change Canada's Canadian Wildlife Service, in conjunction with a larger conservation initiative involving James Bay First Nations and Nature Canada. 
+The James Bay Shorebird Project conducts monitoring and research on shorebirds staging along the James Bay coast, and is a collaborative effort among the Ontario Ministry of Natural Resources and Forestry, Birds Canada, Trent University, Moose Cree First Nation, and Environment and Climate Change Canada's Canadian Wildlife Service, in conjunction with a larger conservation initiative involving James Bay First Nations and Nature Canada. 
 The Royal Ontario Museum was a contributing partner until 2016. 
 The goals of the project are to 
 1) improve the ability to estimate indices of abundance and population trends for shorebird species staging along the western James Bay coast, 
 2) understand movement patterns and their causes, and 
-3) identify the relative importance of shorebird staging sites and their habitats. Collectively, this information will aid in the development of conservation measures for Red Knot and other shorebird species through habitat protection like Western Hemisphere Shorebird Reserve Network (WHSRN) designation. 
+3) identify the relative importance of shorebird staging sites and their habitats. Collectively, this information will aid in the development of conservation measures for Red Knot and other shorebird species, such as Western Hemisphere Shorebird Reserve Network (WHSRN) designation. 
 More information can be viewed on the 
 James Bay Shorebird Project [website](https://www.jamesbayshorebirdproject.com/), 
 [Facebook page](https://www.facebook.com/jamesbayshorebirdproject/), 
@@ -61,7 +61,7 @@ Christian Friis
 Wildlife Biologist / Biologiste de la Faune   
 Canadian Wildlife Service Environment and Climate Change Canada / Government of Canada   
 Service Canadien de la Faune Environnement et Changement Climatique Canada / Gouvernement du Canada  
-<christian.friis@canada.ca> / Tel: 416.739.4908
+<christian.friis@ec.gc.ca> / Tel: 416.739.4908
 
 ### Studies of Migratory Birds and Bats
 In Chapter 7, we use a subset of data collected by the Motus project 'Studies of Migratory Birds and Bats, 2014-2017' (Projects #20 and #50) to illustrate the calculation of vanishing bearings of birds departing a stopover site. 
@@ -96,6 +96,6 @@ The core 'Motus Team' includes Joey Bernard, John Brzustowski, Tara Crewe, Zoe C
 
 ## References
 
-Taylor, P. D., T. L. Crewe, S. A. Mackenzie, D. Lepage, Y. Aubry, Z. Crysler, G. Finney, C. M. Francis, C. G. Guglielmo, D. J. Hamilton, R. L. Holberton, P. H. Loring, G. W. Mitchell, D. R. Noriis, J. Paquet, R. A. Ronconi, J. Smetzer, P. A. Smith, L. J. Welch, and B. K. Woodworth. 2017. The Motus Wildlife Tracking System: a collaborative research network to enhance the understanding of wildlife movement. Avian Conservation and Ecology 12(1):8. https://doi.org/10.5751/ACE-00953-120108.
+Taylor, P. D., T. L. Crewe, S. A. Mackenzie, D. Lepage, Y. Aubry, Z. Crysler, G. Finney, C. M. Francis, C. G. Guglielmo, D. J. Hamilton, R. L. Holberton, P. H. Loring, G. W. Mitchell, D. R. Norris, J. Paquet, R. A. Ronconi, J. Smetzer, P. A. Smith, L. J. Welch, and B. K. Woodworth. 2017. The Motus Wildlife Tracking System: a collaborative research network to enhance the understanding of wildlife movement. Avian Conservation and Ecology 12(1):8. https://doi.org/10.5751/ACE-00953-120108.
 
 > **Next** [Chapter 2 - Installing packages](02-installing-packages.html)
