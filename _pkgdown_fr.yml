@@ -11,7 +11,6 @@ development:
 
 template:
   bootstrap: 5
-  bootswatch: cosmo
 
 navbar:
   structure:
