@@ -13,11 +13,11 @@ sql.motus <- motus:::get_sample_data()
 >
 > **Advanced Topics:**  
 >
-> - **WIP** `.motus` data base tables
+> - `.motus` data base tables (*coming soon!*)
 > - [Working with GPS points](gps.html)
 
 
-**Before downloading your detection data, please ensure that you have no pending metadata issues through the online [Data Issues page](https://motus.org/data/issues)**
+**Before downloading your detection data, please ensure that you have no pending metadata issues on the [Motus website](https://motus.org/). Log in and view the Data Issues page under Manage Data.**
 
 This chapter will begin with an introduction to the structure of the detections database, followed by instructions on how to download and access the data.
 If you're interested in a quick start, checkout the [Getting Started](motus.html) article for a summary that includes how to download, select variables, clean data, and export data.
@@ -41,10 +41,10 @@ The .motus file contains a series of interrelated tables where data are stored i
 8. **`hits`**: detection data at the level of individual hits.
 9. **`meta`**: metadata related to the project and datatype (tags vs. receivers) that are included in the .motus file
 101. **`nodeData`**: data related to nodes by `batchID` and time (`ts`)
-102. **`nodeDeps`**; metadata related to nodes
+102. **`nodeDeps`**: metadata related to nodes
 10. **`projAmbig`**: metadata related to what projects have ambiguous tag detections
 11. **`projs`**: metadata related to projects, e.g., project name, principal investigator.
-12. **`pulseCounts`**: number of radio pulses measured on each antenna over 1 hour periods (`hourBin`).
+12. **`pulseCounts`**: number of radio pulses measured on each antenna over each hour period (`hourBin`).
 13. **`recvDeps`**: metadata related to receiver deployments, e.g., deployment date, location, receiver characteristics.
 14. **`recvs`**: metadata related to receiver serial number and associated Motus deviceID
 15. **`runs`**: detection data associated with a run (continuous detections of a unique tag on a given receiver).
@@ -103,11 +103,11 @@ Sys.setenv(TZ = "UTC")
 
 To import tag detections for your project or receiver, you need a numerical project id or character scalar receiver serial number. 
 
-The success of the Motus network is dependent on the timely upload of detection data from receivers, and on the maintenance of accurate and up to date tag and receiver metadata by collaborators.
+The success of the Motus network is dependent on the timely upload of detection data from receivers, and on the maintenance of accurate and up-to-date tag and receiver metadata by collaborators.
 After downloading your data from the Motus server, users are encouraged to [update detections](#updating-detections) and [update metadata](#updating-metadata) each time they run an analysis, because collaborators can add detection data and metadata at any time, and these could influence the completeness of your own detections data.
 
 Be warned that large datasets can take some time (sometimes a few hours) to download from the Motus server when downloading for the first time. 
-After the initial download, loading a .motus file into R and updating for any new data will be near instantaneous.
+After the initial download, loading a .motus file into R and updating for any new data will be near instantaneous, unless there is a lot of new data.
 
 ### Download data for a project for the _first time_ {#download}
 
@@ -232,7 +232,7 @@ for (row in 1:nrow(df.serno)) {
 You can also create a list of receivers you'd like to download if you don't want to download project-wide receivers:
 ```{r tagmeMultipleRecvs, eval = FALSE}
 # create list of receivers you'd like to download
-df.serno <- c("SG-AB12RPI3CD34", "SG-1234BBBK4321"))
+df.serno <- c("SG-AB12RPI3CD34", "SG-1234BBBK4321")
 
 # loop through each receiver (may take a while!), and save to the working directory
 for (k in 1:length(df.serno)) {
@@ -241,7 +241,7 @@ for (k in 1:length(df.serno)) {
 
 # loop through each receiver (may take a while!), and save to a specified directory
 for (k in 1:length(df.serno)) {
-  tagme(df.serno[k], dir = "/Users/zoecrysler/Downloads/", 
+  tagme(df.serno[k], dir = "./data/", 
         new = TRUE, update = TRUE)
 }
 ```
@@ -298,9 +298,9 @@ str(tbl.alltags)
 The first part of the list, `src`, is a list that provides details of the SQLiteConnection, including the directory where the database is stored. 
 The second part is a list that includes the underlying table. 
 Thus, the R object `alltags` is a *virtual* table that stores the database structure and information required to connect to the underlying data in the `.motus` file. 
-As stated above, the advantage of storing the data in this way is that it saves memory when accessing very large databases, and functions within the dplyr package can be used to manipulate and summarize the tables before collecting the results into a typical 'flat' format dataframe.
+As stated above, the advantage of storing the data in this way is that it saves memory when accessing very large databases, and functions within the `dplyr` package can be used to manipulate and summarize the tables before collecting the results into a typical 'flat' format dataframe.
 
-If you want to use familiar functions to get access to components of the underlying data frame, then use the `collect()` function. For example, to look at the names of the variables in the alltags table:
+If you want to use familiar functions to get access to components of the underlying data frame, then use the `collect()` function. For example, to look at the names of the variables in the `alltags` table:
 
 ```{r, eval = TRUE}
 tbl.alltags %>% 
@@ -331,8 +331,8 @@ head(df.alltags)      # prints the first 6 rows of your df to the console
 summary(df.alltags)   # summary of each column in your df
 ```
 
-Note that the format of the time stamp (ts) field is numeric and represents seconds since January 1 1970. 
-We recommend that when you transform your tables into flat dataframes, that you format the time stamp using the lubridate package at that time, e.g.:
+Note that the format of the time stamp (`ts`) field is numeric and represents seconds since 1 January 1970. 
+We recommend that when you transform your tables into flat dataframes, that you format the time stamp using the `lubridate` package at that time:
 
 ```{r collect_TimeStamp, eval = TRUE}
 df.alltags <- tbl.alltags %>% 
@@ -479,9 +479,9 @@ When you use `tagme()` to download or update your .motus file, you are provided 
 In many instances, you will want access to the full metadata for all tags and receivers across the network, 
 e.g., to determine how many of your deployed tags were not detected, or to plot the location of stations with and without detections. 
 The `metadata()` function can be used to add the complete Motus metadata to your `.motus` file. 
-The metadata function only needs to be run once, but we suggest that you re-import the metadata occasionally to ensure that you have the most recent and up-to-date information.
+The `metadata()` function only needs to be run once, but we suggest that you re-import the metadata occasionally to ensure that you have the most recent and up-to-date information.
 
-Running the metadata function as follows will add the appropriate metadata from across the network (all tags and all receivers) to the `recvDeps` and `tagDeps` tables in your .motus file: 
+Running the `metadata()` function as follows will add the appropriate metadata from across the network (all tags and all receivers) to the `recvDeps` and `tagDeps` tables in your .motus file: 
 
 ```{r eval = FALSE}
 # access all tag and receiver metadata for all projects in the network.
@@ -500,12 +500,12 @@ metadata(sql.motus, projectIDs = c(176, 1))
 
 ## Ensure that you have the correct database version {#checkVersion}
 
-When you call the tagme function to load the sqlite database, the version of the R package used to download the data is stored in an admInfo table. 
+When you call the `tagme()` function to load the sqlite database, the version of the R package used to download the data is stored in an `admInfo` table. 
 Over time, changes will be made to the functionality of the R package that may require adding new tables, views or fields to the database. 
 If your version of the database does not match the version of the R package, some of the examples contained in these articles may not work. 
 The following call will check that your database has been updated to the version matching the current version of the `motus` R package. 
 If your database does not match the most current version of the R package, use `tagme()` with `update = TRUE` to update your database to the correct format. 
-Refer to Appendix B if the `checkVersion()` call returns a warning.
+Refer to [Troubleshooting](troubleshooting.html) if the `checkVersion()` call returns a warning.
 
 
 ```{r eval = FALSE}
