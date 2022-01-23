@@ -49,13 +49,15 @@ Many, *many*, problems arise from conflicts between R packages which may be out 
 If you have a problem that you can't seem to resolve, try the following steps in order (stopping when the problem goes away). 
 If you have a problem installing `motus`, try Step 2 first.
 
-1. Update `motus` and packages that `motus` depends on. (You may first need to install the `remotes` package). **Re-start R**
+1. Restart your computer, R Studio, and R.
+
+2. Update `motus` and packages that `motus` depends on. (You may first need to install the `remotes` package). **Re-start R**
 
 ```R
 remotes::update_packages("motus")
 ```
 
-2. Update all your packages. **Re-start R**
+3. Update all your packages. **Re-start R**
 
 ```R
 remotes::update_packages()
