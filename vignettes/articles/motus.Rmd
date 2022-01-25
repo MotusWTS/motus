@@ -35,8 +35,8 @@ COMMENT: More about the structure of the data. This was in the earlier iteration
 
 Here we're downloading project 176 (sample data, use user name and password 'motus.sample'). You can use your own project number or receiver name.
 
-```{r, eval=F}
-sql.motus <- tagme(176, new = FALSE, update = TRUE, dir = "./data/")
+```{r}
+sql.motus <- tagme(projRecv = 176, new = FALSE, update = TRUE, dir = "./data/")
 ```
 
 `tagme()` includes several options. Here we're using:
