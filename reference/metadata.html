@@ -27,16 +27,21 @@ local file."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs
       <ul class="navbar-nav me-auto"><li class="nav-item">
   <a class="nav-link" href="../articles/motus.html">Get started</a>
 </li>
+<li class="nav-item">
+  <a class="nav-link" href="../articles/troubleshooting.html">Troubleshooting</a>
+</li>
 <li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+  <a class="nav-link" href="../reference/index.html">Functions</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/motus.html">Getting started</a>
-    <a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a>
-    <a class="dropdown-item" href="../articles/motus-data.html">Understanding Motus Data</a>
-    <a class="dropdown-item" href="../articles/database-variables.html">Database Variables</a>
+    <a class="dropdown-item" href="../articles/01-introduction.html">Chapter 1 - Introduction</a>
+    <a class="dropdown-item" href="../articles/02-installing-packages.html">Chapter 2 - Installing packages</a>
+    <a class="dropdown-item" href="../articles/03-accessing-data.html">Chapter 3 - Accessing detections data</a>
+    <a class="dropdown-item" href="../articles/04-deployments.html">Chapter 4 - Tag and receiver deployments</a>
+    <a class="dropdown-item" href="../articles/05-data-cleaning.html">Chapter 5 - Data Cleaning</a>
+    <a class="dropdown-item" href="../articles/06-exploring-data.html">Chapter 6 - Exploring detections data</a>
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="../articles/index.html">More articles...</a>
   </div>
@@ -125,29 +130,29 @@ relevant to a specific project or receiver file.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Source:   table&lt;species&gt; [?? x 6]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: sqlite 3.37.0</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   [/home/runner/work/_temp/Library/motus/extdata/project-176.motus]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       id english                french             scientific        group  sort</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>  <span style="text-decoration: underline;">4</span>180 Semipalmated Plover    Pluvier semipalmé  Charadrius semip… BIRDS    <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>  <span style="text-decoration: underline;">4</span>670 Red Knot               Bécasseau maubèche Calidris canutus  BIRDS    <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>  <span style="text-decoration: underline;">4</span>680 Sanderling             Bécasseau sanderl… Calidris alba     BIRDS    <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>  <span style="text-decoration: underline;">4</span>690 Semipalmated Sandpiper Bécasseau semipal… Calidris pusilla  BIRDS    <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>  <span style="text-decoration: underline;">4</span>760 White-rumped Sandpiper Bécasseau à croup… Calidris fuscico… BIRDS    <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>  <span style="text-decoration: underline;">4</span>780 Pectoral Sandpiper     Bécasseau à poitr… Calidris melanot… BIRDS    <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>  <span style="text-decoration: underline;">4</span>820 Dunlin                 Bécasseau variable Calidris alpina   BIRDS    <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>  <span style="text-decoration: underline;">4</span>980 American Woodcock      Bécasse d'Amérique Scolopax minor    BIRDS    <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> <span style="text-decoration: underline;">15</span>560 Gray-cheeked Thrush    Grive à joues gri… Catharus minimus  BIRDS    <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> <span style="text-decoration: underline;">19</span>050 White-crowned Sparrow  Bruant à couronne… Zonotrichia leuc… BIRDS    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id english                french                    scientific group  sort</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>  <span style="text-decoration: underline;">4</span>180 Semipalmated Plover    Pluvier semipalmé         Charadriu… BIRDS    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>  <span style="text-decoration: underline;">4</span>670 Red Knot               Bécasseau maubèche        Calidris … BIRDS    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>  <span style="text-decoration: underline;">4</span>680 Sanderling             Bécasseau sanderling      Calidris … BIRDS    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>  <span style="text-decoration: underline;">4</span>690 Semipalmated Sandpiper Bécasseau semipalmé       Calidris … BIRDS    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>  <span style="text-decoration: underline;">4</span>760 White-rumped Sandpiper Bécasseau à croupion bla… Calidris … BIRDS    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>  <span style="text-decoration: underline;">4</span>780 Pectoral Sandpiper     Bécasseau à poitrine cen… Calidris … BIRDS    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>  <span style="text-decoration: underline;">4</span>820 Dunlin                 Bécasseau variable        Calidris … BIRDS    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>  <span style="text-decoration: underline;">4</span>980 American Woodcock      Bécasse d'Amérique        Scolopax … BIRDS    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> <span style="text-decoration: underline;">15</span>560 Gray-cheeked Thrush    Grive à joues grises      Catharus … BIRDS    <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> <span style="text-decoration: underline;">19</span>050 White-crowned Sparrow  Bruant à couronne blanche Zonotrich… BIRDS    <span style="color: #BB0000;">NA</span></span>
 <span class="r-in"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql.motus</span>, <span class="st">"projs"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Source:   table&lt;projs&gt; [?? x 5]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: sqlite 3.37.0</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   [/home/runner/work/_temp/Library/motus/extdata/project-176.motus]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      id name                          label    tagsPermissions sensorsPermissio…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>    47 Red Knot staging and migrati… Niles                 <span style="color: #BB0000;">NA</span>                <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>    57 Selva Colombia                Selva                 <span style="color: #BB0000;">NA</span>                <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>    82 Maine - American Woodcock     RBrownA…              <span style="color: #BB0000;">NA</span>                <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>   146 Neonicotinoid insecticides a… NEONICS               <span style="color: #BB0000;">NA</span>                <span style="color: #BB0000;">NA</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>   176 Sample Data                   SampleD…              <span style="color: #BB0000;">NA</span>                <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      id name                              label tagsPermissions sensorsPermissi…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>    47 Red Knot staging and migration e… Niles              <span style="color: #BB0000;">NA</span>               <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>    57 Selva Colombia                    Selva              <span style="color: #BB0000;">NA</span>               <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>    82 Maine - American Woodcock         RBro…              <span style="color: #BB0000;">NA</span>               <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>   146 Neonicotinoid insecticides and m… NEON…              <span style="color: #BB0000;">NA</span>               <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>   176 Sample Data                       Samp…              <span style="color: #BB0000;">NA</span>               <span style="color: #BB0000;">NA</span></span>
 <span class="r-in"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql.motus</span>, <span class="st">"tagDeps"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Source:   table&lt;tagDeps&gt; [?? x 23]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: sqlite 3.37.0</span></span>

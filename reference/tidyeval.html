@@ -63,16 +63,21 @@ http://rlang.r-lib.org and the Metaprogramming section of Advanced R."><!-- math
       <ul class="navbar-nav me-auto"><li class="nav-item">
   <a class="nav-link" href="../articles/motus.html">Get started</a>
 </li>
+<li class="nav-item">
+  <a class="nav-link" href="../articles/troubleshooting.html">Troubleshooting</a>
+</li>
 <li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+  <a class="nav-link" href="../reference/index.html">Functions</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/motus.html">Getting started</a>
-    <a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a>
-    <a class="dropdown-item" href="../articles/motus-data.html">Understanding Motus Data</a>
-    <a class="dropdown-item" href="../articles/database-variables.html">Database Variables</a>
+    <a class="dropdown-item" href="../articles/01-introduction.html">Chapter 1 - Introduction</a>
+    <a class="dropdown-item" href="../articles/02-installing-packages.html">Chapter 2 - Installing packages</a>
+    <a class="dropdown-item" href="../articles/03-accessing-data.html">Chapter 3 - Accessing detections data</a>
+    <a class="dropdown-item" href="../articles/04-deployments.html">Chapter 4 - Tag and receiver deployments</a>
+    <a class="dropdown-item" href="../articles/05-data-cleaning.html">Chapter 5 - Data Cleaning</a>
+    <a class="dropdown-item" href="../articles/06-exploring-data.html">Chapter 6 - Exploring detections data</a>
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="../articles/index.html">More articles...</a>
   </div>
@@ -112,19 +117,19 @@ http://rlang.r-lib.org and the Metaprogramming section of Advanced R."><!-- math
 <ul><li><p><code><a href="https://rlang.r-lib.org/reference/sym.html" class="external-link">sym</a>()</code> creates a symbol from a string and
 <code><a href="https://rlang.r-lib.org/reference/sym.html" class="external-link">syms</a>()</code> creates a list of symbols from a
 character vector.</p></li>
-<li><p><code><a href="https://rlang.r-lib.org/reference/nse-defuse.html" class="external-link">expr</a>()</code> and <code><a href="https://rlang.r-lib.org/reference/nse-defuse.html" class="external-link">quo</a>()</code> quote
+<li><p><code><a href="https://rlang.r-lib.org/reference/expr.html" class="external-link">expr</a>()</code> and <code><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">quo</a>()</code> quote
 one expression. <code><a href="https://dplyr.tidyverse.org/reference/tidyeval-compat.html" class="external-link">quo()</a></code> wraps the quoted expression in a quosure.</p>
-<p>The plural variants <code><a href="https://rlang.r-lib.org/reference/nse-defuse.html" class="external-link">rlang::exprs()</a></code> and
-<code><a href="https://rlang.r-lib.org/reference/nse-defuse.html" class="external-link">quos</a>()</code> return a list of quoted expressions or
+<p>The plural variants <code><a href="https://rlang.r-lib.org/reference/topic-defuse.html" class="external-link">rlang::exprs()</a></code> and
+<code><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">quos</a>()</code> return a list of quoted expressions or
 quosures.</p></li>
-<li><p><code><a href="https://rlang.r-lib.org/reference/nse-defuse.html" class="external-link">enexpr</a>()</code> and <code><a href="https://rlang.r-lib.org/reference/nse-defuse.html" class="external-link">enquo</a>()</code>
+<li><p><code><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">enexpr</a>()</code> and <code><a href="https://rlang.r-lib.org/reference/enquo.html" class="external-link">enquo</a>()</code>
 capture the expression supplied as argument by the user of the
 current function (<code><a href="https://dplyr.tidyverse.org/reference/tidyeval-compat.html" class="external-link">enquo()</a></code> wraps this expression in a quosure).</p>
-<p><code><a href="https://rlang.r-lib.org/reference/nse-defuse.html" class="external-link">enexprs</a>()</code> and <code><a href="https://rlang.r-lib.org/reference/nse-defuse.html" class="external-link">enquos</a>()</code>
+<p><code><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">enexprs</a>()</code> and <code><a href="https://rlang.r-lib.org/reference/enquo.html" class="external-link">enquos</a>()</code>
 capture multiple expressions supplied as arguments, including
 <code>...</code>.</p></li>
 </ul><p><code>exprs()</code> is not exported to avoid conflicts with <code>Biobase::exprs()</code>,
-therefore one should always use <code><a href="https://rlang.r-lib.org/reference/nse-defuse.html" class="external-link">rlang::exprs()</a></code>.</p>
+therefore one should always use <code><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">rlang::exprs()</a></code>.</p>
 <p>To learn more about tidy eval and how to use these tools, visit
 <a href="http://rlang.r-lib.org" class="external-link">http://rlang.r-lib.org</a> and the <a href="https://adv-r.hadley.nz/introduction-16.html" class="external-link">Metaprogramming section</a> of <a href="https://adv-r.hadley.nz" class="external-link">Advanced R</a>.</p>
     </div>

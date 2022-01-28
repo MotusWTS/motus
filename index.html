@@ -41,15 +41,20 @@
   <a class="nav-link" href="articles/motus.html">Get started</a>
 </li>
 <li class="nav-item">
-  <a class="nav-link" href="reference/index.html">Reference</a>
+  <a class="nav-link" href="articles/troubleshooting.html">Troubleshooting</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="reference/index.html">Functions</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="articles/motus.html">Getting started</a>
-    <a class="dropdown-item" href="articles/troubleshooting.html">Troubleshooting</a>
-    <a class="dropdown-item" href="articles/motus-data.html">Understanding Motus Data</a>
-    <a class="dropdown-item" href="articles/database-variables.html">Database Variables</a>
+    <a class="dropdown-item" href="articles/01-introduction.html">Chapter 1 - Introduction</a>
+    <a class="dropdown-item" href="articles/02-installing-packages.html">Chapter 2 - Installing packages</a>
+    <a class="dropdown-item" href="articles/03-accessing-data.html">Chapter 3 - Accessing detections data</a>
+    <a class="dropdown-item" href="articles/04-deployments.html">Chapter 4 - Tag and receiver deployments</a>
+    <a class="dropdown-item" href="articles/05-data-cleaning.html">Chapter 5 - Data Cleaning</a>
+    <a class="dropdown-item" href="articles/06-exploring-data.html">Chapter 6 - Exploring detections data</a>
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="articles/index.html">More articles...</a>
   </div>
@@ -86,79 +91,24 @@
 <div class="section level1">
 <div class="page-header"><h1 id="motus">motus<a class="anchor" aria-label="anchor" href="#motus"></a>
 </h1></div>
-<p>R package for handling <a href="https://motus.org" class="external-link">Motus</a> automated radio-telemetry data.</p>
 <p align="center">
 <a href="https://birdscanada.org" class="external-link"><img src="https://github.com/MotusWTS/motus/blob/master/inst/assets/birds_canada_logo.png?raw=true" alt="Birds Canada Logo showing grey text 'Birds Canada' and 'Oiseaux Canada' on either side of a grey and yellow bird perched on a branch" width="40%"></a> <a href="https://motus.org" class="external-link"><img src="https://github.com/MotusWTS/motus/blob/master/inst/assets/motus_logo.png?raw=true" alt="Motus Logo showing blue text 'Motus Wildlife Tracking System' to the right of pale green images of a bat, bird and dragonfly at the ends of green curved lines"></a>
 </p>
-<p>See the <a href="https://MotusWTS.github.io/motus">motus package site</a> for detailed usage information</p>
+<p>An R package for handling <a href="https://motus.org" class="external-link">Motus</a> automated radio-telemetry data.</p>
+<p>See the <a href="https://MotusWTS.github.io/motus">motus package site</a> for detailed usage information.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<div class="section level3">
-<h3 id="updating">Updating<a class="anchor" aria-label="anchor" href="#updating"></a>
-</h3>
-<p>If you are updating your version of <code>motus</code> from a version &lt;1.5.0 to &gt;= 1.5.0 (i.e. from when <code>motusClient</code> was a separate package), you will have best results if you first remove <code>motus</code> and <code>motusClient</code> and reinstall from scratch:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/remove.packages.html" class="external-link">remove.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"motus"</span>, <span class="st">"motusClient"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>Now you can install v1.5.0+ as follows.</p>
-</div>
-<div class="section level3">
-<h3 id="new-installation">New Installation<a class="anchor" aria-label="anchor" href="#new-installation"></a>
-</h3>
-<p><strong>Users</strong>: the ‘master’ branch is what you want. You can install it from R by doing:</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>                 <span class="co"># if don't already have it</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"motusWTS/motus"</span><span class="op">)</span>   <span class="co"># the lastest stable version</span></code></pre></div>
+<p>The development branches (betaX and sandbox) are for work-in-progress</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>              <span class="co">## if you haven't already done this</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"motusWTS/motus@master"</span><span class="op">)</span>   <span class="co">## the lastest stable version</span></code></pre></div>
-<p><strong>Developers</strong>: the ‘betaX’ branches are for work-in-progress. Install the one you want</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>                       <span class="co">## if you haven't already done this</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"motusWTS/motus@beta3"</span><span class="op">)</span>   <span class="co">## the beta branch for version 3+</span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="troubleshooting">Troubleshooting<a class="anchor" aria-label="anchor" href="#troubleshooting"></a>
-</h3>
-<div class="section level4">
-<h4 id="general-problems">General Problems<a class="anchor" aria-label="anchor" href="#general-problems"></a>
-</h4>
-<p>Many, <em>many</em>, problems arise from conflicts between R packages which may be out of date. If you have a problem that you can’t seem to resolve, try the following steps in order (stopping when the problem goes away). If you have a problem installing <code>motus</code>, try Step 2 first.</p>
-<ol style="list-style-type: decimal">
-<li>Update <code>motus</code> and packages that <code>motus</code> depends on. (You may first need to install the <code>remotes</code> package). <strong>Re-start R</strong>
-</li>
-</ol>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/update_packages.html" class="external-link">update_packages</a></span><span class="op">(</span><span class="st">"motus"</span><span class="op">)</span></code></pre></div>
-<ol start="2" style="list-style-type: decimal">
-<li>Update all your packages. <strong>Re-start R</strong>
-</li>
-</ol>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/update_packages.html" class="external-link">update_packages</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<ol start="3" style="list-style-type: decimal">
-<li>Update R <a href="https://cran.r-project.org/" class="external-link uri">https://cran.r-project.org/</a>. (You may have to reinstall packages)</li>
-</ol>
-</div>
-<div class="section level4">
-<h4 id="specific-problems">Specific Problems<a class="anchor" aria-label="anchor" href="#specific-problems"></a>
-</h4>
-<p>Some known installation problems are listed below. If all else fails, uninstalling R and/or R Studio, and reinstalling the latest R version typically works. Depending on how much customization you have made to your R configuration, this may be the quickest option available.</p>
-<p><strong>cannot remove prior installation of package</strong></p>
-<p>If you get errors “cannot remove prior installation of package …” (e.g. <code>dplyr</code>) while trying to install motus, this could be due to having multiple R sessions active. You can try the following:</p>
-<ol style="list-style-type: decimal">
-<li>find out your R package library location: <code>Sys.getenv("R_LIBS_USER")</code> or <code><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths()</a></code>
-</li>
-<li>close any session of R and/or R Studio</li>
-<li>in the library folder, manually delete the package that failed to remove (e.g. <code>dplyr</code>)</li>
-<li>restart R and manually install the package again e.g. <code>install.packages("dplyr")</code>
-</li>
-</ol>
-<p>Another possible cause of this problem relates to file permissions in your library folders (e.g. libraries installed in c:files-3.x.x). To confirm this, you can try running R “as administrator” (right-clicking the R icon), or use <code>SUDO R</code> (Linux/Ubuntu) and trying installation again. If this resolves your problem, you should consider setting your libraries in a new folder where your logged in user has full access:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># confirm the libPaths location(s)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co"># add a new libPaths default location</span>
-<span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="st">"c:/users/myusername/R/win-libraries"</span><span class="op">)</span></code></pre></div>
-</div>
-</div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>                     <span class="co"># if don't already have it</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"motusWTS/motus@beta3"</span><span class="op">)</span> <span class="co"># the beta branch for v3+</span></code></pre></div>
+<blockquote>
+<p>Running into problems? Check out the <a href="https://motuswts.github.io/motus/articles/troubleshoting.html" class="external-link">Troubleshooting article</a></p>
+</blockquote>
 </div>
 </div>
 

@@ -39,15 +39,20 @@
   <a class="nav-link" href="../articles/motus.html">Get started</a>
 </li>
 <li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+  <a class="nav-link" href="../articles/troubleshooting.html">Troubleshooting</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Functions</a>
 </li>
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/motus.html">Getting started</a>
-    <a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a>
-    <a class="dropdown-item" href="../articles/motus-data.html">Understanding Motus Data</a>
-    <a class="dropdown-item" href="../articles/database-variables.html">Database Variables</a>
+    <a class="dropdown-item" href="../articles/01-introduction.html">Chapter 1 - Introduction</a>
+    <a class="dropdown-item" href="../articles/02-installing-packages.html">Chapter 2 - Installing packages</a>
+    <a class="dropdown-item" href="../articles/03-accessing-data.html">Chapter 3 - Accessing detections data</a>
+    <a class="dropdown-item" href="../articles/04-deployments.html">Chapter 4 - Tag and receiver deployments</a>
+    <a class="dropdown-item" href="../articles/05-data-cleaning.html">Chapter 5 - Data Cleaning</a>
+    <a class="dropdown-item" href="../articles/06-exploring-data.html">Chapter 6 - Exploring detections data</a>
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="../articles/index.html">More articles...</a>
   </div>
@@ -603,9 +608,9 @@ Determine how many of your tag detections may be ambiguous detections</p></li>
          date <span class="op">=</span> <span class="va">ts.x</span>, `rate(m/s)` <span class="op">=</span> <span class="va">rate</span>, 
          <span class="va">dist</span>, total.time <span class="op">=</span> <span class="va">total.time</span>, <span class="va">bearing</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## <span style="color: #949494;"># A tibble: 1 × 7</span></span>
-<span class="co">##   start       end      date                `rate(m/s)`   dist total.time bearing</span>
-<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">## <span style="color: #BCBCBC;">1</span> Netitishi_… MDR_44,… 2015-09-02 <span style="color: #949494;">04:18:42</span>        17.1 1.21<span style="color: #949494;">e</span>6      <span style="text-decoration: underline;">70</span>879    128.</span></code></pre>
+<span class="co">##   start          end   date                `rate(m/s)`   dist total.time bearing</span>
+<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">## <span style="color: #BCBCBC;">1</span> Netitishi_51.… MDR_… 2015-09-02 <span style="color: #949494;">04:18:42</span>        17.1 1.21<span style="color: #949494;">e</span>6      <span style="text-decoration: underline;">70</span>879    128.</span></code></pre>
 <p>These detections are &gt;1200 km distant from one another, but the flight speed (17 m/s) is consistent with a white-rumped Sandpiper. Given that the Gray-cheeked Thrush tag was near the end of its expected lifetime, we can reasonably claim these detections for our project, and remove the ambiguous detections associated with <code>motusTagID</code> 17021.</p>
 <div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">df.block.6</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags.sub</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
@@ -670,19 +675,19 @@ Determine how many of your tag detections may be ambiguous detections</p></li>
          date <span class="op">=</span> <span class="va">ts.x</span>, `rate(m/s)` <span class="op">=</span> <span class="va">rate</span>, 
          <span class="va">dist</span>, total.time <span class="op">=</span> <span class="va">total.time</span>, <span class="va">bearing</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## <span style="color: #949494;"># A tibble: 11 × 7</span></span>
-<span class="co">##    start     end       date                `rate(m/s)`   dist total.time bearing</span>
-<span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">## <span style="color: #BCBCBC;"> 1</span> Piskwami… Washkaug… 2016-10-09 <span style="color: #949494;">22:49:59</span>      20.4   7.68<span style="color: #949494;">e</span>4       <span style="text-decoration: underline;">3</span>767   137. </span>
-<span class="co">## <span style="color: #BCBCBC;"> 2</span> Washkaug… SHNJ_40.… 2016-10-10 <span style="color: #949494;">00:00:42</span>      24.3   1.27<span style="color: #949494;">e</span>6      <span style="text-decoration: underline;">52</span>386   157. </span>
-<span class="co">## <span style="color: #BCBCBC;"> 3</span> NBNJ_39.… Niapiska… 2016-10-10 <span style="color: #949494;">15:47:37</span>       7.74  1.46<span style="color: #949494;">e</span>6     <span style="text-decoration: underline;">188</span>426    31.4</span>
-<span class="co">## <span style="color: #BCBCBC;"> 4</span> Niapiska… Grand-Il… 2016-10-18 <span style="color: #949494;">04:22:02</span>      43.5   1.16<span style="color: #949494;">e</span>4        266   -<span style="color: #BB0000;">92.2</span></span>
-<span class="co">## <span style="color: #BCBCBC;"> 5</span> Grand-Il… Niapiska… 2016-10-18 <span style="color: #949494;">04:29:12</span>       0.728 1.16<span style="color: #949494;">e</span>4      <span style="text-decoration: underline;">15</span>887    87.7</span>
-<span class="co">## <span style="color: #BCBCBC;"> 6</span> Grand-Il… Niapiska… 2016-10-19 <span style="color: #949494;">04:34:04</span>       0.531 1.16<span style="color: #949494;">e</span>4      <span style="text-decoration: underline;">21</span>758    87.7</span>
-<span class="co">## <span style="color: #BCBCBC;"> 7</span> Niapiska… Grand-Il… 2016-10-23 <span style="color: #949494;">01:39:14</span>       5.55  1.16<span style="color: #949494;">e</span>4       <span style="text-decoration: underline;">2</span>084   -<span style="color: #BB0000;">92.2</span></span>
-<span class="co">## <span style="color: #BCBCBC;"> 8</span> Grand-Il… Niapiska… 2016-10-25 <span style="color: #949494;">17:57:52</span>      19.3   1.16<span style="color: #949494;">e</span>4        600    87.7</span>
-<span class="co">## <span style="color: #BCBCBC;"> 9</span> Niapiska… Grand-Il… 2016-10-25 <span style="color: #949494;">21:13:49</span>       0.243 1.16<span style="color: #949494;">e</span>4      <span style="text-decoration: underline;">47</span>541   -<span style="color: #BB0000;">92.2</span></span>
-<span class="co">## <span style="color: #BCBCBC;">10</span> Grand-Il… Niapiska… 2016-10-26 <span style="color: #949494;">19:43:34</span>       0.758 1.16<span style="color: #949494;">e</span>4      <span style="text-decoration: underline;">15</span>254    87.7</span>
-<span class="co">## <span style="color: #BCBCBC;">11</span> Niapiska… Grand-Il… 2016-10-27 <span style="color: #949494;">00:03:21</span>       0.246 1.16<span style="color: #949494;">e</span>4      <span style="text-decoration: underline;">46</span>941   -<span style="color: #BB0000;">92.2</span></span></code></pre>
+<span class="co">##    start         end   date                `rate(m/s)`   dist total.time bearing</span>
+<span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">## <span style="color: #BCBCBC;"> 1</span> Piskwamish_5… Wash… 2016-10-09 <span style="color: #949494;">22:49:59</span>      20.4   7.68<span style="color: #949494;">e</span>4       <span style="text-decoration: underline;">3</span>767   137. </span>
+<span class="co">## <span style="color: #BCBCBC;"> 2</span> Washkaugou_5… SHNJ… 2016-10-10 <span style="color: #949494;">00:00:42</span>      24.3   1.27<span style="color: #949494;">e</span>6      <span style="text-decoration: underline;">52</span>386   157. </span>
+<span class="co">## <span style="color: #BCBCBC;"> 3</span> NBNJ_39.4, -… Niap… 2016-10-10 <span style="color: #949494;">15:47:37</span>       7.74  1.46<span style="color: #949494;">e</span>6     <span style="text-decoration: underline;">188</span>426    31.4</span>
+<span class="co">## <span style="color: #BCBCBC;"> 4</span> Niapiskau_50… Gran… 2016-10-18 <span style="color: #949494;">04:22:02</span>      43.5   1.16<span style="color: #949494;">e</span>4        266   -<span style="color: #BB0000;">92.2</span></span>
+<span class="co">## <span style="color: #BCBCBC;"> 5</span> Grand-Ile_50… Niap… 2016-10-18 <span style="color: #949494;">04:29:12</span>       0.728 1.16<span style="color: #949494;">e</span>4      <span style="text-decoration: underline;">15</span>887    87.7</span>
+<span class="co">## <span style="color: #BCBCBC;"> 6</span> Grand-Ile_50… Niap… 2016-10-19 <span style="color: #949494;">04:34:04</span>       0.531 1.16<span style="color: #949494;">e</span>4      <span style="text-decoration: underline;">21</span>758    87.7</span>
+<span class="co">## <span style="color: #BCBCBC;"> 7</span> Niapiskau_50… Gran… 2016-10-23 <span style="color: #949494;">01:39:14</span>       5.55  1.16<span style="color: #949494;">e</span>4       <span style="text-decoration: underline;">2</span>084   -<span style="color: #BB0000;">92.2</span></span>
+<span class="co">## <span style="color: #BCBCBC;"> 8</span> Grand-Ile_50… Niap… 2016-10-25 <span style="color: #949494;">17:57:52</span>      19.3   1.16<span style="color: #949494;">e</span>4        600    87.7</span>
+<span class="co">## <span style="color: #BCBCBC;"> 9</span> Niapiskau_50… Gran… 2016-10-25 <span style="color: #949494;">21:13:49</span>       0.243 1.16<span style="color: #949494;">e</span>4      <span style="text-decoration: underline;">47</span>541   -<span style="color: #BB0000;">92.2</span></span>
+<span class="co">## <span style="color: #BCBCBC;">10</span> Grand-Ile_50… Niap… 2016-10-26 <span style="color: #949494;">19:43:34</span>       0.758 1.16<span style="color: #949494;">e</span>4      <span style="text-decoration: underline;">15</span>254    87.7</span>
+<span class="co">## <span style="color: #BCBCBC;">11</span> Niapiskau_50… Gran… 2016-10-27 <span style="color: #949494;">00:03:21</span>       0.246 1.16<span style="color: #949494;">e</span>4      <span style="text-decoration: underline;">46</span>941   -<span style="color: #BB0000;">92.2</span></span></code></pre>
 <p>The bird made a 14.5 hour (52386/60/60) flight between Washkaugou and SHNJ at a rate of 24 m/s, which is plausible. The researchers involved may have other data to support or refute the inference (e.g. an actual sighting of the Red Knot still in Niapiskau after this flight was recorded) but it seems likely that while one tag remained at sites around longitude -65, another tag made the above migratory flights.<br>
 We can make another more detailed plot of signal strength to examine these potential migratory flights more closely:</p>
 <div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
@@ -768,7 +773,7 @@ This, coupled with overall detection patterns and knowledge of the species, lead
                              <span class="va">tbl.filter</span>, 
                              by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"runID"</span>, <span class="st">"motusTagID"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <blockquote>
-<p><strong>Next</strong> <a href="06-exploring-data.html">Chapter 6 - Exploring detections data</a></p>
+<p><strong>Next</strong> <a href="06-exploring-data.html">Chapter 6 - Exploring detections data</a> <span style="font-size: 70%">(<a href="index.html">Explore all articles</a>)</span></p>
 </blockquote>
 </div>
 </div>

@@ -39,15 +39,20 @@
   <a class="nav-link" href="../articles/motus.html">Get started</a>
 </li>
 <li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+  <a class="nav-link" href="../articles/troubleshooting.html">Troubleshooting</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Functions</a>
 </li>
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/motus.html">Getting started</a>
-    <a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a>
-    <a class="dropdown-item" href="../articles/motus-data.html">Understanding Motus Data</a>
-    <a class="dropdown-item" href="../articles/database-variables.html">Database Variables</a>
+    <a class="dropdown-item" href="../articles/01-introduction.html">Chapter 1 - Introduction</a>
+    <a class="dropdown-item" href="../articles/02-installing-packages.html">Chapter 2 - Installing packages</a>
+    <a class="dropdown-item" href="../articles/03-accessing-data.html">Chapter 3 - Accessing detections data</a>
+    <a class="dropdown-item" href="../articles/04-deployments.html">Chapter 4 - Tag and receiver deployments</a>
+    <a class="dropdown-item" href="../articles/05-data-cleaning.html">Chapter 5 - Data Cleaning</a>
+    <a class="dropdown-item" href="../articles/06-exploring-data.html">Chapter 6 - Exploring detections data</a>
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="../articles/index.html">More articles...</a>
   </div>
@@ -317,7 +322,8 @@
             tsMin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">ts</span><span class="op">)</span>,
             tsMax <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">ts</span><span class="op">)</span>,
             totDay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">doy</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## `summarise()` has grouped output by 'motusTagID'. You can override using the `.groups` argument.</span></code></pre>
+<pre><code><span class="co">## `summarise()` has grouped output by 'motusTagID'. You can override using the</span>
+<span class="co">## `.groups` argument.</span></code></pre>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">tagRecvSummary</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## <span style="color: #949494;"># A tibble: 6 × 7</span></span>
@@ -450,7 +456,9 @@
 <span class="op">}</span> <span class="co"># end of function call</span>
 
 <span class="va">df.alltags.path</span> <span class="op">&lt;-</span> <span class="fu">fun.getpath</span><span class="op">(</span><span class="va">df.alltags.sub</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## `summarise()` has grouped output by 'motusTagID', 'runID', 'recvDeployName', 'ambigID', 'tagDepLon', 'tagDepLat', 'recvLat'. You can override using the `.groups` argument.</span></code></pre>
+<pre><code><span class="co">## `summarise()` has grouped output by 'motusTagID', 'runID', 'recvDeployName',</span>
+<span class="co">## 'ambigID', 'tagDepLon', 'tagDepLat', 'recvLat'. You can override using the</span>
+<span class="co">## `.groups` argument.</span></code></pre>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">df.alltags.sub.path</span> <span class="op">&lt;-</span> <span class="va">df.alltags.sub</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">tagProjID</span> <span class="op">==</span> <span class="fl">176</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="co"># only tags registered to project</span>
@@ -460,7 +468,9 @@
            <span class="va">tagDepLon</span>, <span class="va">tagDepLat</span>, <span class="va">recvLat</span>, <span class="va">recvLon</span><span class="op">)</span>
 
 <span class="va">df.alltags.path</span> <span class="op">&lt;-</span> <span class="fu">fun.getpath</span><span class="op">(</span><span class="va">df.alltags.sub.path</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## `summarise()` has grouped output by 'motusTagID', 'runID', 'recvDeployName', 'ambigID', 'tagDepLon', 'tagDepLat', 'recvLat'. You can override using the `.groups` argument.</span></code></pre>
+<pre><code><span class="co">## `summarise()` has grouped output by 'motusTagID', 'runID', 'recvDeployName',</span>
+<span class="co">## 'ambigID', 'tagDepLon', 'tagDepLat', 'recvLat'. You can override using the</span>
+<span class="co">## `.groups` argument.</span></code></pre>
 <div class="section level3">
 <h3 id="mapping-with-the-ggmap-package">Mapping with the <code>ggmap</code> package<a class="anchor" aria-label="anchor" href="#mapping-with-the-ggmap-package"></a>
 </h3>
@@ -566,7 +576,7 @@ There are several ways to use the <code>ggmap</code> package. One is with Google
 <p><img src="06-exploring-data_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
 <p>The functions above provide examples of how you can begin exploring your data and are by no means exhaustive.</p>
 <blockquote>
-<p><strong>What Next?</strong> <a href="../index.html">Check out all articles</a></p>
+<p><strong>What Next?</strong> <a href="index.html">Explore all articles</a></p>
 </blockquote>
 </div>
 </div>

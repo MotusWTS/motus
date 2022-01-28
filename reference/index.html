@@ -21,16 +21,21 @@
       <ul class="navbar-nav me-auto"><li class="nav-item">
   <a class="nav-link" href="../articles/motus.html">Get started</a>
 </li>
+<li class="nav-item">
+  <a class="nav-link" href="../articles/troubleshooting.html">Troubleshooting</a>
+</li>
 <li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+  <a class="nav-link" href="../reference/index.html">Functions</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/motus.html">Getting started</a>
-    <a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a>
-    <a class="dropdown-item" href="../articles/motus-data.html">Understanding Motus Data</a>
-    <a class="dropdown-item" href="../articles/database-variables.html">Database Variables</a>
+    <a class="dropdown-item" href="../articles/01-introduction.html">Chapter 1 - Introduction</a>
+    <a class="dropdown-item" href="../articles/02-installing-packages.html">Chapter 2 - Installing packages</a>
+    <a class="dropdown-item" href="../articles/03-accessing-data.html">Chapter 3 - Accessing detections data</a>
+    <a class="dropdown-item" href="../articles/04-deployments.html">Chapter 4 - Tag and receiver deployments</a>
+    <a class="dropdown-item" href="../articles/05-data-cleaning.html">Chapter 5 - Data Cleaning</a>
+    <a class="dropdown-item" href="../articles/06-exploring-data.html">Chapter 6 - Exploring detections data</a>
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="../articles/index.html">More articles...</a>
   </div>
@@ -64,7 +69,7 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a></h2>
       
       
 
@@ -76,65 +81,35 @@
 
       <dl><dt>
           
+          <code><a href="shorebirds.html">shorebirds</a></code> 
+        </dt>
+        <dd>Example shorebirds tags download from Motus</dd>
+      </dl></div><div class="section level2">
+      <h2 id="download-data">Download data<a class="anchor" aria-label="anchor" href="#download-data"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="tagme.html">tagme()</a></code> 
+        </dt>
+        <dd>Download motus tag detections to a database</dd>
+      </dl><dl><dt>
+          
+          <code><a href="tellme.html">tellme()</a></code> 
+        </dt>
+        <dd>report how much new data motus has for a tag detection database</dd>
+      </dl><dl><dt>
+          
           <code><a href="activity.html">activity()</a></code> 
         </dt>
         <dd>Add/update batch activity</dd>
-      </dl><dl><dt>
-          
-          <code><a href="checkVersion.html">checkVersion()</a></code> 
-        </dt>
-        <dd>Verifies the version of the package against the admInfo table of a motus file. Those should match
-if the updateMotusDb function has been properly loaded by the tagme function.</dd>
-      </dl><dl><dt>
-          
-          <code><a href="clarify.html">clarify()</a></code> 
-        </dt>
-        <dd>report on or claim ambiguous tag detections</dd>
-      </dl><dl><dt>
-          
-          <code><a href="createRunsFilter.html">createRunsFilter()</a></code> 
-        </dt>
-        <dd>Create a new filter records that can be applied to runs</dd>
-      </dl><dl><dt>
-          
-          <code><a href="deleteRunsFilter.html">deleteRunsFilter()</a></code> 
-        </dt>
-        <dd>Delete a filter  matching a filter name (and optionally a project ID)</dd>
-      </dl><dl><dt>
-          
-          <code><a href="filterByActivity.html">filterByActivity()</a></code> 
-        </dt>
-        <dd>Filter <code>alltags</code> by <code>activity</code></dd>
-      </dl><dl><dt>
-          
-          <code><a href="getAccess.html">getAccess()</a></code> 
-        </dt>
-        <dd>Return accessible projects and receivers</dd>
-      </dl><dl><dt>
-          
-          <code><a href="getGPS.html">getGPS()</a></code> 
-        </dt>
-        <dd>Get GPS variables</dd>
-      </dl><dl><dt>
-          
-          <code><a href="getMotusDBSrc.html">getMotusDBSrc()</a></code> 
-        </dt>
-        <dd>Get the src_sqlite for a receiver or tag database</dd>
-      </dl><dl><dt>
-          
-          <code><a href="getRuns.html">getRuns()</a></code> 
-        </dt>
-        <dd>Returns a dataframe containing runs</dd>
-      </dl><dl><dt>
-          
-          <code><a href="getRunsFilters.html">getRunsFilters()</a></code> 
-        </dt>
-        <dd>Find runFilters</dd>
-      </dl><dl><dt>
-          
-          <code><a href="listRunsFilters.html">listRunsFilters()</a></code> 
-        </dt>
-        <dd>Returns a dataframe of the filters stored in the local database.</dd>
       </dl><dl><dt>
           
           <code><a href="metadata.html">metadata()</a></code> 
@@ -142,20 +117,89 @@ if the updateMotusDb function has been properly loaded by the tagme function.</d
         <dd>Update all metadata</dd>
       </dl><dl><dt>
           
-          <code><a href="motus.html">motus</a></code> 
-        </dt>
-        <dd>Fetch and use data from the Motus Wildlife Tracking System</dd>
-      </dl><dl><dt>
-          
-          <code><a href="motusLogout.html">motusLogout()</a></code> 
-        </dt>
-        <dd>Forget login credentials for motus.</dd>
-      </dl><dl><dt>
-          
           <code><a href="nodeData.html">nodeData()</a></code> 
         </dt>
         <dd>Add/update nodeData</dd>
+      </dl></div><div class="section level2">
+      <h2 id="cleaning">Cleaning<a class="anchor" aria-label="anchor" href="#cleaning"></a></h2>
+      
+      <p class="section-desc"></p><p>Helper functions for cleaning and preparing data</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="filterByActivity.html">filterByActivity()</a></code> 
+        </dt>
+        <dd>Filter <code>alltags</code> by <code>activity</code></dd>
       </dl><dl><dt>
+          
+          <code><a href="clarify.html">clarify()</a></code> 
+        </dt>
+        <dd>report on or claim ambiguous tag detections</dd>
+      </dl></div><div class="section level2">
+      <h2 id="helper">Helper<a class="anchor" aria-label="anchor" href="#helper"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="getGPS.html">getGPS()</a></code> 
+        </dt>
+        <dd>Get GPS variables</dd>
+      </dl><dl><dt>
+          
+          <code><a href="getRuns.html">getRuns()</a></code> 
+        </dt>
+        <dd>Returns a dataframe containing runs</dd>
+      </dl><dl><dt>
+          
+          <code><a href="simSiteDet.html">simSiteDet()</a></code> 
+        </dt>
+        <dd>Create a dataframe of simultaneous detections at multiple sites</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sunRiseSet.html">sunRiseSet()</a></code> 
+        </dt>
+        <dd>Obtain sunrise and sunset times</dd>
+      </dl><dl><dt>
+          
+          <code><a href="timeToSunriset.html">timeToSunriset()</a></code> 
+        </dt>
+        <dd>Obtain time to and from sunrise/sunset for a dataframe containing POSIXct times</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sqliteToRDS.html">sqliteToRDS()</a></code> 
+        </dt>
+        <dd>Export results of an sqlite query to an .rds file using limited
+memory (Linux, OS X; not Windows)</dd>
+      </dl><dl><dt>
+          
+          <code><a href="getMotusDBSrc.html">getMotusDBSrc()</a></code> 
+        </dt>
+        <dd>Get the src_sqlite for a receiver or tag database</dd>
+      </dl></div><div class="section level2">
+      <h2 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
           <code><a href="plotAllTagsCoord.html">plotAllTagsCoord()</a></code> 
         </dt>
@@ -190,17 +234,18 @@ if the updateMotusDb function has been properly loaded by the tagme function.</d
           <code><a href="plotTagSig.html">plotTagSig()</a></code> 
         </dt>
         <dd>Plot signal strength of all detections for a specified tag by site</dd>
-      </dl><dl><dt>
-          
-          <code><a href="shorebirds.html">shorebirds</a></code> 
-        </dt>
-        <dd>Example shorebirds tags download from Motus</dd>
-      </dl><dl><dt>
-          
-          <code><a href="simSiteDet.html">simSiteDet()</a></code> 
-        </dt>
-        <dd>Create a dataframe of simultaneous detections at multiple sites</dd>
-      </dl><dl><dt>
+      </dl></div><div class="section level2">
+      <h2 id="summarizing">Summarizing<a class="anchor" aria-label="anchor" href="#summarizing"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
           <code><a href="siteSum.html">siteSum()</a></code> 
         </dt>
@@ -217,17 +262,6 @@ if the updateMotusDb function has been properly loaded by the tagme function.</d
         <dd>Summarize transitions between sites for each tag</dd>
       </dl><dl><dt>
           
-          <code><a href="sqliteToRDS.html">sqliteToRDS()</a></code> 
-        </dt>
-        <dd>Export results of an sqlite query to an .rds file using limited
-memory (Linux, OS X; not Windows)</dd>
-      </dl><dl><dt>
-          
-          <code><a href="sunRiseSet.html">sunRiseSet()</a></code> 
-        </dt>
-        <dd>Obtain sunrise and sunset times</dd>
-      </dl><dl><dt>
-          
           <code><a href="tagSum.html">tagSum()</a></code> 
         </dt>
         <dd>General summary of detections for each tag</dd>
@@ -236,28 +270,72 @@ memory (Linux, OS X; not Windows)</dd>
           <code><a href="tagSumSite.html">tagSumSite()</a></code> 
         </dt>
         <dd>Summarize detections of all tags by site</dd>
+      </dl></div><div class="section level2">
+      <h2 id="filtering">Filtering<a class="anchor" aria-label="anchor" href="#filtering"></a></h2>
+      
+      <p class="section-desc"></p><p>Functions for creating database filters</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="getRunsFilters.html">getRunsFilters()</a></code> 
+        </dt>
+        <dd>Find runFilters</dd>
       </dl><dl><dt>
           
-          <code><a href="tagme.html">tagme()</a></code> 
+          <code><a href="listRunsFilters.html">listRunsFilters()</a></code> 
         </dt>
-        <dd>Download motus tag detections to a database</dd>
+        <dd>Returns a dataframe of the filters stored in the local database.</dd>
       </dl><dl><dt>
           
-          <code><a href="tellme.html">tellme()</a></code> 
+          <code><a href="createRunsFilter.html">createRunsFilter()</a></code> 
         </dt>
-        <dd>report how much new data motus has for a tag detection database</dd>
+        <dd>Create a new filter records that can be applied to runs</dd>
       </dl><dl><dt>
           
-          <code><a href="timeToSunriset.html">timeToSunriset()</a></code> 
+          <code><a href="deleteRunsFilter.html">deleteRunsFilter()</a></code> 
         </dt>
-        <dd>Obtain time to and from sunrise/sunset for a dataframe containing POSIXct times</dd>
+        <dd>Delete a filter  matching a filter name (and optionally a project ID)</dd>
       </dl><dl><dt>
           
           <code><a href="writeRunsFilter.html">writeRunsFilter()</a></code> 
         </dt>
         <dd>Write to the local database the probabilities associated with runs for a filter</dd>
+      </dl></div><div class="section level2">
+      <h2 id="administration">Administration<a class="anchor" aria-label="anchor" href="#administration"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="getAccess.html">getAccess()</a></code> 
+        </dt>
+        <dd>Return accessible projects and receivers</dd>
+      </dl><dl><dt>
+          
+          <code><a href="motusLogout.html">motusLogout()</a></code> 
+        </dt>
+        <dd>Forget login credentials for motus.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="checkVersion.html">checkVersion()</a></code> 
+        </dt>
+        <dd>Verifies the version of the package against the admInfo table of a motus file. Those should match
+if the updateMotusDb function has been properly loaded by the tagme function.</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
