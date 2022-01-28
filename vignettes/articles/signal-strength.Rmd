@@ -246,3 +246,4 @@ ggplot(data = filter(df_ambig, date < "2015-09-01"),
   facet_wrap(~motusTagID, ncol = 1)
 ```
 
+> **What Next?** [Explore all articles](index.html)

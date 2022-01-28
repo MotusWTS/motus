@@ -500,3 +500,5 @@ above), so one approach is this:
      - `Motus$acceptReprocessedData <- TRUE`; always accept batches of data from reprocessing events
      - `Motus$acceptReprocessedData <- FALSE`; never accept batches of data from reprocessing events
      - `Motus$acceptReprocessedData <- NA` (default); ask about each reprocessing event
+
+> **What Next?** [Explore all articles](index.html)
