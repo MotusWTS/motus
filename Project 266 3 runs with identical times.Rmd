@@ -1,0 +1,155 @@
+---
+title: "R Notebook"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=T}
+Sys.setenv(TZ = 'UTC')
+
+library(motus)
+library(tidyverse)
+library(data.table)
+library(leaflet)
+
+# load helper function, a time-saving collection of functions I often use
+source('C:/GitHub/motus_scripts/helper_functions.R')
+
+# log into motus
+motus_login()
+
+# define data directory
+if (file.exists('//tsclient/D/')) {
+  dd <- 'C:/MotusData/'
+} else
+  dd <- remoted('D:/MotusData/')
+
+# rds directory
+outdir <- remoted('D:/OneDrive/R/StationSummary/')
+
+# data to download
+d <- 266
+
+```
+
+
+
+```{r download data or connect to local .motus file}
+
+
+# path to local .motus file (if one exists)
+# this just makes it quicker to check whether there is a .motus file
+# regardless of the kind of data being downloaded
+dbpath <- paste0(dd,
+                 ifelse(grepl('CTT|SG|Lotek', d), d, paste0('Project-', d)),
+                 '.motus')
+
+# download the data
+m <- tagme(
+  projRecv = d,
+  new = !file.exists(dbpath),
+  update = T,
+  forceMeta = T,
+  dir = dd
+)
+
+# update metadata system wide explicitly
+metadata(m)
+```
+
+
+
+```{r create and save allruns table}
+
+# create allruns and modify timestamps
+allruns <- tbl(m, 'allruns') %>%
+  as.data.table() %>%
+  mutate(
+    tsBeginCorrected = as.POSIXct(tsBeginCorrected, tz = 'UTC', origin = '1970-01-01'),
+    tsEndCorrected = as.POSIXct(tsEndCorrected, tz = 'UTC', origin = '1970-01-01')
+  )
+
+# Save allruns as RDS locally
+saveRDS(allruns,
+        file = paste0(
+          outdir,
+          'allruns_',
+          ifelse(grepl('CTT|SG|Lotek', d), d, paste0('Project-', d)),
+          '_',
+          Sys.Date(),
+          '.RDS'
+        ))
+```
+
+
+
+```{r load allruns from file}
+# loads the most recent all runs RDS file in the outdir directory (if one exists)
+allruns_rdsfile <- max(gtools::mixedsort(list.files(
+  outdir,
+  pattern = paste0('allruns_',
+                   ifelse(
+                     grepl('CTT|SG|Lotek', d), d, paste0('Project-', d)
+                   )),
+  full.names = T
+)))
+
+if (file.exists(allruns_rdsfile)) {
+  allruns <- read_rds(allruns_rdsfile)
+} else
+  message('allruns RDS file does not exist')
+
+# summarize runs with runLen > 3
+goodruns_summary <- allruns %>%
+  filter(runLen > 3) %>%
+  summarize_runs()                                            
+```
+
+
+
+```{r create and save alltags}
+# create alltags
+alltags <- tbl(m, 'alltags') %>%
+  as.data.table() %>%
+  mutate(tsCorrected = as.POSIXct(tsCorrected, tz = 'UTC', origin = '1970-01-01'))
+
+# save alltags as RDS
+saveRDS(alltags,
+        file = paste0(
+          outdir,
+          'alltags_',
+          ifelse(grepl('CTT|SG|Lotek', d), d, paste0('Project-', d)),
+          '_',
+          Sys.Date(),
+          '.RDS'
+        ))
+
+```
+
+
+
+```{r load alltags file and summarize}
+alltags_rdsfile <- max(gtools::mixedsort(list.files(
+  outdir,
+  pattern = paste0('alltags_',
+                   ifelse(
+                     grepl('CTT|SG|Lotek', d), d, paste0('Project-', d)
+                   )),
+  full.names = T
+)))
+
+
+if (file.exists(alltags_rdsfile)) {
+  alltags <- read_rds(alltags_rdsfile)
+} else
+  message('alltags RDS file does not exist')
+
+
+# summarize runs with runLen > 3
+goodhits_summary <- alltags %>%
+  filter(runLen > 3) %>%
+  summarize_hits()
+
+
+```
