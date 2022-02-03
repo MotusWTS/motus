@@ -43,18 +43,42 @@ jobs:
         run: R CMD INSTALL .
 
       - name: Deploy English Docs
+        if: contains(github.ref, 'overhaul')
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
-          mv _pkgdown_en.yml _pkgdown.yml
-          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE, lazy = TRUE)'
-          mv _pkgdown.yml _pkgdown_en.yml
+          cp _pkgdown_en.yml _pkgdown.yml
+          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
+          rm _pkgdown.yml
       - name: Deploy French Docs
+        if: contains(github.ref, 'overhaul')
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
-          mv _pkgdown_fr.yml _pkgdown.yml
-          mv pkgdown/README_fr.md pkgdown/index.md
-          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE, lazy = TRUE)'
-          mv _pkgdown.yml _pkgdown_fr.yml
-          mv pkgdown/index.md pkgdown/README_fr.md
+          cp _pkgdown_fr.yml _pkgdown.yml
+          cp pkgdown/README_fr.md pkgdown/index.md
+          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
+          rm _pkgdown.yml
+          rm pkgdown/index.md
+      - name: Deploy English DEV Docs
+        if: contains(github.ref, 'beta')
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          cp _pkgdown_en.yml _pkgdown.yml
+          sed -i 's/mode: release/mode: dev/g' _pkgdown.yml
+          sed -i 's/motus\//motus\/dev/g' _pkgdown.yml
+          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
+          rm _pkgdown.yml
+      - name: Deploy French DEV Docs
+        if: contains(github.ref, 'beta')
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          cp _pkgdown_fr.yml _pkgdown.yml
+          cp pkgdown/README_fr.md pkgdown/index.md
+          sed -i 's/destination: fr/destination: dev_fr/g' _pkgdown.yml
+          sed -i 's/motus\/fr/motus\/dev_fr/g' _pkgdown.yml
+          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
+          rm _pkgdown.yml
+          rm pkgdown/index.md

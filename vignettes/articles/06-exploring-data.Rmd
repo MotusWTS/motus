@@ -437,5 +437,5 @@ ggplot(data = na.lakes, aes(x = long, y = lat))+
 The functions above provide examples of how you can begin exploring your data and are by no means exhaustive. 
 
 
-> **What Next?** [Check out all articles](../index.html)
+> **What Next?** [Explore all articles](index.html)
 

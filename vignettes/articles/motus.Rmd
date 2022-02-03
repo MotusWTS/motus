@@ -1,5 +1,5 @@
 ---
-title: "Getting started"
+title: "Get started"
 ---
 
 <!-- Parts of this were originally at the end of Chapter 3 - Accessing Data -->
@@ -22,8 +22,9 @@ Now we'll download some data.
 Here we're downloading project 176 (sample data, use user name and password 'motus.sample').
 You can use your own project number or receiver name.
 
+We use the `tagme()` function to download the data
 ```{r}
-sql.motus <- tagme(projRecv = 176, new = FALSE, update = TRUE, dir = "./data/")
+sql.motus <- tagme(176, new = FALSE, update = TRUE, dir = "./data/")
 ```
 
 `tagme()` includes several options. Here we're using:
@@ -45,8 +46,8 @@ Next, we can convert this to a data frame (a flat file; see [Converting to flat 
 Convert to flat (`collect()`) and transform the time stamps into date/time format
 ```{r}
 df.alltags <- tbl.alltags %>%
-              collect() %>%
-              mutate(ts = as_datetime(ts))
+  collect() %>%
+  mutate(ts = as_datetime(ts))
 ```
  
 If you want to save this flat file, you can export as RDS (see [Exporting detections in Chapter 3](03-accessing-data.html#exporting-detections))
@@ -54,6 +55,8 @@ If you want to save this flat file, you can export as RDS (see [Exporting detect
 saveRDS(df.alltags, "my_motus_data.rds")
 ```
 
+Use caution when producing a flat file as using the full suite of fields can use a lot of memory.
+This can slow R down considerably when dealing with large datasets. 
 
 ## Workflow summary
  
@@ -65,11 +68,9 @@ For your own data we suggest creating a script (or scripts) with the following w
 4. Output the resulting data as an .rds file (see [Exporting detections in Chapter 3](03-accessing-data.html#exporting-detections)). 
 We suggest using RDS instead of CSV, because the RDS format preserves the underlying structure of the data (e.g. times stay as times). If you want to export your data to another program, then a CSV format might be preferred.  
 
-We caution that producing a flat file using the full suite of fields can use a lot of memory, and can slow R down considerably when dealing with large datasets. For some combinations of data sets and computers, it may be impossible to directly use data frames in R. If that is the case, then this is the point in your workflow where you should carefully consider the information you need from within your data set (for example, how it is aggregated) and simplify it. You can always return to this script and creating a new RDS file with different variables, or aggregated at a different scale.
-
-> **What next?** [Check out the in-depth walkthrough starting with Chapter 1 - Introduction](01-introduction.html)
-
 ```{r include = FALSE}
 unlink("my_motus_data.rds")
 ```
 
+> **What next?** Check out the walkthrough starting with [Chapter 1 - Introduction](01-introduction.html)
+> <span style = "font-size: 70%">(<a href = "index.html">Explore all articles</a>)</span>
