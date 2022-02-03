@@ -744,9 +744,6 @@ tbl.alltags.sub <- anti_join(tbl(sql.motus, "alltags"),
 
 
 
-> **Next** [Chapter 6 - Exploring detections data](06-exploring-data.html)
-
-
 [^1]: 
 In these examples we use the latitude/longitude of the receivers as a proxy for tag location:
 `recvDeployLat` and `recvDeployLon`. 
@@ -756,3 +753,6 @@ See [Working with GPS points](gps.html) for more advanced examples with GPS.
 ```{r include = FALSE}
 unlink("data/dfAlltagsSub.rds")
 ```
+
+> **Next** [Chapter 6 - Exploring detections data](06-exploring-data.html)
+> <span style = "font-size: 70%">(<a href = "index.html">Explore all articles</a>)</span>

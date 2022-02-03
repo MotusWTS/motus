@@ -2,13 +2,40 @@
 title: "Troubleshooting"
 ---
 
-As a first step, always ensure you are using the latest version of the motus package (see `checkVersion()`), and you have all required packages installed, loaded, and up to date (see [Chapter 2 - Loading packages](#02-loading-packages.html)).  
+As a first step, always ensure you are using the latest version of the `motus` package (see `checkVersion()`), and you have all required packages installed, loaded, and up to date (see [Chapter 2 - Loading packages](#02-loading-packages.html)).  
 
-While attempting to download data with the motus package, you may encounter errors, many of which are likely due to an interrupted connection. 
-**Always ensure you are connected to the internet when using the `tagme()` function with `update = TRUE`**.
-Most issues can be solved by either logging out of the motus package, or by restarting R and resuming the download using `tagme()`. 
-If errors persist and you are unable to download your data, the server may be temporarily offline.
-Please contact Motus with any concerns at <motus@birdscanada.org>.
+We have outline some problems and possible solutions for working with `motus`. 
+Generally, if all else fails, uninstalling R and/or R Studio, and reinstalling the latest R version typically works. Depending on how much customization you have made to your R configuration, this may be the quickest option available.
+
+## Installation Problems
+
+### Updating `motus`
+If you are updating your version of `motus` from a version <1.5.0 to >= 1.5.0 (i.e. from when `motusClient` was a separate package), you will have best results if you first remove `motus` and `motusClient` and reinstall from scratch:
+
+```R
+remove.packages(c("motus", "motusClient"))
+```
+
+Now you can install v1.5.0+.
+
+### Cannot remove old versions
+
+If you get errors "cannot remove prior installation of package ..." (e.g. `dplyr`) while trying to install motus, this could be due to having multiple R sessions active. You can try the following:
+
+1. find out your R package library location: `Sys.getenv("R_LIBS_USER")` or `.libPaths()`
+2. close any session of R and/or R Studio
+3. in the library folder, manually delete the package that failed to remove (e.g. `dplyr`)
+4. restart R and manually install the package again e.g. `install.packages("dplyr")`
+
+Another possible cause of this problem relates to file permissions in your library folders (e.g. libraries installed in c:\program files\R\R-3.x.x\library\). To confirm this, you can try running R "as administrator" (right-clicking the R icon), or use `SUDO R`  (Linux/Ubuntu) and trying installation again. If this resolves your problem, you should consider setting your libraries in a new folder where your logged in user has full access:
+
+```R
+# confirm the libPaths location(s)
+.libPaths()
+# add a new libPaths default location
+.libPaths("c:/users/myusername/R/win-libraries")
+```
+
 
 ## General Problems
 
@@ -36,13 +63,21 @@ remotes::update_packages()
 motusLogout()
 ```
 
-## Resume data download
+## Data downloads
+While attempting to download data with the `motus` package, you may encounter errors, many of which are likely due to an interrupted connection. 
+**Always ensure you are connected to the internet when using the `tagme()` function with `update = TRUE`**.
+Most issues can be solved by either logging out, or by restarting R and resuming the download.
 
 To resume your data download, run `tagme()` again, but do not include `new = TRUE`:
 
 ```{r, eval = FALSE}
 tagme(project.num, update = TRUE, dir = ...)
 ```
+
+If errors persist and you are unable to download your data, the server may be temporarily offline.
+
+> Please contact Motus with any concerns at <motus@birdscanada.org>.
+
 
 ## Google Maps
 As of October 16, 2018 recent updates require the use of a Google key to access google maps. 
@@ -63,7 +98,7 @@ Once you have your access key, you'll need to provide it with the call `register
 
 Then you can create Google maps with the `ggmap` package using the `get_googlemap()` function and specifying the lat/lon center of your map (as opposed to bounding box as with stamen maps).
 
-## Common problems and solutions:
+## Common errors
 
 ### I cannot access Project 176 / I download 0 records from Project 176
 Remember that project 176 is *only* accessible with the username and password: **`motus.sample`**.
@@ -158,3 +193,5 @@ The easiest solution is to delete your current `.motus` file and download from s
 Of course, there is always the possibility that these articles contains errors! 
 
 For further problems, please contact <motus@birdscanada.org>
+
+> **What Next?** [Explore articles](index.html)

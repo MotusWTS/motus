@@ -131,3 +131,4 @@ Behind the scenes, various functions read and process the raw detections data to
 While most users will not need to call on the internal data processing functions, a complete list of functions within the Motus server R package can be found on the GitHub [motusServer repository](https://github.com/MotusWTS/motusServer). 
 
 > **Next** [Chapter 3 - Accessing detections data](03-accessing-data.html)
+> <span style = "font-size: 70%">(<a href = "index.html">Explore all articles</a>)</span>
