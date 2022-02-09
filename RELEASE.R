@@ -95,8 +95,9 @@ devtools::check_win_oldrelease()
 # English
 file.copy("_pkgdown_en.yml", "_pkgdown.yml")
 pkgdown::build_site(lazy = TRUE)
-#pkgdown::build_home_index()
-#pkgdown::init_site()
+pkgdown::build_home_index()
+pkgdown::init_site()
+pkgdown::build_article("articles/01-introduction")
 unlink("_pkgdown.yml")
 
 # French

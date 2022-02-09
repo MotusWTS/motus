@@ -235,3 +235,5 @@ Future version of the `motus` package should give users access to specific infor
 
 [^3]: 
 Not *quite* the same because `motusFilter` does include some manual filtering.
+
+> **What Next?** [Explore all articles](index.html)

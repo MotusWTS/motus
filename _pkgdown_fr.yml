@@ -19,6 +19,12 @@ navbar:
     left:  [home, intro, reference, articles, news]
     right: [search, github, english, french]
   components:
+    troubleshooting:
+      text: Dépannage
+      href: articles/troubleshooting.html
+    reference:
+      text: Fonctions
+      href: reference/index.html
     english:
       text: EN
       href: ../index.html
@@ -26,17 +32,62 @@ navbar:
       text: FR
       href: index.html
 
-articles:
-
-- title: Notions de base
-  desc: Couvrant les bases du package motus R ainsi que les données Motus
-  navbar: ~
+reference:
+- title: Data
   contents:
-  - articles/motus
-  - articles/troubleshooting
-  - articles/motus-data
-  - articles/database-variables
+  - shorebirds
+  
+- title: Download data
+  contents: 
+  - tagme
+  - tellme
+  - activity
+  - metadata  
+  - nodeData
+  
+- title: Cleaning
+  desc: Helper functions for cleaning and preparing data
+  contents:
+  - filterByActivity
+  - clarify
 
+- title: Helper
+  contents:
+  - getGPS
+  - getRuns
+  - simSiteDet
+  - sunRiseSet
+  - timeToSunriset
+  - sqliteToRDS
+  - getMotusDBSrc
+  
+- title: Plotting
+  contents:
+  - starts_with("plot")
+  
+- title: Summarizing
+  contents: 
+  - starts_with("siteSum")
+  - starts_with("siteTrans")
+  - starts_with("tagSum")
+  
+- title: Filtering
+  desc: Functions for creating database filters
+  contents:
+  - ends_with("Filters")
+  - ends_with("Filter")
+  
+- title: Administration
+  contents:
+  - getAccess
+  - motusLogout
+  - checkVersion
+
+- title: internal
+  contents:
+  - motus
+
+articles:
 - title: Visite complète
   desc: "This is a complete walk-through, originally compiled as the Motus R book.
         These articles are largely based on the original Motus R Book by 
@@ -58,3 +109,8 @@ articles:
   - articles/vanishing-bearings
   - articles/advanced-modelling
   - articles/signal-strength
+
+- title: Référence
+  contents:
+  - articles/motus-data
+  - articles/database-variables

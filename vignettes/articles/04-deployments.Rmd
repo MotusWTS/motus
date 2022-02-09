@@ -524,3 +524,4 @@ Metadata corrected online will automatically be corrected in your detection file
 If you have already downloaded your detection data, you can update the existing file to include this new data (see [Updating a database in Chapter 3](03-accessing-data.html#updating-a-database)).
 
 > **Next** [Chapter 5 - Data cleaning](05-data-cleaning.html)
+> <span style = "font-size: 70%">(<a href = "index.html">Explore all articles</a>)</span>

@@ -71,3 +71,5 @@ v %>%
   DT::datatable(options = list(pageLength = nrow(v), dom = "ft"), 
                 rownames = FALSE)
 ```
+
+> **What Next?** [Explore all articles](index.html)

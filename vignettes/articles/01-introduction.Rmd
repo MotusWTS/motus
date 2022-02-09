@@ -99,3 +99,4 @@ The core 'Motus Team' includes Joey Bernard, John Brzustowski, Tara Crewe, Zoe C
 Taylor, P. D., T. L. Crewe, S. A. Mackenzie, D. Lepage, Y. Aubry, Z. Crysler, G. Finney, C. M. Francis, C. G. Guglielmo, D. J. Hamilton, R. L. Holberton, P. H. Loring, G. W. Mitchell, D. R. Norris, J. Paquet, R. A. Ronconi, J. Smetzer, P. A. Smith, L. J. Welch, and B. K. Woodworth. 2017. The Motus Wildlife Tracking System: a collaborative research network to enhance the understanding of wildlife movement. Avian Conservation and Ecology 12(1):8. https://doi.org/10.5751/ACE-00953-120108.
 
 > **Next** [Chapter 2 - Installing packages](02-installing-packages.html)
+> <span style = "font-size: 70%">(<a href = "index.html">Explore all articles</a>)</span>
