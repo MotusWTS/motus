@@ -535,10 +535,12 @@ df.alltags <- tbl.alltags %>%
                 mutate(ts = as_datetime(ts, tz = "UTC", origin = "1970-01-01"))              
 ```
 
-> **Next** [Chapter 4 - Project Deployments](04-deployments.html)
-
 ```{r, include = FALSE}
 # Clean up!
 unlink(list.files("./data/", "rds|csv", full.names = TRUE))
 ```
+
+
+> **Next** [Chapter 4 - Project Deployments](04-deployments.html)
+> <span style = "font-size: 70%">(<a href = "index.html">Explore all articles</a>)</span>
 
