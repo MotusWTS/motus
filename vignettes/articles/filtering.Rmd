@@ -117,7 +117,7 @@ However, users can fine-tune the filter by adjusting these cutoffs.
 
 To get the same results as our above example with `motusFilter`, we can use `filterByActivity()` with the default arguments and only return `good` (`runLen` > 3) runs.
 ```{r}
-alltags_filtered2 <- filterByActivity(sql.motus, return = "all") %>% collect()
+alltags_filtered2 <- filterByActivity(sql.motus, return = "good")
 ```
 
 **Note** that `filterByActivity()` requires the SQLite database connection (not a flat data frame).
