@@ -13,7 +13,7 @@ sql.motus <- motus:::get_sample_data()
 >
 > **Advanced Topics:**  
 >
-> - `.motus` data base tables (*coming soon!*)
+> - [`motus` data base variables](database_variables.html)
 > - [Working with GPS points](gps.html)
 
 
