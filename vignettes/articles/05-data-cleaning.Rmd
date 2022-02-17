@@ -211,7 +211,7 @@ Other options are to just use date (e.g `date = as_date(ts)`).
 
 Here we create a summary data frame that we can filter to produce different plots:
 
-```{r eval = TRUE}
+```{r eval = TRUE, warning = FALSE}
 df.summary <- tbl.alltags.sub %>%
   filter(tagProjID == 176, # keep only tags registered to the sample project
          !is.na(recvDeployLat) | !(recvDeployLat == 0)) %>% # drops data without lon/lat
@@ -219,7 +219,7 @@ df.summary <- tbl.alltags.sub %>%
            tagDepLon, tagDepLat, recvDeployLat, recvDeployLon) %>%
   #summarizing by runID to get max run length and mean time stamp:
   summarize(max.runLen = max(runLen), 
-            ts = mean(ts)) %>% 
+            ts = mean(ts), .groups = "drop") %>% 
   arrange(motusTagID, ts) %>%
   collect()
 ```
