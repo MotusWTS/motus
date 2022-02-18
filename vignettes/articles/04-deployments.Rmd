@@ -113,8 +113,8 @@ df.tagDeps <- tbl.tagDeps %>%
   filter(projectID == 176) %>%
   collect() %>%
   as.data.frame() %>% # once in df format, can format dates with lubridate
-  mutate(tsStart = as_datetime(tsStart, tz = "UTC", origin = "1970-01-01"),
-         tsEnd = as_datetime(tsEnd, tz = "UTC", origin = "1970-01-01")) 
+  mutate(timeStart = as_datetime(tsStart),
+         timeEnd = as_datetime(tsEnd)) 
 
 anti_join(df.tags, df.tagDeps, by = "tagID") 
 ```
@@ -137,7 +137,7 @@ Here, we check whether there are any tags with more than one deployment in the s
 df.alltags <- tbl(sql.motus, "alltags") %>% 
   collect() %>% 
   as.data.frame() %>%     # for all fields in the df (data frame)
-  mutate(ts = as_datetime(ts, tz = "UTC", origin = "1970-01-01"))
+  mutate(time = as_datetime(ts))
 
 df.alltags %>%
   select(motusTagID, tagDeployID) %>%
@@ -229,11 +229,11 @@ Is the range in deployment latitude and longitude reasonable? Are the values for
 
 ```{r}
 df.tagDeps %>%
-  select(tagID, projectID, tsStart, tsEnd, speciesID, latitude, longitude) %>%
+  select(tagID, projectID, timeStart, timeEnd, speciesID, latitude, longitude) %>%
   summary()
 ```
 
-There are no missing start dates (`tsStart`), and deployment start dates range from `r min(year(df.tagDeps$tsStart))` to `r max(year(df.tagDeps$tsStart))`, which is reasonable for this project.  
+There are no missing start dates (`timeStart`), and deployment start dates range from `r min(year(df.tagDeps$timeStart))` to `r max(year(df.tagDeps$timeStart))`, which is reasonable for this project.  
 
 The `speciesID`s are numeric, and somewhat meaningless without an ability to assign an actual species name to the numeric ID, which we do next, however there are no missing values. 
 
@@ -303,8 +303,8 @@ df.projRecvs <- tbl.recvDeps %>%
   filter(projectID == 176) %>%
   collect() %>%
   as.data.frame() %>%
-  mutate(tsStart = as_datetime(tsStart, tz = "UTC", origin = "1970-01-01"),
-         tsEnd = as_datetime(tsEnd, tz = "UTC", origin = "1970-01-01"))
+  mutate(timeStart = as_datetime(tsStart),
+         timeEnd = as_datetime(tsEnd))
 
 summary(df.projRecvs)
 ```
@@ -316,8 +316,8 @@ The following code keeps only variables of interest (by removing those we do not
 
 ```{r}
 df.projRecvs %>%
-  mutate(dateStart = date(tsStart)) %>% 
-  select(-serno,-fixtureType, -macAddress, -tsStart, -tsEnd, -elevation, 
+  mutate(dateStart = date(timeStart)) %>% 
+  select(-serno,-fixtureType, -macAddress, -timeStart, -timeEnd, -elevation, 
          -projectID, -status, -receiverType, -siteName) %>%
   arrange(deviceID, latitude, dateStart)
 ```
@@ -334,17 +334,17 @@ The timing of deployments can be displayed graphically; horizontal line(s) in th
 
 # put data in long format to simplify plotting (or use geom_segment)
 df.projRecvs.long <- df.projRecvs %>%
-  select(deviceID, deployID, tsStart, tsEnd) %>% 
-  gather(when, ts, c(tsStart, tsEnd)) %>%
+  select(deviceID, deployID, timeStart, timeEnd) %>% 
+  gather(when, time, c(timeStart, timeEnd)) %>%
   # fake end date:
-  mutate(ts = if_else(is.na(ts), max(ts, na.rm = TRUE) + duration(1, "month"), ts)) 
+  mutate(time = if_else(is.na(time), max(time, na.rm = TRUE) + duration(1, "month"), time)) 
 
 ggplot(data = df.projRecvs.long, 
-       aes(x = ts, y = as.factor(deviceID), colour = as.factor(deployID))) +
+       aes(x = time, y = as.factor(deviceID), colour = as.factor(deployID))) +
   theme(legend.position = "none") +
   geom_line(lwd = 3) + 
   # instead, centre to the right
-  geom_text(data = filter(df.projRecvs.long, when == "tsStart"), 
+  geom_text(data = filter(df.projRecvs.long, when == "timeStart"), 
             aes(label = deployID), hjust = "left", nudge_y = 0.2, size = 3, angle = 45) +
   scale_color_viridis_d() +
   theme_bw() +
@@ -355,15 +355,15 @@ If you want more detail for a given year (or all years) you can either subset an
 
 ```{r}
 ggplot(data = df.projRecvs.long, 
-       aes(x = yday(ts), y = as.factor(deviceID), colour = as.factor(deployID))) +
+       aes(x = yday(time), y = as.factor(deviceID), colour = as.factor(deployID))) +
   theme_bw() +
   theme(legend.position = "none") + 
   geom_line(lwd = 3) + 
   # centre labels to the left
-  geom_text(data = filter(df.projRecvs.long, when == "tsStart"), 
+  geom_text(data = filter(df.projRecvs.long, when == "timeStart"), 
             aes(label = deployID), hjust = "left", nudge_y = 0.4, size = 3) +
   labs(x = "Day of year", y = "Receiver ID") +
-  facet_grid(year(ts) ~ ., scales = "free") +
+  facet_grid(year(time) ~ ., scales = "free") +
   scale_color_viridis_d()
   
 ```
@@ -378,8 +378,8 @@ the following steps plot the location of Motus receivers on a map of North Ameri
 df.recvDeps <- tbl.recvDeps %>%
   collect() %>%
   as.data.frame() %>%
-  mutate(tsStart = as_datetime(tsStart, tz = "UTC", origin = "1970-01-01"),
-         tsEnd = as_datetime(tsEnd, tz = "UTC", origin = "1970-01-01"))
+  mutate(timeStart = as_datetime(tsStart),
+         timeEnd = as_datetime(tsEnd))
 ```
 
 **b. Load base map files**
@@ -448,7 +448,7 @@ ggplot(data = region) +
   theme_bw() +  
   labs(x = "", y = "") +
   geom_point(data = filter(df.projRecvs, 
-                           year(tsStart) == 2016, 
+                           year(timeStart) == 2016, 
                            !is.na(latitude)),  # remove mobile receivers
              aes(longitude, latitude, colour = as.factor(deviceID)), size = 2, shape = 19)+
   scale_colour_viridis_d(name = "Receiver ID") 
@@ -484,7 +484,7 @@ df.antDeps <- tbl.antDeps %>%
 # receiver deployments; select variables of interest
 df.recvDeps <- df.recvDeps %>%
   select(deployID, receiverType, deviceID, name, latitude, longitude, 
-         isMobile, tsStart, tsEnd, projectID, elevation) 
+         isMobile, timeStart, timeEnd, projectID, elevation) 
 
 df.stationDeps <- left_join(df.recvDeps, df.antDeps, by = "deployID")
 ```
@@ -513,7 +513,7 @@ Subset the records with missing antenna bearing to see if these can be fixed:
 ```{r}
 df.stationDeps %>%
   filter(is.na(bearing)) %>%
-  select(-elevation, -deviceID, -tsEnd)
+  select(-elevation, -deviceID, -timeEnd)
 ```
 
 Receiver deployments with missing antenna bearing(s) are restricted to deployments of omni-directional antennas or mobile receivers, and so the missing values make sense.

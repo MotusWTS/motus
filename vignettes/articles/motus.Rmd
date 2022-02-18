@@ -43,11 +43,11 @@ tbl.alltags <- tbl(sql.motus, "alltags")
 
 Next, we can convert this to a data frame (a flat file; see [Converting to flat data in Chapter 3](03-accessing-data.html#converting-to-flat-data))
 
-Convert to flat (`collect()`) and transform the time stamps into date/time format
+Convert to flat (`collect()`) and create a date/time column `time` from the numeric timestamps, `ts`.
 ```{r}
 df.alltags <- tbl.alltags %>%
   collect() %>%
-  mutate(ts = as_datetime(ts))
+  mutate(time = as_datetime(ts))
 ```
  
 If you want to save this flat file, you can export as RDS (see [Exporting detections in Chapter 3](03-accessing-data.html#exporting-detections))

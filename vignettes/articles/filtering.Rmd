@@ -195,13 +195,13 @@ You may also be interested more generally in exploring which data have only shor
 For example, the following code shows the maximum run length at all sites by month (for those runs which haven't been removed by filtering).
 
 Here we will collect and summarize by receiver and month maximum run lengths. 
-We'll convert `ts` to a datetime format with `as_datetime()` from the lubridate package and we'll use the `month()` function to pull out months.
+We'll create a date/time column `time` from the `ts` column using `as_datetime()` from the lubridate package and we'll use the `month()` function to pull out months.
 
 ```{r, fig.asp = 4, fig.width = 5, out.width = "50%"}
 max_runlen <- tbl(sql.motus, "alltags") %>%
   collect() %>%
-  mutate(ts = as_datetime(ts, tz = "UTC"), # convert ts to POSIXct format
-         month = month(ts)) %>%
+  mutate(time = as_datetime(ts),
+         month = month(time)) %>%
   group_by(recvDeployName, month) %>%
   summarize(max.rl = max(runLen))
 

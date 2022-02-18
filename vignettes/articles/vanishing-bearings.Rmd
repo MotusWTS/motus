@@ -137,12 +137,13 @@ library(motusData)
 # during the Spring of 2015.
 
 # We also do a couple manipulations here, to reorder the levels of the
-# recvSiteName factor, and order the data by ts.
+# recvSiteName factor, and order the data by time.
 
 df.vanish <- vanishBearing %>%
+  rename(time = ts) %>%
   mutate(recvSiteName = reorder(recvSiteName, recvLat),
          motusTagID = as.factor(as.character(motusTagID))) %>% # order sites by latitude
-  arrange(ts) # arrange by ts
+  arrange(time) # arrange bytime
 ```
 
 ### Select individuals that show clear departure detections
@@ -155,7 +156,7 @@ We look for clear departures by first plotting latitude against time.
 In this case, we can see the birds departing north past several stations:
 
 ```{r}
-ggplot(data = df.vanish, aes(x = ts, y = recvLat, colour = as.factor(recvSiteName))) + 
+ggplot(data = df.vanish, aes(x = time, y = recvLat, colour = as.factor(recvSiteName))) + 
   geom_point(pch = 21) +
   facet_wrap(~ motusTagID, scales = "free", ncol = 1) +
   theme_bw()
@@ -167,8 +168,8 @@ We plot signal strength by time for a subset of the data, to show the last few h
 
 
 ```{r}
-ggplot(data = filter(df.vanish, motusTagID == 16823, ts > "2015-05-30 00:00:00"), 
-       aes(x = ts, y = sig, colour = as.factor(port))) + 
+ggplot(data = filter(df.vanish, motusTagID == 16823, time > "2015-05-30 00:00:00"), 
+       aes(x = time, y = sig, colour = as.factor(port))) + 
   theme_bw() + 
   geom_point(pch = 21) +
   facet_grid(recvSiteName ~ .)
@@ -189,7 +190,7 @@ Continuing with tag 16823, let's find the departure time.
 
 ```{r}
 ggplot(data = filter(df.vanish, motusTagID == 16823), 
-       aes(x = ts, y = sig, colour= as.factor(antBearing))) + 
+       aes(x = time, y = sig, colour= as.factor(antBearing))) + 
   theme_bw() + 
   geom_point() +
   facet_grid(recvSiteName ~ .)
@@ -203,9 +204,9 @@ By zooming in we can find the exact departure time.
 ```{r}
 ggplot(data = filter(df.vanish, 
                      motusTagID == 16823,  
-                     ts > "2015-05-30 03:03:00",  
-                     ts < "2015-05-30 03:10:00"), 
-       aes(x = ts, y = sig, colour= as.factor(antBearing))) + 
+                     time > "2015-05-30 03:03:00",  
+                     time < "2015-05-30 03:10:00"), 
+       aes(x = time, y = sig, colour= as.factor(antBearing))) + 
   theme_bw() + 
   geom_point()
 ```
@@ -230,10 +231,10 @@ dep.16791 <- as.data.frame(cbind(16791, "2015-05-08 02:41:40"))
 
 ## put them all together
 df.departTime <- rbind(dep.16823, dep.16867, dep.16791)
-names(df.departTime) <- c("motusTagID", "ts_depart")
+names(df.departTime) <- c("motusTagID", "time_depart")
 
 ## convert time to posixCT using Lubridate functionality
-df.departTime <- mutate(df.departTime, ts_depart = ymd_hms(ts_depart))
+df.departTime <- mutate(df.departTime, time_depart = ymd_hms(time_depart))
 
 df.departTime
 
@@ -274,7 +275,7 @@ max.sig <- -17.8707
 # in this case, right join should drop any individuals that don't have departure
 # times in df.departTime
 df.vanishBearing <- right_join(df.vanish, df.departTime, by = "motusTagID") %>%
-  filter(ts >= ts_depart,
+  filter(time >= time_depart,
          recvSiteName == depart.station) %>%
   distinct() %>%
   mutate(sig.norm = (sig - (min.sig))/((max.sig)-(min.sig)), 
@@ -288,8 +289,8 @@ df.vanishBearing <- right_join(df.vanish, df.departTime, by = "motusTagID") %>%
                                                                    units = "degrees", 
                                                                    template = "none", 
                                                                    rotation = "clock")),
-            minutes.used = as.duration(min(ts) %--% max(ts))) %>%
-  as.data.frame()
+            minutes.used = as.duration(min(time) %--% max(time)), 
+            .groups = "drop")
 ```
 
 The resulting `df.vanish` dataframe contains the `motusTagID`, the vanishing bearing of the tag, the time in seconds/minutes used to estimate the bearing, and the receiver's name and coordinates. 

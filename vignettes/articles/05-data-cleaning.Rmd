@@ -205,23 +205,22 @@ If we don't, we risk trying to plot thousands or millions of points on a plot (w
 **Simplify the data for plotting**  
 
 We can simplify the data by summarizing by the `runID`. 
-If you want to summarize at a finer/coarser scale, you can also create other groups. 
-The simplest alternative is a rounded timestamp variable; for example by using `mutate(ts.h = plyr::round_any(ts, 3600)`.
-Other options are to just use date (e.g `date = as_date(ts)`).
+If you want to summarize at a finer/coarser scale, you can also create other groups to summarize by.
 
 Here we create a summary data frame that we can filter to produce different plots:
 
 ```{r eval = TRUE, warning = FALSE}
 df.summary <- tbl.alltags.sub %>%
   filter(tagProjID == 176, # keep only tags registered to the sample project
-         !is.na(recvDeployLat) | !(recvDeployLat == 0)) %>% # drops data without lon/lat
+         !is.na(recvDeployLat) | !(recvDeployLat == 0)) %>% # drop data without lon/lat
   group_by(motusTagID, runID, recvDeployName, ambigID, 
            tagDepLon, tagDepLat, recvDeployLat, recvDeployLon) %>%
   #summarizing by runID to get max run length and mean time stamp:
   summarize(max.runLen = max(runLen), 
             ts = mean(ts), .groups = "drop") %>% 
   arrange(motusTagID, ts) %>%
-  collect()
+  collect() %>%
+  mutate(time = as_datetime(ts))
 ```
 
 We would initially plot a subset of tags by either latitude or longitude[^1], to get an overview of where there might be issues. 
@@ -231,7 +230,7 @@ We avoid examining the ambiguous tags for now.
 ```{r}
 ggplot(data = filter(df.summary,
                      motusTagID %in% c(16011, 16035, 16036, 16037, 16038, 16039)), 
-       aes(x = as_datetime(ts), y = recvDeployLat)) +
+       aes(x = time, y = recvDeployLat)) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) + 
   geom_point() + 
@@ -248,10 +247,10 @@ tbl.alltags.sub %>%
   filter(motusTagID %in% c(16035, 16037, 16039),
          recvDeployLat < 44) %>% 
   collect() %>%
-  mutate(ts = as_datetime(ts)) %>%
-  filter(month(ts) == 9) %>%
-  group_by(recvDeployName, month = month(ts), runLen) %>%
-  summarize(n = length(ts), 
+  mutate(time = as_datetime(ts)) %>%
+  filter(month(time) == 9) %>%
+  group_by(recvDeployName, month = month(time), runLen) %>%
+  summarize(n = length(time), 
             n.tags = length(unique(motusTagID)), 
             .groups = "drop") %>%
   arrange(runLen)
@@ -267,8 +266,8 @@ Hypothetically, if we decided that those detections in September were false posi
 df.block.1 <- tbl.alltags.sub %>%
   filter(motusTagID %in% c(16035, 16037, 16039)) %>%
   collect() %>%
-  mutate(ts = as_datetime(ts)) %>%
-  filter(month(ts) == 9) %>%
+  mutate(time = as_datetime(ts)) %>%
+  filter(month(time) == 9) %>%
   select(motusTagID, runID) %>%
   distinct() %>%
   collect()
@@ -286,7 +285,7 @@ And then plot our data again, having omitted those detections:
 ```{r, fig.height=6}
 ggplot(data = filter(df.summary.sub,
                      motusTagID %in% c(16011, 16035, 16036, 16037, 16038, 16039)), 
-       aes(x = as_datetime(ts), y = recvDeployLat)) +
+       aes(x = time, y = recvDeployLat)) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) + 
   geom_point() + 
@@ -347,7 +346,7 @@ ambigTags2 <- tbl.alltags.sub %>%
 # and merge that with 'df.summary'
 
 df.summary.ambig <- left_join(df.summary.ambig, ambigTags2, by = "motusTagID") %>% 
-  arrange(ts)
+  arrange(time)
 ```
 
 Plot the results! 
@@ -355,7 +354,7 @@ We'll add some information to the plot, showing where (in time) the tags are act
 We can then inspect the overall plots (or portions of them) to determine if we can contextually unambiguously assign a detection of an ambiguous tag to a single deployment.  
 ```{r, fig.width=7, fig.height=7}
 ggplot(data = df.summary.ambig, 
-       aes(x = as_datetime(ts), y = recvDeployLat, colour = ambig)) +
+       aes(x = time, y = recvDeployLat, colour = ambig)) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) + 
   geom_point() + 
@@ -414,10 +413,11 @@ Let's examine a simple plot.
 ```{r}
 df.plot <- tbl.alltags.sub %>%
   filter(motusTagID %in% c(22905, 23319)) %>%
-  collect()
+  collect() %>%
+  mutate(time = as_datetime(ts))
 
 ggplot(data = df.plot,
-       aes(x = as_datetime(ts), y = sig, group = recvDeployName, colour = recvDeployName)) + 
+       aes(x = time, y = sig, group = recvDeployName, colour = recvDeployName)) + 
   geom_point() + 
   theme_bw() +
   labs(x = "Time", y = "Signal strength") +
@@ -462,10 +462,10 @@ Then plot the ambiguous detections by date and receiver.
 ```{r}
 df.ambig.171 <- filter(tbl.alltags.sub, ambigID == -171) %>% 
   collect() %>%
-  mutate(ts = as_datetime(ts),
-         date = as_date(ts))
+  mutate(time = as_datetime(ts),
+         date = as_date(time))
 
-ggplot(data = df.ambig.171, aes(x = ts, y = sig, colour = as.factor(port))) +
+ggplot(data = df.ambig.171, aes(x = time, y = sig, colour = as.factor(port))) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) + 
   geom_point() + 
@@ -512,10 +512,12 @@ An initial plot suggested that all of the detections represent a migratory fligh
 ```{r}
 df.ambig.114 <- tbl.alltags.sub %>%
   filter(ambigID == -114) %>%
-  mutate(LatLonStationName = paste(recvDeployLat, recvDeployLon, recvDeployName, sep=": ")) %>%
-  collect()
+  collect() %>%
+  mutate(LatLonStationName = paste(recvDeployLat, recvDeployLon, 
+                                   recvDeployName, sep=": "),
+         time = as_datetime(ts))
 
-ggplot(data = df.ambig.114, aes(x = as_datetime(ts), y = sig, colour = LatLonStationName)) +
+ggplot(data = df.ambig.114, aes(x = time, y = sig, colour = LatLonStationName)) +
   geom_point() + 
   theme_bw() 
 ```
@@ -556,12 +558,11 @@ We plot the ambiguous detections by date to examine the period of overlap.
 df.ambig.106 <- tbl.alltags.sub %>%
   filter(ambigID == -106) %>%
   collect() %>% 
-  mutate(ts = as_datetime(ts),
-         date = as_date(ts))
+  mutate(time = as_datetime(ts),
+         date = as_date(time), 
+         col = paste(recvDeployLat, recvDeployLon, recvDeployName, sep = ": "))
 
-ggplot(data = df.ambig.106, 
-       aes(x = ts, y = sig, 
-           colour = paste(recvDeployLat, recvDeployLon, recvDeployName, sep = ": "))) +
+ggplot(data = df.ambig.106, aes(x = time, y = sig, colour = col)) +
   theme_bw() +
   geom_point() + 
   scale_colour_discrete(name = "Lat/Lon and\nStation Name") +
@@ -616,12 +617,12 @@ Tag 23316 was deployed by the James Bay Shorebird Project (sample project) about
 ```{r}
 df.ambig.56 <- tbl.alltags.sub %>%
   filter(ambigID == -56) %>%
-  mutate(sig = ifelse(sig > 0, sig * -1, sig)) %>%
-  collect()
+  collect() %>%
+  mutate(sig = ifelse(sig > 0, sig * -1, sig),
+         time = as_datetime(ts),
+         col = paste(recvDeployLat, recvDeployLon, recvDeployName, sep=": "))
 
-ggplot(data = df.ambig.56, 
-       aes(x = as_datetime(ts), y = recvDeployLon, 
-           colour = paste(recvDeployLat, recvDeployLon, recvDeployName, sep=": "))) +
+ggplot(data = df.ambig.56, aes(x = time, y = recvDeployLon, colour = col)) +
   theme_bw() +
   geom_point() + 
   scale_colour_discrete(name="Lat/Lon and\nStation Name") 
@@ -631,12 +632,11 @@ We can see from the plot that a tag is detected consistently near longitude -65,
 It's likely all the detections at -65 belong to `motusTagID` 23316, but it is also clear that anything informative about this ambiguity occurs between about 9-11 October, so let's zoom in on that part of the data set. 
 
 ```{r}
-ts.begin <- ymd_hms("2016-10-06 00:00:00")
-ts.end <- ymd_hms("2016-10-12 23:00:00")
+time.begin <- "2016-10-06 00:00:00"
+time.end <- "2016-10-12 23:00:00"
 
-ggplot(data = filter(df.ambig.56, ts > ts.begin, ts < ts.end),
-       aes(x = as_datetime(ts), y = recvDeployLon, 
-           colour = paste(recvDeployLat, recvDeployLon, recvDeployName, sep = ": "))) +
+ggplot(data = filter(df.ambig.56, time > time.begin, time < time.end),
+       aes(x = time, y = recvDeployLon, colour = col)) +
   theme_bw() +
   geom_point() + 
   scale_colour_discrete(name = "Lat/Lon and\nStation Name") 
@@ -666,12 +666,11 @@ We can make another more detailed plot of signal strength to examine these poten
 df.56.tmp <- tbl.alltags.sub %>%
   filter(ambigID == -56, recvDeployLon < -70) %>%
   collect() %>% 
-  mutate(ts = as_datetime(ts),
-         date = as_date(ts))
+  mutate(time = as_datetime(ts),
+         date = as_date(time),
+         col = paste(recvDeployLat, recvDeployLon, recvDeployName, sep = ": "))
 
-ggplot(data = df.56.tmp, 
-       aes(x = ts, y = sig, 
-           colour = paste(recvDeployLat, recvDeployLon, recvDeployName, sep = ": "))) + 
+ggplot(data = df.56.tmp, aes(x = time, y = sig, colour = col)) + 
   theme_bw() +
   geom_point() + 
   scale_colour_discrete(name = "Lat/Lon and\nStation Name") + 

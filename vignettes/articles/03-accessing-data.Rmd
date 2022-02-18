@@ -332,19 +332,20 @@ summary(df.alltags)   # summary of each column in your df
 ```
 
 Note that the format of the time stamp (`ts`) field is numeric and represents seconds since 1 January 1970. 
-We recommend that when you transform your tables into flat dataframes, that you format the time stamp using the `lubridate` package at that time:
+We recommend that when you transform your tables into flat dataframes, that you format the time stamp using the `lubridate` package. This results in the `time` column in date/time format, leaving the `ts` column as numeric. *Note:* By default, `as_datetime()` uses an origin of 1 January 1970 and UTC as the timezone, exactly what we want!
 
 ```{r collect_TimeStamp, eval = TRUE}
 df.alltags <- tbl.alltags %>% 
   collect() %>% 
   as.data.frame() %>%     # for all fields in the df (data frame)
-  mutate(ts = as_datetime(ts, tz = "UTC", origin = "1970-01-01"))
+  mutate(time = as_datetime(ts))
 
 # the tz = "UTC" is not necessary here, provided you have set your system time to UTC
 # ... but it serves as a useful reminder!
 ```
 
 Note that time stamps can only be manipulated in this way *after* collecting the data into a flat dataframe.
+Throughout these articles, we use `ts` for numeric time stamps and `time` for date/time formatted time stamps.
 
 If you want to load only part of your entire virtual table (e.g. certain fields, certain tags, or all tags from a specified project or species), you can use `dplyr` functions to filter the data before collecting into a dataframe. Some examples are below:  
 
@@ -368,7 +369,7 @@ df.alltagsSub <- tbl.alltags %>%
   filter(motusTagID %in% c(16011, 23316)) %>% 
   collect() %>% 
   as.data.frame() %>%    
-  mutate(ts = as_datetime(ts, tz = "UTC", origin = "1970-01-01"))    
+  mutate(time = as_datetime(ts))    
 ```
 
 3. To select a specific species:
@@ -379,14 +380,14 @@ df.4670 <- tbl.alltags %>%
   filter(speciesID == 4670) %>%  
   collect() %>% 
   as.data.frame() %>%    
-  mutate(ts = as_datetime(ts, tz = "UTC", origin = "1970-01-01"))  
+  mutate(time = as_datetime(ts))  
 
 # filter to only Red Knot (using English name)
 df.redKnot <- tbl.alltags %>%
   filter(speciesEN == "Red Knot") %>%   
   collect() %>% 
   as.data.frame() %>%    
-  mutate(ts = as_datetime(ts, tz = "UTC", origin = "1970-01-01"))    
+  mutate(time = as_datetime(ts))    
 ```
 
 Using `dplyr`, your virtual table can also be summarized before converting to a flat file.
@@ -532,7 +533,7 @@ tbl.alltags <- tbl(sql.motus, "alltags")
 df.alltags <- tbl.alltags %>%
                 collect() %>%
                 as.data.frame() %>% # dataframe ("flat") object of alltags table
-                mutate(ts = as_datetime(ts, tz = "UTC", origin = "1970-01-01"))              
+                mutate(time = as_datetime(ts))              
 ```
 
 ```{r, include = FALSE}

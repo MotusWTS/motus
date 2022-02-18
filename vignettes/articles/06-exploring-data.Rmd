@@ -73,7 +73,7 @@ df.alltags.sub <- left_join(tbl.alltags, tbl.filter, by = c("runID", "motusTagID
          -speciesGroup, -gpsLat, -gpsLon, -recvAlt, -recvSiteName) %>%
   collect() %>%
   as.data.frame() %>%
-  mutate(ts = as_datetime(ts),  # work with dates AFTER transforming to flat file
+  mutate(time = as_datetime(ts),  # work with times AFTER transforming to flat file
          tagDeployStart = as_datetime(tagDeployStart),
          tagDeployEnd = as_datetime(tagDeployEnd),
          recvDeployName = if_else(is.na(recvDeployName), 
@@ -103,30 +103,27 @@ sql.motus %>%
   select(ts, motusTagID, runLen, speciesEN, tagDepLat, tagDepLon, 
          recvDeployLat, recvDeployLon) %>% 
   collect() %>%
-  mutate(ts = as_datetime(ts)) %>% 
+  mutate(time = as_datetime(ts)) %>% 
   summary()
 
 # same summary for the filtered sql data
 df.alltags.sub %>% 
-  select(ts, motusTagID, runLen, speciesEN, tagDepLat, tagDepLon, 
+  select(time, motusTagID, runLen, speciesEN, tagDepLat, tagDepLon, 
          recvDeployLat, recvDeployLon) %>% 
-  collect() %>% 
-  mutate(ts = as_datetime(ts)) %>% 
   summary()
 ```
 
 The `dplyr` package allows you to easily summarize data by group, manipulate variables, or create new variables based on your data.  
 
-We can manipulate existing variables or create new ones with `dplyr`'s `mutate()` function, here we'll convert ts to a POSIXct format, then make a new variable for year and day of year (`doy`).
+We can manipulate existing variables or create new ones with `dplyr`'s `mutate()` function, here we'll convert `ts` to a date/time format, then make a new variable for year and day of year (`doy`).
 
 We'll also remove the set of points with missing receiver latitude and longitudes. 
 These may be useful in some contexts (for example if the approximate location of the receiver is known) but can cause warnings or errors when plotting. 
 
 ```{r}
 df.alltags.sub <- df.alltags.sub %>%
-  mutate(ts = as_datetime(ts, tz = "UTC"), # convert ts to POSIXct format
-         year = year(ts), # extract year from ts
-         doy = yday(ts)) %>% # extract numeric day of year from ts
+  mutate(year = year(time), # extract year from time
+         doy = yday(time)) %>% # extract numeric day of year from time
   filter(!is.na(recvDeployLat))
 
 head(df.alltags.sub)
@@ -139,8 +136,8 @@ tagSummary <- df.alltags.sub %>%
   group_by(motusTagID) %>% 
   summarize(nDet = n(),
             nRecv = length(unique(recvDeployName)),
-            tsMin = min(ts),
-            tsMax = max(ts),
+            timeMin = min(time),
+            timeMax = max(time),
             totDay = length(unique(doy)))
 
 head(tagSummary)
@@ -156,9 +153,9 @@ tagRecvSummary <- df.alltags.sub %>%
   group_by(motusTagID, recvDeployName) %>% 
   summarize(nDet = n(),
             nRecv = length(unique(recvDeployName)),
-            tsMin = min(ts),
-            tsMax = max(ts),
-            totDay = length(unique(doy)))
+            timeMin = min(time),
+            timeMax = max(time),
+            totDay = length(unique(doy)), .groups = "drop")
 
 head(tagRecvSummary)
 ```
@@ -188,7 +185,7 @@ ggplot(data = df.alltags.sub.2, aes(x = hour, y = as.factor(motusTagID))) +
 Let's focus only on tags deployed in 2016, and we can colour the tags by species:
 
 ```{r}
-ggplot(data = filter(df.alltags.sub.2, year(as_datetime(tagDeployStart)) == 2016), 
+ggplot(data = filter(df.alltags.sub.2, year(tagDeployStart) == 2016), 
        aes(x = hour, y = as.factor(motusTagID), colour = speciesEN)) +
   theme_bw() + 
   geom_point() +
@@ -201,7 +198,7 @@ We can see how tags moved latitudinally by first ordering by hour, and colouring
 ```{r warnings = FALSE}
 df.alltags.sub.2 <- arrange(df.alltags.sub.2, hour)
 
-ggplot(data = filter(df.alltags.sub.2, year(as_datetime(tagDeployStart)) == 2016), 
+ggplot(data = filter(df.alltags.sub.2, year(tagDeployStart) == 2016), 
        aes(x = hour, y = recvDeployLat, col = as.factor(motusTagID), 
            group = as.factor(motusTagID))) + 
   theme_bw() + 
@@ -219,7 +216,7 @@ Let's examine fall 2016 detections of tag 22897 at Niapiskau; we facet the plot 
 ggplot(data = filter(df.alltags.sub, 
                      motusTagID == 22897, 
                      recvDeployName == "Niapiskau"), 
-       aes(x = ts, y = sig)) +
+       aes(x = time, y = sig)) +
   theme_bw() + 
   geom_point() + 
   labs(x = "Time", y = "Signal strength") +
@@ -234,10 +231,10 @@ We then zoom in on a certain timeframe and add that information to the above plo
 df.alltags.sub <- sunRiseSet(df.alltags.sub, lat = "recvDeployLat", lon = "recvDeployLon") 
 
 ggplot(data = filter(df.alltags.sub, motusTagID == 22897,
-                     ts > ymd("2016-10-11"),
-                     ts < ymd("2016-10-17"),
+                     time > "2016-10-11",
+                     time < "2016-10-17",
                      recvDeployName == "Niapiskau"), 
-       aes(x = ts, y = sig)) +
+       aes(x = time, y = sig)) +
   theme_bw() + 
   geom_point() + 
   labs(x = "Time of year", y = "Signal strength") +
@@ -256,8 +253,8 @@ df.alltags.sub <- mutate(df.alltags.sub,
 
 ggplot(data = filter(df.alltags.sub, 
                      motusTagID == 16039,
-                     ts < ymd("2015-10-01")), 
-       aes(x = ts, y = recvDeployName)) +
+                     time < "2015-10-01"), 
+       aes(x = time, y = recvDeployName)) +
   theme_bw() + 
   geom_point() + 
   labs(x = "Time of year", y = "Receiver name (ordered by latitude)")
@@ -267,9 +264,9 @@ We zoom in on a section of this plot and look at antenna bearings to see directi
 
 ```{r}
 ggplot(data = filter(df.alltags.sub, motusTagID == 16039, 
-                     ts > ymd("2015-09-14"), 
-                     ts < ymd("2015-10-01")), 
-       aes(x = ts, y = sig, col = as.factor(antBearing))) +
+                     time > "2015-09-14", 
+                     time < "2015-10-01"), 
+       aes(x = time, y = sig, col = as.factor(antBearing))) +
   theme_bw() + 
   geom_point() + 
   labs(x = "Time of day", y = "Signal strength") +
@@ -288,9 +285,7 @@ We will use code similar to the code we used in [Chapter 5 - Data cleaning](05-d
 ```{r}
 # Simplify the data by summarizing by the runID
 # If you want to summarize at a finer (or coarser) scale, you can also create
-# other groups. The simplest alternative is a rounded timestamp variable; for
-# example by using mutate(ts.h = plyr::round_any(ts, 3600) function call. Other
-# options are to just use date (e.g date = as_date(ts))
+# other groups.
 
 fun.getpath <- function(df) {
   df %>%
@@ -298,8 +293,8 @@ fun.getpath <- function(df) {
            !is.na(recvDeployLat) | !(recvDeployLat == 0)) %>% 
     group_by(motusTagID, runID, recvDeployName, ambigID, 
              tagDepLon, tagDepLat, recvDeployLat, recvDeployLon) %>%
-    summarize(max.runLen = max(runLen), ts.h = mean(ts)) %>%
-    arrange(motusTagID, ts.h) %>%
+    summarize(max.runLen = max(runLen), time = mean(time), .groups = "drop") %>%
+    arrange(motusTagID, time) %>%
     data.frame()
 } # end of function call
 
@@ -309,8 +304,8 @@ df.alltags.path <- fun.getpath(df.alltags.sub)
 ```{r}
 df.alltags.sub.path <- df.alltags.sub %>%
   filter(tagProjID == 176) %>% # only tags registered to project
-  arrange(motusTagID, ts) %>%       # order by time stamp for each tag
-  mutate(date = as_date(ts)) %>%    # create date variable
+  arrange(motusTagID, time) %>%       # order by time stamp for each tag
+  mutate(date = as_date(time)) %>%    # create date variable
   group_by(motusTagID, date, recvDeployName, ambigID, 
            tagDepLon, tagDepLat, recvDeployLat, recvDeployLon)
 
@@ -338,7 +333,7 @@ We add points for receivers and lines connecting consecutive detections by `motu
 # previous chapter)
 df.tmp <- df.alltags.path %>%
   filter(motusTagID %in% c(16011, 16035, 16036, 16037, 16038, 16039)) %>%
-  arrange(ts.h)  %>% # arrange by hour
+  arrange(time)  %>% # arrange by hour
   as.data.frame()
 
 # set limits to map based on locations of detections, ensuring they include the
@@ -371,21 +366,16 @@ We can also add points for all receivers that were active, but did not detect th
 tbl.recvDeps <- tbl(sql.motus, "recvDeps")
 df.recvDeps <- tbl.recvDeps %>% 
   collect() %>% 
-  as.data.frame() %>% 
-  mutate(tsStart = as_datetime(tsStart, tz = "UTC", origin = "1970-01-01"),
-         tsEnd = as_datetime(tsEnd, tz = "UTC", origin = "1970-01-01"),
+  mutate(timeStart = as_datetime(tsStart),
+         timeEnd = as_datetime(tsEnd),
          # for deployments with no end dates, make an end date a year from now
-         tsEnd = if_else(is.na(tsEnd), 
-                         as.POSIXct(format(Sys.time(), "%Y-%m-%d %H:%M:%S")) +
-                           dyears(1), 
-                         tsEnd), 
-         tsEnd = as.POSIXct(tsEnd, tz = "UTC", origin = "1970-01-01"))
+         timeEnd = if_else(is.na(timeEnd), Sys.time() + years(1), timeEnd))
 
 # get running intervals for all receiver deployments
-siteOp <- with(df.recvDeps, interval(tsStart, tsEnd))
+siteOp <- with(df.recvDeps, interval(timeStart, timeEnd))
 
 # set the date range you're interested in
-dateRange <- interval(as.POSIXct("2015-08-01"), as.POSIXct("2016-01-01"))
+dateRange <- interval(as_date("2015-08-01"), as_date("2016-01-01"))
 
 # create new variable "active" which will be set to TRUE if the receiver was
 # active at some point during your specified date range, and FALSE if not
@@ -433,7 +423,7 @@ gmap <-  get_stamenmap(bbox = c(left = -90, right = -57, bottom = 35, top = 55),
 # previous chapter)
 df.tmp <- df.alltags.path %>%
   filter(motusTagID %in% c(16011, 16035, 16036, 16037, 16038, 16039)) %>%
-  arrange(ts.h)  %>% # arange by hour
+  arrange(time)  %>% # arrange by hour
   as.data.frame()
 
 ggmap(gmap) +
