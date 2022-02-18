@@ -171,7 +171,7 @@ Here we round detection times to the nearest hour, then make a basic plot of hou
 
 ```{r}
 df.alltags.sub.2 <- df.alltags.sub %>%
-  mutate(hour = as.POSIXct(round(ts, "hour"))) %>% 
+  mutate(hour = hour(time)) %>% 
   select(motusTagID, port, tagDeployStart, tagDepLat, tagDepLon, 
          recvDeployLat, recvDeployLon, recvDeployName, antBearing, speciesEN, year, doy, hour) %>% 
   distinct()
@@ -179,7 +179,7 @@ df.alltags.sub.2 <- df.alltags.sub %>%
 ggplot(data = df.alltags.sub.2, aes(x = hour, y = as.factor(motusTagID))) +
   theme_bw() +
   geom_point() + 
-  labs(x = "Time (rounded to hour)", y = "MotusTagID")
+  labs(x = "Hour", y = "MotusTagID")
 ```
 
 Let's focus only on tags deployed in 2016, and we can colour the tags by species:
@@ -189,7 +189,7 @@ ggplot(data = filter(df.alltags.sub.2, year(tagDeployStart) == 2016),
        aes(x = hour, y = as.factor(motusTagID), colour = speciesEN)) +
   theme_bw() + 
   geom_point() +
-  labs(x = "Time (rounded to hour)", y = "MotusTagID") +
+  labs(x = "Hour", y = "MotusTagID") +
   scale_colour_discrete(name = "Species")
 ```
 
@@ -204,7 +204,7 @@ ggplot(data = filter(df.alltags.sub.2, year(tagDeployStart) == 2016),
   theme_bw() + 
   geom_point() +
   geom_path() +
-  labs(x = "Time (rounded to hour)", y = "Receiver latitude") +
+  labs(x = "Hour", y = "Receiver latitude") +
   scale_colour_discrete(name = "MotusTagID")
 ```
 
