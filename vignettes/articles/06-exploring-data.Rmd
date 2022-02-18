@@ -320,7 +320,7 @@ Mapping allows us to spatially view our data and connect sequential detections t
 world <- ne_countries(scale = "medium", returnclass = "sf") 
 lakes <- ne_load(type = "lakes", scale = "medium", category = 'physical',
                  returnclass = "sf",
-                 destdir = paste0(getwd(), "./map-data")) # use this if already downloaded shapefiles
+                 destdir = "map-data") # use this if already downloaded shapefiles
 ```
 
 Then, to map the paths, we set the x-axis and y-axis limits based on the location of receivers with detections. 

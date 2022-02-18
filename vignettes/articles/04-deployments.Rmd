@@ -5,6 +5,10 @@ title: "Chapter 4 - Tag and receiver deployments"
 ```{r setup, include = FALSE}
 # Get and update sample data to avoid messages later
 sql.motus <- motus:::get_sample_data()
+if(!file.exists("map-data/ne_50m_lakes.shp")) {
+  ne_download(scale = "medium", type = 'lakes', category = 'physical',
+              returnclass = "sf", destdir = "map-data")
+}
 ```
 
 > In this chapter, we'll go through checking retrieving and checking tag and receiver deployments. 
@@ -171,7 +175,7 @@ Load base map files from the `rnaturalearth` package. You will need to have the 
 ```{r eval = FALSE, message = FALSE, warning = FALSE}
 world <- ne_countries(scale = "medium", returnclass = "sf") 
 lakes <- ne_download(scale = "medium", type = 'lakes', category = 'physical',
-                     returnclass = "sf", destdir = "./map-data") # only need this first time downloading
+                     returnclass = "sf", destdir = "map-data") # only need this first time downloading
 
 ```
 
@@ -180,7 +184,7 @@ You only need to download the shapefiles once. If you return to an analysis late
 ```{r eval = FALSE, message = FALSE, warning = FALSE}
 lakes <- ne_load(type = "lakes", scale = "medium", category = 'physical',
                  returnclass = "sf",
-                 destdir = paste0(getwd(), "./map-data")) # use this if already downloaded shapefiles
+                 destdir = "map-data") # use this if already downloaded shapefiles
 
 ```
 
