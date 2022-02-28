@@ -26,28 +26,28 @@ These are called 'false positives'.
 
 Second, despite our best efforts to avoid it, duplicate tags are sometimes transmitting in the network at the same time.
 When two tags are deployed at the same time that have the same ID code, burst interval, and nominal transmit frequency, it results in situations where the detections may belong to either tag. 
-If that happens, we must rely on contextual information to separate them (if we can). We term these 'Ambiguous tags'. 
+If that happens, we must rely on contextual information to separate them (if we can). We term these 'ambiguous tags'. 
 
 Third, a tag can appear to be present when two tags are transmitting at the same time that by chance produce a signal that looks like a third tag that is not in fact present. 
-Such tags are most common at roosting sites or breeding colonies, where many tags are transmitting simultaneously. We term these 'Aliased tags'. 
-We do not deal explicitly with Aliased tags in this chapter; 
+Such tags are most common at roosting sites or breeding colonies, where many tags are transmitting simultaneously. We term these 'aliased tags'. 
+We do not deal explicitly with aliased tags in this chapter; 
 we are working on a way to globally identify them and eliminate them from the data. 
 We mention them here because you may encounter situations with what appear to be highly plausible detections that don't make biological sense.
-Please contact us if you think you have some of these Aliased tag detections in your database.
+Please contact us (motus@birdscanada.org) if you think you have some of these aliased tag detections in your database.
 
-The *goal of this chapter* is to provide you with the tools you need to check your data for false detections, and remove them from your data. 
+The goal of this chapter is to provide you with the tools you need to check your data for false detections, and remove them from your data. 
 We do so by providing example workflows that deal with 'false positives' and 'ambiguous tags' in the following steps: 
 
 1. **Preliminary Filter**  
 A run is a group of consecutive detections of a tag detected on a single antenna at a single receiver. 
 Very short runs and relatively short runs at noisy stations both have a high probability of being false positive detections.
-These can be omitted using the `motusFilter`. However, because you will likely lose some true detections in the process, we also recommend that after a full analysis of your data, you return to these detections and examine them individually, to determine (usually contextually) if they can be considered real.
+These can be omitted using the `motusFilter`. However, because you will likely lose some true detections in the process, we also recommend that after a full analysis of your data, you return to these detections and examine them individually to determine (usually contextually) if they can be considered real.
 
 2. **Examine individual tags**  
-Examine indiviudal tags and determine if runs in those tags are errors
+Examine individual tags and determine if runs in those tags are errors.
 
 3. **Ambiguous Detections**  
-Determine how many of your tag detections may be ambiguous detections
+Determine how many of your tag detections may be ambiguous detections.
 
 4. **Remove false detections from your data**
 
@@ -90,13 +90,13 @@ Please ensure your tag metadata are entered correctly.
 Before going further, **please check whether any of your tags were deployed more than once**, as described in [Chapter 4 - Number of deployments per tag](#number-of-deployments-per-tag). 
 If so, you will need to use `tagDeployID` or a combination of `motusTagID` and `tagDeployID` to uniquely define detections associated with a tag deployment (either will do, but combining the two fields will let you know which tagID is associated with each deployment). 
 
-In the sample data, all tags were deployed only once, and so we use the `motusTagID` as a unique identifier for a tag deployment in all R code throughout these articles 
+In the sample data, all tags were deployed only once, and so we use the `motusTagID` as a unique identifier for a tag deployment in all R code throughout these articles. 
 
 
 ## Preliminary filtering {#preliminary-filtering}
 Invariably you will run into some false detections in your tag detection data. 
 Sometimes these may be due to random glitches or noisy radio conditions. 
-The various outputs on the Motus web site are pre-filtered, but data downloaded via the `motus` R package provides access to **all** detections, allowing users more control over which detections to keep or omit. 
+The various outputs on the Motus web site are pre-filtered, but data downloaded via the `motus` R package provide access to **all** detections, allowing users more control over which detections to keep or omit. 
 Therefore, it is important to filter these out as part of your data cleaning process.
 
 As runs are composed of sequences of hits, the longer the run the more confident we can be that it represents a true detection. 
@@ -108,10 +108,10 @@ There are two filtering options in the `motus` R package that follow these ideas
 1. Easiest is the field/column called `motusFilter` found in the `runs` table and `alltags` view
 2. More customizable, is the function called `filterByActivity()`
 
-> Here we will continue with the `motusFilter` column, and encourage users to check out the article on [In-depth detections filtering](filtering.html) for more details on how the `motusFilter` is calculated and how to customize filtering with the `filterByActivity()` function
+Here we will continue with the `motusFilter` column, and encourage users to check out the article on [In-depth detections filtering](filtering.html) for more details on how the `motusFilter` is calculated and how to customize filtering with the `filterByActivity()` function.
 
 `motusFilter` is a column in the `runs` table and is a good first option for identifying detections that have a higher probability of being false. 
-Currently the `motusFilter` contains just two values `0` or `1`. 
+Currently the `motusFilter` contains just two values: `0` or `1`. 
 Runs with a `motusFilter` of `0` are considered "invalid" (i.e. have a low probability of being true detections) and could therefore be omitted. 
 
 ```{r}
@@ -126,14 +126,14 @@ tbl.alltags.sub <- tbl(sql.motus, "alltags") %>%
   filter(motusFilter == 1)
 ```
 
-To double check we can filter for short runs in the original `alltags` view
+To double check we can filter for short runs in the original `alltags` view:
 ```{r}
 tbl(sql.motus, "alltags") %>%
   select(hitID, runID, batchID, motusTagID, runLen) %>%
   filter(runLen <= 3)
 ```
 
-And compare this to our newly created filtered table `tbl.alltags.sub`
+And compare this to our newly created filtered table `tbl.alltags.sub`:
 ```{r}
 tbl.alltags.sub %>%
   select(hitID, runID, batchID, motusTagID, runLen) %>%
@@ -142,7 +142,7 @@ tbl.alltags.sub %>%
 
 
 Note that the filters may exclude some true detections in the process. 
-Therefore, we recommend that after a full analysis of your data, you return to these detections and examine them individually, to determine (usually contextually) if they can be considered real.
+Therefore, we recommend that after a full analysis of your data, you return to these detections and examine them individually to determine (usually contextually) if they can be considered real.
 
 With that in mind, let's keep track of the detections we've just removed.
 
@@ -155,13 +155,13 @@ df.block.0 <- tbl(sql.motus, "alltags") %>%
 
 ## Preliminary data checks
 
-Prior to more specific filtering the data, we will perform a few checks, summaries and plots of the data.
+Prior to more specific data filtering, we will perform a few checks, summaries and plots of the data.
 
 ### Checking receivers
 
 In our example, we will need to remove about 150 detections, because there is no geographic data associated with the receiver metadata, and so no way to determine the location of those detections. 
 
-For example, we can see which receivers are missing data by filtering by `is.na(recvDeployLat)` and `is.na(recvDeployName)`
+For example, we can see which receivers are missing data by filtering by `is.na(recvDeployLat)` and `is.na(recvDeployName)`:
 
 ```{r}
 tbl.alltags.sub %>%
@@ -191,8 +191,7 @@ df.alltags.sub <- tbl.alltags.sub %>%
 > If you take this route, remember that in all future examples you'll want to use
 > your new, flatted data frame `df.alltags.sub`, not the un-flatted `tbl.alltags.sub`
 
-**Note:** if you have GPS points in your data, you may wish to check out the article on [Working with GPS points](gps.html), 
-particularly [the section](gps.html#using-gps-locations) which details how you might wish to combine create new lat/lons with a combination of `recvDeployLat`/`recvDeployLon` and `gpsLat`/`gpsLon'`
+**Note:** If you have GPS points in your data, you may wish to check out the article on [Working with GPS points](gps.html), particularly [the section](gps.html#using-gps-locations) which details how you might wish to combine create new lat/lons with a combination of `recvDeployLat`/`recvDeployLon` and `gpsLat`/`gpsLon`.
 
 
 ### Summarize tag detections
@@ -206,25 +205,22 @@ If we don't, we risk trying to plot thousands or millions of points on a plot (w
 **Simplify the data for plotting**  
 
 We can simplify the data by summarizing by the `runID`. 
-If you want to summarize at a finer/coarser scale, you can also create other groups. 
-The simplest alternative is a rounded timestamp variable; for example by using `mutate(ts.h = plyr::round_any(ts, 3600)`.
-Other options are to just use date (e.g `date = as_date(ts)`).
+If you want to summarize at a finer/coarser scale, you can also create other groups to summarize by.
 
-Here we create a summary data frame that we can filter to produce different plots
+Here we create a summary data frame that we can filter to produce different plots:
 
-```{r eval = TRUE}
-df.plot <- tbl.alltags.sub %>%
+```{r eval = TRUE, warning = FALSE}
+df.summary <- tbl.alltags.sub %>%
   filter(tagProjID == 176, # keep only tags registered to the sample project
-         !is.na(recvDeployLat) | !(recvDeployLat == 0)) %>% # drops data without lon/lat
+         !is.na(recvDeployLat) | !(recvDeployLat == 0)) %>% # drop data without lon/lat
   group_by(motusTagID, runID, recvDeployName, ambigID, 
            tagDepLon, tagDepLat, recvDeployLat, recvDeployLon) %>%
   #summarizing by runID to get max run length and mean time stamp:
-  summarize(max.runLen = max(runLen, na.rm = TRUE), 
-            ts = mean(ts, na.rm = TRUE), .groups = "drop") %>% 
+  summarize(max.runLen = max(runLen), 
+            ts = mean(ts), .groups = "drop") %>% 
   arrange(motusTagID, ts) %>%
   collect() %>%
-  mutate(ts = plyr::round_any(ts, 3600),
-         ts = as_datetime(ts, tz = "UTC", origin = "1970-01-01"))
+  mutate(time = as_datetime(ts))
 ```
 
 We would initially plot a subset of tags by either latitude or longitude[^1], to get an overview of where there might be issues. 
@@ -232,9 +228,9 @@ Here, to simplify the example, we plot only six tags.
 We avoid examining the ambiguous tags for now. 
 
 ```{r}
-ggplot(data = filter(df.plot,
+ggplot(data = filter(df.summary,
                      motusTagID %in% c(16011, 16035, 16036, 16037, 16038, 16039)), 
-       aes(x = ts, y = recvDeployLat)) +
+       aes(x = time, y = recvDeployLat)) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) + 
   geom_point() + 
@@ -251,10 +247,10 @@ tbl.alltags.sub %>%
   filter(motusTagID %in% c(16035, 16037, 16039),
          recvDeployLat < 44) %>% 
   collect() %>%
-  mutate(ts = as_datetime(ts)) %>%
-  filter(month(ts) == 9) %>%
-  group_by(recvDeployName, month = month(ts), runLen) %>%
-  summarize(n = length(ts), 
+  mutate(time = as_datetime(ts)) %>%
+  filter(month(time) == 9) %>%
+  group_by(recvDeployName, month = month(time), runLen) %>%
+  summarize(n = length(time), 
             n.tags = length(unique(motusTagID)), 
             .groups = "drop") %>%
   arrange(runLen)
@@ -264,32 +260,32 @@ Since we have already filtered dubious detections, these remaining ones don't se
 If you are interested, you can re-run the code above, but on the full data frame (`tbl(sql.motus, "alltags")`) containing run lengths of 2 or 3. 
 You will see that there are likely false positive detections at these sites, that were already eliminated by filtering. 
 
-Hypothetically, if we decided that those detections in September were false positives, we could create a data frame that contains the `motusTagID`s and `runID`s for them.
+Hypothetically, if we decided that those detections in September were false positives, we could create a data frame that contains the `motusTagID`s and `runID`s for them:
 
 ```{r}
 df.block.1 <- tbl.alltags.sub %>%
   filter(motusTagID %in% c(16035, 16037, 16039)) %>%
   collect() %>%
-  mutate(ts = as_datetime(ts)) %>%
-  filter(month(ts) == 9) %>%
+  mutate(time = as_datetime(ts)) %>%
+  filter(month(time) == 9) %>%
   select(motusTagID, runID) %>%
   distinct() %>%
   collect()
 ```
 
-Remove them from our plotting data frame
+Remove them from our plotting data frame:
 
 ```{r}
-df.plot.sub <- df.plot %>%
+df.summary.sub <- df.summary %>%
   anti_join(df.block.1, by = c("motusTagID", "runID"))
 ```
 
 
-And then plot our data again, having omitted those detections
-```{r}
-ggplot(data = filter(df.plot.sub,
+And then plot our data again, having omitted those detections:
+```{r, fig.height=6}
+ggplot(data = filter(df.summary.sub,
                      motusTagID %in% c(16011, 16035, 16036, 16037, 16038, 16039)), 
-       aes(x = ts, y = recvDeployLat)) +
+       aes(x = time, y = recvDeployLat)) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) + 
   geom_point() + 
@@ -298,12 +294,12 @@ ggplot(data = filter(df.plot.sub,
   scale_x_datetime(date_labels = "%Y-%m-%d")
 ```
 
-The reader is encouraged to explore the rest of the tags within this group, to determine if there are additional false positives. 
+You are encouraged to explore the rest of the tags within this group, to determine if there are additional false positives. 
 
 ## Examining ambiguous detections {#ambiguous}
 
 Before we go further, we need to check to see if any tags have ambiguous detections.
-If there are, we will need to explore them, and create additional filters to remove detections from our database. 
+If any do, we will need to explore them, and create additional filters to remove detections from our database. 
 
 **Are any of your tags associated with ambiguous detections?**
 
@@ -325,30 +321,40 @@ df.ambigTags <- tbl.alltags.sub %>%
   select(ambigID, motusTagID) %>%
   filter(!is.na(ambigID)) %>%
   distinct() %>%
-  collect() %>%
-  mutate(newID = paste0(ambigID, ": ", motusTagID))
+  collect()
 ```
 
-Using our `df.plot`, data frame we can filter these detections.
+Using our `df.summary`, data frame we can filter these detections. We also need to create new IDs showing links between ambiguous and non-ambiguous detections of tags that have ambiguous detections:
 
 ```{r}
-df.plot.ambig <- filter(df.plot, motusTagID %in% df.ambigTags$motusTagID)
-```
+df.summary.ambig <- filter(df.summary, motusTagID %in% df.ambigTags$motusTagID) %>% 
+  mutate(ambig = !is.na(ambigID)) # Ambiguous or not? TRUE/FALSE
 
- 
-Create new ids showing links between ambiguous and non-ambiguous tags.
-```{r}
-df.plot.ambig <- mutate(df.plot.ambig,
-                        ambig = !is.na(ambigID), # Ambiguous or not? TRUE/FALSE
-                        newID = if_else(ambig, paste0(ambigID, ": ", motusTagID), NA_character_)) 
+# to put all ambiguous tags from the same project on the same plot together, we
+# need to create a new 'ambig tag' variable we call 'newID' that includes the 
+# multiple 'motusTagIDs' for each 'ambigID'
+
+ambigTags2 <- tbl.alltags.sub %>%
+  select(ambigID, motusTagID) %>%
+  filter(!is.na(ambigID)) %>%
+  distinct() %>%
+  collect() %>% 
+  group_by(ambigID) %>%
+  summarize(newID = paste(unique(ambigID), toString(motusTagID), sep = ": ")) %>%
+  left_join(df.ambigTags, by = "ambigID")
+
+# and merge that with 'df.summary'
+
+df.summary.ambig <- left_join(df.summary.ambig, ambigTags2, by = "motusTagID") %>% 
+  arrange(time)
 ```
 
 Plot the results! 
 We'll add some information to the plot, showing where (in time) the tags are actually ambiguous. 
 We can then inspect the overall plots (or portions of them) to determine if we can contextually unambiguously assign a detection of an ambiguous tag to a single deployment.  
-```{r}
-ggplot(data = df.plot.ambig, 
-       aes(x = ts, y = recvDeployLat, colour = ambig)) +
+```{r, fig.width=7, fig.height=7}
+ggplot(data = df.summary.ambig, 
+       aes(x = time, y = recvDeployLat, colour = ambig)) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) + 
   geom_point() + 
@@ -358,12 +364,15 @@ ggplot(data = df.plot.ambig,
 
 Let's deal with the easy ones first. 
 
-**ambigID -337: `motusTagID`s 10811 and 16011**
+**`ambigID` -337: `motusTagID`s 10811 and 16011**
 
 ```{r}
 tbl.alltags.sub %>%
   filter(ambigID == -337) %>%
-  count(motusTagID, tagDeployStart, tagDeployEnd, tagDepLat, tagDepLon)
+  count(motusTagID, tagDeployStart, tagDeployEnd, tagDepLat, tagDepLon) %>% 
+  collect() %>% 
+  mutate(tagDeployStart = as_datetime(tagDeployStart),
+         tagDeployEnd = as_datetime(tagDeployEnd))
 ```
 We can see from the plot that ambiguous tag -337 is ambiguous only at the beginning of the deployment.
 
@@ -384,13 +393,17 @@ df.block.2 <- tbl.alltags.sub %>%
   collect()
 ```
 
-**ambigID -134: motusTagIDs 22905 and 23319**
+**`ambigID` -134: `motusTagID`s 22905 and 23319**
 
 ```{r ambig134a}
 tbl.alltags.sub %>%
   filter(ambigID == -134) %>%
+  collect() %>% 
+  mutate(tagDeployStart = as_datetime(tagDeployStart),
+         tagDeployEnd = as_datetime(tagDeployEnd),
+         month = month(as_datetime(ts))) %>% 
   count(motusTagID, tagDeployStart, tagDeployEnd, 
-           tagDepLat, tagDepLon, month(ts))
+           tagDepLat, tagDepLon, month)
 ```
 
 Here we have a similar situation, but one that is a bit more complex. 
@@ -400,10 +413,11 @@ Let's examine a simple plot.
 ```{r}
 df.plot <- tbl.alltags.sub %>%
   filter(motusTagID %in% c(22905, 23319)) %>%
-  collect()
+  collect() %>%
+  mutate(time = as_datetime(ts))
 
 ggplot(data = df.plot,
-       aes(x = ts, y = sig, group = recvDeployName, colour = recvDeployName)) + 
+       aes(x = time, y = sig, group = recvDeployName, colour = recvDeployName)) + 
   geom_point() + 
   theme_bw() +
   labs(x = "Time", y = "Signal strength") +
@@ -414,7 +428,7 @@ It appears that these are overlapping detections, at two sites in proximity to o
 Additional information from the field researchers may enable us to disentangle them, but it is not clear from the data.
 
 We will therefore remove all detections of this ambiguous tag from the database. 
-To do so, we collect the motusTagID that we want to remove.
+To do so, we collect the `motusTagID`s that we want to remove.
 ```{r}
 df.block.3 <- tbl.alltags.sub %>%
   filter(ambigID == -134) %>% 
@@ -423,7 +437,7 @@ df.block.3 <- tbl.alltags.sub %>%
   collect()
 ```
 
-**ambigID -171: motusTagIDs 22778, 22902 and 22403**
+**`ambigID` -171: `motusTagID`s 22778, 22902 and 22403**
 
 The ambiguous detections for this tag, which occur in the Great Lakes region, could also belong to `motusTagID` 22778 from the RBrownAMWO project or `motusTagID` 24303 from the Neonics project. 
 Let's take a closer look at these detections.
@@ -439,18 +453,19 @@ tbl.alltags.sub %>%
   distinct() %>%
   arrange(start) %>%
   collect() %>%
-  as.data.frame()
+  mutate(start = as_datetime(start),
+         end = as_datetime(end))
 ```
 
-And plot the ambiguous detections by date and receiver. 
+Then plot the ambiguous detections by date and receiver. 
 
 ```{r}
 df.ambig.171 <- filter(tbl.alltags.sub, ambigID == -171) %>% 
   collect() %>%
-  mutate(ts = as_datetime(ts),
-         date = as_date(ts))
+  mutate(time = as_datetime(ts),
+         date = as_date(time))
 
-ggplot(data = df.ambig.171, aes(x = ts, y = sig, colour = as.factor(port))) +
+ggplot(data = df.ambig.171, aes(x = time, y = sig, colour = as.factor(port))) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) + 
   geom_point() + 
@@ -459,7 +474,7 @@ ggplot(data = df.ambig.171, aes(x = ts, y = sig, colour = as.factor(port))) +
 ```
 
 We see that there are a large number of ambiguous detections on 10 May 2017 at Old Cut (Long Point, Lake Erie, Ontario), consistent with a bird 'hanging around'.
-These are almost certainly detections of motusTagID '24303' which was deployed at Old Cut on 10 May 2017.
+These are almost certainly detections of `motusTagID` '24303' which was deployed at Old Cut on 10 May 2017.
 Subsequent detections on the 18th of May are near Old Cut (Bird Studies Canada HQ, Port Rowan, Ontario), and then a location to the North of Old Cut (Hagersville, Ontario). 
 These detections are consistent with a bird departing on migration. 
 Note in particular the pattern in the latter two panels of increasing then decreasing signal strength which indicates a bird is flying through the beam of an antenna.
@@ -474,7 +489,7 @@ df.block.4 <- tbl.alltags.sub %>%
   collect()
 ```
 
-**ambigID -114: motusTagIDs 22897 and 24298**
+**`ambigID` -114: `motusTagID`s 22897 and 24298**
 
 Next we look at the ambiguities for ambiguous tag -114.
 
@@ -485,24 +500,29 @@ tbl.alltags.sub %>%
   select(motusTagID, tagProjID, start = tagDeployStart, end = tagDeployEnd, 
          lat = tagDepLat, lon = tagDepLon, species = speciesEN) %>%
   distinct() %>%
-  arrange(start)
+  arrange(start) %>% 
+  collect() %>% 
+  mutate(start = as_datetime(start),
+         end = as_datetime(end))
 ```
 
-We again subset these and plot them. 
-An initial plot suggested that all of the detections are of a migratory flight, so we construct a somewhat different plot from the one above, that emphasizes this behaviour better. 
+We again subset these detections and plot them. 
+An initial plot suggested that all of the detections represent a migratory flight, so we construct a somewhat different plot from the one above that emphasizes this behaviour better. 
 
 ```{r}
 df.ambig.114 <- tbl.alltags.sub %>%
   filter(ambigID == -114) %>%
-  mutate(LatLonStationName = paste(recvDeployLat, recvDeployLon, recvDeployName, sep=": ")) %>%
-  collect()
+  collect() %>%
+  mutate(LatLonStationName = paste(recvDeployLat, recvDeployLon, 
+                                   recvDeployName, sep=": "),
+         time = as_datetime(ts))
 
-ggplot(data = df.ambig.114, aes(x = ts, y = sig, colour = LatLonStationName)) +
+ggplot(data = df.ambig.114, aes(x = time, y = sig, colour = LatLonStationName)) +
   geom_point() + 
   theme_bw() 
 ```
 
-Notice that the detections are consistent with a migratory departure from the Long Point area (Old Cut Field Station, Lake Erie, Ontario) about a week after the ambiguous tag 24298 was deployed at the same location. 
+Notice that these detections are consistent with a migratory departure from the Long Point area (Old Cut Field Station, Lake Erie, Ontario) about a week after the ambiguous tag 24298 was deployed at the same location. 
 This again suggests that these ambiguous detections can be removed from our data because they belong to another project. 
 
 ```{r}
@@ -513,10 +533,10 @@ df.block.5 <- tbl.alltags.sub %>%
   collect()
 ```
 
-**ambigID -106: motusTagIDs 17021 and 17357**
+**`ambigID` -106: `motusTagID`s 17021 and 17357**
 
 These two tags pose an interesting problem. 
-There is only a short period of overlap, between mid August 2015 and mid September. 
+There is only a short period of overlap, between mid-August 2015 and mid-September. 
 One individual is a Grey-cheeked Thrush, tagged in Colombia, the other a White-rumped Sandpiper, associated with the sample project. 
 
 ```{r}
@@ -526,7 +546,10 @@ tbl.alltags.sub %>%
   select(motusTagID, tagProjID, start = tagDeployStart, end = tagDeployEnd, 
          lat = tagDepLat, lon = tagDepLon, species = speciesEN) %>%
   distinct() %>%
-  arrange(start)
+  arrange(start) %>% 
+  collect() %>% 
+  mutate(start = as_datetime(start),
+         end = as_datetime(end))
 ```
 
 We plot the ambiguous detections by date to examine the period of overlap. 
@@ -534,13 +557,12 @@ We plot the ambiguous detections by date to examine the period of overlap.
 ```{r}
 df.ambig.106 <- tbl.alltags.sub %>%
   filter(ambigID == -106) %>%
-  mutate(ts = as_datetime(ts),
-         date = as_date(ts)) %>%
-  collect()
+  collect() %>% 
+  mutate(time = as_datetime(ts),
+         date = as_date(time), 
+         col = paste(recvDeployLat, recvDeployLon, recvDeployName, sep = ": "))
 
-ggplot(data = df.ambig.106, 
-       aes(x = ts, y = sig, 
-           colour = paste(recvDeployLat, recvDeployLon, recvDeployName, sep = ": "))) +
+ggplot(data = df.ambig.106, aes(x = time, y = sig, colour = col)) +
   theme_bw() +
   geom_point() + 
   scale_colour_discrete(name = "Lat/Lon and\nStation Name") +
@@ -548,7 +570,7 @@ ggplot(data = df.ambig.106,
 ```
 
 Both sets of detections are long run lengths, and look valid (increasing then decreasing signal strength). 
-They are about a day apart, and so it is possible they represent two different birds, or the departure flight of the white-rumped sandpiper from its staging ground. 
+They are about a day apart, and so it is possible they represent two different birds, or the departure flight of the White-rumped Sandpiper from its staging ground. 
 Let's use the `siteTrans()` function to examine the flight from Netitishi to MDR/Seal (in the Gulf of Maine).
 
 ```{r}
@@ -562,7 +584,7 @@ df.ambig.106 %>%
          dist, total.time = total.time, bearing)
 ```
 
-These detections are >1200 km distant from one another, but the flight speed (17 m/s) is consistent with a white-rumped Sandpiper. 
+These detections are >1200 km distant from one another, but the flight speed (17 m/s) is consistent with a White-rumped Sandpiper. 
 Given that the Gray-cheeked Thrush tag was near the end of its expected lifetime, we can reasonably claim these detections for our project, and remove the ambiguous detections associated with `motusTagID` 17021. 
 
 ```{r}
@@ -573,7 +595,7 @@ df.block.6 <- tbl.alltags.sub %>%
   collect()
 ```
 
-**ambigID -56: motusTagIDs 22867 and 23316**
+**`ambigID` -56: `motusTagID`s 22867 and 23316**
 
 These two tags were also both deployed by the same project. 
 
@@ -584,7 +606,10 @@ tbl.alltags.sub %>%
   select(motusTagID, tagProjID, start = tagDeployStart, end = tagDeployEnd, 
          lat = tagDepLat, lon = tagDepLon, species = speciesEN) %>%
   distinct() %>%
-  arrange(start)
+  arrange(start) %>% 
+  collect() %>% 
+  mutate(start = as_datetime(start),
+         end = as_datetime(end))
 ```
 
 Tag 23316 was deployed by the James Bay Shorebird Project (sample project) about three weeks after tag 22867, which was deployed from a location far to the west. 
@@ -592,12 +617,12 @@ Tag 23316 was deployed by the James Bay Shorebird Project (sample project) about
 ```{r}
 df.ambig.56 <- tbl.alltags.sub %>%
   filter(ambigID == -56) %>%
-  mutate(sig = ifelse(sig > 0, sig * -1, sig)) %>%
-  collect()
+  collect() %>%
+  mutate(sig = ifelse(sig > 0, sig * -1, sig),
+         time = as_datetime(ts),
+         col = paste(recvDeployLat, recvDeployLon, recvDeployName, sep=": "))
 
-ggplot(data = df.ambig.56, 
-       aes(x = recvDeployLon, y = ts, 
-           colour = paste(recvDeployLat, recvDeployLon, recvDeployName, sep=": "))) +
+ggplot(data = df.ambig.56, aes(x = time, y = recvDeployLon, colour = col)) +
   theme_bw() +
   geom_point() + 
   scale_colour_discrete(name="Lat/Lon and\nStation Name") 
@@ -607,19 +632,18 @@ We can see from the plot that a tag is detected consistently near longitude -65,
 It's likely all the detections at -65 belong to `motusTagID` 23316, but it is also clear that anything informative about this ambiguity occurs between about 9-11 October, so let's zoom in on that part of the data set. 
 
 ```{r}
-ts.begin <- ymd_hms("2016-10-06 00:00:00")
-ts.end <- ymd_hms("2016-10-12 23:00:00")
+time.begin <- "2016-10-06 00:00:00"
+time.end <- "2016-10-12 23:00:00"
 
-ggplot(data = filter(df.ambig.56, ts > ts.begin, ts < ts.end),
-       aes(x = ts, y = recvDeployLon, 
-           colour = paste(recvDeployLat, recvDeployLon, recvDeployName, sep = ": "))) +
+ggplot(data = filter(df.ambig.56, time > time.begin, time < time.end),
+       aes(x = time, y = recvDeployLon, colour = col)) +
   theme_bw() +
   geom_point() + 
   scale_colour_discrete(name = "Lat/Lon and\nStation Name") 
 ```
 
 We can see that the ambiguous tag was detected consistently at Niapiskau and Grand Ile before and after the period when it was also detected to the north and west (at Washkaugou and Piskwamish) and then to the south (NBNJ, SHNJ, and CONY). 
-We can look at this transition by filtering out the portion of the data not near Niapiskau, and again using the siteTrans function from the `motus` package. 
+We can look at this transition by filtering out the portion of the data not near Niapiskau, and again using the `siteTrans()` function from the `motus` package. 
 
 ```{r}
 # other tag is a duplicate
@@ -641,12 +665,12 @@ We can make another more detailed plot of signal strength to examine these poten
 ```{r}
 df.56.tmp <- tbl.alltags.sub %>%
   filter(ambigID == -56, recvDeployLon < -70) %>%
-  mutate(ts = as_datetime(ts),
-         date = as_date(ts))
+  collect() %>% 
+  mutate(time = as_datetime(ts),
+         date = as_date(time),
+         col = paste(recvDeployLat, recvDeployLon, recvDeployName, sep = ": "))
 
-ggplot(data = df.56.tmp, 
-       aes(x = ts, y = sig, 
-           colour = paste(recvDeployLat, recvDeployLon, recvDeployName, sep = ": "))) + 
+ggplot(data = df.56.tmp, aes(x = time, y = sig, colour = col)) + 
   theme_bw() +
   geom_point() + 
   scale_colour_discrete(name = "Lat/Lon and\nStation Name") + 
@@ -657,7 +681,7 @@ These look like typical fly-by patterns of increasing and then decreasing signal
 This, coupled with overall detection patterns and knowledge of the species, leads us to believe that the ambiguous detections can be reasonably divided between the two individuals; 
 one detected consistently around longitude -65 (23316), and the other migrating SW during the same period (22867).
 
-To address this problem, we need to create two filters - one that excludes ambiguous detections of tag 22867, and one that excludes some detections of 23316. 
+To address this problem, we need to create two filters: one that excludes ambiguous detections of tag 22867, and one that excludes some detections of 23316. 
 In this instance, we can do this most easily by filtering on `motusTagID` and `recvDeployName`. 
 
 
@@ -693,10 +717,9 @@ It is up to the user to decide which detections are reasonable in terms of the b
 
 ### Filter and save to RDS
 
-To filter the data, we can omit rows in the `df.block` data frames from the original data using a `anti_join()`, which removes rows from `x` (`tbl.alltags.sub`) which are present in `y` (`df.block`).
+To filter the data, we can omit rows in the `df.block` data frames from the original data using a `anti_join()`, which removes rows from `x` (`tbl.alltags.sub`) which are present in `y` (`df.block`). First we will combine all of our `df.block` data frames into a single data frame:
 
 ```{r message = FALSE, warning = FALSE}
-# combine our df.block data frames into a single dataframe
 df.block.all <- bind_rows(df.block.0, df.block.2, df.block.3,
                           df.block.4, df.block.5, df.block.6, df.block.7, 
                           df.block.8)
@@ -708,7 +731,7 @@ df.alltags.sub <- tbl(sql.motus, "alltags") %>%
 
 Now save the local data frame as an RDS file, for use in the next chapter. 
 Recall from [Exporting detections in Chapter 3](03-accessing-data.html#exporting-detections) that the RDS format preserves the R data structure, including time stamps.
-The other benefit of saving to RDS is that you have the output from a given workflow saved as a flat file, which you can access again with a simple `readRDS` statement.
+The other benefit of saving to RDS is that you have the output from a given workflow saved as a flat file, which you can access again with a simple `readRDS()` statement.
 
 ```{r}
 saveRDS(df.alltags.sub, file = "./data/dfAlltagsSub.rds")
@@ -735,8 +758,11 @@ df.block.all <- bind_rows(df.block.0, df.block.2, df.block.3,
 # create a new filter with name filtAmbigFalsePos and populate it with df.block.all
 tbl.filter <- writeRunsFilter(sql.motus, "filtAmbigFalsePos", 
                               df = df.block.all, delete = TRUE)
+```
 
-# obtain a table object where the filtered records from tbl.filter.1 have been removed
+Now you can obtain a table object where the filtered records from `tbl.filter` have been removed:
+
+```{r}
 tbl.alltags.sub <- anti_join(tbl(sql.motus, "alltags"), 
                              tbl.filter, 
                              by = c("runID", "motusTagID"))
@@ -747,7 +773,7 @@ tbl.alltags.sub <- anti_join(tbl(sql.motus, "alltags"),
 [^1]: 
 In these examples we use the latitude/longitude of the receivers as a proxy for tag location:
 `recvDeployLat` and `recvDeployLon`. 
-However, if your tags have GPS, you may wish to use a more precise lat/lon. 
+However, if your detections have GPS data from the receiver, you may wish to use a more precise lat/lon. 
 See [Working with GPS points](gps.html) for more advanced examples with GPS.
 
 ```{r include = FALSE}

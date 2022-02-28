@@ -11,11 +11,11 @@ knitr::opts_chunk$set(eval = FALSE) # Don't eval any chunks here
 ## Installing Motus R packages
 Two R packages have been developed for Motus users:
 
-1. `motus`: provides functions for downloading and updated detections and deployment data, as well as for creating summary plots, and transforming (add sun rise/sun set times) and analyzing Motus data.
+1. `motus`: provides functions for downloading and updating detection and deployment data, as well as for creating summary plots, and transforming (e.g. adding sunrise/sunset times) and analyzing Motus data.
 
 2. `motusData`: provides sample datasets used in some of these articles
 
-Motus **users** can install the latest stable versions of the R packages using `install.packages()` (see below). 
+Motus users can install the latest stable versions of the R packages using `install.packages()` (see below). 
 As with all R packages, you only need to install the packages once; 
 after installation, you need to load each package (using `library()`) each time you open a new R session. 
 
@@ -116,8 +116,8 @@ library(tidyverse)
 library(rworldmap)
 library(ggmap)
 ```
-We also install but do not load the `plyr` package; 
-we use it directly for the handy `round_any()` function (with the code `plyr::round_any()`), but loading it can cause problems with the `dplyr` functions:
+Install but do not load the `plyr` package; 
+you can use it directly for the handy `round_any()` function (with the code `plyr::round_any()`), but loading it can cause problems with `dplyr` functions:
 
 ```{r install plyr, eval = FALSE}
 install.packages("plyr")
@@ -126,7 +126,7 @@ install.packages("plyr")
 ## Internal data processing
 
 As an animal moves within the detection range of a Motus station, radio transmissions, or 'bursts', are detected by antenna(s) and recorded by a receiver. 
-These raw detection data are either uploaded to the Motus database instantaneously via internet connection, or downloaded from the receiver and uploaded to Motus manually.
+These raw detection data are either uploaded to the Motus database instantaneously via internet connection, or downloaded periodically from the receiver and uploaded to Motus manually.
 Behind the scenes, various functions read and process the raw detections data to produce the tag detections file that users access using the R package (see [Chapter 3 - Accessing Data](03-accessing-data.html)). 
 While most users will not need to call on the internal data processing functions, a complete list of functions within the Motus server R package can be found on the GitHub [motusServer repository](https://github.com/MotusWTS/motusServer). 
 

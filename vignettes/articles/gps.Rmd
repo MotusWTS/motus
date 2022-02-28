@@ -79,6 +79,7 @@ knots <- tbl(gps_tags, "alltags") %>%
 
 Now let's retrieve the daily median location of GPS points for these data.
 Note that we use both the original database `gps_tags` as well as the data subset `knots`. 
+Also note that the `getGPS()` function requires the original, numeric `ts` column, so if you want a date/time column it's best to rename it (i.e. `time = as_datetime(ts)`).
 
 ```{r}
 index_GPS <- getGPS(src = gps_tags, data = knots)
