@@ -13,7 +13,8 @@ tagme(
   forceMeta = FALSE,
   rename = FALSE,
   skipActivity = FALSE,
-  skipNodes = FALSE
+  skipNodes = FALSE,
+  skipDeprecated = FALSE
 )
 }
 \arguments{
@@ -50,6 +51,9 @@ newest version. If FALSE (default), user is prompted for action.}
 
 \item{skipNodes}{logical. Skip checking for and downloading \code{nodeData}? See
 \code{?nodeData} for more details}
+
+\item{skipDeprecated}{logical. Skip fetching list of deprecated batches
+stored in \code{deprecated}. See \code{?deprecateBatches()} for more details.}
 }
 \value{
 a dplyr::src_sqlite for the (possibly updated) database, or a list

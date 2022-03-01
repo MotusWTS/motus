@@ -153,6 +153,7 @@ prepGPS <- function(src) {
 }
 
 prepData <- function(src, data = NULL) {
+
   if(is.null(data)) {
     data <- dplyr::tbl(src, "alltags")
   } else {
@@ -160,6 +161,15 @@ prepData <- function(src, data = NULL) {
     if(!all(c("hitID", "batchID", "ts") %in% colnames(data))) {
       stop("'data' must be a subset of the 'alltags' view, containing ",
            "at least columns 'hitID', 'batchID' and 'ts'", call. = FALSE)
+    }
+    # Convert back to numeric in case user has changed it to date/time
+    if(is.data.frame(data)) {
+      if(lubridate::is.POSIXct(data$ts)) {
+        data <- dplyr::mutate(data, ts = as.numeric(.data$ts))
+      } else if(!is.numeric(data$ts)) {
+        stop("'ts' column in 'data' must either be a numeric time stamp or ",
+             "in POSIXct date/time format", call. = FALSE)
+      }
     }
   }
   dplyr::select(data, "hitID", "batchID", "ts")

@@ -54,11 +54,6 @@ Commonly used functions:
 \item \code{\link[=timeToSunriset]{timeToSunriset()}}
 }
 }
-
-We also include a practice data set:
-\itemize{
-\item \link{shorebirds}
-}
 }
 \references{
 Motus Wildlife Tracking System \url{http://motus.org}

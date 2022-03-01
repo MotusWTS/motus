@@ -58,7 +58,7 @@ updateMotusDb <- function(src, quiet = FALSE) {
       l <- lapply(v, function(sql) {
         if (sql != "") {
 
-	        e <- try(DBI::dbExecute(src$con, sql), silent = TRUE)
+	        e <- try(dbExecuteAll(src$con, sql), silent = TRUE)
 	        if(class(e) == "try-error") { # Deal with errors
 	          if(!stringr::str_detect(e, "duplicate column name: ")) {
 	            stop(e, call. = FALSE)
@@ -82,7 +82,7 @@ updateMotusDb <- function(src, quiet = FALSE) {
 
 checkViews <- function(src, update_sql, response = NULL) {
   # Motus views in database
-  motus_views <- c("alltags", "alltagsGPS", "allambigs")
+  motus_views <- c("alltags", "alltagsGPS", "allruns", "allrunsGPS", "allambigs")
   motus_views_str <- stringr::regex(
     paste0("\\b", paste0(motus_views, collapse = "\\b|\\b"), "\\b"), 
     ignore_case = TRUE)
@@ -145,5 +145,25 @@ checkViews <- function(src, update_sql, response = NULL) {
     # Delete the views before proceeding
     message("Deleting custom views: ", paste0(db_views$name, collapse = ", "))
     for(v in db_views$name) DBI::dbExecute(src$con, paste0("DROP VIEW ", v))
+  }
+}
+
+
+checkFields <- function(src) {
+  
+  tbls <- DBI::dbListTables(src$con)
+  tbls <- tbls[tbls %in% sql_fields$table]
+  
+  for(t in tbls) {
+   f <- DBI::dbListFields(src$con, t) 
+   s <- dplyr::filter(sql_fields, table == !!t)
+   
+   # Check for an add missing columns/fields
+   if(any(!s$column %in% f)) {
+     miss <- s$sql[!s$column %in% f]
+     miss <- glue::glue("ALTER TABLE {t} ADD COLUMN {miss};")
+     dbExecuteAll(src$con, miss)
+   }
+   if(all(s$extra[[1]] != FALSE)) dbExecuteAll(src$con, s$extra[[1]])
   }
 }

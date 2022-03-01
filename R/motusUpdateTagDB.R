@@ -110,13 +110,15 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
           sql("update batches set numHits = numHits + %f where batchID = %d", 
               numHits, batchID)
         }
-        
         # If testing, break out after x batches
         if(bi >= getOption("motus.test.max") && is_testing()) break
       }
+      if(bi >= getOption("motus.test.max") && is_testing()) break
       batchID <- max(b$batchID)
     }
   }
+  
+  message("Updating metadata")
   motusUpdateDBmetadata(sql, tagIDs, devIDs, force = forceMeta)
   rv <- src
   rv

@@ -1,5 +1,5 @@
-context("Test Server Access")
 
+# srvXXX tests ---------------------------------------
 test_that("srvXXX work as expected", {
   
   skip_if_no_auth()
@@ -13,33 +13,45 @@ test_that("srvXXX work as expected", {
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
   
-  # srvActivityForBatches - From SG-1116BBBK0C40
-  expect_silent(s <- srvActivityForBatches(batchID = 1902447)) %>%
+  # srvActivityForBatches - From Project 4, non-deprecated
+  expect_silent(s <- srvActivityForBatches(batchID = 118721)) %>%
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
   
   # srvAPIinfo
   expect_silent(s <- srvAPIinfo()) %>%
     expect_type("list")
-  expect_named(s, c("maxRows", "dataVersion"))
+  expect_named(s, c("maxRows", "dataVersion", "currentPkgVersion"))
   expect_gt(s$maxRows, 0)
   expect_gt(s$dataVersion, 0)
   
-  # srvBatchesForAll - ONLY FOR ADMINS
-  expect_error(srvBatchesForAll(batchID = 0))
-  
-  # srvBatchesForReceiver
-  expect_silent(s <- srvBatchesForReceiver(deviceID = 1201, batchID = 0)) %>%
+  # srvBatchesForReceiver - From Project 1 (SG-4002BBBK1580)
+  expect_silent(s <- srvBatchesForReceiver(deviceID = 217, batchID = 0)) %>%
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
   
   # srvBatchesForTagProject
-  expect_silent(s <- srvBatchesForTagProject(projectID = 204, batchID = 0)) %>%
+  # expect_silent(s <- srvBatchesForTagProject(projectID = 204, batchID = 0)) %>%
+  #   expect_s3_class("data.frame")
+  # expect_gt(nrow(s), 0)
+  
+  #srvBatchesForReceiverDeprecated
+  expect_silent(s <- srvBatchesForReceiverDeprecated(217)) %>%
+    expect_s3_class("data.frame")
+  expect_gt(nrow(s), 0)
+  
+  #srvBatchesForTagDeprecated
+  expect_silent(s <- srvBatchesForTagProjectDeprecated(1)) %>%
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
   
   # srvDeviceIDForReceiver
   expect_silent(s <- srvDeviceIDForReceiver(serno = "CTT-5031194D3168")) %>%
+    expect_s3_class("data.frame")
+  expect_gt(nrow(s), 0)
+  
+  # srvGPSForAll - deviceID = 6115; CTT-5031194D3168
+  expect_silent(s <- srvGPSForAll(gpsID = 0)) %>%
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
   
@@ -83,24 +95,24 @@ test_that("srvXXX work as expected", {
   expect_gt(nrow(s$projs), 0)
   
   # srvNodes
-  expect_silent(s <- srvNodes(projectID = 207, batchID = 633664)) %>%
+  expect_silent(s <- srvNodes(projectID = 207, batchID = 1019183)) %>%
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
   
   # srvProjectAmbiguitiesForTagProject - *****************************
-  expect_silent(s <- srvProjectAmbiguitiesForTagProject(projectID = 207)) %>%
+  expect_silent(s <- srvProjectAmbiguitiesForTagProject(projectID = 176)) %>%
     expect_s3_class("data.frame")
-  expect_equal(nrow(s), 0)  ## TEST WITH SOMETHING MORE 
+  expect_equal(nrow(s), 0)  ## WHAT IS THIS, EXACTLY?
   
-  # srvPulseCountsForReceiver - CTT-5031194D3168 - PulseCounts table
-  expect_silent(s <- srvPulseCountsForReceiver(batchID = 1582469, ant = 0)) %>%
-    expect_s3_class("data.frame")
-  expect_gt(nrow(s), 0)
+  # srvPulseCountsForReceiver - CTT-5031194D3168
+  # expect_silent(s <- srvPulseCountsForReceiver(batchID = 40570, ant = 0)) %>%
+  #   expect_s3_class("data.frame")
+  # expect_gt(nrow(s), 0)
   
   # srvReceiversForProject
-  expect_silent(s <- srvReceiversForProject(projectID = 204)) %>%
-    expect_s3_class("data.frame")
-  expect_gt(nrow(s), 0)
+  # expect_silent(s <- srvReceiversForProject(projectID = 204)) %>%
+  #   expect_s3_class("data.frame")
+  # expect_gt(nrow(s), 0)
   
   # srvRecvMetadataForProjects
   expect_silent(s <- srvRecvMetadataForProjects(projectIDs = 213)) %>%
@@ -122,9 +134,9 @@ test_that("srvXXX work as expected", {
   expect_gt(nrow(s$projs), 0)
   
   # srvRunsForReceiver - CTT-5031194D3168
-  expect_silent(s <- srvRunsForReceiver(batchID = 1582469, runID = 0)) %>%
-    expect_s3_class("data.frame")
-  expect_gt(nrow(s), 0)
+  # expect_silent(s <- srvRunsForReceiver(batchID = 1582469, runID = 0)) %>%
+  #   expect_s3_class("data.frame")
+  # expect_gt(nrow(s), 0)
   
   # srvRunsForTagProject
   expect_silent(s <- srvRunsForTagProject(projectID = 4, batchID = 120474)) %>%
@@ -132,14 +144,14 @@ test_that("srvXXX work as expected", {
   expect_gt(nrow(s), 0)
   
   # srvSizeOfUpdateForReceiver
-  expect_silent(s <- srvSizeOfUpdateForReceiver(deviceID = 1201, batchID = 0)) %>%
+  expect_silent(s <- srvSizeOfUpdateForReceiver(deviceID = 217, batchID = 0)) %>%
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
   
   # srvSizeOfUpdateForTagProject
-  expect_silent(s <- srvSizeOfUpdateForTagProject(projectID = 204, batchID = 0)) %>%
-    expect_s3_class("data.frame")
-  expect_gt(nrow(s), 0)
+  # expect_silent(s <- srvSizeOfUpdateForTagProject(projectID = 204, batchID = 0)) %>%
+  #   expect_s3_class("data.frame")
+  # expect_gt(nrow(s), 0)
   
   # srvTagMetadataForProjects
   expect_silent(s <- srvTagMetadataForProjects(projectIDs = 25)) %>%
@@ -147,7 +159,7 @@ test_that("srvXXX work as expected", {
   expect_gt(nrow(s$tags), 0)
   expect_true(all(s$tags$projectID == 25))
   expect_gt(nrow(s$tagDeps), 0)
-  expect_gt(nrow(s$tagProps), 0)
+  #expect_gt(nrow(s$tagProps), 0)
   expect_gt(nrow(s$species), 0)
   expect_gt(nrow(s$projs), 0)
   
@@ -169,12 +181,9 @@ test_that("srvXXX work as expected", {
   expect_gt(nrow(s), 0)
 })
 
-
 test_that("tagme() errors appropriately", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
-  
+
   unlink("project-10.motus")
   unlink("CTT-5031194D3168")
   
@@ -193,9 +202,10 @@ test_that("tagme() errors appropriately", {
   unlink("CTT-5031194D3168.motus")
 })
 
+
+# Projects downloads ---------------------------------------
 test_that("tagme() downloads data - Projects", {
   skip_on_cran()
-  skip_on_appveyor()
   
   unlink("project-176.motus")
   
@@ -206,9 +216,10 @@ test_that("tagme() downloads data - Projects", {
 
 })
 
-test_that("Receivers download - Receivers", {
+
+# Receivers download ------------------------------------------------------
+test_that("tagme() downloads data - Receivers", {
   skip_on_cran()
-  skip_on_appveyor()
   skip_if_no_auth()
   
   unlink("SG-3115BBBK1127.motus")
@@ -217,12 +228,15 @@ test_that("Receivers download - Receivers", {
   unlink("SG-3115BBBK1127.motus")
 })
 
+
+# Projects countOnly = TRUE ---------------------------------------------------
 test_that("tagme with countOnly (tellme) - Projects", {
   skip_on_cran()
-  
   sample_auth()
   
-  file.copy(system.file("extdata", "project-176.motus", package = "motus"), ".")
+  unlink("project-176.motus")
+  file.copy(system.file("extdata", "project-176.motus", package = "motus"), 
+            ".")
   
   expect_silent(tagme(projRecv = 176, new = FALSE, 
                       update = TRUE, countOnly = TRUE)) %>%
@@ -234,6 +248,7 @@ test_that("tagme with countOnly (tellme) - Projects", {
   unlink("project-176.motus")
 })
 
+# Receivers countOnly = TRUE ---------------------------------------------------
 test_that("tagme with countOnly (tellme) - Receivers", {
   skip_on_cran()
   skip_if_no_auth()
@@ -244,6 +259,8 @@ test_that("tagme with countOnly (tellme) - Receivers", {
   unlink("SG-3115BBBK1127.motus")
 })
 
+
+# Timeouts ----------------------------------------------------------------
 test_that("srvQuery handles time out graciously", {
   
   sample_auth()
@@ -257,6 +274,8 @@ test_that("srvQuery handles time out graciously", {
     "The server did not respond within 0.01s. Trying again...")
 })
 
+
+# srvAuth errors ----------------------------------------------------------
 test_that("srvAuth handles errors informatively", {
   motusLogout()
   sessionVariable(name = "userLogin", val = "motus.samp")
@@ -276,5 +295,25 @@ test_that("metadata()", {
   expect_message(metadata(tags, projectIDs = 45), "Loading complete")
   
   unlink("project-176.motus")
+})
+
+# srvAuth package version --------------------------------------------------
+
+test_that("srvAuth errors/warns/passes on package version", {
+  sample_auth()
+  expect_silent(srvAuth())
+  expect_true(!is.null(motus_vars$currentPkgVersion))
+    
+  v <- package_version(motus_vars$currentPkgVersion)
+  v <- c(v, v, v)
+  v[[c(1,1)]] <- as.numeric(v[[c(1,1)]]) - 1
+  v[[c(3,1)]] <- as.numeric(v[[c(3,1)]]) + 1
+  v <- as.character(v)
   
+  with_mock("motus:::pkg_version" = mockery::mock(v[1]), 
+            expect_warning(srvAuth()))
+  with_mock("motus:::pkg_version" = mockery::mock(v[2]), 
+            expect_silent(srvAuth()))
+  with_mock("motus:::pkg_version" = mockery::mock(v[3]), 
+            expect_silent(srvAuth()))
 })

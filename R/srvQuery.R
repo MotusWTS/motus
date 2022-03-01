@@ -2,8 +2,6 @@
 #'
 #' @param API one of the motus_vars$API_DATA_... constants
 #' @param params named list of API-specific parameters
-#' @param show if TRUE, print the request to the console before submitting to
-#'   motus
 #' @param JSON if TRUE, return results as JSON-format string; otherwise, as R
 #'   list
 #' @param auth if TRUE, the default, the API requires an authentication token,
@@ -22,7 +20,7 @@
 #'     
 #' @noRd
 
-srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE, 
+srvQuery <- function (API, params = NULL, JSON = FALSE, 
                       auth = TRUE, url = motus_vars$dataServerURL,
                       timeout = 120, verbose = FALSE) {
   
@@ -56,9 +54,7 @@ srvQuery <- function (API, params = NULL, show = FALSE, JSON = FALSE,
 
         json <- jsonlite::toJSON(query, auto_unbox = TRUE, null = "null")
         if(json == "[]") json <- "NULL"
-        
-        if(show) message(json, "\n")
-        
+
         if(verbose) message(url, "\n", json)
         
         api_query <- function(url, json, ua, timeout) {

@@ -93,13 +93,29 @@ projects/receivers.
 ## Adding and Updating
 
 ### Adding a new field/column
-- Make change to `ensureDBTables()`
+- Source `data-raw/internal_data.R`, this will run `data-raw/field_names.R` which
+  should grab the new field name from the server and add it to the list of tables
+    - If there's a special SQL command, however, you'll have add that by hand to the 
+    table in `data-raw/field_names.R`
 - Add update to `data-raw/updatesql.R` (run script, re-build package locally)
-- Add test to make sure new field is added (test_sqlite and test_data_returned)
+- Add test to make sure new field is added (`tests/testthat/test_02_sqlite.R`)
+  and filled with data (`tests/testthat/test_07_data_returned.R`)
+- Update internal data `source("data-raw/sample_data.R")`
+- Update NEWS.md
+- Run tests
+- Push!
+
+### Adding a new table
+- Add a section to `data-raw/field_names.R` pulling the new table data from the
+  server and adding it to the list of tables
+- In `ensureDBTables.R` either add it to the list of tables that are created 
+  empty, or add it to the section where tables are created and then immediately
+  filled with data (and add the data that should fill it). 
+- If the table has `batchIDs` add it to the list of tables in which to remove
+  deprecated `batchIDs` in `deprecateBatches()` in the `deprecateBatches.R` file.
+- You **shouldn't** need to add a section to `data-raw/updatesql.R`
+- Add test to make sure new field is added (`tests/testthat/test_02_sqlite.R`)
+  and filled with data (`tests/testthat/test_07_data_returned.R`)
 - Update internal data `source("data-raw/sample_data.R")`
 - Update NEWS.md
 - Push!
-
-
-
-

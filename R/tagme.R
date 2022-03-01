@@ -25,6 +25,8 @@
 #'   `?activity` for more details
 #' @param skipNodes logical. Skip checking for and downloading `nodeData`? See
 #'   `?nodeData` for more details
+#' @param skipDeprecated logical. Skip fetching list of deprecated batches
+#'   stored in `deprecated`. See `?deprecateBatches()` for more details.
 #'
 #' @examples
 #'
@@ -63,78 +65,87 @@
 #'
 #' @export
 
-tagme = function(projRecv, update = TRUE, new = FALSE, dir = getwd(), 
-                 countOnly = FALSE, forceMeta = FALSE, rename = FALSE,
-                 skipActivity = FALSE, skipNodes = FALSE) {
-    if (missing(projRecv) && ! new) {
-        ## special case: update all existing databases in \code{dir}
-        return(lapply(dir(dir, pattern="\\.motus$"),
-                      function(f) {
-                          tagme(projRecv=sub("\\.motus$", "", f), update=TRUE, dir=dir, countOnly=countOnly, forceMeta=forceMeta)
-                      }))
-    }
-    if (length(projRecv) != 1 || (! is.numeric(projRecv) && ! is.character(projRecv)))
-        stop("You must specify one integer project ID or character receiver serial number.", call. = FALSE)
-    if (is.character(projRecv) && grepl("\\.motus$", projRecv, ignore.case=TRUE))
-        projRecv = gsub("\\.motus$", projRecv, ignore.case=TRUE)
-    dbname = getDBFilename(projRecv, dir)
-    have = file.exists(dbname)
-    if (! new && ! have)
-        stop("Database ", dbname, " does not exist.\n",
-             "If you *really* want to create a new database, specify 'new=TRUE'\n",
-             "But maybe you just need to specify 'dir=' to tell me where to find it?", 
-             call. = FALSE)
-    if (new && have) {
-        warning("Database ", dbname, " already exists, so I'm ignoring the ",
-                "'new=TRUE' option", immediate. = TRUE)
-        new <- FALSE
-    }
-    if (new && missing(update))
-        update = FALSE
-    if (! have && is.character(projRecv)) {
-        deviceID = srvDeviceIDForReceiver(projRecv)[[2]]
-        if (! isTRUE(as.integer(deviceID) > 0))
-            stop("Either the serial number '", projRecv, 
-                 "' is not for a receiver registered\n       with motus or ",
-                 "this receiver has not yet registered any hits", 
-                 call. = FALSE)
-    } else {
-        deviceID = NULL
-    }
-
-    #rv <- dplyr::src_sqlite(dbname, create = new)
-    rv <- dbplyr::src_dbi(con = DBI::dbConnect(RSQLite::SQLite(), dbname))
+tagme <- function(projRecv, update = TRUE, new = FALSE, dir = getwd(), 
+                  countOnly = FALSE, forceMeta = FALSE, rename = FALSE,
+                  skipActivity = FALSE, skipNodes = FALSE, skipDeprecated = FALSE) {
+  if (missing(projRecv) && ! new) {
+    ## special case: update all existing databases in \code{dir}
+    lapply(dir(dir, pattern="\\.motus$"),
+           function(f) {
+             tagme(projRecv = sub("\\.motus$", "", f), update = TRUE, dir = dir, 
+                   countOnly = countOnly, forceMeta = forceMeta)
+           }) %>%
+      return()
+  }
+  
+  if (length(projRecv) != 1 || (! is.numeric(projRecv) && ! is.character(projRecv)))
+    stop("You must specify one integer project ID or character receiver serial number.", call. = FALSE)
+  
+  if (is.character(projRecv) && grepl("\\.motus$", projRecv, ignore.case=TRUE))
+    projRecv = gsub("\\.motus$", projRecv, ignore.case=TRUE)
+  
+  dbname <- getDBFilename(projRecv, dir)
+  have <- file.exists(dbname)
+  
+  if (! new && ! have)
+    stop("Database ", dbname, " does not exist.\n",
+         "If you *really* want to create a new database, specify 'new=TRUE'\n",
+         "But maybe you just need to specify 'dir=' to tell me where to find it?", 
+         call. = FALSE)
+  
+  if (new && have) {
+    warning("Database ", dbname, " already exists, so I'm ignoring the ",
+            "'new=TRUE' option", immediate. = TRUE)
+    new <- FALSE
+  }
+  if (new && missing(update)) update = FALSE
+  
+  if (! have && is.character(projRecv)) {
+    deviceID = srvDeviceIDForReceiver(projRecv)[[2]]
+    if (! isTRUE(as.integer(deviceID) > 0))
+      stop("Either the serial number '", projRecv, 
+           "' is not for a receiver registered\n       with motus or ",
+           "this receiver has not yet registered any hits", 
+           call. = FALSE)
+  } else {
+    deviceID = NULL
+  }
+  
+  #rv <- dplyr::src_sqlite(dbname, create = new)
+  rv <- dbplyr::src_dbi(con = DBI::dbConnect(RSQLite::SQLite(), dbname))
+  
+  if (update) {
     
-    if (update) {
-        
-        # Check Data Version either:
-        # - Stops (based on user input)
-        # - Archives old version and creates new database
-        # - Passes and proceeds as expected
-        if(!new) {
-            rv <- checkDataVersion(rv, dbname = dbname, rename = rename)
-            # For receivers, if starting fresh, get the device ID again
-            if(length(DBI::dbListTables(rv$con)) == 0 && 
-               is.null(deviceID) && !is_proj(projRecv)) {
-                deviceID <- srvDeviceIDForReceiver(projRecv)[[2]]
-            }
-        } else {
-            # Prompt for authorization to update dataVersion prior to filling tables
-            motus_vars$authToken 
-        }
+    # Check Data Version either:
+    # - Stops (based on user input)
+    # - Archives old version and creates new database
+    # - Passes and proceeds as expected
 
-        # Ensure correct DBtables, but only if update = TRUE
-        ensureDBTables(rv, projRecv, deviceID, quiet = new)
-
-        # Update databse
-        rv <- motusUpdateDB(projRecv, rv, countOnly, forceMeta)
-        
-        # Add activity and nodeData
-        if(!countOnly) {
-            if(!skipActivity) rv <- activity(src = rv, resume = TRUE)
-            if(!skipNodes) rv <- nodeData(src = rv, resume = TRUE)
-        }
+    if(!new) {
+      rv <- checkDataVersion(rv, dbname = dbname, rename = rename)
+      # For receivers, if starting fresh, get the device ID again
+      if(length(DBI::dbListTables(rv$con)) == 0 && 
+         is.null(deviceID) && !is_proj(projRecv)) {
+        deviceID <- srvDeviceIDForReceiver(projRecv)[[2]]
+      }
+    } else {
+      # Prompt for authorization to update dataVersion prior to filling tables
+      motus_vars$authToken 
     }
-
-    return(rv)
+    
+    # Ensure correct DBtables, but only if update = TRUE
+    ensureDBTables(rv, projRecv, deviceID, quiet = new)
+    
+    # Update database
+    rv <- motusUpdateDB(projRecv, rv, countOnly, forceMeta)
+    
+    # Add activity and nodeData
+    if(!countOnly) {
+      if(!skipActivity) rv <- activity(src = rv, resume = TRUE)
+      if(!skipNodes) rv <- nodeData(src = rv, resume = TRUE)
+      if(!skipDeprecated) rv <- fetchDeprecated(src = rv)
+    }
+  }
+  
+  rv
 }

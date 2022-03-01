@@ -58,6 +58,13 @@
 
     with(motus_vars,
     {
+        
+        # List of tables and field names for database
+        API_SCHEMA = "schema"
+        
+        # Update motus R package version on the server
+        API_UPDATE_PKG_VERSION = "update_pkg_version"
+        
         ## API entry points for the data server (these are relative to the data server URL)
 
         API_DATA_AUTHENTICATE = "custom/authenticate_user"
@@ -70,18 +77,24 @@
 
         ## API entry points for the data server (URLs relative to dataServerURL)
         API_API_INFO                            = "custom/api_info"
+        API_ACTIVITY_FOR_ALL                    = "custom/activity_for_all"
         API_ACTIVITY_FOR_BATCHES                = "custom/activity_for_batch"
         API_DEVICE_ID_FOR_RECEIVER              = "custom/deviceID_for_receiver"
         API_RECEIVERS_FOR_PROJECT               = "custom/receivers_for_project"
         API_BATCHES_FOR_TAG_PROJECT             = "custom/batches_for_tag_project"
         API_BATCHES_FOR_RECEIVER                = "custom/batches_for_receiver"
         API_BATCHES_FOR_ALL                     = "custom/batches_for_all"
+        API_BATCHES_FOR_ALL_DEPRECATED          = "custom/batches_for_all_deprecated"
+        API_BATCHES_FOR_RECEIVER_DEPRECATED     = "custom/batches_for_receiver_deprecated"
+        API_BATCHES_FOR_TAG_PROJECT_DEPRECATED  = "custom/batches_for_tag_project_deprecated"
         API_RUNS_FOR_TAG_PROJECT                = "custom/runs_for_tag_project"
         API_RUNS_FOR_RECEIVER                   = "custom/runs_for_receiver"
         API_HITS_FOR_TAG_PROJECT                = "custom/hits_for_tag_project"
         API_HITS_FOR_RECEIVER                   = "custom/hits_for_receiver"
         API_GPS_FOR_TAG_PROJECT                 = "custom/gps_for_tag_project"
         API_GPS_FOR_RECEIVER                    = "custom/gps_for_receiver"
+        API_GPS_FOR_RECIEVER_ALL                = "custom/gps_for_receiver_all"
+        API_PROJECT_AMBIGUITIES_FOR_TAG_PROJECT = "custom/project_ambiguities_for_tag_project"
         API_PULSE_COUNTS_FOR_RECEIVER           = "custom/pulse_counts_for_receiver"
         API_METADATA_FOR_TAGS                   = "custom/metadata_for_tags"
         API_METADATA_FOR_RECEIVERS              = "custom/metadata_for_receivers"
@@ -92,9 +105,6 @@
         API_TAGS_FOR_AMBIGUITIES                = "custom/tags_for_ambiguities"
         API_SIZE_OF_UPDATE_FOR_TAG_PROJECT      = "custom/size_of_update_for_tag_project"
         API_SIZE_OF_UPDATE_FOR_RECEIVER         = "custom/size_of_update_for_receiver"
-        API_PROJECT_AMBIGUITIES_FOR_TAG_PROJECT = "custom/project_ambiguities_for_tag_project"
-        API_ACTIVITY_FOR_ALL                    = "custom/activity_for_all"
-        API_GPS_FOR_RECIEVER_ALL                = "custom/gps_for_receiver_all"
 
         ## a list of field names which must be formatted as floats so that the
         ## motus API recognizes them correctly.  This means that if they happen
@@ -138,10 +148,11 @@
 
     with(motus_vars,
     {
-        dataVersion = 0L  ## Current dataVersion returned by server
-        projects = 0L     ## vector of projectIDs to which user has access
+        dataVersion = 0L       ## Current dataVersion returned by server
+        currentPkgVersion = "" ## Current package Version accepted/required by server
+        projects = 0L          ## vector of projectIDs to which user has access
         receivers = 0L
-        dbDir = getwd()   ## folder where tag and receiver databases are stored
+        dbDir = getwd()        ## folder where tag and receiver databases are stored
     })
     
     # CRAN Note avoidance
