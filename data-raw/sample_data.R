@@ -4,8 +4,6 @@ set_testing(set = FALSE)
 sample_auth()
 unlink("./inst/extdata/project-176.motus")
 tags <- tagme(projRecv = 176, new = TRUE, update = TRUE, dir = "./inst/extdata/")
-shorebirds <- dplyr::tbl(tags, "alltagsGPS") %>%
-  dplyr::collect()
 usethis::use_data(shorebirds, overwrite = TRUE)
 
 #file.remove("./data-raw/project-176.motus") # Keep this file?

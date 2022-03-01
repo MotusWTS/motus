@@ -8,14 +8,14 @@ teardown({
 context("filterByActivity")
 test_that("filterByActivity filters as expected", {
   expect_silent(
-    shorebirds_sql <- tagme(176, update = FALSE, 
-                            dir = system.file("extdata", package = "motus")))
+    tags <- tagme(176, update = FALSE, 
+                  dir = system.file("extdata", package = "motus")))
   
-  expect_silent(a <- filterByActivity(shorebirds_sql, return = "all")) %>%
+  expect_silent(a <- filterByActivity(tags, return = "all")) %>%
     expect_is("tbl")
-  expect_silent(g <- filterByActivity(shorebirds_sql)) %>%
+  expect_silent(g <- filterByActivity(tags)) %>%
     expect_is("tbl")
-  expect_silent(b <- filterByActivity(shorebirds_sql, return = "bad")) %>%
+  expect_silent(b <- filterByActivity(tags, return = "bad")) %>%
     expect_is("tbl")
   
   # 'good' and 'bad' should be subsets of 'all'
@@ -26,7 +26,7 @@ test_that("filterByActivity filters as expected", {
   expect_true(dplyr::all_equal(dplyr::filter(a, probability == 0), b))
   
   # Matches motusFilter results
-  runs <- dplyr::tbl(shorebirds_sql, "runs") %>%
+  runs <- dplyr::tbl(tags, "runs") %>%
     dplyr::select(runID, batchID = batchIDbegin, 
                   runLen = len, motusFilter) %>%
     dplyr::distinct() %>%
@@ -45,28 +45,34 @@ test_that("filterByActivity filters as expected", {
 
 test_that("Good/Bad runs change depending on parameters", {
   expect_silent(
-    shorebirds_sql <- tagme(176, update = FALSE, 
+    tags <- tagme(176, update = FALSE, 
                             dir = system.file("extdata", package = "motus")))
   
   # Expect run lengths to change if adjust the parameters
-  expect_silent(a <- filterByActivity(shorebirds_sql, minLen = 10, maxLen = 15, return = "all"))
+  expect_silent(a <- filterByActivity(tags, minLen = 10, 
+                                      maxLen = 15, return = "all"))
   expect_equal(dplyr::filter(a, runLen <= 10) %>%
-                 dplyr::summarize(probability = sum(probability, na.rm = TRUE)) %>%
+                 dplyr::summarize(probability = 
+                                    sum(probability, na.rm = TRUE)) %>%
                  dplyr::collect() %>% dplyr::pull(probability),
                0)
   expect_equal(dplyr::filter(a, runLen >= 15) %>%
-                 dplyr::summarize(probability = sum(probability == 0, na.rm = TRUE)) %>%
+                 dplyr::summarize(probability = 
+                                    sum(probability == 0, na.rm = TRUE)) %>%
                  dplyr::collect() %>% dplyr::pull(probability),
                0)
   
 
-  expect_silent(a <- filterByActivity(shorebirds_sql, minLen = 2, maxLen = 5, return = "all"))
+  expect_silent(a <- filterByActivity(tags, minLen = 2,
+                                      maxLen = 5, return = "all"))
   expect_equal(dplyr::filter(a, runLen <= 2) %>%
-                 dplyr::summarize(probability = sum(probability, na.rm = TRUE)) %>%
+                 dplyr::summarize(probability = 
+                                    sum(probability, na.rm = TRUE)) %>%
                  dplyr::collect() %>% dplyr::pull(probability),
                0)
   expect_equal(dplyr::filter(a, runLen >= 5) %>%
-                 dplyr::summarize(probability = sum(probability == 0, na.rm = TRUE)) %>%
+                 dplyr::summarize(probability = 
+                                    sum(probability == 0, na.rm = TRUE)) %>%
                  dplyr::collect() %>% dplyr::pull(probability),
                0)
 })
@@ -196,7 +202,8 @@ test_that("calcGPS() matches GPS by = 'daily'", {
   g <- dplyr::select(g, -hitID, -ts) %>% dplyr::distinct() %>% as.data.frame()
   
   expect_silent(getGPS(tags, by = "daily")) %>%
-    expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt", "gpsTs_min", "gpsTs_max"))
+    expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt", 
+                   "gpsTs_min", "gpsTs_max"))
   
   DBI::dbDisconnect(tags$con)
   unlink("gps_sample.motus")

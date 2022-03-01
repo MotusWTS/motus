@@ -45,6 +45,5 @@ Suggests:
 License: GPL-3
 RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
-LazyData: true
 Encoding: UTF-8
 Language: en-CA

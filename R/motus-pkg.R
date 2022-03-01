@@ -42,10 +42,6 @@
 #'     - [sunRiseSet()]
 #'     - [timeToSunriset()]
 #'
-#' We also include a practice data set:
-#'
-#' - [shorebirds]
-#'
 #'
 #' @references
 #' Motus Wildlife Tracking System \url{http://motus.org}
