@@ -31,10 +31,7 @@ navbar:
       href: fr/index.html
 
 reference:
-- title: Data
-  contents:
-  - shorebirds
-  
+
 - title: Download data
   contents: 
   - tagme
