@@ -12,11 +12,15 @@
 #  beta --> master
 #  beta --> sandbox
 #  sandbox --> master
+#
+#  hotfix --> master
+#  hotfix --> beta
+#  hotfix --> sandbox
 # 
 # When merging changes to master: 
 # 
-# - Change api url to https://motus.org/api
-# - Change version to correct (non-dev) version
+# - Change api url to https://motus.org/api     (in z.onLoad.R)
+# - Change version to correct (non-dev) version (in DESCRIPTION)
 # - Test changes (beta/sandbox branch)
 # - Push
 # - GitHub pull request, make sure tests pass, merge
@@ -45,13 +49,13 @@
 remotes::install_deps()
 
 
-## IF MERGING SANDBOX
-# - Make sure that data-raw/updatesql.R updates unique to sandbox have a date later than
-#   beta updates (otherwise they won't trigger)
+## Update internal data files ------------------------------
 
-## Update internal data files
+# - If merging sandbox - make sure that data-raw/updatesql.R updates unique to 
+#   sandbox have a date later than beta updates (otherwise they won't trigger)
+
 set_testing(set = FALSE) # Make sure to download full sets
-source("data-raw/updatesql.R")
+source("data-raw/internal_data.R")
 source("data-raw/sample_data.R")
 
 
@@ -68,7 +72,7 @@ spelling::update_wordlist() # All remaining words will be added to the ignore WO
 ## Finalize package version
 # - Update DESCRIPTION - package version
 # - Update .onLoad - API version
-v <- "4.0.6"
+v <- "5.0.0"
 v <- packageVersion("motus") # If dev version loaded with devtools::load_all()
 
 ## Checks

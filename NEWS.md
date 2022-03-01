@@ -1,13 +1,31 @@
+# motus 5.0.0
+### New features
+* New `allruns` and `allrunsGPS` views for quicker first passes of the data with 
+large datasets
+* New field/column `attachment` in `tagDeps` table
+* New field/column `numGPSfix` in `activity` and `activityAll` tables
+* New field/columns `stationName` and `stationID` in `recvDeps` tables
+* `gpsAll()` and `activityAll()` functions allow downloading complete records
+  of GPS points and Activity
+* Deprecated batches are now returned to a new table `deprecated` on `tagme()`
+* `deprecateBatches()` function to fetch and (optionally) remove deprecated batches
+  from all relevant tables
+
+### Bug fixes
+* fixed bug in `filterByActivity()` resulting in `NA` probabilities
+* fixed bug in `getGPS()` which crashed if `ts` had been converted to date/time format
+
 # motus 4.0.6
 ### Bug fixes
 * fixed bug resulting in missing metadata tables, and permission errors resulting
 from JSON formatting
-* fixed bug where `forceMeta` didn't force metadata download for previously downloaded tags
+* fixed bug where `forceMeta` did not force metadata download for previously downloaded tags
 * fixed warnings produced by `plotRouteMap()` on old versions of R
 
 # motus 4.0.5
 ### Bug fixes
 * removed not null constraint on tsEnd in nodeDeps
+
 
 # motus 4.0.4
 ### Bug fixes

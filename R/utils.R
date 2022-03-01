@@ -3,8 +3,8 @@
 #' All testthat tests that require a personal user account are prefaced with
 #' this skip function. 
 #' 
-#' The credentials for a personal user account (`motus_userLogin` and
-#' `motus_userPassword`) should be stored in the users .Renviron file (generally
+#' The credentials for a personal user account (`MOTUS_USER` and
+#' `MOTUS_PASSWORD`) should be stored in the users .Renviron file (generally
 #' found in the users Home, e.g., on linux /home/user/ which is loaded on R
 #' startup. If the credentials are not found, the tests are skipped.
 #' 
@@ -39,21 +39,21 @@ set_testing <- function(set = TRUE) {
 #' This is a helper function for testing and applying local authorizations when
 #' available.
 #' 
-#' The credentials for a personal user account (`motus_userLogin` and
-#' `motus_userPassword`) should be stored in the users .Renviron file (generally
-#' found in the users Home, e.g., on linux /home/user/ which is loaded on R
-#' startup. If the credentials are not found, they are applied and TRUE is
-#' returned. Otherwise FALSE is returned.
+#' The credentials for a personal user account (`MOTUS_USER` and
+#' `MOTUS_PASSWORD`) should be stored in the user's .Renviron file
+#' (generally found in the users Home, e.g., on linux /home/user/ which is
+#' loaded on R startup. If the credentials are found, they are applied and
+#' TRUE is returned. Otherwise FALSE is returned.
 #' 
 #' @noRd
 
-have_auth <- function() !identical(Sys.getenv("motus_userLogin"), "")
+have_auth <- function() !identical(Sys.getenv("MOTUS_USER"), "")
 
 local_auth <- function() {
   if(have_auth()) {
     suppressMessages(motusLogout())
-    sessionVariable(name = "userLogin", val = Sys.getenv("motus_userLogin"))
-    sessionVariable(name = "userPassword", val = Sys.getenv("motus_userPassword"))
+    sessionVariable(name = "userLogin", val = Sys.getenv("MOTUS_USER"))
+    sessionVariable(name = "userPassword", val = Sys.getenv("MOTUS_PASSWORD"))
   } else {
     message("No local authorization")
   }
@@ -85,6 +85,11 @@ get_projRecv <- function(src) {
 }
 
 
+
+updatePkgVersion <- function(version) {
+  srvUpdatePkgVersion(version)
+}
+
 #' Return accessible projects and receivers
 #'
 #' Return the projects and receivers which are accessible by the given
@@ -103,6 +108,14 @@ getAccess <- function() {
           "Receivers: ", paste0(motus_vars$receivers, collapse = ", "))
 }
 
+
+requiredCols <- function(x, req, name = "data") {
+  cols <- colnames(x)
+  if(any(!req %in% cols)) {
+    stop("Required columns/fields missing from '", name, "': ",
+         paste0(req[!req %in% cols], collapse = ", "))
+  }
+}
 
 get_sample_data <- function() {
   sample_auth() # Use motus sample authorizations
