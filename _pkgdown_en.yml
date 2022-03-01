@@ -39,12 +39,15 @@ reference:
   - activity
   - metadata  
   - nodeData
+  - activityAll
+  - gpsAll
   
 - title: Cleaning
   desc: Helper functions for cleaning and preparing data
   contents:
   - filterByActivity
   - clarify
+  - deprecateBatches
 
 - title: Helper
   contents:
