@@ -8,13 +8,13 @@
 #'   date/time, latitude, and longitude
 #' @param lat variable with latitude values, defaults to recvDeployLat
 #' @param lon variable with longitude values, defaults to recvDeployLon
-#' @param ts variable with time in UTC as numeric or POSIXct, defaults to ts
+#' @param ts variable with time in UTC as numeric or POSIXct, defaults to `ts`
 #'
 #' @return the original dataframe provided, with the following additional
 #'   columns:
-#' - sunrise: sunrise time for the date and location provided by ts and lat/lon
+#' - sunrise: sunrise time for the date and location provided by `ts` and lat/lon
 #' per row
-#' - sunset: sunset time for the date and location provided by ts and lat/lon
+#' - sunset: sunset time for the date and location provided by `ts` and lat/lon
 #' per row
 #'
 #' @examples
@@ -69,7 +69,7 @@ sunRiseSet <- function(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = 
   requiredCols(data, req = c(lat, lon, ts))
 
   data <- dplyr::collect(data) %>%
-    dplyr::mutate(time := lubridate::as_datetime(.data[[ts]], tz = "UTC"))
+    dplyr::mutate(time = lubridate::as_datetime(.data[[ts]], tz = "UTC"))
   
   if(all(is.na(data[[lat]])) | all(is.na(data[[lon]]))) {
     stop("No data with non-missing coordinates in '", lat, "' and '", lon, "'", 
