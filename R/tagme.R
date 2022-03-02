@@ -112,7 +112,8 @@ tagme <- function(projRecv, update = TRUE, new = FALSE, dir = getwd(),
   }
   
   #rv <- dplyr::src_sqlite(dbname, create = new)
-  rv <- dbplyr::src_dbi(con = DBI::dbConnect(RSQLite::SQLite(), dbname))
+  rv <- dbplyr::src_dbi(con = DBI::dbConnect(RSQLite::SQLite(), dbname),
+                        auto_disconnect = TRUE)
   
   if (update) {
     

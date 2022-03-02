@@ -23,6 +23,7 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
                         "inner join batches b on a.batchID = b.batchID ",
                         "where tagDepProjectID = %d"), projectID)
   if(countOnly) {
+    DBI::dbDisconnect(src$con)
     return(srvSizeOfUpdateForTagProject(projectID = projectID, 
                                         batchID = batchID))
   }

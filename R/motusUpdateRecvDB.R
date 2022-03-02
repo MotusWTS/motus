@@ -25,7 +25,10 @@ motusUpdateRecvDB <- function(src, countOnly, forceMeta = FALSE) {
          "Try delete or rename the file and use tagme() again?", call. = FALSE)
   }
   batchID <- sql("select ifnull(max(batchID), 0) from batches")[[1]]
-  if (countOnly) return(srvSizeOfUpdateForReceiver(deviceID = deviceID, batchID = batchID))
+  if (countOnly) {
+    DBI::dbDisconnect(src$con)
+    return(srvSizeOfUpdateForReceiver(deviceID = deviceID, batchID = batchID))
+  }
   
   # keep track of items we'll need metadata for
   tagIDs = c()
