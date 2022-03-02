@@ -56,7 +56,7 @@ test_that("srvXXX work as expected", {
   expect_gt(nrow(s), 0)
   
   # srvGPSForReceiver - deviceID = 6115; CTT-5031194D3168
-  expect_silent(s <- srvGPSForReceiver(batchID = 1235827)) %>%
+  expect_silent(s <- srvGPSForReceiver(batchID = 476443)) %>%
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
   
@@ -66,7 +66,7 @@ test_that("srvXXX work as expected", {
   expect_gt(nrow(s), 0)
   
   # srvHitsForReceiver
-  expect_silent(s <- srvHitsForReceiver(batchID = 1235827, hitID = 0)) %>%
+  expect_silent(s <- srvHitsForReceiver(batchID = 476443, hitID = 0)) %>%
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
   
