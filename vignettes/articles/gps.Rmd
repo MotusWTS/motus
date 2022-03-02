@@ -4,8 +4,9 @@ title: "Working with GPS points"
 
 ```{r, include = FALSE}
 motus:::local_auth()
+if(!dir.exists("data")) dir.create("data")
 file.copy(system.file("extdata", "gps_sample.motus", package = "motus"),
-          "./data")
+          "./data/")
 gps_tags <- DBI::dbConnect(RSQLite::SQLite(), "./data/gps_sample.motus")
 gps_tags <- dbplyr::src_dbi(con = gps_tags)
 
@@ -70,33 +71,36 @@ tbl(gps_tags, "alltagsGPS") %>%
 ### Filtering then adding GPS data
 
 
-For example, let's work with a subset of the alltags view, including only Red Knots.
+For example, let's work with a subset of the alltags view, including only King Rails.
 
 ```{r}
-knots <- tbl(gps_tags, "alltags") %>%
-  filter(speciesEN == "Red Knot")
+rails <- tbl(gps_tags, "alltags") %>%
+  filter(speciesEN == "King Rail")
 ```
 
 Now let's retrieve the daily median location of GPS points for these data.
-Note that we use both the original database `gps_tags` as well as the data subset `knots`. 
+Note that we use both the original database `gps_tags` as well as the data subset `rails`. 
 Also note that the `getGPS()` function requires the original, numeric `ts` column, so if you want a date/time column it's best to rename it (i.e. `time = as_datetime(ts)`).
 
 ```{r}
-index_GPS <- getGPS(src = gps_tags, data = knots)
+index_GPS <- getGPS(src = gps_tags, data = rails)
 ```
 
 This table is an index matching GPS points to specific `hitID`, so the next step is to join it into your data subset using the `left_join()` function from the `dplyr` package.
-Note that at this point, we need to use `collect()` to ensure that `knots` is 'flat' (i.e. a data frame, not a database; see [Converting to flat data](03-accessing-data.html#converting-to-flat-data) for more details).
+Note that at this point, we need to use `collect()` to ensure that `rails` is 'flat' (i.e. a data frame, not a database; see [Converting to flat data](03-accessing-data.html#converting-to-flat-data) for more details).
 
 ```{r}
-knots_GPS <- left_join(collect(knots), index_GPS, by = "hitID")
+rails_GPS <- left_join(collect(rails), index_GPS, by = "hitID")
 ```
 
-We can subset the columns to see if it worked as expected
+We can subset the columns to see if it worked as expected 
+(we filter to non-missing, because not all hits have a GPS point when using the
+default matching).
 
 ```{r}
-knots_GPS %>%
-  select(hitID, runID, batchID, ts, contains("gps"))
+rails_GPS %>%
+  select(hitID, runID, batchID, ts, contains("gps")) %>%
+  filter(!is.na(gpsLat))
 ```
 
 
@@ -114,7 +118,7 @@ However, we can match GPS locations to `hitID`s according to one of several diff
 
 For example, the median location within 60 minutes of a `hitID`.
 ```{r}
-index_GPS <- getGPS(src = gps_tags, data = knots, by = 60)
+index_GPS <- getGPS(src = gps_tags, data = rails, by = 60)
 index_GPS
 ```    
     
@@ -124,7 +128,7 @@ index_GPS
     - this method is most suitable for receiver deployments at fixed location.
     
 ```{r}
-index_GPS <- getGPS(src = gps_tags, data = knots, by = "daily")
+index_GPS <- getGPS(src = gps_tags, data = rails, by = "daily")
 index_GPS
 ```
     
@@ -135,7 +139,7 @@ index_GPS
 
 For example, the closest location in time noted within 2 hours of a hit.
 ```{r}
-index_GPS <- getGPS(src = gps_tags, data = knots, by = "closest", cutoff = 120)
+index_GPS <- getGPS(src = gps_tags, data = rails, by = "closest", cutoff = 120)
 index_GPS
 ```
 
@@ -143,7 +147,8 @@ To keep all `hitID`s, regardless of whether they match to GPS data or not, use t
 This results in `NA` for `gpsLat`, `gpsLon` and `gpsAlt` where there is no corresponding GPS hit (otherwise the hit is omitted). 
 
 ```{r}
-index_GPS <- getGPS(src = gps_tags, data = knots, keepAll = TRUE)
+index_GPS <- getGPS(src = gps_tags, data = rails, keepAll = TRUE)
+index_GPS
 ```
 
 
