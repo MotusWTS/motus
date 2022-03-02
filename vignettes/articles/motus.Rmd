@@ -74,4 +74,3 @@ unlink("my_motus_data.rds")
 
 > **What next?** Check out the walkthrough starting with [Chapter 1 - Introduction](01-introduction.html)
 > <span style = "font-size: 70%">(<a href = "index.html">Explore all articles</a>)</span>
-
