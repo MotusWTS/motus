@@ -16,7 +16,7 @@ template:
 navbar:
   bg: dark
   structure:
-    left:  [home, intro, reference, articles, news]
+    left:  [home, intro, articles, troubleshooting, reference, news]
     right: [search, github, english, french]
   components:
     troubleshooting:
