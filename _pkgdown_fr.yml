@@ -92,7 +92,7 @@ articles:
   desc: "This is a complete walk-through, originally compiled as the Motus R book.
         These articles are largely based on the original Motus R Book by 
         [Crewe et al. 2018](https://motus.org/motusRBook/archives/MotusRBook2018-01.pdf), 
-        and have since been supplemented by [various people on the Motus team](articles/01-introduction.html#acknowledgements)."
+        and have since been supplemented by [various people on the Motus team](01-introduction.html#acknowledgements)."
   contents:
   - articles/01-introduction
   - articles/02-installing-packages
