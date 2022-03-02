@@ -19,11 +19,16 @@ Motus users can install the latest stable versions of the R packages using `inst
 As with all R packages, you only need to install the packages once; 
 after installation, you need to load each package (using `library()`) each time you open a new R session. 
 
-Please note that some functionalities of the `remotes` package may require updated versions of R and RStudio. 
 To avoid errors, please ensure you are using the most recent releases of [R](https://www.r-project.org/) **and** [RStudio](https://www.rstudio.com/products/RStudio/).
-Update your R packages using `update.packages()` in the R console.
 
-Begin by installing the required packages, if not already installed.
+First update existing packages with the `remotes` package (this may take a while).
+
+```{r}
+install.packages("remotes")
+update_packages()
+```
+
+Next, we'll start installing the required packages, if not already installed.
 
 If you have used the older version of `motus` which included use of the `motusClient` package, it is recommended to first uninstall both packages.
 
@@ -31,27 +36,16 @@ If you have used the older version of `motus` which included use of the `motusCl
 remove.packages(c("motus", "motusClient"))
 ```
 
-Then proceed with the installation of the `motus` package
+Then proceed with the installation/update of the `motus` and `motusData` packages.
 
 ```{r}
-install.packages("remotes")
-library(remotes)
-
-# install motus
-install_github("MotusWTS/motus")
-
-# install motusData package which contains sample datasets, e.g., vanishBearing
-# used in Chapter 7
-install_github("MotusWTS/motusData")
+install.packages(c("motus", "motusData"), 
+                 repos = c(birdscanada = 'https://birdscanada.r-universe.dev',
+                           CRAN = 'https://cloud.r-project.org'))
 
 # Load the packages for use
 library(motus)
 library(motusData)
-```
-
-If you need to update the existing `motus` package, the process is the same:
-```{r}
-install_github("MotusWTS/motus")
 ```
 
 If you want to know what version of the motus package you currently have installed:
@@ -66,35 +60,28 @@ packageVersion("motus")
 ## Installing other packages
 Throughout these articles and examples, we use the [`tidyverse`](https://www.tidyverse.org/) collection of R packages for data science, including `tidyr`, `dplyr`, `ggplot2`, and `lubridate` (for managing and manipulating dates).
 See the [`tidyverse` website](https://www.tidyverse.org/) for more information, or browse (or better still, thoroughly read) [R for Data Science](http://r4ds.had.co.nz/) by Garrett Grolemund and Hadley Wickham.
-For mapping we also use the `rworldmap`, and `ggmap` packages.
+For mapping we also use the `rnaturalearth`, and `ggmap` packages.
+
 These can be installed from CRAN, as follows:
-
 ```{r}
-install.packages("maps")
-library(maps)
-
-install.packages("tidyverse")
-library(tidyverse)
-
-install.packages("rworldmap")
-library(rworldmap)
-
-install.packages("ggmap")
-library(ggmap)
+install.packages(c("tidyverse", "ggmap", "rnaturalearth"))
 ```
 
+We also need a couple of data packages for `rnaturalearth` which can be installed
+from the rOpenSci R-universe:
+```{r}
+install.packages(c("rnaturalearthhires", "rnaturalearthdata"),
+                 repos = c(ropensci = 'https://ropensci.r-universe.dev',  
+                           CRAN = 'https://cloud.r-project.org'))
+```
+
+
+Now, to use these packages include the following in your scripts:
 ```{r}
 library(motus)
-library(maps)
+library(rnaturalearth)
 library(tidyverse)
-library(rworldmap)
 library(ggmap)
-```
-Install but do not load the `plyr` package; 
-you can use it directly for the handy `round_any()` function (with the code `plyr::round_any()`), but loading it can cause problems with `dplyr` functions:
-
-```{r install plyr, eval = FALSE}
-install.packages("plyr")
 ```
 
 ## Internal data processing

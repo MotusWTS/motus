@@ -11,11 +11,11 @@ Generally, if all else fails, uninstalling R and/or R Studio, and reinstalling t
 
 Occasionally users run into problems while trying to install or update `motus`. Often this is related to problems with different versions of package dependencies. Here we suggest several solutions.
 
-1. Update all packages during the installation
+1. Update all packages before the installation
 
 ```{r}
 library(remotes)
-update_packages("motus", dependencies = TRUE)
+update_packages()
 ```
 
 2. If the installation of Motus generates errors saying that some of the existing packages cannot be removed, you can try to quit any R session, manually delete the problematic package folder from your R libraries and manually install the package again before trying to install `motus.` 
@@ -28,14 +28,6 @@ To set a custom library folder for installing new packages:
 ```
 
 3. In some cases, it is easier to upgrade R itself by reinstalling the newest version of R: <https://cran.r-project.org/>. **Note:** While this results in a nice clean installation with fewer problems, it necessitates the re-installation of R packages which can be time-consuming.
-
-4. If reinstalling R is not an option, you get an error related to packages built under a current version of R, AND updating your packages doesn't help, you can consider overriding the error with the following code. **Note:** This might help you install `motus` but may result in other problems. If possible, it's best to resolve the errors rather than ignoring them.
-
-```{r}
-library(remotes)
-Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS"=TRUE)
-install_github("MotusWTS/motus", upgrade = "always")
-```
 
 
 ### Updating `motus`from a much earlier version
