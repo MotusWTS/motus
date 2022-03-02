@@ -67,9 +67,10 @@ sunRiseSet <- function(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = 
   }
 
   requiredCols(data, req = c(lat, lon, ts))
-
-  data <- dplyr::collect(data) %>%
-    dplyr::mutate(time = lubridate::as_datetime(.data[[ts]], tz = "UTC"))
+  
+  data <- data %>%
+    dplyr::collect() %>%
+    dplyr::mutate(time_sun = lubridate::as_datetime(.data[[ts]], tz = "UTC"))
   
   if(all(is.na(data[[lat]])) | all(is.na(data[[lon]]))) {
     stop("No data with non-missing coordinates in '", lat, "' and '", lon, "'", 
@@ -80,29 +81,29 @@ sunRiseSet <- function(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = 
     dplyr::select("hitID", !!lat, !!lon) %>%
     dplyr::distinct() %>%
     dplyr::filter(!is.na(.data[[lat]]) & !is.na(.data[[lon]])) %>%
-    dplyr::mutate(tz = lutz::tz_lookup_coords(.data[[lat]], .data[[lon]], warn = FALSE)) %>%
-    tidyr::nest(data = c(-"tz")) %>%
-    dplyr::mutate(tz = purrr::map_dbl(tz, ~lutz::tz_offset("2021-01-01", .)$utc_offset_h)) %>%
+    dplyr::mutate(tz_sun = lutz::tz_lookup_coords(.data[[lat]], .data[[lon]], warn = FALSE)) %>%
+    tidyr::nest(data = c(-"tz_sun")) %>%
+    dplyr::mutate(tz_sun = purrr::map_dbl(tz_sun, ~lutz::tz_offset("2021-01-01", .)$utc_offset_h)) %>%
     tidyr::unnest("data")
   
   data <- data %>%
-    dplyr::left_join(dplyr::select(tz, "tz", "hitID"), by = "hitID") %>%
-    dplyr::mutate(date = lubridate::floor_date(.data$time + 
-                                                 lubridate::hours(.data$tz), 
+    dplyr::left_join(dplyr::select(tz, "tz_sun", "hitID"), by = "hitID") %>%
+    dplyr::mutate(date_sun = lubridate::floor_date(.data$time_sun + 
+                                                 lubridate::hours(.data$tz_sun), 
                                                unit = "day"))
   
   sun <- data %>%
-    dplyr::select(.data[[lon]], .data[[lat]], .data$date) %>%
-    dplyr::filter(!is.na(.data$date), !is.na(.data[[lon]]), !is.na(.data[[lat]])) %>%
+    dplyr::select(.data[[lon]], .data[[lat]], .data$date_sun) %>%
+    dplyr::filter(!is.na(.data$date_sun), !is.na(.data[[lon]]), !is.na(.data[[lat]])) %>%
     dplyr::distinct() %>%
-    dplyr::mutate(sunrise = sunriset(.data[[lon]], .data[[lat]], .data$date, 
+    dplyr::mutate(sunrise = sunriset(.data[[lon]], .data[[lat]], .data$date_sun, 
                                      direction = "sunrise"),
-                  sunset = sunriset(.data[[lon]], .data[[lat]], .data$date,
+                  sunset = sunriset(.data[[lon]], .data[[lat]], .data$date_sun,
                                     direction = "sunset"))
                   
   data %>%
-    dplyr::left_join(sun, by = c(lat, lon, "date")) %>%
-    dplyr::select(-"date", -"tz", -"time")
+    dplyr::left_join(sun, by = c(lat, lon, "date_sun")) %>%
+    dplyr::select(-"time_sun", -"date_sun", -"tz_sun")
 }
 
 sunriset <- function(lon, lat, time, direction) {
