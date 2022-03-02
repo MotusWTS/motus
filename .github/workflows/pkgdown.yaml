@@ -39,7 +39,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          remotes::install_github("MotusWTS/motusData")
+          install.packages(c("motusData", "rnaturalearthhires", "rnaturalearthdata"), repos = c(BirdsCanada = 'https://birdscanada.r-universe.dev', ropensci = 'https://ropensci.r-universe.dev',  CRAN = 'https://cloud.r-project.org'))
         shell: Rscript {0}
 
       - name: Install package
