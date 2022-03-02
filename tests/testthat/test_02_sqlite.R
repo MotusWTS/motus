@@ -79,7 +79,7 @@ test_that("Create DB, includes any new fields", {
 
 # views created correctly -------------------------------------------------
 test_that("Views created correctly", {
-  unlink("project-176-backup.motus")
+  file.copy(system.file("extdata", "project-176.motus", package = "motus"), ".")
   file.copy("project-176.motus", "project-176-backup.motus")
   tags <- tagme(176, update = FALSE, new = FALSE)
   
