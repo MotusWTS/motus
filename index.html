@@ -28,7 +28,7 @@
     
     <a class="navbar-brand me-2" href="index.html">motus</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">5.0.0</small>
+    <small class="nav-text text-light me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">5.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,10 +99,12 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
+<p>The easiest way to install motus is from Birds Canada’s R-universe:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>                 <span class="co"># if don't already have it</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"motusWTS/motus"</span><span class="op">)</span>   <span class="co"># the lastest stable version</span></code></pre></div>
-<p>The development branches (betaX and sandbox) are for work-in-progress</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"motus"</span>, 
+                 repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>birdscanada <span class="op">=</span> <span class="st">'https://birdscanada.r-universe.dev'</span>,
+                           CRAN <span class="op">=</span> <span class="st">'https://cloud.r-project.org'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>If you want to check out work-in-progress, you can install the development branches (betaX and sandbox) using <code>remotes</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>                     <span class="co"># if don't already have it</span>
 <span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"motusWTS/motus@beta3"</span><span class="op">)</span> <span class="co"># the beta branch for v3+</span></code></pre></div>
@@ -138,9 +140,9 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
+<li>Birds Canada <br><small class="roles"> Author, maintainer </small>  </li>
 <li>John Brzustowski <br><small class="roles"> Author </small>  </li>
-<li>Denis Lepage <br><small class="roles"> Author, maintainer </small>  </li>
-<li>Birds Canada <br><small class="roles"> Funder </small>  </li>
+<li>Denis Lepage <br><small class="roles"> Author </small>  </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
@@ -159,7 +161,7 @@
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by John Brzustowski, Denis Lepage, Birds Canada.</p>
+<p>Developed by Birds Canada, John Brzustowski, Denis Lepage.</p>
 </div>
 
 <div class="pkgdown-footer-right">

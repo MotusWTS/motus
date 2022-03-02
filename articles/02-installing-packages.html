@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">motus</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">5.0.0</small>
+    <small class="nav-text text-light me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">5.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -110,83 +110,49 @@
 <li><p><code>motusData</code>: provides sample datasets used in some of these articles</p></li>
 </ol>
 <p>Motus users can install the latest stable versions of the R packages using <code><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages()</a></code> (see below). As with all R packages, you only need to install the packages once; after installation, you need to load each package (using <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code>) each time you open a new R session.</p>
-<p>Please note that some functionalities of the <code>remotes</code> package may require updated versions of R and RStudio. To avoid errors, please ensure you are using the most recent releases of <a href="https://www.r-project.org/" class="external-link">R</a> <strong>and</strong> <a href="https://www.rstudio.com/products/RStudio/" class="external-link">RStudio</a>. Update your R packages using <code><a href="https://rdrr.io/r/utils/update.packages.html" class="external-link">update.packages()</a></code> in the R console.</p>
-<p>Begin by installing the required packages, if not already installed.</p>
-<p>If you have used the older version of <code>motus</code> which included use of the <code>motusClient</code> package, it is recommended to first uninstall both packages.</p>
+<p>To avoid errors, please ensure you are using the most recent releases of <a href="https://www.r-project.org/" class="external-link">R</a> <strong>and</strong> <a href="https://www.rstudio.com/products/RStudio/" class="external-link">RStudio</a>.</p>
+<p>First update existing packages with the <code>remotes</code> package (this may take a while).</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/remove.packages.html" class="external-link">remove.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"motus"</span>, <span class="st">"motusClient"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>Then proceed with the installation of the <code>motus</code> package</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://remotes.r-lib.org" class="external-link">remotes</a></span><span class="op">)</span>
-
-<span class="co"># install motus</span>
-<span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"MotusWTS/motus"</span><span class="op">)</span>
-
-<span class="co"># install motusData package which contains sample datasets, e.g., vanishBearing</span>
-<span class="co"># used in Chapter 7</span>
-<span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"MotusWTS/motusData"</span><span class="op">)</span>
+<span class="fu">update_packages</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<p>Next, we’ll start installing the required packages, if not already installed.</p>
+<p>If you have used the older version of <code>motus</code> which included use of the <code>motusClient</code> package, it is recommended to first uninstall both packages.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/remove.packages.html" class="external-link">remove.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"motus"</span>, <span class="st">"motusClient"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>Then proceed with the installation/update of the <code>motus</code> and <code>motusData</code> packages.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"motus"</span>, <span class="st">"motusData"</span><span class="op">)</span>, 
+                 repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>birdscanada <span class="op">=</span> <span class="st">'https://birdscanada.r-universe.dev'</span>,
+                           CRAN <span class="op">=</span> <span class="st">'https://cloud.r-project.org'</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># Load the packages for use</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/motusWTS/motus" class="external-link">motus</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">motusData</span><span class="op">)</span></code></pre></div>
-<p>If you need to update the existing <code>motus</code> package, the process is the same:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"MotusWTS/motus"</span><span class="op">)</span></code></pre></div>
 <p>If you want to know what version of the motus package you currently have installed:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span><span class="st">"motus"</span><span class="op">)</span></code></pre></div>
-<div class="section level3">
-<h3 id="troubleshooting-the-installation">Troubleshooting the installation<a class="anchor" aria-label="anchor" href="#troubleshooting-the-installation"></a>
-</h3>
-<p>Occasionally users run into problems while trying to install or update <code>motus</code>. Often this is related to problems with different versions of package dependencies. Here we suggest several solutions.</p>
-<ol style="list-style-type: decimal">
-<li>Update all packages during the installation</li>
-</ol>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://remotes.r-lib.org" class="external-link">remotes</a></span><span class="op">)</span>
-<span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"MotusWTS/motus"</span>, upgrade <span class="op">=</span> <span class="st">"always"</span><span class="op">)</span></code></pre></div>
-<ol start="2" style="list-style-type: decimal">
-<li>If the installation of Motus generates errors saying that some of the existing packages cannot be removed, you can try to quit any R session, manually delete the problematic package folder from your R libraries and manually install the package again before trying to install <code>motus.</code> You can also try to set up a custom R library folder with <code><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths()</a></code> and ensure that you have full write permissions on that folder, or try to start R in administrator (Windows) or SUDO mode (Linux/Ubuntu) and try installing again.</li>
-</ol>
-<p>To set a custom library folder for installing new packages:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="st">"C:/r-libraries/"</span><span class="op">)</span></code></pre></div>
-<ol start="3" style="list-style-type: decimal">
-<li><p>In some cases, it is easier to upgrade R itself by reinstalling the newest version of R: <a href="https://cran.r-project.org/" class="external-link uri">https://cran.r-project.org/</a>. <strong>Note:</strong> While this results in a nice clean installation with fewer problems, it necessitates the re-installation of R packages which can be time-consuming.</p></li>
-<li><p>If reinstalling R is not an option, you get an error related to packages built under a current version of R, AND updating your packages doesn’t help, you can consider overriding the error with the following code. <strong>Note:</strong> This might help you install <code>motus</code> but may result in other problems. If possible, it’s best to resolve the errors rather than ignoring them.</p></li>
-</ol>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://remotes.r-lib.org" class="external-link">remotes</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span><span class="st">"R_REMOTES_NO_ERRORS_FROM_WARNINGS"</span><span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"MotusWTS/motus"</span>, upgrade <span class="op">=</span> <span class="st">"always"</span><span class="op">)</span></code></pre></div>
-</div>
+<blockquote>
+<p>If you are running into difficulties installing the <code>motus</code> package, please refer to the <a href="troubleshooting.html"><code>troubleshooting</code></a> section for tips.</p>
+</blockquote>
 </div>
 <div class="section level2">
 <h2 id="installing-other-packages">Installing other packages<a class="anchor" aria-label="anchor" href="#installing-other-packages"></a>
 </h2>
-<p>Throughout these articles and examples, we use the <a href="https://www.tidyverse.org/" class="external-link"><code>tidyverse</code></a> collection of R packages for data science, including <code>tidyr</code>, <code>dplyr</code>, <code>ggplot2</code>, and <code>lubridate</code> (for managing and manipulating dates). See the <a href="https://www.tidyverse.org/" class="external-link"><code>tidyverse</code> website</a> for more information, or browse (or better still, thoroughly read) <a href="http://r4ds.had.co.nz/" class="external-link">R for Data Science</a> by Garrett Grolemund and Hadley Wickham. For mapping we also use the <code>rworldmap</code>, and <code>ggmap</code> packages. These can be installed from CRAN, as follows:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"maps"</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">maps</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"tidyverse"</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"rworldmap"</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AndySouth/rworldmap/" class="external-link">rworldmap</a></span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ggmap"</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dkahle/ggmap" class="external-link">ggmap</a></span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<p>Throughout these articles and examples, we use the <a href="https://www.tidyverse.org/" class="external-link"><code>tidyverse</code></a> collection of R packages for data science, including <code>tidyr</code>, <code>dplyr</code>, <code>ggplot2</code>, and <code>lubridate</code> (for managing and manipulating dates). See the <a href="https://www.tidyverse.org/" class="external-link"><code>tidyverse</code> website</a> for more information, or browse (or better still, thoroughly read) <a href="http://r4ds.had.co.nz/" class="external-link">R for Data Science</a> by Garrett Grolemund and Hadley Wickham. For mapping we also use the <code>rnaturalearth</code>, and <code>ggmap</code> packages.</p>
+<p>These can be installed from CRAN, as follows:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tidyverse"</span>, <span class="st">"ggmap"</span>, <span class="st">"rnaturalearth"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>We also need a couple of data packages for <code>rnaturalearth</code> which can be installed from the rOpenSci R-universe:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rnaturalearthhires"</span>, <span class="st">"rnaturalearthdata"</span><span class="op">)</span>,
+                 repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>ropensci <span class="op">=</span> <span class="st">'https://ropensci.r-universe.dev'</span>,  
+                           CRAN <span class="op">=</span> <span class="st">'https://cloud.r-project.org'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>Now, to use these packages include the following in your scripts:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/motusWTS/motus" class="external-link">motus</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">maps</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ropenscilabs/rnaturalearth" class="external-link">rnaturalearth</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AndySouth/rworldmap/" class="external-link">rworldmap</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dkahle/ggmap" class="external-link">ggmap</a></span><span class="op">)</span></code></pre></div>
-<p>Install but do not load the <code>plyr</code> package; you can use it directly for the handy <code>round_any()</code> function (with the code <code><a href="https://rdrr.io/pkg/plyr/man/round_any.html" class="external-link">plyr::round_any()</a></code>), but loading it can cause problems with <code>dplyr</code> functions:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"plyr"</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="internal-data-processing">Internal data processing<a class="anchor" aria-label="anchor" href="#internal-data-processing"></a>
@@ -204,7 +170,7 @@
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by John Brzustowski, Denis Lepage, Birds Canada.</p>
+<p>Developed by Birds Canada, John Brzustowski, Denis Lepage.</p>
 </div>
 
 <div class="pkgdown-footer-right">
