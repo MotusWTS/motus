@@ -61,7 +61,7 @@ df.alltags.sub <- left_join(tbl.alltags, tbl.filter, by = c("runID", "motusTagID
   select(-noise, -slop, -burstSlop, -done, -bootnum, -codeSet, 
          -mfg, -nomFreq, -markerNumber, -markerType, -tagDepComments, 
          -fullID, -deviceID, -recvDeployAlt, 
-         -speciesGroup, -gpsLat, -gpsLon, -recvAlt, -recvSiteName) %>%
+         -speciesGroup, -gpsLat, -gpsLon, -recvSiteName) %>%
   collect() %>%
   mutate(time = as_datetime(ts),  # work with times AFTER transforming to flat file
          tagDeployStart = as_datetime(tagDeployStart),
