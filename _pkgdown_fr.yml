@@ -7,7 +7,7 @@ lang: fr
 development:
   mode: devel
   destination: fr
-  version_label: default
+  version_label: light
 
 template:
   bootstrap: 5

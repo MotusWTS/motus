@@ -5,7 +5,7 @@ lang: en
 
 development:
   mode: release
-  version_label: default
+  version_label: light
 
 template:
   bootstrap: 5
