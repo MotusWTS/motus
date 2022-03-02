@@ -94,6 +94,7 @@ test_that("Empty activity table stops", {
 # getGPS ------------------------------------------------------------------
 context("getGPS")
 test_that("getGPS() runs as expected with no data", {
+  skip_on_os("windows")
   file.copy(system.file("extdata", "project-176.motus", package = "motus"), ".")
   
   # No GPS data
