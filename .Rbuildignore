@@ -10,6 +10,6 @@
 ^CODE_DESIGN\.md$
 ^\.github$
 ^vignettes/articles$
-^_pkgdown\.yml$
 ^docs$
-^pkgdown*
+^_pkgdown_en\.yml$
+^_pkgdown_fr\.yml$
