@@ -1,16 +1,4 @@
 context("Data returned")
-setup({
-  unlink("project-207.motus")
-  unlink("project-1.motus")
-  unlink("SG-3115BBBK1127.motus")
-})
-
-teardown({
-  unlink("project-207.motus")
-  unlink("project-1.motus")
-  unlink("SG-3115BBBK1127.motus")
-})
-
 
 # Local auth Tags ---------------------------------------------------------
 test_that("Tag data returned as expected", {
@@ -69,6 +57,9 @@ test_that("Tag data returned as expected", {
   expect_true(any(nchar(a$stationName) > 0))
   expect_true(any(a$stationID > 0))
   
+  DBI::dbDisconnect(tags$con)
+  unlink("project-207.motus")
+  
   expect_message(tags <- tagme(projRecv = 1, new = TRUE, update = TRUE)) %>%
     expect_is("src_SQLiteConnection")
   
@@ -82,6 +73,8 @@ test_that("Tag data returned as expected", {
     expect_is(a[, !!i][[1]], c("integer", "numeric"))
   }
   
+  DBI::dbDisconnect(tags$con)
+  unlink("project-1.motus")
 })
 
 
@@ -151,6 +144,7 @@ test_that("Reciever data returned as expected", {
   expect_true(any(a$stationID > 0))
   
   options(motus.test.max = orig)
+  DBI::dbDisconnect(tags$con)
   unlink("SG-3115BBBK0782.motus")
 })
 
@@ -178,6 +172,9 @@ test_that("activityAll and gpsAll return for tag data", {
   # Expect data downloaded
   expect_gt(dplyr::tbl(a, "activityAll") %>% dplyr::collect() %>% nrow(), 0)
   expect_gt(dplyr::tbl(a, "gpsAll") %>% dplyr::collect() %>% nrow(), 0)
+  
+  DBI::dbDisconnect(tags$con)
+  unlink("project-4.motus")
 })
 
 test_that("activityAll and gpsAll return for receiver data", {
@@ -203,4 +200,6 @@ test_that("activityAll and gpsAll return for receiver data", {
   # Expect data downloaded
   expect_gt(dplyr::tbl(tags, "activityAll") %>% dplyr::collect() %>% nrow(), 0)
   expect_gt(dplyr::tbl(tags, "gpsAll") %>% dplyr::collect() %>% nrow(), 0)
+  DBI::dbDisconnect(tags$con)
+  unlink("SG-3115BBBK0782.motus")
 })

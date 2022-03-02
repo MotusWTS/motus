@@ -1,4 +1,4 @@
-
+o <- options(connectionObserver = NULL)
 # srvXXX tests ---------------------------------------
 test_that("srvXXX work as expected", {
   
@@ -183,9 +183,6 @@ test_that("srvXXX work as expected", {
 
 test_that("tagme() errors appropriately", {
   skip_on_cran()
-
-  unlink("project-10.motus")
-  unlink("CTT-5031194D3168")
   
   sample_auth()
   
@@ -197,9 +194,6 @@ test_that("tagme() errors appropriately", {
                                     new = TRUE, update = TRUE), 
                               "updateMotusDb"),
                "Either") #...
-  
-  unlink("project-10.motus")
-  unlink("CTT-5031194D3168.motus")
 })
 
 
@@ -207,13 +201,12 @@ test_that("tagme() errors appropriately", {
 test_that("tagme() downloads data - Projects", {
   skip_on_cran()
   
-  unlink("project-176.motus")
-  
   sample_auth()
   
   expect_message(tags <- tagme(projRecv = 176, new = TRUE, update = TRUE)) %>%
     expect_is("src_SQLiteConnection")
-
+  DBI::dbDisconnect(tags$con)
+  unlink("project-176.motus")
 })
 
 
@@ -223,8 +216,9 @@ test_that("tagme() downloads data - Receivers", {
   skip_if_no_auth()
   
   unlink("SG-3115BBBK1127.motus")
-  expect_message(tagme("SG-3115BBBK1127", new = TRUE, update = TRUE)) %>%
+  expect_message(t <- tagme("SG-3115BBBK1127", new = TRUE, update = TRUE)) %>%
     expect_s3_class("src_sql")
+  DBI::dbDisconnect(t$con)
   unlink("SG-3115BBBK1127.motus")
 })
 
@@ -293,7 +287,7 @@ test_that("metadata()", {
   expect_message(metadata(tags), "Loading complete")
   
   expect_message(metadata(tags, projectIDs = 45), "Loading complete")
-  
+  DBI::dbDisconnect(tags$con)
   unlink("project-176.motus")
 })
 
@@ -317,3 +311,4 @@ test_that("srvAuth errors/warns/passes on package version", {
   with_mock("motus:::pkg_version" = mockery::mock(v[3]), 
             expect_silent(srvAuth()))
 })
+options(o)

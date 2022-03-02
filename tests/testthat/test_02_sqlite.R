@@ -1,20 +1,9 @@
 context("sql tables")
 
-setup({
-  unlink(list.files(pattern = "*.motus"))
-  unlink(list.files(pattern = "project-176_custom_views"))
-  file.copy(system.file("extdata", "project-176.motus", package = "motus"), ".")
-})
-
-teardown({
-  unlink(list.files(pattern = "*.motus"))
-})
-
-# Create DB, includes new tables
-
 test_that("Create DB, includes any new tables", {
   unlink("temp.motus")
-  temp <- dbplyr::src_dbi(DBI::dbConnect(RSQLite::SQLite(), "temp.motus")) %>%
+  temp <- dbplyr::src_dbi(DBI::dbConnect(RSQLite::SQLite(), "temp.motus"),
+                          auto_disconnect = TRUE) %>%
     expect_silent()
   expect_length(DBI::dbListTables(temp$con), 0)
   expect_silent(ensureDBTables(temp, 176, quiet = TRUE))
@@ -34,14 +23,13 @@ test_that("Create DB, includes any new tables", {
 # Create DB, includes any new fields -----------------------------------------
 test_that("Create DB, includes any new fields", {
   unlink("temp.motus")
-  expect_silent(temp <- dbplyr::src_dbi(DBI::dbConnect(RSQLite::SQLite(), 
-                                                       "temp.motus")))
+  temp <- dbplyr::src_dbi(DBI::dbConnect(RSQLite::SQLite(), "temp.motus"), 
+                          auto_disconnect = TRUE) %>%
+    expect_silent()
   expect_length(DBI::dbListTables(temp$con), 0)
   
   expect_message(ensureDBTables(temp, 176, quiet = FALSE))
   expect_silent(ensureDBTables(temp, 176, quiet = TRUE))
-  expect_silent(temp <- dbplyr::src_dbi(DBI::dbConnect(RSQLite::SQLite(), 
-                                                       "temp.motus")))
   expect_length(t <- DBI::dbListTables(temp$con), 32)
   
   # Expect columns in the tables
@@ -136,9 +124,9 @@ test_that("Views created correctly", {
   expect_equal(unique(atGPS$batchID), unique(arGPS$batchID))
   expect_equal(unique(atGPS$runID), unique(arGPS$runID))
   
+  DBI::dbDisconnect(tags$con)
   unlink("project-176.motus")
-  file.copy("project-176-backup.motus", "project-176.motus")
-  unlink("project-176-backup.motus")
+  file.rename("project-176-backup.motus", "project-176.motus")
 })
 
 
@@ -155,6 +143,9 @@ test_that("new tables have character ant and port", {
               dplyr::pull("port"), 
             "character")
   
+  DBI::dbDisconnect(tags)
+  unlink("project-176.motus")
+  
   # For receivers
   skip_if_no_auth()
   f <- system.file("extdata", "SG-3115BBBK0782.motus", package = "motus")
@@ -164,7 +155,7 @@ test_that("new tables have character ant and port", {
               dplyr::collect() %>% 
               dplyr::pull("ant"), 
             "character")
-  
+  DBI::dbDisconnect(tags)
 })
 
 
@@ -193,6 +184,7 @@ test_that("Missing tables recreated silently", {
   
   for(i in t) expect_true(DBI::dbExistsTable(tags$con, !!i))
   
+  DBI::dbDisconnect(tags$con)
   unlink("project-176.motus")
 })
 
@@ -229,6 +221,8 @@ test_that("check for custom views before update", {
    
   expect_message(tagme(176, update = TRUE), "updateMotusDb started")
   
+  DBI::dbDisconnect(tags$con)
+  unlink("project-176.motus")
   unlink(paste0("project-176_custom_views_", Sys.Date(), ".log"))
 })
 

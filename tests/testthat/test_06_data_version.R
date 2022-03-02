@@ -1,19 +1,6 @@
 context("Data version updates correctly")
 
-setup({
-  unlink("project-176.motus")
-  unlink("project-176_v1.motus")
-  unlink("SG-3115BBBK1127.motus")
-  unlink("SG-3115BBBK1127_v1.motus")
-})
-
-teardown({
-  # Remove old and new versions
-  unlink("project-176.motus")
-  unlink("project-176_v1.motus")
-  unlink("SG-3115BBBK1127.motus")
-  unlink("SG-3115BBBK1127_v1.motus")
-})
+o <- options(connectionObserver = NULL)
 
 test_that("Database updates as expected (proj) - new = TRUE", {
   if(utils::packageVersion("motus") >= 3) {
@@ -25,9 +12,8 @@ test_that("Database updates as expected (proj) - new = TRUE", {
     expect_warning(t <- tagme(176, new = TRUE, update = TRUE, rename = TRUE), 
                    "already exists")
     expect_true(file.exists("project-176_v1.motus"))  # Backup
+
     DBI::dbDisconnect(t$con)
-    rm(t)
-    gc()
     unlink("project-176.motus")
     unlink("project-176_v1.motus")
 
@@ -41,8 +27,6 @@ test_that("Database updates as expected (proj) - new = TRUE", {
                    "already exists")
     expect_true(file.exists("project-176_v1.motus"))  # Backup
     DBI::dbDisconnect(t$con)
-    rm(t)
-    gc()
     unlink("project-176.motus")
     unlink("project-176_v1.motus")
   }
@@ -78,14 +62,13 @@ test_that("Database updates as expected (proj) - new = FALSE", {
   
   DBI::dbDisconnect(old)
   DBI::dbDisconnect(new)
-
+  unlink("project-176.motus") # Leave _v1 for next test
 })
 
 test_that("Update fails if backup present (proj)", {
   skip_if_not(utils::packageVersion("motus") >= 3 && 
                 file.exists("project-176_v1.motus"))
     
-  unlink("project-176.motus") 
   file.copy("project-176_v1.motus", "project-176.motus")
   sample_auth()
   
@@ -93,6 +76,8 @@ test_that("Update fails if backup present (proj)", {
     tagme(176, new = FALSE, update = TRUE, rename = TRUE), "DATABASE UPDATE"),
     "_v1.motus already exists")
   
+  unlink("project-176.motus")
+  unlink("project-176_v1.motus")
 })
 
 test_that("Database updates as expected (receivers)", {
@@ -111,8 +96,6 @@ test_that("Database updates as expected (receivers)", {
                  "already exists")
   expect_true(file.exists("SG-3115BBBK1127_v1.motus"))  # Backup
   DBI::dbDisconnect(t$con)
-  rm(t)
-  gc()
   unlink("SG-3115BBBK1127.motus")
   unlink("SG-3115BBBK1127_v1.motus")
   
@@ -136,7 +119,7 @@ test_that("Database updates as expected (receivers)", {
   
   DBI::dbDisconnect(new)
   options(orig)
-
+  unlink("SG-3115BBBK1127.motus")
 })
 
 test_that("Update fails if backup present (receivers)", {
@@ -146,7 +129,6 @@ test_that("Update fails if backup present (receivers)", {
                 file.exists("SG-3115BBBK1127_v1.motus"))
   
   local_auth()
-  unlink("SG-3115BBBK1127.motus") 
   file.copy("SG-3115BBBK1127_v1.motus", "SG-3115BBBK1127.motus")
   
   expect_error(expect_message(
@@ -157,3 +139,5 @@ test_that("Update fails if backup present (receivers)", {
   unlink("SG-3115BBBK1127.motus")
   unlink("SG-3115BBBK1127_v1.motus")
 })
+
+options(o)
