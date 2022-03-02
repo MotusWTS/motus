@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">motus</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">4.0.6</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">5.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,10 +106,10 @@
 </h2>
 <p>Two R packages have been developed for Motus users:</p>
 <ol style="list-style-type: decimal">
-<li><p><code>motus</code>: provides functions for downloading and updated detections and deployment data, as well as for creating summary plots, and transforming (add sun rise/sun set times) and analyzing Motus data.</p></li>
+<li><p><code>motus</code>: provides functions for downloading and updating detection and deployment data, as well as for creating summary plots, and transforming (e.g. adding sunrise/sunset times) and analyzing Motus data.</p></li>
 <li><p><code>motusData</code>: provides sample datasets used in some of these articles</p></li>
 </ol>
-<p>Motus <strong>users</strong> can install the latest stable versions of the R packages using <code><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages()</a></code> (see below). As with all R packages, you only need to install the packages once; after installation, you need to load each package (using <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code>) each time you open a new R session.</p>
+<p>Motus users can install the latest stable versions of the R packages using <code><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages()</a></code> (see below). As with all R packages, you only need to install the packages once; after installation, you need to load each package (using <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code>) each time you open a new R session.</p>
 <p>Please note that some functionalities of the <code>remotes</code> package may require updated versions of R and RStudio. To avoid errors, please ensure you are using the most recent releases of <a href="https://www.r-project.org/" class="external-link">R</a> <strong>and</strong> <a href="https://www.rstudio.com/products/RStudio/" class="external-link">RStudio</a>. Update your R packages using <code><a href="https://rdrr.io/r/utils/update.packages.html" class="external-link">update.packages()</a></code> in the R console.</p>
 <p>Begin by installing the required packages, if not already installed.</p>
 <p>If you have used the older version of <code>motus</code> which included use of the <code>motusClient</code> package, it is recommended to first uninstall both packages.</p>
@@ -184,14 +184,14 @@
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AndySouth/rworldmap/" class="external-link">rworldmap</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dkahle/ggmap" class="external-link">ggmap</a></span><span class="op">)</span></code></pre></div>
-<p>We also install but do not load the <code>plyr</code> package; we use it directly for the handy <code>round_any()</code> function (with the code <code><a href="https://rdrr.io/pkg/plyr/man/round_any.html" class="external-link">plyr::round_any()</a></code>), but loading it can cause problems with the <code>dplyr</code> functions:</p>
+<p>Install but do not load the <code>plyr</code> package; you can use it directly for the handy <code>round_any()</code> function (with the code <code><a href="https://rdrr.io/pkg/plyr/man/round_any.html" class="external-link">plyr::round_any()</a></code>), but loading it can cause problems with <code>dplyr</code> functions:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"plyr"</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="internal-data-processing">Internal data processing<a class="anchor" aria-label="anchor" href="#internal-data-processing"></a>
 </h2>
-<p>As an animal moves within the detection range of a Motus station, radio transmissions, or ‘bursts’, are detected by antenna(s) and recorded by a receiver. These raw detection data are either uploaded to the Motus database instantaneously via internet connection, or downloaded from the receiver and uploaded to Motus manually. Behind the scenes, various functions read and process the raw detections data to produce the tag detections file that users access using the R package (see <a href="03-accessing-data.html">Chapter 3 - Accessing Data</a>). While most users will not need to call on the internal data processing functions, a complete list of functions within the Motus server R package can be found on the GitHub <a href="https://github.com/MotusWTS/motusServer" class="external-link">motusServer repository</a>.</p>
+<p>As an animal moves within the detection range of a Motus station, radio transmissions, or ‘bursts’, are detected by antenna(s) and recorded by a receiver. These raw detection data are either uploaded to the Motus database instantaneously via internet connection, or downloaded periodically from the receiver and uploaded to Motus manually. Behind the scenes, various functions read and process the raw detections data to produce the tag detections file that users access using the R package (see <a href="03-accessing-data.html">Chapter 3 - Accessing Data</a>). While most users will not need to call on the internal data processing functions, a complete list of functions within the Motus server R package can be found on the GitHub <a href="https://github.com/MotusWTS/motusServer" class="external-link">motusServer repository</a>.</p>
 <blockquote>
 <p><strong>Next</strong> <a href="03-accessing-data.html">Chapter 3 - Accessing detections data</a> <span style="font-size: 70%">(<a href="index.html">Explore all articles</a>)</span></p>
 </blockquote>

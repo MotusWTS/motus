@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="index.html">motus</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">4.0.6</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">5.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -174,10 +174,26 @@
 <h2 id="adding-and-updating">Adding and Updating<a class="anchor" aria-label="anchor" href="#adding-and-updating"></a></h2>
 <div class="section level3">
 <h3 id="adding-a-new-fieldcolumn">Adding a new field/column<a class="anchor" aria-label="anchor" href="#adding-a-new-fieldcolumn"></a></h3>
-<ul><li>Make change to <code>ensureDBTables()</code>
+<ul><li>Source <code>data-raw/internal_data.R</code>, this will run <code>data-raw/field_names.R</code> which should grab the new field name from the server and add it to the list of tables
+<ul><li>If there’s a special SQL command, however, you’ll have add that by hand to the table in <code>data-raw/field_names.R</code>
 </li>
+</ul></li>
 <li>Add update to <code>data-raw/updatesql.R</code> (run script, re-build package locally)</li>
-<li>Add test to make sure new field is added (test_sqlite and test_data_returned)</li>
+<li>Add test to make sure new field is added (<code>tests/testthat/test_02_sqlite.R</code>) and filled with data (<code>tests/testthat/test_07_data_returned.R</code>)</li>
+<li>Update internal data <code>source("data-raw/sample_data.R")</code>
+</li>
+<li>Update NEWS.md</li>
+<li>Run tests</li>
+<li>Push!</li>
+</ul></div>
+<div class="section level3">
+<h3 id="adding-a-new-table">Adding a new table<a class="anchor" aria-label="anchor" href="#adding-a-new-table"></a></h3>
+<ul><li>Add a section to <code>data-raw/field_names.R</code> pulling the new table data from the server and adding it to the list of tables</li>
+<li>In <code>ensureDBTables.R</code> either add it to the list of tables that are created empty, or add it to the section where tables are created and then immediately filled with data (and add the data that should fill it).</li>
+<li>If the table has <code>batchIDs</code> add it to the list of tables in which to remove deprecated <code>batchIDs</code> in <code><a href="reference/deprecateBatches.html">deprecateBatches()</a></code> in the <code>deprecateBatches.R</code> file.</li>
+<li>You <strong>shouldn’t</strong> need to add a section to <code>data-raw/updatesql.R</code>
+</li>
+<li>Add test to make sure new field is added (<code>tests/testthat/test_02_sqlite.R</code>) and filled with data (<code>tests/testthat/test_07_data_returned.R</code>)</li>
 <li>Update internal data <code>source("data-raw/sample_data.R")</code>
 </li>
 <li>Update NEWS.md</li>

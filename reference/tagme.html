@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">motus</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">4.0.6</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">5.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,7 +85,8 @@
   forceMeta <span class="op">=</span> <span class="cn">FALSE</span>,
   rename <span class="op">=</span> <span class="cn">FALSE</span>,
   skipActivity <span class="op">=</span> <span class="cn">FALSE</span>,
-  skipNodes <span class="op">=</span> <span class="cn">FALSE</span>
+  skipNodes <span class="op">=</span> <span class="cn">FALSE</span>,
+  skipDeprecated <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -125,6 +126,9 @@ newest version. If FALSE (default), user is prompted for action.</p></dd>
 <dt>skipNodes</dt>
 <dd><p>logical. Skip checking for and downloading <code>nodeData</code>? See
 <code><a href="nodeData.html">?nodeData</a></code> for more details</p></dd>
+<dt>skipDeprecated</dt>
+<dd><p>logical. Skip fetching list of deprecated batches
+stored in <code>deprecated</code>. See <code>?deprecateBatches()</code> for more details.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>

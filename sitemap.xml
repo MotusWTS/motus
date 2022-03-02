@@ -70,6 +70,9 @@
     <loc>https://MotusWTS.github.io/motus/reference/activity.html</loc>
   </url>
   <url>
+    <loc>https://MotusWTS.github.io/motus/reference/activityAll.html</loc>
+  </url>
+  <url>
     <loc>https://MotusWTS.github.io/motus/reference/checkVersion.html</loc>
   </url>
   <url>
@@ -80,6 +83,9 @@
   </url>
   <url>
     <loc>https://MotusWTS.github.io/motus/reference/deleteRunsFilter.html</loc>
+  </url>
+  <url>
+    <loc>https://MotusWTS.github.io/motus/reference/deprecateBatches.html</loc>
   </url>
   <url>
     <loc>https://MotusWTS.github.io/motus/reference/filterByActivity.html</loc>
@@ -98,6 +104,9 @@
   </url>
   <url>
     <loc>https://MotusWTS.github.io/motus/reference/getRunsFilters.html</loc>
+  </url>
+  <url>
+    <loc>https://MotusWTS.github.io/motus/reference/gpsAll.html</loc>
   </url>
   <url>
     <loc>https://MotusWTS.github.io/motus/reference/index.html</loc>
@@ -140,9 +149,6 @@
   </url>
   <url>
     <loc>https://MotusWTS.github.io/motus/reference/plotTagSig.html</loc>
-  </url>
-  <url>
-    <loc>https://MotusWTS.github.io/motus/reference/shorebirds.html</loc>
   </url>
   <url>
     <loc>https://MotusWTS.github.io/motus/reference/simSiteDet.html</loc>

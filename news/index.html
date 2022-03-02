@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">motus</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">4.0.6</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">5.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,11 +70,32 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="5.0.0" id="motus-500">motus 5.0.0<a class="anchor" aria-label="anchor" href="#motus-500"></a></h2>
+<div class="section level4">
+<h4 id="new-features-5-0-0">New features<a class="anchor" aria-label="anchor" href="#new-features-5-0-0"></a></h4>
+<ul><li>New <code>allruns</code> and <code>allrunsGPS</code> views for quicker first passes of the data with large datasets</li>
+<li>New field/column <code>attachment</code> in <code>tagDeps</code> table</li>
+<li>New field/column <code>numGPSfix</code> in <code>activity</code> and <code>activityAll</code> tables</li>
+<li>New field/columns <code>stationName</code> and <code>stationID</code> in <code>recvDeps</code> tables</li>
+<li>
+<code><a href="../reference/gpsAll.html">gpsAll()</a></code> and <code><a href="../reference/activityAll.html">activityAll()</a></code> functions allow downloading complete records of GPS points and Activity</li>
+<li>Deprecated batches are now returned to a new table <code>deprecated</code> on <code><a href="../reference/tagme.html">tagme()</a></code>
+</li>
+<li>
+<code><a href="../reference/deprecateBatches.html">deprecateBatches()</a></code> function to fetch and (optionally) remove deprecated batches from all relevant tables</li>
+</ul></div>
+<div class="section level4">
+<h4 id="bug-fixes-5-0-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-5-0-0"></a></h4>
+<ul><li>fixed bug in <code><a href="../reference/filterByActivity.html">filterByActivity()</a></code> resulting in <code>NA</code> probabilities</li>
+<li>fixed bug in <code><a href="../reference/getGPS.html">getGPS()</a></code> which crashed if <code>ts</code> had been converted to date/time format</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="4.0.6" id="motus-406">motus 4.0.6<a class="anchor" aria-label="anchor" href="#motus-406"></a></h2>
 <div class="section level4">
 <h4 id="bug-fixes-4-0-6">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-4-0-6"></a></h4>
 <ul><li>fixed bug resulting in missing metadata tables, and permission errors resulting from JSON formatting</li>
-<li>fixed bug where <code>forceMeta</code> didn’t force metadata download for previously downloaded tags</li>
+<li>fixed bug where <code>forceMeta</code> did not force metadata download for previously downloaded tags</li>
 <li>fixed warnings produced by <code><a href="../reference/plotRouteMap.html">plotRouteMap()</a></code> on old versions of R</li>
 </ul></div>
 </div>
