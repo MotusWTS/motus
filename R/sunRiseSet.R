@@ -83,7 +83,9 @@ sunRiseSet <- function(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = 
     dplyr::filter(!is.na(.data[[lat]]) & !is.na(.data[[lon]])) %>%
     dplyr::mutate(tz_sun = lutz::tz_lookup_coords(.data[[lat]], .data[[lon]], warn = FALSE)) %>%
     tidyr::nest(data = c(-"tz_sun")) %>%
-    dplyr::mutate(tz_sun = purrr::map_dbl(tz_sun, ~lutz::tz_offset("2021-01-01", .)$utc_offset_h)) %>%
+    dplyr::mutate(tz_sun = purrr::map_dbl(
+      .data$tz_sun, 
+      ~lutz::tz_offset("2021-01-01", .)$utc_offset_h)) %>%
     tidyr::unnest("data")
   
   data <- data %>%

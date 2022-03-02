@@ -13,6 +13,7 @@ teardown({
 # Create DB, includes new tables
 
 test_that("Create DB, includes any new tables", {
+  unlink("temp.motus")
   temp <- dbplyr::src_dbi(DBI::dbConnect(RSQLite::SQLite(), "temp.motus")) %>%
     expect_silent()
   expect_length(DBI::dbListTables(temp$con), 0)
@@ -26,11 +27,13 @@ test_that("Create DB, includes any new tables", {
   # Expect Deprecated
   expect_true("deprecated" %in% t)
   
+  DBI::dbDisconnect(temp$con)
   unlink("temp.motus")
 })
 
 # Create DB, includes any new fields -----------------------------------------
 test_that("Create DB, includes any new fields", {
+  unlink("temp.motus")
   expect_silent(temp <- dbplyr::src_dbi(DBI::dbConnect(RSQLite::SQLite(), 
                                                        "temp.motus")))
   expect_length(DBI::dbListTables(temp$con), 0)
@@ -81,6 +84,7 @@ test_that("Create DB, includes any new fields", {
   expect_true(all(c("stationName", "stationID") %in% 
                     DBI::dbListFields(temp$con, "recvDeps")))
 
+  DBI::dbDisconnect(temp$con)
   unlink("temp.motus")
 })
 
@@ -133,7 +137,8 @@ test_that("Views created correctly", {
   expect_equal(unique(atGPS$runID), unique(arGPS$runID))
   
   unlink("project-176.motus")
-  file.rename("project-176-backup.motus", "project-176.motus")
+  file.copy("project-176-backup.motus", "project-176.motus")
+  unlink("project-176-backup.motus")
 })
 
 
