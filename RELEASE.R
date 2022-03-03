@@ -94,13 +94,15 @@ devtools::check_win_release() # Win builder
 devtools::check_win_devel()
 devtools::check_win_oldrelease()
 
-## Test motus website
+## Test motus website (will be compiled online)
 
 # English
 file.copy("_pkgdown_en.yml", "_pkgdown.yml")
 pkgdown::build_site(lazy = TRUE)
 pkgdown::build_home_index()
+pkgdown::build_home()
 pkgdown::init_site()
+pkgdown::build_article("articles/06-exploring-data")
 pkgdown::build_article("articles/01-introduction")
 unlink("_pkgdown.yml")
 
