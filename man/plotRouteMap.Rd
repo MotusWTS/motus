@@ -43,12 +43,14 @@ points for receivers that were operational at some point during the date range.
 By default this function uses Stamen maps
 }
 \examples{
+\dontshow{if (requireNamespace("ggmap", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # You must use a .motus sql file, instructions to load using tagme() are
 # below
 
 # download and access data from project 176 in sql format
 # usename and password are both "motus.sample"
 \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+
 
 # OR use example sql file included in `motus`
 sql.motus <- tagme(176, update = FALSE, 
@@ -57,4 +59,5 @@ sql.motus <- tagme(176, update = FALSE,
 # Plot routemap of all detection data, with "terrain" maptype, and receivers
 # active between 2016-01-01 and 2017-01-01
 plotRouteMap(sql.motus, recvStart = "2016-01-01", recvEnd = "2016-12-31")
+\dontshow{\}) # examplesIf}
 }

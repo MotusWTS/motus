@@ -15,15 +15,15 @@ date/time, latitude, and longitude}
 
 \item{lon}{variable with longitude values, defaults to recvDeployLon}
 
-\item{ts}{variable with time in UTC as numeric or POSIXct, defaults to ts}
+\item{ts}{variable with time in UTC as numeric or POSIXct, defaults to \code{ts}}
 }
 \value{
 the original dataframe provided, with the following additional
 columns:
 \itemize{
-\item sunrise: sunrise time for the date and location provided by ts and lat/lon
+\item sunrise: sunrise time for the date and location provided by \code{ts} and lat/lon
 per row
-\item sunset: sunset time for the date and location provided by ts and lat/lon
+\item sunset: sunset time for the date and location provided by \code{ts} and lat/lon
 per row
 }
 }
