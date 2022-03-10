@@ -20,7 +20,7 @@ Authors@R: c(
     person("Paul", "Morrill", role = "ctb"),
     person("Josh", "Sayers", role = "ctb"),
     person("Philip", "Taylor", role = "ctb"))
-URL: https://github.com/motusWTS/motus, https://motusWTS.github.io/motus, https://motus.org
+URL: https://motusWTS.github.io/motus/
 Depends:
     R (>= 3.2.0)
 Imports:
