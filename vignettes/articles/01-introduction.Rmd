@@ -77,7 +77,7 @@ Department of Biology, Western University, Canada
 
 ## Acknowledgements
 
-These articles are largely based on the original Motus R Book by [Crewe et al. 2018](https://motus.org/motusRBook/archives/MotusRBook2018-01.pdf), and have been supplemented by numerous Motus collaborators and Birds Canada Motus staff.
+These articles are largely based on the original Motus R Book by [Crewe et al. 2018](https://raw.githubusercontent.com/MotusWTS/motus/master/inst/extdata/MotusRBook2018-01.pdf), and have been supplemented by numerous Motus collaborators and Birds Canada Motus staff.
 
 Motus is an international collaborative research network that uses coordinated automated radio telemetry to facilitate research and education on the ecology and conservation of small organisms. Motus is a program of Birds Canada in partnership with collaborating researchers and organizations. The Motus website includes a list of [Motus partners and collaborators](https://motus.org/data/partners). If your organization is not listed, please contact <motus@birdscanada.org>.
 
