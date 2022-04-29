@@ -28,7 +28,12 @@ test_that("Create DB, includes any new fields", {
     expect_silent()
   expect_length(DBI::dbListTables(temp$con), 0)
   
+  dbExecuteAll(
+    temp$con,
+    c("CREATE TABLE admInfo (db_version TEXT, data_version TEXT);",
+      "INSERT INTO admInfo (db_version, data_version) VALUES('2000-01-01', 0);"))
   expect_message(ensureDBTables(temp, 176, quiet = FALSE))
+  
   expect_silent(ensureDBTables(temp, 176, quiet = TRUE))
   expect_length(t <- DBI::dbListTables(temp$con), 32)
   
