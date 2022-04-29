@@ -3,16 +3,20 @@ title: "Removing deprecated batches"
 ---
 
 ```{r, include = FALSE}
-motus:::get_sample_data()
-options(width = 90)
-knitr::opts_chunk$set(cache = TRUE)
-```
-
-```{r, message = FALSE}
 library(motus)
 library(tidyverse)
 
+motus:::get_sample_data()
+options(width = 90)
+knitr::opts_chunk$set(cache = TRUE)
 sql.motus <- tagme(176, update = TRUE, new = FALSE, dir = "./data/")
+```
+
+```{r, message = FALSE, eval = FALSE}
+library(motus)
+library(tidyverse)
+
+sql.motus <- tagme(176, update = TRUE, new = TRUE, dir = "./data/")
 ```
 
 As work progresses and data are fine-tuned, batches of data may be re-run on the 
@@ -28,7 +32,15 @@ Users can see which batches have been deprecated in the `deprecated` table:
 tbl(sql.motus, "deprecated")
 ```
 
-These batches can be seen in other tables
+This table is updated everytime you update your data with a call to `tagme()`.
+If you want to update it again (without removing anything), you can use
+
+```{r, collapse = TRUE}
+sql.motus <- deprecateBatches(sql.motus, fetchOnly = TRUE)
+```
+
+
+To see where these batches are in your data, you can filter for the IDs
 
 ```{r}
 tbl(sql.motus, "alltags") %>%
@@ -37,14 +49,29 @@ tbl(sql.motus, "alltags") %>%
 
 Deprecated batches can be removed `deprecateBatches()` function,
 which fetches the update-to-date record of deprecated batches and then removes them.
-However, once removed deprecated batches are gone for good.
+
+However, **once removed deprecated batches are gone for good**.
 It is advisable to backup your dataset before proceeding 
-([see below](#why-not-remove-deprecated).
+([see below](#why-not-remove-deprecated)).
+
+Just in case, `deprecateBatches()` will ask you if you are sure you want to 
+remove the batches before proceeding. 
 
 ```{r, eval = FALSE}
 sql.motus <- deprecateBatches(sql.motus)
 ```
-```{r, echo = FALSE}
+
+```
+You are about to permanently delete up to 6 deprecated batches from project-176.motus
+Continue? 
+
+1: Yes
+2: No
+
+Selection: 1
+```
+
+```{r, echo = FALSE, collapse = TRUE}
 sql.motus <- deprecateBatches(sql.motus, ask = FALSE)
 ```
 
