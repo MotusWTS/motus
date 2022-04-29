@@ -1,0 +1,78 @@
+---
+title: "Removing deprecated batches"
+---
+
+```{r, include = FALSE}
+motus:::get_sample_data()
+options(width = 90)
+knitr::opts_chunk$set(cache = TRUE)
+```
+
+```{r, message = FALSE}
+library(motus)
+library(tidyverse)
+
+sql.motus <- tagme(176, update = TRUE, new = FALSE, dir = "./data/")
+```
+
+As work progresses and data are fine-tuned, batches of data may be re-run on the 
+Motus servers, and as a result, be assigned new batch numbers 
+(see the section on [Reprocessing Data](motus-data.html#reprocessing-data) in the [Understanding Motus Data](motus-data.html) article)
+
+This results is a disconnect between the user's local data and the data on the server.
+When the user updates their data, they'll have the new batches, but will also have the older, *deprecated* batches.
+
+Users can see which batches have been deprecated in the `deprecated` table:
+
+```{r}
+tbl(sql.motus, "deprecated")
+```
+
+These batches can be seen in other tables
+
+```{r}
+tbl(sql.motus, "alltags") %>%
+  filter(batchID %in% c(6000, 6001, 6002))
+```
+
+Deprecated batches can be removed `deprecateBatches()` function,
+which fetches the update-to-date record of deprecated batches and then removes them.
+However, once removed deprecated batches are gone for good.
+It is advisable to backup your dataset before proceeding 
+([see below](#why-not-remove-deprecated).
+
+```{r, eval = FALSE}
+sql.motus <- deprecateBatches(sql.motus)
+```
+```{r, echo = FALSE}
+sql.motus <- deprecateBatches(sql.motus, ask = FALSE)
+```
+
+
+After removal, you can see that the batches have been removed from the data
+
+```{r}
+tbl(sql.motus, "alltags") %>%
+  filter(batchID %in% c(6000, 6001, 6002))
+```
+
+Also that the `deprecated` table now lists `removed` as 1.
+
+```{r}
+tbl(sql.motus, "deprecated")
+```
+
+
+## Why **not** remove deprecated batches? {#why-not-remove-deprecated}
+In active projects it is a good idea to remove deprecated batches routinely,
+to ensure your data is update to date and as accurate as possible.
+
+However, once removed, deprecated batches are gone for good. 
+If you have an analysis or publication based on older data versions, 
+this analysis is no longer repeatable as you no longer have the original batches. 
+
+It is therefore advisable to keep a copy of the data base you need for a specific
+analysis backed up and static (i.e. no updates and no removal of deprecated batches).
+
+
+> **What Next?** [Explore all articles](index.html)
