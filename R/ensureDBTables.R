@@ -117,7 +117,7 @@ makeAdmInfo <- function(con) {
   sapply(makeTable("admInfo"), DBI::dbExecute, conn = con)
   DBI::dbExecute(con, 
                  glue::glue("INSERT INTO admInfo (db_version, data_version) 
-                             values ('1980-01-01', {motus_vars$dataVersion});"))
+                             values ('{Sys.Date()}', {motus_vars$dataVersion});"))
 }
 
 makeProjBatch <- function(con, projRecv) {
