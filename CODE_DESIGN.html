@@ -64,7 +64,6 @@
     </div>
 
 <div id="motus-design-principles" class="section level1">
-
 <p>This is a collection of developer notes and is by no means exhaustive or correct</p>
 <ul><li><a href="#versioning">Versioning</a></li>
 <li><a href="#naming-conventions">Naming Conventions</a></li>
@@ -89,8 +88,7 @@
 <div class="section level2">
 <h2 id="naming-conventions">Naming Conventions<a class="anchor" aria-label="anchor" href="#naming-conventions"></a></h2>
 <ul><li>Each function in a single file</li>
-<li>Exceptions
-<ul><li>
+<li>Exceptions<ul><li>
 <code>utils.R</code> contains internal utility functions</li>
 <li>
 <code>ensureDBTables.R</code> also contains <code>makeTable()</code> function to create tables</li>
@@ -102,15 +100,11 @@
 <h2 id="sqlite-databases">SQLite databases<a class="anchor" aria-label="anchor" href="#sqlite-databases"></a></h2>
 <ul><li>Empty SQLite tables created</li>
 <li>
-<code>ensureDBTables()</code> checks for existing tables and creates empty tables if they don’t exist
-<ul><li>some tables are created with <code>makeTables()</code>
-</li>
-</ul></li>
-<li>When changing the data base, the <code><a href="reference/checkVersion.html">checkVersion()</a></code> function compares the date in the <code>admInfo</code> table to the date in the internal data frame <code>sql_versions</code>
-<ul><li>
+<code>ensureDBTables()</code> checks for existing tables and creates empty tables if they don’t exist<ul><li>some tables are created with <code>makeTables()</code>
+</li></ul></li>
+<li>When changing the data base, the <code><a href="reference/checkVersion.html">checkVersion()</a></code> function compares the date in the <code>admInfo</code> table to the date in the internal data frame <code>sql_versions</code><ul><li>
 <code>sql_versions</code> is created in <code>./data-raw/updatesql.R</code>
-</li>
-</ul></li>
+</li></ul></li>
 <li>If the database is out of date, <code><a href="reference/checkVersion.html">checkVersion()</a></code> applies the SQLite commands in the <code>sql_version</code> data frame to update the data base</li>
 <li>Sometimes this involves making a temporary copy of a table, re-creating (with changes) the original table and then copying the data back. In these cases the table structure is created by the <code>makeTables()</code> function (so it can be used by <code>updatesql.R</code> as well as by <code>ensureDBTables()</code> without duplicating the process.</li>
 <li>
@@ -135,9 +129,7 @@
 <div class="section level2">
 <h2 id="special-files">Special Files<a class="anchor" aria-label="anchor" href="#special-files"></a></h2>
 <ul><li>
-<code>z.onLoad.R</code>
-<ul><li>Set session variables (i.e., API links) and motus options (i.e. max batches to get when testing)</li>
-</ul></li>
+<code>z.onLoad.R</code><ul><li>Set session variables (i.e., API links) and motus options (i.e. max batches to get when testing)</li></ul></li>
 <li>
 <code>Motus.R</code> - Define empty session variable (filled with <code>z.onLoad.R</code>)</li>
 <li>
@@ -145,9 +137,7 @@
 </ul></div>
 <div class="section level2">
 <h2 id="data-files">Data Files<a class="anchor" aria-label="anchor" href="#data-files"></a></h2>
-<ul><li>Sample data for examples and testing, created in <code>./data-raw/sample_data.R</code>
-<ul><li>INCOMPLETE</li>
-</ul></li>
+<ul><li>Sample data for examples and testing, created in <code>./data-raw/sample_data.R</code><ul><li>INCOMPLETE</li></ul></li>
 <li><code>updatesql.R</code></li>
 </ul></div>
 <div class="section level2">
@@ -168,10 +158,8 @@
 <h2 id="adding-and-updating">Adding and Updating<a class="anchor" aria-label="anchor" href="#adding-and-updating"></a></h2>
 <div class="section level3">
 <h3 id="adding-a-new-fieldcolumn">Adding a new field/column<a class="anchor" aria-label="anchor" href="#adding-a-new-fieldcolumn"></a></h3>
-<ul><li>Source <code>data-raw/internal_data.R</code>, this will run <code>data-raw/field_names.R</code> which should grab the new field name from the server and add it to the list of tables
-<ul><li>If there’s a special SQL command, however, you’ll have add that by hand to the table in <code>data-raw/field_names.R</code>
-</li>
-</ul></li>
+<ul><li>Source <code>data-raw/internal_data.R</code>, this will run <code>data-raw/field_names.R</code> which should grab the new field name from the server and add it to the list of tables<ul><li>If there’s a special SQL command, however, you’ll have add that by hand to the table in <code>data-raw/field_names.R</code>
+</li></ul></li>
 <li>Add update to <code>data-raw/updatesql.R</code> (run script, re-build package locally)</li>
 <li>Add test to make sure new field is added (<code>tests/testthat/test_02_sqlite.R</code>) and filled with data (<code>tests/testthat/test_07_data_returned.R</code>)</li>
 <li>Update internal data <code>source("data-raw/sample_data.R")</code>
@@ -205,7 +193,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
     </footer></div>

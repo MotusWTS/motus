@@ -269,20 +269,27 @@
 <code class="sourceCode R"><span class="va">df.tagDeps</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">tagID</span>, <span class="va">projectID</span>, <span class="va">timeStart</span>, <span class="va">timeEnd</span>, <span class="va">speciesID</span>, <span class="va">latitude</span>, <span class="va">longitude</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##      tagID         projectID     timeStart                  </span>
-<span class="co">##  Min.   :16011   Min.   :176   Min.   :2015-08-02 11:40:00  </span>
-<span class="co">##  1st Qu.:16038   1st Qu.:176   1st Qu.:2015-08-13 15:25:00  </span>
-<span class="co">##  Median :16050   Median :176   Median :2015-09-10 17:50:30  </span>
-<span class="co">##  Mean   :18616   Mean   :176   Mean   :2016-01-24 12:49:36  </span>
-<span class="co">##  3rd Qu.:22890   3rd Qu.:176   3rd Qu.:2016-09-25 15:34:15  </span>
-<span class="co">##  Max.   :23319   Max.   :176   Max.   :2016-10-15 16:00:00  </span>
-<span class="co">##     timeEnd                      speciesID       latitude       longitude     </span>
-<span class="co">##  Min.   :2015-12-17 11:40:00   Min.   :4180   Min.   :50.19   Min.   :-80.69  </span>
-<span class="co">##  1st Qu.:2015-12-28 15:25:00   1st Qu.:4670   1st Qu.:50.52   1st Qu.:-80.45  </span>
-<span class="co">##  Median :2016-03-10 17:50:30   Median :4690   Median :51.48   Median :-80.45  </span>
-<span class="co">##  Mean   :2016-07-28 18:09:36   Mean   :4674   Mean   :51.18   Mean   :-75.85  </span>
-<span class="co">##  3rd Qu.:2017-06-06 09:53:45   3rd Qu.:4690   3rd Qu.:51.48   3rd Qu.:-67.92  </span>
-<span class="co">##  Max.   :2017-06-26 16:00:00   Max.   :4820   Max.   :51.80   Max.   :-63.75</span></code></pre>
+<pre><code><span class="co">##      tagID         projectID     timeStart                     </span>
+<span class="co">##  Min.   :16011   Min.   :176   Min.   :2015-08-02 11:40:00.00  </span>
+<span class="co">##  1st Qu.:16038   1st Qu.:176   1st Qu.:2015-08-13 15:25:00.00  </span>
+<span class="co">##  Median :16050   Median :176   Median :2015-09-10 17:50:30.00  </span>
+<span class="co">##  Mean   :18616   Mean   :176   Mean   :2016-01-24 12:49:36.67  </span>
+<span class="co">##  3rd Qu.:22890   3rd Qu.:176   3rd Qu.:2016-09-25 15:34:15.00  </span>
+<span class="co">##  Max.   :23319   Max.   :176   Max.   :2016-10-15 16:00:00.00  </span>
+<span class="co">##     timeEnd                         speciesID       latitude    </span>
+<span class="co">##  Min.   :2015-12-17 11:40:00.00   Min.   :4180   Min.   :50.19  </span>
+<span class="co">##  1st Qu.:2015-12-28 15:25:00.00   1st Qu.:4670   1st Qu.:50.52  </span>
+<span class="co">##  Median :2016-03-10 17:50:30.00   Median :4690   Median :51.48  </span>
+<span class="co">##  Mean   :2016-07-28 18:09:36.67   Mean   :4674   Mean   :51.18  </span>
+<span class="co">##  3rd Qu.:2017-06-06 09:53:45.00   3rd Qu.:4690   3rd Qu.:51.48  </span>
+<span class="co">##  Max.   :2017-06-26 16:00:00.00   Max.   :4820   Max.   :51.80  </span>
+<span class="co">##    longitude     </span>
+<span class="co">##  Min.   :-80.69  </span>
+<span class="co">##  1st Qu.:-80.45  </span>
+<span class="co">##  Median :-80.45  </span>
+<span class="co">##  Mean   :-75.85  </span>
+<span class="co">##  3rd Qu.:-67.92  </span>
+<span class="co">##  Max.   :-63.75</span></code></pre>
 <p>There are no missing start dates (<code>timeStart</code>), and deployment start dates range from 2015 to 2016, which is reasonable for this project.</p>
 <p>The <code>speciesID</code>s are numeric, and somewhat meaningless without an ability to assign an actual species name to the numeric ID, which we do next, however there are no missing values.</p>
 <p><strong>b. Check that <code>speciesID</code>s are appropriate for your data</strong></p>
@@ -399,22 +406,22 @@
 <span class="co">##  3rd Qu.:-4.75   3rd Qu.:0.0000   3rd Qu.:1.470e+09   3rd Qu.:1.481e+09  </span>
 <span class="co">##  Max.   :-4.00   Max.   :1.0000   Max.   :1.503e+09   Max.   :1.503e+09  </span>
 <span class="co">##  NA's   :16                                           NA's   :2          </span>
-<span class="co">##    utcOffset     stationID    macAddress          timeStart                  </span>
-<span class="co">##  Min.   : NA   Min.   : NA   Length:18          Min.   :2014-07-12 00:00:00  </span>
-<span class="co">##  1st Qu.: NA   1st Qu.: NA   Class :character   1st Qu.:2015-05-24 06:00:00  </span>
-<span class="co">##  Median : NA   Median : NA   Mode  :character   Median :2016-05-17 12:00:00  </span>
-<span class="co">##  Mean   :NaN   Mean   :NaN                      Mean   :2016-01-23 14:03:16  </span>
-<span class="co">##  3rd Qu.: NA   3rd Qu.: NA                      3rd Qu.:2016-08-04 01:26:15  </span>
-<span class="co">##  Max.   : NA   Max.   : NA                      Max.   :2017-08-20 23:30:00  </span>
-<span class="co">##  NA's   :18    NA's   :18                                                    </span>
-<span class="co">##     timeEnd                   </span>
-<span class="co">##  Min.   :2014-11-06 00:00:00  </span>
-<span class="co">##  1st Qu.:2015-10-20 00:00:00  </span>
-<span class="co">##  Median :2016-03-16 21:05:00  </span>
-<span class="co">##  Mean   :2016-03-25 17:06:15  </span>
-<span class="co">##  3rd Qu.:2016-12-01 00:00:00  </span>
-<span class="co">##  Max.   :2017-08-20 23:30:00  </span>
-<span class="co">##  NA's   :2</span></code></pre>
+<span class="co">##    utcOffset     stationID    macAddress       </span>
+<span class="co">##  Min.   : NA   Min.   : NA   Length:18         </span>
+<span class="co">##  1st Qu.: NA   1st Qu.: NA   Class :character  </span>
+<span class="co">##  Median : NA   Median : NA   Mode  :character  </span>
+<span class="co">##  Mean   :NaN   Mean   :NaN                     </span>
+<span class="co">##  3rd Qu.: NA   3rd Qu.: NA                     </span>
+<span class="co">##  Max.   : NA   Max.   : NA                     </span>
+<span class="co">##  NA's   :18    NA's   :18                      </span>
+<span class="co">##    timeStart                         timeEnd                   </span>
+<span class="co">##  Min.   :2014-07-12 00:00:00.00   Min.   :2014-11-06 00:00:00  </span>
+<span class="co">##  1st Qu.:2015-05-24 06:00:00.00   1st Qu.:2015-10-20 00:00:00  </span>
+<span class="co">##  Median :2016-05-17 12:00:00.00   Median :2016-03-16 21:05:00  </span>
+<span class="co">##  Mean   :2016-01-23 14:03:16.67   Mean   :2016-03-25 17:06:15  </span>
+<span class="co">##  3rd Qu.:2016-08-04 01:26:15.00   3rd Qu.:2016-12-01 00:00:00  </span>
+<span class="co">##  Max.   :2017-08-20 23:30:00.00   Max.   :2017-08-20 23:30:00  </span>
+<span class="co">##                                   NA's   :2</span></code></pre>
 <p>There are 18 receiver deployments registered to the sample project. Four deployments are missing latitude and longitude, and six deployments are missing end dates, which suggests that those receivers are still deployed.</p>
 <p>The following code keeps only variables of interest (by removing those we do not need), and arranges the remaining records by receiver ID, latitude, and start date:</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
@@ -617,14 +624,14 @@
 <span class="co">##  3rd Qu.:51.70   3rd Qu.:-80.45   3rd Qu.:0.00000  </span>
 <span class="co">##  Max.   :51.88   Max.   :-79.81   Max.   :1.00000  </span>
 <span class="co">##  NA's   :3       NA's   :3                         </span>
-<span class="co">##    timeStart                      timeEnd                      projectID  </span>
-<span class="co">##  Min.   :2014-07-12 00:00:00   Min.   :2014-11-06 00:00:00   Min.   :176  </span>
-<span class="co">##  1st Qu.:2015-05-24 00:00:00   1st Qu.:2015-11-02 00:00:00   1st Qu.:176  </span>
-<span class="co">##  Median :2016-05-18 00:00:00   Median :2016-10-05 08:15:00   Median :176  </span>
-<span class="co">##  Mean   :2016-02-22 12:28:39   Mean   :2016-05-04 00:08:20   Mean   :176  </span>
-<span class="co">##  3rd Qu.:2017-05-16 15:55:00   3rd Qu.:2016-12-01 00:00:00   3rd Qu.:176  </span>
-<span class="co">##  Max.   :2017-08-20 23:30:00   Max.   :2017-08-20 23:30:00   Max.   :176  </span>
-<span class="co">##                                NA's   :7                                  </span>
+<span class="co">##    timeStart                         timeEnd                      projectID  </span>
+<span class="co">##  Min.   :2014-07-12 00:00:00.00   Min.   :2014-11-06 00:00:00   Min.   :176  </span>
+<span class="co">##  1st Qu.:2015-05-24 00:00:00.00   1st Qu.:2015-11-02 00:00:00   1st Qu.:176  </span>
+<span class="co">##  Median :2016-05-18 00:00:00.00   Median :2016-10-05 08:15:00   Median :176  </span>
+<span class="co">##  Mean   :2016-02-22 12:28:39.26   Mean   :2016-05-04 00:08:20   Mean   :176  </span>
+<span class="co">##  3rd Qu.:2017-05-16 15:55:00.00   3rd Qu.:2016-12-01 00:00:00   3rd Qu.:176  </span>
+<span class="co">##  Max.   :2017-08-20 23:30:00.00   Max.   :2017-08-20 23:30:00   Max.   :176  </span>
+<span class="co">##                                   NA's   :7                                  </span>
 <span class="co">##    elevation          port           antennaType           bearing      </span>
 <span class="co">##  Min.   :-7.000   Length:55          Length:55          Min.   : 10.00  </span>
 <span class="co">##  1st Qu.:-7.000   Class :character   Class :character   1st Qu.: 66.25  </span>
@@ -692,7 +699,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
     </footer>

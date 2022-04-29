@@ -356,11 +356,11 @@ There are several reasons:</p>
 <p>Therefore, for simplicity we <strong>choose reprocessing periods that cross no runs</strong>. Currently, that means a boot session, <a href="#boot">as discussed above</a>.</p>
 </div>
 <div class="section level3">
-<h3 id="distributing-reprocessed-data">Distributing reprocessed data<a class="anchor" aria-label="anchor" href="#distributing-reprocessed-data"></a>
+<h3 id="distributing-reprocessed-data-eventual">Distributing reprocessed data (eventual)<a class="anchor" aria-label="anchor" href="#distributing-reprocessed-data-eventual"></a>
 </h3>
 <p>The previous section shows why we only reprocess data by boot session. Given that, how do we get reprocessed data to users while fulfilling the reprocessing contract?</p>
 <p>Note that a reprocessed boot session will fully replace one or more existing batches and one or more runs, because batches and runs both nest within boot sessions.</p>
-<p>Replacement of data by reprocessed versions should happen in-band (point #5 above), so one approach is this:</p>
+<p>Replacement of data by reprocessed versions should happen in-band (point #5 above), so <strong>one <em>potential</em> approach</strong> is this:</p>
 <ul>
 <li>the <code>batches_for_XXX</code> API entries should mark new batches which result from reprocessing, so that the client can deal with them appropriately. This can be done by adding a field called <code>reprocessID</code> with these semantics:
 <ul>
@@ -412,7 +412,7 @@ There are several reasons:</p>
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
     </footer>

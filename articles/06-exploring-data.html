@@ -187,13 +187,13 @@
 <span class="co">##  3rd Qu.:50.19   3rd Qu.:-63.75   3rd Qu.: 50.20   3rd Qu.: -63.75  </span>
 <span class="co">##  Max.   :51.80   Max.   :-63.75   Max.   : 62.89   Max.   : -60.02  </span>
 <span class="co">##  NA's   :80949   NA's   :80949    NA's   :173      NA's   :173      </span>
-<span class="co">##       time                    </span>
-<span class="co">##  Min.   :2015-07-23 10:10:54  </span>
-<span class="co">##  1st Qu.:2016-10-19 02:00:53  </span>
-<span class="co">##  Median :2016-10-26 13:19:24  </span>
-<span class="co">##  Mean   :2016-12-15 03:37:44  </span>
-<span class="co">##  3rd Qu.:2017-03-14 08:46:57  </span>
-<span class="co">##  Max.   :2017-06-26 16:11:04  </span>
+<span class="co">##       time                       </span>
+<span class="co">##  Min.   :2015-07-23 10:10:54.90  </span>
+<span class="co">##  1st Qu.:2016-10-19 02:00:53.27  </span>
+<span class="co">##  Median :2016-10-26 13:19:24.00  </span>
+<span class="co">##  Mean   :2016-12-15 03:37:44.72  </span>
+<span class="co">##  3rd Qu.:2017-03-14 08:46:57.19  </span>
+<span class="co">##  Max.   :2017-06-26 16:11:04.47  </span>
 <span class="co">## </span></code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># same summary for the filtered sql data</span>
@@ -201,14 +201,14 @@
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">motusTagID</span>, <span class="va">runLen</span>, <span class="va">speciesEN</span>, <span class="va">tagDepLat</span>, <span class="va">tagDepLon</span>, 
          <span class="va">recvDeployLat</span>, <span class="va">recvDeployLon</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##       time                       motusTagID        runLen      </span>
-<span class="co">##  Min.   :2015-08-03 06:37:11   Min.   :-1953   Min.   :   4.0  </span>
-<span class="co">##  1st Qu.:2016-10-06 19:18:39   1st Qu.:22897   1st Qu.:  27.0  </span>
-<span class="co">##  Median :2016-10-09 21:50:50   Median :22897   Median :  97.0  </span>
-<span class="co">##  Mean   :2016-09-05 19:18:32   Mean   :22262   Mean   : 234.7  </span>
-<span class="co">##  3rd Qu.:2016-10-19 10:42:18   3rd Qu.:22897   3rd Qu.: 287.0  </span>
-<span class="co">##  Max.   :2017-04-20 22:33:19   Max.   :23316   Max.   :1371.0  </span>
-<span class="co">##                                                                </span>
+<pre><code><span class="co">##       time                          motusTagID        runLen      </span>
+<span class="co">##  Min.   :2015-08-03 06:37:11.58   Min.   :-1953   Min.   :   4.0  </span>
+<span class="co">##  1st Qu.:2016-10-06 19:18:39.83   1st Qu.:22897   1st Qu.:  27.0  </span>
+<span class="co">##  Median :2016-10-09 21:50:50.03   Median :22897   Median :  97.0  </span>
+<span class="co">##  Mean   :2016-09-05 19:18:32.42   Mean   :22262   Mean   : 234.7  </span>
+<span class="co">##  3rd Qu.:2016-10-19 10:42:18.48   3rd Qu.:22897   3rd Qu.: 287.0  </span>
+<span class="co">##  Max.   :2017-04-20 22:33:19.25   Max.   :23316   Max.   :1371.0  </span>
+<span class="co">##                                                                   </span>
 <span class="co">##   speciesEN           tagDepLat       tagDepLon      recvDeployLat   </span>
 <span class="co">##  Length:48225       Min.   :50.19   Min.   :-80.69   Min.   :-42.50  </span>
 <span class="co">##  Class :character   1st Qu.:50.19   1st Qu.:-63.75   1st Qu.: 50.20  </span>
@@ -549,7 +549,7 @@ There are several ways to use the <code>ggmap</code> package. One is with Google
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
     </footer>
