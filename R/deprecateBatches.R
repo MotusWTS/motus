@@ -66,10 +66,12 @@ fetchDeprecated <- function(src, verbose = FALSE) {
   }
 
   # Only get new batches
-  new <- dplyr::tbl(src, "deprecated") %>% 
-    dplyr::collect() %>%
-    dplyr::anti_join(b, ., by = "batchID") %>%
-    dplyr::mutate(removed = 0)
+  if(nrow(b) > 0) {
+    new <- dplyr::tbl(src, "deprecated") %>% 
+      dplyr::collect() %>%
+      dplyr::anti_join(b, ., by = "batchID") %>%
+      dplyr::mutate(removed = 0)
+  } else new <- data.frame()
 
   # Add to deprecated table
   dbInsertOrReplace(src$con, "deprecated", new)
