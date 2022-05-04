@@ -21,7 +21,7 @@ sql.motus <- tagme(176, update = TRUE, new = TRUE, dir = "./data/")
 
 As work progresses and data are fine-tuned, batches of data may be re-run on the 
 Motus servers, and as a result, be assigned new batch numbers 
-(see the section on [Reprocessing Data](motus-data.html#reprocessing-data) in the [Understanding Motus Data](motus-data.html) article)
+(see the section on [Reprocessing Data](motus-data.html#reprocessing-data) in the [Understanding Motus Data](motus-data.html) article).
 
 This results is a disconnect between the user's local data and the data on the server.
 When the user updates their data, they'll have the new batches, but will also have the older, *deprecated* batches.
@@ -32,7 +32,10 @@ Users can see which batches have been deprecated in the `deprecated` table:
 tbl(sql.motus, "deprecated")
 ```
 
-This table is updated everytime you update your data with a call to `tagme()`.
+Each `batchID` listed represented a deprecated batch. The column `removed` indicates
+whether this batch has been removed from your data (`1`) or not (`0`). 
+
+This table is updated every time you update your data with a call to `tagme()`.
 If you want to update it again (without removing anything), you can use
 
 ```{r, collapse = TRUE}
@@ -40,17 +43,18 @@ sql.motus <- deprecateBatches(sql.motus, fetchOnly = TRUE)
 ```
 
 
-To see where these batches are in your data, you can filter for the IDs
+To see where these batches are in your data, you can filter for the IDs in a 
+specific table
 
 ```{r}
 tbl(sql.motus, "alltags") %>%
   filter(batchID %in% c(6000, 6001, 6002))
 ```
 
-Deprecated batches can be removed `deprecateBatches()` function,
-which fetches the update-to-date record of deprecated batches and then removes them.
+Deprecated batches can also be removed with the `deprecateBatches()` function,
+which, by default, fetches the update-to-date record of deprecated batches and then removes them.
 
-However, **once removed deprecated batches are gone for good**.
+However, **once removed, deprecated batches are gone for good**.
 It is advisable to backup your dataset before proceeding 
 ([see below](#why-not-remove-deprecated)).
 
@@ -98,8 +102,9 @@ However, once removed, deprecated batches are gone for good.
 If you have an analysis or publication based on older data versions, 
 this analysis is no longer repeatable as you no longer have the original batches. 
 
-It is therefore advisable to keep a copy of the data base you need for a specific
-analysis backed up and static (i.e. no updates and no removal of deprecated batches).
+It is therefore advisable to keep a copy of the database (i.e. the `XXXX.motus`
+file) you need for a specific analysis backed up and static 
+(i.e. no updates and no removal of deprecated batches).
 
 
 > **What Next?** [Explore all articles](index.html)
