@@ -97,7 +97,7 @@
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span>
 
 <span class="va">sql.motus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="fl">176</span>, update <span class="op">=</span> <span class="cn">TRUE</span>, new <span class="op">=</span> <span class="cn">TRUE</span>, dir <span class="op">=</span> <span class="st">"./data/"</span><span class="op">)</span></code></pre></div>
-<p>As work progresses and data are fine-tuned, batches of data may be re-run on the Motus servers, and as a result, be assigned new batch numbers (see the section on <a href="motus-data.html#reprocessing-data">Reprocessing Data</a> in the <a href="motus-data.html">Understanding Motus Data</a> article)</p>
+<p>As work progresses and data are fine-tuned, batches of data may be re-run on the Motus servers, and as a result, be assigned new batch numbers (see the section on <a href="motus-data.html#reprocessing-data">Reprocessing Data</a> in the <a href="motus-data.html">Understanding Motus Data</a> article).</p>
 <p>This results is a disconnect between the user’s local data and the data on the server. When the user updates their data, they’ll have the new batches, but will also have the older, <em>deprecated</em> batches.</p>
 <p>Users can see which batches have been deprecated in the <code>deprecated</code> table:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -113,13 +113,14 @@
 <span class="co">## <span style="color: #BCBCBC;">4</span>    <span style="text-decoration: underline;">6</span>003           4       0</span>
 <span class="co">## <span style="color: #BCBCBC;">5</span>    <span style="text-decoration: underline;">6</span>004           4       0</span>
 <span class="co">## <span style="color: #BCBCBC;">6</span>    <span style="text-decoration: underline;">6</span>005           4       0</span></code></pre>
-<p>This table is updated everytime you update your data with a call to <code><a href="../reference/tagme.html">tagme()</a></code>. If you want to update it again (without removing anything), you can use</p>
+<p>Each <code>batchID</code> listed represented a deprecated batch. The column <code>removed</code> indicates whether this batch has been removed from your data (<code>1</code>) or not (<code>0</code>).</p>
+<p>This table is updated every time you update your data with a call to <code><a href="../reference/tagme.html">tagme()</a></code>. If you want to update it again (without removing anything), you can use</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sql.motus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/deprecateBatches.html">deprecateBatches</a></span><span class="op">(</span><span class="va">sql.motus</span>, fetchOnly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">## Fetching deprecated batches</span>
 <span class="co">## Total deprecated batches: 6</span>
 <span class="co">## New deprecated batches: 0</span></code></pre></div>
-<p>To see where these batches are in your data, you can filter for the IDs</p>
+<p>To see where these batches are in your data, you can filter for the IDs in a specific table</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql.motus</span>, <span class="st">"alltags"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">batchID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6000</span>, <span class="fl">6001</span>, <span class="fl">6002</span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -145,8 +146,8 @@
 <span class="co">## <span style="color: #949494;">#   tagDeployID &lt;int&gt;, speciesID &lt;int&gt;, markerNumber &lt;chr&gt;, markerType &lt;chr&gt;,</span></span>
 <span class="co">## <span style="color: #949494;">#   tagDeployStart &lt;dbl&gt;, tagDeployEnd &lt;dbl&gt;, tagDepLat &lt;dbl&gt;, tagDepLon &lt;dbl&gt;,</span></span>
 <span class="co">## <span style="color: #949494;">#   tagDepAlt &lt;dbl&gt;, tagDepComments &lt;chr&gt;, tagDeployTest &lt;int&gt;, fullID &lt;chr&gt;, …</span></span></code></pre>
-<p>Deprecated batches can be removed <code><a href="../reference/deprecateBatches.html">deprecateBatches()</a></code> function, which fetches the update-to-date record of deprecated batches and then removes them.</p>
-<p>However, <strong>once removed deprecated batches are gone for good</strong>. It is advisable to backup your dataset before proceeding (<a href="#why-not-remove-deprecated">see below</a>).</p>
+<p>Deprecated batches can also be removed with the <code><a href="../reference/deprecateBatches.html">deprecateBatches()</a></code> function, which, by default, fetches the update-to-date record of deprecated batches and then removes them.</p>
+<p>However, <strong>once removed, deprecated batches are gone for good</strong>. It is advisable to backup your dataset before proceeding (<a href="#why-not-remove-deprecated">see below</a>).</p>
 <p>Just in case, <code><a href="../reference/deprecateBatches.html">deprecateBatches()</a></code> will ask you if you are sure you want to remove the batches before proceeding.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sql.motus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/deprecateBatches.html">deprecateBatches</a></span><span class="op">(</span><span class="va">sql.motus</span><span class="op">)</span></code></pre></div>
@@ -200,7 +201,7 @@ Selection: 1</code></pre>
 </h2>
 <p>In active projects it is a good idea to remove deprecated batches routinely, to ensure your data is update to date and as accurate as possible.</p>
 <p>However, once removed, deprecated batches are gone for good. If you have an analysis or publication based on older data versions, this analysis is no longer repeatable as you no longer have the original batches.</p>
-<p>It is therefore advisable to keep a copy of the data base you need for a specific analysis backed up and static (i.e. no updates and no removal of deprecated batches).</p>
+<p>It is therefore advisable to keep a copy of the database (i.e. the <code>XXXX.motus</code> file) you need for a specific analysis backed up and static (i.e. no updates and no removal of deprecated batches).</p>
 <blockquote>
 <p><strong>What Next?</strong> <a href="index.html">Explore all articles</a></p>
 </blockquote>
