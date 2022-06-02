@@ -1,5 +1,3 @@
-context("sql tables")
-
 test_that("Create DB, includes any new tables", {
   unlink("temp.motus")
   temp <- dbplyr::src_dbi(DBI::dbConnect(RSQLite::SQLite(), "temp.motus"),

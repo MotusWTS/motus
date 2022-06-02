@@ -46,7 +46,7 @@
 # Steps/Commands to run before a package release -----------------------------
 
 ## Install required packages (if they don't already exist)
-remotes::install_deps()
+remotes::install_deps(dependencies = TRUE)
 
 
 ## Update internal data files ------------------------------
@@ -72,7 +72,7 @@ spelling::update_wordlist() # All remaining words will be added to the ignore WO
 ## Finalize package version
 # - Update DESCRIPTION - package version
 # - Update .onLoad - API version
-v <- "5.0.0"
+v <- "5.0.1"
 v <- packageVersion("motus") # If dev version loaded with devtools::load_all()
 
 ## Checks
@@ -105,6 +105,7 @@ pkgdown::init_site()
 pkgdown::build_article("articles/06-exploring-data")
 pkgdown::build_article("articles/01-introduction")
 unlink("_pkgdown.yml")
+unlink("vignettes/articles/map-data/", recursive = TRUE)
 
 # French
 file.rename("pkgdown/README_fr.md", "pkgdown/index.md")

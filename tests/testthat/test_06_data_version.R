@@ -1,5 +1,3 @@
-context("Data version updates correctly")
-
 o <- options(connectionObserver = NULL)
 
 test_that("Database updates as expected (proj) - new = TRUE", {

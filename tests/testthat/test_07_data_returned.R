@@ -1,5 +1,3 @@
-context("Data returned")
-
 # Local auth Tags ---------------------------------------------------------
 test_that("Tag data returned as expected", {
   skip_on_cran()

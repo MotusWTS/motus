@@ -1,6 +1,5 @@
 
 # filterByActivity --------------------------------------------------------
-context("filterByActivity")
 test_that("filterByActivity filters as expected", {
   expect_silent(
     tags <- tagme(176, update = FALSE, 

@@ -1,5 +1,3 @@
-context("Compare server to R")
-
 test_that("table fields match server (sample auth)", {
   sample_auth()
   

@@ -1,5 +1,3 @@
-context("Utility functions")
-
 teardown(unlink("project-176.motus"))
 
 test_that("checkVersion and updateMotusDb run and return messages as expected", {

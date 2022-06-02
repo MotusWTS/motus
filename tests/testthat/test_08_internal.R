@@ -1,5 +1,3 @@
-context("low level functions") 
-
 setup({
   unlink("project-176.motus")
   unlink("SG-3115BBBK0782.motus")

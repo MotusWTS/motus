@@ -1,5 +1,3 @@
-context("Plotting functions")
-
 teardown(unlink("Rplots.pdf"))
 
 test_that("Plots run with no errors", {

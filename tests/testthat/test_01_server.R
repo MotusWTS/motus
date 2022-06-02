@@ -194,6 +194,7 @@ test_that("tagme() errors appropriately", {
                                     new = TRUE, update = TRUE), 
                               "updateMotusDb"),
                "Either") #...
+  unlink("project-10.motus")
 })
 
 
