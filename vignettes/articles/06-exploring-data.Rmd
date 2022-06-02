@@ -154,7 +154,7 @@ head(tagRecvSummary)
 
 Plotting your data is a powerful way to visualize broad and fine-scale detection patterns.
 This section will give you a brief introduction to plotting using `ggplot2`.
-For more in depth information on the uses of `ggplot2`, we recommend the [Cookbook for R](http://www.cookbook-r.com/Graphs/), and the Rstudio [`ggplot2` cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf).  
+For more in depth information on the uses of `ggplot2`, we recommend the [Cookbook for R](http://www.cookbook-r.com/Graphs/), and the RStudio [`ggplot2` cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf).  
 
 To make coarse-scale plots with large files, we suggest first rounding the detection time to the nearest hour or day so that processing time is faster.
 Here we round detection times to the nearest hour, then make a basic plot of hourly detections by `motusTagID`:
