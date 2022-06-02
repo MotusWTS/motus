@@ -16,15 +16,14 @@ test_that("Create DB, includes any new tables", {
   # Expect Deprecated
   expect_true("deprecated" %in% t)
   
-  DBI::dbDisconnect(temp$con)
+  disconnect(temp$con)
   unlink("temp.motus")
 })
 
 # Create DB, includes any new fields -----------------------------------------
 test_that("Create DB, includes any new fields", {
   unlink("temp.motus")
-  temp <- dbplyr::src_dbi(DBI::dbConnect(RSQLite::SQLite(), "temp.motus"), 
-                          auto_disconnect = TRUE) %>%
+  temp <- dbplyr::src_dbi(DBI::dbConnect(RSQLite::SQLite(), "temp.motus")) %>%
     expect_silent()
   expect_length(DBI::dbListTables(temp$con), 0)
   
@@ -77,7 +76,7 @@ test_that("Create DB, includes any new fields", {
   expect_true(all(c("stationName", "stationID") %in% 
                     DBI::dbListFields(temp$con, "recvDeps")))
 
-  DBI::dbDisconnect(temp$con)
+  disconnect(temp$con)
   unlink("temp.motus")
 })
 
@@ -129,7 +128,7 @@ test_that("Views created correctly", {
   expect_equal(unique(atGPS$batchID), unique(arGPS$batchID))
   expect_equal(unique(atGPS$runID), unique(arGPS$runID))
   
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags$con)
   unlink("project-176.motus")
   file.rename("project-176-backup.motus", "project-176.motus")
 })
@@ -148,7 +147,7 @@ test_that("new tables have character ant and port", {
               dplyr::pull("port"), 
             "character")
   
-  DBI::dbDisconnect(tags)
+  disconnect(tags)
   unlink("project-176.motus")
   
   # For receivers
@@ -160,7 +159,7 @@ test_that("new tables have character ant and port", {
               dplyr::collect() %>% 
               dplyr::pull("ant"), 
             "character")
-  DBI::dbDisconnect(tags)
+  disconnect(tags)
 })
 
 
@@ -189,7 +188,7 @@ test_that("Missing tables recreated silently", {
   
   for(i in t) expect_true(DBI::dbExistsTable(tags$con, !!i))
   
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags$con)
   unlink("project-176.motus")
 })
 
@@ -208,7 +207,7 @@ test_that("check for custom views before update", {
     tags, 
     "CREATE VIEW alltags_fast AS SELECT hitID, runID, ts FROM alltags WHERE sig = 52;")
   DBI::dbExecute(tags, "UPDATE admInfo SET db_version = '2019-01-01 00:00:00'")
-  DBI::dbDisconnect(tags)
+  disconnect(tags)
   tags <- tagme(176, update = FALSE)
   
   # Test for handling of custom view
@@ -226,7 +225,7 @@ test_that("check for custom views before update", {
    
   expect_message(tagme(176, update = TRUE), "updateMotusDb started")
   
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags$con)
   unlink("project-176.motus")
   unlink(paste0("project-176_custom_views_", Sys.Date(), ".log"))
 })

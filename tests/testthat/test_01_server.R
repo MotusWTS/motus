@@ -205,7 +205,7 @@ test_that("tagme() downloads data - Projects", {
   
   expect_message(tags <- tagme(projRecv = 176, new = TRUE, update = TRUE)) %>%
     expect_is("src_SQLiteConnection")
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags$con)
   unlink("project-176.motus")
 })
 
@@ -218,7 +218,7 @@ test_that("tagme() downloads data - Receivers", {
   unlink("SG-3115BBBK1127.motus")
   expect_message(t <- tagme("SG-3115BBBK1127", new = TRUE, update = TRUE)) %>%
     expect_s3_class("src_sql")
-  DBI::dbDisconnect(t$con)
+  disconnect(t$con)
   unlink("SG-3115BBBK1127.motus")
 })
 
@@ -287,7 +287,7 @@ test_that("metadata()", {
   expect_message(metadata(tags), "Loading complete")
   
   expect_message(metadata(tags, projectIDs = 45), "Loading complete")
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags$con)
   unlink("project-176.motus")
 })
 

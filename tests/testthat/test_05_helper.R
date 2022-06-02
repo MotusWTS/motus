@@ -87,12 +87,11 @@ test_that("Empty activity table stops", {
   expect_error(a <- filterByActivity(tags, return = "all"),
                "'src' must contain at least tables 'activity', 'alltags',")
   
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags$con)
 })
 
 
 # getGPS ------------------------------------------------------------------
-context("getGPS")
 test_that("getGPS() runs as expected with no data", {
   skip_on_os("windows")
   file.copy(system.file("extdata", "project-176.motus", package = "motus"), ".")
@@ -108,7 +107,7 @@ test_that("getGPS() runs as expected with no data", {
     expect_is("data.frame")
   expect_gt(nrow(g), 10000)
   
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags$con)
   unlink("project-176.motus")
 })
 
@@ -124,7 +123,7 @@ test_that("getGPS() handels date/time in ts gracefully", {
     expect_is("data.frame")
   expect_gt(nrow(g), 0)
   
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags$con)
   unlink("gps_sample.motus")
 })
 
@@ -144,7 +143,7 @@ test_that("prepData() handles both data.frame and src", {
   expect_error(prepData(tags, dplyr::select(alltags, -hitID)),
                "'data' must be a subset of the 'alltags' view")
   
-  DBI::dbDisconnect(tags)
+  disconnect(tags)
   unlink("gps_sample.motus")
 })
 
@@ -178,7 +177,7 @@ test_that("getBatches() returns batch subset", {
   expect_true(all((diff_end + 15*60) > 0  & (diff_start - 15*60) < 0))
   expect_false(all((diff_end + 1*60) > 0  & (diff_start - 1*60) < 0))
   
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags$con)
   unlink("gps_sample.motus")
 })
 
@@ -201,7 +200,7 @@ test_that("calcGPS() matches GPS by = 'daily'", {
     expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt", 
                    "gpsTs_min", "gpsTs_max"))
   
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags$con)
   unlink("gps_sample.motus")
 })
   
@@ -236,7 +235,7 @@ test_that("calcGPS() matches GPS by = 60", {
   expect_silent(getGPS(tags, by = 60)) %>%
     expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt", "gpsTs_min", "gpsTs_max"))
   
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags$con)
   unlink("gps_sample.motus")
 })
 
@@ -268,7 +267,7 @@ test_that("calcGPS() matches GPS by = 120", {
     expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt", 
                    "gpsTs_min", "gpsTs_max"))
   
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags$con)
   unlink("gps_sample.motus")
 })
 
@@ -309,7 +308,7 @@ test_that("calcGPS() matches GPS by = 'closest'", {
   expect_silent(getGPS(tags, by = "closest", cutoff = 10)) %>%
     expect_named(c("hitID", "gpsID", "gpsLat", "gpsLon", "gpsAlt", "gpsTs"))
   
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags$con)
   unlink("gps_sample.motus")
 })   
 
@@ -317,7 +316,7 @@ test_that("getGPS errors", {
   tags <- dbplyr::src_dbi(DBI::dbConnect(RSQLite::SQLite(), ":memory:"),
                           auto_disconnect = TRUE)
   expect_error(getGPS(tags))
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags$con)
 
   file.copy(system.file("extdata", "gps_sample.motus", package = "motus"), ".")  
   tags <- dbplyr::src_dbi(DBI::dbConnect(RSQLite::SQLite(), "gps_sample.motus"),
@@ -326,7 +325,7 @@ test_that("getGPS errors", {
   expect_error(getGPS(tags, by = 0))
   expect_error(getGPS(tags, by = -100))
   
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags$con)
   unlink("gps_sample.motus")
 })
 
@@ -352,7 +351,7 @@ test_that("calcGPS() matches GPS with subset - Daily", {
   expect_silent(getGPS(tags, by = "daily")) %>%
     expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt", "gpsTs_min", "gpsTs_max"))
   
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags$con)
   unlink("gps_sample.motus")
 })
 
@@ -392,7 +391,7 @@ test_that("calcGPS() matches GPS with subset - 60min", {
   expect_silent(getGPS(tags, by = 60)) %>%
     expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt", "gpsTs_min", "gpsTs_max"))
   
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags$con)
   unlink("gps_sample.motus")
 })
 
@@ -437,7 +436,7 @@ test_that("calcGPS() matches GPS with subset - closest", {
   expect_silent(getGPS(tags, by = "closest", cutoff = 10)) %>%
     expect_named(c("hitID", "gpsID", "gpsLat", "gpsLon", "gpsAlt", "gpsTs"))
   
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags$con)
   unlink("gps_sample.motus")
 })   
 
@@ -474,7 +473,7 @@ test_that("calcGPS() keepAll = TRUE", {
   expect_equal(dplyr::collect(prepData(tags))$hitID,
                g2$hitID)
   
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags$con)
   unlink("gps_sample.motus")
 })   
 
@@ -521,7 +520,7 @@ test_that("sunRiseSet() returns sunset times", {
   expect_error(sunRiseSet(t), "The package 'lutz' is required") %>%
     expect_message("'data' is a complete")
   
-  DBI::dbDisconnect(t$con)
+  disconnect(t$con)
   unlink("project-176.motus")
 })
 
@@ -588,7 +587,7 @@ test_that("deprecated batches are removed from tables - sample", {
     }
   }
   
-  DBI::dbDisconnect(t$con)
+  disconnect(t$con)
   unlink("project-176.motus")  
 })
 
@@ -652,7 +651,7 @@ test_that("deprecated batches are removed from tables project 1", {
     }
   }
 
-  DBI::dbDisconnect(t$con)
+  disconnect(t$con)
   unlink("project-1.motus")  
 })
 

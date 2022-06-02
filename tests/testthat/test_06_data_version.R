@@ -13,7 +13,7 @@ test_that("Database updates as expected (proj) - new = TRUE", {
                    "already exists")
     expect_true(file.exists("project-176_v1.motus"))  # Backup
 
-    DBI::dbDisconnect(t$con)
+    disconnect(t$con)
     unlink("project-176.motus")
     unlink("project-176_v1.motus")
 
@@ -26,7 +26,7 @@ test_that("Database updates as expected (proj) - new = TRUE", {
                                              rename = TRUE)), 
                    "already exists")
     expect_true(file.exists("project-176_v1.motus"))  # Backup
-    DBI::dbDisconnect(t$con)
+    disconnect(t$con)
     unlink("project-176.motus")
     unlink("project-176_v1.motus")
   }
@@ -42,7 +42,7 @@ test_that("Database updates as expected (proj) - new = FALSE", {
             "./project-176.motus")
   expect_message(t <- tagme(176, new = FALSE, update = TRUE, rename = TRUE))
   expect_true(file.exists("project-176_v1.motus"))  # Backup
-  DBI::dbDisconnect(t$con)
+  disconnect(t$con)
   
   old <- DBI::dbConnect(RSQLite::SQLite(), dbname = "project-176_v1.motus")
   new <- DBI::dbConnect(RSQLite::SQLite(), dbname = "project-176.motus")
@@ -60,8 +60,8 @@ test_that("Database updates as expected (proj) - new = FALSE", {
   expect_gt(DBI::dbGetQuery(new, "SELECT * FROM hits") %>% nrow(), 0)
   expect_gt(DBI::dbGetQuery(new, "SELECT * FROM runs") %>% nrow(), 0)
   
-  DBI::dbDisconnect(old)
-  DBI::dbDisconnect(new)
+  disconnect(old)
+  disconnect(new)
   unlink("project-176.motus") # Leave _v1 for next test
 })
 
@@ -88,14 +88,14 @@ test_that("Database updates as expected (receivers)", {
   # Create dummy version 1
   tags <- tagme("SG-3115BBBK1127", new = TRUE, update = TRUE)
   DBI::dbExecute(tags$con, "UPDATE admInfo set data_version = 1")
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags$con)
   
   expect_false(file.exists("SG-3115BBBK1127_v1.motus")) # No backup
   expect_warning(t <- tagme("SG-3115BBBK1127", new = TRUE, 
                             update = TRUE, rename = TRUE), 
                  "already exists")
   expect_true(file.exists("SG-3115BBBK1127_v1.motus"))  # Backup
-  DBI::dbDisconnect(t$con)
+  disconnect(t$con)
   unlink("SG-3115BBBK1127.motus")
   unlink("SG-3115BBBK1127_v1.motus")
   
@@ -103,12 +103,12 @@ test_that("Database updates as expected (receivers)", {
   orig <- options(motus.test.max = 30)
   tags <- tagme("SG-3115BBBK1127", new = TRUE, update = TRUE)
   DBI::dbExecute(tags$con, "UPDATE admInfo set data_version = 1")
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags$con)
   
   expect_false(file.exists("SG-3115BBBK1127_v1.motus")) # No backup
   expect_error(t <- tagme("SG-3115BBBK1127", new = FALSE, update = TRUE, rename = TRUE), NA)
   expect_true(file.exists("SG-3115BBBK1127_v1.motus"))  # Backup
-  DBI::dbDisconnect(t$con)
+  disconnect(t$con)
   
   # Expect data
   new <- DBI::dbConnect(RSQLite::SQLite(), dbname = "SG-3115BBBK1127.motus")
@@ -117,7 +117,7 @@ test_that("Database updates as expected (receivers)", {
   expect_gt(DBI::dbGetQuery(new, "SELECT * FROM hits") %>% nrow(), 0)
   expect_gt(DBI::dbGetQuery(new, "SELECT * FROM runs") %>% nrow(), 0)
   
-  DBI::dbDisconnect(new)
+  disconnect(new)
   options(orig)
   unlink("SG-3115BBBK1127.motus")
 })
