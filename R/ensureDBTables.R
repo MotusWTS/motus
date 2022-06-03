@@ -116,8 +116,9 @@ makeMetaTable <- function(con, projRecv, deviceID) {
 makeAdmInfo <- function(con) {
   sapply(makeTable("admInfo"), DBI::dbExecute, conn = con)
   DBI::dbExecute(con, 
-                 glue::glue("INSERT INTO admInfo (db_version, data_version) 
-                             values ('1980-01-01', {motus_vars$dataVersion});"))
+                 glue::glue(
+                   "INSERT INTO admInfo (db_version, data_version) 
+                             values ('{max(sql_versions$date)}', {motus_vars$dataVersion});"))
 }
 
 makeProjBatch <- function(con, projRecv) {

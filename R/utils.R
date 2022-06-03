@@ -126,3 +126,8 @@ get_sample_data <- function() {
   message("Loading sample project")
   tagme(projRecv = 176, new = FALSE, update = TRUE, dir = "./data/")
 }
+
+disconnect <- function(src, warnings = FALSE) {
+  if(!warnings) suppressWarnings(DBI::dbDisconnect(src))
+  if(warnings) DBI::dbDisconnect(src)
+}

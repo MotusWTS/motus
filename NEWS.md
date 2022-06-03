@@ -1,3 +1,9 @@
+# motus 5.0.1
+### Bug fixes
+* fixed bug in `deprecateBatches()` which caused an error when there were no batches to deprecate.
+* ensure new databases are fully up-to-date (without needing to immediately update).
+
+
 # motus 5.0.0
 ### New features
 * New `allruns` and `allrunsGPS` views for quicker first passes of the data with 
