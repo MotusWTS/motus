@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">motus</a>
 
-    <small class="nav-text text-light me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">5.0.0</small>
+    <small class="nav-text text-light me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">5.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -288,7 +288,7 @@ Tag C: /  2--2---2--2|--2--2--2--2--2--2--2--2--2--2|--2--2--2--2--2   /
 <div class="section level3">
 <h3 id="boot">Receiver Boot Sessions<a class="anchor" aria-label="anchor" href="#boot"></a>
 </h3>
-<p>A receiver <strong>reboots</strong> when it is powered down and then (possibly much later) powered back up. A boot session is definied as the period between reboots. Reboots often correspond to a receiver:</p>
+<p>A receiver <strong>reboots</strong> when it is powered down and then (possibly much later) powered back up. A boot session is defined as the period between reboots. Reboots often correspond to a receiver:</p>
 <ul>
 <li>being redeployed</li>
 <li>having its software updated</li>
@@ -327,7 +327,7 @@ There are several reasons:</p>
 <ul>
 <li>
 <p><strong>New or modified tag deployment records</strong></p>
-<p>The tag detection code relies on knowing the active life of each tag it looks for, to control rates of false positive and false negative hits. If the deployment record for a tag only reaches the server after it has already processed raw files overlapping the tag’s deployment, then those files will need to be reprocessed in order to (potentially) find the tag therein. Similary, if a tag was mistakenly sought during a period when it was not deployed, it will have “used up” signals that could instead have come from other tags, thereby causing both its own false positives, and false negatives on other tags. (This is only true for Lotek ID tags; CTT should be unaffected, provided deployed tags are well dispersed in the ID codespace.)</p>
+<p>The tag detection code relies on knowing the active life of each tag it looks for, to control rates of false positive and false negative hits. If the deployment record for a tag only reaches the server after it has already processed raw files overlapping the tag’s deployment, then those files will need to be reprocessed in order to (potentially) find the tag therein. Similarly, if a tag was mistakenly sought during a period when it was not deployed, it will have “used up” signals that could instead have come from other tags, thereby causing both its own false positives, and false negatives on other tags. (This is only true for Lotek ID tags; CTT should be unaffected, provided deployed tags are well dispersed in the ID codespace.)</p>
 </li>
 <li><p><strong>Bug fixes or improvements in the tag finding algorithm</strong></p></li>
 <li>

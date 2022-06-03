@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">motus</a>
 
-    <small class="nav-text text-light me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">5.0.0</small>
+    <small class="nav-text text-light me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">5.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -296,7 +296,7 @@
 <div class="section level2">
 <h2 id="plotting-your-data">Plotting your data<a class="anchor" aria-label="anchor" href="#plotting-your-data"></a>
 </h2>
-<p>Plotting your data is a powerful way to visualize broad and fine-scale detection patterns. This section will give you a brief introduction to plotting using <code>ggplot2</code>. For more in depth information on the uses of <code>ggplot2</code>, we recommend the <a href="http://www.cookbook-r.com/Graphs/" class="external-link">Cookbook for R</a>, and the Rstudio <a href="https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf" class="external-link"><code>ggplot2</code> cheatsheet</a>.</p>
+<p>Plotting your data is a powerful way to visualize broad and fine-scale detection patterns. This section will give you a brief introduction to plotting using <code>ggplot2</code>. For more in depth information on the uses of <code>ggplot2</code>, we recommend the <a href="http://www.cookbook-r.com/Graphs/" class="external-link">Cookbook for R</a>, and the RStudio <a href="https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf" class="external-link"><code>ggplot2</code> cheatsheet</a>.</p>
 <p>To make coarse-scale plots with large files, we suggest first rounding the detection time to the nearest hour or day so that processing time is faster. Here we round detection times to the nearest hour, then make a basic plot of hourly detections by <code>motusTagID</code>:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">df.alltags.sub.2</span> <span class="op">&lt;-</span> <span class="va">df.alltags.sub</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>

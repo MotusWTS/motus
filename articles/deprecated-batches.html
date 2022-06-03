@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">motus</a>
 
-    <small class="nav-text text-light me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">5.0.0</small>
+    <small class="nav-text text-light me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">5.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -103,7 +103,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql.motus</span>, <span class="st">"deprecated"</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## <span style="color: #949494;"># Source:   table&lt;deprecated&gt; [?? x 3]</span></span>
-<span class="co">## <span style="color: #949494;"># Database: sqlite 3.38.3</span></span>
+<span class="co">## <span style="color: #949494;"># Database: sqlite 3.38.5</span></span>
 <span class="co"><span style="color: #949494;">## #   [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span>
 <span class="co">##   batchID batchFilter removed</span>
 <span class="co">##     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
@@ -125,7 +125,7 @@
 <code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql.motus</span>, <span class="st">"alltags"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">batchID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6000</span>, <span class="fl">6001</span>, <span class="fl">6002</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## <span style="color: #949494;"># Source:   lazy query [?? x 62]</span></span>
-<span class="co">## <span style="color: #949494;"># Database: sqlite 3.38.3</span></span>
+<span class="co">## <span style="color: #949494;"># Database: sqlite 3.38.5</span></span>
 <span class="co"><span style="color: #949494;">## #   [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span>
 <span class="co">##       hitID   runID batchID          ts tsCorrected   sig sigsd noise  freq freqsd   slop</span>
 <span class="co">##       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
@@ -173,7 +173,7 @@ Selection: 1</code></pre>
 <code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql.motus</span>, <span class="st">"alltags"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">batchID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6000</span>, <span class="fl">6001</span>, <span class="fl">6002</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## <span style="color: #949494;"># Source:   lazy query [?? x 62]</span></span>
-<span class="co">## <span style="color: #949494;"># Database: sqlite 3.38.3</span></span>
+<span class="co">## <span style="color: #949494;"># Database: sqlite 3.38.5</span></span>
 <span class="co"><span style="color: #949494;">## #   [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span>
 <span class="co">## <span style="color: #949494;"># … with 62 variables: hitID &lt;int&gt;, runID &lt;int&gt;, batchID &lt;int&gt;, ts &lt;dbl&gt;,</span></span>
 <span class="co">## <span style="color: #949494;">#   tsCorrected &lt;lgl&gt;, sig &lt;dbl&gt;, sigsd &lt;dbl&gt;, noise &lt;dbl&gt;, freq &lt;dbl&gt;, freqsd &lt;dbl&gt;,</span></span>
@@ -186,7 +186,7 @@ Selection: 1</code></pre>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql.motus</span>, <span class="st">"deprecated"</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## <span style="color: #949494;"># Source:   table&lt;deprecated&gt; [?? x 3]</span></span>
-<span class="co">## <span style="color: #949494;"># Database: sqlite 3.38.3</span></span>
+<span class="co">## <span style="color: #949494;"># Database: sqlite 3.38.5</span></span>
 <span class="co"><span style="color: #949494;">## #   [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span>
 <span class="co">##   batchID batchFilter removed</span>
 <span class="co">##     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>

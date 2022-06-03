@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">motus</a>
 
-    <small class="nav-text text-light me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">5.0.0</small>
+    <small class="nav-text text-light me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">5.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -200,7 +200,7 @@
 </ol>
 <p>Full details are listed under “Detailed Guide” <a href="https://developers.google.com/maps/documentation/javascript/get-api-key" class="external-link">here</a>. Note that you may have to enable Google Maps Static API. For troubleshooting see <a href="https://groups.google.com/forum/#!topic/motus-wts/UxqFIO6Pcmo" class="external-link">here</a> and <a href="https://groups.google.com/forum/#!topic/motus-wts/UxqFIO6Pcmo%20and%20https://github.com/dkahle/ggmap/issues/51" class="external-link">here</a>.</p>
 <p>Once you have your access key, you’ll need to provide it with the call <code><a href="https://rdrr.io/pkg/ggmap/man/register_google.html" class="external-link">register_google()</a></code>, <strong>each time you start a new R session you will be required to enter your key.</strong></p>
-<p>Then you can create Google maps with the <code>ggmap</code> package using the <code><a href="https://rdrr.io/pkg/ggmap/man/get_googlemap.html" class="external-link">get_googlemap()</a></code> function and specifying the lat/lon center of your map (as opposed to bounding box as with stamen maps).</p>
+<p>Then you can create Google maps with the <code>ggmap</code> package using the <code><a href="https://rdrr.io/pkg/ggmap/man/get_googlemap.html" class="external-link">get_googlemap()</a></code> function and specifying the lat/lon centre of your map (as opposed to bounding box as with stamen maps).</p>
 </div>
 <div class="section level2">
 <h2 id="common-errors">Common errors<a class="anchor" aria-label="anchor" href="#common-errors"></a>
@@ -249,7 +249,7 @@
 <div class="section level3">
 <h3 id="i-get-an-error-error-in-rsqlite_connectdbname-loadable-extensions-flags-vfs-could-not-connect-to-database-unable-to-open-database-file-when-attempting-to-run-tagme">I get an error <code>Error in rsqlite_connect(dbname, loadable.extensions, flags, vfs) : Could not connect to database: unable to open database file</code> when attempting to run <code>tagme()</code><a class="anchor" aria-label="anchor" href="#i-get-an-error-error-in-rsqlite_connectdbname-loadable-extensions-flags-vfs-could-not-connect-to-database-unable-to-open-database-file-when-attempting-to-run-tagme"></a>
 </h3>
-<p>If you get this message, it’s likely that you’re attempting a new download or update to a nonexistant directory. The directory is specified in the <strong><code>dir = ""</code></strong> command of the <code><a href="../reference/tagme.html">tagme()</a></code> function. If the directory is not specified, files will be saved to your working directory. Use <code><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd()</a></code> to determine your current working directory. Use <code><a href="https://rdrr.io/r/base/getwd.html" class="external-link">setwd()</a></code> to set a new working directory. To specify a location to save files from your working directory use <code>./</code> followed by the file path.</p>
+<p>If you get this message, it’s likely that you’re attempting a new download or update to a nonexistent directory. The directory is specified in the <strong><code>dir = ""</code></strong> command of the <code><a href="../reference/tagme.html">tagme()</a></code> function. If the directory is not specified, files will be saved to your working directory. Use <code><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd()</a></code> to determine your current working directory. Use <code><a href="https://rdrr.io/r/base/getwd.html" class="external-link">setwd()</a></code> to set a new working directory. To specify a location to save files from your working directory use <code>./</code> followed by the file path.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># show working directory, in this case it's "C:/Documents"</span>
 

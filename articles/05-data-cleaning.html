@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">motus</a>
 
-    <small class="nav-text text-light me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">5.0.0</small>
+    <small class="nav-text text-light me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">5.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -172,7 +172,7 @@ Determine how many of your tag detections may be ambiguous detections.</p></li>
 <code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql.motus</span>, <span class="st">"alltags"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">ts</span>, <span class="va">motusFilter</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## <span style="color: #949494;"># Source:   lazy query [?? x 5]</span></span>
-<span class="co">## <span style="color: #949494;"># Database: sqlite 3.38.3</span></span>
+<span class="co">## <span style="color: #949494;"># Database: sqlite 3.38.5</span></span>
 <span class="co"><span style="color: #949494;">## #   [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span>
 <span class="co">##     hitID runID batchID          ts motusFilter</span>
 <span class="co">##     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
@@ -197,7 +197,7 @@ Determine how many of your tag detections may be ambiguous detections.</p></li>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">motusTagID</span>, <span class="va">runLen</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">runLen</span> <span class="op">&lt;=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## <span style="color: #949494;"># Source:   lazy query [?? x 5]</span></span>
-<span class="co">## <span style="color: #949494;"># Database: sqlite 3.38.3</span></span>
+<span class="co">## <span style="color: #949494;"># Database: sqlite 3.38.5</span></span>
 <span class="co"><span style="color: #949494;">## #   [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span>
 <span class="co">##     hitID  runID batchID motusTagID runLen</span>
 <span class="co">##     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
@@ -218,7 +218,7 @@ Determine how many of your tag detections may be ambiguous detections.</p></li>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">motusTagID</span>, <span class="va">runLen</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">runLen</span> <span class="op">&lt;=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## <span style="color: #949494;"># Source:   lazy query [?? x 5]</span></span>
-<span class="co">## <span style="color: #949494;"># Database: sqlite 3.38.3</span></span>
+<span class="co">## <span style="color: #949494;"># Database: sqlite 3.38.5</span></span>
 <span class="co"><span style="color: #949494;">## #   [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span>
 <span class="co">## <span style="color: #949494;"># … with 5 variables: hitID &lt;int&gt;, runID &lt;int&gt;, batchID &lt;int&gt;,</span></span>
 <span class="co">## <span style="color: #949494;">#   motusTagID &lt;lgl&gt;, runLen &lt;int&gt;</span></span></code></pre>
@@ -245,7 +245,7 @@ Determine how many of your tag detections may be ambiguous detections.</p></li>
          <span class="va">recvProjID</span>, <span class="va">recvProjName</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## <span style="color: #949494;"># Source:   lazy query [?? x 7]</span></span>
-<span class="co">## <span style="color: #949494;"># Database: sqlite 3.38.3</span></span>
+<span class="co">## <span style="color: #949494;"># Database: sqlite 3.38.5</span></span>
 <span class="co"><span style="color: #949494;">## #   [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span>
 <span class="co">##   recvDeployLat recvDeployLon recvDeployName recvDeployID recv        recvProjID</span>
 <span class="co">##           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
