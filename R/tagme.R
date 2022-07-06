@@ -112,8 +112,7 @@ tagme <- function(projRecv, update = TRUE, new = FALSE, dir = getwd(),
   }
   
   #rv <- dplyr::src_sqlite(dbname, create = new)
-  rv <- dbplyr::src_dbi(con = DBI::dbConnect(RSQLite::SQLite(), dbname),
-                        auto_disconnect = TRUE)
+  rv <- DBI::dbConnect(RSQLite::SQLite(), dbname)
   
   if (update) {
     
@@ -125,7 +124,7 @@ tagme <- function(projRecv, update = TRUE, new = FALSE, dir = getwd(),
     if(!new) {
       rv <- checkDataVersion(rv, dbname = dbname, rename = rename)
       # For receivers, if starting fresh, get the device ID again
-      if(length(DBI::dbListTables(rv$con)) == 0 && 
+      if(length(DBI::dbListTables(rv)) == 0 && 
          is.null(deviceID) && !is_proj(projRecv)) {
         deviceID <- srvDeviceIDForReceiver(projRecv)[[2]]
       }

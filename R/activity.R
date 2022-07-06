@@ -38,7 +38,7 @@
 activity <- function(src, resume = FALSE) {
   
   getBatches <- function(src) {
-    dplyr::tbl(src$con, "batches") %>%
+    dplyr::tbl(src, "batches") %>%
       dplyr::pull(.data$batchID)
   }
   

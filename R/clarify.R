@@ -87,7 +87,7 @@
 #' @export
 
 clarify = function(s, id, from, to, all.mine=FALSE) {
-    sql = safeSQL(s$con)
+    sql = safeSQL(s)
     if (missing(id) && ! all.mine) {
         ## report on ambiguities
 

@@ -74,7 +74,7 @@ fetchDeprecated <- function(src, verbose = FALSE) {
   } else new <- data.frame()
 
   # Add to deprecated table
-  dbInsertOrReplace(src$con, "deprecated", new)
+  dbInsertOrReplace(src, "deprecated", new)
   message("Total deprecated batches: ", nrow(b), 
           "\nNew deprecated batches: ", nrow(new))
   
@@ -99,7 +99,7 @@ removeDeprecated <- function(src, ask) {
       choices = c("TRUE" = "Yes", "FALSE" = "No"), 
       title = glue::glue(
         "You are about to permanently delete up to {length(d)} deprecated ", 
-        "batches from\n{src$con@dbname}\nContinue?")) == 1
+        "batches from\n{src@dbname}\nContinue?")) == 1
     if(!continue) stop("Aborting, leaving deprecated batches as is", 
                        call. = FALSE)
   }
@@ -116,8 +116,8 @@ removeDeprecated <- function(src, ask) {
   removeByID(src, t = "projBatch", ids = d)
   removeByID(src, t = "batches", ids = d)
   
-  dbInsertOrReplace(src$con, "deprecated", deprecated)
-  DBI::dbExecute(src$con, "VACUUM")
+  dbInsertOrReplace(src, "deprecated", deprecated)
+  DBI::dbExecute(src, "VACUUM")
   message("Total deprecated batches removed: ", length(d))
   
   src
@@ -128,7 +128,7 @@ removeByID <- function(src, t, id_type = "batchID", ids) {
     n <- glue::glue("DELETE FROM {t} WHERE {id_type} IN (",
                glue::glue_collapse(ids, sep = ', '), 
                ")") %>%
-      DBI::dbExecute(src$con, statement = .)
+      DBI::dbExecute(src, statement = .)
     if(n > 0) message(glue::glue("  {n} deprecated rows deleted from {t}"))
   }
 }

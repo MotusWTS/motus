@@ -17,7 +17,7 @@
 
 getRunsFilterID <- function(src, filterName, motusProjID = NA) {
 
-  sqlq = function(...) DBI::dbGetQuery(src$con, sprintf(...))
+  sqlq = function(...) DBI::dbGetQuery(src, sprintf(...))
 
   filterID <- NA
   

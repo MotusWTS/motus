@@ -43,7 +43,7 @@
 nodeData <- function(src, resume = FALSE) {
   
   getBatches <- function(src) {
-    dplyr::tbl(src$con, "batches") %>%
+    dplyr::tbl(src, "batches") %>%
       dplyr::filter(.data$source == "ctt") %>%
       dplyr::pull(.data$batchID)
   }

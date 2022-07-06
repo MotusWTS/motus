@@ -26,7 +26,7 @@ motusUpdateRecvDB <- function(src, countOnly, forceMeta = FALSE) {
   }
   batchID <- sql("select ifnull(max(batchID), 0) from batches")[[1]]
   if (countOnly) {
-    DBI::dbDisconnect(src$con)
+    DBI::dbDisconnect(src)
     return(srvSizeOfUpdateForReceiver(deviceID = deviceID, batchID = batchID))
   }
   
@@ -69,7 +69,7 @@ motusUpdateRecvDB <- function(src, countOnly, forceMeta = FALSE) {
       
       # 6. Save - write the record for this batch ------------------------------
       # This marks the transfers for this batch as complete.
-      dbInsertOrReplace(sql$con, "batches", b[bi,], replace=FALSE)
+      dbInsertOrReplace(sql, "batches", b[bi,], replace=FALSE)
       
       # If testing, break out after x batches
       if(bi >= getOption("motus.test.max") && is_testing()) break

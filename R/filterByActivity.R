@@ -66,19 +66,19 @@ filterByActivity <- function(src, return = "good", view = "alltags",
   if(ratio < 0 | ratio > 1) stop("'ratio' must be a value between 0 and 1", call. = FALSE)
   if(minLen > maxLen) stop("'minLen' must be smaller than or equal to 'maxLen'", call. = FALSE)
   
-  t <- DBI::dbListTables(src$con)
+  t <- DBI::dbListTables(src)
   
   if(any(!c("runs", "activity", view) %in% t)) {
     stop(paste0("'src' must contain at least tables 'activity', '", view, 
                 "', and 'runs'"), call. = FALSE)
   }
   
-  tbl_runs <- dplyr::tbl(src$con, "runs") %>% 
+  tbl_runs <- dplyr::tbl(src, "runs") %>% 
     dplyr::mutate(hourBin = floor(.data$tsBegin/3600))
   
-  tbl_activity <- dplyr::tbl(src$con, "activity")
+  tbl_activity <- dplyr::tbl(src, "activity")
   
-  if(nrow(DBI::dbGetQuery(src$con, "SELECT * FROM activity LIMIT 1")) < 1) {
+  if(nrow(DBI::dbGetQuery(src, "SELECT * FROM activity LIMIT 1")) < 1) {
     stop("'activity' table is empty, cannot filter by activity", call. = FALSE)
   }
 
@@ -95,12 +95,12 @@ filterByActivity <- function(src, return = "good", view = "alltags",
     dplyr::select("runID")
   
   # Label "bad" alltags 
-  tbl_bad <- dplyr::tbl(src$con, view) %>%
+  tbl_bad <- dplyr::tbl(src, view) %>%
     dplyr::left_join(tbl_bad, ., by = "runID") %>%
     dplyr::mutate(probability = 0)
 
   # All others are "good"
-  tbl_good <- dplyr::tbl(src$con, view) %>%
+  tbl_good <- dplyr::tbl(src, view) %>%
     dplyr::anti_join(tbl_bad, by = "runID") %>%
     dplyr::mutate(probability = 1)
 

@@ -4,16 +4,16 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
   motus_vars$authToken # Prompt for authorization to get dataVersion
   server_version <- motus_vars$dataVersion
   
-  if (DBI::dbExistsTable(src$con, "admInfo") && 
-      "data_version" %in% DBI::dbListFields(src$con, "admInfo")) {
-    local_version <- dplyr::tbl(src$con, "admInfo") %>%
+  if (DBI::dbExistsTable(src, "admInfo") && 
+      "data_version" %in% DBI::dbListFields(src, "admInfo")) {
+    local_version <- dplyr::tbl(src, "admInfo") %>%
       dplyr::pull(.data$data_version)
   } else local_version <- character()
 
   # If missing admInfo table OR data_version, assume is version 1
   if(length(local_version) == 0) local_version <- 1
 
-  if(length(DBI::dbListTables(src$con)) > 1 && local_version < server_version) {
+  if(length(DBI::dbListTables(src)) > 1 && local_version < server_version) {
 
     new_name <- stringr::str_replace(src[[1]]@dbname, 
                                      ".motus$", 
@@ -44,14 +44,14 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
     if(!file.exists(new_name)) {
 
       # First try renaming
-      DBI::dbDisconnect(src$con)
+      DBI::dbDisconnect(src)
       rm(src)
       gc()
       t <- try(file.rename(from = n, to = new_name), silent = TRUE)
       
       # If renaming succeeds, create new database
       if(class(t) != "try-error") {
-        src <- dbplyr::src_dbi(con = DBI::dbConnect(RSQLite::SQLite(), n))
+        src <- DBI::dbConnect(RSQLite::SQLite(), n)
         
       } else {  # If renaming fails, then try copying
         message("    File rename failed (common on Windows), copying file to archive instead (this may take longer)")
@@ -91,16 +91,16 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
 
     # Clear current database
     message(" - Preparing database for v", server_version, " data")
-    src <- dbplyr::src_dbi(con = DBI::dbConnect(RSQLite::SQLite(), n))
+    src <- DBI::dbConnect(RSQLite::SQLite(), n)
     
-    if(length(DBI::dbListTables(src$con)) > 0) {
-      DBI::dbExecute(src$con, "DROP VIEW allambigs")
-      DBI::dbExecute(src$con, "DROP VIEW alltags")
+    if(length(DBI::dbListTables(src)) > 0) {
+      DBI::dbExecute(src, "DROP VIEW allambigs")
+      DBI::dbExecute(src, "DROP VIEW alltags")
       
-      sapply(DBI::dbListTables(src$con), 
-             FUN = function(x) DBI::dbRemoveTable(src$con, x))
+      sapply(DBI::dbListTables(src), 
+             FUN = function(x) DBI::dbRemoveTable(src, x))
     
-      if(length(DBI::dbListTables(src$con)) > 0) {
+      if(length(DBI::dbListTables(src)) > 0) {
         stop("Unable to prepare new database", .call = FALSE)
       }
     }

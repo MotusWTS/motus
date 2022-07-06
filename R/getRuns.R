@@ -26,7 +26,7 @@
 getRuns = function(src, ts.min=NA, ts.max=NA, match.partial=TRUE, 
                    motusTagID=c(), ambigID=c()) {
 
-  sqlq = function(...) DBI::dbGetQuery(src$con, sprintf(...))
+  sqlq = function(...) DBI::dbGetQuery(src, sprintf(...))
 
   a = " where "
   sql = "select a.runID, IFNULL(b.motusTagID, a.motusTagID) as motusTagID, b.ambigID, tsBegin, tsEnd from runs a left join allambigs b on a.motusTagID = b.ambigID"

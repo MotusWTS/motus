@@ -28,8 +28,8 @@ runsForBatch <- function(sql, batchID, batchMsg, projectID = NULL) {
     ## add these run records to the DB
     ## Because some might be updates, or a previous transfer might have been
     ## interrupted, use dbInsertOrReplace
-    dbInsertOrReplace(sql$con, "runs", r)
-    DBI::dbWriteTable(sql$con, "batchRuns", 
+    dbInsertOrReplace(sql, "runs", r)
+    DBI::dbWriteTable(sql, "batchRuns", 
                       data.frame(batchID = batchID, runID = r$runID), 
                       append = TRUE, row.names = FALSE)
     message(sprintf("%s: got %6d runs starting at %15.0f\r", 
@@ -77,7 +77,7 @@ hitsForBatchProject <- function(sql, batchID, batchMsg, projectID = NULL) {
     
     # add these hit records to the DB
     # Because some extra fields will cause this to error, use dbInsertOrReplace
-    dbInsertOrReplace(sql$con, "hits", h)
+    dbInsertOrReplace(sql, "hits", h)
     hitID <- max(h$hitID)
     
     numHits <- numHits + nrow(h)
@@ -113,7 +113,7 @@ hitsForBatchReceiver <- function(sql, batchID, batchMsg) {
     
     # add these hit records to the DB
     # Because some extra fields will cause this to error, use dbInsertOrReplace
-    dbInsertOrReplace(sql$con, "hits", h)
+    dbInsertOrReplace(sql, "hits", h)
     hitID <- max(h$hitID)
   } 
 }
@@ -139,7 +139,7 @@ gpsForBatchProject <- function(sql, batchID, batchMsg, projectID) {
     if (!isTRUE(nrow(g) > 0)) break
     message(sprintf("%s: got %6d GPS fixes                     \r", 
                     batchMsg, nrow(g)))
-    dbInsertOrReplace(sql$con, "gps", g)
+    dbInsertOrReplace(sql, "gps", g)
     gpsID <- max(g$gpsID)
   } 
 }
@@ -161,7 +161,7 @@ gpsForBatchReceiver <- function(sql, batchID, batchMsg) {
     if (!isTRUE(nrow(g) > 0)) break
     message(sprintf("%s: got %6d GPS fixes                     \r", 
                     batchMsg, nrow(g)))
-    dbInsertOrReplace(sql$con, "gps", 
+    dbInsertOrReplace(sql, "gps", 
                       g[, c("batchID", "ts", "gpsts", "lat", "lon", "alt")])
     gpsID <- max(g$gpsID)
   } 
@@ -191,7 +191,7 @@ pulseForBatchReceiver <- function(sql, batchID, batchMsg) {
     if (!isTRUE(nrow(pc) > 0)) break
     message(sprintf("%s: got %6d pulse counts                     \r", 
                     batchMsg, nrow(pc)))
-    dbInsertOrReplace(sql$con, "pulseCounts", 
+    dbInsertOrReplace(sql, "pulseCounts", 
                       pc[, c("batchID", "ant", "hourBin", "count")])
     ant <- utils::tail(pc$ant, 1)
     hourBin <- utils::tail(pc$hourBin, 1)

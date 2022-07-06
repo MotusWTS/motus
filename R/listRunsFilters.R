@@ -8,7 +8,7 @@
 
 listRunsFilters = function(src) {
   
-  sqlq = function(...) DBI::dbGetQuery(src$con, sprintf(...))
+  sqlq = function(...) DBI::dbGetQuery(src, sprintf(...))
   
   return (sqlq("select * from filters"))
   

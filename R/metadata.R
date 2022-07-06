@@ -47,7 +47,7 @@ metadata = function(src, projectIDs = NULL, replace = TRUE, delete = FALSE) {
    if(missing(src)) stop("Must provide 'src' a SQLite reference to a .motus ",
                          "database", call. = FALSE)
    
-  sql <- function(...) DBI::dbExecute(src$con, sprintf(...))
+  sql <- function(...) DBI::dbExecute(src, sprintf(...))
    if (delete) {
       message("Deleting local copy of Motus metadata")
       sql("delete from species")
@@ -66,22 +66,22 @@ metadata = function(src, projectIDs = NULL, replace = TRUE, delete = FALSE) {
 
    ## get metadata for tags, their deployments, and species names
    tmeta <- srvTagMetadataForProjects(projectIDs = projectIDs)
-   dbInsertOrReplace(src$con, "tags", tmeta$tags, replace)
-   dbInsertOrReplace(src$con, "tagDeps", tmeta$tagDeps, replace)
-   dbInsertOrReplace(src$con, "tagProps", tmeta$tagProps, replace)
-   dbInsertOrReplace(src$con, "species", tmeta$species, replace)
-   dbInsertOrReplace(src$con, "projs", tmeta$projs, replace)
+   dbInsertOrReplace(src, "tags", tmeta$tags, replace)
+   dbInsertOrReplace(src, "tagDeps", tmeta$tagDeps, replace)
+   dbInsertOrReplace(src, "tagProps", tmeta$tagProps, replace)
+   dbInsertOrReplace(src, "species", tmeta$species, replace)
+   dbInsertOrReplace(src, "projs", tmeta$projs, replace)
    ## update tagDeps.fullID
-   DBI::dbExecute(src$con, "update tagDeps set fullID = (select printf('%s#%s:%.1f@%g(M.%d)', t3.label, t2.mfgID, t2.bi, t2.nomFreq, t2.tagID)
+   DBI::dbExecute(src, "update tagDeps set fullID = (select printf('%s#%s:%.1f@%g(M.%d)', t3.label, t2.mfgID, t2.bi, t2.nomFreq, t2.tagID)
       from tags as t2 join projs as t3 on t3.id = tagDeps.projectID where t2.tagID = tagDeps.tagID limit 1)")
 
    ## get metadata for receivers and their antennas
    rmeta <- srvRecvMetadataForProjects(projectIDs)
-   dbInsertOrReplace(src$con, "recvDeps", rmeta$recvDeps, replace)
-   dbInsertOrReplace(src$con, "recvs", rmeta$recvDeps[,c("deviceID", "serno")], replace)
-   dbInsertOrReplace(src$con, "antDeps", rmeta$antDeps, replace)
-   dbInsertOrReplace(src$con, "nodeDeps", rmeta$nodeDeps, replace)
-   dbInsertOrReplace(src$con, "projs", rmeta$projs, replace)
+   dbInsertOrReplace(src, "recvDeps", rmeta$recvDeps, replace)
+   dbInsertOrReplace(src, "recvs", rmeta$recvDeps[,c("deviceID", "serno")], replace)
+   dbInsertOrReplace(src, "antDeps", rmeta$antDeps, replace)
+   dbInsertOrReplace(src, "nodeDeps", rmeta$nodeDeps, replace)
+   dbInsertOrReplace(src, "projs", rmeta$projs, replace)
    
    message("Done")
 }

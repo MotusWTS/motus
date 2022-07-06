@@ -15,7 +15,7 @@
 
 deleteRunsFilter = function(src, filterName, motusProjID=NA, clearOnly=FALSE) {
 
-  sql = function(...) DBI::dbExecute(src$con, sprintf(...))
+  sql = function(...) DBI::dbExecute(src, sprintf(...))
 
   # determines the filterID
   filterID = getRunsFilterID(src, filterName, motusProjID)

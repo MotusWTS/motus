@@ -108,10 +108,10 @@ getGPS <- function(src, data = NULL, by = "daily", cutoff = NULL,
     stop("'src' must be a SQLite connection to a .motus database (see ?tagme)", 
          call. = FALSE)
   }
-  if(!"gps" %in% DBI::dbListTables(src$con)) {
+  if(!"gps" %in% DBI::dbListTables(src)) {
     stop("'src' must contain a table 'gps'", call. = FALSE)
   }
-  if(is.null(data) && !"alltags" %in% DBI::dbListTables(src$con)) {
+  if(is.null(data) && !"alltags" %in% DBI::dbListTables(src)) {
     stop("'src' must contain the view 'alltags', unless 'data' is provided", 
          call. = FALSE)
   }
@@ -180,7 +180,7 @@ getBatches <- function(src, cutoff) {
 
   cutoff <- cutoff * 60
   
-  batches <- dplyr::tbl(src$con, "batches") %>%
+  batches <- dplyr::tbl(src, "batches") %>%
     dplyr::mutate(ts_min = .data$tsStart - cutoff,
                   ts_max = .data$tsEnd + cutoff) %>%
     dplyr::select("batchID", "tsStart", "tsEnd", "ts_min", "ts_max") %>%

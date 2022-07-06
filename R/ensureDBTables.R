@@ -16,8 +16,8 @@
 
 ensureDBTables = function(src, projRecv, deviceID, quiet = FALSE) {
   if (!inherits(src, "src_sql")) stop("src is not a dplyr::src_sql object", call. = FALSE)
-  con <- src$con
-  if (!inherits(con, "SQLiteConnection")) stop("src is not open or is corrupt; underlying db connection invalid", call. = FALSE)
+
+  if (!inherits(src, "SQLiteConnection")) stop("src is not open or is corrupt; underlying db connection invalid", call. = FALSE)
   
   if (missing(projRecv)) {
     stop("You must specify a project number or receiver serial number for a new database", 
@@ -26,12 +26,12 @@ ensureDBTables = function(src, projRecv, deviceID, quiet = FALSE) {
   isRecvDB <- is.character(projRecv)
 
   ## reasonably large page size; post 2011 hard drives have 4K sectors anyway
-  DBI::dbExecute(con, "pragma page_size=4096") 
+  DBI::dbExecute(src, "pragma page_size=4096") 
   
   tables <- dplyr::src_tbls(src)
 
   # Create and fill 'meta' table
-  if (!"meta" %in% tables) makeMetaTable(con, projRecv, deviceID)
+  if (!"meta" %in% tables) makeMetaTable(src, projRecv, deviceID)
   
   # Create all empty tables
   for(t in c("activity", "activityAll", "antDeps", "batches", "batchRuns", 
@@ -41,14 +41,14 @@ ensureDBTables = function(src, projRecv, deviceID, quiet = FALSE) {
              "tagAmbig", "tagDeps", "tagProps", "tags")) {
 
     if(!t %in% tables && !(t == "pulseCounts" && !isRecvDB)) {
-      lapply(makeTable(t), dbExecuteAll, conn = con)
+      lapply(makeTable(t), dbExecuteAll, conn = src)
     }
   }
   
   # Create tables to fill (either need current values, or values from DB)
-  if(!"admInfo" %in% tables) makeAdmInfo(con)
-  if(!"projBatch" %in% tables && !isRecvDB) makeProjBatch(con, projRecv)
-  if(!"recvs" %in% tables) makeRecvs(con)
+  if(!"admInfo" %in% tables) makeAdmInfo(src)
+  if(!"projBatch" %in% tables && !isRecvDB) makeProjBatch(src, projRecv)
+  if(!"recvs" %in% tables) makeRecvs(src)
   
   
   updateMotusDb(src, quiet = quiet)
@@ -66,8 +66,8 @@ makeTable <- function(name) {
     unlist()
 }
 
-makeMetaTable <- function(con, projRecv, deviceID) {
-  sapply(makeTable("meta"), DBI::dbExecute, conn = con)
+makeMetaTable <- function(src, projRecv, deviceID) {
+  sapply(makeTable("meta"), DBI::dbExecute, conn = src)
   
   if (is.character(projRecv))  {  # If Receiver
     if (missing(deviceID) || ! isTRUE(is.numeric(deviceID))) {
@@ -93,7 +93,7 @@ makeMetaTable <- function(con, projRecv, deviceID) {
       stop("Unexpected receiver type: ", type, call. = FALSE)
     }
     
-    DBI::dbExecute(con, glue::glue_collapse(
+    DBI::dbExecute(src, glue::glue_collapse(
       glue::glue("INSERT INTO meta (key, val)",
                  "values",
                  "('dbType', 'receiver'),",
@@ -104,7 +104,7 @@ makeMetaTable <- function(con, projRecv, deviceID) {
     
     
   } else if (is.numeric(projRecv)) {
-    DBI::dbExecute(con, glue::glue_collapse(glue::glue("INSERT INTO meta (key, val)", 
+    DBI::dbExecute(src, glue::glue_collapse(glue::glue("INSERT INTO meta (key, val)", 
                                        "values",
                                        "('dbType', 'tag'),",
                                        "('tagProject', {projRecv})"), sep = "\n"))
@@ -113,17 +113,17 @@ makeMetaTable <- function(con, projRecv, deviceID) {
   }
 }
 
-makeAdmInfo <- function(con) {
-  sapply(makeTable("admInfo"), DBI::dbExecute, conn = con)
-  DBI::dbExecute(con, 
+makeAdmInfo <- function(src) {
+  sapply(makeTable("admInfo"), DBI::dbExecute, conn = src)
+  DBI::dbExecute(src, 
                  glue::glue(
                    "INSERT INTO admInfo (db_version, data_version) 
                              values ('{max(sql_versions$date)}', {motus_vars$dataVersion});"))
 }
 
-makeProjBatch <- function(con, projRecv) {
-  sapply(makeTable("projBatch"), DBI::dbExecute, conn = con)
-  DBI::dbExecute(con, glue::glue(
+makeProjBatch <- function(src, projRecv) {
+  sapply(makeTable("projBatch"), DBI::dbExecute, conn = src)
+  DBI::dbExecute(src, glue::glue(
     "INSERT INTO projBatch 
       SELECT {projRecv} AS tagDepProjectID, t1.batchID, max(t2.hitID)
       FROM batches AS t1
@@ -132,9 +132,9 @@ makeProjBatch <- function(con, projRecv) {
      ORDER BY t1.batchID"))
 }
 
-makeRecvs <- function(con) {
-  sapply(makeTable("recvs"), DBI::dbExecute, conn = con)
-  DBI::dbExecute(con, "INSERT OR IGNORE INTO recvs 
+makeRecvs <- function(src) {
+  sapply(makeTable("recvs"), DBI::dbExecute, conn = src)
+  DBI::dbExecute(src, "INSERT OR IGNORE INTO recvs 
                        SELECT deviceID, serno FROM recvDeps")
 }
 

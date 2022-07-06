@@ -31,7 +31,7 @@ UNION SELECT ambigID, motusTagID4 as motusTagID FROM tagAmbig where motusTagID4 
 UNION SELECT ambigID, motusTagID5 as motusTagID FROM tagAmbig where motusTagID5 is not null
 UNION SELECT ambigID, motusTagID6 as motusTagID FROM tagAmbig where motusTagID6 is not null
 ")
-    DBI::dbExecute(db$con, paste0("DROP VIEW IF EXISTS ", name))
-    DBI::dbExecute(db$con, query)
+    DBI::dbExecute(db, paste0("DROP VIEW IF EXISTS ", name))
+    DBI::dbExecute(db, query)
     return(dplyr::tbl(db, name))
 }

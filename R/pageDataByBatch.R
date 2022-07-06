@@ -19,7 +19,7 @@ pageDataByBatch <- function(src, table, resume = FALSE,
     batches <- batches[batches >= last_batch]
   } else {
     # Otherwise remove all rows and start again
-    DBI::dbExecute(src$con, paste0("DELETE FROM ", table))
+    DBI::dbExecute(src, paste0("DELETE FROM ", table))
   }
   
   # If length zero, then no batches to get data for
@@ -37,7 +37,7 @@ pageDataByBatch <- function(src, table, resume = FALSE,
     
     # Check if actually new, or just the end of the record
     if(nrow(b) > 0 && resume && identical(last_batch, batches[length(batches)])) {
-      t <- dplyr::tbl(src$con, table) %>%
+      t <- dplyr::tbl(src, table) %>%
         dplyr::filter(.data$batchID == batches[1]) %>%
         dplyr::collect() %>%
         as.data.frame()
@@ -64,7 +64,7 @@ pageDataByBatch <- function(src, table, resume = FALSE,
         msg <- sprintf("batchID %8d (#%6d of %6d): ", batchID, i, length(batches))
         
         # Save Previous batch
-        dbInsertOrReplace(sql$con, table, b)
+        dbInsertOrReplace(sql, table, b)
         message(msg, sprintf("got %6d %s records", nrow(b), table))
         added <- added + nrow(b)
         b <- pageForward(b, batchID, projectID)

@@ -15,7 +15,7 @@ pageDataByReturn <- function(src, table, resume = FALSE, returnIDtype = "batchID
   } else {
     msg <- sprintf("%s: downloading all data", table)
     # Otherwise remove all rows and start again
-    DBI::dbExecute(src$con, paste0("DELETE FROM ", table))
+    DBI::dbExecute(src, paste0("DELETE FROM ", table))
   }
   
   # If length zero, then no batches to get data for
@@ -42,7 +42,7 @@ pageDataByReturn <- function(src, table, resume = FALSE, returnIDtype = "batchID
   repeat {
     
     # Save Previous batch
-    dbInsertOrReplace(sql$con, table, b)
+    dbInsertOrReplace(sql, table, b)
     added <- added + nrow(b)
 
     # Page forward

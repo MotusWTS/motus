@@ -21,7 +21,7 @@
 
 writeRunsFilter = function(src, filterName, motusProjID=NA, df, overwrite=TRUE, delete=FALSE) {
 
-  sql = function(...) DBI::dbExecute(src$con, sprintf(...))
+  sql = function(...) DBI::dbExecute(src, sprintf(...))
   
   # determines the filterID
   id = createRunsFilter(src, filterName, motusProjID, update=FALSE)
@@ -32,7 +32,7 @@ writeRunsFilter = function(src, filterName, motusProjID=NA, df, overwrite=TRUE, 
     }
     df$filterID = id
 
-    dbInsertOrReplace(src$con, "runsFilters", df, replace=overwrite)
+    dbInsertOrReplace(src, "runsFilters", df, replace=overwrite)
     message("Filter records saved");
   
   }

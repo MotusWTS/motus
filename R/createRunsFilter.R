@@ -16,21 +16,21 @@
 
 createRunsFilter = function(src, filterName, motusProjID=NA, descr=NA, update=FALSE) {
 
-  sqlq = function(...) DBI::dbGetQuery(src$con, sprintf(...))
+  sqlq = function(...) DBI::dbGetQuery(src, sprintf(...))
 
   if (is.na(motusProjID)) motusProjID = -1
   
   df = sqlq("select * from filters where filterName = '%s' and motusProjID = %d", filterName, motusProjID)
   if (nrow(df) == 0) {
     df = data.frame(userLogin=motus_vars$userLogin, filterName=filterName, motusProjID=motusProjID, descr=descr, lastModified=format(Sys.time(), "%Y-%m-%d %H:%M:%S"))
-    dbInsertOrReplace(src$con, "filters", df)
+    dbInsertOrReplace(src, "filters", df)
     df = sqlq("select * from filters where filterName = '%s' and motusProjID = %d", filterName, motusProjID)
     return (df[1,]$filterID)
   } else if (nrow(df) == 1) {
     if (update) {
 		  df$descr = descr
 		  df$lastModified=format(Sys.time(), "%Y-%m-%d %H:%M:%S")
-		  dbInsertOrReplace(src$con, "filters", df);
+		  dbInsertOrReplace(src, "filters", df);
 		  warning("Filter already exists. The description has been updated.")	
 	  } else {
 	  	warning("Warning: filter already exists. Use createRunsFilter function with update=TRUE if you want to update the properties (e.g. name) of the existing filter.")	

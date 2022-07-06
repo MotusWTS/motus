@@ -11,7 +11,7 @@ test_that("checkVersion and updateMotusDb run and return messages as expected", 
   expect_silent(updateMotusDb(tags))
   
   # No admInfo Table
-  DBI::dbRemoveTable(tags$con, "admInfo")
+  DBI::dbRemoveTable(tags, "admInfo")
   
   expect_message(checkVersion(tags), 
                  "The admInfo table has not yet been created in your motus sqlite file.")

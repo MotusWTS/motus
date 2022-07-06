@@ -30,13 +30,13 @@
 updateMotusDb <- function(src, quiet = FALSE) {
 
   # # Create and fill the admInfo table if it doesn't exist
-  # DBI::dbExecute(src$con, paste0("CREATE TABLE IF NOT EXISTS admInfo ",
+  # DBI::dbExecute(src, paste0("CREATE TABLE IF NOT EXISTS admInfo ",
   #                                "(key VARCHAR PRIMARY KEY NOT NULL, value VARCHAR)"))
-  # DBI::dbExecute(src$con, paste0("INSERT OR IGNORE INTO admInfo (key,value) ",
+  # DBI::dbExecute(src, paste0("INSERT OR IGNORE INTO admInfo (key,value) ",
   #                                "VALUES('db_version',date('1970-01-01'))"))
 
   # Get the current src version
-  src_version <- dplyr::tbl(src$con, "admInfo") %>%
+  src_version <- dplyr::tbl(src, "admInfo") %>%
     dplyr::pull(.data$db_version) %>%
     as.POSIXct(., tz = "UTC")
 
@@ -58,7 +58,7 @@ updateMotusDb <- function(src, quiet = FALSE) {
       l <- lapply(v, function(sql) {
         if (sql != "") {
 
-	        e <- try(dbExecuteAll(src$con, sql), silent = TRUE)
+	        e <- try(dbExecuteAll(src, sql), silent = TRUE)
 	        if(class(e) == "try-error") { # Deal with errors
 	          if(!stringr::str_detect(e, "duplicate column name: ")) {
 	            stop(e, call. = FALSE)
@@ -73,7 +73,7 @@ updateMotusDb <- function(src, quiet = FALSE) {
     if (length(dates) > 0) dt <- dates[length(dates)]
 
     if (dt > src_version) {
-      DBI::dbExecute(src$con, paste0("UPDATE admInfo set db_version = '",
+      DBI::dbExecute(src, paste0("UPDATE admInfo set db_version = '",
                                     strftime(dt, "%Y-%m-%d %H:%M:%S"), "'"))
     }
   }
@@ -89,7 +89,7 @@ checkViews <- function(src, update_sql, response = NULL) {
   
   # Any custom views in database?
   db_views <- DBI::dbGetQuery(
-    src$con, 
+    src, 
     "SELECT name, sql FROM sqlite_master WHERE type = 'view'") %>%
     dplyr::filter(!.data$name %in% motus_views)
   
@@ -144,26 +144,26 @@ checkViews <- function(src, update_sql, response = NULL) {
     
     # Delete the views before proceeding
     message("Deleting custom views: ", paste0(db_views$name, collapse = ", "))
-    for(v in db_views$name) DBI::dbExecute(src$con, paste0("DROP VIEW ", v))
+    for(v in db_views$name) DBI::dbExecute(src, paste0("DROP VIEW ", v))
   }
 }
 
 
 checkFields <- function(src) {
   
-  tbls <- DBI::dbListTables(src$con)
+  tbls <- DBI::dbListTables(src)
   tbls <- tbls[tbls %in% sql_fields$table]
   
   for(t in tbls) {
-   f <- DBI::dbListFields(src$con, t) 
+   f <- DBI::dbListFields(src, t) 
    s <- dplyr::filter(sql_fields, table == !!t)
    
    # Check for an add missing columns/fields
    if(any(!s$column %in% f)) {
      miss <- s$sql[!s$column %in% f]
      miss <- glue::glue("ALTER TABLE {t} ADD COLUMN {miss};")
-     dbExecuteAll(src$con, miss)
+     dbExecuteAll(src, miss)
    }
-   if(all(s$extra[[1]] != FALSE)) dbExecuteAll(src$con, s$extra[[1]])
+   if(all(s$extra[[1]] != FALSE)) dbExecuteAll(src, s$extra[[1]])
   }
 }

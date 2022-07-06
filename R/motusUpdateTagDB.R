@@ -23,13 +23,13 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
                         "inner join batches b on a.batchID = b.batchID ",
                         "where tagDepProjectID = %d"), projectID)
   if(countOnly) {
-    DBI::dbDisconnect(src$con)
+    DBI::dbDisconnect(src)
     return(srvSizeOfUpdateForTagProject(projectID = projectID, 
                                         batchID = batchID))
   }
 
   ambigProjs <- srvProjectAmbiguitiesForTagProject(projectID)
-  dbInsertOrReplace(src$con, "projAmbig", ambigProjs)
+  dbInsertOrReplace(src, "projAmbig", ambigProjs)
   projectIDs <- unique(c(projectID, ambigProjs$ambigProjectID))
   
   msg <- sprintf("Checking for new data in project %d", projectID)
@@ -58,7 +58,7 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
       if (!isTRUE(nrow(b) > 0)) break
 
       # Check that version matches (just in case)
-      if(any(b$version != dplyr::tbl(src$con, "admInfo") %>%
+      if(any(b$version != dplyr::tbl(src, "admInfo") %>%
              dplyr::pull(.data$data_version))) {
         stop("Server data version doesn't match the version in this database",
              call. = FALSE)
@@ -103,8 +103,8 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
         if(nrow(oldBatch) == 0) {
           # this is a new batch record, so write the whole thing
           b$numHits[bi] <- numHits
-          # dbWriteTable(sql$con, "batches", b[bi,], append = TRUE, row.names = FALSE)
-          dbInsertOrReplace(sql$con, "batches", b[bi,], replace = FALSE)
+          # dbWriteTable(sql, "batches", b[bi,], append = TRUE, row.names = FALSE)
+          dbInsertOrReplace(sql, "batches", b[bi,], replace = FALSE)
         } else {
           # this is a batch record we already have, but we've fetched
           # additional hits due to ambiguous tags

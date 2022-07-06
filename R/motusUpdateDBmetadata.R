@@ -53,7 +53,7 @@ motusUpdateDBmetadata <- function(sql, tagIDs = NULL, deviceIDs = NULL, force = 
   ## get mappings for tag ambiguities
   if (length(ambigTagIDs) > 0) {
     ambig <- srvTagsForAmbiguities(tagIDs[tagIDs < 0])
-    dbInsertOrReplace(sql$con, "tagAmbig", ambig)
+    dbInsertOrReplace(sql, "tagAmbig", ambig)
     
     ## augment the tagIDs we need metadata for by the ambiguous tags for each
     ## ambigTagID; these are stored in columns motusTagID1, motusTagID2, ...
@@ -65,11 +65,11 @@ motusUpdateDBmetadata <- function(sql, tagIDs = NULL, deviceIDs = NULL, force = 
   ## get metadata for tags, their deployments, and species names
   if (length(realTagIDs) > 0) {
     tmeta <- srvMetadataForTags(motusTagIDs = realTagIDs)
-    dbInsertOrReplace(sql$con, "tags", tmeta$tags)
-    dbInsertOrReplace(sql$con, "tagDeps", tmeta$tagDeps)
-    dbInsertOrReplace(sql$con, "tagProps", tmeta$tagProps)
-    dbInsertOrReplace(sql$con, "species", tmeta$species)
-    dbInsertOrReplace(sql$con, "projs", tmeta$projs)
+    dbInsertOrReplace(sql, "tags", tmeta$tags)
+    dbInsertOrReplace(sql, "tagDeps", tmeta$tagDeps)
+    dbInsertOrReplace(sql, "tagProps", tmeta$tagProps)
+    dbInsertOrReplace(sql, "species", tmeta$species)
+    dbInsertOrReplace(sql, "projs", tmeta$projs)
     ## update tagDeps.fullID
     sql("
 update
@@ -91,10 +91,10 @@ set
   ## get metadata for receivers and their antennas
   if (length(deviceIDs) > 0) {
     rmeta <- srvMetadataForReceivers(deviceIDs)
-    dbInsertOrReplace(sql$con, "recvDeps", rmeta$recvDeps)
-    dbInsertOrReplace(sql$con, "recvs", rmeta$recvDeps[,c("deviceID", "serno")])
-    dbInsertOrReplace(sql$con, "antDeps", rmeta$antDeps)
-    dbInsertOrReplace(sql$con, "projs", rmeta$projs)
+    dbInsertOrReplace(sql, "recvDeps", rmeta$recvDeps)
+    dbInsertOrReplace(sql, "recvs", rmeta$recvDeps[,c("deviceID", "serno")])
+    dbInsertOrReplace(sql, "antDeps", rmeta$antDeps)
+    dbInsertOrReplace(sql, "projs", rmeta$projs)
   }
   
   invisible(NULL)
