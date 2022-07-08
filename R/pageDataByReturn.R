@@ -6,18 +6,17 @@ pageDataByReturn <- function(src, table, resume = FALSE, returnIDtype = "batchID
   
   # Check tables and update to include table if necessary
   ensureDBTables(src, projRecv = get_projRecv(src))
-  sql <- safeSQL(src)
-  
+
   returnID <- 0
   # Check where to start
   if(resume) {
-    msg <- sprintf("%s: checking for new data", table)
+    msg <- msg_fmt("{table}: checking for new data")
     # If updating, start with last batch downloaded (a bit of overlap)
-    returnID <- sql(glue::glue("select ifnull(max({returnIDtype}), 0) from ", table))[[1]]  
+    returnID <- DBI_Query("SELECT IFNULL(max({returnIDtype}), 0) FROM {table}")  
   } else {
-    msg <- sprintf("%s: downloading all data", table)
+    msg <- msg_fmt("{table}: downloading all data")
     # Otherwise remove all rows and start again
-    DBI::dbExecute(src, paste0("DELETE FROM ", table))
+    DBI_Execute(src,"DELETE FROM {table}")
   }
   
   # If length zero, then no batches to get data for
@@ -39,12 +38,12 @@ pageDataByReturn <- function(src, table, resume = FALSE, returnIDtype = "batchID
   rounds <- 1
   
   # Progress messages
-  message(sprintf("%s %8d: ", returnIDtype, returnID), sprintf("got %6d %s records", nrow(b), table))
+  message(msg_fmt("{returnIDtype} {returnID:8d}: got {nrow(b):6d} {table} records"))
 
   repeat {
     
     # Save Previous batch
-    dbInsertOrReplace(sql, table, b)
+    dbInsertOrReplace(src, table, b)
     added <- added + nrow(b)
 
     # Page forward
@@ -52,7 +51,7 @@ pageDataByReturn <- function(src, table, resume = FALSE, returnIDtype = "batchID
     b <- pageForward(b, returnID, projectID)
     
     # Progress messages
-    message(sprintf("%s %8d: ", returnIDtype, returnID), sprintf("got %6d %s records", nrow(b), table))
+    message(msg_fmt("{returnIDtype} {returnID:8d}: got {nrow(b):6d} {table} records"))
     
     if(nrow(b) == 0) break
     
@@ -61,7 +60,7 @@ pageDataByReturn <- function(src, table, resume = FALSE, returnIDtype = "batchID
     if(rounds >= getOption("motus.test.max") && is_testing()) break
   }
   
-  message("Downloaded ", added, " ", table, " records")
+  message(msg_fmt("Downloaded {added} {table} {records}"))
   
   src
 }

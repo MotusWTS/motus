@@ -158,7 +158,7 @@ LEFT JOIN
    projs AS t10 ON t10.ID = t6.projectID;
 ")
 
-    DBI::dbExecute(src, paste0("DROP VIEW IF EXISTS ", name))
-    DBI::dbExecute(src, query)
-    return(dplyr::tbl(src, name))
+    DBI_Execute(src, "DROP VIEW IF EXISTS {name}")
+    DBI_Execute(src, query)
+    dplyr::tbl(src, name)
 }

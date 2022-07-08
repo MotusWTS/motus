@@ -15,30 +15,32 @@
 #' @noRd
 
 motusUpdateRecvDB <- function(src, countOnly, forceMeta = FALSE) {
-  sql <- safeSQL(src)
   check_src(src)
   
-  recvSerno <- sql("select val from meta where key='recvSerno'")[[1]]
-  deviceID <- sql("select val from meta where key='deviceID'")[[1]] %>% 
-      as.integer()
+  recvSerno <- DBI_Query(src, "SELECT val FROM meta WHERE key = 'recvSerno'")
+  deviceID <- DBI_Query(src, "SELECT val FROM meta WHERE key = 'deviceID'") %>%
+    as.integer()
   
   if (!isTRUE(deviceID > 0)) {
     stop("This receiver database does not have a valid deviceID stored in it.\n",
          "Try delete or rename the file and use tagme() again?", call. = FALSE)
   }
-  batchID <- sql("select ifnull(max(batchID), 0) from batches")[[1]]
+  
+  batchID <- DBI_Query(src, "SELECT IFNULL(max(batchID), 0) FROM batches")
+  
   if (countOnly) {
     DBI::dbDisconnect(src)
     return(srvSizeOfUpdateForReceiver(deviceID = deviceID, batchID = batchID))
   }
   
   # keep track of items we'll need metadata for
-  tagIDs = c()
+  tagIDs <- c()
   
   # 1. get records for all new batches -----------------------------------------
   # Start after the latest batch we already have.
-  message(paste0("Checking for new data for receiver ", recvSerno, 
-                 " (deviceID: ", deviceID, ")"))
+  message(msg_fmt("Checking for new data for receiver {recvSerno} ", 
+                  "(deviceID: {deviceID})"))
+  
   repeat {
     # we always use countOnly = FALSE, because we need to obtain batchIDs
     # in order to count runs and hits
@@ -49,11 +51,11 @@ motusUpdateRecvDB <- function(src, countOnly, forceMeta = FALSE) {
     # to span multiple deployments.
     b <- subset(b, !duplicated(batchID))
     
-    message(sprintf("Receiver %s:  got %5d batch records", recvSerno, nrow(b)))
+    message(msg_fmt("Receiver {recvSerno}:  got {nrow(b):5d} batch records"))
     for (bi in 1:nrow(b)) {
       batchID <- b$batchID[bi]
         
-      batchMsg <- sprintf("batchID %8d (#%6d of %6d)", batchID, bi, nrow(b))
+      batchMsg <- msg_fmt("batchID {batchID:8d} (#{bi:6d} of {nrow(b):6d})")
       # To handle interruption of transfers, we save a record to the batches
       # table as the last step after acquiring runs and hits for that batch.
       

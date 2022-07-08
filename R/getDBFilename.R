@@ -27,9 +27,9 @@
 
 getDBFilename = function(projRecv, dir = getwd()) {
     if (is.numeric(projRecv)) {
-        dbName = sprintf("project-%d.motus", projRecv)
+        dbName <- glue::glue("project-{projRecv}.motus")
     } else {
-        dbName = sprintf("%s.motus", projRecv)
+        dbName <- glue::glue("{projRecv}.motus")
     }
-    return (file.path(dir, dbName))
+    file.path(dir, dbName)
 }

@@ -19,7 +19,7 @@ pageDataByBatch <- function(src, table, resume = FALSE,
     batches <- batches[batches >= last_batch]
   } else {
     # Otherwise remove all rows and start again
-    DBI::dbExecute(src, paste0("DELETE FROM ", table))
+    DBI_Execute(src, "DELETE FROM {table}")
   }
   
   # If length zero, then no batches to get data for
@@ -49,8 +49,10 @@ pageDataByBatch <- function(src, table, resume = FALSE,
   }  
 
   # Announce
-  message(sprintf("%s: %5d %s batch records to check", 
-                  table, length(batches), dplyr::if_else(resume, "new", "")))
+  message(msg_fmt(
+    "{table}: {length(batches):5d} {dplyr::if_else(resume, 'new', '')}",
+    "batch records to check"))
+  
   added <- 0
   if(length(batches) > 0) {
     for(i in 1:length(batches)) {
@@ -61,19 +63,20 @@ pageDataByBatch <- function(src, table, resume = FALSE,
       while(nrow(b) > 0) {
         
         # Progress messages
-        msg <- sprintf("batchID %8d (#%6d of %6d): ", batchID, i, length(batches))
+        msg <- msg_fmt("batchID {batchID:8d} (#{i:6d} of {length(batches):6d}): ")
         
         # Save Previous batch
         dbInsertOrReplace(sql, table, b)
-        message(msg, sprintf("got %6d %s records", nrow(b), table))
+        message(msg, msg_fmt("got {nrow(b):6d} {table} records"))
         added <- added + nrow(b)
         b <- pageForward(b, batchID, projectID)
       }
       
       # Progress messages
       if(nrow(b) == 0) { 
-        message(sprintf("batchID %8d (#%6d of %6d): got %6d %s records", 
-                        batchID, i, length(batches), 0, table))
+        message(msg_fmt(
+          "batchID {batchID:8d} (#{i:6d} of {length(batches):6d}: ",
+          "got       0 {table} records"))
       }
       
       # If testing, break out after x batches

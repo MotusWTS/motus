@@ -7,10 +7,4 @@
 #'
 #' @export
 
-listRunsFilters = function(src) {
-  
-  sqlq = function(...) DBI::dbGetQuery(src, sprintf(...))
-  
-  return (sqlq("select * from filters"))
-  
-}
+listRunsFilters <- function(src) DBI_Query(src, "SELECT * FROM filters")

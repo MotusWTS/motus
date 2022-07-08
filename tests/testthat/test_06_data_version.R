@@ -54,9 +54,9 @@ test_that("Database updates as expected (proj) - new = FALSE", {
   expect_true(all(sort(DBI::dbListFields(old, "activity")) %in%
                     sort(DBI::dbListFields(new, "activity"))))
               
-  expect_gt(DBI::dbGetQuery(new, "SELECT * FROM activity") %>% nrow(), 0)
-  expect_gt(DBI::dbGetQuery(new, "SELECT * FROM hits") %>% nrow(), 0)
-  expect_gt(DBI::dbGetQuery(new, "SELECT * FROM runs") %>% nrow(), 0)
+  expect_gt(DBI_Query(new, "SELECT * FROM activity") %>% nrow(), 0)
+  expect_gt(DBI_Query(new, "SELECT * FROM hits") %>% nrow(), 0)
+  expect_gt(DBI_Query(new, "SELECT * FROM runs") %>% nrow(), 0)
   
   disconnect(old)
   disconnect(new)
@@ -85,7 +85,7 @@ test_that("Database updates as expected (receivers)", {
   
   # Create dummy version 1
   tags <- tagme("SG-3115BBBK1127", new = TRUE, update = TRUE)
-  DBI::dbExecute(tags, "UPDATE admInfo set data_version = 1")
+  DBI_Execute(tags, "UPDATE admInfo set data_version = 1")
   disconnect(tags)
   
   expect_false(file.exists("SG-3115BBBK1127_v1.motus")) # No backup
@@ -100,7 +100,7 @@ test_that("Database updates as expected (receivers)", {
   # Create dummy version 1
   orig <- options(motus.test.max = 30)
   tags <- tagme("SG-3115BBBK1127", new = TRUE, update = TRUE)
-  DBI::dbExecute(tags, "UPDATE admInfo set data_version = 1")
+  DBI_Execute(tags, "UPDATE admInfo set data_version = 1")
   disconnect(tags)
   
   expect_false(file.exists("SG-3115BBBK1127_v1.motus")) # No backup
@@ -111,9 +111,9 @@ test_that("Database updates as expected (receivers)", {
   # Expect data
   new <- DBI::dbConnect(RSQLite::SQLite(), dbname = "SG-3115BBBK1127.motus")
   
-  expect_gt(DBI::dbGetQuery(new, "SELECT * FROM activity") %>% nrow(), 0)
-  expect_gt(DBI::dbGetQuery(new, "SELECT * FROM hits") %>% nrow(), 0)
-  expect_gt(DBI::dbGetQuery(new, "SELECT * FROM runs") %>% nrow(), 0)
+  expect_gt(DBI_Query(new, "SELECT * FROM activity") %>% nrow(), 0)
+  expect_gt(DBI_Query(new, "SELECT * FROM hits") %>% nrow(), 0)
+  expect_gt(DBI_Query(new, "SELECT * FROM runs") %>% nrow(), 0)
   
   disconnect(new)
   options(orig)

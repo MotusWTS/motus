@@ -24,7 +24,7 @@ test_that("Create DB, includes any new fields", {
     expect_silent()
   expect_length(DBI::dbListTables(temp), 0)
   
-  dbExecuteAll(
+  DBI_ExecuteAll(
     temp,
     c("CREATE TABLE admInfo (db_version TEXT, data_version TEXT);",
       "INSERT INTO admInfo (db_version, data_version) VALUES('2000-01-01', 0);"))
@@ -41,8 +41,8 @@ test_that("Create DB, includes any new fields", {
     expect_equal(nrow(DBI::dbGetQuery(temp, paste0("SELECT * FROM ", !!i))),
                  0)
   }
-  expect_equal(nrow(DBI::dbGetQuery(temp, "SELECT * FROM admInfo")), 1)
-  expect_equal(nrow(DBI::dbGetQuery(temp, "SELECT * FROM meta")), 2)
+  expect_equal(nrow(DBI_Query(temp, "SELECT * FROM admInfo")), 1)
+  expect_equal(nrow(DBI_Query(temp, "SELECT * FROM meta")), 2)
   
   # Expect new columns age/sex in tagDeps
   expect_true(all(c("age", "sex") %in% DBI::dbListFields(temp, "tagDeps")))
@@ -57,7 +57,7 @@ test_that("Create DB, includes any new fields", {
                     DBI::dbListFields(temp, "nodeData")))
   
   # Expect no NOT NULL in nodeDeps tsEnd
-  expect_equal(DBI::dbGetQuery(temp, "PRAGMA table_info(nodeDeps)") %>%
+  expect_equal(DBI_Query(temp, "PRAGMA table_info(nodeDeps)") %>%
                  dplyr::filter(name == "tsEnd") %>%
                  dplyr::pull(notnull), 
                0)
@@ -87,7 +87,7 @@ test_that("Views created correctly", {
   views <- c("allambigs", "alltags", "alltagsGPS", "allruns", "allrunsGPS")
   
   # Remove existing views
-  for(v in views) DBI::dbExecute(tags, glue::glue("DROP VIEW IF EXISTS {v}"))
+  for(v in views) DBI_Execute(tags, "DROP VIEW IF EXISTS {v}")
   
   # Add views
   tags <- ensureDBTables(tags, projRecv = 176)
@@ -200,10 +200,10 @@ test_that("check for custom views before update", {
   
   # Add custom view
   tags <- DBI::dbConnect(RSQLite::SQLite(), "project-176.motus")
-  DBI::dbExecute(
+  DBI_Execute(
     tags, 
     "CREATE VIEW alltags_fast AS SELECT hitID, runID, ts FROM alltags WHERE sig = 52;")
-  DBI::dbExecute(tags, "UPDATE admInfo SET db_version = '2019-01-01 00:00:00'")
+  DBI_Execute(tags, "UPDATE admInfo SET db_version = '2019-01-01 00:00:00'")
   disconnect(tags)
   tags <- tagme(176, update = FALSE)
   

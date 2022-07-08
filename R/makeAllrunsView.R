@@ -18,7 +18,7 @@
 #'
 
 makeAllrunsView <- function(src, name = "allruns") {
-  query = glue::glue("
+  query <- glue::glue("
   CREATE VIEW IF NOT EXISTS {name} 
   AS
   SELECT
@@ -120,7 +120,7 @@ makeAllrunsView <- function(src, name = "allruns") {
   LEFT JOIN
     projs AS t10 ON t10.ID = t6.projectID")
   
-  DBI::dbExecute(src, paste0("DROP VIEW IF EXISTS ", name))
-  DBI::dbExecute(src, query)
+  DBI_Execute(src, "DROP VIEW IF EXISTS {name}")
+  DBI_Execute(src, query)
   dplyr::tbl(src, name)
 }

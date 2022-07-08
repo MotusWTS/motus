@@ -79,7 +79,7 @@ filterByActivity <- function(src, return = "good", view = "alltags",
   
   tbl_activity <- dplyr::tbl(src, "activity")
   
-  if(nrow(DBI::dbGetQuery(src, "SELECT * FROM activity LIMIT 1")) < 1) {
+  if(nrow(DBI_Query(src, "SELECT * FROM activity LIMIT 1")) < 1) {
     stop("'activity' table is empty, cannot filter by activity", call. = FALSE)
   }
 

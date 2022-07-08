@@ -22,25 +22,25 @@ motusUpdateDBmetadata <- function(src, tagIDs = NULL, deviceIDs = NULL, force = 
   check_src(src)
   
   if (is.null(tagIDs) | force) {
-    tagIDs <- sql("select distinct motusTagID from runs")[[1]]
+    tagIDs <- DBI_Query("SELECT DISTINCT motusTagID FROM runs")
   }
   
   if (! force) {
     ## drop tags for which we already have metadata
-    have <- sql("select distinct tagID from tagDeps")[[1]]
+    have <- DBI_Query("SELECT DISTINCT tagID FROM tagDeps")
     tagIDs <- setdiff(tagIDs, have)
     
     ## drop ambiguous tags for which we already ave the mapping
-    have <- sql("select distinct ambigID from tagAmbig")[[1]]
+    have <- DBI_Query("SELECT DISTINCT ambigID FROM tagAmbig")
     tagIDs <- setdiff(tagIDs, have)
   }
   
   if (is.null(deviceIDs) | force) {
-    deviceIDs <- sql("select distinct motusDeviceID from batches")[[1]]
+    deviceIDs <- DBI_Query("SELECT DISTINCT motusDeviceID FROM batches")
   }
     
   if (! force) {
-    have <- sql("select distinct deviceID from recvDeps")[[1]]
+    have <- DBI_Query("SELECT DISTINCT deviceID FROM recvDeps")
     deviceIDs <- setdiff(deviceIDs, have)
   }
   
@@ -68,21 +68,19 @@ motusUpdateDBmetadata <- function(src, tagIDs = NULL, deviceIDs = NULL, force = 
     dbInsertOrReplace(src, "species", tmeta$species)
     dbInsertOrReplace(src, "projs", tmeta$projs)
     ## update tagDeps.fullID
-    sql("
-update
-   tagDeps
-set
-   fullID = (
-      select
-         printf('%s#%s:%.1f@%g(M.%d)', t3.label, t2.mfgID, t2.bi, t2.nomFreq, t2.tagID)
-      from
-         tags as t2
-         join projs as t3 on t3.id = tagDeps.projectID
-      where
-         t2.tagID = tagDeps.tagID
-      limit 1
-   )
-")
+    DBI_Execute(
+      src,
+      "UPDATE tagDeps SET ",
+      "  fullID = ( ",
+      "    SELECT ", 
+      "      printf('%s#%s:%.1f@%g(M.%d)', t3.label, t2.mfgID, t2.bi, t2.nomFreq, t2.tagID) ",
+      "    FROM ",
+      "      tags AS t2 ",
+      "      JOIN projs AS t3 ON t3.id = tagDeps.projectID ",
+      "    WHERE ",
+      "      t2.tagID = tagDeps.tagID ",
+      "    LIMIT 1",
+      "  ) ")
   }
   
   ## get metadata for receivers and their antennas

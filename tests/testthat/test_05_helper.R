@@ -77,7 +77,7 @@ test_that("Empty activity table stops", {
   tags <- tagme(176, update = FALSE)
   
   # Empty activity
-  DBI::dbExecute(tags, "DELETE FROM activity")
+  DBI_Execute(tags, "DELETE FROM activity")
   expect_error(a <- filterByActivity(tags, return = "all"),
                "'activity' table is empty, cannot filter by activity")
   
@@ -541,7 +541,7 @@ test_that("deprecated batches are removed from tables - sample", {
   
   for(i in DBI::dbListTables(t)) {
     if("batchID" %in% DBI::dbListFields(t, i) &
-       DBI::dbExecute(t, glue::glue("SELECT * FROM {i} LIMIT 1")) > 0) {
+       DBI_Execute(t, "SELECT * FROM {i} LIMIT 1") > 0) {
       dplyr::tbl(t, i) %>% 
         dplyr::filter(.data$batchID %in% !!d) %>%
         dplyr::collect() %>%
@@ -566,7 +566,7 @@ test_that("deprecated batches are removed from tables - sample", {
   
   for(i in DBI::dbListTables(t)) {
     if("batchID" %in% DBI::dbListFields(t, i) &
-       DBI::dbExecute(t, glue::glue("SELECT * FROM {i} LIMIT 1")) > 0) {
+       DBI_Execute(t, "SELECT * FROM {i} LIMIT 1") > 0) {
       dplyr::tbl(t, i) %>% 
         dplyr::filter(.data$batchID %in% !!d) %>%
         dplyr::collect() %>%
@@ -605,7 +605,7 @@ test_that("deprecated batches are removed from tables project 1", {
   
   for(i in DBI::dbListTables(t)) {
     if("batchID" %in% DBI::dbListFields(t, i) &
-       DBI::dbExecute(t, glue::glue("SELECT * FROM {i} LIMIT 1")) > 0) {
+       DBI_Execute(t, "SELECT * FROM {i} LIMIT 1") > 0) {
       dplyr::tbl(t, i) %>% 
         dplyr::filter(.data$batchID %in% !!d) %>%
         dplyr::collect() %>%
@@ -630,7 +630,7 @@ test_that("deprecated batches are removed from tables project 1", {
   
   for(i in DBI::dbListTables(t)) {
     if("batchID" %in% DBI::dbListFields(t, i) &
-       DBI::dbExecute(t, glue::glue("SELECT * FROM {i} LIMIT 1")) > 0) {
+       DBI_Execute(t, "SELECT * FROM {i} LIMIT 1") > 0) {
       dplyr::tbl(t, i) %>% 
         dplyr::filter(.data$batchID %in% !!d) %>%
         dplyr::collect() %>%

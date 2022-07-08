@@ -20,12 +20,11 @@
 #'
 #' @export
 
-writeRunsFilter = function(src, filterName, motusProjID=NA, df, overwrite=TRUE, delete=FALSE) {
+writeRunsFilter <- function(src, filterName, motusProjID = NA, df, 
+                            overwrite = TRUE, delete = FALSE) {
 
-  sql = function(...) DBI::dbExecute(src, sprintf(...))
-  
   # determines the filterID
-  id = createRunsFilter(src, filterName, motusProjID, update=FALSE)
+  id <- createRunsFilter(src, filterName, motusProjID, update = FALSE)
     
   if (!is.null(id)) {
     if (delete) {
@@ -33,11 +32,11 @@ writeRunsFilter = function(src, filterName, motusProjID=NA, df, overwrite=TRUE, 
     }
     df$filterID = id
 
-    dbInsertOrReplace(src, "runsFilters", df, replace=overwrite)
-    message("Filter records saved");
+    dbInsertOrReplace(src, "runsFilters", df, replace = overwrite)
+    message("Filter records saved")
   
   }
  
-  return(dplyr::tbl(src, "runsFilters") %>% dplyr::filter(.data$filterID == id))
-
+  dplyr::tbl(src, "runsFilters") %>% 
+    dplyr::filter(.data$filterID == .env$id)
 }

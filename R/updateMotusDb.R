@@ -48,8 +48,7 @@ updateMotusDb <- function(src, quiet = FALSE) {
     # Check if there are custom views to be concerned about
     checkViews(src, dplyr::pull(update_versions, "sql"))
     
-    if(!quiet) message(sprintf("updateMotusDb started (%d version update(s))", 
-                               nrow(update_versions)))
+    if(!quiet) message(msg_fmt("updateMotusDb started ({nrow(update_versions)} version update(s))"))
     
     dates <- apply(update_versions, 1, function(row) {
       if(!quiet) message(" - ", row["descr"], sep = "")
@@ -58,7 +57,7 @@ updateMotusDb <- function(src, quiet = FALSE) {
       l <- lapply(v, function(sql) {
         if (sql != "") {
 
-	        e <- try(dbExecuteAll(src, sql), silent = TRUE)
+	        e <- try(DBI_ExecuteAll(src, sql), silent = TRUE)
 	        if(class(e) == "try-error") { # Deal with errors
 	          if(!stringr::str_detect(e, "duplicate column name: ")) {
 	            stop(e, call. = FALSE)
@@ -73,8 +72,9 @@ updateMotusDb <- function(src, quiet = FALSE) {
     if (length(dates) > 0) dt <- dates[length(dates)]
 
     if (dt > src_version) {
-      DBI::dbExecute(src, paste0("UPDATE admInfo set db_version = '",
-                                    strftime(dt, "%Y-%m-%d %H:%M:%S"), "'"))
+      DBI_Execute(src, 
+                  "UPDATE admInfo set db_version = '",
+                  strftime(dt, "%Y-%m-%d %H:%M:%S"), "'")
     }
   }
 }
@@ -88,7 +88,7 @@ checkViews <- function(src, update_sql, response = NULL) {
     ignore_case = TRUE)
   
   # Any custom views in database?
-  db_views <- DBI::dbGetQuery(
+  db_views <- DBI_Query(
     src, 
     "SELECT name, sql FROM sqlite_master WHERE type = 'view'") %>%
     dplyr::filter(!.data$name %in% motus_views)
@@ -118,8 +118,8 @@ checkViews <- function(src, update_sql, response = NULL) {
   if(nrow(db_views) > 0) {
     
     sql_name <- file.path(
-      dirname(src[[1]]@dbname), 
-      paste0(stringr::str_remove(basename(src[[1]]@dbname), ".motus"),
+      dirname(src@dbname), 
+      paste0(stringr::str_remove(basename(src@dbname), ".motus"),
              "_custom_views_", Sys.Date(), ".log"))
     
     writeLines(db_views$sql, con = sql_name, sep = "\r\n\r\n\r\n\r\n\r\n")
@@ -144,7 +144,7 @@ checkViews <- function(src, update_sql, response = NULL) {
     
     # Delete the views before proceeding
     message("Deleting custom views: ", paste0(db_views$name, collapse = ", "))
-    for(v in db_views$name) DBI::dbExecute(src, paste0("DROP VIEW ", v))
+    for(v in db_views$name) DBI_Execute(src, "DROP VIEW {v}")
   }
 }
 
@@ -162,8 +162,8 @@ checkFields <- function(src) {
    if(any(!s$column %in% f)) {
      miss <- s$sql[!s$column %in% f]
      miss <- glue::glue("ALTER TABLE {t} ADD COLUMN {miss};")
-     dbExecuteAll(src, miss)
+     DBI_ExecuteAll(src, miss)
    }
-   if(all(s$extra[[1]] != FALSE)) dbExecuteAll(src, s$extra[[1]])
+   if(all(s$extra[[1]] != FALSE)) DBI_ExecuteAll(src, s$extra[[1]])
   }
 }

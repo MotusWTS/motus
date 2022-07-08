@@ -86,140 +86,121 @@
 #'
 #' @export
 
-clarify = function(s, id, from, to, all.mine=FALSE) {
-    sql = safeSQL(s)
+clarify <- function(s, id, from, to, all.mine = FALSE) {
+  
     if (missing(id) && ! all.mine) {
         ## report on ambiguities
 
         ## detections by ambiguous tag
-        ambig = sql("
-select
-   tmap.ambigID,
-   tcount.numHits,
-   tmap.id1,
-   tmap.fullID1,
-   tmap.id2,
-   tmap.fullID2,
-   tmap.id3,
-   tmap.fullID3,
-   tmap.id4,
-   tmap.fullID4,
-   tmap.id5,
-   tmap.fullID5,
-   tmap.id6,
-   tmap.fullID6,
-   tclar.tagID as motusTagID,
-   tclar.tsStart,
-   tclar.tsEnd
-from
-   (
-   select distinct
-      t1.ambigID as ambigID,
-      t2.tagID as id1,
-      t2.fullID as fullID1,
-      t3.tagID as id2,
-      t3.fullID as fullID2,
-      t4.tagID as id3,
-      t4.fullID as fullID3,
-      t5.tagID as id4,
-      t5.fullID as fullID4,
-      t6.tagID as id5,
-      t6.fullID as fullID5,
-      t7.tagID as id6,
-      t7.fullID as fullID6
-   from
-      tagAmbig as t1
-      left join tagDeps as t2 on t2.tagID = t1.motusTagID1
-      left join tagDeps as t3 on t3.tagID = t1.motusTagID2
-      left join tagDeps as t4 on t4.tagID = t1.motusTagID3
-      left join tagDeps as t5 on t5.tagID = t1.motusTagID4
-      left join tagDeps as t6 on t6.tagID = t1.motusTagID5
-      left join tagDeps as t7 on t7.tagID = t1.motusTagID6
-   order by
-      t1.ambigID desc
-   ) as tmap
-
-   left join
-
-   (
-   select
-      motusTagID as ambigID,
-      ifnull(sum(len), 0) as numHits
-   from
-      runs
-   where
-      motusTagID < 0
-   group by
-      motusTagID
-   order by
-      motusTagID
-   ) as tcount on tmap.ambigID = tcount.ambigID
-
-   left join
-
-   clarified as tclar on tmap.ambigID = tclar.ambigID
-
-")
+        ambig <- DBI_Query(
+        src, 
+        "SELECT ",
+        "  tmap.ambigID,
+           tcount.numHits,
+           tmap.id1,
+           tmap.fullID1,
+           tmap.id2,
+           tmap.fullID2,
+           tmap.id3,
+           tmap.fullID3,
+           tmap.id4,
+           tmap.fullID4,
+           tmap.id5,
+           tmap.fullID5,
+           tmap.id6,
+           tmap.fullID6,
+           tclar.tagID AS motusTagID,
+           tclar.tsStart,
+           tclar.tsEnd ",
+        "FROM ",
+        "( ",
+        "  SELECT DISTINCT ",
+        "    t1.ambigID AS ambigID,
+             t2.tagID AS id1,
+             t2.fullID AS fullID1,
+             t3.tagID AS id2,
+             t3.fullID AS fullID2,
+             t4.tagID AS id3,
+             t4.fullID AS fullID3,
+             t5.tagID AS id4,
+             t5.fullID AS fullID4,
+             t6.tagID AS id5,
+             t6.fullID AS fullID5,
+             t7.tagID AS id6,
+             t7.fullID AS fullID6 ",
+        "  FROM ",
+        "    tagAmbig AS t1
+             LEFT JOIN tagDeps AS t2 ON t2.tagID = t1.motusTagID1
+             LEFT JOIN tagDeps AS t3 ON t3.tagID = t1.motusTagID2
+             LEFT JOIN tagDeps AS t4 ON t4.tagID = t1.motusTagID3
+             LEFT JOIN tagDeps AS t5 ON t5.tagID = t1.motusTagID4
+             LEFT JOIN tagDeps AS t6 ON t6.tagID = t1.motusTagID5
+             LEFT JOIN tagDeps AS t7 ON t7.tagID = t1.motusTagID6 ",
+        "  ORDER BY ", 
+        "    t1.ambigID DESC",
+        ") AS tmap ",
+        
+        "LEFT JOIN ", 
+        "( ",
+        "  SELECT ", 
+        "     motusTagID AS ambigID, ", 
+        "     IFNULL(sum(len), 0) AS numHits ",
+        "  FROM ",
+        "    runs ",
+        "  WHERE ",
+        "    motusTagID < 0 ",
+        "  GROUP BY ",
+        "    motusTagID ",
+        "  ORDER BY ",
+        "    motusTagID ",
+        ") AS tcount ON tmap.ambigID = tcount.ambigID ", 
+        
+        "LEFT JOIN ",
+        "clarified AS tclar ON tmap.ambigID = tclar.ambigID")
+        
         if (nrow(ambig) == 0) {
-            warning("No ambiguous detections in this tag database.\n")
+            warning("No ambiguous detections in this tag database.", call. = FALSE)
         }
 
         return(ambig)
     }
     if (all.mine) {
         ## now update
-        sql("
+      DBI_Execute(
+        src, 
+        "INSERT OR IGNORE INTO clarified (ambigID, tagID) ", 
+        "SELECT DISTINCT t1.ambigID, t2.tagID FROM tagAmbig as t1 ",
+        "JOIN tagDeps AS t2 ON ",
+        "  t1.motusTagID1 = t2.tagID
+           or t1.motusTagID2 = t2.tagID
+           or t1.motusTagID3 = t2.tagID
+           or t1.motusTagID4 = t2.tagID
+           or t1.motusTagID5 = t2.tagID
+           or t1.motusTagID6 = t2.tagID ",
+        "WHERE ",
+        "  t2.projectID = (SELECT val FROM meta WHERE key = 'tagProject') ",
+        "ORDER BY ",
+        "  t1.ambigID DESC, t2.tagID")
 
-insert or ignore into clarified
-   (
-      ambigID,
-      tagID
-   )
-   select distinct
-      t1.ambigID,
-      t2.tagID
-   from
-      tagAmbig as t1
-      join tagDeps as t2 on
-            t1.motusTagID1 = t2.tagID
-         or t1.motusTagID2 = t2.tagID
-         or t1.motusTagID3 = t2.tagID
-         or t1.motusTagID4 = t2.tagID
-         or t1.motusTagID5 = t2.tagID
-         or t1.motusTagID6 = t2.tagID
-   where
-      t2.projectID = ( select val from meta where key = 'tagProject' )
-   order by
-      t1.ambigID desc, t2.tagID
-")
-        map = sql("select * from clarified")
-        sql("
-update
-   runs
-set
-   motusTagID =
-      (
-      select
-         tagID
-      from
-         clarified
-      where
-         clarified.ambigID = runs.motusTagID
-         and clarified.tsStart is null
-      )
-where
-   motusTagID < 0
-")
+      map <- DBI_Query(src, "SELECT * FROM clarified")
+      DBI_Execute(
+      src, 
+      "UPDATE runs SET motusTagID = ( ",
+      "  SELECT tagID FROM clarified WHERE ",
+      "    clarified.ambigID = runs.motusTagID AND clarified.tsStart IS NULL) ",
+      "WHERE motusTagID < 0")
+      
         if (any(duplicated(map$ambigID)))
             warning("Some ambiguous detections were resolved by choosing between\n",
                     "two of *your* tags, instead of between one of your tags and\n",
                     "one from a different project.\n",
-                    "In each case, the tag with the smaller motusID was used.\n")
+                    "In each case, the tag with the smaller motusID was used.", 
+                    call. = FALSE)
 
         message("To see how ambiguous tags were resolved, you can do `clarify(s)`")
     } else {
         ## TODO limited claims
-        idfromto = cbind(id, from, to)
+        idfromto <- cbind(id, from, to)
         stop("Not yet implemented", call. = FALSE)
     }
 }

@@ -23,15 +23,18 @@
 #' @noRd
 #'
 makeAllambigsView <- function(src, name = "allambigs") {
-    query = paste0("CREATE VIEW ", name, " AS
-SELECT ambigID, motusTagID1 as motusTagID FROM tagAmbig where motusTagID1 is not null
-UNION SELECT ambigID, motusTagID2 as motusTagID FROM tagAmbig where motusTagID2 is not null
-UNION SELECT ambigID, motusTagID3 as motusTagID FROM tagAmbig where motusTagID3 is not null
-UNION SELECT ambigID, motusTagID4 as motusTagID FROM tagAmbig where motusTagID4 is not null
-UNION SELECT ambigID, motusTagID5 as motusTagID FROM tagAmbig where motusTagID5 is not null
-UNION SELECT ambigID, motusTagID6 as motusTagID FROM tagAmbig where motusTagID6 is not null
-")
-    DBI::dbExecute(src, paste0("DROP VIEW IF EXISTS ", name))
-    DBI::dbExecute(src, query)
-    return(dplyr::tbl(src, name))
+  
+  query <- glue::glue(
+    "CREATE VIEW {name} AS ", 
+    "  SELECT ambigID, motusTagID1 as motusTagID FROM tagAmbig where motusTagID1 is not null ",
+    "  UNION SELECT ambigID, motusTagID2 as motusTagID FROM tagAmbig where motusTagID2 is not null ",
+    "  UNION SELECT ambigID, motusTagID3 as motusTagID FROM tagAmbig where motusTagID3 is not null ", 
+    "  UNION SELECT ambigID, motusTagID4 as motusTagID FROM tagAmbig where motusTagID4 is not null ",
+    "  UNION SELECT ambigID, motusTagID5 as motusTagID FROM tagAmbig where motusTagID5 is not null ", 
+    "  UNION SELECT ambigID, motusTagID6 as motusTagID FROM tagAmbig where motusTagID6 is not null")
+  
+  DBI_Execute(src, "DROP VIEW IF EXISTS {name}")
+  DBI_Execute(src, query)
+  
+  dplyr::tbl(src, name)
 }

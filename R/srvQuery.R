@@ -91,10 +91,9 @@ srvQuery <- function (API, params = NULL, JSON = FALSE,
             p <- list(errorMsg = "Internal Server Error")
           } else p <- list(errorMsg = "Unknown Error")
           
-          stop(sprintf("Motus API request failed [%s]\n%s",
-                       httr::status_code(resp),
-                       p$errorMsg), 
-               call. = FALSE)
+          stop(msg_fmt("Motus API request failed [{httr::status_code(resp)}]",
+                       "\n{p$errorMsg}"), 
+            call. = FALSE)
         }
         
         resp <- resp %>%

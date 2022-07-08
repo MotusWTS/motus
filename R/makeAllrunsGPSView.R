@@ -18,7 +18,7 @@
 #'
 
 makeAllrunsGPSView <- function(src, name = "allrunsGPS") {
-  query = glue::glue("
+  query <- glue::glue("
   CREATE VIEW IF NOT EXISTS {name} 
   AS
   SELECT
@@ -148,7 +148,7 @@ makeAllrunsGPSView <- function(src, name = "allrunsGPS") {
              AND t11b.ts >= t2.tsBegin
          )")
   
-  DBI::dbExecute(src, paste0("DROP VIEW IF EXISTS ", name))
-  DBI::dbExecute(src, query)
+  DBI_Execute(src, "DROP VIEW IF EXISTS {name}")
+  DBI_Execute(src, query)
   dplyr::tbl(src, name)
 }

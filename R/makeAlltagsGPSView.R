@@ -17,7 +17,9 @@
 #'
 #'
 makeAlltagsGPSView <- function(src, name = "alltagsGPS") {
-    query = paste0("CREATE VIEW IF NOT EXISTS ", name, " AS
+    query <- glue::glue(
+    "CREATE VIEW IF NOT EXISTS {name} AS ", 
+    "
 SELECT
    t1.hitID as hitID,
    t1.runID as runID,
@@ -145,7 +147,7 @@ LEFT JOIN
          );
 ")
 
-    DBI::dbExecute(src, paste0("DROP VIEW IF EXISTS ", name))
-    DBI::dbExecute(src, query)
-    return(dplyr::tbl(src, name))
+    DBI_Execute(src, "DROP VIEW IF EXISTS {name}")
+    DBI_Execute(src, query)
+    dplyr::tbl(src, name)
 }

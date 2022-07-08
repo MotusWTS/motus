@@ -14,20 +14,15 @@
 #'
 #' @export
 
-deleteRunsFilter = function(src, filterName, motusProjID=NA, clearOnly=FALSE) {
-
-  sql = function(...) DBI::dbExecute(src, sprintf(...))
+deleteRunsFilter <- function(src, filterName, motusProjID = NA, clearOnly = FALSE) {
 
   # determines the filterID
-  filterID = getRunsFilterID(src, filterName, motusProjID)
+  filterID <- getRunsFilterID(src, filterName, motusProjID)
+  
   if (!is.null(filterID)) {
-
-    sql("delete from runsFilters where filterID = '%d'", filterID)
-    if (!clearOnly) 
-      sql("delete from filters where filterID = '%d'", filterID)
-    
+    DBI_Execute("DELETE FROM runsFilters WHERE filterID = {'filterID'}")
+    if (!clearOnly) DBI_Execute("DELETE FROM filters WHERE filterID = {'filterID'}")
   }
   
-  return(filterID)
-
+  filterID
 }

@@ -42,27 +42,24 @@
 #'   
 
 
-metadata = function(src, projectIDs = NULL, replace = TRUE, delete = FALSE) {
-   
-   
-  sql <- function(...) DBI::dbExecute(src, sprintf(...))
+metadata <- function(src, projectIDs = NULL, replace = TRUE, delete = FALSE) {
   check_src(src)
   
    if (delete) {
       message("Deleting local copy of Motus metadata")
-      sql("delete from species")
-      sql("delete from projs")
-      sql("delete from tagDeps")
-      sql("delete from tagProps")
-      sql("delete from tags")
-      sql("delete from antDeps")
-      sql("delete from recvDeps")
-      sql("delete from recvs")
+      DBI_Execute(src, "DELETE FROM species")
+      DBI_Execute(src, "DELETE FROM projs")
+      DBI_Execute(src, "DELETE FROM tagDeps")
+      DBI_Execute(src, "DELETE FROM tagProps")
+      DBI_Execute(src, "DELETE FROM tags")
+      DBI_Execute(src, "DELETE FROM antDeps")
+      DBI_Execute(src, "DELETE FROM recvDeps")
+      DBI_Execute(src, "DELETE FROM recvs")
    }
    
    message("Loading complete Motus metadata")
-   if (!is.null(projectIDs)) message(sprintf("Project # %s", 
-                                             paste(projectIDs, collapse = ", ")))
+   if (!is.null(projectIDs)) message(glue::glue(
+     "Project # ", glue::glue_collapse(projectIDs, sep = ", ")))
 
    ## get metadata for tags, their deployments, and species names
    tmeta <- srvTagMetadataForProjects(projectIDs = projectIDs)
@@ -72,8 +69,13 @@ metadata = function(src, projectIDs = NULL, replace = TRUE, delete = FALSE) {
    dbInsertOrReplace(src, "species", tmeta$species, replace)
    dbInsertOrReplace(src, "projs", tmeta$projs, replace)
    ## update tagDeps.fullID
-   DBI::dbExecute(src, "update tagDeps set fullID = (select printf('%s#%s:%.1f@%g(M.%d)', t3.label, t2.mfgID, t2.bi, t2.nomFreq, t2.tagID)
-      from tags as t2 join projs as t3 on t3.id = tagDeps.projectID where t2.tagID = tagDeps.tagID limit 1)")
+   DBI_Execute(
+     src, 
+     "UPDATE tagDeps SET fullID = (",
+     "  SELECT printf('%s#%s:%.1f@%g(M.%d)', t3.label, t2.mfgID, t2.bi, t2.nomFreq, t2.tagID) ",
+     "  FROM tags AS t2 JOIN projs AS t3 ON t3.id = tagDeps.projectID ",
+     "  WHERE t2.tagID = tagDeps.tagID ",
+     "  LIMIT 1)")
 
    ## get metadata for receivers and their antennas
    rmeta <- srvRecvMetadataForProjects(projectIDs)

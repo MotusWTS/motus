@@ -94,8 +94,8 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
     src <- DBI::dbConnect(RSQLite::SQLite(), n)
     
     if(length(DBI::dbListTables(src)) > 0) {
-      DBI::dbExecute(src, "DROP VIEW allambigs")
-      DBI::dbExecute(src, "DROP VIEW alltags")
+      DBI_Execute(src, "DROP VIEW allambigs")
+      DBI_Execute(src, "DROP VIEW alltags")
       
       sapply(DBI::dbListTables(src), 
              FUN = function(x) DBI::dbRemoveTable(src, x))

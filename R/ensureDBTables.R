@@ -25,7 +25,7 @@ ensureDBTables <- function(src, projRecv, deviceID, quiet = FALSE) {
   isRecvDB <- is.character(projRecv)
 
   ## reasonably large page size; post 2011 hard drives have 4K sectors anyway
-  DBI::dbExecute(src, "pragma page_size=4096") 
+  DBI_Execute(src, "pragma page_size=4096") 
   
   tables <- DBI::dbListTables(src)
 
@@ -40,7 +40,7 @@ ensureDBTables <- function(src, projRecv, deviceID, quiet = FALSE) {
              "tagAmbig", "tagDeps", "tagProps", "tags")) {
 
     if(!t %in% tables && !(t == "pulseCounts" && !isRecvDB)) {
-      lapply(makeTable(t), dbExecuteAll, conn = src)
+      lapply(makeTable(t), DBI_ExecuteAll, conn = src)
     }
   }
   
@@ -66,7 +66,7 @@ makeTable <- function(name) {
 }
 
 makeMetaTable <- function(src, projRecv, deviceID) {
-  sapply(makeTable("meta"), DBI::dbExecute, conn = src)
+  sapply(makeTable("meta"), DBI_Execute, src)
   
   if (is.character(projRecv))  {  # If Receiver
     if (missing(deviceID) || ! isTRUE(is.numeric(deviceID))) {
@@ -113,37 +113,29 @@ makeMetaTable <- function(src, projRecv, deviceID) {
 }
 
 makeAdmInfo <- function(src) {
-  sapply(makeTable("admInfo"), DBI::dbExecute, conn = src)
-  DBI::dbExecute(src, 
-                 glue::glue(
-                   "INSERT INTO admInfo (db_version, data_version) 
-                             values ('{max(sql_versions$date)}', {motus_vars$dataVersion});"))
+  sapply(makeTable("admInfo"), DBI_Execute, conn = src)
+  DBI_Execute(
+    src, 
+    "INSERT INTO admInfo (db_version, data_version) ",
+    "values ('{max(sql_versions$date)}', {motus_vars$dataVersion})")
 }
 
 makeProjBatch <- function(src, projRecv) {
-  sapply(makeTable("projBatch"), DBI::dbExecute, conn = src)
-  DBI::dbExecute(src, glue::glue(
+  sapply(makeTable("projBatch"), DBI_Execute, conn = src)
+  DBI_Execute(
+    src, 
     "INSERT INTO projBatch 
       SELECT {projRecv} AS tagDepProjectID, t1.batchID, max(t2.hitID)
       FROM batches AS t1
      JOIN hits AS t2 ON t2.batchID=t1.batchID
      GROUP BY t1.batchID
-     ORDER BY t1.batchID"))
+     ORDER BY t1.batchID")
 }
 
 makeRecvs <- function(src) {
-  sapply(makeTable("recvs"), DBI::dbExecute, conn = src)
-  DBI::dbExecute(src, "INSERT OR IGNORE INTO recvs 
-                       SELECT deviceID, serno FROM recvDeps")
-}
-
-dbExecuteAll <- function(conn, statement) {
-  if(length(statement) == 1) {
-    statement <- stringr::str_remove(statement, ";*( )*$") %>%
-      stringr::str_split(";") %>%
-      unlist()
-  } 
-
-  purrr::map(statement, ~ DBI::dbExecute(conn, .))
+  sapply(makeTable("recvs"), DBI_Execute, conn = src)
+  DBI_Execute(src, 
+              "INSERT OR IGNORE INTO recvs ",
+              "SELECT deviceID, serno FROM recvDeps")
 }
 
