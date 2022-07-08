@@ -1,6 +1,7 @@
 #' Write to the local database the probabilities associated with runs for a filter
 #'
-#' @param src dplyr sqlite src, as returned by \code{dplyr::src_sqlite()}
+#' @param src SQLite connection (result of `tagme(XXX)` or
+#'   `DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")`)
 #'
 #' @param filterName unique name given to the filter 
 #'

@@ -4,7 +4,7 @@ test_that("Tag data returned as expected", {
   skip_if_no_auth()
   
   expect_message(tags <- tagme(projRecv = 207, new = TRUE, update = TRUE)) %>%
-    expect_is("src_SQLiteConnection")
+    expect_s4_class("SQLiteConnection")
   
   # Tables exists
   for(i in c("activity", "nodeData", "nodeDeps", "gps", 
@@ -59,7 +59,7 @@ test_that("Tag data returned as expected", {
   unlink("project-207.motus")
   
   expect_message(tags <- tagme(projRecv = 1, new = TRUE, update = TRUE)) %>%
-    expect_is("src_SQLiteConnection")
+    expect_s4_class("SQLiteConnection")
   
   #activity
   expect_silent(a <- dplyr::tbl(tags, "activity") %>% dplyr::collect())
@@ -89,7 +89,7 @@ test_that("Reciever data returned as expected", {
   
   expect_message(tags <- tagme(projRecv = "SG-3115BBBK0782", 
                                new = TRUE, update = TRUE)) %>%
-    expect_is("src_SQLiteConnection")
+    expect_s4_class("SQLiteConnection")
   
   # Tables exists
   for(i in c("activity", "nodeData", "nodeDeps", "gps", 
@@ -154,7 +154,7 @@ test_that("activityAll and gpsAll return for tag data", {
   
   unlink("project-4.motus")
   expect_message(tags <- tagme(projRecv = 4, new = TRUE, update = TRUE)) %>%
-    expect_is("src_SQLiteConnection")
+    expect_s4_class("SQLiteConnection")
   
   # Tables exists
   expect_true("activityAll" %in% DBI::dbListTables(tags))
@@ -182,7 +182,7 @@ test_that("activityAll and gpsAll return for receiver data", {
   unlink("SG-3115BBBK0782.motus")
   expect_message(tags <- tagme(projRecv = "SG-3115BBBK0782", 
                                new = TRUE, update = TRUE)) %>%
-    expect_is("src_SQLiteConnection")
+    expect_s4_class("SQLiteConnection")
   
   # Tables exists
   expect_true("activityAll" %in% DBI::dbListTables(tags))

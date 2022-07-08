@@ -56,7 +56,7 @@ newest version. If FALSE (default), user is prompted for action.}
 stored in \code{deprecated}. See \code{?deprecateBatches()} for more details.}
 }
 \value{
-a dplyr::src_sqlite for the (possibly updated) database, or a list
+a SQLite Connection for the (possibly updated) database, or a list
 of counts if \code{countOnly==TRUE}
 }
 \description{

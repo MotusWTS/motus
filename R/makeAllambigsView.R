@@ -5,7 +5,7 @@
 #' this is mainly used by the alltags view to expand the detections records
 #' showing each tag in addition to the ambigID
 #'
-#' @param db dplyr src_sqlite to detections database
+#' @param src SQLite Connection
 #' @param name character scalar; name for the virtual table.
 #'     Default: 'allambigs'.
 #'
@@ -17,12 +17,12 @@
 #' }
 #'
 #' @note The new virtual table replaces any previous virtual table by the same
-#' name in \code{db}.  The virtual table is an SQL VIEW, which will persist in \code{db}
+#' name in \code{src}.  The virtual table is an SQL VIEW, which will persist in \code{src}
 #' across R sessions.
 #'
 #' @noRd
 #'
-makeAllambigsView = function(db, name="allambigs") {
+makeAllambigsView <- function(src, name = "allambigs") {
     query = paste0("CREATE VIEW ", name, " AS
 SELECT ambigID, motusTagID1 as motusTagID FROM tagAmbig where motusTagID1 is not null
 UNION SELECT ambigID, motusTagID2 as motusTagID FROM tagAmbig where motusTagID2 is not null
@@ -31,7 +31,7 @@ UNION SELECT ambigID, motusTagID4 as motusTagID FROM tagAmbig where motusTagID4 
 UNION SELECT ambigID, motusTagID5 as motusTagID FROM tagAmbig where motusTagID5 is not null
 UNION SELECT ambigID, motusTagID6 as motusTagID FROM tagAmbig where motusTagID6 is not null
 ")
-    DBI::dbExecute(db, paste0("DROP VIEW IF EXISTS ", name))
-    DBI::dbExecute(db, query)
-    return(dplyr::tbl(db, name))
+    DBI::dbExecute(src, paste0("DROP VIEW IF EXISTS ", name))
+    DBI::dbExecute(src, query)
+    return(dplyr::tbl(src, name))
 }

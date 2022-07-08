@@ -14,7 +14,8 @@ writeRunsFilter(
 )
 }
 \arguments{
-\item{src}{dplyr sqlite src, as returned by \code{dplyr::src_sqlite()}}
+\item{src}{SQLite connection (result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")})}
 
 \item{filterName}{unique name given to the filter}
 

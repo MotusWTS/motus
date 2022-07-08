@@ -2,7 +2,7 @@
 #' 
 #' If required tables are missing, create them.
 #'
-#' @param src dplyr sqlite src, as returned by `dplyr::src_sqlite()`
+#' @param src SQLite connection
 #' @param projRecv integer scalar motus project ID number *or* character scalar
 #'   receiver serial number; must be specified if `src` does not already
 #'   contain a table named `meta`.
@@ -14,10 +14,9 @@
 #' 
 #' @noRd
 
-ensureDBTables = function(src, projRecv, deviceID, quiet = FALSE) {
-  if (!inherits(src, "src_sql")) stop("src is not a dplyr::src_sql object", call. = FALSE)
+ensureDBTables <- function(src, projRecv, deviceID, quiet = FALSE) {
 
-  if (!inherits(src, "SQLiteConnection")) stop("src is not open or is corrupt; underlying db connection invalid", call. = FALSE)
+  check_src(src)
   
   if (missing(projRecv)) {
     stop("You must specify a project number or receiver serial number for a new database", 
@@ -28,7 +27,7 @@ ensureDBTables = function(src, projRecv, deviceID, quiet = FALSE) {
   ## reasonably large page size; post 2011 hard drives have 4K sectors anyway
   DBI::dbExecute(src, "pragma page_size=4096") 
   
-  tables <- dplyr::src_tbls(src)
+  tables <- DBI::dbListTables(src)
 
   # Create and fill 'meta' table
   if (!"meta" %in% tables) makeMetaTable(src, projRecv, deviceID)

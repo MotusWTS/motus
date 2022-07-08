@@ -1,6 +1,7 @@
 #' Update a motus tag detection database - receiver flavour (backend)
 #'
-#' @param src src_sqlite object representing the database
+#' @param src SQLite connection (result of `tagme(XXX)` or
+#'   `DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")`)
 #' @param countOnly logical scalar: count results instead of returning them?
 #' @param forceMeta logical scalar: if true, re-get metadata for tags and
 #'   receivers, even if we already have them.  Default: FALSE
@@ -15,6 +16,7 @@
 
 motusUpdateRecvDB <- function(src, countOnly, forceMeta = FALSE) {
   sql <- safeSQL(src)
+  check_src(src)
   
   recvSerno <- sql("select val from meta where key='recvSerno'")[[1]]
   deviceID <- sql("select val from meta where key='deviceID'")[[1]] %>% 
@@ -56,20 +58,20 @@ motusUpdateRecvDB <- function(src, countOnly, forceMeta = FALSE) {
       # table as the last step after acquiring runs and hits for that batch.
       
       # 2. Runs for one new batch ----------------------------------------------
-      tagIDs <- runsForBatch(sql, batchID, batchMsg)
+      tagIDs <- runsForBatch(src, batchID, batchMsg)
       
       # 3. Hits for one new batch ----------------------------------------------
-      hitsForBatchReceiver(sql, batchID, batchMsg)
+      hitsForBatchReceiver(src, batchID, batchMsg)
       
       # 4. GPS for for this Batch ----------------------------------------------
-      gpsForBatchReceiver(sql, batchID, batchMsg)
+      gpsForBatchReceiver(src, batchID, batchMsg)
       
       # 5. get pulse counts for this batch -------------------------------------
-      pulseForBatchReceiver(sql, batchID, batchMsg)
+      pulseForBatchReceiver(src, batchID, batchMsg)
       
       # 6. Save - write the record for this batch ------------------------------
       # This marks the transfers for this batch as complete.
-      dbInsertOrReplace(sql, "batches", b[bi,], replace=FALSE)
+      dbInsertOrReplace(src, "batches", b[bi,], replace=FALSE)
       
       # If testing, break out after x batches
       if(bi >= getOption("motus.test.max") && is_testing()) break
@@ -77,7 +79,7 @@ motusUpdateRecvDB <- function(src, countOnly, forceMeta = FALSE) {
     batchID <- max(b$batchID)
   }
   
-  motusUpdateDBmetadata(sql, tagIDs, deviceID, force = forceMeta)
-  rv <- src
-  rv
+  motusUpdateDBmetadata(src, tagIDs, deviceID, force = forceMeta)
+  
+  src
 }

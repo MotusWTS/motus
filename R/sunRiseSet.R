@@ -52,7 +52,7 @@
 #' @export
 
 sunRiseSet <- function(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = "ts"){
-  if("src_SQLiteConnection" %in% class(data)) {
+  if(inherits(data, "SQLiteConnection")) {
     message("'data' is a complete motus data base, using 'alltags' view")
     data <- dplyr::tbl(data, "alltags")
   }

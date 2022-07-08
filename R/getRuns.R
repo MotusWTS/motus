@@ -9,7 +9,8 @@
 #' TRUE, `runID`'s are returned whenever the run partially matches the specified
 #' period.
 #'
-#' @param src dplyr sqlite src, as returned by `dplyr::src_sqlite()`
+#' @param src SQLite connection (result of `tagme(XXX)` or
+#'   `DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")`)
 #' @param ts.min minimum timestamp used to filter the dataframe, Default: NA 
 #' @param ts.max maximum timestamp used to filter the dataframe, Default: NA  
 #' @param match.partial whether runs that partially overlap the specified ts

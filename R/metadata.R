@@ -5,8 +5,8 @@
 #' tags and receivers, and not only those pertinent to the detections in your
 #' local file.
 #'
-#' @param src src_sqlite object representing the database (either tag or
-#'   receiver)
+#' @param src SQLite connection (result of `tagme(XXX)` or
+#'   `DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")`)
 #' @param projectIDs optional integer vector of Motus projects IDs for which
 #'   metadata should be obtained; default: NULL, meaning obtain metadata for all
 #'   tags and receivers that your permissions allow.
@@ -44,10 +44,10 @@
 
 metadata = function(src, projectIDs = NULL, replace = TRUE, delete = FALSE) {
    
-   if(missing(src)) stop("Must provide 'src' a SQLite reference to a .motus ",
-                         "database", call. = FALSE)
    
   sql <- function(...) DBI::dbExecute(src, sprintf(...))
+  check_src(src)
+  
    if (delete) {
       message("Deleting local copy of Motus metadata")
       sql("delete from species")

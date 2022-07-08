@@ -5,7 +5,8 @@
 #' (stored in the 'deprecated' table), and, optionally, removes these batches 
 #' from all tables that reference `batchID`s
 #'
-#' @param src src_sqlite object representing the database
+#' @param src SQLite connection (result of `tagme(XXX)` or
+#'   `DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")`)
 #' @param fetchOnly Logical. Only *fetch* batches that are deprecated. Don't 
 #'   remove deprecated batches from other tables.
 #' @param ask Logical. Ask for confirmation when removing deprecated batches

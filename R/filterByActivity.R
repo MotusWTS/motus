@@ -6,7 +6,8 @@
 #' identified in the `alltags` view with the column `probability`. **No changes
 #' to the database are made.**
 #'
-#' @param src src_sqlite object representing the database
+#' @param src SQLite connection (result of `tagme(XXX)` or
+#'   `DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")`)
 #' @param return Character. One of "good" (return only 'good' runs), "bad"
 #'   (return only 'bad' runs), "all" (return all runs, but with a new
 #'   `probability` column which identifies 'bad' (0) and 'good' (1) runs.

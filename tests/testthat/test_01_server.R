@@ -205,7 +205,7 @@ test_that("tagme() downloads data - Projects", {
   sample_auth()
   
   expect_message(tags <- tagme(projRecv = 176, new = TRUE, update = TRUE)) %>%
-    expect_is("src_SQLiteConnection")
+    expect_s4_class("SQLiteConnection")
   disconnect(tags)
   unlink("project-176.motus")
 })
@@ -218,7 +218,7 @@ test_that("tagme() downloads data - Receivers", {
   
   unlink("SG-3115BBBK1127.motus")
   expect_message(t <- tagme("SG-3115BBBK1127", new = TRUE, update = TRUE)) %>%
-    expect_s3_class("src_sql")
+    expect_s4_class("SQLiteConnection")
   disconnect(t)
   unlink("SG-3115BBBK1127.motus")
 })

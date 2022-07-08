@@ -1,6 +1,6 @@
 #' update a motus tag detection database - tag flavour (backend)
 #'
-#' @param src src_sqlite object representing the database
+#' @param src SQLite Connection
 #' @param countOnly logical scalar: count results instead of returning them?
 #' @param forceMeta logical scalar: if true, re-get metadata for tags and
 #'   receivers, even if we already have them.  Default:  FALSE.
@@ -84,13 +84,13 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
         # table as the last step after acquiring runs and hits for that batch.
         
         # 2. Runs for one new batch -------------------------------------------
-        tagIDs <- unique(c(tagIDs, runsForBatch(sql, batchID, batchMsg, projectID)))
+        tagIDs <- unique(c(tagIDs, runsForBatch(src, batchID, batchMsg, projectID)))
         
         # 3. Hits for one new batch -------------------------------------------
-        numHits <- hitsForBatchProject(sql, batchID, batchMsg, projectID)
+        numHits <- hitsForBatchProject(src, batchID, batchMsg, projectID)
         
         # 4. GPS for for this Batch -------------------------------------------
-        gpsForBatchProject(sql, batchID, batchMsg, projectID)
+        gpsForBatchProject(src, batchID, batchMsg, projectID)
         
         # 5. Save - write the record for this batch ---------------------------
         # This marks the transfers for this batch as complete.
@@ -103,8 +103,7 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
         if(nrow(oldBatch) == 0) {
           # this is a new batch record, so write the whole thing
           b$numHits[bi] <- numHits
-          # dbWriteTable(sql, "batches", b[bi,], append = TRUE, row.names = FALSE)
-          dbInsertOrReplace(sql, "batches", b[bi,], replace = FALSE)
+          dbInsertOrReplace(src, "batches", b[bi,], replace = FALSE)
         } else {
           # this is a batch record we already have, but we've fetched
           # additional hits due to ambiguous tags

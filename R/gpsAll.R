@@ -5,7 +5,8 @@
 #' batch. Batches with large numbers of hits may indicate interference and thus
 #' unreliable hits.
 #'
-#' @param src src_sqlite object representing the database
+#' @param src SQLite connection (result of `tagme(XXX)` or
+#'   `DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")`)
 #' @param resume Logical. Resume a download? Otherwise the `activity` table is
 #'   removed and the download is started from the beginning.
 #' 

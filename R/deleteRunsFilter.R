@@ -1,6 +1,7 @@
 #' Delete a filter  matching a filter name (and optionally a project ID)
 #'
-#' @param src dplyr sqlite src, as returned by \code{dplyr::src_sqlite()}
+#' @param src SQLite connection (result of `tagme(XXX)` or
+#'   `DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")`)
 #'
 #' @param filterName unique name given to the filter 
 #'

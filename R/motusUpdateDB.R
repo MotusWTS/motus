@@ -2,7 +2,7 @@
 #'
 #' @param projRecv integer scalar project code from motus.org, *or* character
 #'   scalar receiver serial number
-#' @param src src_sqlite object representing the database
+#' @param src SQLite Connection
 #' @param countOnly logical scalar: if FALSE, the default, then do
 #'     requested database updates.  Otherwise, return a count of items
 #'     that would need to be transferred in order to update the
@@ -19,13 +19,13 @@
 #' 
 #' @noRd
 
-motusUpdateDB = function(projRecv, src, countOnly, forceMeta=FALSE) {
-    if (! is.numeric(projRecv) && ! is.character(projRecv))
+motusUpdateDB <- function(projRecv, src, countOnly, forceMeta = FALSE) {
+  
+  check_src(src)  
+  
+  if (! is.numeric(projRecv) && ! is.character(projRecv))
         stop("projRecv must be an integer motus project ID, ",
              "or a character receiver serial number", call. = FALSE)
-
-    if (! inherits(src, "src_sql"))
-        stop("src must be a dplyr::src_sql object", call. = FALSE)
 
     if (!is.logical(countOnly))
         stop("countOnly must be a logical scalar", call. = FALSE)

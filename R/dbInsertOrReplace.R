@@ -6,7 +6,7 @@
 #' the same purpose; i.e. record-wise overwrite, rather than
 #' table-wise.
 #'
-#' @param con DBI database connection
+#' @param src SQLite Connection
 #' @param name name of table to insert or replace records into
 #' @param df data from which to write data.
 #' @param replace boolean that determines whether existing records are replaced
@@ -16,12 +16,11 @@
 #'
 #' @noRd
 
-dbInsertOrReplace = function(con, name, df, replace=TRUE) {
-    if (nrow(df) == 0)
-        return()
 
     sql = function(...) DBI::dbExecute(con, sprintf(...))
     query = function(...) DBI::dbGetQuery(con, sprintf(...))
+dbInsertOrReplace <- function(src, name, df, replace = TRUE) {
+    if (nrow(df) == 0)  return()
 
     ## remove fields from df that are not in the database
     ## An alternative would be to add them, but this may best

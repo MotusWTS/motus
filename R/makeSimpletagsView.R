@@ -5,8 +5,7 @@
 #' receiver.  This is a much "narrower" view than the 'alltags' view
 #' created by \code{makeAlltagsView()}
 #'
-#' @param db dplyr src_sqlite to detections database
-#'
+#' @param src SQLite connection
 #' @param name character scalar; name for the virtual table.
 #'     Default: 'simpletags'.
 #'
@@ -45,7 +44,7 @@
 #' @noRd
 #'
 
-makeSimpletagsView = function(db, name="simpletags") {
+makeSimpletagsView <- function(src, name = "simpletags") {
     query = paste0("create view ", name, " as
 select
    t1.hitID,
@@ -107,7 +106,7 @@ from
    left join projs as t9  on t9.id  = t5.projectID
    left join projs as t10 on t10.id = t6.projectID
 ")
-    DBI::dbExecute(db, paste0("DROP VIEW IF EXISTS ", name))
-    DBI::dbExecute(db, query)
-    return(dplyr::tbl(db, name))
+    DBI::dbExecute(src, paste0("DROP VIEW IF EXISTS ", name))
+    DBI::dbExecute(src, query)
+    return(dplyr::tbl(src, name))
 }

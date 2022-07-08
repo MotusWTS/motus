@@ -58,7 +58,7 @@
 #' ## update all existing project and receiver databases in \code{dir}
 #' # tagme()
 #'
-#' @return a dplyr::src_sqlite for the (possibly updated) database, or a list
+#' @return a SQLite Connection for the (possibly updated) database, or a list
 #' of counts if \code{countOnly==TRUE}
 #'
 #' @seealso \code{\link{tellme}}, which is a synonym for \code{tagme(..., update=TRUE, countOnly=TRUE)}
@@ -111,7 +111,6 @@ tagme <- function(projRecv, update = TRUE, new = FALSE, dir = getwd(),
     deviceID = NULL
   }
   
-  #rv <- dplyr::src_sqlite(dbname, create = new)
   rv <- DBI::dbConnect(RSQLite::SQLite(), dbname)
   
   if (update) {

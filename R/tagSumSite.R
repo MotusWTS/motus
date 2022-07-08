@@ -16,7 +16,7 @@
 #' # You can use either a selected tbl from .motus eg. "alltagsGPS", or a
 #' # data.frame, instructions to convert a .motus file to all formats are below.
 #' 
-#' # download and access data from project 176 in sql format
+#' # download and access data from project 176 in SQLite format
 #' # usename and password are both "motus.sample"
 #' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
 #' 

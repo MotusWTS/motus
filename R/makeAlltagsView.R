@@ -4,12 +4,12 @@
 #' links each tag detection to all metadata available for the tag and
 #' receiver, excluding GPS metadata.
 #'
-#' @param db dplyr src_sqlite to detections database
+#' @param src SQLite Connection
 #' @param name character scalar; name for the virtual table.
 #'     Default: 'alltags'.
 #'
 #' @note The new virtual table replaces any previous virtual table by the same
-#' name in `db`.  The virtual table is an SQL VIEW, which will persist in `db`
+#' name in `src`.  The virtual table is an SQL VIEW, which will persist in `src`
 #' across R sessions.
 #'
 #' @noRd
@@ -43,7 +43,7 @@
 #' sqlite suggests it optimizes well.
 #'
 #'
-makeAlltagsView = function(db, name="alltags") {
+makeAlltagsView <- function(src, name = "alltags") {
     query = paste0("CREATE VIEW IF NOT EXISTS ", name, " AS
 SELECT
    t1.hitID as hitID,
@@ -158,7 +158,7 @@ LEFT JOIN
    projs AS t10 ON t10.ID = t6.projectID;
 ")
 
-    DBI::dbExecute(db, paste0("DROP VIEW IF EXISTS ", name))
-    DBI::dbExecute(db, query)
-    return(dplyr::tbl(db, name))
+    DBI::dbExecute(src, paste0("DROP VIEW IF EXISTS ", name))
+    DBI::dbExecute(src, query)
+    return(dplyr::tbl(src, name))
 }

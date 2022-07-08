@@ -15,11 +15,11 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
 
   if(length(DBI::dbListTables(src)) > 1 && local_version < server_version) {
 
-    new_name <- stringr::str_replace(src[[1]]@dbname, 
+    new_name <- stringr::str_replace(src@dbname, 
                                      ".motus$", 
                                      paste0("_v", local_version, ".motus"))
     msg <- paste0(
-      "motus sqlite file: ", src[[1]]@dbname, "\n",
+      "motus sqlite file: ", src@dbname, "\n",
       "Local data version (v", local_version, ") ",
       "doesn't match the server version (v", server_version, ").\n",
       "Rename current database to ", basename(new_name), " ",
@@ -33,7 +33,7 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
       }
     }
 
-    n <- src[[1]]@dbname
+    n <- src@dbname
     
     message("DATABASE UPDATE (data version 1 -> 2)")
     message(" - Archiving ", basename(n), " (v", local_version, ") to ", 

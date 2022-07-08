@@ -12,7 +12,7 @@ checkVersion <- function(src) {
   message("Motus package database version: ", current_version)
 
   # Get current database info
-  message("Your motus sqlite file: ", src[[1]]@dbname)
+  message("Your motus sqlite file: ", src@dbname)
   
   # If database has admin info table
   if (DBI::dbExistsTable(src, "admInfo")) {

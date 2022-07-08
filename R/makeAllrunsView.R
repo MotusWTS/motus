@@ -4,7 +4,7 @@
 #' links each tag detection to all metadata available for the tag and
 #' receiver. The allruns view is the same as alltags but excludes hits.
 #'
-#' @param db dplyr src_sqlite to detections database
+#' @param src SQLite connection
 #' @param name character scalar; name for the virtual table.
 #'     Default: 'allruns'.
 #'
@@ -17,7 +17,7 @@
 #' @noRd
 #'
 
-makeAllrunsView <- function(db, name = "allruns") {
+makeAllrunsView <- function(src, name = "allruns") {
   query = glue::glue("
   CREATE VIEW IF NOT EXISTS {name} 
   AS
@@ -120,7 +120,7 @@ makeAllrunsView <- function(db, name = "allruns") {
   LEFT JOIN
     projs AS t10 ON t10.ID = t6.projectID")
   
-  DBI::dbExecute(db, paste0("DROP VIEW IF EXISTS ", name))
-  DBI::dbExecute(db, query)
-  dplyr::tbl(db, name)
+  DBI::dbExecute(src, paste0("DROP VIEW IF EXISTS ", name))
+  DBI::dbExecute(src, query)
+  dplyr::tbl(src, name)
 }

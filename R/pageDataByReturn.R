@@ -2,6 +2,8 @@
 pageDataByReturn <- function(src, table, resume = FALSE, returnIDtype = "batchID",
                              pageInitial, pageForward) {
 
+  check_src(src)
+  
   # Check tables and update to include table if necessary
   ensureDBTables(src, projRecv = get_projRecv(src))
   sql <- safeSQL(src)
