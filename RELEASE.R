@@ -115,11 +115,25 @@ file.rename("pkgdown/index.md", "pkgdown/README_fr.md")
 file.rename("_pkgdown.yml", "_pkgdown_fr.yml")
 
 
-
-
-
 # Check/update URLS
 urlchecker::url_check()
+
+
+## Push to GitHub
+
+## Push to master branch (pull request, etc.)
+
+## Update API package version to current (only for master)
+local_auth(); srvQuery(API = "custom/update_pkg_version", params = list(pkgVersion = "5.0.1"))
+
+
+## Actually release it (manually)
+# - Create signed release on github
+# - Add NEWS to release details
+
+
+
+
 
 ## Note: non-ASCII files found
 # Find them
@@ -134,11 +148,4 @@ for(i in 1:nrow(problems)) {
 problems <- dplyr::mutate(problems, yes = purrr::map_lgl(problem, ~length(na.omit(.)) > 0)) %>%
   dplyr::filter(yes)
 
-## Push to GitHub
 
-## Push to master branch (pull request, etc.)
-
-
-## Actually release it (manually)
-# - Create signed release on github
-# - Add NEWS to release details
