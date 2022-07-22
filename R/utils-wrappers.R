@@ -1,12 +1,19 @@
 
-DBI_Execute <- function(src, ...) {
-  DBI::dbExecute(src, glue::glue_sql(..., .con = src, .envir = parent.frame()))
+DBI_Query <- function(src, ...) {
+  # ensure each string is separate
+  q <- glue::glue_collapse(list(...), sep = "\n") 
+  q <- DBI::dbGetQuery(src, 
+                       glue::glue_sql(q, .con = src, .envir = parent.frame()))
+  
+  # If a single value OR a single column, return as a vector
+  if(all(dim(q) <= 1) | dim(q)[2] == 1) q <- q[[1]]
+  q
 }
 
-DBI_Query <- function(src, ...) {
-  q <- DBI::dbGetQuery(src, glue::glue_sql(..., .con = src, .envir = parent.frame()))
-  if(all(dim(q) <= 1)) q <- q[[1]]
-  q
+DBI_Execute <- function(src, ...) {
+  # ensure each string is separate
+  q <- glue::glue_collapse(list(...), sep = " ") 
+  DBI::dbExecute(src, glue::glue_sql(q, .con = src, .envir = parent.frame()))
 }
 
 DBI_ExecuteAll <- function(src, statement) {
@@ -15,8 +22,7 @@ DBI_ExecuteAll <- function(src, statement) {
       stringr::str_split(";") %>%
       unlist()
   } 
-  
-  purrr::map(statement, ~ DBI::dbExecute(src, .))
+  purrr::map(statement, DBI_Execute, src = src)
 }
 
 msg_fmt <- function(...){

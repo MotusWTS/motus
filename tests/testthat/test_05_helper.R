@@ -541,7 +541,7 @@ test_that("deprecated batches are removed from tables - sample", {
   
   for(i in DBI::dbListTables(t)) {
     if("batchID" %in% DBI::dbListFields(t, i) &
-       DBI_Execute(t, "SELECT * FROM {i} LIMIT 1") > 0) {
+       nrow(DBI_Query(t, "SELECT * FROM {`i`} LIMIT 1")) > 0) {
       dplyr::tbl(t, i) %>% 
         dplyr::filter(.data$batchID %in% !!d) %>%
         dplyr::collect() %>%

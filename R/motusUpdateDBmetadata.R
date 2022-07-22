@@ -22,25 +22,25 @@ motusUpdateDBmetadata <- function(src, tagIDs = NULL, deviceIDs = NULL, force = 
   check_src(src)
   
   if (is.null(tagIDs) | force) {
-    tagIDs <- DBI_Query("SELECT DISTINCT motusTagID FROM runs")
+    tagIDs <- DBI_Query(src, "SELECT DISTINCT motusTagID FROM runs")
   }
   
   if (! force) {
     ## drop tags for which we already have metadata
-    have <- DBI_Query("SELECT DISTINCT tagID FROM tagDeps")
+    have <- DBI_Query(src, "SELECT DISTINCT tagID FROM tagDeps")
     tagIDs <- setdiff(tagIDs, have)
     
     ## drop ambiguous tags for which we already ave the mapping
-    have <- DBI_Query("SELECT DISTINCT ambigID FROM tagAmbig")
+    have <- DBI_Query(src, "SELECT DISTINCT ambigID FROM tagAmbig")
     tagIDs <- setdiff(tagIDs, have)
   }
   
   if (is.null(deviceIDs) | force) {
-    deviceIDs <- DBI_Query("SELECT DISTINCT motusDeviceID FROM batches")
+    deviceIDs <- DBI_Query(src, "SELECT DISTINCT motusDeviceID FROM batches")
   }
     
   if (! force) {
-    have <- DBI_Query("SELECT DISTINCT deviceID FROM recvDeps")
+    have <- DBI_Query(src, "SELECT DISTINCT deviceID FROM recvDeps")
     deviceIDs <- setdiff(deviceIDs, have)
   }
   

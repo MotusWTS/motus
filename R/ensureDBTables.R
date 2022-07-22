@@ -40,7 +40,7 @@ ensureDBTables <- function(src, projRecv, deviceID, quiet = FALSE) {
              "tagAmbig", "tagDeps", "tagProps", "tags")) {
 
     if(!t %in% tables && !(t == "pulseCounts" && !isRecvDB)) {
-      lapply(makeTable(t), DBI_ExecuteAll, conn = src)
+      DBI_ExecuteAll(src, makeTable(t))
     }
   }
   
@@ -66,7 +66,8 @@ makeTable <- function(name) {
 }
 
 makeMetaTable <- function(src, projRecv, deviceID) {
-  sapply(makeTable("meta"), DBI_Execute, src)
+
+  DBI_Execute(src, makeTable("meta"))
   
   if (is.character(projRecv))  {  # If Receiver
     if (missing(deviceID) || ! isTRUE(is.numeric(deviceID))) {
@@ -113,15 +114,15 @@ makeMetaTable <- function(src, projRecv, deviceID) {
 }
 
 makeAdmInfo <- function(src) {
-  sapply(makeTable("admInfo"), DBI_Execute, conn = src)
+  DBI_Execute(src, makeTable("admInfo"))
   DBI_Execute(
     src, 
     "INSERT INTO admInfo (db_version, data_version) ",
-    "values ('{max(sql_versions$date)}', {motus_vars$dataVersion})")
+    "values ({max(sql_versions$date)}, {motus_vars$dataVersion})")
 }
 
 makeProjBatch <- function(src, projRecv) {
-  sapply(makeTable("projBatch"), DBI_Execute, conn = src)
+  DBI_Execute(src, makeTable("projBatch"))
   DBI_Execute(
     src, 
     "INSERT INTO projBatch 
@@ -133,7 +134,7 @@ makeProjBatch <- function(src, projRecv) {
 }
 
 makeRecvs <- function(src) {
-  sapply(makeTable("recvs"), DBI_Execute, conn = src)
+  DBI_Execute(src, makeTable("recvs"))
   DBI_Execute(src, 
               "INSERT OR IGNORE INTO recvs ",
               "SELECT deviceID, serno FROM recvDeps")

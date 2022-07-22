@@ -12,7 +12,7 @@ pageDataByReturn <- function(src, table, resume = FALSE, returnIDtype = "batchID
   if(resume) {
     msg <- msg_fmt("{table}: checking for new data")
     # If updating, start with last batch downloaded (a bit of overlap)
-    returnID <- DBI_Query("SELECT IFNULL(max({returnIDtype}), 0) FROM {table}")  
+    returnID <- DBI_Query(src, "SELECT IFNULL(max({returnIDtype}), 0) FROM {`table`}")  
   } else {
     msg <- msg_fmt("{table}: downloading all data")
     # Otherwise remove all rows and start again

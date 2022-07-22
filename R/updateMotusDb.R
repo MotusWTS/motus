@@ -73,8 +73,8 @@ updateMotusDb <- function(src, quiet = FALSE) {
 
     if (dt > src_version) {
       DBI_Execute(src, 
-                  "UPDATE admInfo set db_version = '",
-                  strftime(dt, "%Y-%m-%d %H:%M:%S"), "'")
+                  "UPDATE admInfo set db_version = ",
+                  "{strftime(dt, '%Y-%m-%d %H:%M:%S')}")
     }
   }
 }

@@ -7,7 +7,6 @@ pageDataByBatch <- function(src, table, resume = FALSE,
 
   # Check tables and update to include table if necessary
   ensureDBTables(src, projRecv = get_projRecv(src))
-  sql <- safeSQL(src)
   
   # Fetch/resume table download
   batches <- getBatches(src)
@@ -15,11 +14,11 @@ pageDataByBatch <- function(src, table, resume = FALSE,
   # Check where to start
   if(resume) {
     # If updating, start with last batch downloaded (a bit of overlap)
-    last_batch <- sql(paste0("select ifnull(max(batchID), 0) from ", table))[[1]]  
+    last_batch <- DBI_Query(src, "SELECT IFNULL(max(batchID), 0) from {`table`}")
     batches <- batches[batches >= last_batch]
   } else {
     # Otherwise remove all rows and start again
-    DBI_Execute(src, "DELETE FROM {table}")
+    DBI_Execute(src, "DELETE FROM {`table`}")
   }
   
   # If length zero, then no batches to get data for
@@ -66,7 +65,7 @@ pageDataByBatch <- function(src, table, resume = FALSE,
         msg <- msg_fmt("batchID {batchID:8d} (#{i:6d} of {length(batches):6d}): ")
         
         # Save Previous batch
-        dbInsertOrReplace(sql, table, b)
+        dbInsertOrReplace(src, table, b)
         message(msg, msg_fmt("got {nrow(b):6d} {table} records"))
         added <- added + nrow(b)
         b <- pageForward(b, batchID, projectID)

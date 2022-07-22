@@ -20,8 +20,8 @@ deleteRunsFilter <- function(src, filterName, motusProjID = NA, clearOnly = FALS
   filterID <- getRunsFilterID(src, filterName, motusProjID)
   
   if (!is.null(filterID)) {
-    DBI_Execute("DELETE FROM runsFilters WHERE filterID = {'filterID'}")
-    if (!clearOnly) DBI_Execute("DELETE FROM filters WHERE filterID = {'filterID'}")
+    DBI_Execute(src, "DELETE FROM runsFilters WHERE filterID = {'filterID'}")
+    if (!clearOnly) DBI_Execute(src, "DELETE FROM filters WHERE filterID = {'filterID'}")
   }
   
   filterID

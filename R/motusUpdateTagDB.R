@@ -121,11 +121,8 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
 }
 
 max_batch <- function(src, projectID) {
-  b <- dplyr::inner_join(dplyr::tbl(src, "projBatch"), 
-                    dplyr::tbl(src, "batches"), by = "batchID") %>% 
-    dplyr::filter(tagDepProjectID == .env$projectID) %>% 
-    dplyr::filter(batchID == max(.data$batchID)) %>%
-    dplyr::pull(.data$batchID)
-  if(length(b) == 0) b <- 0
-  b
+  DBI_Query(src,
+            "SELECT IFNULL(max(a.batchID), 0) FROM projBatch a ",
+            "INNER JOIN batches b ON a.batchID = b.batchID ",
+            "WHERE tagDepProjectID = {projectID}")
 }

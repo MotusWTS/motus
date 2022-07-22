@@ -3,14 +3,14 @@
 #' Start with runID <- 0, because we don't know in advance what runs that we
 #' already have records for might be modified by each batch
 #'
-#' @param sql 
+#' @param src 
 #' @param projectID 
 #' @param batchID 
 #' @param batchMsg 
 #'
 #' @noRd
 
-runsForBatch <- function(sql, batchID, batchMsg, projectID = NULL) {
+runsForBatch <- function(src, batchID, batchMsg, projectID = NULL) {
   runID <- 0
   tagIDs <- vector()
   repeat {
@@ -28,8 +28,9 @@ runsForBatch <- function(sql, batchID, batchMsg, projectID = NULL) {
     ## add these run records to the DB
     ## Because some might be updates, or a previous transfer might have been
     ## interrupted, use dbInsertOrReplace
-    dbInsertOrReplace(sql, "runs", r)
-    DBI::dbWriteTable(sql, "batchRuns", 
+    
+    dbInsertOrReplace(src, "runs", r)
+    DBI::dbWriteTable(src, "batchRuns", 
                       data.frame(batchID = batchID, runID = r$runID), 
                       append = TRUE, row.names = FALSE)
     message(msg_fmt("{batchMsg}: got {nrow(r):6d} runs starting at {runID:15.0f}"))
@@ -122,13 +123,13 @@ hitsForBatchReceiver <- function(src, batchID, batchMsg) {
 #' 
 #' Start after the largest gpsID for which we already have a fix
 #'
-#' @param sql 
+#' @param src 
 #' @param batchID 
 #' @param batchMsg 
 #' @param projectID
 #'
 #' @noRd
-gpsForBatchProject <- function(sql, batchID, batchMsg, projectID) {
+gpsForBatchProject <- function(src, batchID, batchMsg, projectID) {
   gpsID <- DBI_Query(src, 
                      "SELECT ifnull(max(gpsID), 0) ",
                      "FROM gps WHERE batchID = {batchID}")
@@ -175,10 +176,11 @@ gpsForBatchReceiver <- function(src, batchID, batchMsg) {
 #' @param batchMsg 
 #'
 #' @noRd
-pulseForBatchReceiver <- function(sql, batchID, batchMsg) {
-  info <- DBI_Query(src, 
-                    "SELECT ant, hourBin FROM pulseCounts WHERE batchID = {batchID}",
-                    "ORDER BY ant DESC, hourBin DESC LIMIT 1")
+pulseForBatchReceiver <- function(src, batchID, batchMsg) {
+  info <- DBI_Query(
+    src, 
+    "SELECT ant, hourBin FROM pulseCounts WHERE batchID = {batchID}",
+    "ORDER BY ant DESC, hourBin DESC LIMIT 1")
   if (nrow(info) == 1) {
     ant <- info[[1]]
     hourBin <- info[[2]]
