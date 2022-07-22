@@ -48,9 +48,9 @@ pageDataByBatch <- function(src, table, resume = FALSE,
   }  
 
   # Announce
-  message(msg_fmt(
-    "{table}: {length(batches):5d} {dplyr::if_else(resume, 'new', '')}",
-    "batch records to check"))
+  message(msg_fmt("{table}: {length(batches):5d} ",
+                  dplyr::if_else(resume, "new ", ""),
+                  "batch records to check"))
   
   added <- 0
   if(length(batches) > 0) {
@@ -58,26 +58,23 @@ pageDataByBatch <- function(src, table, resume = FALSE,
       batchID <- batches[i]
       if(i != 1) b <- pageInitial(batchID, projectID)
 
+      # Progress messages
+      msg <- msg_fmt("batchID {batchID:8d} (#{i:6d} of {length(batches):6d}): ")
+      
+      # Progress messages when none
+      if(nrow(b) == 0) { 
+        message(msg, msg_fmt("got {0:6d} {table} records"))
+      }
+      
       # Get the rest of the data
       while(nrow(b) > 0) {
-        
-        # Progress messages
-        msg <- msg_fmt("batchID {batchID:8d} (#{i:6d} of {length(batches):6d}): ")
-        
         # Save Previous batch
         dbInsertOrReplace(src, table, b)
         message(msg, msg_fmt("got {nrow(b):6d} {table} records"))
         added <- added + nrow(b)
         b <- pageForward(b, batchID, projectID)
       }
-      
-      # Progress messages
-      if(nrow(b) == 0) { 
-        message(msg_fmt(
-          "batchID {batchID:8d} (#{i:6d} of {length(batches):6d}: ",
-          "got       0 {table} records"))
-      }
-      
+
       # If testing, break out after x batches
       if(i >= getOption("motus.test.max") && is_testing()) break
     }

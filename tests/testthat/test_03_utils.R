@@ -27,7 +27,7 @@ test_that("get_projRecv pulls project name", {
   d <- system.file("extdata", package = "motus")
   
   expect_equal(get_projRecv(tagme(176, update = FALSE, dir = d)), 176)
-  expect_error(get_projRecv("hello"), "src is not a SQLite connection")
+  expect_error(get_projRecv("hello"), "src must be a SQLite")
   
   skip_if_no_auth()
   skip_if_no_file(system.file("extdata", "SG-3115BBBK0782.motus", package = "motus"))

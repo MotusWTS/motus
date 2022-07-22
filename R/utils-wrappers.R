@@ -22,6 +22,7 @@ DBI_ExecuteAll <- function(src, statement) {
       stringr::str_split(";") %>%
       unlist()
   } 
+
   purrr::map(statement, DBI_Execute, src = src)
 }
 

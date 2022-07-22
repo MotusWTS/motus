@@ -60,7 +60,7 @@ pageDataByReturn <- function(src, table, resume = FALSE, returnIDtype = "batchID
     if(rounds >= getOption("motus.test.max") && is_testing()) break
   }
   
-  message(msg_fmt("Downloaded {added} {table} {records}"))
+  message(msg_fmt("Downloaded {added} {table} records"))
   
   src
 }

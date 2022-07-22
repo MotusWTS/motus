@@ -89,13 +89,13 @@ tagme <- function(projRecv, update = TRUE, new = FALSE, dir = getwd(),
   
   if (! new && ! have)
     stop("Database ", dbname, " does not exist.\n",
-         "If you *really* want to create a new database, specify 'new=TRUE'\n",
-         "But maybe you just need to specify 'dir=' to tell me where to find it?", 
+         "If you *really* want to create a new database, specify 'new = TRUE'\n",
+         "But maybe you just need to specify 'dir = ' to tell me where to find it?", 
          call. = FALSE)
   
   if (new && have) {
     warning("Database ", dbname, " already exists, so I'm ignoring the ",
-            "'new=TRUE' option", immediate. = TRUE)
+            "'new = TRUE' option", immediate. = TRUE, call. = FALSE)
     new <- FALSE
   }
   if (new && missing(update)) update = FALSE

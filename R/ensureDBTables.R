@@ -19,8 +19,8 @@ ensureDBTables <- function(src, projRecv, deviceID, quiet = FALSE) {
   check_src(src)
   
   if (missing(projRecv)) {
-    stop("You must specify a project number or receiver serial number for a new database", 
-         call. = FALSE)
+    stop("You must specify a project number or receiver serial number for a ",
+         "new database", call. = FALSE)
   }
   isRecvDB <- is.character(projRecv)
 

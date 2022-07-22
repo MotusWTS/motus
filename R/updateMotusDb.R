@@ -48,7 +48,8 @@ updateMotusDb <- function(src, quiet = FALSE) {
     # Check if there are custom views to be concerned about
     checkViews(src, dplyr::pull(update_versions, "sql"))
     
-    if(!quiet) message(msg_fmt("updateMotusDb started ({nrow(update_versions)} version update(s))"))
+    if(!quiet) message(msg_fmt("updateMotusDb started ({nrow(update_versions)} ",
+                               "version update(s))"))
     
     dates <- apply(update_versions, 1, function(row) {
       if(!quiet) message(" - ", row["descr"], sep = "")

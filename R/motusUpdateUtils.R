@@ -109,7 +109,7 @@ hitsForBatchReceiver <- function(src, batchID, batchMsg) {
     
     
     if (!isTRUE(nrow(h) > 0)) break
-    message(msg_fmt("{batchMsg}: got {nrow(h)} hits starting at {hitID}"))
+    message(msg_fmt("{batchMsg}: got {nrow(h):6d} hits starting at {hitID}"))
     
     # add these hit records to the DB
     # Because some extra fields will cause this to error, use dbInsertOrReplace
@@ -138,7 +138,7 @@ gpsForBatchProject <- function(src, batchID, batchMsg, projectID) {
                              batchID = batchID, 
                              gpsID = gpsID)
     if (!isTRUE(nrow(g) > 0)) break
-    message(msg_fmt("{batchMsg}: got {nrow(g)} GPS fixes"))
+    message(msg_fmt("{batchMsg}: got {nrow(g):6d} GPS fixes"))
     dbInsertOrReplace(src, "gps", g)
     gpsID <- max(g$gpsID)
   } 
@@ -160,7 +160,7 @@ gpsForBatchReceiver <- function(src, batchID, batchMsg) {
   repeat {
     g <- srvGPSForReceiver(batchID = batchID, gpsID = gpsID)
     if (!isTRUE(nrow(g) > 0)) break
-    message(msg_fmt("{batchMsg}: got {nrow(g)} GPS fixes"))
+    message(msg_fmt("{batchMsg}: got {nrow(g):6d} GPS fixes"))
     dbInsertOrReplace(src, "gps", 
                       g[, c("batchID", "ts", "gpsts", "lat", "lon", "alt")])
     gpsID <- max(g$gpsID)
@@ -192,7 +192,7 @@ pulseForBatchReceiver <- function(src, batchID, batchMsg) {
   repeat {
     pc <- srvPulseCountsForReceiver(batchID = batchID, ant = ant, hourBin = hourBin)
     if (!isTRUE(nrow(pc) > 0)) break
-    message(msg_fmt("{batchMsg}: got {nrow(pc)} pulse counts"))
+    message(msg_fmt("{batchMsg}: got {nrow(pc):6d} pulse counts"))
     dbInsertOrReplace(src, "pulseCounts", 
                       pc[, c("batchID", "ant", "hourBin", "count")])
     ant <- utils::tail(pc$ant, 1)

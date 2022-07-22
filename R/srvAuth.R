@@ -18,8 +18,9 @@ srvAuth = function(verbose = FALSE) {
   pars <- list(user = motus_vars$userLogin, 
                password = motus_vars$userPassword,
                pkgVersion = pkg_version())
+
   tryCatch({
-    res <- srvQuery(motus_vars$API_DATA_AUTHENTICATE, pars, auth=FALSE, verbose = verbose)
+    res <- srvQuery(motus_vars$API_DATA_AUTHENTICATE, pars, auth = FALSE, verbose = verbose)
     motus_vars$projects <- res$projects
     motus_vars$receivers <- res$receivers
     motus_vars$dataVersion <- res$dataVersion
