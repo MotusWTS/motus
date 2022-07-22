@@ -202,7 +202,7 @@ t <- field_names %>%
 
 # admInfo --------------------------------------------------------------------
 t <- tribble(~column,        ~type,
-                   "db_version",   "INTEGER",
+                   "db_version",   "TEXT",
                    "data_version", "TEXT") %>%
   mutate(table = "admInfo") %>%
   bind_rows(t, .)
