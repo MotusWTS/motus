@@ -1,3 +1,8 @@
+# motus 5.0.2
+### Bug fixes
+* fixed bug in `deprecateBatches()` which caused an error when removing deprecated
+batches from receivers.
+
 # motus 5.0.1
 ### Bug fixes
 * fixed bug in `deprecateBatches()` which caused an error when there were no batches to deprecate.

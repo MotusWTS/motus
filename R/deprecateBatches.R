@@ -125,11 +125,13 @@ removeDeprecated <- function(src, ask) {
 
 removeByID <- function(src, t, id_type = "batchID", ids) {
   if(length(ids) > 0) {
-    n <- glue::glue("DELETE FROM {t} WHERE {id_type} IN (",
-               glue::glue_collapse(ids, sep = ', '), 
-               ")") %>%
-      DBI::dbExecute(src$con, statement = .)
-    if(n > 0) message(glue::glue("  {n} deprecated rows deleted from {t}"))
+    if(t %in% DBI::dbListTables(src$con)) {
+      n <- glue::glue("DELETE FROM {t} WHERE {id_type} IN (",
+                      glue::glue_collapse(ids, sep = ', '), 
+                      ")") %>%
+        DBI::dbExecute(src$con, statement = .)
+      if(n > 0) message(glue::glue("  {n} deprecated rows deleted from {t}"))
+    }
   }
 }
 
