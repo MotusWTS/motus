@@ -1,3 +1,4 @@
+
 # motus 6.0.0
 ### Potential breaking change
 * Changed internal method for loading SQLite databases. Now uses standard method
@@ -7,6 +8,10 @@
 
 ### Functions removed
 * Remove functions `safeSQL()`, `sqliteToRDS()`
+
+### Bug fixes
+* fixed bug in `deprecateBatches()` which caused an error when removing deprecated
+batches from receivers.
 
 ### Other
 * Updated internal code for logging messages
