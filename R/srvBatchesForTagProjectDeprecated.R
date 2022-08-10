@@ -1,4 +1,4 @@
-#' Fetch deprecated batches for a tag project
+#' Get deprecated batches for a tag project
 #'
 #' @param projectID Numeric. Motus project ID
 #' @param batchID Numeric. Largest batchID already fetched. For pagination,

@@ -2,10 +2,13 @@
 #'
 #' Plot deployment (ordered by latitude) vs time (UTC) for each tag
 #'
-#' @param data a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-#' including at a minimum variables for recvDeployName, fullID, mfgID, date/time, latitude or longitude
+#' @param data a selected table from .motus data, eg. "alltags", or a data.frame
+#'   of detection data including at a minimum variables for `recvDeployName`,
+#'   `fullID`, `mfgID`, date/time, `latitude` or `longitude`
 #' @param tagsPerPanel number of tags in each panel of the plot, default is 5
-#' @param coordinate column of receiver latitude/longitude values to use, defaults to recvDeployLat
+#' @param coordinate column of receiver latitude/longitude values to use,
+#'   defaults to `recvDeployLat`
+#'   
 #' @export
 #'
 #' @examples
@@ -73,16 +76,16 @@ plotAllTagsSite <- function(data, coordinate = "recvDeployLat", tagsPerPanel = 5
   
   ## We want to plot multiple tags per panel, so sort their labels and create a grouping factor
   ## Note that labels are sorted in increasing order by ID
-  labs = data$fullID[order(data$mfgID,data$fullID)]
-  dup = duplicated(labs)
-  tagLabs = labs[!dup]
-  tagGroupIDs = data$mfgID[order(data$mfgID,data$fullID)][!dup]
-  tagGroup = 1 + floor((0:length(tagLabs)) / tagsPerPanel)
-  ngroup = length(tagGroup)
-  names(tagGroup) = tagLabs
-  tagGroupFactor = tagGroup[as.character(data$fullID)]
-  tagGroupLabels = tapply(tagGroupIDs, 1 + floor((0:(length(tagGroupIDs)-1)) / tagsPerPanel), function(data) paste("IDs:", paste(sort(unique(data)), collapse=",")))
-  data$tagGroupFactor = factor(tagGroupFactor, labels=tagGroupLabels, ordered=TRUE)
+  labs <- data$fullID[order(data$mfgID,data$fullID)]
+  dup <- duplicated(labs)
+  tagLabs <- labs[!dup]
+  tagGroupIDs <- data$mfgID[order(data$mfgID,data$fullID)][!dup]
+  tagGroup <- 1 + floor((0:length(tagLabs)) / tagsPerPanel)
+  ngroup <- length(tagGroup)
+  names(tagGroup) <- tagLabs
+  tagGroupFactor <- tagGroup[as.character(data$fullID)]
+  tagGroupLabels <- tapply(tagGroupIDs, 1 + floor((0:(length(tagGroupIDs)-1)) / tagsPerPanel), function(data) paste("IDs:", paste(sort(unique(data)), collapse = ",")))
+  data$tagGroupFactor <- factor(tagGroupFactor, labels = tagGroupLabels, ordered = TRUE)
   data <- unique(subset(data, select = c("round_ts", "meanlat", "sitelat", "fullID", "tagGroupFactor"))) ## get unique hourly detections for small dataframe
   data <- data[order(data$round_ts),] ## order by time
   out <- by(data, INDICES = data$tagGroupFactor, FUN = function(m){

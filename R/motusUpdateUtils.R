@@ -1,14 +1,10 @@
-#' Get runs by batch for Tags
+#' Get runs by batch for tags
 #' 
-#' Start with runID <- 0, because we don't know in advance what runs that we
+#' Start with `runID <- 0`, because we don't know in advance what runs that we
 #' already have records for might be modified by each batch
 #'
-#' @param src 
-#' @param projectID 
-#' @param batchID 
-#' @param batchMsg 
-#'
 #' @noRd
+#' @keywords internal
 
 runsForBatch <- function(src, batchID, batchMsg, projectID = NULL) {
   runID <- 0
@@ -46,12 +42,9 @@ runsForBatch <- function(src, batchID, batchMsg, projectID = NULL) {
 #' new hits as we get them, writing the final total to the numHits field in this
 #' batch's record).
 #'
-#' @param src 
-#' @param batchID 
-#' @param batchMsg 
-#' @param projectID 
-#'
 #' @noRd
+#' @keywords internal
+
 hitsForBatchProject <- function(src, batchID, batchMsg, projectID = NULL) {
 
   hitID <- DBI_Query(src,
@@ -94,11 +87,9 @@ hitsForBatchProject <- function(src, batchID, batchMsg, projectID = NULL) {
 #' 
 #' Start after the largest hitID we already have.
 #'
-#' @param src
-#' @param batchID 
-#' @param batchMsg 
-#'
 #' @noRd
+#' @keywords internal
+
 hitsForBatchReceiver <- function(src, batchID, batchMsg) {
   
   hitID <- DBI_Query(src, 
@@ -123,12 +114,9 @@ hitsForBatchReceiver <- function(src, batchID, batchMsg) {
 #' 
 #' Start after the largest gpsID for which we already have a fix
 #'
-#' @param src 
-#' @param batchID 
-#' @param batchMsg 
-#' @param projectID
-#'
 #' @noRd
+#' @keywords internal
+
 gpsForBatchProject <- function(src, batchID, batchMsg, projectID) {
   gpsID <- DBI_Query(src, 
                      "SELECT ifnull(max(gpsID), 0) ",
@@ -148,11 +136,9 @@ gpsForBatchProject <- function(src, batchID, batchMsg, projectID) {
 #' 
 #' Start after the largest TS for which we already have a fix
 #'
-#' @param src
-#' @param batchID 
-#' @param batchMsg 
-#'
 #' @noRd
+#' @keywords internal
+
 gpsForBatchReceiver <- function(src, batchID, batchMsg) {
   gpsID <- DBI_Query(src, 
                      "SELECT ifnull(max(gpsID), 0) ",
@@ -171,11 +157,10 @@ gpsForBatchReceiver <- function(src, batchID, batchMsg) {
 #'
 #' Start after the largest ant, hourBin for which we already have pulseCounts
 #' from this batch.
-#' @param src 
-#' @param batchID 
-#' @param batchMsg 
-#'
+#' 
 #' @noRd
+#' @keywords internal
+
 pulseForBatchReceiver <- function(src, batchID, batchMsg) {
   info <- DBI_Query(
     src, 

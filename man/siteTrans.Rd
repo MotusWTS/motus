@@ -8,14 +8,14 @@ siteTrans(data, latCoord = "recvDeployLat", lonCoord = "recvDeployLon")
 }
 \arguments{
 \item{data}{a selected table from .motus data, eg. "alltagsGPS", or a
-data.frame of detection data including at a minimum variables for ts,
-motusTagID, tagDeployID, recvDeployName, and a latitude/longitude}
+data.frame of detection data including at a minimum variables for \code{ts},
+\code{motusTagID}, \code{tagDeployID}, \code{recvDeployName}, and a latitude/longitude}
 
 \item{latCoord}{a variable with numeric latitude values, defaults to
-recvDeployLat}
+\code{recvDeployLat}}
 
 \item{lonCoord}{a variable with numeric longitude values, defaults to
-recvDeployLon}
+\code{recvDeployLon}}
 }
 \value{
 a data.frame with these columns:
@@ -30,9 +30,11 @@ a data.frame with these columns:
 \item lon.y: longitude of site.y
 \item site.y: second site in transition pair (the "departure" site)
 \item tot_ts: length of time between ts.x and ts.y (in seconds)
-\item dist: total straight line distance between site.x and site.y (in metres), see latLonDist function in sensorgnome package for details
+\item dist: total straight line distance between site.x and site.y (in metres),
+see \code{sensorgnome::latLonDist()} for details
 \item rate: overall rate of movement (tot_ts/dist), in metres/second
-\item bearing: bearing between first and last detection sites, see bearing function in geosphere package for more details
+\item bearing: bearing between first and last detection sites, see bearing
+function in geosphere package for more details
 }
 }
 \description{

@@ -1,18 +1,13 @@
+#' Insert or replace records in data base
+#' 
 #' Save records from a data frame into a db table, replacing
 #' existing records when primary keys collide.
 #'
-#' Seems like an obvious missing piece of the DBI.  Ideally,
-#' dbWriteTable would have a boolean 'replace' argument that served
-#' the same purpose; i.e. record-wise overwrite, rather than
-#' table-wise.
-#'
-#' @param src SQLite Connection
+#' @param src database source
 #' @param name name of table to insert or replace records into
 #' @param df data from which to write data.
 #' @param replace boolean that determines whether existing records are replaced
 #'   or ignored.
-#'
-#' @return no return value
 #'
 #' @noRd
 

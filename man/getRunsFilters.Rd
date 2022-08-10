@@ -2,7 +2,7 @@
 % Please edit documentation in R/getRunsFilters.R
 \name{getRunsFilters}
 \alias{getRunsFilters}
-\title{Find runFilters}
+\title{Get runFilters}
 \usage{
 getRunsFilters(src, filterName, motusProjID = NA)
 }
@@ -10,15 +10,15 @@ getRunsFilters(src, filterName, motusProjID = NA)
 \item{src}{SQLite connection (result of \code{tagme(XXX)} or
 \code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")})}
 
-\item{filterName}{unique name given to the filter}
+\item{filterName}{Character. Unique name given to the filter}
 
-\item{motusProjID}{optional project ID attached to the filter in order to
-share with other users of the same project.}
+\item{motusProjID}{Character. Optional project ID attached to the filter in
+order to share with other users of the same project.}
 }
 \value{
-a dplyr sqlite object
+a database connection to \code{src}
 }
 \description{
-Returns a dataframe of the runFilters records matching a filter name (and
+Returns a dataframe of the \code{runFilters} records matching a filter name (and
 optionally a project ID) stored in the local database.
 }

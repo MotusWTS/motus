@@ -1,4 +1,4 @@
-#' Fetch deprecated batches for a receiver
+#' Get deprecated batches for a receiver
 #'
 #' @param deviceID Numeric. Motus receiver device ID
 #' @param batchID Numeric. Largest batchID already fetched. For pagination,

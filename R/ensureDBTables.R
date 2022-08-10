@@ -3,10 +3,8 @@
 #' If required tables are missing, create them.
 #'
 #' @param src SQLite connection
-#' @param projRecv integer scalar motus project ID number *or* character scalar
-#'   receiver serial number; must be specified if `src` does not already
-#'   contain a table named `meta`.
-#' @param deviceID integer scalar motus deviceID; must be specified when this is
+#' @param projRecv project code or receiver id
+#' @param deviceID Numeric. Motus deviceID; must be specified when this is
 #'   a new receiver database.
 #'   
 #' @return returns a dplyr::tbl representing the alltags virtual table which is

@@ -7,11 +7,11 @@
 #'
 #' @details if login is unsuccessful, execution stops with an error message
 #'
-#' @seealso \code{\link{motus_vars}}
+#' @seealso `motus_vars`
 #'
 #' @noRd
 
-srvAuth = function(verbose = FALSE) {
+srvAuth <- function(verbose = FALSE) {
   ## force lookup of userLogin and userPassword using their active bindings.
   ## (we don't want to use lazy evaluation here by instead passing the list(...)
   ## expression to srvQuery
@@ -30,8 +30,8 @@ srvAuth = function(verbose = FALSE) {
     
     return(res$authToken)
   }, error = function(e) {
-    motus_vars$userLogin = NULL
-    motus_vars$userPassword = NULL
+    motus_vars$userLogin <- NULL
+    motus_vars$userPassword <- NULL
     stop("Login failed with error message\n'", e$message, "'",
          call. = FALSE)
   })

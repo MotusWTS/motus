@@ -1,7 +1,10 @@
-#' Verifies the version of the package against the admInfo table of a motus file. Those should match
-#' if the updateMotusDb function has been properly loaded by the tagme function.
+#' Check database version
+#' 
+#' Verifies the version of the package against the `admInfo` table of a `.motus`
+#' file. Those should match if the `updateMotusDb()` function has been properly
+#' applied by the `tagme()` function.
 #'
-#' @param src motus sqlite database source
+#' @inheritParams args
 #' @export
 #'
 

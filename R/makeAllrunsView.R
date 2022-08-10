@@ -11,7 +11,7 @@
 #' @return a dplyr::tbl which refers to the newly-created virtual table.
 #'
 #' @note The new virtual table replaces any previous virtual table by the same
-#' name in `db`.  The virtual table is an SQL VIEW, which will persist in `db`
+#' name in `src`.  The virtual table is an SQL VIEW, which will persist in `src`
 #' across R sessions.
 #'
 #' @noRd

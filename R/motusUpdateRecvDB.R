@@ -1,16 +1,15 @@
-#' Update a motus tag detection database - receiver flavour (backend)
+#' Update receiver database 
 #'
-#' @param src SQLite connection (result of `tagme(XXX)` or
-#'   `DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")`)
+#' @param src SQLite connection
 #' @param countOnly logical scalar: count results instead of returning them?
 #' @param forceMeta logical scalar: if true, re-get metadata for tags and
-#'   receivers, even if we already have them.  Default: FALSE
+#'   receivers, even if we already have them.  Default: `FALSE`
 #'
-#' @return \code{src}, if countOnly is FALSE.  Otherwise, a list of
-#'     counts items that would be transferred by the update.
+#' @return `src`, if `countOnly` is `FALSE.`  Otherwise, a list of counts items
+#'   that would be transferred by the update.
 #'
-#' @seealso \code{\link{tagme}}, which is intended for most users, and
-#'     indirectly calls this function.
+#' @seealso `tagme()`, which is intended for most users, and indirectly calls
+#'   this function.
 #'     
 #' @noRd
 

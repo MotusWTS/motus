@@ -21,8 +21,6 @@
 #'  closest `hitID` timestamp. Use `cutoff` to specify the maximum
 #'  allowable time between timestamps (defaults to none).
 #'
-#' @param src SQLite connection (result of `tagme(XXX)` or
-#'   `DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")`)
 #' @param data SQLite connection or data.frame. Optional subset of the `alltags`
 #'   view. Must have `ts`, `batchID` and `hitID` at the minimum.
 #' @param by Numeric/Character. Either the time in minutes over which to join GPS
@@ -33,6 +31,8 @@
 #'   `NULL` (no maximum).
 #' @param keepAll Logical. Return all hits regardless of whether they have a GPS
 #'   match? Defaults to FALSE.
+#'   
+#' @inheritParams args
 #'
 #' @return Data frame linking hitID to gpsLat, gpsLon and gpsAlt. 
 #'   When `by = 'daily'` or `by = 'X'`, output includes:

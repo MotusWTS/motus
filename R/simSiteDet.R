@@ -1,10 +1,12 @@
 #' Create a dataframe of simultaneous detections at multiple sites
 #'
-#' Creates a dataframe consisting of detections of tags that are detected at two or more receiver
-#' at the same time.
+#' Creates a dataframe consisting of detections of tags that are detected at two
+#' or more receiver at the same time.
 #'
-#' @param data a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-#' including at a minimum variables for motusTagID, recvDeployName, ts
+#' @param data a selected table from .motus data, eg. "alltags", or a data.frame
+#'   of detection data including at a minimum variables for `motusTagID`,
+#'   `recvDeployName`, `ts`
+#'   
 #' @export
 #'
 #' @examples
@@ -57,5 +59,6 @@ simSiteDet <- function(data){
   tmp <- dplyr::filter(tmp, .data$num.dup > 1) ## remove any where number of duplicates is less than 1, because anything over 1 will have detections at more than one site
   tmp <- merge(tmp, data, all.x = TRUE) ## now merge the identified duplicates back with detection data so we have more info available
   tmp <- unique(tmp)
-  return(tmp)
+  
+  tmp
 }

@@ -1,7 +1,6 @@
 #' Returns a dataframe of the filters stored in the local database. 
 #'
-#' @param src SQLite connection (result of `tagme(XXX)` or
-#'   `DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")`)
+#' @inheritParams args
 #'
 #' @return a dataframe 
 #'

@@ -2,16 +2,17 @@
 #'
 #' Creates a summary of the first and last daily detection at a site, the length
 #' of time between first and last detection, the number of tags, and the total
-#' number of detections at a site for each day. Same as siteSum, but daily by
-#' site.
+#' number of detections at a site for each day. Same as `siteSum()`, but daily
+#' by site.
 #'
 #' @param data a selected table from .motus data, eg. "alltagsGPS", or a
 #'   data.frame of detection data including at a minimum variables for
-#'   motusTagID, sig, recvDeployName, ts
+#'   `motusTagID`, `sig`, `recvDeployName`, `ts`
 #' @param units units to display time difference, defaults to "hours", options
 #'   include "secs", "mins", "hours", "days", "weeks"
 #'
 #' @return a data.frame with these columns:
+#' 
 #' - recvDeployName: site name of deployment
 #' - date: date that is being summarized
 #' - first_ts: time of first detection on specified "date" at "recvDeployName"
@@ -86,6 +87,6 @@ siteSumDaily <- function(data, units = "hours"){
                                tot_ts = difftime(max(.data$ts), min(.data$ts), units = units),
                                num_tags = length(unique(.data$motusTagID)),
                                num_det = length(.data$ts))
-  site_sum <- as.data.frame(site_sum)
-  return(site_sum)
+  
+  as.data.frame(site_sum)
 }

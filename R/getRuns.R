@@ -9,8 +9,6 @@
 #' TRUE, `runID`'s are returned whenever the run partially matches the specified
 #' period.
 #'
-#' @param src SQLite connection (result of `tagme(XXX)` or
-#'   `DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")`)
 #' @param ts.min minimum timestamp used to filter the dataframe, Default: NA 
 #' @param ts.max maximum timestamp used to filter the dataframe, Default: NA  
 #' @param match.partial whether runs that partially overlap the specified ts
@@ -19,6 +17,8 @@
 #'   dataframe, Default: c()
 #' @param ambigID vector of ambig ID's used to filter the resulting dataframe,
 #'   Default: c()
+#'   
+#' @inheritParams args
 #'
 #' @return a dataframe containing the runID, the motusTagID and the ambigID (if applicable) of runs
 #'

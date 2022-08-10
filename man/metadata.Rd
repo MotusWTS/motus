@@ -22,7 +22,7 @@ tables are cleared (for all projects) before re-importing the metadata.}
 }
 \description{
 Updates the entire metadata for receivers and tags from Motus server.
-Contrary to tagme, this function retrieves the entire set of metadata for
+Contrary to \code{tagme()}, this function retrieves the entire set of metadata for
 tags and receivers, and not only those pertinent to the detections in your
 local file.
 }
@@ -48,6 +48,6 @@ tbl(sql.motus, "tagDeps")
   
 }
 \seealso{
-\code{\link{tagme}} provides an option to update only the metadata
+\code{tagme()} provides an option to update only the metadata
 relevant to a specific project or receiver file.
 }

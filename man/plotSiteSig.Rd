@@ -7,13 +7,15 @@
 plotSiteSig(data, recvDeployName)
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame of detection data
-including at a minimum variables for antBearing, ts, recvDeployLat, sig, fullID, recvDeployName}
+\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame
+of detection data including at a minimum variables for \code{antBearing}, \code{ts},
+\code{recvDeployLat}, \code{sig}, \code{fullID}, \code{recvDeployName}}
 
-\item{recvDeployName}{name of recvDeployName}
+\item{recvDeployName}{name of \code{recvDeployName}}
 }
 \description{
-Plot signal strength vs time for all tags detected at a specified site, coloured by antenna
+Plot signal strength vs time for all tags detected at a specified site,
+coloured by antenna
 }
 \examples{
 # You can use either a selected tbl from .motus eg. "alltags", or a

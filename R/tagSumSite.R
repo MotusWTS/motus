@@ -51,24 +51,25 @@ tagSumSite <- function(data, units = "hours"){
     dplyr::distinct() %>% 
     dplyr::collect() %>% 
     as.data.frame()
-  data <- dplyr::mutate(data,
-                        recvLat = dplyr::if_else((is.na(.data$gpsLat)|.data$gpsLat == 0|.data$gpsLat ==999),
-                                                 .data$recvDeployLat,
-                                                 .data$gpsLat),
-                        recvLon = dplyr::if_else((is.na(.data$gpsLon)|.data$gpsLon == 0|.data$gpsLon == 999),
-                                                 .data$recvDeployLon,
-                                                 .data$gpsLon),
-                        recvDeployName = paste(.data$recvDeployName, 
-                                               round(.data$recvLat, digits = 1), sep = "\n" ),
-                        recvDeployName = paste(.data$recvDeployName,
-                                               round(.data$recvLon, digits = 1), sep = ", "),
-                        ts = lubridate::as_datetime(.data$ts, tz = "UTC"))
+  data <- dplyr::mutate(
+    data,
+    recvLat = dplyr::if_else((is.na(.data$gpsLat)|.data$gpsLat == 0|.data$gpsLat ==999),
+                             .data$recvDeployLat,
+                             .data$gpsLat),
+    recvLon = dplyr::if_else((is.na(.data$gpsLon)|.data$gpsLon == 0|.data$gpsLon == 999),
+                             .data$recvDeployLon,
+                             .data$gpsLon),
+    recvDeployName = paste(.data$recvDeployName, 
+                           round(.data$recvLat, digits = 1), sep = "\n" ),
+    recvDeployName = paste(.data$recvDeployName,
+                           round(.data$recvLon, digits = 1), sep = ", "),
+    ts = lubridate::as_datetime(.data$ts, tz = "UTC"))
   grouped <- dplyr::group_by(data, .data$fullID, .data$recvDeployName)
   data <- dplyr::summarise(grouped,
                            first_ts=min(.data$ts),
                            last_ts=max(.data$ts),
                            tot_ts = difftime(max(.data$ts), min(.data$ts), units = units),
                            num_det = length(.data$ts))
-  data <- as.data.frame(data)
-  return(data)
+  
+  as.data.frame(data)
 }

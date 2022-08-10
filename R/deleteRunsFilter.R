@@ -1,16 +1,13 @@
-#' Delete a filter  matching a filter name (and optionally a project ID)
+#' Delete a filter
+#' 
+#' Deletes a filter by name or project ID.
 #'
-#' @param src SQLite connection (result of `tagme(XXX)` or
-#'   `DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")`)
+#' @param clearOnly Logical. When true, only remove the probability records
+#'   associated with the filter, but retain the filter itself
 #'
-#' @param filterName unique name given to the filter 
+#' @inheritParams args
 #'
-#' @param motusProjID optional project ID attached to the filter in order to share with other users of the same project.
-#'
-#' @param clearOnly boolean. When true, only remove the probability records associated with the filter, 
-#' but retain the filter itself
-#'
-#' @return the integer filterID of the filter deleted
+#' @return the integer `filterID` of the filter deleted
 #'
 #' @export
 

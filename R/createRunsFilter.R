@@ -1,23 +1,20 @@
 #' Create a new filter records that can be applied to runs
 #'
-#' @param src SQLite connection (result of `tagme(XXX)` or
-#'   `DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")`)
+#' @param descr Character. Optional filter description detailing what the filter
+#'   is meant to do
+#' @param update Logical. Whether the filter record gets updated when a filter
+#'   with the same name already exists.
 #'
-#' @param filterName unique name given to the filter 
-#'
-#' @param motusProjID optional project ID attached to the filter in order to share with other users of the same project.
-#'
-#' @param descr optional filter description detailing what the filter is meant to do
-#'
-#' @param update whether the filter record gets updated when a filter with the same name already exists.
-#'
-#' @return an integer filterID
+#' @inheritParams args
+#' 
+#' @return an integer `filterID`
 #'
 #' @export
 
-createRunsFilter <- function(src, filterName, motusProjID = NA, descr = NA, update = FALSE) {
+createRunsFilter <- function(src, filterName, motusProjID = NA, 
+                             descr = NA, update = FALSE) {
 
-  if (is.na(motusProjID)) motusProjID = -1
+  if (is.na(motusProjID)) motusProjID <- -1
   
   df <- DBI_Query(src, 
                   "SELECT * FROM filters WHERE filterName = {'filterName'} ",
@@ -42,7 +39,7 @@ createRunsFilter <- function(src, filterName, motusProjID = NA, descr = NA, upda
     if (update) {
 		  df$descr <- descr
 		  df$lastModified <- format(Sys.time(), "%Y-%m-%d %H:%M:%S")
-		  dbInsertOrReplace(src, "filters", df);
+		  dbInsertOrReplace(src, "filters", df)
 		  
 		  warning("Filter already exists. The description has been updated.",
 		          call. = FALSE)	

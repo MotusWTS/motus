@@ -1,15 +1,15 @@
-#' update a motus tag detection database - tag flavour (backend)
+#' Update project database
 #'
 #' @param src SQLite Connection
-#' @param countOnly logical scalar: count results instead of returning them?
-#' @param forceMeta logical scalar: if true, re-get metadata for tags and
-#'   receivers, even if we already have them.  Default:  FALSE.
+#' @param countOnly Logical. Count results instead of returning them?
+#' @param forceMeta Logical. If true, re-get metadata for tags and receivers,
+#'   even if we already have them.  Default:  `FALSE.`
 #'
-#' @return \code{src}, if countOnly is FALSE.  Otherwise, a list
-#' of counts items that would be transferred by the update.
+#' @return `src`, if `countOnly` is `FALSE.`  Otherwise, a list of counts items
+#'   that would be transferred by the update.
 #'
-#' @seealso \code{\link{tagme}}, which is intended for most users, and
-#'     indirectly calls this function.
+#' @seealso `tagme()`, which is intended for most users, and indirectly calls
+#'   this function.
 #'
 #' @noRd
 

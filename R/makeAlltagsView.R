@@ -44,7 +44,7 @@
 #'
 #'
 makeAlltagsView <- function(src, name = "alltags") {
-    query = paste0("CREATE VIEW IF NOT EXISTS ", name, " AS
+    query <- paste0("CREATE VIEW IF NOT EXISTS ", name, " AS
 SELECT
    t1.hitID as hitID,
    t1.runID as runID,

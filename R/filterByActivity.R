@@ -1,4 +1,3 @@
-
 #' Filter `alltags` by `activity`
 #' 
 #' The `activity` table is used to identify batches with too much noise.
@@ -6,8 +5,6 @@
 #' identified in the `alltags` view with the column `probability`. **No changes
 #' to the database are made.**
 #'
-#' @param src SQLite connection (result of `tagme(XXX)` or
-#'   `DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")`)
 #' @param return Character. One of "good" (return only 'good' runs), "bad"
 #'   (return only 'bad' runs), "all" (return all runs, but with a new
 #'   `probability` column which identifies 'bad' (0) and 'good' (1) runs.
@@ -20,6 +17,8 @@
 #' @param maxRuns Numeric. The cutoff of number of runs in a batch (see Details)
 #' @param ratio Numeric. The ratio cutoff of runs length 2 to number of runs in
 #'   a batch (see Details)
+#'   
+#' @inheritParams args
 #' 
 #' @details Runs are identified by the following: 
 #' - All runs with a length >= `maxLen` are **GOOD**
@@ -35,8 +34,8 @@
 #'
 #' @examples
 #' 
-#' #' # download and access data from project 176 in sql format
-#' # usename and password are both "motus.sample"
+#' # download and access data from project 176 in sql format
+#' # username and password are both "motus.sample"
 #' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
 #' 
 #' # OR use example sql file included in `motus`
@@ -47,7 +46,7 @@
 #' tbl_bad <- filterByActivity(sql.motus, return = "bad")
 #' tbl_all <- filterByActivity(sql.motus, return = "all")
 #' 
-#' 
+
 filterByActivity <- function(src, return = "good", view = "alltags",
                              minLen = 3, maxLen = 5, 
                              maxRuns = 100, ratio = 0.85) {

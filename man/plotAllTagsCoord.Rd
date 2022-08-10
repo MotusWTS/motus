@@ -12,21 +12,21 @@ plotAllTagsCoord(
 )
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltags", or a data.frame
-of detection data including at a minimum variables for recvDeployName,
-fullID, mfgID, date/time, latitude or longitude}
+\item{data}{a selected table from motus data, eg. "alltags", or a data.frame
+of detection data including at a minimum variables for \code{recvDeployName},
+\code{fullID}, \code{mfgID}, date/time, \code{latitude} or \code{longitude}}
 
 \item{coordinate}{column name from which to obtain location values, by
-default it is set to recvDeployLat}
+default it is set to \code{recvDeployLat}}
 
-\item{ts}{column for a date/time object as numeric or POSIXct, defaults to ts}
+\item{ts}{column for a date/time object as numeric or POSIXct, defaults to \code{ts}}
 
 \item{tagsPerPanel}{number of tags in each panel of the plot, by default this
 is 5}
 }
 \description{
 Plot latitude/longitude vs time (UTC rounded to the hour) for each tag using
-.motus detection data. Coordinate is by default taken from a receivers
+motus detection data. Coordinate is by default taken from a receivers
 deployment latitude in metadata.
 }
 \examples{

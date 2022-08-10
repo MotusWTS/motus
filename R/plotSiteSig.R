@@ -1,10 +1,12 @@
 #' Plot signal strength of all tags by a specified site
 #'
-#' Plot signal strength vs time for all tags detected at a specified site, coloured by antenna
+#' Plot signal strength vs time for all tags detected at a specified site,
+#' coloured by antenna
 #'
-#' @param data a selected table from .motus data, eg. "alltags", or a data.frame of detection data 
-#' including at a minimum variables for antBearing, ts, recvDeployLat, sig, fullID, recvDeployName
-#' @param recvDeployName name of recvDeployName
+#' @param data a selected table from .motus data, eg. "alltags", or a data.frame
+#'   of detection data including at a minimum variables for `antBearing`, `ts`,
+#'   `recvDeployLat`, `sig`, `fullID`, `recvDeployName`
+#' @param recvDeployName name of `recvDeployName`
 #' @export
 #'
 #' @examples

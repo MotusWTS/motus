@@ -1,4 +1,4 @@
-#' report on or claim ambiguous tag detections
+#' Report or claim ambiguous tag detections
 #'
 #' A detections is "ambiguous" if the motus tag finder could not tell
 #' which of several tags was detected, because they all produce the
@@ -14,79 +14,65 @@
 #'
 #' This function serves two purposes:
 #'
-#' \itemize{
-#' \item called with only a database dplyr::src, it reports the numbers
-#' of ambiguous detections and what they could represent.
-#' \item called with \code{id}, it lets you claim some of the ambiguities
-#' as your own tag, so that in subsequent processing, they will appear
-#' to be yours.
-#' }
+#' - called with only a database, it reports the numbers of ambiguous detections
+#' and what they could represent.
+#' - called with `id`, it lets you claim some of the ambiguities as your own
+#' tag, so that in subsequent processing, they will appear to be yours.
 #'
 #' This function does not (yet?) report your claim to motus.org
 #'
 #' WARNING: you cannot undo a claim within a copy of the database.  If
-#' unsure, copy the .motus file first, then run \code{clarify} on only
+#' unsure, copy the .motus file first, then run `clarify` on only
 #' one copy.
 #'
-#' @param s dplyr::src to the tag database, as returned by \code{tagme()}
 #'
-#' @param id if not missing, a vector of negative motus ambiguous tag IDs
-#' for which you wish to claim detections.  If missing, all tags are claimed
-#' over any period specified by \code{from} and \code{to}.
+#' @param id if not missing, a vector of negative motus ambiguous tag IDs for
+#'   which you wish to claim detections.  If missing, all tags are claimed over
+#'   any period specified by `from` and `to`.
+#' @param from Character. If not missing, the start time for your claim to
+#'   ambiguous detections of tag(s) `id`.  If missing, you are claiming all
+#'   detections up to `to`.  `from` can be a numeric timestamp, or a character
+#'   string compatible with `lubridate::ymd()`
+#' @param to Character. If not missing, the end time for your claim to ambiguous
+#'   detections of tag(s) `id`.  If missing, you are claiming all detections
+#'   after `from`. `to` can be a numeric timestamp, or a character string
+#'   compatible with `lubridate::ymd()`
+#' @param all.mine Logical. If TRUE, claim all ambiguous detections. In this
+#'   case, `id`, `from` and `to` are ignored.
+#'   
+#' @inheritParams args
+#' 
+#' @details 
 #'
-#' @param from if not missing, the start time for your claim to
-#'     ambiguous detections of tag(s) \code{id}.  If missing, you are
-#'     claiming all detections up to \code{to}.  \code{from} can be a
-#'     numeric timestamp, or a character string compatible with
-#'     \code{lubridate::ymd}
+#' If both `from` and `to` are missing, then all detections of ambiguous tag(s)
+#' `id` are claimed.
 #'
-#' @param to if not missing, the end time for your claim to ambiguous
-#'     detections of tag(s) \code{id}.  If missing, you are claiming
-#'     all detections after \code{from}.  \code{to} can be a numeric
-#'     timestamp, or a character string compatible with
-#'     \code{lubridate::ymd}
+#' Parameters `id`, `from`, and `to` are recycled to the length of the longest
+#' item.
 #'
-#' @param all.mine logical; if TRUE, claim all ambiguous detections.
-#' In this case, \code{id, from} and \code{to} are ignored.
-#'
-#' If both \code{from} and \code{to} are missing, then all detections of
-#' ambiguous tag(s) \code{id} are claimed.
-#'
-#' Parameters \code{id}, \code{from}, and \code{to} are recycled to the
-#' length of the longest item.
-#'
-#' When you claim an ambiguous tag \code{T} for a period, any runs of \code{T}
-#' which overlap that period at all are claimed entirely, even if they extend
-#' beyond the period; i.e. runs are not split.
+#' When you claim an ambiguous tag `T` for a period, any runs of `T` which
+#' overlap that period at all are claimed entirely, even if they extend beyond
+#' the period; i.e. runs are not split.
 #'
 #' @examples
-#' ## s = tagme(57) ## get a dplyr::src to the tag database for project 57
-#' ## clarify(s)  ## report on the ambiguous tag detections in s
-#' ## clarify(all.mine=TRUE) ## claim all ambiguous tag detections as mine
-#' ## clarify(id = -57) ## claim all detections of ambiguous tag -57 as mine
-#' ## clarify(id = c(-72, -88, -91), from=("2017-01-02"), to=("2017-05-06")) 
-#' ## claim all detections of ambiguous tags -72, -88, and -91 from
-#' ##   January 2 through May 6, 2017, as mine
-#'
-#' @return with no parameters, returns a summary data frame of ambiguous tag detections, with these columns
-#' \itemize{
-#' \item ambigID; integer: negative motus ambiguous tag ID, representing multiple possible real tags
-#' \item numHits; numeric: total number of detections of this ambiguity
-#' \item id1; integer: first possible motus ID of real tag that this detection might represent
-#' \item fullID1; character: fullID for first possible real tag, in "Project#MFGID:BI@NOMFREQ(M.MotusID)" format
-#' \item id2; integer: second possible motus ID of real tag that this detection might represent
-#' \item fullID2; character: fullID for second possible real tag, in same format as fullID1
-#' \item ...
-#' \item id6; integer: sixth possible motus ID of real tag that this detection might represent
-#' \item fullID6; character: fullID for sixth possible real tag, in same format as fullID1
-#' \item motusTagID; integer tag ID ambiguity was resolved to over some period
-#' \item tsStart; numeric: timestamp of start of period for this ambiguity resolution
-#' \item tsEnd; numeric: timestamp of end of period for this ambiguity resolution
+#' 
+#' \dontrun{
+#' s <- tagme(57)         # get the tag database for project 57
+#' clarify(s)             # report on the ambiguous tag detections in s
+#' clarify(all.mine = TRUE) # claim all ambiguous tag detections as mine
+#' clarify(id = -57)      # claim all detections of ambiguous tag -57 as mine
+#' 
+#' clarify(id = c(-72, -88, -91), from = "2017-01-02", to = "2017-05-06")
+#' # claim all detections of ambiguous tags -72, -88, and -91 from
+#' #   January 2 through May 6, 2017, as mine
 #' }
+#'
+#' @return With no parameters, returns a summary data frame of ambiguous tag
+#'   detections
 #'
 #' @export
 
-clarify <- function(s, id, from, to, all.mine = FALSE) {
+clarify <- function(src, id, from, to, all.mine = FALSE) {
   
     if (missing(id) && ! all.mine) {
         ## report on ambiguities

@@ -5,11 +5,11 @@
 #' (stored in the 'deprecated' table), and, optionally, removes these batches 
 #' from all tables that reference `batchID`s
 #'
-#' @param src SQLite connection (result of `tagme(XXX)` or
-#'   `DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")`)
 #' @param fetchOnly Logical. Only *fetch* batches that are deprecated. Don't 
 #'   remove deprecated batches from other tables.
 #' @param ask Logical. Ask for confirmation when removing deprecated batches
+#' 
+#' @inheritParams args
 #'
 #' @examples
 #' 
@@ -126,7 +126,7 @@ removeDeprecated <- function(src, ask) {
 
 removeByID <- function(src, t, id_type = "batchID", ids) {
   if(length(ids) > 0) {
-    if(t %in% DBI::dbListTables(src$con)) {
+    if(t %in% DBI::dbListTables(src)) {
       n <- DBI_Execute(src, 
                        "DELETE FROM {`t`} WHERE {`id_type`} IN (",
                        glue::glue_collapse(ids, sep = ', '), 

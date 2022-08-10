@@ -1,20 +1,21 @@
-#' update the metadata for receivers and tags in a motus tag detection database
+#' Update the metadata
+#' 
+#' Updates metadata for receivers and tags in a motus tag detection database
 #'
 #' @param src SQLite Connection
 #' @param tagIDs integer vector of tag IDs for which metadata should be
 #'   obtained; default: NULL, meaning obtain metadata for all tags with
 #'   detections in the database.  Negative values represent proxy tags for
-#'   groups of ambiguous real tags, and if present in \code{tagIDs} the groups
-#'   represented by them are fetched and stored in the DB's \code{tagAmbig}
-#'   table.
+#'   groups of ambiguous real tags, and if present in `tagIDs` the groups
+#'   represented by them are fetched and stored in the DB's `tagAmbig` table.
 #' @param deviceIDs integer vector of device IDs for which metadata should be
 #'   obtained; default: NULL, meaning obtain metadata for all receivers from
 #'   which the database has detections
 #' @param force logical scalar; if TRUE, re-obtain metadata even if we already
 #'   have it.
 #'
-#' @seealso \code{\link{tagme}}, which is intended for most users, and
-#'     indirectly calls this function.
+#' @seealso `tagme()`, which is intended for most users, and indirectly calls
+#'   this function.
 #'     
 #' @noRd
 

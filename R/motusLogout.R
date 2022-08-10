@@ -7,17 +7,17 @@
 #' @return TRUE.
 #'
 #' @details This function just resets these items to NULL:
-#' \itemize{
-#'    \item motus_vars$authToken
-#'    \item motus_vars$userLogin
-#'    \item motus_vars$userPassword
-#' }
+#' 
+#' - motus_vars$authToken
+#' - motus_vars$userLogin
+#' - motus_vars$userPassword
+#' 
 #' Due to their active bindings, subsequent calls to
 #' any functions that need them will prompt for a login.
 #'
 #' @export
 
-motusLogout = function () {
+motusLogout <- function () {
   sessionVariable(name = "authToken", srvAuth)
   sessionVariable("userLogin", "login name at motus.org")
   sessionVariable("userPassword", "password at motus.org")

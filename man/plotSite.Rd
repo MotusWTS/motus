@@ -15,7 +15,8 @@ antBearing, fullID, recvDeployName}
 sites.}
 }
 \description{
-Plot tag ID vs time for all tags detected by site, coloured by antenna bearing
+Plot tag ID vs time for all tags detected by site, coloured by antenna
+bearing
 }
 \examples{
 # You can use either a selected tbl from .motus eg. "alltagsGPS", or a

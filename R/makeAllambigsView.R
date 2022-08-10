@@ -11,14 +11,13 @@
 #'
 #' @return a dplyr::tbl which refers to the newly-created virtual table.
 #' By default, the columns in the virtual table are:
-#' \itemize{
-#'    \item{ambigID} unique ID linking ambiguous tag detections
-#'    \item{motusTagID} unique motus ID for this physical tag
-#' }
+#' 
+#' - `ambigID` unique ID linking ambiguous tag detections
+#' - `motusTagID` unique motus ID for this physical tag
 #'
 #' @note The new virtual table replaces any previous virtual table by the same
-#' name in \code{src}.  The virtual table is an SQL VIEW, which will persist in \code{src}
-#' across R sessions.
+#'   name in `src`.  The virtual table is an SQL VIEW, which will persist in
+#'   `src` across R sessions.
 #'
 #' @noRd
 #'
