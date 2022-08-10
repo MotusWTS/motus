@@ -13,8 +13,8 @@ srvMetadataForReceivers <- function(deviceIDs, verbose = FALSE) {
                 params = list(deviceIDs = I(deviceIDs)),
                 verbose = verbose)
   list(
-    recvDeps = as.data.frame(x$recvDeps),
-    antDeps = as.data.frame(x$antDeps),
-    projs = as.data.frame(x$projs)
+    recvDeps = to_df(x$recvDeps),
+    antDeps = to_df(x$antDeps),
+    projs = to_df(x$projs)
   )
 }

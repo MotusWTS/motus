@@ -17,9 +17,9 @@ srvRecvMetadataForProjects <- function(projectIDs, verbose = FALSE) {
                verbose = verbose)
 
   list(
-    recvDeps = as.data.frame(x$recvDeps),
-    antDeps = as.data.frame(x$antDeps),
-    nodeDeps = as.data.frame(x$nodeDeps),
-    projs = as.data.frame(x$projs)
+    recvDeps = to_df(x$recvDeps),
+    antDeps = to_df(x$antDeps),
+    nodeDeps = to_df(x$nodeDeps),
+    projs = to_df(x$projs)
   )
 }

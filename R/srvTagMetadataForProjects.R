@@ -17,10 +17,10 @@ srvTagMetadataForProjects <- function(projectIDs, verbose = FALSE) {
                verbose = verbose)
   
   list(
-    tags = as.data.frame(x$tags),
-    tagDeps = as.data.frame(x$tagDeps),
-    tagProps = as.data.frame(x$tagProps),
-    species = as.data.frame(x$species),
-    projs = as.data.frame(x$projs)
+    tags = to_df(x$tags),
+    tagDeps = to_df(x$tagDeps),
+    tagProps = to_df(x$tagProps),
+    species = to_df(x$species),
+    projs = to_df(x$projs)
   )
 }

@@ -11,5 +11,5 @@ srvTagsForAmbiguities <- function(ambigIDs, verbose = FALSE) {
   srvQuery(API = motus_vars$API_TAGS_FOR_AMBIGUITIES, 
            params = list(ambigIDs = I(ambigIDs)), 
            verbose = verbose) %>%
-    as.data.frame()
+    to_df()
 }

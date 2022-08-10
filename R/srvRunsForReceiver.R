@@ -10,5 +10,5 @@ srvRunsForReceiver <- function(batchID, runID = 0, verbose = FALSE) {
   srvQuery(API = motus_vars$API_RUNS_FOR_RECEIVER,
            params = list(batchID = batchID, runID = runID),
            verbose = verbose) %>%
-    as.data.frame()
+    to_df()
 }

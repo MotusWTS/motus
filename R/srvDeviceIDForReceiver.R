@@ -11,5 +11,5 @@ srvDeviceIDForReceiver <- function(serno, verbose = FALSE) {
   srvQuery(API = motus_vars$API_DEVICE_ID_FOR_RECEIVER, 
            params = list(serno = I(serno)),
            verbose = verbose) %>%
-    as.data.frame()
+    to_df()
 }

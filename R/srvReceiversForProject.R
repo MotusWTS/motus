@@ -11,5 +11,5 @@ srvReceiversForProject <- function(projectID, verbose = FALSE) {
   srvQuery(API = motus_vars$API_RECEIVERS_FOR_PROJECT, 
            params = list(projectID = projectID), 
            verbose = verbose) %>%
-    as.data.frame()
+    to_df()
 }

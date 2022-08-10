@@ -6,5 +6,5 @@
 
 srvSchema <- function(verbose = FALSE) {
   srvQuery(API = motus_vars$API_SCHEMA, verbose = verbose) %>%
-    as.data.frame()
+    to_df()
 }

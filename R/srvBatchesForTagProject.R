@@ -10,5 +10,5 @@ srvBatchesForTagProject <- function(projectID, batchID = 0, verbose = FALSE) {
   srvQuery(API = motus_vars$API_BATCHES_FOR_TAG_PROJECT, 
            params = list(projectID = projectID, batchID = batchID),
            verbose = verbose) %>%
-    as.data.frame()
+    to_df()
 }

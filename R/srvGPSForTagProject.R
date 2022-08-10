@@ -19,5 +19,5 @@ srvGPSForTagProject <- function(projectID, batchID, gpsID = 0, verbose = FALSE) 
            params = list(projectID = projectID, batchID = batchID, 
                          gpsID = gpsID),
            verbose = verbose) %>%
-    as.data.frame()
+    to_df()
 }

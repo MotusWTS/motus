@@ -130,3 +130,9 @@ disconnect <- function(src, warnings = FALSE) {
   if(!warnings) suppressWarnings(DBI::dbDisconnect(src))
   if(warnings) DBI::dbDisconnect(src)
 }
+
+
+# Faster than as.data.frame()
+to_df <- function(x) {
+  structure(x, class = "data.frame", row.names = seq(along = x[[1]]))
+}

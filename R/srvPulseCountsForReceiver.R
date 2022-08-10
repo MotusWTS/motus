@@ -18,5 +18,5 @@ srvPulseCountsForReceiver <- function(batchID, ant, hourBin = 0, verbose = FALSE
   srvQuery(API = motus_vars$API_PULSE_COUNTS_FOR_RECEIVER, 
            params = list(batchID = batchID, ant = ant, hourBin = hourBin),
            verbose = verbose) %>%
-    as.data.frame()
+    to_df()
 }

@@ -7,9 +7,8 @@
 #' @noRd
 
 srvGPSForAll <- function(gpsID = 0, verbose = FALSE) {
-  x <- srvQuery(API = motus_vars$API_GPS_FOR_RECIEVER_ALL,
-                params = list(gpsID = gpsID),
-                verbose = verbose)
-  
-  as.data.frame(x)
+  srvQuery(API = motus_vars$API_GPS_FOR_RECIEVER_ALL,
+           params = list(gpsID = gpsID),
+           verbose = verbose) %>%
+    to_df()
 }

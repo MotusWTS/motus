@@ -14,5 +14,5 @@ srvGPSForReceiver <- function(batchID, gpsID = 0, verbose = FALSE) {
   srvQuery(API = motus_vars$API_GPS_FOR_RECEIVER, 
            params = list(batchID = batchID, gpsID = gpsID),
            verbose = verbose) %>%
-    as.data.frame()
+    to_df()
 }

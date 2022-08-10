@@ -12,5 +12,5 @@ srvHitsForTagProject <- function(projectID, batchID, hitID = 0, verbose = FALSE)
            params = list(projectID = projectID, batchID = batchID, 
                          hitID = hitID),
            verbose = verbose) %>%
-    as.data.frame()
+    to_df()
 }

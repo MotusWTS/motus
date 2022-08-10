@@ -10,5 +10,5 @@ srvActivityForAll <- function(batchID = 0, ant = NULL, hourBin = NULL, verbose =
   srvQuery(API = motus_vars$API_ACTIVITY_FOR_ALL,
            params = list(batchID = batchID, ant = ant, hourBin = hourBin),
            verbose = verbose) %>%
-    as.data.frame()
+    to_df()
 }

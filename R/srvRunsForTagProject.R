@@ -13,5 +13,5 @@ srvRunsForTagProject <- function(projectID, batchID, runID = 0, verbose = FALSE)
                          batchID = batchID, 
                          runID = runID),
            verbose = verbose) %>%
-    as.data.frame()
+    to_df()
 }
