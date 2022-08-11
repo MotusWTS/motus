@@ -134,5 +134,5 @@ disconnect <- function(src, warnings = FALSE) {
 
 # Faster than as.data.frame()
 to_df <- function(x) {
-  structure(x, class = "data.frame", row.names = seq(along = x[[1]]))
+  structure(x, class = "data.frame", row.names = seq_len(lengths(x[1])))
 }

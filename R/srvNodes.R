@@ -24,8 +24,6 @@ srvNodes <- function(batchID, projectID = NULL, nodeDataID = 0, verbose = FALSE)
                                 nodeDataID = nodeDataID),
                   verbose = verbose)
   }
-  if(length(x) > 0) {
-    x <- to_df(x)
-  } else x <- data.frame()
-  x
+  
+  to_df(x)
 }
