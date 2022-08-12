@@ -50,7 +50,7 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
       t <- try(file.rename(from = n, to = new_name), silent = TRUE)
       
       # If renaming succeeds, create new database
-      if(class(t) != "try-error") {
+      if(!inherits(t, "try-error")) {
         src <- DBI::dbConnect(RSQLite::SQLite(), n)
         
       } else {  # If renaming fails, then try copying
@@ -70,8 +70,8 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
         }
         
         t <- try(file.copy(from = n, to = new_name), silent = TRUE)
-        if(class(t) == "try-error") stop("Unable to archive database", 
-                                         call. = FALSE)
+        if(inherits(t, "try-error")) stop("Unable to archive database", 
+                                          call. = FALSE)
       }
     } else {
       stop(new_name, " already exists", call. = FALSE)
@@ -81,7 +81,7 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
     temp_db <- try(
       DBI::dbConnect(RSQLite::SQLite(), dbname = new_name), 
       silent = TRUE)
-    if(class(temp_db) == "try-error" || 
+    if(inherits(temp_db, "try-error") || 
        length(DBI::dbListTables(temp_db)) == 0 || 
        orig_md5sum != tools::md5sum(new_name)) {
       stop("Database did not archive properly", call. = FALSE)

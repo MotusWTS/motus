@@ -58,7 +58,7 @@
 
 plotAllTagsCoord <- function(data, coordinate = "recvDeployLat", ts = "ts",
                              tagsPerPanel = 5) {
-  if(class(tagsPerPanel) != "numeric") {
+  if(!is.numeric(tagsPerPanel)) {
     stop('Numeric value required for "tagsPerPanel"', call. = FALSE)
   }
 

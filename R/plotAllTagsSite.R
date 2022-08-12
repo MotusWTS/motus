@@ -49,7 +49,7 @@
 
 ## grouping code taken from sensorgnome package
 plotAllTagsSite <- function(data, coordinate = "recvDeployLat", tagsPerPanel = 5){
-  if(class(tagsPerPanel) != "numeric") stop('Numeric value required for "tagsPerPanel"', call. = FALSE)
+  if(!is.numeric(tagsPerPanel)) stop('Numeric value required for "tagsPerPanel"', call. = FALSE)
   
   data <- data %>% 
     ## round times to the hour

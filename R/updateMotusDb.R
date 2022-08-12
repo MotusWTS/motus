@@ -57,7 +57,7 @@ updateMotusDb <- function(src, quiet = FALSE) {
         if (sql != "") {
 
 	        e <- try(DBI_ExecuteAll(src, sql), silent = TRUE)
-	        if(class(e) == "try-error") { # Deal with errors
+	        if(inherits(e, "try-error")) { # Deal with errors
 	          if(!stringr::str_detect(e, "duplicate column name: ")) {
 	            stop(e, call. = FALSE)
 	          }

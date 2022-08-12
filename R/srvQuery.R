@@ -63,18 +63,18 @@ srvQuery <- function(API, params = NULL, JSON = FALSE,
     }
     resp <- try(api_query(url, json, ua, timeout), silent = TRUE)
     
-    if(class(resp) == "try-error") {
+    if(inherits(resp, "try-error")) {
       if(stringr::str_detect(resp, "aborted by an application callback")){
         stop(resp, call. = FALSE)
       } else if (stringr::str_detect(resp, "Timeout was reached")) {
         message("The server did not respond within ", timeout, 
                 "s. Trying again...")
         resp <- try(api_query(url, json, ua, timeout), silent = TRUE)
-        if(class(resp) == "try-error" && 
+        if(inherits(resp, "try-error") && 
            stringr::str_detect(resp, "Timeout was reached")) {
           stop("The server is not responding, please try again later.", 
                call. = FALSE)
-        } else if(class(resp) == "try-error") {
+        } else if(inherits(resp, "try-error")) {
           stop(resp, call. = FALSE)
         }
       } else {
