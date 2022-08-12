@@ -80,6 +80,8 @@ v <- packageVersion("motus") # If dev version loaded with devtools::load_all()
 goodpractice::gp(checks = stringr::str_subset(goodpractice::all_checks(), 
                                               "rcmdcheck|covr|cyclocomp", negate = TRUE))
 
+# Quick check without examples or tests
+devtools::check(args = c("--no-tests", "--no-examples"))
 
 devtools::check(run_dont_test = TRUE)   # Local, run long-running examples
 devtools::check(run_dont_test = FALSE)

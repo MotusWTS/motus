@@ -50,7 +50,9 @@ newest version. If \code{FALSE} (default), user is prompted for action.}
 \code{?activity} for more details}
 
 \item{skipNodes}{Logical. Skip checking for and downloading \code{nodeData}? See
-\code{?nodeData} for more details
+\code{?nodeData} for more details}
+
+\item{skipDeprecated}{logical. Skip fetching list of deprecated batches
 stored in \code{deprecated}. See \code{?deprecateBatches()} for more details.}
 }
 \value{

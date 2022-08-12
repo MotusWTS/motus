@@ -13,3 +13,4 @@
 ^docs$
 ^_pkgdown_en\.yml$
 ^_pkgdown_fr\.yml$
+^pkgdown$
