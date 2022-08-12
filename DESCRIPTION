@@ -26,7 +26,8 @@ Depends:
     R (>= 3.2.0)
 Imports:
     DBI (>= 1.0.0),
-    dplyr (>= 0.8.1),
+    dbplyr (>= 2.1.1),
+    dplyr (>= 1.0.4),
     httr (>= 1.4.0),
     geosphere (>= 1.5.7),
     ggplot2 (>= 3.2.0),
@@ -42,7 +43,7 @@ Imports:
     RSQLite (>= 2.1.1),
     stringr (>= 1.4.0),
     tidyr (>= 0.8.3),
-    tidyselect (>= 1.0.0)
+    tidyselect (>= 1.0.0),
 Suggests:
     ggmap (>= 3.0.0),
     lutz (>= 0.3.1),
