@@ -4,7 +4,7 @@
 * Changed internal method for loading SQLite databases. Now uses standard method
   with `DBI::dbConnect()`. Previously, users applying `DBI` functions to 
   databases loaded with `tagme()` had to use the `$con` sub-element of the connection.
-  `$con` is no longer required (and will result in an error if used).
+  `$con`  should no longer be used (it will result in an error).
 
 ### Functions removed
 * Remove functions `safeSQL()`, `sqliteToRDS()`
