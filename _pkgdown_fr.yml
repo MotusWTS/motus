@@ -58,7 +58,6 @@ reference:
   - simSiteDet
   - sunRiseSet
   - timeToSunriset
-  - sqliteToRDS
   - getMotusDBSrc
   
 - title: Plotting
