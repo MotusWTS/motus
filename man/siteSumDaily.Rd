@@ -9,7 +9,7 @@ siteSumDaily(data, units = "hours")
 \arguments{
 \item{data}{a selected table from .motus data, eg. "alltagsGPS", or a
 data.frame of detection data including at a minimum variables for
-motusTagID, sig, recvDeployName, ts}
+\code{motusTagID}, \code{sig}, \code{recvDeployName}, \code{ts}}
 
 \item{units}{units to display time difference, defaults to "hours", options
 include "secs", "mins", "hours", "days", "weeks"}
@@ -30,8 +30,8 @@ a data.frame with these columns:
 \description{
 Creates a summary of the first and last daily detection at a site, the length
 of time between first and last detection, the number of tags, and the total
-number of detections at a site for each day. Same as siteSum, but daily by
-site.
+number of detections at a site for each day. Same as \code{siteSum()}, but daily
+by site.
 }
 \examples{
 # You can use either a selected tbl from .motus eg. "alltagsGPS", or a

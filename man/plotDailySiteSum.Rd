@@ -9,13 +9,13 @@ plotDailySiteSum(data, recvDeployName)
 \arguments{
 \item{data}{a selected table from .motus data, eg. "alltagsGPS", or a
 data.frame of detection data including at a minimum variables for
-motusTagID, sig, recvDeployName, ts}
+\code{motusTagID}, \code{sig}, \code{recvDeployName}, \code{ts}}
 
 \item{recvDeployName}{name of site to plot}
 }
 \description{
 Plots total number of detections across all tags, and total number of tags
-detected per day for a specified site.  Depends on siteSumDaily function.
+detected per day for a specified site.  Depends on \code{siteSumDaily()}.
 }
 \examples{
 # You can use either a selected tbl from .motus eg. "alltagsGPS", or a

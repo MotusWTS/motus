@@ -7,9 +7,10 @@
 gpsAll(src, resume = TRUE)
 }
 \arguments{
-\item{src}{src_sqlite object representing the database}
+\item{src}{SQLite connection (result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")})}
 
-\item{resume}{Logical. Resume a download? Otherwise the \code{activity} table is
+\item{resume}{Logical. Resume a download? Otherwise the table is
 removed and the download is started from the beginning.}
 }
 \description{
@@ -17,14 +18,6 @@ Download or resume a download of the \code{gpsAll} table in an existing Motus
 database. Batch activity refers to the number of hits detected during a given
 batch. Batches with large numbers of hits may indicate interference and thus
 unreliable hits.
-}
-\details{
-This function is automatically run by the \code{\link[=tagme]{tagme()}} function with
-\code{resume = TRUE}.
-
-If an \code{activity} table doesn't exist, it will be created prior to
-downloading. If there is an existing \code{activity} table, this will update the
-records.
 }
 \examples{
 

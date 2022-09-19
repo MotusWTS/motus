@@ -1,4 +1,3 @@
-
 #' Filter `alltags` by `activity`
 #' 
 #' The `activity` table is used to identify batches with too much noise.
@@ -6,7 +5,6 @@
 #' identified in the `alltags` view with the column `probability`. **No changes
 #' to the database are made.**
 #'
-#' @param src src_sqlite object representing the database
 #' @param return Character. One of "good" (return only 'good' runs), "bad"
 #'   (return only 'bad' runs), "all" (return all runs, but with a new
 #'   `probability` column which identifies 'bad' (0) and 'good' (1) runs.
@@ -19,6 +17,8 @@
 #' @param maxRuns Numeric. The cutoff of number of runs in a batch (see Details)
 #' @param ratio Numeric. The ratio cutoff of runs length 2 to number of runs in
 #'   a batch (see Details)
+#'   
+#' @inheritParams args
 #' 
 #' @details Runs are identified by the following: 
 #' - All runs with a length >= `maxLen` are **GOOD**
@@ -34,8 +34,8 @@
 #'
 #' @examples
 #' 
-#' #' # download and access data from project 176 in sql format
-#' # usename and password are both "motus.sample"
+#' # download and access data from project 176 in sql format
+#' # username and password are both "motus.sample"
 #' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
 #' 
 #' # OR use example sql file included in `motus`
@@ -46,7 +46,7 @@
 #' tbl_bad <- filterByActivity(sql.motus, return = "bad")
 #' tbl_all <- filterByActivity(sql.motus, return = "all")
 #' 
-#' 
+
 filterByActivity <- function(src, return = "good", view = "alltags",
                              minLen = 3, maxLen = 5, 
                              maxRuns = 100, ratio = 0.85) {
@@ -66,19 +66,19 @@ filterByActivity <- function(src, return = "good", view = "alltags",
   if(ratio < 0 | ratio > 1) stop("'ratio' must be a value between 0 and 1", call. = FALSE)
   if(minLen > maxLen) stop("'minLen' must be smaller than or equal to 'maxLen'", call. = FALSE)
   
-  t <- DBI::dbListTables(src$con)
+  t <- DBI::dbListTables(src)
   
   if(any(!c("runs", "activity", view) %in% t)) {
     stop(paste0("'src' must contain at least tables 'activity', '", view, 
                 "', and 'runs'"), call. = FALSE)
   }
   
-  tbl_runs <- dplyr::tbl(src$con, "runs") %>% 
+  tbl_runs <- dplyr::tbl(src, "runs") %>% 
     dplyr::mutate(hourBin = floor(.data$tsBegin/3600))
   
-  tbl_activity <- dplyr::tbl(src$con, "activity")
+  tbl_activity <- dplyr::tbl(src, "activity")
   
-  if(nrow(DBI::dbGetQuery(src$con, "SELECT * FROM activity LIMIT 1")) < 1) {
+  if(nrow(DBI_Query(src, "SELECT * FROM activity LIMIT 1")) < 1) {
     stop("'activity' table is empty, cannot filter by activity", call. = FALSE)
   }
 
@@ -95,12 +95,12 @@ filterByActivity <- function(src, return = "good", view = "alltags",
     dplyr::select("runID")
   
   # Label "bad" alltags 
-  tbl_bad <- dplyr::tbl(src$con, view) %>%
+  tbl_bad <- dplyr::tbl(src, view) %>%
     dplyr::left_join(tbl_bad, ., by = "runID") %>%
     dplyr::mutate(probability = 0)
 
   # All others are "good"
-  tbl_good <- dplyr::tbl(src$con, view) %>%
+  tbl_good <- dplyr::tbl(src, view) %>%
     dplyr::anti_join(tbl_bad, by = "runID") %>%
     dplyr::mutate(probability = 1)
 

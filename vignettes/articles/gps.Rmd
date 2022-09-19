@@ -8,7 +8,6 @@ if(!dir.exists("data")) dir.create("data")
 file.copy(system.file("extdata", "gps_sample.motus", package = "motus"),
           "./data/")
 gps_tags <- DBI::dbConnect(RSQLite::SQLite(), "./data/gps_sample.motus")
-gps_tags <- dbplyr::src_dbi(con = gps_tags)
 
 # Get and update sample data to avoid messages later
 sql.motus <- motus:::get_sample_data()

@@ -7,18 +7,22 @@
 createRunsFilter(src, filterName, motusProjID = NA, descr = NA, update = FALSE)
 }
 \arguments{
-\item{src}{dplyr sqlite src, as returned by \code{dplyr::src_sqlite()}}
+\item{src}{SQLite connection (result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")})}
 
-\item{filterName}{unique name given to the filter}
+\item{filterName}{Character. Unique name given to the filter}
 
-\item{motusProjID}{optional project ID attached to the filter in order to share with other users of the same project.}
+\item{motusProjID}{Character. Optional project ID attached to the filter in
+order to share with other users of the same project.}
 
-\item{descr}{optional filter description detailing what the filter is meant to do}
+\item{descr}{Character. Optional filter description detailing what the filter
+is meant to do}
 
-\item{update}{whether the filter record gets updated when a filter with the same name already exists.}
+\item{update}{Logical. Whether the filter record gets updated when a filter
+with the same name already exists.}
 }
 \value{
-an integer filterID
+an integer \code{filterID}
 }
 \description{
 Create a new filter records that can be applied to runs

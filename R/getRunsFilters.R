@@ -1,20 +1,17 @@
-#' Find runFilters
+#' Get runFilters
 #' 
-#' Returns a dataframe of the runFilters records matching a filter name (and
+#' Returns a dataframe of the `runFilters` records matching a filter name (and
 #' optionally a project ID) stored in the local database.
 #'
-#' @param src dplyr sqlite src, as returned by `dplyr::src_sqlite()`
-#' @param filterName unique name given to the filter 
-#' @param motusProjID optional project ID attached to the filter in order to
-#'   share with other users of the same project.
-#'
-#' @return a dplyr sqlite object 
+#' @inheritParams args
+#' 
+#' @return a database connection to `src`
 #'
 #' @export
 
-getRunsFilters = function(src, filterName, motusProjID=NA) {
+getRunsFilters <- function(src, filterName, motusProjID = NA) {
   
-  id = getRunsFilterID(src, filterName, motusProjID)
+  id <- getRunsFilterID(src, filterName, motusProjID)
   if (!is.null(id)) {
     id <- dplyr::tbl(src, "runsFilters") %>% 
       dplyr::filter(.data$filterID == id)

@@ -14,14 +14,14 @@
 #' @export
 #'
 #' @return a data.frame with these columns:
-#' \itemize{
-#' \item site: site
-#' \item first_ts: time of first detection at specified site
-#' \item last_ts: time of last detection at specified site
-#' \item tot_ts: total amount of time between first and last detection at specified site, output in specified unit (defaults to "hours")
-#' \item num.tags: total number of unique tags detected at specified site
-#' \item num.det: total number of tag detections at specified site
-#' }
+#' 
+#' - site: site
+#' - first_ts: time of first detection at specified site
+#' - last_ts: time of last detection at specified site
+#' - tot_ts: total amount of time between first and last detection at specified site, output in specified unit (defaults to "hours")
+#' - num.tags: total number of unique tags detected at specified site
+#' - num.det: total number of tag detections at specified site
+#' 
 #'
 #' @examples
 #' # You can use either a selected tbl from .motus eg. "alltagsGPS", or a
@@ -95,5 +95,5 @@ siteSum <- function(data, units = "hours"){
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)) + ## make x-axis labels on a 45 deg angle to read more easily
     ggplot2::labs(title = "Total number of tags detected per site", x= "Site", y = "Number of tags") ## changes x- and y-axis label
   gridExtra::grid.arrange(detections, tags, nrow = 2)
-  return(data)
+  data
 }

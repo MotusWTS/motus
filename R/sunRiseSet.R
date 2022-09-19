@@ -6,12 +6,13 @@
 #' @param data a selected table from .motus detection data, eg. "alltags", or a
 #'   data.frame of detection data including at a minimum variables for
 #'   date/time, latitude, and longitude
-#' @param lat variable with latitude values, defaults to recvDeployLat
-#' @param lon variable with longitude values, defaults to recvDeployLon
+#' @param lat variable with latitude values, defaults to `recvDeployLat`
+#' @param lon variable with longitude values, defaults to `recvDeployLon`
 #' @param ts variable with time in UTC as numeric or POSIXct, defaults to `ts`
 #'
 #' @return the original dataframe provided, with the following additional
 #'   columns:
+#'   
 #' - sunrise: sunrise time for the date and location provided by `ts` and lat/lon
 #' per row
 #' - sunset: sunset time for the date and location provided by `ts` and lat/lon
@@ -52,7 +53,7 @@
 #' @export
 
 sunRiseSet <- function(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = "ts"){
-  if("src_SQLiteConnection" %in% class(data)) {
+  if(inherits(data, "SQLiteConnection")) {
     message("'data' is a complete motus data base, using 'alltags' view")
     data <- dplyr::tbl(data, "alltags")
   }

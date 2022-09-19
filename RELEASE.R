@@ -72,10 +72,17 @@ spelling::update_wordlist() # All remaining words will be added to the ignore WO
 ## Finalize package version
 # - Update DESCRIPTION - package version
 # - Update .onLoad - API version
-v <- "5.0.1"
+v <- "6.0.0"
 v <- packageVersion("motus") # If dev version loaded with devtools::load_all()
 
 ## Checks
+
+goodpractice::gp(checks = stringr::str_subset(goodpractice::all_checks(), 
+                                              "rcmdcheck|covr|cyclocomp", negate = TRUE))
+
+# Quick check without examples or tests
+devtools::check(args = c("--no-tests", "--no-examples"))
+
 devtools::check(run_dont_test = TRUE)   # Local, run long-running examples
 devtools::check(run_dont_test = FALSE)
 
@@ -115,11 +122,25 @@ file.rename("pkgdown/index.md", "pkgdown/README_fr.md")
 file.rename("_pkgdown.yml", "_pkgdown_fr.yml")
 
 
-
-
-
 # Check/update URLS
 urlchecker::url_check()
+
+
+## Push to GitHub
+
+## Push to master branch (pull request, etc.)
+
+## Update API package version to current (only for master)
+local_auth(); srvQuery(API = "custom/update_pkg_version", params = list(pkgVersion = "5.0.1"))
+
+
+## Actually release it (manually)
+# - Create signed release on github
+# - Add NEWS to release details
+
+
+
+
 
 ## Note: non-ASCII files found
 # Find them
@@ -134,11 +155,4 @@ for(i in 1:nrow(problems)) {
 problems <- dplyr::mutate(problems, yes = purrr::map_lgl(problem, ~length(na.omit(.)) > 0)) %>%
   dplyr::filter(yes)
 
-## Push to GitHub
 
-## Push to master branch (pull request, etc.)
-
-
-## Actually release it (manually)
-# - Create signed release on github
-# - Add NEWS to release details

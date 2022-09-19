@@ -2,23 +2,23 @@
 % Please edit documentation in R/tellme.R
 \name{tellme}
 \alias{tellme}
-\title{report how much new data motus has for a tag detection database}
+\title{Report how much new data motus has for a tag detection database}
 \usage{
 tellme(projRecv, new = FALSE, dir = getwd())
 }
 \arguments{
-\item{projRecv}{integer scalar project code from motus.org, \emph{or}
-character scalar receiver serial number}
+\item{projRecv}{Numeric project code from motus.org, \emph{or} character receiver
+serial number.}
 
-\item{new}{logical scalar: is this a new database?  Default: FALSE
-You have to specify \code{new=TRUE} if you want a new local copy of the
-database to be created.  Otherwise, \code{tellme()} assumes the database
-already exists, and will stop with an error if it cannot find it
-in the current directory.  This is mainly to prevent inadvertent
-downloads of large amounts of data that you already have!}
+\item{new}{Logical. Is this a new database?  Default: FALSE You have to
+specify \code{new = TRUE} if you want a new local copy of the database to be
+created. Otherwise, this function assumes the database already exists,
+and will stop with an error if it cannot find it in the current directory.
+This is mainly to prevent inadvertent downloads of large amounts of data
+that you already have!}
 
-\item{dir}{path to the folder where you are storing databases
-Default: the current directory; i.e. \code{getwd()}}
+\item{dir}{Character. Path to the folder where you are storing databases
+Defaults to current directory; i.e. \code{getwd()}.}
 }
 \value{
 a named list with these items:
@@ -27,20 +27,16 @@ a named list with these items:
 \item numRuns: number of runs of tags detections with new data
 \item numHits: number of new detections
 \item numGPS: number of new GPS fixes covering the new detections
-\item numBytes: estimated size of download, in bytes.  This is
-an estimate of the \emph{uncompressed} size, but
-data are gz-compressed for transfer, so the number of bytes
-you have to download is typically going to be smaller than
-this number by a factor of 2 or more.
+\item numBytes: estimated size of download, in bytes.  This is an estimate of the
+\emph{uncompressed} size, but data are gz-compressed for transfer, so the number
+of bytes you have to download is typically going to be smaller than this
+number by a factor of 2 or more.
 }
 }
 \description{
 "new" means data not already in your local database.
 }
 \note{
-if you specify \code{new=TRUE} and the database does not already exist,
-it will be created (but empty).
-}
-\seealso{
-\code{\link{tellme}}, which is a synonym for \code{tagme(..., countOnly=TRUE)}
+if you specify \code{new = TRUE} and the database does not already exist, it
+will be created (but empty).
 }

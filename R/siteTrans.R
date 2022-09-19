@@ -9,29 +9,30 @@
 #' rate of movement between detections, and bearing between site pairs.
 #'
 #' @param data a selected table from .motus data, eg. "alltagsGPS", or a
-#'   data.frame of detection data including at a minimum variables for ts,
-#'   motusTagID, tagDeployID, recvDeployName, and a latitude/longitude
+#'   data.frame of detection data including at a minimum variables for `ts`,
+#'   `motusTagID`, `tagDeployID`, `recvDeployName`, and a latitude/longitude
 #' @param latCoord a variable with numeric latitude values, defaults to
-#'   recvDeployLat
+#'   `recvDeployLat`
 #' @param lonCoord a variable with numeric longitude values, defaults to
-#'   recvDeployLon
+#'   `recvDeployLon`
 #'
 #' @return a data.frame with these columns:
-#' \itemize{
-#' \item fullID: fullID of Motus registered tag
-#' \item ts.x: time of last detection of tag at site.x ("departure" time)
-#' \item lat.x: latitude of site.x
-#' \item lon.x: longitude of site.x
-#' \item site.x: first site in transition pair (the "departure" site)
-#' \item ts.y: time of first detection of tag at site.y ("arrival" time)
-#' \item lat.y: latitude of site.y
-#' \item lon.y: longitude of site.y
-#' \item site.y: second site in transition pair (the "departure" site)
-#' \item tot_ts: length of time between ts.x and ts.y (in seconds)
-#' \item dist: total straight line distance between site.x and site.y (in metres), see latLonDist function in sensorgnome package for details
-#' \item rate: overall rate of movement (tot_ts/dist), in metres/second
-#' \item bearing: bearing between first and last detection sites, see bearing function in geosphere package for more details
-#'}
+#' 
+#' - fullID: fullID of Motus registered tag
+#' - ts.x: time of last detection of tag at site.x ("departure" time)
+#' - lat.x: latitude of site.x
+#' - lon.x: longitude of site.x
+#' - site.x: first site in transition pair (the "departure" site)
+#' - ts.y: time of first detection of tag at site.y ("arrival" time)
+#' - lat.y: latitude of site.y
+#' - lon.y: longitude of site.y
+#' - site.y: second site in transition pair (the "departure" site)
+#' - tot_ts: length of time between ts.x and ts.y (in seconds)
+#' - dist: total straight line distance between site.x and site.y (in metres),
+#'   see `sensorgnome::latLonDist()` for details
+#' - rate: overall rate of movement (tot_ts/dist), in metres/second
+#' - bearing: bearing between first and last detection sites, see bearing
+#'   function in geosphere package for more details
 #'
 #' @export
 #'
@@ -66,9 +67,9 @@
 
 siteTrans <- function(data, latCoord = "recvDeployLat", lonCoord = "recvDeployLon"){
   tmp <- if(any(class(data) == "data.frame")){
-    tmp = data
+    tmp <- data
   } else {
-    tmp = data %>% 
+    tmp <- data %>% 
       dplyr::collect() %>% 
       as.data.frame()
   }

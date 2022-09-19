@@ -1,30 +1,16 @@
-#' get the hits for a tag project from the data server
+#' Get the hits for a tag project
 #'
-#' @param projectID integer scalar motus project ID
-#' @param batchID integer scalar motus batch ID
-#' @param hitID integer scalar ID of latest hit already obtained.
-#' Default: 0, meaning none.
-#'
-#' @return data.frame with these columns:
-#' \itemize{
-#'   \item hitID
-#'   \item runID
-#'   \item batchID
-#'   \item ts
-#'   \item sig
-#'   \item sigSD
-#'   \item noise
-#'   \item freq
-#'   \item freqSD
-#'   \item slop
-#'   \item burstSlop
-#' }
+#' @param projectID Integer. Motus project ID
+#' @param batchID Integer. Batch ID
+#' @param hitID Integer. Hit ID of latest hit already obtained. Default: 0,
+#'   meaning none.
 #'
 #' @noRd
 
-srvHitsForTagProject = function(projectID, batchID, hitID=0, verbose = FALSE) {
-    x = srvQuery(API=motus_vars$API_HITS_FOR_TAG_PROJECT, 
-                 params=list(projectID=projectID, batchID=batchID, hitID=hitID),
-                 verbose = verbose)
-    return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
+srvHitsForTagProject <- function(projectID, batchID, hitID = 0, verbose = FALSE) {
+  srvQuery(API = motus_vars$API_HITS_FOR_TAG_PROJECT, 
+           params = list(projectID = projectID, batchID = batchID, 
+                         hitID = hitID),
+           verbose = verbose) %>%
+    to_df()
 }

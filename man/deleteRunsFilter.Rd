@@ -2,23 +2,25 @@
 % Please edit documentation in R/deleteRunsFilter.R
 \name{deleteRunsFilter}
 \alias{deleteRunsFilter}
-\title{Delete a filter  matching a filter name (and optionally a project ID)}
+\title{Delete a filter}
 \usage{
 deleteRunsFilter(src, filterName, motusProjID = NA, clearOnly = FALSE)
 }
 \arguments{
-\item{src}{dplyr sqlite src, as returned by \code{dplyr::src_sqlite()}}
+\item{src}{SQLite connection (result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")})}
 
-\item{filterName}{unique name given to the filter}
+\item{filterName}{Character. Unique name given to the filter}
 
-\item{motusProjID}{optional project ID attached to the filter in order to share with other users of the same project.}
+\item{motusProjID}{Character. Optional project ID attached to the filter in
+order to share with other users of the same project.}
 
-\item{clearOnly}{boolean. When true, only remove the probability records associated with the filter,
-but retain the filter itself}
+\item{clearOnly}{Logical. When true, only remove the probability records
+associated with the filter, but retain the filter itself}
 }
 \value{
-the integer filterID of the filter deleted
+the integer \code{filterID} of the filter deleted
 }
 \description{
-Delete a filter  matching a filter name (and optionally a project ID)
+Deletes a filter by name or project ID.
 }

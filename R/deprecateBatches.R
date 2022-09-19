@@ -5,10 +5,11 @@
 #' (stored in the 'deprecated' table), and, optionally, removes these batches 
 #' from all tables that reference `batchID`s
 #'
-#' @param src src_sqlite object representing the database
 #' @param fetchOnly Logical. Only *fetch* batches that are deprecated. Don't 
 #'   remove deprecated batches from other tables.
 #' @param ask Logical. Ask for confirmation when removing deprecated batches
+#' 
+#' @inheritParams args
 #'
 #' @examples
 #' 
@@ -74,7 +75,7 @@ fetchDeprecated <- function(src, verbose = FALSE) {
   } else new <- data.frame()
 
   # Add to deprecated table
-  dbInsertOrReplace(src$con, "deprecated", new)
+  dbInsertOrReplace(src, "deprecated", new)
   message("Total deprecated batches: ", nrow(b), 
           "\nNew deprecated batches: ", nrow(new))
   
@@ -99,7 +100,7 @@ removeDeprecated <- function(src, ask) {
       choices = c("TRUE" = "Yes", "FALSE" = "No"), 
       title = glue::glue(
         "You are about to permanently delete up to {length(d)} deprecated ", 
-        "batches from\n{src$con@dbname}\nContinue?")) == 1
+        "batches from\n{src@dbname}\nContinue?")) == 1
     if(!continue) stop("Aborting, leaving deprecated batches as is", 
                        call. = FALSE)
   }
@@ -116,8 +117,8 @@ removeDeprecated <- function(src, ask) {
   removeByID(src, t = "projBatch", ids = d)
   removeByID(src, t = "batches", ids = d)
   
-  dbInsertOrReplace(src$con, "deprecated", deprecated)
-  DBI::dbExecute(src$con, "VACUUM")
+  dbInsertOrReplace(src, "deprecated", deprecated)
+  DBI_Execute(src, "VACUUM")
   message("Total deprecated batches removed: ", length(d))
   
   src
@@ -125,11 +126,13 @@ removeDeprecated <- function(src, ask) {
 
 removeByID <- function(src, t, id_type = "batchID", ids) {
   if(length(ids) > 0) {
-    n <- glue::glue("DELETE FROM {t} WHERE {id_type} IN (",
-               glue::glue_collapse(ids, sep = ', '), 
-               ")") %>%
-      DBI::dbExecute(src$con, statement = .)
-    if(n > 0) message(glue::glue("  {n} deprecated rows deleted from {t}"))
+    if(t %in% DBI::dbListTables(src)) {
+      n <- DBI_Execute(src, 
+                       "DELETE FROM {`t`} WHERE {`id_type`} IN (",
+                       glue::glue_collapse(ids, sep = ', '), 
+                       ")")
+      if(n > 0) message(msg_fmt("  {n} deprecated rows deleted from {t}"))
+    }
   }
 }
 

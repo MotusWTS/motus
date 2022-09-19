@@ -1,17 +1,18 @@
 #' Plot all tag detections by latitude or longitude
 #'
 #' Plot latitude/longitude vs time (UTC rounded to the hour) for each tag using
-#' .motus detection data. Coordinate is by default taken from a receivers
+#' motus detection data. Coordinate is by default taken from a receivers
 #' deployment latitude in metadata.
 #'
-#' @param data a selected table from .motus data, eg. "alltags", or a data.frame
-#'   of detection data including at a minimum variables for recvDeployName,
-#'   fullID, mfgID, date/time, latitude or longitude
+#' @param data a selected table from motus data, eg. "alltags", or a data.frame
+#'   of detection data including at a minimum variables for `recvDeployName`,
+#'   `fullID`, `mfgID`, date/time, `latitude` or `longitude`
 #' @param tagsPerPanel number of tags in each panel of the plot, by default this
 #'   is 5
 #' @param coordinate column name from which to obtain location values, by
-#'   default it is set to recvDeployLat
-#' @param ts column for a date/time object as numeric or POSIXct, defaults to ts
+#'   default it is set to `recvDeployLat`
+#' @param ts column for a date/time object as numeric or POSIXct, defaults to `ts`
+#' 
 #' @export
 #'
 #' @examples
@@ -55,8 +56,11 @@
 
 ## grouping code taken from sensorgnome package
 
-plotAllTagsCoord <- function(data, coordinate = "recvDeployLat", ts = "ts", tagsPerPanel = 5) {
-  if(class(tagsPerPanel) != "numeric") stop('Numeric value required for "tagsPerPanel"', call. = FALSE)
+plotAllTagsCoord <- function(data, coordinate = "recvDeployLat", ts = "ts",
+                             tagsPerPanel = 5) {
+  if(!is.numeric(tagsPerPanel)) {
+    stop('Numeric value required for "tagsPerPanel"', call. = FALSE)
+  }
 
   data <- data %>%
     dplyr::mutate(hour = 3600*round(as.numeric(.data$ts)/3600, 0)) %>% ## round times to the hour

@@ -1,3 +1,23 @@
+
+# motus 6.0.0
+### Potential breaking change
+* Changed internal method for loading SQLite databases. Now uses standard method
+  with `DBI::dbConnect()`. Previously, users applying `DBI` functions to 
+  databases loaded with `tagme()` had to use the `$con` sub-element of the connection.
+  `$con`  should no longer be used (it will result in an error).
+
+### Functions removed
+* Remove functions `safeSQL()`, `sqliteToRDS()`
+
+### Bug fixes
+* fixed bug in `deprecateBatches()` which caused an error when removing deprecated
+batches from receivers.
+
+### Other
+* Updated internal code for logging messages
+* Now use simple wrappers for `DBI::dbExecute()` and `DBI::dbGetQuery()`, using
+  `glue::glue_sql()` to help construct statements.
+
 # motus 5.0.1
 ### Bug fixes
 * fixed bug in `deprecateBatches()` which caused an error when there were no batches to deprecate.

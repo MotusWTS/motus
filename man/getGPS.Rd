@@ -7,9 +7,10 @@
 getGPS(src, data = NULL, by = "daily", cutoff = NULL, keepAll = FALSE)
 }
 \arguments{
-\item{src}{src_sqlite object representing the motus database}
+\item{src}{SQLite connection (result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")})}
 
-\item{data}{src_sqlite object or data.frame. Optional subset of the \code{alltags}
+\item{data}{SQLite connection or data.frame. Optional subset of the \code{alltags}
 view. Must have \code{ts}, \code{batchID} and \code{hitID} at the minimum.}
 
 \item{by}{Numeric/Character. Either the time in minutes over which to join GPS

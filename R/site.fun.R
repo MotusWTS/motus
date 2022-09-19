@@ -12,6 +12,5 @@ site.fun <- function(df) {
   out.df.y <- df[2:length(df$recvDeployName), ]
   names(out.df.y) <- paste(names(df), "y", sep=".")
   out.df <- cbind(out.df.x, out.df.y)
-  out.df <- dplyr::filter(out.df, ((.data$recvDeployName.x != .data$recvDeployName.y)))
-  return(out.df)
+  dplyr::filter(out.df, (.data$recvDeployName.x != .data$recvDeployName.y))
 }

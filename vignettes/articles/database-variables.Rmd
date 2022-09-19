@@ -39,8 +39,8 @@ This table lists all variables present in .motus SQLite databases.
 
 
 ```{r, echo = FALSE}
-t <- tibble(table = DBI::dbListTables(tags$con)) %>%
-  mutate(name_table = map(table, ~DBI::dbListFields(tags$con, .))) %>%
+t <- tibble(table = DBI::dbListTables(tags)) %>%
+  mutate(name_table = map(table, ~DBI::dbListFields(tags, .))) %>%
   unnest(name_table)
 
 v <- system.file("extdata/fields_glossary.csv", package = "motus") %>%

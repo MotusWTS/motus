@@ -5,16 +5,7 @@
 #' batch. Batches with large numbers of hits may indicate interference and thus
 #' unreliable hits.
 #'
-#' @param src src_sqlite object representing the database
-#' @param resume Logical. Resume a download? Otherwise the `activity` table is
-#'   removed and the download is started from the beginning.
-#' 
-#' @details This function is automatically run by the [tagme()] function with
-#'   `resume = TRUE`. 
-#'   
-#'   If an `activity` table doesn't exist, it will be created prior to
-#'   downloading. If there is an existing `activity` table, this will update the
-#'   records.
+#' @inheritParams args
 #'
 #' @examples
 #' 

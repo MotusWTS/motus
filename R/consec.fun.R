@@ -1,7 +1,7 @@
-#' Create dataframe for siteTrans function
+#' Create dataframe for `siteTrans()`
 #'
-#' @param df dataframe of Motus detection data containing at a minimum fullID,
-#'   ts, lat, lon
+#' @param df Data.frame. Motus detection data containing at a minimum `fullID`,
+#'   `ts`, `lat`, `lon`
 #'
 #' @noRd
 
@@ -15,7 +15,6 @@ consec.fun <- function(df) {
   transitions <- which(diff(run) != 0)
   transitions <- c(transitions, transitions+1, length(df$recvDeployName))
   out.df <- df[transitions,]
-  out.df <- out.df[order(out.df$ts),]
-  return(out.df)
+  out.df[order(out.df$ts),]
 }
 

@@ -17,27 +17,28 @@ plotRouteMap(
 \arguments{
 \item{data}{a .motus sql file}
 
-\item{zoom}{integer.  Values between 3 and 21, 3 being continent level, 10 being city-scale}
+\item{zoom}{Integer.  Values between 3 and 21, 3 being continent level, 10
+being city-scale}
 
-\item{lat}{numeric vector. Top and bottom latitude bounds. If NULL (default)
+\item{lat}{Numeric vector. Top and bottom latitude bounds. If NULL (default)
 this is calculated from the data}
 
-\item{lon}{numeric vector. Left and right longitude bounds. If NULL
+\item{lon}{Numeric vector. Left and right longitude bounds. If NULL
 (default) this is calculated from the data}
 
-\item{maptype}{map type to display, can be: "terrain" , "toner",
-"watercolor", or any other option available to
-\code{\link[ggmap]{get_stamenmap}()}.}
+\item{maptype}{Character. Map type to display, can be: "terrain" , "toner",
+"watercolor", or any other option available to \code{ggmap::get_stamenmap()}}
 
-\item{recvStart}{start date for date range of active receivers. If NULL uses
-the full data range}
+\item{recvStart}{Character. Start date for date range of active receivers. If
+\code{NULL} uses the full data range}
 
-\item{recvEnd}{end date for date range of active receivers. If NULL uses the
-full data range}
+\item{recvEnd}{Character. End date for date range of active receivers. If
+\code{NULL} uses the full data range}
 }
 \description{
-Google map of routes of Motus tag detections coloured by ID.  User defines a date range to show
-points for receivers that were operational at some point during the date range.
+Google map of routes of Motus tag detections coloured by ID.  User defines a
+date range to show points for receivers that were operational at some point
+during the date range.
 }
 \details{
 By default this function uses Stamen maps

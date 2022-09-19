@@ -11,7 +11,7 @@ test_that("checkVersion and updateMotusDb run and return messages as expected", 
   expect_silent(updateMotusDb(tags))
   
   # No admInfo Table
-  DBI::dbRemoveTable(tags$con, "admInfo")
+  DBI::dbRemoveTable(tags, "admInfo")
   
   expect_message(checkVersion(tags), 
                  "The admInfo table has not yet been created in your motus sqlite file.")
@@ -27,7 +27,7 @@ test_that("get_projRecv pulls project name", {
   d <- system.file("extdata", package = "motus")
   
   expect_equal(get_projRecv(tagme(176, update = FALSE, dir = d)), 176)
-  expect_error(get_projRecv("hello"), "src is not a dplyr::src_sql object")
+  expect_error(get_projRecv("hello"), "src must be a SQLite")
   
   skip_if_no_auth()
   skip_if_no_file(system.file("extdata", "SG-3115BBBK0782.motus", package = "motus"))

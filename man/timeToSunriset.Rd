@@ -2,7 +2,7 @@
 % Please edit documentation in R/timeToSunriset.R
 \name{timeToSunriset}
 \alias{timeToSunriset}
-\title{Obtain time to and from sunrise/sunset for a dataframe containing POSIXct times}
+\title{Obtain time to and from sunrise/sunset}
 \usage{
 timeToSunriset(
   data,
@@ -17,9 +17,9 @@ timeToSunriset(
 data.frame of detection data including at a minimum variables for
 date/time, latitude, and longitude}
 
-\item{lat}{variable with latitude values, defaults to recvDeployLat}
+\item{lat}{variable with latitude values, defaults to \code{recvDeployLat}}
 
-\item{lon}{variable with longitude values, defaults to recvDeployLon}
+\item{lon}{variable with longitude values, defaults to \code{recvDeployLon}}
 
 \item{ts}{variable with time in UTC as numeric or POSIXct, defaults to ts}
 
@@ -30,9 +30,9 @@ include "secs", "mins", "hours", "days", "weeks"}
 the original dataframe provided, with the following additional columns:
 \itemize{
 \item sunrise: sunrise time for the date and location provided by ts and
-recvDeployLat/recvDeployLon per row
+\code{recvDeployLat}/\code{recvDeployLon} per row
 \item sunset: sunset time for the date and location provided by ts and
-recvDeployLat/recvDeployLon per row
+\code{recvDeployLat}/\code{recvDeployLon} per row
 \item ts_to_set: time to next sunset after "ts", units default to "hours"
 \item ts_since_set: time to previous sunset since "ts", units default to "hours"
 \item ts_to_rise: time to next sunrise after "ts", units default to "hours"

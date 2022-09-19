@@ -23,7 +23,7 @@ This chapter will begin with an introduction to the structure of the detections 
 If you're interested in a quick start, checkout the [Getting Started](motus.html) article for a summary that includes how to download, select variables, clean data, and export data.
 
 ## Data structure
-Each tag detection database is stored as an SQLite (`dplyr::src_sqlite`) file with the extension '.motus'. The sqlite format was chosen because:
+Each tag detection database is stored as an SQLite file with the extension '.motus'. The SQLite format was chosen because:
 
 1. it is **flexible**, allowing for many data formats.
 2. it is **accessible** from many software platforms (not just R).
@@ -61,7 +61,7 @@ In addition to these tables, there are also 'virtual' tables or 'views', which h
 2. **`alltags`**: provides the full detection data for all tags, and all ambiguous (duplicate) tags,  associated with your project. Ambiguous detections are repeated for each motusTagID represented by each ambigID.  
 3. **`alltagsGPS`**: same as `alltags` but includes GPS latitude, longitude and altitude (much slower to load on large databases).
 
-Because the file is a `dplyr::src_sqlite` file, all of the `dplyr` functions can be used to filter and summarize the .motus database, without needing to first save the data as a *flat* file (a typical two-dimensional dataframe). The SQL format is very advantageous when you have a large file -- the queries using SQL will be substantially faster than those done on a flat dataframe. 
+Because the file is a SQLite database, all of the `dplyr` functions can be used to filter and summarize the .motus database, without needing to first save the data as a *flat* file (a typical two-dimensional dataframe). The SQL format is very advantageous when you have a large file -- the queries using SQL will be substantially faster than those done on a flat dataframe. 
 
 ## Database types
 

@@ -1,4 +1,4 @@
-#' Fetch deprecated batches for a tag project
+#' Get deprecated batches for a tag project
 #'
 #' @param projectID Numeric. Motus project ID
 #' @param batchID Numeric. Largest batchID already fetched. For pagination,
@@ -11,5 +11,5 @@ srvBatchesForTagProjectDeprecated <- function(projectID, batchID = 0, verbose = 
   srvQuery(API = motus_vars$API_BATCHES_FOR_TAG_PROJECT_DEPRECATED, 
            params = list(projectID = projectID, batchID = batchID),
            verbose = verbose) %>%
-    as.data.frame()
+    to_df()
 }
