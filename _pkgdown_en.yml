@@ -104,12 +104,15 @@ articles:
 - title: Other topics
   desc: Specific tutorials for different tasks
   contents:
+  - articles/motus
+  - articles/troubleshooting
   - articles/filtering
   - articles/gps
   - articles/vanishing-bearings
   - articles/advanced-modelling
   - articles/signal-strength
   - articles/deprecated-batches
+
   
 - title: Reference
   contents:

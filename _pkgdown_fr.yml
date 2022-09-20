@@ -103,6 +103,8 @@ articles:
 - title: Autres sujets
   desc: Specific tutorials for different tasks
   contents:
+  - articles/motus
+  - articles/troubleshooting
   - articles/filtering
   - articles/gps
   - articles/vanishing-bearings
