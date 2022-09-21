@@ -22,9 +22,9 @@ getRunsFilterID <- function(src, filterName, motusProjID = NA) {
   # if motusProjID is not specified, look for the filter name across all projects 
   if (is.na(motusProjID)) {
     motusProjID <- -1
-    df <- DBI_Query(src, "SELECT * FROM filters WHERE filterName = {'filterName'}")
+    df <- DBI_Query(src, "SELECT * FROM filters WHERE filterName = {filterName}")
     if (nrow(df) == 0) {
-      warning("There are no filter matching this name.", call. = FALSE)
+      warning("There are no filters matching this name.", call. = FALSE)
     } else if (nrow(df) == 1) {
       filterID <- df[1, ]$filterID
     }
@@ -33,7 +33,7 @@ getRunsFilterID <- function(src, filterName, motusProjID = NA) {
     # limit the search to a specific project (including filters unassigned to a project = -1)
     # by default, return the filter not attached to a project
     df <- DBI_Query(src, 
-                    "SELECT * FROM filters WHERE filterName = {'filterName'}",
+                    "SELECT * FROM filters WHERE filterName = {filterName}",
                     "AND motusProjID = {motusProjID}")
     
     if (nrow(df) == 0) {

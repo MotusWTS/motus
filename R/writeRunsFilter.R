@@ -18,10 +18,16 @@
 writeRunsFilter <- function(src, filterName, motusProjID = NA, df, 
                             overwrite = TRUE, delete = FALSE) {
 
+  # Check for probability column
+  if(!all(c("runID", "motusTagID","probability") %in% names(df))) {
+    stop("'df' must have at least columns 'runID', 'motusTagID', and ",
+         "'probability'", call. = FALSE)
+  }
+  
   # determines the filterID
   id <- createRunsFilter(src, filterName, motusProjID, update = FALSE)
     
-  if (!is.null(id)) {
+  if (!(is.null(id) | is.na(id))) {
     if (delete) {
       deleteRunsFilter(src, filterName, motusProjID, clearOnly = TRUE)
     }

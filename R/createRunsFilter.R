@@ -17,10 +17,11 @@ createRunsFilter <- function(src, filterName, motusProjID = NA,
   if (is.na(motusProjID)) motusProjID <- -1
   
   df <- DBI_Query(src, 
-                  "SELECT * FROM filters WHERE filterName = {'filterName'} ",
+                  "SELECT * FROM filters WHERE filterName = {filterName} ",
                   "AND motusProjID = {motusProjID}")
   
   if (nrow(df) == 0) {
+
     df <- data.frame(userLogin = motus_vars$userLogin, 
                      filterName = filterName, 
                      motusProjID = motusProjID, 
@@ -30,7 +31,7 @@ createRunsFilter <- function(src, filterName, motusProjID = NA,
     dbInsertOrReplace(src, "filters", df)
     
     df <- DBI_Query(src, 
-                    "SELECT * FROM filters WHERE filterName = {'filterName'} ",
+                    "SELECT * FROM filters WHERE filterName = {filterName} ",
                     "AND motusProjID = {motusProjID}")
     
     return (df[1,]$filterID)

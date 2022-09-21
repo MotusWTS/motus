@@ -1,6 +1,6 @@
-#' Get runFilters
+#' Get runsFilters
 #' 
-#' Returns a dataframe of the `runFilters` records matching a filter name (and
+#' Returns a dataframe of the `runsFilters` records matching a filter name (and
 #' optionally a project ID) stored in the local database.
 #'
 #' @inheritParams args

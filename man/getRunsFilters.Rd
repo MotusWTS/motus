@@ -2,7 +2,7 @@
 % Please edit documentation in R/getRunsFilters.R
 \name{getRunsFilters}
 \alias{getRunsFilters}
-\title{Get runFilters}
+\title{Get runsFilters}
 \usage{
 getRunsFilters(src, filterName, motusProjID = NA)
 }
@@ -19,6 +19,6 @@ order to share with other users of the same project.}
 a database connection to \code{src}
 }
 \description{
-Returns a dataframe of the \code{runFilters} records matching a filter name (and
+Returns a dataframe of the \code{runsFilters} records matching a filter name (and
 optionally a project ID) stored in the local database.
 }
