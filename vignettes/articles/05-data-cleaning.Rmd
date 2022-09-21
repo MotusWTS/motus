@@ -216,8 +216,8 @@ df.summary <- tbl.alltags.sub %>%
   group_by(motusTagID, runID, recvDeployName, ambigID, 
            tagDepLon, tagDepLat, recvDeployLat, recvDeployLon) %>%
   #summarizing by runID to get max run length and mean time stamp:
-  summarize(max.runLen = max(runLen), 
-            ts = mean(ts), .groups = "drop") %>% 
+  summarize(max.runLen = max(runLen, na.rm = TRUE), 
+            ts = mean(ts, na.rm = TRUE), .groups = "drop") %>% 
   arrange(motusTagID, ts) %>%
   collect() %>%
   mutate(time = as_datetime(ts))
