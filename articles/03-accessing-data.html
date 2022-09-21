@@ -8,8 +8,8 @@
 <meta name="description" content="motus">
 <title>Chapter 3 - Accessing detections data • motus</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Chapter 3 - Accessing detections data">
 <meta property="og:description" content="motus">
@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">motus</a>
 
-    <small class="nav-text text-light me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">5.0.1</small>
+    <small class="nav-text text-light me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,11 +82,11 @@
 
 
 <script src="03-accessing-data_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Chapter 3 - Accessing detections data</h1>
             
       
-      
+      <small class="dont-index">Source: <a href="NA/NA/NA/blob/HEAD/vignettes/articles/03-accessing-data.Rmd"><code>vignettes/articles/03-accessing-data.Rmd</code></a></small>
       <div class="d-none name"><code>03-accessing-data.Rmd</code></div>
     </div>
 
@@ -106,7 +106,7 @@
 <div class="section level2">
 <h2 id="data-structure">Data structure<a class="anchor" aria-label="anchor" href="#data-structure"></a>
 </h2>
-<p>Each tag detection database is stored as an SQLite (<code><a href="https://dplyr.tidyverse.org/reference/src_dbi.html" class="external-link">dplyr::src_sqlite</a></code>) file with the extension ‘.motus’. The sqlite format was chosen because:</p>
+<p>Each tag detection database is stored as an SQLite file with the extension ‘.motus’. The SQLite format was chosen because:</p>
 <ol style="list-style-type: decimal">
 <li>it is <strong>flexible</strong>, allowing for many data formats.</li>
 <li>it is <strong>accessible</strong> from many software platforms (not just R).</li>
@@ -173,7 +173,7 @@
 <li>
 <strong><code>alltagsGPS</code></strong>: same as <code>alltags</code> but includes GPS latitude, longitude and altitude (much slower to load on large databases).</li>
 </ol>
-<p>Because the file is a <code><a href="https://dplyr.tidyverse.org/reference/src_dbi.html" class="external-link">dplyr::src_sqlite</a></code> file, all of the <code>dplyr</code> functions can be used to filter and summarize the .motus database, without needing to first save the data as a <em>flat</em> file (a typical two-dimensional dataframe). The SQL format is very advantageous when you have a large file – the queries using SQL will be substantially faster than those done on a flat dataframe.</p>
+<p>Because the file is a SQLite database, all of the <code>dplyr</code> functions can be used to filter and summarize the .motus database, without needing to first save the data as a <em>flat</em> file (a typical two-dimensional dataframe). The SQL format is very advantageous when you have a large file – the queries using SQL will be substantially faster than those done on a flat dataframe.</p>
 </div>
 <div class="section level2">
 <h2 id="database-types">Database types<a class="anchor" aria-label="anchor" href="#database-types"></a>
@@ -194,16 +194,16 @@
 </h2>
 <p>Before we begin working with data, we need to load the required packages for this chapter. If you have not yet <em>installed</em> these packages (from github and CRAN) then please return to <a href="02-installing-packages.html">Chapter 2 - Installing Packages</a>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://motuswts.github.io/motus/" class="external-link">motus</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://motuswts.github.io/motus/" class="external-link">motus</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="set-system-environment">Set system environment<a class="anchor" aria-label="anchor" href="#set-system-environment"></a>
 </h2>
 <p>Set the system environment time zone to Greenwich Mean Time (UTC), to ensure that you are always working in UTC. This is a very important step, and should be part of every working session. If you fail to do this, then two problems can arise. Times are stored in the Motus database in UTC, and if you do not keep your environment in UTC, then they can be inadvertently changed during import. Second, if tags have been detected across multiple time zones, then they can also inadvertently be changed.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>TZ <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>TZ <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="downloading-tag-detections">Downloading tag detections<a class="anchor" aria-label="anchor" href="#downloading-tag-detections"></a>
@@ -233,13 +233,13 @@
 <p><strong>Unless the directory that you want your data saved in is stated explicitly within the function call, data will be downloaded to the current working directory.</strong></p>
 <p>Lets start by determining what our working directory is so we know where our file will be saved.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>As this is the first time you are downloading data for project 176, set <code>projRecv = 176</code>, <code>new = TRUE</code> and <code>update = TRUE</code>. This will create a <code>.motus</code> file in your current working directory, which was shown above using <code><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd()</a></code>. This will also create an SQL object in your R environment called <code>sql.motus</code></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sql.motus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span>projRecv <span class="op">=</span> <span class="fl">176</span>, new <span class="op">=</span> <span class="cn">TRUE</span>, update <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">sql.motus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span>projRecv <span class="op">=</span> <span class="fl">176</span>, new <span class="op">=</span> <span class="cn">TRUE</span>, update <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Alternatively you can specify a different location to save the data by entering your preferred filepath. In this example we save to our data folder using the <code>dir</code> argument. Note that <code>./</code> simply means ‘relative to the current folder’ (shown by <code><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd()</a></code>).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sql.motus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span>projRecv <span class="op">=</span> <span class="fl">176</span>, new <span class="op">=</span> <span class="cn">TRUE</span>, update <span class="op">=</span> <span class="cn">TRUE</span>, dir <span class="op">=</span> <span class="st">"./data/"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">sql.motus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span>projRecv <span class="op">=</span> <span class="fl">176</span>, new <span class="op">=</span> <span class="cn">TRUE</span>, update <span class="op">=</span> <span class="cn">TRUE</span>, dir <span class="op">=</span> <span class="st">"./data/"</span><span class="op">)</span></span></code></pre></div>
 <blockquote>
 <p><strong>Note:</strong> You’ll need to use the <strong>username</strong> <code>motus.sample</code> and the <strong>password</strong> <code>motus.sample</code> to access this data (see <a href="#login">login</a> for more details)!</p>
 </blockquote>
@@ -262,7 +262,7 @@
 </h4>
 <p>Once you are logged in under one user account, you will not be able to access data from another account. If you need to logout of the current account to access other data, you will need to use the logout function.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/motusLogout.html">motusLogout</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/motusLogout.html">motusLogout</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -270,8 +270,8 @@
 </h3>
 <p>We could also download data by receiver through the same process as described above. This will provide you with all detections of any tags on the specified receiver. As there are no receivers registered to sample project 176, <strong>this call will not work</strong>. If you have a receiver registered to your own project, replace the receiver serial number in the tagme call below with the serial number for your own receiver, ensuring that you are logged in using your own <a href="#user-authentication">credentials</a>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">proj.num</span> <span class="op">&lt;-</span> <span class="st">"SG-123BBBK1234"</span>
-<span class="va">sql.motus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span>projRecv <span class="op">=</span> <span class="va">proj.num</span>, new <span class="op">=</span> <span class="cn">TRUE</span>, update <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">proj.num</span> <span class="op">&lt;-</span> <span class="st">"SG-123BBBK1234"</span></span>
+<span><span class="va">sql.motus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span>projRecv <span class="op">=</span> <span class="va">proj.num</span>, new <span class="op">=</span> <span class="cn">TRUE</span>, update <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>This will download a file to your working directory named <code>SG-123BBBK1234.motus</code>.</p>
 <p>Some users may wish to work directly with the .motus SQLite file. However, since many users are more familiar with a ‘flat’ dataframe format, instructions to view the the data as a flat dataframe within R, and on how to export the flat file to .csv or .rds format, are included below.</p>
 </div>
@@ -280,51 +280,51 @@
 </h3>
 <p>If you have a large number of receivers in your project, and wish to get receiver specific data for each one, rather than downloading them one by one as above, we can download them with a simple loop. Note that since the sample project doesn’t have any receivers associated with it, this script will not result in a download but you can try it with your own project if you have receivers.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># get a copy of the metadata only</span>
-<span class="va">sql.motus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="fl">176</span>, new <span class="op">=</span> <span class="cn">TRUE</span>, update <span class="op">=</span> <span class="cn">FALSE</span>, dir <span class="op">=</span> <span class="st">"./data/"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/metadata.html">metadata</a></span><span class="op">(</span><span class="va">sql.motus</span>, <span class="fl">176</span><span class="op">)</span>
-<span class="va">tbl.recvDeps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql.motus</span>, <span class="st">"recvDeps"</span><span class="op">)</span>
-
-<span class="va">df.serno</span> <span class="op">&lt;-</span> <span class="va">tbl.recvDeps</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">projectID</span> <span class="op">==</span> <span class="fl">176</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">serno</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="co"># loop through each receiver (may take a while!)</span>
-<span class="kw">for</span> <span class="op">(</span><span class="va">row</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df.serno</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="va">df.serno</span><span class="op">[</span><span class="va">row</span>, <span class="st">"serno"</span><span class="op">]</span>, dir <span class="op">=</span> <span class="st">"./data/"</span>, new <span class="op">=</span> <span class="cn">TRUE</span>, update <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="op">}</span>
-
-<span class="co"># Note you can remove the dir argument if you want to save it to your working</span>
-<span class="co"># directory, just make sure that you use the same directory in both calls</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># get a copy of the metadata only</span></span>
+<span><span class="va">sql.motus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="fl">176</span>, new <span class="op">=</span> <span class="cn">TRUE</span>, update <span class="op">=</span> <span class="cn">FALSE</span>, dir <span class="op">=</span> <span class="st">"./data/"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/metadata.html">metadata</a></span><span class="op">(</span><span class="va">sql.motus</span>, <span class="fl">176</span><span class="op">)</span></span>
+<span><span class="va">tbl.recvDeps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql.motus</span>, <span class="st">"recvDeps"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">df.serno</span> <span class="op">&lt;-</span> <span class="va">tbl.recvDeps</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">projectID</span> <span class="op">==</span> <span class="fl">176</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">serno</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># loop through each receiver (may take a while!)</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">row</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df.serno</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="va">df.serno</span><span class="op">[</span><span class="va">row</span>, <span class="st">"serno"</span><span class="op">]</span>, dir <span class="op">=</span> <span class="st">"./data/"</span>, new <span class="op">=</span> <span class="cn">TRUE</span>, update <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># Note you can remove the dir argument if you want to save it to your working</span></span>
+<span><span class="co"># directory, just make sure that you use the same directory in both calls</span></span></code></pre></div>
 <p>You can also create a list of receivers you’d like to download if you don’t want to download project-wide receivers:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># create list of receivers you'd like to download</span>
-<span class="va">df.serno</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SG-AB12RPI3CD34"</span>, <span class="st">"SG-1234BBBK4321"</span><span class="op">)</span>
-
-<span class="co"># loop through each receiver (may take a while!), and save to the working directory</span>
-<span class="kw">for</span> <span class="op">(</span><span class="va">k</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">df.serno</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="va">df.serno</span><span class="op">[</span><span class="va">k</span><span class="op">]</span>, new <span class="op">=</span> <span class="cn">TRUE</span>, update <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="op">}</span>
-
-<span class="co"># loop through each receiver (may take a while!), and save to a specified directory</span>
-<span class="kw">for</span> <span class="op">(</span><span class="va">k</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">df.serno</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="va">df.serno</span><span class="op">[</span><span class="va">k</span><span class="op">]</span>, dir <span class="op">=</span> <span class="st">"./data/"</span>, 
-        new <span class="op">=</span> <span class="cn">TRUE</span>, update <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># create list of receivers you'd like to download</span></span>
+<span><span class="va">df.serno</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SG-AB12RPI3CD34"</span>, <span class="st">"SG-1234BBBK4321"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># loop through each receiver (may take a while!), and save to the working directory</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">k</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">df.serno</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="va">df.serno</span><span class="op">[</span><span class="va">k</span><span class="op">]</span>, new <span class="op">=</span> <span class="cn">TRUE</span>, update <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># loop through each receiver (may take a while!), and save to a specified directory</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">k</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">df.serno</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="va">df.serno</span><span class="op">[</span><span class="va">k</span><span class="op">]</span>, dir <span class="op">=</span> <span class="st">"./data/"</span>, </span>
+<span>        new <span class="op">=</span> <span class="cn">TRUE</span>, update <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="updating-all--motus-files-within-a-directory">Updating all <code>.motus</code> files within a directory<a class="anchor" aria-label="anchor" href="#updating-all--motus-files-within-a-directory"></a>
 </h3>
 <p>Once you have .motus files, you can also update them all by simply calling the <code><a href="../reference/tagme.html">tagme()</a></code> function but leaving all arguments blank, apart from the directory:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># If you have them saved your working directory:</span>
-<span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="co"># If you have them saved in a different directory:</span>
-<span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span>dir <span class="op">=</span> <span class="st">"./data/"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># If you have them saved your working directory:</span></span>
+<span><span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># If you have them saved in a different directory:</span></span>
+<span><span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span>dir <span class="op">=</span> <span class="st">"./data/"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="accessing-downloaded-detection-data">Accessing downloaded detection data<a class="anchor" aria-label="anchor" href="#accessing-downloaded-detection-data"></a>
@@ -332,73 +332,76 @@
 <p>Now that we’ve downloaded our data as an SQLite database and loaded it into an R object called <code>sql.motus</code>, we want to access the tables stored within. Detailed descriptions of all the tables stored in the .motus file can be found in the <a href="#data-structure">Data structure</a> section.</p>
 <p>You can also view the list of tables, and variables contained within those tables, using the <code>DBI</code> and <code>RSQLite</code> packages (these are automatically installed when you install <code>motus</code>).</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rsqlite.r-dbi.org" class="external-link">RSQLite</a></span><span class="op">)</span>
-
-<span class="co"># specify the filepath where your .motus file is saved, and the file name.</span>
-<span class="va">file.name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu"><a href="https://rsqlite.r-dbi.org/reference/SQLite.html" class="external-link">SQLite</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"./data/project-176.motus"</span><span class="op">)</span> 
-
-<span class="co"># get a list of tables in the .motus file specified above.</span>
-<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbListTables.html" class="external-link">dbListTables</a></span><span class="op">(</span><span class="va">file.name</span><span class="op">)</span> </code></pre></div>
-<pre><code><span class="co">##  [1] "activity"    "activityAll" "admInfo"     "allambigs"   "allruns"    </span>
-<span class="co">##  [6] "allrunsGPS"  "alltags"     "alltagsGPS"  "antDeps"     "batchRuns"  </span>
-<span class="co">## [11] "batches"     "clarified"   "deprecated"  "filters"     "gps"        </span>
-<span class="co">## [16] "gpsAll"      "hits"        "meta"        "nodeData"    "nodeDeps"   </span>
-<span class="co">## [21] "projAmbig"   "projBatch"   "projs"       "recvDeps"    "recvs"      </span>
-<span class="co">## [26] "runs"        "runsFilters" "species"     "tagAmbig"    "tagDeps"    </span>
-<span class="co">## [31] "tagProps"    "tags"</span></code></pre>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rsqlite.r-dbi.org" class="external-link">RSQLite</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># specify the filepath where your .motus file is saved, and the file name.</span></span>
+<span><span class="va">file.name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu"><a href="https://rsqlite.r-dbi.org/reference/SQLite.html" class="external-link">SQLite</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"./data/project-176.motus"</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="co"># get a list of tables in the .motus file specified above.</span></span>
+<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbListTables.html" class="external-link">dbListTables</a></span><span class="op">(</span><span class="va">file.name</span><span class="op">)</span> </span></code></pre></div>
+<pre><code><span><span class="co">##  [1] "activity"    "activityAll" "admInfo"     "allambigs"   "allruns"    </span></span>
+<span><span class="co">##  [6] "allrunsGPS"  "alltags"     "alltagsGPS"  "antDeps"     "batchRuns"  </span></span>
+<span><span class="co">## [11] "batches"     "clarified"   "deprecated"  "filters"     "gps"        </span></span>
+<span><span class="co">## [16] "gpsAll"      "hits"        "meta"        "nodeData"    "nodeDeps"   </span></span>
+<span><span class="co">## [21] "projAmbig"   "projBatch"   "projs"       "recvDeps"    "recvs"      </span></span>
+<span><span class="co">## [26] "runs"        "runsFilters" "species"     "tagAmbig"    "tagDeps"    </span></span>
+<span><span class="co">## [31] "tagProps"    "tags"</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># get a list of variables in the "species" table in the .motus file.</span>
-<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbListFields.html" class="external-link">dbListFields</a></span><span class="op">(</span><span class="va">file.name</span>, <span class="st">"species"</span><span class="op">)</span> </code></pre></div>
-<pre><code><span class="co">## [1] "id"         "english"    "french"     "scientific" "group"     </span>
-<span class="co">## [6] "sort"</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># get a list of variables in the "species" table in the .motus file.</span></span>
+<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbListFields.html" class="external-link">dbListFields</a></span><span class="op">(</span><span class="va">file.name</span>, <span class="st">"species"</span><span class="op">)</span> </span></code></pre></div>
+<pre><code><span><span class="co">## [1] "id"         "english"    "french"     "scientific" "group"     </span></span>
+<span><span class="co">## [6] "sort"</span></span></code></pre>
 <p>The <em>virtual</em> table <code>alltags</code> contains the detection data, along with most metadata variables that users need from the various underlying <code>.motus</code> tables. We access the tables using the <code><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl()</a></code> function from the <code>dplyr</code> package which we installed in <a href="02-installing-packages.html">Chapter 2</a> and loaded at the <a href="#load-relevant-r-packages">start of this chapter</a>.</p>
 <p>For example, retrieve the virtual <code>alltags</code> table from our <code>sql.motus</code> SQLite file.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tbl.alltags</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql.motus</span>, <span class="st">"alltags"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">tbl.alltags</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql.motus</span>, <span class="st">"alltags"</span><span class="op">)</span></span></code></pre></div>
 <p>We now have a new <code>tbl.alltags</code> object in R. The underlying structure of these tables is a list of length 2:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">tbl.alltags</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## List of 2</span>
-<span class="co">##  $ src:List of 2</span>
-<span class="co">##   ..$ con  :Formal class 'SQLiteConnection' [package "RSQLite"] with 8 slots</span>
-<span class="co">##   .. .. ..@ ptr                :&lt;externalptr&gt; </span>
-<span class="co">##   .. .. ..@ dbname             : chr "/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus"</span>
-<span class="co">##   .. .. ..@ loadable.extensions: logi TRUE</span>
-<span class="co">##   .. .. ..@ flags              : int 70</span>
-<span class="co">##   .. .. ..@ vfs                : chr ""</span>
-<span class="co">##   .. .. ..@ ref                :&lt;environment: 0x5619e42832a8&gt; </span>
-<span class="co">##   .. .. ..@ bigint             : chr "integer64"</span>
-<span class="co">##   .. .. ..@ extended_types     : logi FALSE</span>
-<span class="co">##   ..$ disco:&lt;environment: 0x5619e43fab28&gt; </span>
-<span class="co">##   ..- attr(*, "class")= chr [1:4] "src_SQLiteConnection" "src_dbi" "src_sql" "src"</span>
-<span class="co">##  $ ops:List of 2</span>
-<span class="co">##   ..$ x   : 'ident' chr "alltags"</span>
-<span class="co">##   ..$ vars: chr [1:62] "hitID" "runID" "batchID" "ts" ...</span>
-<span class="co">##   ..- attr(*, "class")= chr [1:3] "op_base_remote" "op_base" "op"</span>
-<span class="co">##  - attr(*, "class")= chr [1:5] "tbl_SQLiteConnection" "tbl_dbi" "tbl_sql" "tbl_lazy" ...</span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">tbl.alltags</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## List of 2</span></span>
+<span><span class="co">##  $ src       :List of 2</span></span>
+<span><span class="co">##   ..$ con  :Formal class 'SQLiteConnection' [package "RSQLite"] with 8 slots</span></span>
+<span><span class="co">##   .. .. ..@ ptr                :&lt;externalptr&gt; </span></span>
+<span><span class="co">##   .. .. ..@ dbname             : chr "/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus"</span></span>
+<span><span class="co">##   .. .. ..@ loadable.extensions: logi TRUE</span></span>
+<span><span class="co">##   .. .. ..@ flags              : int 70</span></span>
+<span><span class="co">##   .. .. ..@ vfs                : chr ""</span></span>
+<span><span class="co">##   .. .. ..@ ref                :&lt;environment: 0x556c7c129eb0&gt; </span></span>
+<span><span class="co">##   .. .. ..@ bigint             : chr "integer64"</span></span>
+<span><span class="co">##   .. .. ..@ extended_types     : logi FALSE</span></span>
+<span><span class="co">##   ..$ disco: NULL</span></span>
+<span><span class="co">##   ..- attr(*, "class")= chr [1:4] "src_SQLiteConnection" "src_dbi" "src_sql" "src"</span></span>
+<span><span class="co">##  $ lazy_query:List of 5</span></span>
+<span><span class="co">##   ..$ x         : 'ident' chr "alltags"</span></span>
+<span><span class="co">##   ..$ vars      : chr [1:62] "hitID" "runID" "batchID" "ts" ...</span></span>
+<span><span class="co">##   ..$ group_vars: chr(0) </span></span>
+<span><span class="co">##   ..$ order_vars: NULL</span></span>
+<span><span class="co">##   ..$ frame     : NULL</span></span>
+<span><span class="co">##   ..- attr(*, "class")= chr [1:3] "lazy_base_remote_query" "lazy_base_query" "lazy_query"</span></span>
+<span><span class="co">##  - attr(*, "class")= chr [1:5] "tbl_SQLiteConnection" "tbl_dbi" "tbl_sql" "tbl_lazy" ...</span></span></code></pre>
 <p>The first part of the list, <code>src</code>, is a list that provides details of the SQLiteConnection, including the directory where the database is stored. The second part is a list that includes the underlying table. Thus, the R object <code>alltags</code> is a <em>virtual</em> table that stores the database structure and information required to connect to the underlying data in the <code>.motus</code> file. As stated above, the advantage of storing the data in this way is that it saves memory when accessing very large databases, and functions within the <code>dplyr</code> package can be used to manipulate and summarize the tables before collecting the results into a typical ‘flat’ format dataframe.</p>
 <p>If you want to use familiar functions to get access to components of the underlying data frame, then use the <code><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect()</a></code> function. For example, to look at the names of the variables in the <code>alltags</code> table:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tbl.alltags</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># list the variable names in the table</span></code></pre></div>
-<pre><code><span class="co">##  [1] "hitID"          "runID"          "batchID"        "ts"            </span>
-<span class="co">##  [5] "tsCorrected"    "sig"            "sigsd"          "noise"         </span>
-<span class="co">##  [9] "freq"           "freqsd"         "slop"           "burstSlop"     </span>
-<span class="co">## [13] "done"           "motusTagID"     "ambigID"        "port"          </span>
-<span class="co">## [17] "nodeNum"        "runLen"         "motusFilter"    "bootnum"       </span>
-<span class="co">## [21] "tagProjID"      "mfgID"          "tagType"        "codeSet"       </span>
-<span class="co">## [25] "mfg"            "tagModel"       "tagLifespan"    "nomFreq"       </span>
-<span class="co">## [29] "tagBI"          "pulseLen"       "tagDeployID"    "speciesID"     </span>
-<span class="co">## [33] "markerNumber"   "markerType"     "tagDeployStart" "tagDeployEnd"  </span>
-<span class="co">## [37] "tagDepLat"      "tagDepLon"      "tagDepAlt"      "tagDepComments"</span>
-<span class="co">## [41] "tagDeployTest"  "fullID"         "deviceID"       "recvDeployID"  </span>
-<span class="co">## [45] "recvDeployLat"  "recvDeployLon"  "recvDeployAlt"  "recv"          </span>
-<span class="co">## [49] "recvDeployName" "recvSiteName"   "isRecvMobile"   "recvProjID"    </span>
-<span class="co">## [53] "recvUtcOffset"  "antType"        "antBearing"     "antHeight"     </span>
-<span class="co">## [57] "speciesEN"      "speciesFR"      "speciesSci"     "speciesGroup"  </span>
-<span class="co">## [61] "tagProjName"    "recvProjName"</span></code></pre>
+<code class="sourceCode R"><span><span class="va">tbl.alltags</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># list the variable names in the table</span></span></code></pre></div>
+<pre><code><span><span class="co">##  [1] "hitID"          "runID"          "batchID"        "ts"            </span></span>
+<span><span class="co">##  [5] "tsCorrected"    "sig"            "sigsd"          "noise"         </span></span>
+<span><span class="co">##  [9] "freq"           "freqsd"         "slop"           "burstSlop"     </span></span>
+<span><span class="co">## [13] "done"           "motusTagID"     "ambigID"        "port"          </span></span>
+<span><span class="co">## [17] "nodeNum"        "runLen"         "motusFilter"    "bootnum"       </span></span>
+<span><span class="co">## [21] "tagProjID"      "mfgID"          "tagType"        "codeSet"       </span></span>
+<span><span class="co">## [25] "mfg"            "tagModel"       "tagLifespan"    "nomFreq"       </span></span>
+<span><span class="co">## [29] "tagBI"          "pulseLen"       "tagDeployID"    "speciesID"     </span></span>
+<span><span class="co">## [33] "markerNumber"   "markerType"     "tagDeployStart" "tagDeployEnd"  </span></span>
+<span><span class="co">## [37] "tagDepLat"      "tagDepLon"      "tagDepAlt"      "tagDepComments"</span></span>
+<span><span class="co">## [41] "tagDeployTest"  "fullID"         "deviceID"       "recvDeployID"  </span></span>
+<span><span class="co">## [45] "recvDeployLat"  "recvDeployLon"  "recvDeployAlt"  "recv"          </span></span>
+<span><span class="co">## [49] "recvDeployName" "recvSiteName"   "isRecvMobile"   "recvProjID"    </span></span>
+<span><span class="co">## [53] "recvUtcOffset"  "antType"        "antBearing"     "antHeight"     </span></span>
+<span><span class="co">## [57] "speciesEN"      "speciesFR"      "speciesSci"     "speciesGroup"  </span></span>
+<span><span class="co">## [61] "tagProjName"    "recvProjName"</span></span></code></pre>
 <p>If you want access to GPS data you can either use the <code>alltagsGPS</code> view, or, after filtering your data (see <a href="05-data-cleaning.html">Chapter 5 - Data cleaning</a> and the article <a href="filtering.html">In-depth detections filtering</a>) you can use the <code><a href="../reference/getGPS.html">getGPS()</a></code> function (see <a href="gps.html">Working with GPS points</a>).</p>
 </div>
 <div class="section level3">
@@ -406,70 +409,70 @@
 </h3>
 <p>To convert the <code>alltags</code> view or other table in the .motus file into a typical ‘flat’ format, i.e., with every record for each field filled in, use the <code><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect()</a></code> and <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code> functions. The output can then be further manipulated, or used to generate a RDS file of your data for archiving or export.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">df.alltags</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">df.alltags</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Now we have flat data of the alltags table called <code>df.alltags</code>. We can look at some metrics of the file:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">df.alltags</span><span class="op">)</span>     <span class="co"># field names</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">df.alltags</span><span class="op">)</span>       <span class="co"># structure of your data fields</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df.alltags</span><span class="op">)</span>      <span class="co"># prints the first 6 rows of your df to the console</span>
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">df.alltags</span><span class="op">)</span>   <span class="co"># summary of each column in your df</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">df.alltags</span><span class="op">)</span>     <span class="co"># field names</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">df.alltags</span><span class="op">)</span>       <span class="co"># structure of your data fields</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df.alltags</span><span class="op">)</span>      <span class="co"># prints the first 6 rows of your df to the console</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">df.alltags</span><span class="op">)</span>   <span class="co"># summary of each column in your df</span></span></code></pre></div>
 <p>Note that the format of the time stamp (<code>ts</code>) field is numeric and represents seconds since 1 January 1970. We recommend that when you transform your tables into flat dataframes, that you format the time stamp using the <code>lubridate</code> package. This results in the <code>time</code> column in date/time format, leaving the <code>ts</code> column as numeric. <em>Note:</em> By default, <code><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime()</a></code> uses an origin of 1 January 1970 and UTC as the timezone, exactly what we want!</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">df.alltags</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>     <span class="co"># for all fields in the df (data frame)</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>time <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="va">ts</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># the tz = "UTC" is not necessary here, provided you have set your system time to UTC</span>
-<span class="co"># ... but it serves as a useful reminder!</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">df.alltags</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>     <span class="co"># for all fields in the df (data frame)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>time <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="va">ts</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># the tz = "UTC" is not necessary here, provided you have set your system time to UTC</span></span>
+<span><span class="co"># ... but it serves as a useful reminder!</span></span></code></pre></div>
 <p>Note that time stamps can only be manipulated in this way <em>after</em> collecting the data into a flat dataframe. Throughout these articles, we use <code>ts</code> for numeric time stamps and <code>time</code> for date/time formatted time stamps.</p>
 <p>If you want to load only part of your entire virtual table (e.g. certain fields, certain tags, or all tags from a specified project or species), you can use <code>dplyr</code> functions to filter the data before collecting into a dataframe. Some examples are below:</p>
 <ol style="list-style-type: decimal">
 <li>To select certain variables:</li>
 </ol>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># to grab a subset of variables, in this case a unique list of Motus tag IDs at</span>
-<span class="co"># each receiver and antenna.</span>
-<span class="va">df.alltagsSub</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">recv</span>, <span class="va">port</span>, <span class="va">motusTagID</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> </code></pre></div>
+<code class="sourceCode R"><span><span class="co"># to grab a subset of variables, in this case a unique list of Motus tag IDs at</span></span>
+<span><span class="co"># each receiver and antenna.</span></span>
+<span><span class="va">df.alltagsSub</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">recv</span>, <span class="va">port</span>, <span class="va">motusTagID</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> </span></code></pre></div>
 <ol start="2" style="list-style-type: decimal">
 <li>To select certain tag IDs:</li>
 </ol>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># filter to include only motusTagIDs 16011, 23316</span>
-<span class="va">df.alltagsSub</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">motusTagID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">16011</span>, <span class="fl">23316</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>    
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>time <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="va">ts</span><span class="op">)</span><span class="op">)</span>    </code></pre></div>
+<code class="sourceCode R"><span><span class="co"># filter to include only motusTagIDs 16011, 23316</span></span>
+<span><span class="va">df.alltagsSub</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">motusTagID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">16011</span>, <span class="fl">23316</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>    </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>time <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="va">ts</span><span class="op">)</span><span class="op">)</span>    </span></code></pre></div>
 <ol start="3" style="list-style-type: decimal">
 <li>To select a specific species:</li>
 </ol>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># filter to only Red Knot (using speciesID)</span>
-<span class="va">df.4670</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">speciesID</span> <span class="op">==</span> <span class="fl">4670</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>    
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>time <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="va">ts</span><span class="op">)</span><span class="op">)</span>  
-
-<span class="co"># filter to only Red Knot (using English name)</span>
-<span class="va">df.redKnot</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">speciesEN</span> <span class="op">==</span> <span class="st">"Red Knot"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>   
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>    
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>time <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="va">ts</span><span class="op">)</span><span class="op">)</span>    </code></pre></div>
+<code class="sourceCode R"><span><span class="co"># filter to only Red Knot (using speciesID)</span></span>
+<span><span class="va">df.4670</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">speciesID</span> <span class="op">==</span> <span class="fl">4670</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>    </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>time <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="va">ts</span><span class="op">)</span><span class="op">)</span>  </span>
+<span></span>
+<span><span class="co"># filter to only Red Knot (using English name)</span></span>
+<span><span class="va">df.redKnot</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">speciesEN</span> <span class="op">==</span> <span class="st">"Red Knot"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>   </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>    </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>time <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="va">ts</span><span class="op">)</span><span class="op">)</span>    </span></code></pre></div>
 <p>Using <code>dplyr</code>, your virtual table can also be summarized before converting to a flat file. For example, to find the number of different detections for each tag at each receiver:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">df.detectSum</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">motusTagID</span>, <span class="va">recv</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> </code></pre></div>
+<code class="sourceCode R"><span><span class="va">df.detectSum</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">motusTagID</span>, <span class="va">recv</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> </span></code></pre></div>
 <p>In later chapter(s) we will show you additional ways of summarizing and working with your data.</p>
 </div>
 </div>
@@ -478,10 +481,10 @@
 </h2>
 <p>A good workflow is to create a script that deals with all your data issues (as described in later chapters), and then saves the resulting ‘flat’ dataframe to CSV or RDS for re-use. If you do this, you can quickly start an analysis or visualization session from a known (and consistent) starting point. We use an .rds file, which preserves all of the associated R data structures (such as time stamps).</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">df.alltags</span>, <span class="st">"./data/df_alltags.rds"</span><span class="op">)</span>  </code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">df.alltags</span>, <span class="st">"./data/df_alltags.rds"</span><span class="op">)</span>  </span></code></pre></div>
 <p>Some users may also want to export the flat dataframe into a .csv file for analysis in other programs. This can easily be done with the following code. Note that it <strong>does not</strong> preserve time stamps:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">df.alltags</span>, <span class="st">"./data/df_alltags.csv"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">df.alltags</span>, <span class="st">"./data/df_alltags.csv"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="updating-a-database">Updating a database<a class="anchor" aria-label="anchor" href="#updating-a-database"></a>
@@ -491,21 +494,20 @@
 </h3>
 <p>As you or other users upload data to our server, you may have additional tag detections that weren’t present in your initial data download. Since the <code>.motus</code> file is a SQLite database, you can update your existing file with any newly available data, rather than doing a complete new download of the entire database. To open and update a detections database that already exists (has been downloaded previously), we use the <code><a href="../reference/tagme.html">tagme()</a></code> function but set <code>new = FALSE</code>:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sql.motus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span>projRecv <span class="op">=</span> <span class="fl">176</span>, new <span class="op">=</span> <span class="cn">FALSE</span>, update <span class="op">=</span> <span class="cn">TRUE</span>, dir <span class="op">=</span> <span class="st">"./data/"</span><span class="op">)</span> </code></pre></div>
-<pre><code><span class="co">## Checking for new data in project 176</span></code></pre>
-<pre><code><span class="co">## Updating metadata</span></code></pre>
-<pre><code><span class="co">## activity:     1 new batch records to check</span></code></pre>
-<pre><code><span class="co">## batchID  1977125 (#     1 of      1): got    156 activity records</span></code></pre>
-<pre><code><span class="co">## batchID  1977125 (#     1 of      1): got      0 activity records</span></code></pre>
-<pre><code><span class="co">## Downloaded 156 activity records</span></code></pre>
-<pre><code><span class="co">## nodeData:     0 new batch records to check</span></code></pre>
-<pre><code><span class="co">## Fetching deprecated batches</span></code></pre>
-<pre><code><span class="co">## Total deprecated batches: 6</span>
-<span class="co">## New deprecated batches: 0</span></code></pre>
+<code class="sourceCode R"><span><span class="va">sql.motus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span>projRecv <span class="op">=</span> <span class="fl">176</span>, new <span class="op">=</span> <span class="cn">FALSE</span>, update <span class="op">=</span> <span class="cn">TRUE</span>, dir <span class="op">=</span> <span class="st">"./data/"</span><span class="op">)</span> </span></code></pre></div>
+<pre><code><span><span class="co">## Checking for new data in project 176</span></span></code></pre>
+<pre><code><span><span class="co">## Updating metadata</span></span></code></pre>
+<pre><code><span><span class="co">## activity:     1 new batch records to check</span></span></code></pre>
+<pre><code><span><span class="co">## batchID  1977125 (#     1 of      1): got    156 activity records</span></span></code></pre>
+<pre><code><span><span class="co">## Downloaded 156 activity records</span></span></code></pre>
+<pre><code><span><span class="co">## nodeData:     0 new batch records to check</span></span></code></pre>
+<pre><code><span><span class="co">## Fetching deprecated batches</span></span></code></pre>
+<pre><code><span><span class="co">## Total deprecated batches: 6</span></span>
+<span><span class="co">## New deprecated batches: 0</span></span></code></pre>
 <p>If you are working offline, and simply want to open an already downloaded database without connecting to the server to update, use <code>new = FALSE</code> and <code>update = FALSE</code>:</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># use dir = to specify a directory</span>
-<span class="va">sql.motus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span>projRecv <span class="op">=</span> <span class="fl">176</span>, new <span class="op">=</span> <span class="cn">FALSE</span>, update <span class="op">=</span> <span class="cn">FALSE</span>, dir <span class="op">=</span> <span class="st">"./data"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># use dir = to specify a directory</span></span>
+<span><span class="va">sql.motus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span>projRecv <span class="op">=</span> <span class="fl">176</span>, new <span class="op">=</span> <span class="cn">FALSE</span>, update <span class="op">=</span> <span class="cn">FALSE</span>, dir <span class="op">=</span> <span class="st">"./data"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="checking-for-new-detections">Checking for new detections<a class="anchor" aria-label="anchor" href="#checking-for-new-detections"></a>
@@ -524,19 +526,19 @@
 <strong><code>numGPS</code></strong>: number of GPS records of new data.</li>
 </ul>
 <p>The following assumes that a local copy of the database already exists:</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/tellme.html">tellme</a></span><span class="op">(</span>projRecv <span class="op">=</span> <span class="fl">176</span><span class="op">)</span>                    <span class="co"># If db is in the working directory</span>
-<span class="fu"><a href="../reference/tellme.html">tellme</a></span><span class="op">(</span>projRecv <span class="op">=</span> <span class="fl">176</span>, dir <span class="op">=</span> <span class="st">"./data/"</span><span class="op">)</span>   <span class="co"># To specify a different directory</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tellme.html">tellme</a></span><span class="op">(</span>projRecv <span class="op">=</span> <span class="fl">176</span><span class="op">)</span>                    <span class="co"># If db is in the working directory</span></span>
+<span><span class="fu"><a href="../reference/tellme.html">tellme</a></span><span class="op">(</span>projRecv <span class="op">=</span> <span class="fl">176</span>, dir <span class="op">=</span> <span class="st">"./data/"</span><span class="op">)</span>   <span class="co"># To specify a different directory</span></span></code></pre></div>
 <p>To check how much data is available for a project but you <em>do not</em> have a database for it, use the ‘new’ parameter:</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/tellme.html">tellme</a></span><span class="op">(</span>projRecv <span class="op">=</span> <span class="fl">176</span>, new <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tellme.html">tellme</a></span><span class="op">(</span>projRecv <span class="op">=</span> <span class="fl">176</span>, new <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="updating-metadata">Updating metadata<a class="anchor" aria-label="anchor" href="#updating-metadata"></a>
 </h3>
 <p>Tag and receiver metadata are automatically merged with tag detections when data are downloaded. However, if metadata have been updated since your initial download, you can force re-import of the metadata when updating a database by running:</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sql.motus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span>projRecv <span class="op">=</span> <span class="fl">176</span>, forceMeta <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sql.motus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span>projRecv <span class="op">=</span> <span class="fl">176</span>, forceMeta <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -550,39 +552,39 @@
 </ol>
 <p>In many instances, you will want access to the full metadata for all tags and receivers across the network, e.g., to determine how many of your deployed tags were not detected, or to plot the location of stations with and without detections. The <code><a href="../reference/metadata.html">metadata()</a></code> function can be used to add the complete Motus metadata to your <code>.motus</code> file. The <code><a href="../reference/metadata.html">metadata()</a></code> function only needs to be run once, but we suggest that you re-import the metadata occasionally to ensure that you have the most recent and up-to-date information.</p>
 <p>Running the <code><a href="../reference/metadata.html">metadata()</a></code> function as follows will add the appropriate metadata from across the network (all tags and all receivers) to the <code>recvDeps</code> and <code>tagDeps</code> tables in your .motus file:</p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># access all tag and receiver metadata for all projects in the network.</span>
-<span class="fu"><a href="../reference/metadata.html">metadata</a></span><span class="op">(</span><span class="va">sql.motus</span><span class="op">)</span> </code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># access all tag and receiver metadata for all projects in the network.</span></span>
+<span><span class="fu"><a href="../reference/metadata.html">metadata</a></span><span class="op">(</span><span class="va">sql.motus</span><span class="op">)</span> </span></code></pre></div>
 <p>Alternatively, you can load metadata for a specific project(s) using:</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># access tag and receiver metadata associated with project 176</span>
-<span class="fu"><a href="../reference/metadata.html">metadata</a></span><span class="op">(</span><span class="va">sql.motus</span>, projectIDs <span class="op">=</span> <span class="fl">176</span><span class="op">)</span> 
-
-<span class="co"># access tag and receiver metadata associated with projects 176 and 1</span>
-<span class="fu"><a href="../reference/metadata.html">metadata</a></span><span class="op">(</span><span class="va">sql.motus</span>, projectIDs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">176</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> </code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># access tag and receiver metadata associated with project 176</span></span>
+<span><span class="fu"><a href="../reference/metadata.html">metadata</a></span><span class="op">(</span><span class="va">sql.motus</span>, projectIDs <span class="op">=</span> <span class="fl">176</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="co"># access tag and receiver metadata associated with projects 176 and 1</span></span>
+<span><span class="fu"><a href="../reference/metadata.html">metadata</a></span><span class="op">(</span><span class="va">sql.motus</span>, projectIDs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">176</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="checkVersion">Ensure that you have the correct database version<a class="anchor" aria-label="anchor" href="#checkVersion"></a>
 </h2>
 <p>When you call the <code><a href="../reference/tagme.html">tagme()</a></code> function to load the sqlite database, the version of the R package used to download the data is stored in an <code>admInfo</code> table. Over time, changes will be made to the functionality of the R package that may require adding new tables, views or fields to the database. If your version of the database does not match the version of the R package, some of the examples contained in these articles may not work. The following call will check that your database has been updated to the version matching the current version of the <code>motus</code> R package. If your database does not match the most current version of the R package, use <code><a href="../reference/tagme.html">tagme()</a></code> with <code>update = TRUE</code> to update your database to the correct format. Refer to <a href="troubleshooting.html">Troubleshooting</a> if the <code><a href="../reference/checkVersion.html">checkVersion()</a></code> call returns a warning.</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/checkVersion.html">checkVersion</a></span><span class="op">(</span><span class="va">sql.motus</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/checkVersion.html">checkVersion</a></span><span class="op">(</span><span class="va">sql.motus</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="r-object-naming-convention">R object naming convention<a class="anchor" aria-label="anchor" href="#r-object-naming-convention"></a>
 </h2>
 <p>Throughout this chapter and the rest of the articles, we name R objects according to their structure and the source of the data contained in the object. So, SQLite objects will be prefixed with <code>sql.</code>, virtual table objects will be prefixed with <code>tbl.</code>, and dataframe objects will be prefixed with <code>df.</code>; the rest of the name will include the name of the .motus table that the data originates from.</p>
 <p>The following code assumes you have already downloaded the sample data and do not need to update it; if you have not downloaded the data, see the section on <a href="#download">downloading data for the first time</a> for instructions on initial download.</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># SQLite R object, which links to the .motus file:</span>
-<span class="va">sql.motus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="fl">176</span>, update <span class="op">=</span> <span class="cn">TRUE</span>, dir <span class="op">=</span> <span class="st">"./data"</span><span class="op">)</span>  
-
-<span class="co"># virtual table object of the alltags table in the sample.motus file:</span>
-<span class="va">tbl.alltags</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql.motus</span>, <span class="st">"alltags"</span><span class="op">)</span>  
-<span class="va">df.alltags</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-                <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-                <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="co"># dataframe ("flat") object of alltags table</span>
-                <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>time <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="va">ts</span><span class="op">)</span><span class="op">)</span>              </code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># SQLite R object, which links to the .motus file:</span></span>
+<span><span class="va">sql.motus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="fl">176</span>, update <span class="op">=</span> <span class="cn">TRUE</span>, dir <span class="op">=</span> <span class="st">"./data"</span><span class="op">)</span>  </span>
+<span></span>
+<span><span class="co"># virtual table object of the alltags table in the sample.motus file:</span></span>
+<span><span class="va">tbl.alltags</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql.motus</span>, <span class="st">"alltags"</span><span class="op">)</span>  </span>
+<span><span class="va">df.alltags</span> <span class="op">&lt;-</span> <span class="va">tbl.alltags</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>                <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>                <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="co"># dataframe ("flat") object of alltags table</span></span>
+<span>                <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>time <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="va">ts</span><span class="op">)</span><span class="op">)</span>              </span></code></pre></div>
 <blockquote>
 <p><strong>Next</strong> <a href="04-deployments.html">Chapter 4 - Project Deployments</a> <span style="font-size: 70%">(<a href="index.html">Explore all articles</a>)</span></p>
 </blockquote>
@@ -600,7 +602,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer>

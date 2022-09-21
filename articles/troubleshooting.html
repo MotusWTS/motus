@@ -8,8 +8,8 @@
 <meta name="description" content="motus">
 <title>Troubleshooting • motus</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Troubleshooting">
 <meta property="og:description" content="motus">
@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">motus</a>
 
-    <small class="nav-text text-light me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">5.0.1</small>
+    <small class="nav-text text-light me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,11 +82,11 @@
 
 
 <script src="troubleshooting_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Troubleshooting</h1>
             
       
-      
+      <small class="dont-index">Source: <a href="NA/NA/NA/blob/HEAD/vignettes/articles/troubleshooting.Rmd"><code>vignettes/articles/troubleshooting.Rmd</code></a></small>
       <div class="d-none name"><code>troubleshooting.Rmd</code></div>
     </div>
 
@@ -102,18 +102,22 @@
 <li>Update all packages before the installation</li>
 </ol>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://remotes.r-lib.org" class="external-link">remotes</a></span><span class="op">)</span>
-<span class="fu"><a href="https://remotes.r-lib.org/reference/update_packages.html" class="external-link">update_packages</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Skipping 3 packages not available: rnaturalearthhires, motusData, motus</span></code></pre>
-<pre><code><span class="co">## Skipping 1 packages ahead of CRAN: rnaturalearthdata</span></code></pre>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://remotes.r-lib.org" class="external-link">remotes</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://remotes.r-lib.org/reference/update_packages.html" class="external-link">update_packages</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## pak (0.3.0 -&gt; 0.3.1) [CRAN]</span></span></code></pre>
+<pre><code><span><span class="co">## Skipping 3 packages not available: rnaturalearthhires, motusData, motus</span></span></code></pre>
+<pre><code><span><span class="co">## Skipping 1 packages ahead of CRAN: rnaturalearthdata</span></span></code></pre>
+<pre><code><span><span class="co">## Installing 1 packages: pak</span></span></code></pre>
+<pre><code><span><span class="co">## Installing package into '/home/runner/work/_temp/Library'</span></span>
+<span><span class="co">## (as 'lib' is unspecified)</span></span></code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>If the installation of Motus generates errors saying that some of the existing packages cannot be removed, you can try to quit any R session, manually delete the problematic package folder from your R libraries and manually install the package again before trying to install <code>motus.</code>
 </li>
 </ol>
 <p>You can also try to set up a custom R library folder with <code><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths()</a></code> and ensure that you have full write permissions on that folder, or try to start R in administrator (Windows) or SUDO mode (Linux/Ubuntu) and try installing again.</p>
 <p>To set a custom library folder for installing new packages:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="st">"C:/r-libraries/"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="st">"C:/r-libraries/"</span><span class="op">)</span></span></code></pre></div>
 <ol start="3" style="list-style-type: decimal">
 <li>In some cases, it is easier to upgrade R itself by reinstalling the newest version of R: <a href="https://cran.r-project.org/" class="external-link uri">https://cran.r-project.org/</a>. <strong>Note:</strong> While this results in a nice clean installation with fewer problems, it necessitates the re-installation of R packages which can be time-consuming.</li>
 </ol>
@@ -121,8 +125,8 @@
 <h3 id="updating-motusfrom-a-much-earlier-version">Updating <code>motus</code>from a much earlier version<a class="anchor" aria-label="anchor" href="#updating-motusfrom-a-much-earlier-version"></a>
 </h3>
 <p>If you are updating your version of <code>motus</code> from a version &lt;1.5.0 to &gt;= 1.5.0 (i.e. from when <code>motusClient</code> was a separate package), you will have best results if you first remove <code>motus</code> and <code>motusClient</code> and reinstall from scratch:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/remove.packages.html" class="external-link">remove.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"motus"</span>, <span class="st">"motusClient"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/remove.packages.html" class="external-link">remove.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"motus"</span>, <span class="st">"motusClient"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Now you can install v1.5.0+.</p>
 </div>
 <div class="section level3">
@@ -138,11 +142,11 @@
 </li>
 </ol>
 <p>Another possible cause of this problem relates to file permissions in your library folders (e.g. libraries installed in c:files-3.x.x). To confirm this, you can try running R “as administrator” (right-clicking the R icon), or use <code>SUDO R</code> (Linux/Ubuntu) and trying installation again. If this resolves your problem, you should consider setting your libraries in a new folder where your logged in user has full access:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># confirm the libPaths location(s)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co"># add a new libPaths default location</span>
-<span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="st">"c:/users/myusername/R/win-libraries"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># confirm the libPaths location(s)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co"># add a new libPaths default location</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="st">"c:/users/myusername/R/win-libraries"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -153,14 +157,14 @@
 <li>Update <code>motus</code> and packages that <code>motus</code> depends on. (You may first need to install the <code>remotes</code> package). <strong>Re-start R</strong>
 </li>
 </ol>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/update_packages.html" class="external-link">update_packages</a></span><span class="op">(</span><span class="st">"motus"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/update_packages.html" class="external-link">update_packages</a></span><span class="op">(</span><span class="st">"motus"</span><span class="op">)</span></span></code></pre></div>
 <ol start="2" style="list-style-type: decimal">
 <li>Update all your packages. <strong>Re-start R</strong>
 </li>
 </ol>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/update_packages.html" class="external-link">update_packages</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/update_packages.html" class="external-link">update_packages</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <ol start="3" style="list-style-type: decimal">
 <li>Update R <a href="https://cran.r-project.org/" class="external-link uri">https://cran.r-project.org/</a>. (You may have to reinstall packages)</li>
 </ol>
@@ -168,16 +172,16 @@
 <div class="section level2">
 <h2 id="logging-out-of-motus">Logging out of motus<a class="anchor" aria-label="anchor" href="#logging-out-of-motus"></a>
 </h2>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/motusLogout.html">motusLogout</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/motusLogout.html">motusLogout</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="data-downloads">Data downloads<a class="anchor" aria-label="anchor" href="#data-downloads"></a>
 </h2>
 <p>While attempting to download data with the <code>motus</code> package, you may encounter errors, many of which are likely due to an interrupted connection. <strong>Always ensure you are connected to the internet when using the <code><a href="../reference/tagme.html">tagme()</a></code> function with <code>update = TRUE</code></strong>. Most issues can be solved by either logging out, or by restarting R and resuming the download.</p>
 <p>To resume your data download, run <code><a href="../reference/tagme.html">tagme()</a></code> again, but do not include <code>new = TRUE</code>:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="va">project.num</span>, update <span class="op">=</span> <span class="cn">TRUE</span>, dir <span class="op">=</span> <span class="va">...</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="va">project.num</span>, update <span class="op">=</span> <span class="cn">TRUE</span>, dir <span class="op">=</span> <span class="va">...</span><span class="op">)</span></span></code></pre></div>
 <p>If errors persist and you are unable to download your data, the server may be temporarily offline.</p>
 <blockquote>
 <p>Please contact Motus with any concerns at <a href="mailto:motus@birdscanada.org" class="email">motus@birdscanada.org</a>.</p>
@@ -230,9 +234,9 @@
 </h3>
 <p>Be sure to start the steps from the top of the chapter and run them in sequential order. Another possibility is that your <code>.motus</code> database hasn’t been updated to support the latest version of the <code>motus</code> package.</p>
 <p>To ensure that your <code>.motus</code> file is up-to-date with the <code>motus</code> package:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sql.motus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="va">project.num</span>, dir<span class="op">=</span> <span class="va">...</span><span class="op">)</span>
-<span class="fu"><a href="../reference/checkVersion.html">checkVersion</a></span><span class="op">(</span><span class="va">sql.motus</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sql.motus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="va">project.num</span>, dir<span class="op">=</span> <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/checkVersion.html">checkVersion</a></span><span class="op">(</span><span class="va">sql.motus</span><span class="op">)</span></span></code></pre></div>
 <p>To correct any warnings, you should follow these steps:</p>
 <ol style="list-style-type: decimal">
 <li>download the latest version of the motus package (refer to <a href="02-loading-packages.html">Chapter 2 - Loading packages</a>).</li>
@@ -241,40 +245,40 @@
 <li>load your sqlite file. Look for notes on the console indicating that your database is being updated.</li>
 <li>check the version again.</li>
 </ol>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://motuswts.github.io/motus/" class="external-link">motus</a></span><span class="op">)</span>
-<span class="va">sql</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="va">project.num</span>, dir<span class="op">=</span> <span class="va">...</span><span class="op">)</span>
-<span class="fu"><a href="../reference/checkVersion.html">checkVersion</a></span><span class="op">(</span><span class="va">sql</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://motuswts.github.io/motus/" class="external-link">motus</a></span><span class="op">)</span></span>
+<span><span class="va">sql</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="va">project.num</span>, dir<span class="op">=</span> <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/checkVersion.html">checkVersion</a></span><span class="op">(</span><span class="va">sql</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="i-get-an-error-error-in-rsqlite_connectdbname-loadable-extensions-flags-vfs-could-not-connect-to-database-unable-to-open-database-file-when-attempting-to-run-tagme">I get an error <code>Error in rsqlite_connect(dbname, loadable.extensions, flags, vfs) : Could not connect to database: unable to open database file</code> when attempting to run <code>tagme()</code><a class="anchor" aria-label="anchor" href="#i-get-an-error-error-in-rsqlite_connectdbname-loadable-extensions-flags-vfs-could-not-connect-to-database-unable-to-open-database-file-when-attempting-to-run-tagme"></a>
 </h3>
 <p>If you get this message, it’s likely that you’re attempting a new download or update to a nonexistent directory. The directory is specified in the <strong><code>dir = ""</code></strong> command of the <code><a href="../reference/tagme.html">tagme()</a></code> function. If the directory is not specified, files will be saved to your working directory. Use <code><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd()</a></code> to determine your current working directory. Use <code><a href="https://rdrr.io/r/base/getwd.html" class="external-link">setwd()</a></code> to set a new working directory. To specify a location to save files from your working directory use <code>./</code> followed by the file path.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># show working directory, in this case it's "C:/Documents"</span>
-
-<span class="co"># downloads data to your working directory</span>
-<span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="va">proj.num</span>, new <span class="op">=</span> <span class="cn">TRUE</span>, update <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="co"># downloads data to the data folder within your working directory</span>
-<span class="co"># ie. the file path C:/Documents/data</span>
-<span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="va">proj.num</span>, new <span class="op">=</span> <span class="cn">TRUE</span>, update <span class="op">=</span> <span class="cn">TRUE</span>, dir <span class="op">=</span> <span class="st">"./data/"</span><span class="op">)</span> 
-
-<span class="co"># downloads data to the file path C:/Downloads</span>
-<span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="va">proj.num</span>, new <span class="op">=</span> <span class="cn">TRUE</span>, update <span class="op">=</span> <span class="cn">TRUE</span>, dir <span class="op">=</span> <span class="st">"C:/Downloads"</span><span class="op">)</span> </code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># show working directory, in this case it's "C:/Documents"</span></span>
+<span></span>
+<span><span class="co"># downloads data to your working directory</span></span>
+<span><span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="va">proj.num</span>, new <span class="op">=</span> <span class="cn">TRUE</span>, update <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># downloads data to the data folder within your working directory</span></span>
+<span><span class="co"># ie. the file path C:/Documents/data</span></span>
+<span><span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="va">proj.num</span>, new <span class="op">=</span> <span class="cn">TRUE</span>, update <span class="op">=</span> <span class="cn">TRUE</span>, dir <span class="op">=</span> <span class="st">"./data/"</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="co"># downloads data to the file path C:/Downloads</span></span>
+<span><span class="fu"><a href="../reference/tagme.html">tagme</a></span><span class="op">(</span><span class="va">proj.num</span>, new <span class="op">=</span> <span class="cn">TRUE</span>, update <span class="op">=</span> <span class="cn">TRUE</span>, dir <span class="op">=</span> <span class="st">"C:/Downloads"</span><span class="op">)</span> </span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="i-see-gps-coordinates-of-0-or-999">I see GPS coordinates of “0” or “999”<a class="anchor" aria-label="anchor" href="#i-see-gps-coordinates-of-0-or-999"></a>
 </h3>
 <p>These values are recorded from the GPS unit in the field.<br>
 Values like these should be ignored, you can replace these with <code>NA</code>, or insert the <code>recvDeployLat</code>/<code>recvDeplOyLon</code> values which are taken from receiver deployment metadata entered by users.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co">## to replace gpsLat/gpsLon values of NA, 0, or 999 with that of receiver deployment metadata in the alltags table, and read into a data.frame</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a>df.alltags &lt;-<span class="st"> </span>tbl.alltags <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb14-3"><a href="#cb14-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">recvLat =</span> <span class="kw">if_else</span>((<span class="kw">is.na</span>(gpsLat)<span class="op">|</span>gpsLat <span class="op">==</span><span class="st"> </span><span class="dv">0</span><span class="op">|</span>gpsLat <span class="op">==</span><span class="st"> </span><span class="dv">999</span>), </span>
-<span id="cb14-4"><a href="#cb14-4"></a>                           recvDeployLat, gpsLat), </span>
-<span id="cb14-5"><a href="#cb14-5"></a>         <span class="dt">recvLon =</span> <span class="kw">if_else</span>((<span class="kw">is.na</span>(gpsLon)<span class="op">|</span>gpsLon <span class="op">==</span><span class="st"> </span><span class="dv">0</span><span class="op">|</span>gpsLon <span class="op">==</span><span class="st"> </span><span class="dv">999</span>), </span>
-<span id="cb14-6"><a href="#cb14-6"></a>                           recvDeployLon, gpsLon)</span>
-<span id="cb14-7"><a href="#cb14-7"></a>  <span class="kw">collect</span>() <span class="op">%&gt;%</span><span class="st"> </span>as.data.frame</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co">## to replace gpsLat/gpsLon values of NA, 0, or 999 with that of receiver deployment metadata in the alltags table, and read into a data.frame</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>df.alltags &lt;-<span class="st"> </span>tbl.alltags <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">recvLat =</span> <span class="kw">if_else</span>((<span class="kw">is.na</span>(gpsLat)<span class="op">|</span>gpsLat <span class="op">==</span><span class="st"> </span><span class="dv">0</span><span class="op">|</span>gpsLat <span class="op">==</span><span class="st"> </span><span class="dv">999</span>), </span>
+<span id="cb17-4"><a href="#cb17-4"></a>                           recvDeployLat, gpsLat), </span>
+<span id="cb17-5"><a href="#cb17-5"></a>         <span class="dt">recvLon =</span> <span class="kw">if_else</span>((<span class="kw">is.na</span>(gpsLon)<span class="op">|</span>gpsLon <span class="op">==</span><span class="st"> </span><span class="dv">0</span><span class="op">|</span>gpsLon <span class="op">==</span><span class="st"> </span><span class="dv">999</span>), </span>
+<span id="cb17-6"><a href="#cb17-6"></a>                           recvDeployLon, gpsLon)</span>
+<span id="cb17-7"><a href="#cb17-7"></a>  <span class="kw">collect</span>() <span class="op">%&gt;%</span><span class="st"> </span>as.data.frame</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="i-see-port-with-a-value-of--1">I see port with a value of -1<a class="anchor" aria-label="anchor" href="#i-see-port-with-a-value-of--1"></a>
@@ -305,7 +309,7 @@ Values like these should be ignored, you can replace these with <code>NA</code>,
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer>

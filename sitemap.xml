@@ -76,6 +76,9 @@
     <loc>https://MotusWTS.github.io/motus/reference/activityAll.html</loc>
   </url>
   <url>
+    <loc>https://MotusWTS.github.io/motus/reference/args.html</loc>
+  </url>
+  <url>
     <loc>https://MotusWTS.github.io/motus/reference/checkVersion.html</loc>
   </url>
   <url>
@@ -166,9 +169,6 @@
     <loc>https://MotusWTS.github.io/motus/reference/siteTrans.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/reference/sqliteToRDS.html</loc>
-  </url>
-  <url>
     <loc>https://MotusWTS.github.io/motus/reference/sunRiseSet.html</loc>
   </url>
   <url>
@@ -182,9 +182,6 @@
   </url>
   <url>
     <loc>https://MotusWTS.github.io/motus/reference/tellme.html</loc>
-  </url>
-  <url>
-    <loc>https://MotusWTS.github.io/motus/reference/tidyeval.html</loc>
   </url>
   <url>
     <loc>https://MotusWTS.github.io/motus/reference/timeToSunriset.html</loc>
