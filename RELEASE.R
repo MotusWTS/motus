@@ -4,8 +4,9 @@
 # The motus project works with three(ish) main branches:
 #
 # - master - currently released version of motus (e.g., v3.0.0)
-# - betaX - minor work for the next minor release (e.g., beta3 = v3.0.1)
-# - sandbox - major work for the next major release (e.g., v4.0.0)
+# - hotfix/dev - minor work using current API version (e.g., v3.0.0.9000)
+# - beta - minor work for the next minor API release (e.g., v3.0.0.9900)
+# - sandbox - major work for the next major API release (e.g., v3.0.0.9990)
 #
 # Merges may occur as follows:  
 #
@@ -42,6 +43,14 @@
 # - Revert API url to (i.e. should be sandbox url, not point to beta)
 # - Revert VERSION number (i.e. keep sandbox version, not beta version)
 # - Committ changes as merge with betaX
+#
+# # After releasing a new version (i.e. all changes into master)
+# 
+# - Delete beta and sandbox locally and on GitHub
+# - Create beta and sandbox from master
+# - Update versions (X.X.X.9900 and X.X.X.9990)
+# - Update apis (in z.onLoad.R) to https://beta.motus.org/api and https://sandbox.motus.org/api
+# - Add `# motus beta dev` and `# motus sandbox dev` headings to NEWS
 
 # Steps/Commands to run before a package release -----------------------------
 
