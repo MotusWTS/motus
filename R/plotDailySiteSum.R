@@ -1,12 +1,13 @@
 #' Plots number of detections and tags, daily, for a specified site
 #'
 #' Plots total number of detections across all tags, and total number of tags
-#' detected per day for a specified site.  Depends on siteSumDaily function.
+#' detected per day for a specified site.  Depends on `siteSumDaily()`.
 #'
 #' @param data a selected table from .motus data, eg. "alltagsGPS", or a
 #'   data.frame of detection data including at a minimum variables for
-#'   motusTagID, sig, recvDeployName, ts
+#'   `motusTagID`, `sig`, `recvDeployName`, `ts`
 #' @param recvDeployName name of site to plot
+#' 
 #' @export
 #' 
 #' @examples
@@ -38,9 +39,9 @@
 
 plotDailySiteSum <- function(data, recvDeployName){
   tmp <- if(any(class(data) == "data.frame")){
-    tmp = data
+    tmp <- data
   } else {
-    tmp = data %>% dplyr::collect() %>% as.data.frame()
+    tmp <- data %>% dplyr::collect() %>% as.data.frame()
   }
   sitesum <- siteSumDaily(dplyr::filter(data, .data$recvDeployName == !!recvDeployName))
   detections <- ggplot2::ggplot(sitesum, ggplot2::aes_string(x = "date", y = "num_det")) +

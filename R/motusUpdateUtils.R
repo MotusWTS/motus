@@ -1,16 +1,12 @@
-#' Get runs by batch for Tags
+#' Get runs by batch for tags
 #' 
-#' Start with runID <- 0, because we don't know in advance what runs that we
+#' Start with `runID <- 0`, because we don't know in advance what runs that we
 #' already have records for might be modified by each batch
 #'
-#' @param sql 
-#' @param projectID 
-#' @param batchID 
-#' @param batchMsg 
-#'
 #' @noRd
+#' @keywords internal
 
-runsForBatch <- function(sql, batchID, batchMsg, projectID = NULL) {
+runsForBatch <- function(src, batchID, batchMsg, projectID = NULL) {
   runID <- 0
   tagIDs <- vector()
   repeat {
@@ -28,12 +24,12 @@ runsForBatch <- function(sql, batchID, batchMsg, projectID = NULL) {
     ## add these run records to the DB
     ## Because some might be updates, or a previous transfer might have been
     ## interrupted, use dbInsertOrReplace
-    dbInsertOrReplace(sql$con, "runs", r)
-    DBI::dbWriteTable(sql$con, "batchRuns", 
+    
+    dbInsertOrReplace(src, "runs", r)
+    DBI::dbWriteTable(src, "batchRuns", 
                       data.frame(batchID = batchID, runID = r$runID), 
                       append = TRUE, row.names = FALSE)
-    message(sprintf("%s: got %6d runs starting at %15.0f\r", 
-                    batchMsg, nrow(r), runID))
+    message(msg_fmt("{batchMsg}: got {nrow(r):6d} runs starting at {runID:15.0f}"))
     runID <- max(r$runID)
   }
   tagIDs
@@ -46,22 +42,21 @@ runsForBatch <- function(sql, batchID, batchMsg, projectID = NULL) {
 #' new hits as we get them, writing the final total to the numHits field in this
 #' batch's record).
 #'
-#' @param sql 
-#' @param batchID 
-#' @param batchMsg 
-#' @param projectID 
-#'
 #' @noRd
-hitsForBatchProject <- function(sql, batchID, batchMsg, projectID = NULL) {
-  
-  hitID <- sql(paste0("select maxHitID from projBatch ",
-                      "where tagDepProjectID = %d and batchID = %d"), 
-               projectID, batchID)[[1]]
+#' @keywords internal
+
+hitsForBatchProject <- function(src, batchID, batchMsg, projectID = NULL) {
+
+  hitID <- DBI_Query(src,
+                     "SELECT maxHitID FROM projBatch ",
+                     "WHERE tagDepProjectID = {projectID} ",
+                     "AND batchID = {batchID}")
   
   if (length(hitID) == 0) {
     hitID <- 0
-    sql(paste0("insert into projBatch (tagDepProjectID, batchID, maxHitID) ",
-               "values (%d, %d, 0)"), projectID, batchID)
+    DBI_Execute(src, 
+                "INSERT INTO projBatch (tagDepProjectID, batchID, maxHitID) ",
+                "VALUES ({projectID}, {batchID}, 0)")
   }
   
   numHits <- 0
@@ -72,19 +67,18 @@ hitsForBatchProject <- function(sql, batchID, batchMsg, projectID = NULL) {
                               hitID = hitID)
     
     if (!isTRUE(nrow(h) > 0)) break
-    message(sprintf("%s: got %6d hits starting at %15.0f\r", 
-                    batchMsg, nrow(h), hitID))
+    message(msg_fmt("{batchMsg}: got {nrow(h):6d} hits starting at {hitID:15.0f}"))
     
     # add these hit records to the DB
     # Because some extra fields will cause this to error, use dbInsertOrReplace
-    dbInsertOrReplace(sql$con, "hits", h)
+    dbInsertOrReplace(src, "hits", h)
     hitID <- max(h$hitID)
     
     numHits <- numHits + nrow(h)
     
-    sql(paste0("update projBatch set maxHitID = %f ",
-               "where tagDepProjectID = %d and batchID = %d"), 
-        hitID, projectID, batchID)
+    DBI_Execute(src, 
+                "UPDATE projBatch SET maxHitID = {hitID} ",
+                "WHERE tagDepProjectID = {projectID} AND batchID = {batchID}")
   }
   numHits
 }
@@ -93,27 +87,24 @@ hitsForBatchProject <- function(sql, batchID, batchMsg, projectID = NULL) {
 #' 
 #' Start after the largest hitID we already have.
 #'
-#' @param sql 
-#' @param batchID 
-#' @param batchMsg 
-#'
 #' @noRd
-hitsForBatchReceiver <- function(sql, batchID, batchMsg) {
+#' @keywords internal
+
+hitsForBatchReceiver <- function(src, batchID, batchMsg) {
   
-  hitID <- sql("select ifnull(max(hitID), 0) from hits where batchID=%d",
-               batchID)[[1]]
+  hitID <- DBI_Query(src, 
+                     "SELECT IFNULL(max(hitID), 0) FROM hits WHERE batchID = {batchID}")
   
   repeat {
     h <- srvHitsForReceiver(batchID = batchID, hitID = hitID)
     
     
     if (!isTRUE(nrow(h) > 0)) break
-    message(sprintf("%s: got %6d hits starting at %15.0f\r", 
-                    batchMsg, nrow(h), hitID))
+    message(msg_fmt("{batchMsg}: got {nrow(h):6d} hits starting at {hitID}"))
     
     # add these hit records to the DB
     # Because some extra fields will cause this to error, use dbInsertOrReplace
-    dbInsertOrReplace(sql$con, "hits", h)
+    dbInsertOrReplace(src, "hits", h)
     hitID <- max(h$hitID)
   } 
 }
@@ -123,23 +114,20 @@ hitsForBatchReceiver <- function(sql, batchID, batchMsg) {
 #' 
 #' Start after the largest gpsID for which we already have a fix
 #'
-#' @param sql 
-#' @param batchID 
-#' @param batchMsg 
-#' @param projectID
-#'
 #' @noRd
-gpsForBatchProject <- function(sql, batchID, batchMsg, projectID) {
-  gpsID <- sql(paste0("SELECT ifnull(max(gpsID), 0) ",
-                      "FROM gps WHERE batchID = %d"), batchID)[[1]]
+#' @keywords internal
+
+gpsForBatchProject <- function(src, batchID, batchMsg, projectID) {
+  gpsID <- DBI_Query(src, 
+                     "SELECT ifnull(max(gpsID), 0) ",
+                     "FROM gps WHERE batchID = {batchID}")
   repeat {
     g <- srvGPSForTagProject(projectID = projectID, 
                              batchID = batchID, 
                              gpsID = gpsID)
     if (!isTRUE(nrow(g) > 0)) break
-    message(sprintf("%s: got %6d GPS fixes                     \r", 
-                    batchMsg, nrow(g)))
-    dbInsertOrReplace(sql$con, "gps", g)
+    message(msg_fmt("{batchMsg}: got {nrow(g):6d} GPS fixes"))
+    dbInsertOrReplace(src, "gps", g)
     gpsID <- max(g$gpsID)
   } 
 }
@@ -148,20 +136,18 @@ gpsForBatchProject <- function(sql, batchID, batchMsg, projectID) {
 #' 
 #' Start after the largest TS for which we already have a fix
 #'
-#' @param sql 
-#' @param batchID 
-#' @param batchMsg 
-#'
 #' @noRd
-gpsForBatchReceiver <- function(sql, batchID, batchMsg) {
-  gpsID <- sql(paste0("SELECT ifnull(max(gpsID), 0) ",
-                      "FROM gps WHERE batchID = %d"), batchID)[[1]]
+#' @keywords internal
+
+gpsForBatchReceiver <- function(src, batchID, batchMsg) {
+  gpsID <- DBI_Query(src, 
+                     "SELECT ifnull(max(gpsID), 0) ",
+                     "FROM gps WHERE batchID = {batchID}")
   repeat {
     g <- srvGPSForReceiver(batchID = batchID, gpsID = gpsID)
     if (!isTRUE(nrow(g) > 0)) break
-    message(sprintf("%s: got %6d GPS fixes                     \r", 
-                    batchMsg, nrow(g)))
-    dbInsertOrReplace(sql$con, "gps", 
+    message(msg_fmt("{batchMsg}: got {nrow(g):6d} GPS fixes"))
+    dbInsertOrReplace(src, "gps", 
                       g[, c("batchID", "ts", "gpsts", "lat", "lon", "alt")])
     gpsID <- max(g$gpsID)
   } 
@@ -171,13 +157,15 @@ gpsForBatchReceiver <- function(sql, batchID, batchMsg) {
 #'
 #' Start after the largest ant, hourBin for which we already have pulseCounts
 #' from this batch.
-#' @param sql 
-#' @param batchID 
-#' @param batchMsg 
-#'
+#' 
 #' @noRd
-pulseForBatchReceiver <- function(sql, batchID, batchMsg) {
-  info <- sql("select ant, hourBin from pulseCounts where batchID=%d order by ant desc, hourBin desc limit 1", batchID)
+#' @keywords internal
+
+pulseForBatchReceiver <- function(src, batchID, batchMsg) {
+  info <- DBI_Query(
+    src, 
+    "SELECT ant, hourBin FROM pulseCounts WHERE batchID = {batchID}",
+    "ORDER BY ant DESC, hourBin DESC LIMIT 1")
   if (nrow(info) == 1) {
     ant <- info[[1]]
     hourBin <- info[[2]]
@@ -189,9 +177,8 @@ pulseForBatchReceiver <- function(sql, batchID, batchMsg) {
   repeat {
     pc <- srvPulseCountsForReceiver(batchID = batchID, ant = ant, hourBin = hourBin)
     if (!isTRUE(nrow(pc) > 0)) break
-    message(sprintf("%s: got %6d pulse counts                     \r", 
-                    batchMsg, nrow(pc)))
-    dbInsertOrReplace(sql$con, "pulseCounts", 
+    message(msg_fmt("{batchMsg}: got {nrow(pc):6d} pulse counts"))
+    dbInsertOrReplace(src, "pulseCounts", 
                       pc[, c("batchID", "ant", "hourBin", "count")])
     ant <- utils::tail(pc$ant, 1)
     hourBin <- utils::tail(pc$hourBin, 1)

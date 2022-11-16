@@ -7,9 +7,10 @@
 nodeData(src, resume = FALSE)
 }
 \arguments{
-\item{src}{src_sqlite object representing the database}
+\item{src}{SQLite connection (result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")})}
 
-\item{resume}{Logical. Resume a download? Otherwise the \code{nodeData} table is
+\item{resume}{Logical. Resume a download? Otherwise the table is
 removed and the download is started from the beginning.}
 }
 \description{

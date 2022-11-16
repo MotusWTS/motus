@@ -10,7 +10,7 @@ Wildlife Tracking System \url{http://motus.org}.
 }
 \details{
 For a detailed walk-though and instructions check out the
-\href{https://MotusWTS.github.io/motus}{walk-throughs and articles}
+\href{https://MotusWTS.github.io/motus}{walk-throughs and articles}!
 
 Commonly used functions:
 \enumerate{

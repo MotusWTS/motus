@@ -2,15 +2,16 @@
 % Please edit documentation in R/checkVersion.R
 \name{checkVersion}
 \alias{checkVersion}
-\title{Verifies the version of the package against the admInfo table of a motus file. Those should match
-if the updateMotusDb function has been properly loaded by the tagme function.}
+\title{Check database version}
 \usage{
 checkVersion(src)
 }
 \arguments{
-\item{src}{motus sqlite database source}
+\item{src}{SQLite connection (result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")})}
 }
 \description{
-Verifies the version of the package against the admInfo table of a motus file. Those should match
-if the updateMotusDb function has been properly loaded by the tagme function.
+Verifies the version of the package against the \code{admInfo} table of a \code{.motus}
+file. Those should match if the \code{updateMotusDb()} function has been properly
+applied by the \code{tagme()} function.
 }

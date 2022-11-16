@@ -150,7 +150,7 @@ ggplot(data = filter(df_tags, motusTagID == 16039, date == "2015-08-31"),
   facet_wrap( ~ hourBin, scales = "free", ncol = 3)
 ```
 
-### By reciver latitude
+### By receiver latitude
 
 We can also look at these patterns by receiver latitude, which, while the scale
 obscures some of the small local patterns, shows a more clear global pattern 

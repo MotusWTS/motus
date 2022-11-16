@@ -1,10 +1,10 @@
 #' Fetch and use data from the Motus Wildlife Tracking System
 #'
-#' \code{motus} is an R package for retrieving telemetry data from the Motus
+#' `motus` is an R package for retrieving telemetry data from the Motus
 #' Wildlife Tracking System \url{http://motus.org}.
 #' 
 #' For a detailed walk-though and instructions check out the 
-#' \href{https://MotusWTS.github.io/motus}{walk-throughs and articles}
+#' [walk-throughs and articles](https://MotusWTS.github.io/motus)!
 #' 
 #' Commonly used functions:
 #'
@@ -50,3 +50,11 @@
 #' @docType package
 #' @name motus
 NULL
+
+# .onAttach <- function(libname, pkgname) {
+#   packageStartupMessage("motus v", utils::packageVersion("motus"), "\n",
+#                         "Database connections have been updated.\nIf you ",
+#                         "use `XXX$con` notation, note that the `$con` is no ",
+#                         "longer required.\n",
+#                         "Release notes: https://motuswts.github.io/motus/news")
+# }

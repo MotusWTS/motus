@@ -14,23 +14,27 @@ writeRunsFilter(
 )
 }
 \arguments{
-\item{src}{dplyr sqlite src, as returned by \code{dplyr::src_sqlite()}}
+\item{src}{SQLite connection (result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")})}
 
-\item{filterName}{unique name given to the filter}
+\item{filterName}{Character. Unique name given to the filter}
 
-\item{motusProjID}{optional project ID attached to the filter in order to share with other users of the same project.}
+\item{motusProjID}{Character. Optional project ID attached to the filter in
+order to share with other users of the same project.}
 
-\item{df}{dataframe containing the runID, the motusTagID and probability values to save in the local database}
+\item{df}{Data frame. Containing \code{runID}, \code{motusTagID} and probability values
+to save in the local database}
 
-\item{overwrite}{boolean. When TRUE ensures that existing records matching the same filterName
-and runID get replaced}
+\item{overwrite}{Logical. When \code{TRUE} ensures that existing records matching
+the same \code{filterName} and \code{runID} get replaced}
 
-\item{delete}{boolean. When TRUE, removes all existing filter records associated with the filterName
-and re-inserts the ones contained in the dataframe. This option should be used if the dataframe
-provided contains the entire set of filters you want to save.}
+\item{delete}{Logical. When TRUE, removes all existing filter records
+associated with the \code{filterName} and re-inserts the ones contained in the
+dataframe. This option should be used if the dataframe provided contains
+the entire set of filters you want to save.}
 }
 \value{
-a dplyr sqlite object refering to the filter created
+database connection refering to the filter created
 }
 \description{
 Write to the local database the probabilities associated with runs for a filter

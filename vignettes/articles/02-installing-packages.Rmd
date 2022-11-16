@@ -25,7 +25,7 @@ First update existing packages with the `remotes` package (this may take a while
 
 ```{r}
 install.packages("remotes")
-update_packages()
+remotes::update_packages()
 ```
 
 Next, we'll start installing the required packages, if not already installed.

@@ -42,6 +42,10 @@ There 3-4 different `motus` versions on GitHub at any one time:
   table structure is created by the `makeTables()` function (so it can be used by 
   `updatesql.R` as well as by `ensureDBTables()` without duplicating the process. 
 - `checkDataVersion()` is used to update data versions (not database versions)
+- Querying and changing the data base is done with wrapper functions: `DBI_Query()`
+  and `DBI_Execute()` in `utils-wrappers.R`. These use `glue_sql()` to combine
+  statements and insert parameters. Note the use of backticks {`var`} when 
+  inserting table or column names into a statement.
 
 ## Talk to the API - Boxing/Unboxing JSON parameters
 - The API requires that some parameters be boxed (i.e. `[parameter]`) and some

@@ -1,14 +1,11 @@
-context("sql tables")
-
 test_that("Create DB, includes any new tables", {
   unlink("temp.motus")
-  temp <- dbplyr::src_dbi(DBI::dbConnect(RSQLite::SQLite(), "temp.motus"),
-                          auto_disconnect = TRUE) %>%
+  temp <- DBI::dbConnect(RSQLite::SQLite(), "temp.motus") %>%
     expect_silent()
-  expect_length(DBI::dbListTables(temp$con), 0)
+  expect_length(DBI::dbListTables(temp), 0)
   expect_silent(ensureDBTables(temp, 176, quiet = TRUE))
   
-  t <- DBI::dbListTables(temp$con)
+  t <- DBI::dbListTables(temp)
   
   # Expect activityAll and gpsAll
   expect_true(all(c("activityAll", "gpsAll") %in% t)) 
@@ -16,63 +13,67 @@ test_that("Create DB, includes any new tables", {
   # Expect Deprecated
   expect_true("deprecated" %in% t)
   
-  DBI::dbDisconnect(temp$con)
+  disconnect(temp)
   unlink("temp.motus")
 })
 
 # Create DB, includes any new fields -----------------------------------------
 test_that("Create DB, includes any new fields", {
   unlink("temp.motus")
-  temp <- dbplyr::src_dbi(DBI::dbConnect(RSQLite::SQLite(), "temp.motus"), 
-                          auto_disconnect = TRUE) %>%
+  temp <- DBI::dbConnect(RSQLite::SQLite(), "temp.motus") %>%
     expect_silent()
-  expect_length(DBI::dbListTables(temp$con), 0)
+  expect_length(DBI::dbListTables(temp), 0)
   
+  DBI_ExecuteAll(
+    temp,
+    c("CREATE TABLE admInfo (db_version TEXT, data_version TEXT);",
+      "INSERT INTO admInfo (db_version, data_version) VALUES('2000-01-01', 0);"))
   expect_message(ensureDBTables(temp, 176, quiet = FALSE))
+  
   expect_silent(ensureDBTables(temp, 176, quiet = TRUE))
-  expect_length(t <- DBI::dbListTables(temp$con), 32)
+  expect_length(t <- DBI::dbListTables(temp), 32)
   
   # Expect columns in the tables
-  for(i in t) expect_gte(ncol(dplyr::tbl(temp$con, !!i)), 2)
+  for(i in t) expect_gte(ncol(dplyr::tbl(temp, !!i)), 2)
 
   # Expect no data in the tables
   for(i in t[!t %in% c("admInfo", "meta")]){
-    expect_equal(nrow(DBI::dbGetQuery(temp$con, paste0("SELECT * FROM ", !!i))),
+    expect_equal(nrow(DBI::dbGetQuery(temp, paste0("SELECT * FROM ", !!i))),
                  0)
   }
-  expect_equal(nrow(DBI::dbGetQuery(temp$con, "SELECT * FROM admInfo")), 1)
-  expect_equal(nrow(DBI::dbGetQuery(temp$con, "SELECT * FROM meta")), 2)
+  expect_equal(nrow(DBI_Query(temp, "SELECT * FROM admInfo")), 1)
+  expect_equal(nrow(DBI_Query(temp, "SELECT * FROM meta")), 2)
   
   # Expect new columns age/sex in tagDeps
-  expect_true(all(c("age", "sex") %in% DBI::dbListFields(temp$con, "tagDeps")))
+  expect_true(all(c("age", "sex") %in% DBI::dbListFields(temp, "tagDeps")))
   
   # Expect new columns in gps
   expect_true(all(c("lat_mean", "lon_mean", "n_fixes") %in% 
-                    DBI::dbListFields(temp$con, "gps")))
+                    DBI::dbListFields(temp, "gps")))
   
   # Expect new columns in nodeData
   expect_true(all(c("nodets", "firmware", "solarVolt", "solarCurrent", 
                     "solarCurrentCumul", "lat", "lon") %in% 
-                    DBI::dbListFields(temp$con, "nodeData")))
+                    DBI::dbListFields(temp, "nodeData")))
   
   # Expect no NOT NULL in nodeDeps tsEnd
-  expect_equal(DBI::dbGetQuery(temp$con, "PRAGMA table_info(nodeDeps)") %>%
+  expect_equal(DBI_Query(temp, "PRAGMA table_info(nodeDeps)") %>%
                  dplyr::filter(name == "tsEnd") %>%
                  dplyr::pull(notnull), 
                0)
   
   # Expect new columns in hits
-  expect_true(all(c("validated") %in% DBI::dbListFields(temp$con, "hits")))
+  expect_true(all(c("validated") %in% DBI::dbListFields(temp, "hits")))
   
   # Expect new columns in activity/activityAll
-  expect_true(all(c("numGPSfix") %in% DBI::dbListFields(temp$con, "activity")))
-  expect_true(all(c("numGPSfix") %in% DBI::dbListFields(temp$con, "activityAll")))
+  expect_true(all(c("numGPSfix") %in% DBI::dbListFields(temp, "activity")))
+  expect_true(all(c("numGPSfix") %in% DBI::dbListFields(temp, "activityAll")))
   
   # Expect new columns in recvDeps
   expect_true(all(c("stationName", "stationID") %in% 
-                    DBI::dbListFields(temp$con, "recvDeps")))
+                    DBI::dbListFields(temp, "recvDeps")))
 
-  DBI::dbDisconnect(temp$con)
+  disconnect(temp)
   unlink("temp.motus")
 })
 
@@ -86,19 +87,19 @@ test_that("Views created correctly", {
   views <- c("allambigs", "alltags", "alltagsGPS", "allruns", "allrunsGPS")
   
   # Remove existing views
-  for(v in views) DBI::dbExecute(tags$con, glue::glue("DROP VIEW IF EXISTS {v}"))
+  for(v in views) DBI_Execute(tags, "DROP VIEW IF EXISTS {v}")
   
   # Add views
   tags <- ensureDBTables(tags, projRecv = 176)
   
   # Check that views present
-  expect_true(all(views %in% DBI::dbListTables(tags$con)))
+  expect_true(all(views %in% DBI::dbListTables(tags)))
   
   # Check that data in views correct
-  allruns <- dplyr::tbl(tags$con, "allruns")
-  allrunsGPS <- dplyr::tbl(tags$con, "allrunsGPS")
-  alltags <- dplyr::tbl(tags$con, "alltags")
-  alltagsGPS <- dplyr::tbl(tags$con, "alltagsGPS")
+  allruns <- dplyr::tbl(tags, "allruns")
+  allrunsGPS <- dplyr::tbl(tags, "allrunsGPS")
+  alltags <- dplyr::tbl(tags, "alltags")
+  alltagsGPS <- dplyr::tbl(tags, "alltagsGPS")
   
   # More fields in GPS views
   expect_gt(ncol(allrunsGPS), ncol(allruns))
@@ -124,7 +125,7 @@ test_that("Views created correctly", {
   expect_equal(unique(atGPS$batchID), unique(arGPS$batchID))
   expect_equal(unique(atGPS$runID), unique(arGPS$runID))
   
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags)
   unlink("project-176.motus")
   file.rename("project-176-backup.motus", "project-176.motus")
 })
@@ -143,7 +144,7 @@ test_that("new tables have character ant and port", {
               dplyr::pull("port"), 
             "character")
   
-  DBI::dbDisconnect(tags)
+  disconnect(tags)
   unlink("project-176.motus")
   
   # For receivers
@@ -155,7 +156,7 @@ test_that("new tables have character ant and port", {
               dplyr::collect() %>% 
               dplyr::pull("ant"), 
             "character")
-  DBI::dbDisconnect(tags)
+  disconnect(tags)
 })
 
 
@@ -165,26 +166,26 @@ test_that("Missing tables recreated silently", {
   file.copy(system.file("extdata", "project-176.motus", package = "motus"), ".")
   tags <- tagme(176, new = FALSE, update = FALSE)
   
-  t <- DBI::dbListTables(tags$con)
+  t <- DBI::dbListTables(tags)
   t <- t[t != "admInfo"] # Don't try removing admInfo table
   
   for(i in t) {
     # Remove table/view
     if(!i %in% c("alltags", "allambigs", "alltagsGPS", "allruns", "allrunsGPS")) {
-      expect_silent(DBI::dbRemoveTable(tags$con, !!i))
-      expect_false(DBI::dbExistsTable(tags$con, !!i))
+      expect_silent(DBI::dbRemoveTable(tags, !!i))
+      expect_false(DBI::dbExistsTable(tags, !!i))
     } else {
-      expect_silent(DBI::dbExecute(tags$con, paste0("DROP VIEW ", !!i)))
-      expect_false(DBI::dbExistsTable(tags$con, !!i))
+      expect_silent(DBI::dbExecute(tags, paste0("DROP VIEW ", !!i)))
+      expect_false(DBI::dbExistsTable(tags, !!i))
     }
   }
   
   # Add tables, no errors
   expect_message(tags <- tagme(176, new = FALSE, update = TRUE))
   
-  for(i in t) expect_true(DBI::dbExistsTable(tags$con, !!i))
+  for(i in t) expect_true(DBI::dbExistsTable(tags, !!i))
   
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags)
   unlink("project-176.motus")
 })
 
@@ -199,17 +200,17 @@ test_that("check for custom views before update", {
   
   # Add custom view
   tags <- DBI::dbConnect(RSQLite::SQLite(), "project-176.motus")
-  DBI::dbExecute(
+  DBI_Execute(
     tags, 
     "CREATE VIEW alltags_fast AS SELECT hitID, runID, ts FROM alltags WHERE sig = 52;")
-  DBI::dbExecute(tags, "UPDATE admInfo SET db_version = '2019-01-01 00:00:00'")
-  DBI::dbDisconnect(tags)
+  DBI_Execute(tags, "UPDATE admInfo SET db_version = '2019-01-01 00:00:00'")
+  disconnect(tags)
   tags <- tagme(176, update = FALSE)
   
   # Test for handling of custom view
   expect_error(checkViews(src = tags, update_sql = sql_versions$sql, response = 2),
                "Cannot update local database if conflicting custom views")
-  expect_true("alltags_fast" %in% DBI::dbListTables(tags$con))
+  expect_true("alltags_fast" %in% DBI::dbListTables(tags))
   expect_message(checkViews(src = tags, update_sql = sql_versions$sql, response = 1),
                  "Deleting custom views: alltags_fast")
   expect_true(file.exists(paste0("project-176_custom_views_", Sys.Date(), ".log")))
@@ -217,11 +218,11 @@ test_that("check for custom views before update", {
   expect_true(any(stringr::str_detect(readLines(paste0("project-176_custom_views_", 
                                                        Sys.Date(), ".log")),
                                       "CREATE VIEW alltags_fast")))
-  expect_false("alltags_fast" %in% DBI::dbListTables(tags$con))
+  expect_false("alltags_fast" %in% DBI::dbListTables(tags))
    
   expect_message(tagme(176, update = TRUE), "updateMotusDb started")
   
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags)
   unlink("project-176.motus")
   unlink(paste0("project-176_custom_views_", Sys.Date(), ".log"))
 })

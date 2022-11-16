@@ -1,5 +1,33 @@
 # motus beta dev
 
+# motus 6.0.1
+* Fix bug in `xxxRunsFilter()` functions resulting in the inability to correctly
+  return the filter id
+
+# motus 6.0.0
+### Potential breaking change
+* Changed internal method for loading SQLite databases. Now uses standard method
+  with `DBI::dbConnect()`. Previously, users applying `DBI` functions to 
+  databases loaded with `tagme()` had to use the `$con` sub-element of the connection.
+  `$con`  should no longer be used (it will result in an error).
+
+### Functions removed
+* Remove functions `safeSQL()`, `sqliteToRDS()`
+
+### Bug fixes
+* fixed bug in `deprecateBatches()` which caused an error when removing deprecated
+batches from receivers.
+
+### Other
+* Updated internal code for logging messages
+* Now use simple wrappers for `DBI::dbExecute()` and `DBI::dbGetQuery()`, using
+  `glue::glue_sql()` to help construct statements.
+
+# motus 5.0.1
+### Bug fixes
+* fixed bug in `deprecateBatches()` which caused an error when there were no batches to deprecate.
+* ensure new databases are fully up-to-date (without needing to immediately update).
+
 # motus 5.0.0
 ### New features
 * New `allruns` and `allrunsGPS` views for quicker first passes of the data with 

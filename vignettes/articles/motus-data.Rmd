@@ -301,7 +301,7 @@ This means that:
 ### Receiver Boot Sessions {#boot}
 
 A receiver **reboots** when it is powered down and then (possibly much later)
-powered back up. A boot session is definied as the period between reboots.
+powered back up. A boot session is defined as the period between reboots.
 Reboots often correspond to a receiver:
 
  - being redeployed
@@ -390,7 +390,7 @@ There are several reasons:
   deployment record for a tag only reaches the server after it has already
   processed raw files overlapping the tag's deployment, then those files will
   need to be reprocessed in order to (potentially) find the tag therein.
-  Similary, if a tag was mistakenly sought during a period when it was not
+  Similarly, if a tag was mistakenly sought during a period when it was not
   deployed, it will have "used up" signals that could instead have come from
   other tags, thereby causing both its own false positives, and false negatives
   on other tags.  (This is only true for Lotek ID tags; CTT should be
@@ -450,7 +450,7 @@ that run?
 Therefore, for simplicity we **choose reprocessing periods that cross no runs**.
 Currently, that means a boot session, [as discussed above](#boot).
 
-### Distributing reprocessed data
+### Distributing reprocessed data (eventual)
 
 The previous section shows why we only reprocess data by boot session. Given
 that, how do we get reprocessed data to users while fulfilling the reprocessing
@@ -461,7 +461,7 @@ batches and one or more runs, because batches and runs both nest within boot
 sessions.
 
 Replacement of data by reprocessed versions should happen in-band (point \#5
-above), so one approach is this:
+above), so **one *potential* approach** is this:
 
  - the `batches_for_XXX` API entries should mark new batches which result
    from reprocessing, so that the client can deal with them appropriately.

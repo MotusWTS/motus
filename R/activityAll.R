@@ -5,9 +5,7 @@
 #' batch. Batches with large numbers of hits may indicate interference and thus
 #' unreliable hits.
 #'
-#' @param src src_sqlite object representing the database
-#' @param resume Logical. Resume a download? Otherwise the `activityAll` table is
-#'   removed and the download is started from the beginning.
+#' @inheritParams args
 #'
 #' @examples
 #' 

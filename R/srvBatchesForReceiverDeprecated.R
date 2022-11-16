@@ -1,4 +1,4 @@
-#' Fetch deprecated batches for a receiver
+#' Get deprecated batches for a receiver
 #'
 #' @param deviceID Numeric. Motus receiver device ID
 #' @param batchID Numeric. Largest batchID already fetched. For pagination,
@@ -10,5 +10,5 @@ srvBatchesForReceiverDeprecated <- function(deviceID, batchID = 0, verbose = FAL
   srvQuery(API = motus_vars$API_BATCHES_FOR_RECEIVER_DEPRECATED, 
            params = list(deviceID = deviceID, batchID = batchID),
            verbose = verbose) %>%
-    as.data.frame()
+    to_df()
 }

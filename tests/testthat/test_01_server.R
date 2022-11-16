@@ -4,17 +4,63 @@ test_that("srvXXX work as expected", {
   
   skip_if_no_auth()
   
-  #srvAuth
+  ## srv meta ----------------------
+  
+  # srvRecvMetadataForProjects
+  expect_silent(s <- srvRecvMetadataForProjects(projectIDs = 213)) %>%
+    expect_type("list")
+  expect_named(s, c("recvDeps", "antDeps", "nodeDeps", "projs"))
+  expect_gt(nrow(s$recvDeps), 0)
+  expect_true(all(s$recvDeps$projectID == 213))
+  expect_gt(nrow(s$antDeps), 0)
+  expect_gt(nrow(s$nodeDeps), 0)
+  expect_gt(nrow(s$projs), 0)
+  
+  expect_silent(s <- srvRecvMetadataForProjects(projectIDs = NULL)) %>%
+    expect_type("list")
+  expect_named(s, c("recvDeps", "antDeps", "nodeDeps", "projs"))
+  expect_gt(nrow(s$recvDeps), 0)
+  expect_gt(length(unique(s$recvDeps$projectID)), 10)
+  expect_gt(nrow(s$antDeps), 0)
+  expect_gt(nrow(s$nodeDeps), 0)
+  expect_gt(nrow(s$projs), 0)
+  
+  # srvMetadataForReceivers
+  d <- srvDeviceIDForReceiver("CTT-5031194D3168")$deviceID
+  expect_silent(meta_recv <- srvMetadataForReceivers(deviceIDs = d)) %>%
+    expect_type("list")
+  expect_named(meta_recv, c("recvDeps", "antDeps", "projs"))
+  expect_gt(nrow(meta_recv$recvDeps), 0)
+  expect_gt(nrow(meta_recv$antDeps), 0)
+  expect_gt(nrow(meta_recv$projs), 0)
+  
+  # srvMetadataForTags
+  expect_silent(s <- srvMetadataForTags(motusTagIDs = 29876)) %>%
+    expect_type("list")
+  expect_named(s, c("tags", "tagDeps", "tagProps", "species", "projs"))
+  expect_gt(nrow(s$tags), 0)
+  expect_gt(nrow(s$tagDeps), 0)
+  expect_s3_class(s$tagProps, "data.frame") # might be empty
+  expect_gt(nrow(s$species), 0)
+  expect_gt(nrow(s$projs), 0)
+  
+  
+  #srvAuth --------------------
   expect_silent(srvAuth()) %>%
     expect_type("character")
+  
+  
+  # srv regular ----------------
   
   # srvActivityForAll
   expect_silent(s <- srvActivityForAll(batchID = 0, hourBin = 0)) %>%
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
   
+  b <- s$batchID[1]
+  
   # srvActivityForBatches - From Project 4, non-deprecated
-  expect_silent(s <- srvActivityForBatches(batchID = 118721)) %>%
+  expect_silent(s <- srvActivityForBatches(batchID = b)) %>%
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
   
@@ -30,10 +76,14 @@ test_that("srvXXX work as expected", {
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
   
+  b217 <- s$batchID[nrow(s)]
+  
   # srvBatchesForTagProject
-  # expect_silent(s <- srvBatchesForTagProject(projectID = 204, batchID = 0)) %>%
-  #   expect_s3_class("data.frame")
-  # expect_gt(nrow(s), 0)
+  expect_silent(s <- srvBatchesForTagProject(projectID = 1, batchID = 0)) %>%
+    expect_s3_class("data.frame")
+  expect_gt(nrow(s), 0)
+  
+  b1 <- s$batchID[nrow(s)]
   
   #srvBatchesForReceiverDeprecated
   expect_silent(s <- srvBatchesForReceiverDeprecated(217)) %>%
@@ -50,49 +100,32 @@ test_that("srvXXX work as expected", {
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
   
-  # srvGPSForAll - deviceID = 6115; CTT-5031194D3168
+  # srvGPSForAll
   expect_silent(s <- srvGPSForAll(gpsID = 0)) %>%
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
   
+  b_gps <- s$batchID[1]
+
   # srvGPSForReceiver - deviceID = 6115; CTT-5031194D3168
-  expect_silent(s <- srvGPSForReceiver(batchID = 476443)) %>%
+  expect_silent(s <- srvGPSForReceiver(batchID = b_gps)) %>%
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
   
-  # srvGPSForTagProject
-  expect_silent(s <- srvGPSForTagProject(projectID = 4, batchID = 476443)) %>%
-    expect_s3_class("data.frame")
-  expect_gt(nrow(s), 0)
+  # srvGPSForTagProject - Not sure what's going on
+  #expect_silent(s <- srvGPSForTagProject(projectID = p, batchID = 0)) %>%
+  #  expect_s3_class("data.frame")
+  #expect_gt(nrow(s), 0)
   
   # srvHitsForReceiver
-  expect_silent(s <- srvHitsForReceiver(batchID = 476443, hitID = 0)) %>%
+  expect_silent(s <- srvHitsForReceiver(batchID = b217, hitID = 0)) %>%
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
   
   # srvHitsForTagProject
-  expect_silent(s <- srvHitsForTagProject(projectID = 4, batchID = 476443)) %>%
+  expect_silent(s <- srvHitsForTagProject(projectID = 1, batchID = b1)) %>%
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
-  
-  # srvMetadataForReceivers
-  d <- srvDeviceIDForReceiver("CTT-5031194D3168")$deviceID
-  expect_silent(s <- srvMetadataForReceivers(deviceIDs = d)) %>%
-    expect_type("list")
-  expect_named(s, c("recvDeps", "antDeps", "projs"))
-  expect_gt(nrow(s$recvDeps), 0)
-  expect_gt(nrow(s$antDeps), 0)
-  expect_gt(nrow(s$projs), 0)
-  
-  # srvMetadataForTags
-  expect_silent(s <- srvMetadataForTags(motusTagIDs = 29876)) %>%
-    expect_type("list")
-  expect_named(s, c("tags", "tagDeps", "tagProps", "species", "projs"))
-  expect_gt(nrow(s$tags), 0)
-  expect_gt(nrow(s$tagDeps), 0)
-  expect_s3_class(s$tagProps, "data.frame") # might be empty
-  expect_gt(nrow(s$species), 0)
-  expect_gt(nrow(s$projs), 0)
   
   # srvNodes
   expect_silent(s <- srvNodes(projectID = 207, batchID = 1019183)) %>%
@@ -113,25 +146,6 @@ test_that("srvXXX work as expected", {
   # expect_silent(s <- srvReceiversForProject(projectID = 204)) %>%
   #   expect_s3_class("data.frame")
   # expect_gt(nrow(s), 0)
-  
-  # srvRecvMetadataForProjects
-  expect_silent(s <- srvRecvMetadataForProjects(projectIDs = 213)) %>%
-    expect_type("list")
-  expect_named(s, c("recvDeps", "antDeps", "nodeDeps", "projs"))
-  expect_gt(nrow(s$recvDeps), 0)
-  expect_true(all(s$recvDeps$projectID == 213))
-  expect_gt(nrow(s$antDeps), 0)
-  expect_gt(nrow(s$nodeDeps), 0)
-  expect_gt(nrow(s$projs), 0)
-  
-  expect_silent(s <- srvRecvMetadataForProjects(projectIDs = NULL)) %>%
-    expect_type("list")
-  expect_named(s, c("recvDeps", "antDeps", "nodeDeps", "projs"))
-  expect_gt(nrow(s$recvDeps), 0)
-  expect_gt(length(unique(s$recvDeps$projectID)), 10)
-  expect_gt(nrow(s$antDeps), 0)
-  expect_gt(nrow(s$nodeDeps), 0)
-  expect_gt(nrow(s$projs), 0)
   
   # srvRunsForReceiver - CTT-5031194D3168
   # expect_silent(s <- srvRunsForReceiver(batchID = 1582469, runID = 0)) %>%
@@ -194,6 +208,7 @@ test_that("tagme() errors appropriately", {
                                     new = TRUE, update = TRUE), 
                               "updateMotusDb"),
                "Either") #...
+  unlink("project-10.motus")
 })
 
 
@@ -204,8 +219,8 @@ test_that("tagme() downloads data - Projects", {
   sample_auth()
   
   expect_message(tags <- tagme(projRecv = 176, new = TRUE, update = TRUE)) %>%
-    expect_is("src_SQLiteConnection")
-  DBI::dbDisconnect(tags$con)
+    expect_s4_class("SQLiteConnection")
+  disconnect(tags)
   unlink("project-176.motus")
 })
 
@@ -217,8 +232,8 @@ test_that("tagme() downloads data - Receivers", {
   
   unlink("SG-3115BBBK1127.motus")
   expect_message(t <- tagme("SG-3115BBBK1127", new = TRUE, update = TRUE)) %>%
-    expect_s3_class("src_sql")
-  DBI::dbDisconnect(t$con)
+    expect_s4_class("SQLiteConnection")
+  disconnect(t)
   unlink("SG-3115BBBK1127.motus")
 })
 
@@ -287,7 +302,7 @@ test_that("metadata()", {
   expect_message(metadata(tags), "Loading complete")
   
   expect_message(metadata(tags, projectIDs = 45), "Loading complete")
-  DBI::dbDisconnect(tags$con)
+  disconnect(tags)
   unlink("project-176.motus")
 })
 

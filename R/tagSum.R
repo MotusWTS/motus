@@ -12,21 +12,20 @@
 #' @export
 #'
 #' @return a data.frame with these columns:
-#' \itemize{
-#' \item fullID: fullID of Motus registered tag
-#' \item first_ts: time of first detection of tag
-#' \item last_ts: time of last detection of tag
-#' \item first_site: first detection site of tag
-#' \item last_site: last detection site of tag
-#' \item lat.x: latitude of first deteciton site of tag
-#' \item lon.x: longitude of first deteciton site of tag
-#' \item lat.y: latitude of last deteciton site of tag
-#' \item lon.y: longitude of last deteciton site of tag
-#' \item tot_ts: length of time between first and last detection of tag (in seconds)
-#' \item dist: total straight line distance between first and last detection site (in metres), see latLonDist function in sensorgnome package for details
-#' \item rate: overall rate of movement (tot_ts/dist), in metres/second
-#' \item bearing: bearing between first and last detection sites, see bearing function in geosphere package for more details
-#' }
+#' 
+#' - fullID: fullID of Motus registered tag
+#' - first_ts: time of first detection of tag
+#' - last_ts: time of last detection of tag
+#' - first_site: first detection site of tag
+#' - last_site: last detection site of tag
+#' - lat.x: latitude of first deteciton site of tag
+#' - lon.x: longitude of first deteciton site of tag
+#' - lat.y: latitude of last deteciton site of tag
+#' - lon.y: longitude of last deteciton site of tag
+#' - tot_ts: length of time between first and last detection of tag (in seconds)
+#' - dist: total straight line distance between first and last detection site (in metres), see latLonDist function in sensorgnome package for details
+#' - rate: overall rate of movement (tot_ts/dist), in metres/second
+#' - bearing: bearing between first and last detection sites, see bearing function in geosphere package for more details
 #'
 #' @examples
 #' # You can use either a selected tbl from .motus eg. "alltagsGPS", or a
@@ -62,18 +61,20 @@
 
 tagSum <- function(data){
   data <- data %>% dplyr::collect() %>% as.data.frame()
-  data <- dplyr::mutate(data,
-                        recvLat = dplyr::if_else((is.na(.data$gpsLat)|.data$gpsLat == 0|.data$gpsLat ==999),
-                                                 .data$recvDeployLat,
-                                                 .data$gpsLat),
-                        recvLon = dplyr::if_else((is.na(.data$gpsLon)|.data$gpsLon == 0|.data$gpsLon == 999),
-                                                 .data$recvDeployLon,
-                                                 .data$gpsLon),
-                        recvDeployName = paste(.data$recvDeployName, 
-                                               round(.data$recvLat, digits = 1), sep = "_" ),
-                        recvDeployName = paste(.data$recvDeployName,
-                                               round(.data$recvLon, digits = 1), sep = ", "),
-                        ts = lubridate::as_datetime(.data$ts, tz = "UTC"))
+  data <- dplyr::mutate(
+    data,
+    recvLat = dplyr::if_else((is.na(.data$gpsLat)|.data$gpsLat == 0|.data$gpsLat ==999),
+                             .data$recvDeployLat,
+                             .data$gpsLat),
+    recvLon = dplyr::if_else((is.na(.data$gpsLon)|.data$gpsLon == 0|.data$gpsLon == 999),
+                             .data$recvDeployLon,
+                             .data$gpsLon),
+    recvDeployName = paste(.data$recvDeployName, 
+                           round(.data$recvLat, digits = 1), sep = "_" ),
+    recvDeployName = paste(.data$recvDeployName,
+                           round(.data$recvLon, digits = 1), sep = ", "),
+    ts = lubridate::as_datetime(.data$ts, tz = "UTC"))
+  
   grouped <- dplyr::group_by(data, .data$fullID)
   tmp <- dplyr::summarise(grouped,
                           first_ts=min(.data$ts),
@@ -91,6 +92,6 @@ tagSum <- function(data){
                                               matrix(c(recvLon.y, recvLat.y), ncol=2))) ## bearing (see package geosphere for help)
   #  tmp$rhumbline_bearing <- with(tmp, geosphere::bearingRhumb(matrix(c(recvLon.x, recvLat.x), ncol=2),
   #                                                        matrix(c(recvLon.y, recvLat.y), ncol=2))) ## rhumbline bearing (see package geosphere for help)
-  return(tmp[c("fullID", "first_ts", "last_ts", "first_site", "last_site", "recvLat.x", "recvLon.x",
-               "recvLat.y", "recvLon.y", "tot_ts", "dist", "rate", "bearing", "num_det")])
+  tmp[c("fullID", "first_ts", "last_ts", "first_site", "last_site", "recvLat.x", "recvLon.x",
+        "recvLat.y", "recvLon.y", "tot_ts", "dist", "rate", "bearing", "num_det")]
 }

@@ -1,21 +1,22 @@
 #' Map of tag routes and sites coloured by id
 #'
-#' Google map of routes of Motus tag detections coloured by ID.  User defines a date range to show
-#' points for receivers that were operational at some point during the date range.
+#' Google map of routes of Motus tag detections coloured by ID.  User defines a
+#' date range to show points for receivers that were operational at some point
+#' during the date range.
 #'
 #' @param data a .motus sql file
-#' @param zoom integer.  Values between 3 and 21, 3 being continent level, 10 being city-scale
-#' @param lat numeric vector. Top and bottom latitude bounds. If NULL (default)
+#' @param zoom Integer.  Values between 3 and 21, 3 being continent level, 10
+#'   being city-scale
+#' @param lat Numeric vector. Top and bottom latitude bounds. If NULL (default)
 #'   this is calculated from the data
-#' @param lon  numeric vector. Left and right longitude bounds. If NULL
+#' @param lon Numeric vector. Left and right longitude bounds. If NULL
 #'   (default) this is calculated from the data
-#' @param maptype map type to display, can be: "terrain" , "toner",
-#'   "watercolor", or any other option available to
-#'   \code{\link[ggmap]{get_stamenmap}()}.
-#' @param recvStart start date for date range of active receivers. If NULL uses
-#'   the full data range
-#' @param recvEnd end date for date range of active receivers. If NULL uses the
-#'   full data range
+#' @param maptype Character. Map type to display, can be: "terrain" , "toner",
+#'   "watercolor", or any other option available to `ggmap::get_stamenmap()`
+#' @param recvStart Character. Start date for date range of active receivers. If
+#'   `NULL` uses the full data range
+#' @param recvEnd Character. End date for date range of active receivers. If
+#'   `NULL` uses the full data range
 #' 
 #' @details By default this function uses Stamen maps
 #' 

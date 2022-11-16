@@ -118,7 +118,7 @@ For troubleshooting see [here](https://groups.google.com/forum/#!topic/motus-wts
 
 Once you have your access key, you'll need to provide it with the call `register_google()`, **each time you start a new R session you will be required to enter your key.**
 
-Then you can create Google maps with the `ggmap` package using the `get_googlemap()` function and specifying the lat/lon center of your map (as opposed to bounding box as with stamen maps).
+Then you can create Google maps with the `ggmap` package using the `get_googlemap()` function and specifying the lat/lon centre of your map (as opposed to bounding box as with stamen maps).
 
 ## Common errors
 
@@ -168,7 +168,7 @@ checkVersion(sql)
 ```
 
 ### I get an error `Error in rsqlite_connect(dbname, loadable.extensions, flags, vfs) : Could not connect to database: unable to open database file` when attempting to run `tagme()`
-If you get this message, it's likely that you're attempting a new download or update to a nonexistant directory. 
+If you get this message, it's likely that you're attempting a new download or update to a nonexistent directory. 
 The directory is specified in the **`dir = ""`** command of the `tagme()` function. 
 If the directory is not specified, files will be saved to your working directory. 
 Use `getwd()` to determine your current working directory. 

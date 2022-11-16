@@ -1,4 +1,4 @@
-#' determine the model from a lotek serial number
+#' Determine the model from a lotek serial number
 #'
 #' The serial number determines the receiver model in most cases, but
 #' for a few receivers, additional fields from the .DTA file are needed.
@@ -11,10 +11,10 @@
 #'
 #' @noRd
 
-getLotekModel = function(serno, extra) {
+getLotekModel <- function(serno, extra) {
 
     ## get bare serial number by dropping "Lotek-" (first 6 chars)
-    bareno = substring(serno, 7)
+    bareno <- substring(serno, 7)
 
     ## map to model as per info from Lotek:
 
@@ -34,18 +34,18 @@ getLotekModel = function(serno, extra) {
     ## > actually occurs from SN 000390 to SN D000391.
 
     if (substr(bareno, 1, 1) == "D") {
-        model = "SRX800D"
+        model <- "SRX800D"
     } else if (bareno >= "9000A") {
-        model = "SRX400A"
+        model <- "SRX400A"
     } else if (bareno >= "8000") {
-        model = "SRX-DL"
+        model <- "SRX-DL"
     } else if (bareno >= "6000") {
-        model = "SRX600"
+        model <- "SRX600"
     } else if (as.integer(bareno) >= 391) {
         ## per Lotek, it's not a model "D"
-        model = "SRX800M/MD"
+        model <- "SRX800M/MD"
     } else {
-        model = "SRX800"
+        model <- "SRX800"
     }
-    return(model)
+    model
 }

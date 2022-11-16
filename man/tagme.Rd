@@ -18,81 +18,86 @@ tagme(
 )
 }
 \arguments{
-\item{projRecv}{integer. Project code from motus.org, \emph{or} character
-scalar receiver serial number}
+\item{projRecv}{Numeric project code from motus.org, \emph{or} character receiver
+serial number.}
 
-\item{update}{logical. Should any new data be downloaded and merged?
+\item{update}{Logical. Should any new data be downloaded and merged?
 Defaults to TRUE unless this is a new database (in which case you must
 specify \code{update = TRUE} explicitly).}
 
-\item{new}{logical. Is this a new database?  Default: FALSE You have to
+\item{new}{Logical. Is this a new database?  Default: FALSE You have to
 specify \code{new = TRUE} if you want a new local copy of the database to be
-created. Otherwise, \code{tagme()} assumes the database already exists,
+created. Otherwise, this function assumes the database already exists,
 and will stop with an error if it cannot find it in the current directory.
 This is mainly to prevent inadvertent downloads of large amounts of data
 that you already have!}
 
-\item{dir}{character. Path to the folder where you are storing databases
+\item{dir}{Character. Path to the folder where you are storing databases
 Defaults to current directory; i.e. \code{getwd()}.}
 
-\item{countOnly}{logical. If FALSE, the default, then do requested
+\item{countOnly}{Logical. If \code{FALSE}, the default, then do requested
 database updates. Otherwise, return a count of items that would need to be
 transferred in order to update the database.}
 
-\item{forceMeta}{logical. If TRUE, re-get metadata for tags and receivers,
+\item{forceMeta}{Logical. If \code{TRUE}, re-get metadata for tags and receivers,
 even if we already have them.}
 
-\item{rename}{logical. If current SQLite database is of an older version,
+\item{rename}{Logical. If current SQLite database is of an older version,
 automatically rename that database for backup purposes and download the
-newest version. If FALSE (default), user is prompted for action.}
+newest version. If \code{FALSE} (default), user is prompted for action.}
 
-\item{skipActivity}{logical. Skip checking for and downloading \code{activity}? See
+\item{skipActivity}{Logical. Skip checking for and downloading \code{activity}? See
 \code{?activity} for more details}
 
-\item{skipNodes}{logical. Skip checking for and downloading \code{nodeData}? See
+\item{skipNodes}{Logical. Skip checking for and downloading \code{nodeData}? See
 \code{?nodeData} for more details}
 
 \item{skipDeprecated}{logical. Skip fetching list of deprecated batches
 stored in \code{deprecated}. See \code{?deprecateBatches()} for more details.}
 }
 \value{
-a dplyr::src_sqlite for the (possibly updated) database, or a list
-of counts if \code{countOnly==TRUE}
+a SQLite Connection for the (possibly updated) database, or a list
+of counts if \code{countOnly = TRUE}
 }
 \description{
 Download motus tag detections to a database
 }
 \examples{
 
-## create and open a local tag database for motus project 14 in the
-## current directory
+\dontrun{
 
-# t = tagme(14, new=TRUE)
+# Create and open a local tag database for motus project 14 in the
+# current directory
 
-## update and open the local tag database for motus project 14;
-## it must already exist and be in the current directory
+t <- tagme(14, new = TRUE)
 
-# t = tagme(14, update=TRUE)
+# Update and open the local tag database for motus project 14;
+# it must already exist and be in the current directory
 
-## update and open the local tag database for a receiver;
-## it must already exist and be in the current directory
+t <- tagme(14, update = TRUE)
 
-# t = tagme("SG-1234BBBK4567", update=TRUE)
+# Update and open the local tag database for a receiver;
+# it must already exist and be in the current directory
 
-## open the local tag database for a receiver, without
-## updating it
+t <- tagme("SG-1234BBBK4567", update = TRUE)
 
-# t = tagme("SG-1234BBBK4567")
+# Open the local tag database for a receiver, without
+# updating it
 
-## open the local tag database for a receiver, but
-## tell 'tagme' that it is in a specific directory
+t <- tagme("SG-1234BBBK4567")
 
-# t = tagme("SG-1234BBBK4567", dir="Projects/gulls")
+# Open the local tag database for a receiver, but
+# tell 'tagme' that it is in a specific directory
 
-## update all existing project and receiver databases in \code{dir}
-# tagme()
+t <- tagme("SG-1234BBBK4567", dir = "Projects/gulls")
+
+# update all existing project and receiver databases in `dir`
+
+tagme()
+}
 
 }
 \seealso{
-\code{\link{tellme}}, which is a synonym for \code{tagme(..., update=TRUE, countOnly=TRUE)}
+\code{tellme()}, which is a synonym for
+\code{tagme(..., update = TRUE, countOnly = TRUE)}
 }

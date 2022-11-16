@@ -1,32 +1,25 @@
-#' Delete a filter  matching a filter name (and optionally a project ID)
+#' Delete a filter
+#' 
+#' Deletes a filter by name or project ID.
 #'
-#' @param src dplyr sqlite src, as returned by \code{dplyr::src_sqlite()}
+#' @param clearOnly Logical. When true, only remove the probability records
+#'   associated with the filter, but retain the filter itself
 #'
-#' @param filterName unique name given to the filter 
+#' @inheritParams args
 #'
-#' @param motusProjID optional project ID attached to the filter in order to share with other users of the same project.
-#'
-#' @param clearOnly boolean. When true, only remove the probability records associated with the filter, 
-#' but retain the filter itself
-#'
-#' @return the integer filterID of the filter deleted
+#' @return the integer `filterID` of the filter deleted
 #'
 #' @export
 
-deleteRunsFilter = function(src, filterName, motusProjID=NA, clearOnly=FALSE) {
-
-  sql = function(...) DBI::dbExecute(src$con, sprintf(...))
+deleteRunsFilter <- function(src, filterName, motusProjID = NA, clearOnly = FALSE) {
 
   # determines the filterID
-  filterID = getRunsFilterID(src, filterName, motusProjID)
+  filterID <- getRunsFilterID(src, filterName, motusProjID)
+  
   if (!is.null(filterID)) {
-
-    sql("delete from runsFilters where filterID = '%d'", filterID)
-    if (!clearOnly) 
-      sql("delete from filters where filterID = '%d'", filterID)
-    
+    DBI_Execute(src, "DELETE FROM runsFilters WHERE filterID = {filterID}")
+    if (!clearOnly) DBI_Execute(src, "DELETE FROM filters WHERE filterID = {filterID}")
   }
   
-  return(filterID)
-
+  filterID
 }

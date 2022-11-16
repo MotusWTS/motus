@@ -11,9 +11,9 @@ sunRiseSet(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = "ts")
 data.frame of detection data including at a minimum variables for
 date/time, latitude, and longitude}
 
-\item{lat}{variable with latitude values, defaults to recvDeployLat}
+\item{lat}{variable with latitude values, defaults to \code{recvDeployLat}}
 
-\item{lon}{variable with longitude values, defaults to recvDeployLon}
+\item{lon}{variable with longitude values, defaults to \code{recvDeployLon}}
 
 \item{ts}{variable with time in UTC as numeric or POSIXct, defaults to \code{ts}}
 }

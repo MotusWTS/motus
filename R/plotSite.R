@@ -1,6 +1,7 @@
 #' Plot all tags by site
 #'
-#' Plot tag ID vs time for all tags detected by site, coloured by antenna bearing
+#' Plot tag ID vs time for all tags detected by site, coloured by antenna
+#' bearing
 #'
 #' @param data a selected table from .motus data, eg. "alltagsGPS", or a
 #'   data.frame of detection data including at a minimum variables for ts,

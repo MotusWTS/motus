@@ -1,6 +1,6 @@
 Package: motus
 Type: Package
-Version: 5.0.0.9000
+Version: 6.0.1.9000
 Title: Fetch and use data from the Motus Wildlife Tracking System
 Description: Retrieve, filter, and visualize telemetry data from the Motus 
     Wildlife Tracking System <http://motus.org>.
@@ -21,12 +21,13 @@ Authors@R: c(
     person("Josh", "Sayers", role = "ctb"),
     person("Philip", "Taylor", role = "ctb"))
 URL: https://motuswts.github.io/motus/
+BugReports: https://github.com/MotusWTS/issues
 Depends:
     R (>= 3.2.0)
 Imports:
     DBI (>= 1.0.0),
-    dplyr (>= 0.8.1),
-    dbplyr (>= 1.4.2),
+    dbplyr (>= 2.1.1),
+    dplyr (>= 1.0.4),
     httr (>= 1.4.0),
     geosphere (>= 1.5.7),
     ggplot2 (>= 3.2.0),
@@ -53,7 +54,8 @@ Suggests:
     covr,
     rmarkdown
 License: GPL-3
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
 Language: en-CA
+LazyData: true

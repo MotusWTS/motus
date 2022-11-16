@@ -70,12 +70,11 @@ is_proj <- function(x) stringr::str_detect(x, "^[0-9]+$")
 
 # Get project or receiver from source name
 get_projRecv <- function(src) {
-  if (! inherits(src, "src_sql"))
-    stop("src is not a dplyr::src_sql object", call. = FALSE)
+  check_src(src)
   
-  projRecv <- basename(src[[1]]@dbname)
+  projRecv <- basename(src@dbname)
   if(stringr::str_detect(projRecv, "project-[0-9]+.motus")) {
-    projRecv <- as.numeric(stringr::str_extract(projRecv, "[0-9]+"))
+    projRecv <- as.integer(stringr::str_extract(projRecv, "[0-9]+"))
   } else if(stringr::str_detect(projRecv, ".motus")) {
     projRecv <- stringr::str_remove(projRecv, ".motus")
   } else {
@@ -125,4 +124,15 @@ get_sample_data <- function() {
             "./data/")
   message("Loading sample project")
   tagme(projRecv = 176, new = FALSE, update = TRUE, dir = "./data/")
+}
+
+disconnect <- function(src, warnings = FALSE) {
+  if(!warnings) suppressWarnings(DBI::dbDisconnect(src))
+  if(warnings) DBI::dbDisconnect(src)
+}
+
+
+# Faster than as.data.frame()
+to_df <- function(x) {
+  structure(x, class = "data.frame", row.names = seq_len(lengths(x[1])))
 }

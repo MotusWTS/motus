@@ -1,29 +1,14 @@
-#' get the hits for a receiver from the data server
+#' Get the hits for a receiver
 #'
-#' @param batchID integer scalar motus batch ID
-#' @param hitID integer scalar ID of latest hit already obtained.
-#' Default: 0, meaning none.
-#'
-#' @return data.frame with these columns:
-#' \itemize{
-#'   \item hitID
-#'   \item runID
-#'   \item batchID
-#'   \item ts
-#'   \item sig
-#'   \item sigSD
-#'   \item noise
-#'   \item freq
-#'   \item freqSD
-#'   \item slop
-#'   \item burstSlop
-#' }
+#' @param batchID Integer. Batch ID
+#' @param hitID Integer. Hit ID of latest hit already obtained. Default: 0,
+#'   meaning none.
 #'
 #' @noRd
 
-srvHitsForReceiver = function(batchID, hitID=0, verbose = FALSE) {
-    x = srvQuery(API=motus_vars$API_HITS_FOR_RECEIVER, 
-                 params=list(batchID=batchID, hitID=hitID),
-                 verbose = verbose)
-    return (structure(x, class = "data.frame", row.names=seq(along=x[[1]])))
+srvHitsForReceiver <- function(batchID, hitID = 0, verbose = FALSE) {
+  srvQuery(API = motus_vars$API_HITS_FOR_RECEIVER, 
+           params = list(batchID = batchID, hitID = hitID),
+           verbose = verbose) %>%
+    to_df()
 }

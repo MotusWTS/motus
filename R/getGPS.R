@@ -21,8 +21,7 @@
 #'  closest `hitID` timestamp. Use `cutoff` to specify the maximum
 #'  allowable time between timestamps (defaults to none).
 #'
-#' @param src src_sqlite object representing the motus database 
-#' @param data src_sqlite object or data.frame. Optional subset of the `alltags`
+#' @param data SQLite connection or data.frame. Optional subset of the `alltags`
 #'   view. Must have `ts`, `batchID` and `hitID` at the minimum.
 #' @param by Numeric/Character. Either the time in minutes over which to join GPS
 #'   locations to hits, or "daily" or "closest". To join GPS locations by daily
@@ -32,6 +31,8 @@
 #'   `NULL` (no maximum).
 #' @param keepAll Logical. Return all hits regardless of whether they have a GPS
 #'   match? Defaults to FALSE.
+#'   
+#' @inheritParams args
 #'
 #' @return Data frame linking hitID to gpsLat, gpsLon and gpsAlt. 
 #'   When `by = 'daily'` or `by = 'X'`, output includes:
@@ -91,6 +92,9 @@
 
 getGPS <- function(src, data = NULL, by = "daily", cutoff = NULL, 
                    keepAll = FALSE) {
+  
+  check_src(src)
+  
   if(!is.numeric(by) && !by %in% c("daily", "closest")) {
     stop("'by' must be either a number, 'daily' or 'closest'", call. = FALSE)
   }
@@ -104,14 +108,10 @@ getGPS <- function(src, data = NULL, by = "daily", cutoff = NULL,
     }
   }
 
-  if(!"src_SQLiteConnection" %in% class(src)) {
-    stop("'src' must be a SQLite connection to a .motus database (see ?tagme)", 
-         call. = FALSE)
-  }
-  if(!"gps" %in% DBI::dbListTables(src$con)) {
+  if(!"gps" %in% DBI::dbListTables(src)) {
     stop("'src' must contain a table 'gps'", call. = FALSE)
   }
-  if(is.null(data) && !"alltags" %in% DBI::dbListTables(src$con)) {
+  if(is.null(data) && !"alltags" %in% DBI::dbListTables(src)) {
     stop("'src' must contain the view 'alltags', unless 'data' is provided", 
          call. = FALSE)
   }
@@ -180,7 +180,7 @@ getBatches <- function(src, cutoff) {
 
   cutoff <- cutoff * 60
   
-  batches <- dplyr::tbl(src$con, "batches") %>%
+  batches <- dplyr::tbl(src, "batches") %>%
     dplyr::mutate(ts_min = .data$tsStart - cutoff,
                   ts_max = .data$tsEnd + cutoff) %>%
     dplyr::select("batchID", "tsStart", "tsEnd", "ts_min", "ts_max") %>%
