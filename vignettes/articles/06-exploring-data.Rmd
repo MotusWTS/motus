@@ -59,7 +59,7 @@ df.alltags.sub <- left_join(tbl.alltags, tbl.filter, by = c("runID", "motusTagID
   mutate(probability = ifelse(is.na(probability), 1, probability)) %>%
   filter(probability > 0) %>%
   select(-noise, -slop, -burstSlop, -done, -bootnum, -codeSet, 
-         -mfg, -nomFreq, -markerNumber, -markerType, -tagDepComments, 
+         -mfg, -nomFreq, -markerNumber, -markerType, -tagDeployComments, 
          -fullID, -deviceID, -recvDeployAlt, 
          -speciesGroup, -gpsLat, -gpsLon, -recvSiteName) %>%
   collect() %>%
@@ -90,7 +90,7 @@ Here we will run through some basic commands, starting with the `summary()` func
 ```{r}
 sql.motus %>% 
   tbl("alltags") %>% 
-  select(ts, motusTagID, runLen, speciesEN, tagDepLat, tagDepLon, 
+  select(ts, motusTagID, runLen, speciesEN, tagDeployLat, tagDeployLon, 
          recvDeployLat, recvDeployLon) %>% 
   collect() %>%
   mutate(time = as_datetime(ts)) %>% 
@@ -98,7 +98,7 @@ sql.motus %>%
 
 # same summary for the filtered sql data
 df.alltags.sub %>% 
-  select(time, motusTagID, runLen, speciesEN, tagDepLat, tagDepLon, 
+  select(time, motusTagID, runLen, speciesEN, tagDeployLat, tagDeployLon, 
          recvDeployLat, recvDeployLon) %>% 
   summary()
 ```
@@ -162,7 +162,7 @@ Here we round detection times to the nearest hour, then make a basic plot of hou
 ```{r}
 df.alltags.sub.2 <- df.alltags.sub %>%
   mutate(hour = hour(time)) %>% 
-  select(motusTagID, port, tagDeployStart, tagDepLat, tagDepLon, 
+  select(motusTagID, port, tagDeployStart, tagDeployLat, tagDeployLon, 
          recvDeployLat, recvDeployLon, recvDeployName, antBearing, speciesEN, year, doy, hour) %>% 
   distinct()
 
@@ -282,7 +282,7 @@ fun.getpath <- function(df) {
     filter(tagProjID == 176, # keep only tags registered to the sample project
            !is.na(recvDeployLat) | !(recvDeployLat == 0)) %>% 
     group_by(motusTagID, runID, recvDeployName, ambigID, 
-             tagDepLon, tagDepLat, recvDeployLat, recvDeployLon) %>%
+             tagDeployLon, tagDeployLat, recvDeployLat, recvDeployLon) %>%
     summarize(max.runLen = max(runLen), time = mean(time), .groups = "drop") %>%
     arrange(motusTagID, time) %>%
     data.frame()
@@ -297,7 +297,7 @@ df.alltags.sub.path <- df.alltags.sub %>%
   arrange(motusTagID, time) %>%       # order by time stamp for each tag
   mutate(date = as_date(time)) %>%    # create date variable
   group_by(motusTagID, date, recvDeployName, ambigID, 
-           tagDepLon, tagDepLat, recvDeployLat, recvDeployLon)
+           tagDeployLon, tagDeployLat, recvDeployLat, recvDeployLon)
 
 df.alltags.path <- fun.getpath(df.alltags.sub.path)
 ```
@@ -346,7 +346,7 @@ ggplot(data = world) +
   geom_point(data = df.tmp, aes(x = recvDeployLon, y = recvDeployLat), 
              shape = 16, colour = "black") +
   geom_point(data = df.tmp, 
-             aes(x = tagDepLon, y = tagDepLat), colour = "red", shape = 4) +
+             aes(x = tagDeployLon, y = tagDeployLat), colour = "red", shape = 4) +
   scale_colour_discrete("motusTagID") 
 ```
 We can also add points for all receivers that were active, but did not detect these birds during a certain time period if we have already downloaded all metadata.
@@ -388,7 +388,7 @@ ggplot(data = world) +
   geom_point(data = df.tmp, aes(x = recvDeployLon, y = recvDeployLat), 
              shape = 16, colour = "black") +
   geom_point(data = df.tmp, 
-             aes(x = tagDepLon, y = tagDepLat), colour = "red", shape = 4) +
+             aes(x = tagDeployLon, y = tagDeployLat), colour = "red", shape = 4) +
   scale_colour_discrete("motusTagID") 
 ```
 

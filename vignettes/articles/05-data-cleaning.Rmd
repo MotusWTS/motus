@@ -214,7 +214,7 @@ df.summary <- tbl.alltags.sub %>%
   filter(tagProjID == 176, # keep only tags registered to the sample project
          !is.na(recvDeployLat) | !(recvDeployLat == 0)) %>% # drop data without lon/lat
   group_by(motusTagID, runID, recvDeployName, ambigID, 
-           tagDepLon, tagDepLat, recvDeployLat, recvDeployLon) %>%
+           tagDeployLon, tagDeployLat, recvDeployLat, recvDeployLon) %>%
   #summarizing by runID to get max run length and mean time stamp:
   summarize(max.runLen = max(runLen, na.rm = TRUE), 
             ts = mean(ts, na.rm = TRUE), .groups = "drop") %>% 
@@ -369,7 +369,7 @@ Let's deal with the easy ones first.
 ```{r}
 tbl.alltags.sub %>%
   filter(ambigID == -337) %>%
-  count(motusTagID, tagDeployStart, tagDeployEnd, tagDepLat, tagDepLon) %>% 
+  count(motusTagID, tagDeployStart, tagDeployEnd, tagDeployLat, tagDeployLon) %>% 
   collect() %>% 
   mutate(tagDeployStart = as_datetime(tagDeployStart),
          tagDeployEnd = as_datetime(tagDeployEnd))
@@ -403,7 +403,7 @@ tbl.alltags.sub %>%
          tagDeployEnd = as_datetime(tagDeployEnd),
          month = month(as_datetime(ts))) %>% 
   count(motusTagID, tagDeployStart, tagDeployEnd, 
-           tagDepLat, tagDepLon, month)
+           tagDeployLat, tagDeployLon, month)
 ```
 
 Here we have a similar situation, but one that is a bit more complex. 
@@ -449,7 +449,7 @@ tbl.alltags.sub %>%
   filter(ambigID == -171) %>% 
   filter(!is.na(tagDeployStart)) %>%
   select(motusTagID, tagProjID, start = tagDeployStart, end = tagDeployEnd, 
-         lat = tagDepLat, lon = tagDepLon, species = speciesEN) %>%
+         lat = tagDeployLat, lon = tagDeployLon, species = speciesEN) %>%
   distinct() %>%
   arrange(start) %>%
   collect() %>%
@@ -498,7 +498,7 @@ tbl.alltags.sub %>%
   filter(ambigID == -114) %>% 
   filter(!is.na(tagDeployStart)) %>%
   select(motusTagID, tagProjID, start = tagDeployStart, end = tagDeployEnd, 
-         lat = tagDepLat, lon = tagDepLon, species = speciesEN) %>%
+         lat = tagDeployLat, lon = tagDeployLon, species = speciesEN) %>%
   distinct() %>%
   arrange(start) %>% 
   collect() %>% 
@@ -544,7 +544,7 @@ tbl.alltags.sub %>%
   filter(ambigID == -106) %>% 
   filter(!is.na(tagDeployStart)) %>%
   select(motusTagID, tagProjID, start = tagDeployStart, end = tagDeployEnd, 
-         lat = tagDepLat, lon = tagDepLon, species = speciesEN) %>%
+         lat = tagDeployLat, lon = tagDeployLon, species = speciesEN) %>%
   distinct() %>%
   arrange(start) %>% 
   collect() %>% 
@@ -604,7 +604,7 @@ tbl.alltags.sub %>%
   filter(ambigID == -56) %>% 
   filter(!is.na(tagDeployStart)) %>%
   select(motusTagID, tagProjID, start = tagDeployStart, end = tagDeployEnd, 
-         lat = tagDepLat, lon = tagDepLon, species = speciesEN) %>%
+         lat = tagDeployLat, lon = tagDeployLon, species = speciesEN) %>%
   distinct() %>%
   arrange(start) %>% 
   collect() %>% 

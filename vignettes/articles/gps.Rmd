@@ -156,7 +156,7 @@ index_GPS
 Now that we have our GPS data (either through loading `alltagsGPS` or using the `getGPS()` function), 
 we can use these coordinates when [cleaning our data in Chapter 5](05-data-cleaning.html). 
 
-In Chapter 5, we used the receiver deployment latitude and longitude: `recvDepLat`, `recvDepLon`.
+In Chapter 5, we used the receiver deployment latitude and longitude: `recvDeployLat`, `recvDeployLon`.
 
 However, now that you have gps data, you can create receiver latitude and longitude variables (`recvLat`, `recvLon`, `recvAlt`) based on the coordinates recorded by the receiver GPS (`gpsLat`, `gpsLon`, `gpsAlt`), and where those are not available, infilled with coordinates from the receiver deployment metadata (`recvDeployLat`, `recvDeployLon`, `recvDeployAlt`). 
 

@@ -1,4 +1,5 @@
-# IMPORTANT! RUN THIS ENTIRE FILE AFTER MAKING ANY CHANGES and then re-build and re-load the package
+# IMPORTANT! Run the entire data-raw/internal_data.R file 
+# after making any changes and then re-build and re-load the package
 
 sql_versions <- dplyr::tibble()
 

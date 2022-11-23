@@ -1,3 +1,8 @@
+# motus 6.0.2
+* Change `tagDepXXX` variables to `tagDeployXXX` variables for consistency 
+  (e.g., `tagDepLat` is now `tagDeployLat`). Affects `tagDepLat`, `tagDepLon`,
+  `tagDepAlt` and `tagDepComments`.
+
 # motus 6.0.1
 * Fix bug in `xxxRunsFilter()` functions resulting in the inability to correctly
   return the filter id
