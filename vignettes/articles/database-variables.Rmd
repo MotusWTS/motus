@@ -39,34 +39,58 @@ This table lists all variables present in .motus SQLite databases.
 
 
 ```{r, echo = FALSE}
+views <- c("allambigs", "allruns", "allrunsGPS", "alltags", "alltagsGPS")
+
+v_index <- system.file("extdata/fields_glossary.csv", package = "motus") %>%
+  read.csv(skip = 1, na.strings = c("NA", ""))
+
 t <- tibble(table = DBI::dbListTables(tags)) %>%
   mutate(name_table = map(table, ~DBI::dbListFields(tags, .))) %>%
   unnest(name_table)
 
-v <- system.file("extdata/fields_glossary.csv", package = "motus") %>%
-  read.csv(skip = 1) %>%
-  bind_rows(t) %>%
+# Get variables in views
+t_views <- filter(t, table %in% .env$views) %>%
+  rename(view = table, name_view = name_table) %>%
+  left_join(v_index, by = "name_view")
+
+# Get variables in tables
+t_tables <- filter(t, !table %in% .env$views) %>%
+  left_join(v_index, by = "name_table")
+
+desc <- system.file("extdata/fields_description.csv", package = "motus") %>%
+  read.csv()
+
+
+
+v <- full_join(t_views, t_tables, 
+               by = c("name_table", "name_view", "comment"))  %>%
+  left_join(desc, by = "name_view") %>%
   arrange(name_table, view) %>%
   select(name_table, table, view, name_view, comment, description) %>%
-  mutate(name_view = replace_na(name_view, "--"),
-         view = replace_na(view, "--"),
+  mutate(across(.cols = c(name_view, name_table, view, table),
+                .fns = ~replace_na(.x, "--")),
          comment = replace_na(comment, "")) %>%
-  group_by(name_table) %>%
-  summarize(table = paste(unique(table), collapse = ", "),
-            view = paste(unique(view), collapse = ", "),
-            name_view = paste(unique(name_view), collapse = ", "), 
-            comment = paste(unique(comment), collapse = ", ")) %>%
-  mutate(name_view = str_remove_all(name_view, "(, --)|(--, )"),
-         view = str_remove_all(view, "(, --)|(--, )"),
-         comment = str_remove_all(comment, ", $"),
-         name_table = replace_na(name_table, "--"),
-         table = replace_na(table, "--"))
+  group_by(name_view, name_table) %>%
+  summarize(across(.cols = c(table, view, comment),
+                   .fns = ~paste(unique(.x), collapse = ", ")),
+            description = unique(description), .groups = "drop") %>%
+  mutate(across(.cols = c(name_view, name_table, view, table),
+                .fns = ~str_remove_all(.x, "(, --)|(--, )")),
+         comment = str_remove_all(comment, ", $"))
+
+# ALL variables should be in a table, OR have a creation comment explaining why
+# they don't (e.g., tsCorrected)
+
+## FIX IT! Some variables aren't the same but are grouped together because they
+## have the same table name... fix it!
 
 v %>%
-  rename("Variable name" = "name_table", 
-         "Table name" = "table",
-         "Variable name in view" = "name_view",
-         "Creation comments" = "comment") %>%
+  rename("Variable name in tables" = "name_table", 
+         "In tables" = "table",
+         "Variable name in views" = "name_view",
+         "Creation comments" = "comment",
+         "Description" = "description", 
+         "In views" = "view") %>%
   rename_all(tools::toTitleCase) %>%
   DT::datatable(options = list(pageLength = nrow(v), dom = "ft"), 
                 rownames = FALSE)
