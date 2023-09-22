@@ -61,11 +61,6 @@ sunRiseSet <- function(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = 
     stop("'data' must be a data frame, table/view (e.g., alltags), ",
          "or motus SQLite database (see ?sunRiseSet for examples)", call. = FALSE)
   }
-     
-  if(!requireNamespace("lutz", quietly = TRUE)) {
-    stop("The package 'lutz' is required to calculate sunrise/sunset times.\n", 
-         "You can install it with 'install.packages(\"lutz\")'", call. = FALSE)
-  }
 
   requiredCols(data, req = c(lat, lon, ts))
   
@@ -77,9 +72,9 @@ sunRiseSet <- function(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = 
     stop("No data with non-missing coordinates in '", lat, "' and '", lon, "'", 
          call. = FALSE)
   }
-  
+
   tz <- data %>%
-    dplyr::select("hitID", !!lat, !!lon) %>%
+    dplyr::select(!!lat, !!lon) %>%
     dplyr::distinct() %>%
     dplyr::filter(!is.na(.data[[lat]]) & !is.na(.data[[lon]])) %>%
     dplyr::mutate(tz_sun = lutz::tz_lookup_coords(.data[[lat]], .data[[lon]], warn = FALSE)) %>%
@@ -90,7 +85,7 @@ sunRiseSet <- function(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = 
     tidyr::unnest("data")
   
   data <- data %>%
-    dplyr::left_join(dplyr::select(tz, "tz_sun", "hitID"), by = "hitID") %>%
+    dplyr::left_join(tz, by = c(lat, lon)) %>%
     dplyr::mutate(date_sun = lubridate::floor_date(.data$time_sun + 
                                                  lubridate::hours(.data$tz_sun), 
                                                unit = "day"))
