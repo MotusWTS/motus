@@ -37,14 +37,14 @@ Imports:
     lubridate (>= 1.7.4),
     lutz (>= 0.3.1),
     magrittr,
-    maptools (>= 0.9.5),
     methods,
     purrr (>= 0.3.0),
     rlang (>= 0.3.1),
     RSQLite (>= 2.1.1),
     stringr (>= 1.4.0),
     tidyr (>= 0.8.3),
-    tidyselect (>= 1.0.0)
+    tidyselect (>= 1.0.0),
+    suncalc
 Suggests:
     ggmap (>= 3.0.0),
     mockery,
@@ -54,7 +54,7 @@ Suggests:
     covr,
     rmarkdown
 License: GPL-3
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
 Language: en-CA

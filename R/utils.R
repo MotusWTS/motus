@@ -107,15 +107,6 @@ getAccess <- function() {
           "Receivers: ", paste0(motus_vars$receivers, collapse = ", "))
 }
 
-
-requiredCols <- function(x, req, name = "data") {
-  cols <- colnames(x)
-  if(any(!req %in% cols)) {
-    stop("Required columns/fields missing from '", name, "': ",
-         paste0(req[!req %in% cols], collapse = ", "))
-  }
-}
-
 get_sample_data <- function() {
   sample_auth() # Use motus sample authorizations
   if(!dir.exists("./data/")) dir.create("./data/")

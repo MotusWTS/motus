@@ -1,113 +1,104 @@
 #' Obtain time to and from sunrise/sunset
 #'
-#' Creates and adds columns for time to, and time from sunrise/sunset based on a
-#' column of POSIXct dates/times dataframe must contain latitude, longitude, and
-#' a date/time variable
+#' Create and add columns for time to and time since sunrise/sunset to tag data.
+#' Can take a motus database table, but will always return a collected data
+#' frame. Requires data containing at least latitude, longitude, and time.
+#' 
+#' Uses `sunRiseSet()` to perform sunrise/sunset calculates, see `?sunRiseSet`
+#' for details regarding how local dates are assessed from UTC timestamps.
 #'
-#' @param data a selected table from .motus data, eg. "alltagsGPS", or a
-#'   data.frame of detection data including at a minimum variables for
-#'   date/time, latitude, and longitude
-#' @param lat variable with latitude values, defaults to `recvDeployLat`
-#' @param lon variable with longitude values, defaults to `recvDeployLon`
-#' @param ts variable with time in UTC as numeric or POSIXct, defaults to ts
-#' @param units units to display time difference, defaults to "hours", options
-#'   include "secs", "mins", "hours", "days", "weeks"
-#'
+#' @param lat Character. Name of column with latitude values, defaults to
+#'   `recvDeployLat`
+#' @param lon Character. Name of column with longitude values, defaults to
+#'   `recvDeployLon`
+#' @param ts Character. Name of column with time as numeric or POSIXct, defaults
+#'   to `ts`
+#' @param units Character. Units to display time difference, defaults to
+#'   "hours", options include "secs", "mins", "hours", "days", "weeks".
+#'   
+#' @inheritParams args
+#' 
 #' @export
 #'
-#' @return the original dataframe provided, with the following additional columns:
-#' - sunrise: sunrise time for the date and location provided by ts and
-#' `recvDeployLat`/`recvDeployLon` per row
-#' - sunset: sunset time for the date and location provided by ts and
-#' `recvDeployLat`/`recvDeployLon` per row
-#' - ts_to_set: time to next sunset after "ts", units default to "hours"
-#' - ts_since_set: time to previous sunset since "ts", units default to "hours"
-#' - ts_to_rise: time to next sunrise after "ts", units default to "hours"
-#' - ts_since_rise: time to previous sunrise since "ts", units default to "hours"
+#' @return Original data (as a flat data frame), with the following additional
+#'   columns:
+#'   
+#' - `sunrise` - Time of sunrise in **UTC** for that row's date and location
+#' - `sunset` - Time of sunset in **UTC** for that row's date and location
+#' - `ts_to_set` - Time to next sunset, in `units`
+#' - `ts_since_set` - Time to previous sunset, in `units`
+#' - `ts_to_rise` - Time to next sunrise after, in `units`
+#' - `ts_since_rise` - Time to previous sunrise, in `units`
 #'
 #' @examples
-#' # You can use either a selected tbl from .motus eg. "alltagsGPS", or a
-#' # data.frame, instructions to convert a .motus file to all formats are below.
 #' 
-#' # download and access data from project 176 in sql format
-#' # usename and password are both "motus.sample"
-#' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+#' # For SQLite Data base-----------------------------------------------
 #' 
-#' # OR use example sql file included in `motus`
-#' sql.motus <- tagme(176, update = FALSE, 
+#' # Download sample project 176 in SQL (user and password are both "motus.sample")
+#' \dontrun{sql_motus <- tagme(176, new = TRUE, update = TRUE)}
+#' 
+#' # OR Use example SQL file
+#' sql_motus <- tagme(176, update = FALSE, 
 #'                    dir = system.file("extdata", package = "motus"))
 #' 
-#' # convert sql file "sql.motus" to a tbl called "tbl.alltags"
-#' library(dplyr)
-#' tbl.alltags <- tbl(sql.motus, "alltagsGPS")
-#' 
-#' # convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
-#' # let's also filter down to one day
-#' df.alltags <- tbl.alltags %>% 
-#'   collect() %>% 
-#'   mutate(time = lubridate::as_datetime(tsCorrected),
-#'          date = lubridate::as_date(time)) %>%
-#'   filter(date == "2015-10-31") %>%
-#'   as.data.frame()
-#' 
-#' # Get sunrise and sunset information with units in minutse
-#' sunrise <- timeToSunriset(df.alltags, units = "mins")
-#' 
-#' # Get sunrise and sunset information with units in hours using gps lat/lon
-#' # using data.frame df.alltags. NOTE: This only works if there are non-NA
-#' # gpsLat/gpsLon
-#' \dontrun{sunrise <- timeToSunriset(df.alltags, lat = "gpsLat", lon = "gpsLon")}
+#' # Get sunrise and sunset information for alltags view with units in minutes
+#' sunrise <- timeToSunriset(sql_motus, units = "mins")
 
-timeToSunriset <- function(data, lat = "recvDeployLat", lon = "recvDeployLon", 
-                           ts = "ts", units = "hours"){
-  data <- data %>% dplyr::collect() %>% as.data.frame()
-  data$ts <- lubridate::as_datetime(data$ts, tz = "UTC")
-  cols <- c(lat, lon, ts) ## Select columns that can't contain NA values
-  loc_na <- data[!stats::complete.cases(data[cols]),] ## new dataframe with NA values in lat, lon, or ts
-  loc <- data[stats::complete.cases(data[cols]),] ## new dataframe with no NA values in lat, lon, or ts
+timeToSunriset <- function(df_src, lat = "recvDeployLat", lon = "recvDeployLon",
+                           ts = "ts", units = "hours", data){
+
+  # Deprecate data - 2023-09
+  if(!missing(data)) {
+    warning("Argument `data` is deprecated in favour of `df_src`", call. = FALSE)
+    df_src <- data
+  }
   
-  if(nrow(loc) == 0)  stop("No data with coordinates '", lat, "' and '", 
-                           lon, "'", call. = FALSE)
+  # Checks
+  df <- check_df_src(df_src, cols = c(lat, lon, ts))
   
-  loc$sunrise <- maptools::sunriset(
-    as.matrix(dplyr::select(loc, lon, lat)), loc$ts, 
-    POSIXct.out = TRUE, direction = 'sunrise')$time
+  # Calculate sunrise/set times for day of, before and after for all dates
+  df_ts <- df %>%
+    dplyr::select(.data[[lat]], .data[[lon]], .data[[ts]]) %>%
+    dplyr::mutate(.date = lubridate::as_datetime(.data[[ts]], tz = "UTC"))
   
-  loc$sunset <- maptools::sunriset(
-    as.matrix(dplyr::select(loc, lon, lat)), loc$ts, 
-    POSIXct.out = TRUE, direction = 'sunset')$time
+  sun <- dplyr::select(df_ts, .data[[lat]], .data[[lon]], ".date") %>%
+    dplyr::distinct()
   
-  # to get time difference, must take into account whether you are going
-  # to/from sunrise/sunset from the previous or next day, this depends on when
-  # the detection was in relation to sunrise/sunset times for that day.
+  sun_day <- sunRiseSet(sun, lat = lat, lon = lon, ts = ".date")
   
-  loc$ts_to_set <- ifelse(
-    loc$ts < loc$sunset, 
-    difftime(loc$sunset, loc$ts, units = units),
-    difftime(maptools::sunriset(
-      as.matrix(dplyr::select(loc, lon, lat)), (loc$ts + 86400), 
-      POSIXct.out = TRUE, direction = 'sunset')$time, loc$ts, units = units))
+  sun_before <- sunRiseSet(dplyr::mutate(sun, `.date` = .data[[".date"]] - lubridate::days(1)),
+                           lat = lat, lon = lon, ts = ".date") %>%
+    dplyr::select("sunrise_before" = "sunrise", "sunset_before" = "sunset")
+  sun_after <- sunRiseSet(dplyr::mutate(sun, `.date` = .data[[".date"]] + lubridate::days(1)),
+                         lat = lat, lon = lon, ts = ".date") %>%
+    dplyr::select("sunrise_after" = "sunrise", "sunset_after" = "sunset")
+
+  # Join back in with timestamps and calculate difftimes
+  sun <- dplyr::bind_cols(sun[".date"], sun_day, sun_before, sun_after) %>%
+    dplyr::left_join(df_ts, by = c(lat, lon, ".date")) %>%
+    tidyr::drop_na()
+
+  sun$ts_to_rise <- sun$sunrise - sun$`.date`
+  sun$ts_to_rise[sun$ts_to_rise < 0] <- sun$sunrise_after[sun$ts_to_rise < 0] - sun$`.date`[sun$ts_to_rise < 0]
   
-  loc$ts_since_set <- ifelse(
-    loc$ts > loc$sunset, 
-    difftime(loc$ts, loc$sunset, units = units),
-    difftime(loc$ts, maptools::sunriset(
-      as.matrix(dplyr::select(loc, lon, lat)), (loc$ts - 86400), 
-      POSIXct.out = TRUE, direction = 'sunset')$time, units = units))
+  sun$ts_to_set <- sun$sunset - sun$`.date`
+  sun$ts_to_set[sun$ts_to_set < 0] <- sun$sunset_after[sun$ts_to_set < 0] - sun$`.date`[sun$ts_to_set < 0]
   
-  loc$ts_to_rise <- ifelse(
-    loc$ts < loc$sunrise, 
-    difftime(loc$sunrise, loc$ts, units = units),
-    difftime(maptools::sunriset(
-      as.matrix(dplyr::select(loc, lon, lat)), (loc$ts + 86400), 
-      POSIXct.out = TRUE, direction = 'sunrise')$time, loc$ts, units = units))
+  sun$ts_since_rise <- sun$`.date` - sun$sunrise
+  sun$ts_since_rise[sun$ts_since_rise < 0] <- sun$`.date`[sun$ts_since_rise < 0] - sun$sunrise_before[sun$ts_since_rise < 0]
   
-  loc$ts_since_rise <- ifelse(
-    loc$ts > loc$sunrise, 
-    difftime(loc$ts, loc$sunrise, units = units),
-    difftime(loc$ts, maptools::sunriset(
-      as.matrix(dplyr::select(loc, lon, lat)), (loc$ts - 86400), 
-      POSIXct.out = TRUE, direction = 'sunrise')$time, units = units))
+  sun$ts_since_set <- sun$`.date` - sun$sunset
+  sun$ts_since_set[sun$ts_since_set < 0] <- sun$`.date`[sun$ts_since_set < 0] - sun$sunset_before[sun$ts_since_set < 0]
   
-  merge(loc, loc_na, all = TRUE)
+  # Set units and return as numeric
+  sun$ts_to_rise <- as.double(sun$ts_to_rise, units = units)
+  sun$ts_to_set <- as.double(sun$ts_to_set, units = units)
+  sun$ts_since_rise <- as.double(sun$ts_since_rise, units = units)
+  sun$ts_since_set <- as.double(sun$ts_since_set, units = units)
+  
+  sun <- dplyr::select(sun, dplyr::all_of(c(lat, lon, ts)), 
+                       "sunrise", "sunset", 
+                       "ts_to_rise", "ts_to_set", "ts_since_rise", "ts_since_set")
+  
+  dplyr::left_join(df, sun, by = c(lat, lon, ts))
 }
