@@ -467,8 +467,6 @@ test_that("calcGPS() keepAll = TRUE", {
 
 
 
-
-
 # deprecateBatches() -------------------------------------
 
 
