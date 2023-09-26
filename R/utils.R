@@ -107,6 +107,37 @@ getAccess <- function() {
           "Receivers: ", paste0(motus_vars$receivers, collapse = ", "))
 }
 
+
+#' Create an in-memory copy of sample tags data
+#' 
+#' For running examples and testing out motus functionality, it can be useful to
+#' work with sample data set. You can download the most up-to-date copy of this
+#' data yourself (to `project-176.motus`) with the username and password both
+#' "motus.sample".
+#' 
+#' `sql_motus <- tagme(176, new = TRUE, update = TRUE)`
+#' 
+#' Or you can use this helper function to grab an in-memory copy bundled in this
+#' package.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+tagmeSample <- function() {
+  sample <- DBI::dbConnect(
+    RSQLite::SQLite(),
+    system.file("extdata", "project-176.motus", package = "motus"))
+  
+  memory <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+  
+  RSQLite::sqliteCopyDatabase(sample, memory)
+  memory
+}
+
+#' Internal function for use in docs
+#'
+#' @noRd
 get_sample_data <- function() {
   sample_auth() # Use motus sample authorizations
   if(!dir.exists("./data/")) dir.create("./data/")

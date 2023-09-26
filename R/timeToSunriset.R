@@ -37,9 +37,8 @@
 #' # Download sample project 176 in SQL (user and password are both "motus.sample")
 #' \dontrun{sql_motus <- tagme(176, new = TRUE, update = TRUE)}
 #' 
-#' # OR Use example SQL file
-#' sql_motus <- tagme(176, update = FALSE, 
-#'                    dir = system.file("extdata", package = "motus"))
+#' # Or use example data base in memory
+#' sql_motus <- tagmeSample()
 #' 
 #' # Get sunrise and sunset information for alltags view with units in minutes
 #' sunrise <- timeToSunriset(sql_motus, units = "mins")

@@ -20,11 +20,6 @@
 #'   time of 2023-01-01 22:38:30 UTC.
 #'   This makes sense, as we know that the timestamp is ~8pm local time, 
 #'   well after sunset in the winter for that date.
-#'
-#' @param lat Character. Name of column with latitude values, defaults to
-#'   `recvDeployLat`
-#' @param lon Character. Name of column with longitude values, defaults to
-#'   `recvDeployLon`
 #' 
 #' @inheritParams args
 #'
@@ -41,9 +36,8 @@
 #' # Download sample project 176 in SQL (user and password are both "motus.sample")
 #' \dontrun{sql_motus <- tagme(176, new = TRUE, update = TRUE)}
 #' 
-#' # OR Use example SQL file
-#' sql_motus <- tagme(176, update = FALSE, 
-#'                    dir = system.file("extdata", package = "motus"))
+#' # Or use example data base in memory
+#' sql_motus <- tagmeSample()
 #' 
 #' # Add sunrise/sunset
 #' sun <- sunRiseSet(sql_motus)
@@ -51,14 +45,10 @@
 #' # For specific SQLite table/view ------------------------------------
 #' library(dplyr)
 #' tbl_alltagsGPS <- tbl(sql_motus, "alltagsGPS") 
-#' 
-#' # Add sunrise/sunset
 #' sun <- sunRiseSet(tbl_alltagsGPS)
 #' 
 #' # For a flattened data frame ----------------------------------------
 #' df_alltagsGPS <- collect(tbl_alltagsGPS)
-#' 
-#' # Add sunrise/sunset
 #' sun <- sunRiseSet(df_alltagsGPS)
 #' 
 #' # Using alternate lat/lons ------------------------------------------

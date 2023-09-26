@@ -11,6 +11,10 @@
 #'   `DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")`; an SQlite table would be
 #'   the result of `dplyr::tbl(tags, "alltags")`; a data frame could be the
 #'   result of `dplyr::tbl(tags, "alltags") %>% dplyr::collect()`.
+#' @param lat Character. Name of column with latitude values, defaults to
+#'   `recvDeployLat`
+#' @param lon Character. Name of column with longitude values, defaults to
+#'   `recvDeployLon`
 #'   
 #' @param resume Logical. Resume a download? Otherwise the table is
 #'   removed and the download is started from the beginning.
@@ -22,6 +26,8 @@
 #' @param filterName Character. Unique name given to the filter
 #' @param motusProjID Character. Optional project ID attached to the filter in
 #'   order to share with other users of the same project.
+#'   
+#' @param data Defunct, use `df_src` instead.
 #'   
 #' @keywords internal
 #' @name args
