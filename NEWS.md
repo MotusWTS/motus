@@ -2,6 +2,8 @@
 * Clean up helper functions `sunRiseSet()` and `timeToSunriset()`
   * `sunRiseSet()` now required to run `timeToSunriset()`
   * Changed function argument names for clarity
+* Clean up docs for `tagSum()`
+* Remove any functions that rely on deprecating spatial functions
 
 # motus 6.0.1
 * Fix bug in `xxxRunsFilter()` functions resulting in the inability to correctly
