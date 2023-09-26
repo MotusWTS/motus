@@ -57,7 +57,7 @@
 remotes::install_deps(dependencies = TRUE)
 
 
-## Update internal data files ------------------------------
+## Update internal data files ------------------------------------------------
 
 # - If merging sandbox - make sure that data-raw/updatesql.R updates unique to 
 #   sandbox have a date later than beta updates (otherwise they won't trigger)
@@ -67,23 +67,26 @@ source("data-raw/internal_data.R")
 source("data-raw/sample_data.R")
 
 
-## Documentation
+## Documentation ----------------------------------------------------------
 # - Update NEWS
 
 
-## Check spelling
+## Check spelling ---------------------------------------------------------
 dict <- hunspell::dictionary('en_CA')
 devtools::spell_check() # Fix and re-run docs as needed
 spelling::update_wordlist() # All remaining words will be added to the ignore WORDLIST file
 
+# Check/update URLS
+urlchecker::url_check()
 
-## Finalize package version
+
+## Finalize package version -----------------------------------------------
 # - Update DESCRIPTION - package version
 # - Update .onLoad - API version
 v <- "6.0.1"
 v <- packageVersion("motus") # If dev version loaded with devtools::load_all()
 
-## Checks
+## Checks ------------------------------------------------------------------
 
 goodpractice::gp(checks = stringr::str_subset(goodpractice::all_checks(), 
                                               "rcmdcheck|covr|cyclocomp", negate = TRUE))
@@ -109,7 +112,25 @@ devtools::check_win_release() # Win builder
 devtools::check_win_devel()
 devtools::check_win_oldrelease()
 
-## Test motus website (will be compiled online)
+
+
+## Push to GitHub ----------------------------------------------------
+
+## Push to master branch (pull request, etc.)
+
+## Update API package version to current (only for master) -----------
+# - Must use personal access
+srvAPIinfo()
+srvQuery(API = "custom/update_pkg_version", params = list(pkgVersion = "6.0.1"))
+
+
+## Actually release it (manually) ----------------------------------
+# - Create signed release on github
+# - Add NEWS to release details
+
+
+
+## Test motus website (will be compiled online) ------------------------------
 
 # English
 file.copy("_pkgdown_en.yml", "_pkgdown.yml")
@@ -130,29 +151,8 @@ file.rename("pkgdown/index.md", "pkgdown/README_fr.md")
 file.rename("_pkgdown.yml", "_pkgdown_fr.yml")
 
 
-# Check/update URLS
-urlchecker::url_check()
-
-
-## Push to GitHub
-
-## Push to master branch (pull request, etc.)
-
-## Update API package version to current (only for master)
-local_auth(); srvQuery(API = "custom/update_pkg_version", params = list(pkgVersion = "5.0.1"))
-
-
-## Actually release it (manually)
-# - Create signed release on github
-# - Add NEWS to release details
-
-
-
-
-
-## Note: non-ASCII files found
-# Find them
-
+## Find ASCII -------------------------------------------------------
+# Note: non-ASCII files found
 problems <- data.frame(file = list.files(recursive = TRUE, full.names = TRUE),
                        problem = as.character(NA), stringsAsFactors = FALSE)
 problems <- dplyr::as_tibble(problems)

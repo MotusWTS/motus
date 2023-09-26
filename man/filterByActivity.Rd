@@ -15,8 +15,8 @@ filterByActivity(
 )
 }
 \arguments{
-\item{src}{SQLite connection (result of \code{tagme(XXX)} or
-\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")})}
+\item{src}{SQLite connection. Result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}}
 
 \item{return}{Character. One of "good" (return only 'good' runs), "bad"
 (return only 'bad' runs), "all" (return all runs, but with a new

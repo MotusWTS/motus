@@ -7,8 +7,8 @@
 deprecateBatches(src, fetchOnly = FALSE, ask = TRUE)
 }
 \arguments{
-\item{src}{SQLite connection (result of \code{tagme(XXX)} or
-\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")})}
+\item{src}{SQLite connection. Result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}}
 
 \item{fetchOnly}{Logical. Only \emph{fetch} batches that are deprecated. Don't
 remove deprecated batches from other tables.}

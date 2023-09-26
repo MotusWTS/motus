@@ -18,7 +18,7 @@ tagme(
 )
 }
 \arguments{
-\item{projRecv}{Numeric project code from motus.org, \emph{or} character receiver
+\item{projRecv}{Numeric. Project code from motus.org, \emph{or} character receiver
 serial number.}
 
 \item{update}{Logical. Should any new data be downloaded and merged?

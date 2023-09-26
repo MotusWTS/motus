@@ -7,8 +7,8 @@
 getGPS(src, data = NULL, by = "daily", cutoff = NULL, keepAll = FALSE)
 }
 \arguments{
-\item{src}{SQLite connection (result of \code{tagme(XXX)} or
-\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")})}
+\item{src}{SQLite connection. Result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}}
 
 \item{data}{SQLite connection or data.frame. Optional subset of the \code{alltags}
 view. Must have \code{ts}, \code{batchID} and \code{hitID} at the minimum.}

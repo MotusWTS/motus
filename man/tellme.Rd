@@ -7,7 +7,7 @@
 tellme(projRecv, new = FALSE, dir = getwd())
 }
 \arguments{
-\item{projRecv}{Numeric project code from motus.org, \emph{or} character receiver
+\item{projRecv}{Numeric. Project code from motus.org, \emph{or} character receiver
 serial number.}
 
 \item{new}{Logical. Is this a new database?  Default: FALSE You have to
