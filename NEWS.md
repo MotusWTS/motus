@@ -1,3 +1,8 @@
+# motus 6.1.0
+* Clean up helper functions `sunRiseSet()` and `timeToSunriset()`
+  * `sunRiseSet()` now required to run `timeToSunriset()`
+  * Changed function argument names for clarity
+
 # motus 6.0.1
 * Fix bug in `xxxRunsFilter()` functions resulting in the inability to correctly
   return the filter id

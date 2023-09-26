@@ -4,11 +4,17 @@
 \alias{args}
 \title{Common arguments}
 \arguments{
-\item{projRecv}{Numeric project code from motus.org, \emph{or} character receiver
+\item{projRecv}{Numeric. Project code from motus.org, \emph{or} character receiver
 serial number.}
 
-\item{src}{SQLite connection (result of \code{tagme(XXX)} or
-\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")})}
+\item{src}{SQLite connection. Result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}}
+
+\item{df_src}{Data frame, SQLite connection, or SQLite table. An SQLite
+connection would be the result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}; an SQlite table would be
+the result of \code{dplyr::tbl(tags, "alltags")}; a data frame could be the
+result of \code{dplyr::tbl(tags, "alltags") \%>\% dplyr::collect()}.}
 
 \item{resume}{Logical. Resume a download? Otherwise the table is
 removed and the download is started from the beginning.}
