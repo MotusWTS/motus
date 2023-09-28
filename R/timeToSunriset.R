@@ -54,10 +54,10 @@ timeToSunriset <- function(df_src, lat = "recvDeployLat", lon = "recvDeployLon",
   
   # Calculate sunrise/set times for day of, before and after for all dates
   df_ts <- df %>%
-    dplyr::select(.data[[lat]], .data[[lon]], .data[[ts]]) %>%
+    dplyr::select("lat", "lon", "ts") %>%
     dplyr::mutate(.date = lubridate::as_datetime(.data[[ts]], tz = "UTC"))
   
-  sun <- dplyr::select(df_ts, .data[[lat]], .data[[lon]], ".date") %>%
+  sun <- dplyr::select(df_ts, "lat", "lon", ".date") %>%
     dplyr::distinct()
   
   sun_day <- sunRiseSet(sun, lat = lat, lon = lon, ts = ".date")

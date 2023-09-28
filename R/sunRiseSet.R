@@ -77,11 +77,11 @@ sunRiseSet <- function(df_src, lat = "recvDeployLat", lon = "recvDeployLon",
 
   # Get timezone of location 
   tz <- df %>%
-    dplyr::select(!!lat, !!lon) %>%
+    dplyr::select(dplyr::all_of(c(lat, lon))) %>%
     dplyr::distinct() %>%
     dplyr::filter(!is.na(.data[[lat]]) & !is.na(.data[[lon]])) %>%
     dplyr::mutate(.tz = lutz::tz_lookup_coords(.data[[lat]], .data[[lon]], warn = FALSE)) %>%
-    tidyr::nest(data = c(-".tz")) %>%
+    tidyr::nest(data = -c(".tz")) %>%
     dplyr::mutate(.tz = purrr::map_dbl(
       .data[[".tz"]],
       ~lutz::tz_offset("2021-01-01", .)$utc_offset_h)) %>%
@@ -98,10 +98,10 @@ sunRiseSet <- function(df_src, lat = "recvDeployLat", lon = "recvDeployLon",
   
   # Get the sunrise/set times in UTC but for the correct date
   sun <- df %>%
-    dplyr::select(.data[[lon]], .data[[lat]], .data[[".date"]]) %>%
+    dplyr::select(dplyr::all_of(c(lon, lat, ".date"))) %>%
     dplyr::filter(!is.na(.data[[".date"]]), !is.na(.data[[lon]]), !is.na(.data[[lat]])) %>%
     dplyr::distinct() %>%
-    dplyr::rename("lat" = .data[[lat]], "lon" = .data[[lon]], "date" = ".date") %>%
+    dplyr::rename("lat" = !!lat, "lon" = !!lon, "date" = ".date") %>%
     suncalc::getSunlightTimes(data = ., keep = c("sunrise", "sunset"), tz = "UTC")
   
   df %>%
