@@ -1,7 +1,6 @@
 test_that("tagSum()", {
-  testthat::local_edition(3)
+  t <- withr::local_db_connection(tagmeSample())
   
-  t <- tagmeSample()
   df <- dplyr::tbl(t, "alltagsGPS") %>%
     dplyr::collect()
   
@@ -10,5 +9,4 @@ test_that("tagSum()", {
 
   # Not Interactive
   expect_snapshot_value(tags, style = "json2")
-
 })

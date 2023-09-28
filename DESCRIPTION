@@ -50,12 +50,14 @@ Suggests:
     mockery,
     roxygen2,
     spelling,
-    testthat,
+    testthat (>= 3.0.0),
     covr,
-    rmarkdown
+    rmarkdown,
+    withr
 License: GPL-3
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
 Language: en-CA
 LazyData: true
+Config/testthat/edition: 3

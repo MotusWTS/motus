@@ -1,23 +1,21 @@
 
 # filterByActivity --------------------------------------------------------
 test_that("filterByActivity filters as expected", {
-  expect_silent(
-    tags <- tagme(176, update = FALSE, 
-                  dir = system.file("extdata", package = "motus")))
+  tags <- tagmeSample()
   
   expect_silent(a <- filterByActivity(tags, return = "all")) %>%
-    expect_is("tbl")
+    expect_s3_class("tbl")
   expect_silent(g <- filterByActivity(tags)) %>%
-    expect_is("tbl")
+    expect_s3_class("tbl")
   expect_silent(b <- filterByActivity(tags, return = "bad")) %>%
-    expect_is("tbl")
+    expect_s3_class("tbl")
   
   # 'good' and 'bad' should be subsets of 'all'
   expect_equal(nrow(a <- dplyr::collect(a)), 
                nrow(g <- dplyr::collect(g)) + nrow(b <- dplyr::collect(b)))
                  
-  expect_true(dplyr::all_equal(dplyr::filter(a, probability == 1), g))
-  expect_true(dplyr::all_equal(dplyr::filter(a, probability == 0), b))
+  expect_equal(sort(a$hitID[a$probability == 1]), g$hitID)
+  expect_equal(sort(a$hitID[a$probability == 0]), b$hitID)
   
   # Matches motusFilter results
   runs <- dplyr::tbl(tags, "runs") %>%
@@ -34,13 +32,11 @@ test_that("filterByActivity filters as expected", {
     dplyr::collect() %>%
     dplyr::filter(runID != 2358172, batchID != 1991040) #Extra filtering applied
   
-  expect_true(dplyr::all_equal(runs, a))
+  expect_equal(runs, dplyr::arrange(a, runID))
 })
 
 test_that("Good/Bad runs change depending on parameters", {
-  expect_silent(
-    tags <- tagme(176, update = FALSE, 
-                            dir = system.file("extdata", package = "motus")))
+  tags <- tagmeSample()
   
   # Expect run lengths to change if adjust the parameters
   expect_silent(a <- filterByActivity(tags, minLen = 10, 
@@ -72,9 +68,7 @@ test_that("Good/Bad runs change depending on parameters", {
 })
 
 test_that("Empty activity table stops", {
-  file.copy(system.file("extdata", "project-176.motus", package = "motus"),
-            ".")
-  tags <- tagme(176, update = FALSE)
+  tags <- withr::local_db_connection(tagmeSample())
   
   # Empty activity
   DBI_Execute(tags, "DELETE FROM activity")
@@ -85,65 +79,52 @@ test_that("Empty activity table stops", {
   DBI::dbRemoveTable(tags, "activity")
   expect_error(a <- filterByActivity(tags, return = "all"),
                "'src' must contain at least tables 'activity', 'alltags',")
-  
-  disconnect(tags)
 })
 
 
 # getGPS ------------------------------------------------------------------
 test_that("getGPS() runs as expected with no data", {
   skip_on_os("windows")
-  file.copy(system.file("extdata", "project-176.motus", package = "motus"), ".")
+  
+  tags <- withr::local_db_connection(tagmeSample())
   
   # No GPS data
-  tags <- tagme(projRecv = 176, new = FALSE, update = FALSE)
   expect_silent(g <- getGPS(src = tags)) %>%
-    expect_is("data.frame")
+    expect_s3_class("data.frame")
   expect_equal(nrow(g), 0) # No GPS points
   
   # No GPS data but keepAll
   expect_silent(g <- getGPS(src = tags, keepAll = TRUE)) %>%
-    expect_is("data.frame")
+    expect_s3_class("data.frame")
   expect_gt(nrow(g), 10000)
-  
-  disconnect(tags)
-  unlink("project-176.motus")
 })
 
 test_that("getGPS() handels date/time in ts gracefully", {
-  file.copy(system.file("extdata", "gps_sample.motus", package = "motus"), ".")
-  tags <- tagme("gps_sample", new = FALSE, update = FALSE)
+  tags <- withr::local_db_connection(tagmeSample("gps_sample.motus"))
   
   d <- dplyr::tbl(tags, "alltags") %>%
     dplyr::collect() %>%
     dplyr::mutate(ts = lubridate::as_datetime(ts))
   
   expect_silent(g <- getGPS(src = tags, data = d)) %>%
-    expect_is("data.frame")
+    expect_s3_class("data.frame")
   expect_gt(nrow(g), 0)
-  
-  disconnect(tags)
-  unlink("gps_sample.motus")
 })
 
 
 test_that("prepData() handles both data.frame and src", {
-  file.copy(system.file("extdata", "gps_sample.motus", package = "motus"), ".")
-  tags <- DBI::dbConnect(RSQLite::SQLite(), "gps_sample.motus")
+  tags <- withr::local_db_connection(tagmeSample("gps_sample.motus"))
   alltags <- dplyr::tbl(tags, "alltags")
   
   expect_silent(a <- prepData(tags, alltags)) %>%
-    expect_is("tbl_sql")
+    expect_s3_class("tbl_sql")
   
   expect_silent(a <- prepData(tags, dplyr::collect(alltags))) %>%
-    expect_is("data.frame")
+    expect_s3_class("data.frame")
   
   # errors
   expect_error(prepData(tags, dplyr::select(alltags, -hitID)),
                "'data' must be a subset of the 'alltags' view")
-  
-  disconnect(tags)
-  unlink("gps_sample.motus")
 })
 
 # library(ggplot2)
@@ -152,12 +133,11 @@ test_that("prepData() handles both data.frame and src", {
 #   geom_errorbarh()
 
 test_that("getBatches() returns batch subset", {
-  file.copy(system.file("extdata", "gps_sample.motus", package = "motus"), ".")
-  tags <- DBI::dbConnect(RSQLite::SQLite(), "gps_sample.motus")
+  tags <- withr::local_db_connection(tagmeSample("gps_sample.motus"))
   
   expect_null(getBatches(tags, cutoff = NULL))
   expect_silent(b1 <- getBatches(tags, cutoff = 15)) %>%
-    expect_is("data.frame")
+    expect_s3_class("data.frame")
   expect_silent(b2 <- getBatches(tags, cutoff = 1000))
   
   expect_lt(sum(purrr::map_int(b1$b, length)), 
@@ -174,18 +154,14 @@ test_that("getBatches() returns batch subset", {
   
   expect_true(all((diff_end + 15*60) > 0  & (diff_start - 15*60) < 0))
   expect_false(all((diff_end + 1*60) > 0  & (diff_start - 1*60) < 0))
-  
-  disconnect(tags)
-  unlink("gps_sample.motus")
 })
 
 test_that("calcGPS() matches GPS by = 'daily'", {
-  file.copy(system.file("extdata", "gps_sample.motus", package = "motus"), ".")
-  tags <- DBI::dbConnect(RSQLite::SQLite(), "gps_sample.motus")
+  tags <- withr::local_db_connection(tagmeSample("gps_sample.motus"))
   
   # Daily Join
   expect_silent(g <- calcGPS(prepGPS(tags), prepData(tags))) %>%
-    expect_is("data.frame")
+    expect_s3_class("data.frame")
   expect_gt(nrow(g), 0) # GPS points
   expect_equal(nrow(g[is.na(g$gpsLat),]), 0) # No missing GPS points
   expect_equal(max(table(g$hitID)), 1) # No duplicate hitIDs
@@ -196,18 +172,14 @@ test_that("calcGPS() matches GPS by = 'daily'", {
   expect_silent(getGPS(tags, by = "daily")) %>%
     expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt", 
                    "gpsTs_min", "gpsTs_max"))
-  
-  disconnect(tags)
-  unlink("gps_sample.motus")
 })
   
 test_that("calcGPS() matches GPS by = 60", {
-  file.copy(system.file("extdata", "gps_sample.motus", package = "motus"), ".")
-  tags <- DBI::dbConnect(RSQLite::SQLite(), "gps_sample.motus")
+  tags <- withr::local_db_connection(tagmeSample("gps_sample.motus"))
   
   # By = 60
   expect_silent(g <- calcGPS(prepGPS(tags), prepData(tags), by = 60)) %>%
-    expect_is("data.frame")
+    expect_s3_class("data.frame")
   expect_gt(nrow(g), 0) # GPS points
   expect_equal(nrow(g[is.na(g$gpsLat),]), 0) # No missing GPS points
   expect_equal(max(table(g$hitID)), 1) # No duplicate hitIDs
@@ -230,18 +202,14 @@ test_that("calcGPS() matches GPS by = 60", {
     
   expect_silent(getGPS(tags, by = 60)) %>%
     expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt", "gpsTs_min", "gpsTs_max"))
-  
-  disconnect(tags)
-  unlink("gps_sample.motus")
 })
 
 test_that("calcGPS() matches GPS by = 120", {
-  file.copy(system.file("extdata", "gps_sample.motus", package = "motus"), ".")
-  tags <- DBI::dbConnect(RSQLite::SQLite(), "gps_sample.motus")
+  tags <- withr::local_db_connection(tagmeSample("gps_sample.motus"))
   
   # By = 120 seconds
   expect_silent(g <- calcGPS(prepGPS(tags), prepData(tags), by = 120/60)) %>%
-    expect_is("data.frame")
+    expect_s3_class("data.frame")
   expect_gt(nrow(g), 0) # There are GPS points
   expect_equal(nrow(g[is.na(g$gpsLat),]), 0) # No missing GPS points
   expect_equal(max(table(g$hitID)), 1) # No duplicate hitIDs
@@ -261,19 +229,15 @@ test_that("calcGPS() matches GPS by = 120", {
   expect_silent(getGPS(tags, by = 120/60)) %>%
     expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt", 
                    "gpsTs_min", "gpsTs_max"))
-  
-  disconnect(tags)
-  unlink("gps_sample.motus")
 })
 
 test_that("calcGPS() matches GPS by = 'closest'", {
-  file.copy(system.file("extdata", "gps_sample.motus", package = "motus"), ".")
-  tags <- DBI::dbConnect(RSQLite::SQLite(), "gps_sample.motus")
+  tags <- withr::local_db_connection(tagmeSample("gps_sample.motus"))
   
   # By = "closest"
   expect_message(g <- calcGPS(prepGPS(tags), prepData(tags), by = "closest"),
-                 "Max time difference") %>%
-    expect_is("data.frame")
+                 "Max time difference")
+  expect_s3_class(g, "data.frame")
   expect_gt(nrow(g), 0) # There are GPS points
   expect_equal(nrow(g[is.na(g$gpsLat),]), 0) # No missing GPS points
   expect_equal(max(table(g$hitID)), 1) # No duplicate hitIDs
@@ -281,49 +245,41 @@ test_that("calcGPS() matches GPS by = 'closest'", {
   expect_false(all(abs(g$ts - g$gpsTs) <= 15*60, na.rm = TRUE)) # Expect long time between matches
   g1 <- dplyr::left_join(dplyr::select(g, hitts = ts, gpsID, gpsTs,
                                        gpsLat, gpsLon, gpsAlt), 
-                         dplyr::collect(dplyr::tbl(tags, "gps")))
+                         dplyr::collect(dplyr::tbl(tags, "gps")),
+                         by = "gpsID")
   expect_equal(g1$gpsLat, g1$lat)
   expect_equal(g1$gpsLon, g1$lon)
   expect_equal(g1$gpsAlt, g1$alt)
   expect_equal(g1$gpsTs, g1$ts)
 
-  expect_message(getGPS(tags, by = "closest"), "Max time difference") %>%
-    expect_named(c("hitID", "gpsID", "gpsLat", "gpsLon", "gpsAlt", "gpsTs"))
+  expect_message(g <- getGPS(tags, by = "closest"), "Max time difference")
+  expect_named(g, c("hitID", "gpsID", "gpsLat", "gpsLon", "gpsAlt", "gpsTs"))
   
   # By = "closest", cutoff not NULL
   expect_silent(g <- calcGPS(prepGPS(tags), 
                              prepData(tags), 
                              batches = getBatches(tags, cutoff = 10),
                              by = "closest",
-                             cutoff = 10)) %>%
-    expect_is("data.frame")
+                             cutoff = 10))
+  expect_s3_class(g, "data.frame")
   expect_true(all(abs(g$ts - g$gpsTs) <= 10*60, na.rm = TRUE))
   
-  expect_silent(getGPS(tags, by = "closest", cutoff = 10)) %>%
-    expect_named(c("hitID", "gpsID", "gpsLat", "gpsLon", "gpsAlt", "gpsTs"))
-  
-  disconnect(tags)
-  unlink("gps_sample.motus")
-})   
+  expect_silent(g <- getGPS(tags, by = "closest", cutoff = 10))
+  expect_named(g, c("hitID", "gpsID", "gpsLat", "gpsLon", "gpsAlt", "gpsTs"))
+})
 
 test_that("getGPS errors", {
-  tags <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+  tags <- withr::local_db_connection(DBI::dbConnect(RSQLite::SQLite(), ":memory:"))
   expect_error(getGPS(tags))
-  disconnect(tags)
 
-  file.copy(system.file("extdata", "gps_sample.motus", package = "motus"), ".")  
-  tags <- DBI::dbConnect(RSQLite::SQLite(), "gps_sample.motus")
+  tags <- withr::local_db_connection(tagmeSample("gps_sample.motus"))
   expect_error(getGPS(tags, by = "daaaaily"))
   expect_error(getGPS(tags, by = 0))
   expect_error(getGPS(tags, by = -100))
-  
-  disconnect(tags)
-  unlink("gps_sample.motus")
 })
 
 test_that("calcGPS() matches GPS with subset - Daily", {
-  file.copy(system.file("extdata", "gps_sample.motus", package = "motus"), ".")
-  tags <- DBI::dbConnect(RSQLite::SQLite(), "gps_sample.motus")
+  tags <- withr::local_db_connection(tagmeSample("gps_sample.motus"))
   
   alltags <- dplyr::tbl(tags, "alltags") %>%
     dplyr::filter(batchID == batchID[1]) %>%
@@ -331,7 +287,7 @@ test_that("calcGPS() matches GPS with subset - Daily", {
   
   # Daily Join
   expect_silent(g <- calcGPS(prepGPS(tags), prepData(tags, alltags))) %>%
-    expect_is("data.frame")
+    expect_s3_class("data.frame")
   expect_gt(nrow(g), 0) # There are GPS points
   expect_true(all(g$hitID %in% alltags$hitID))
   expect_equal(nrow(g[is.na(g$gpsLat),]), 0) # No missing GPS points
@@ -341,22 +297,17 @@ test_that("calcGPS() matches GPS with subset - Daily", {
   
   expect_silent(getGPS(tags, by = "daily")) %>%
     expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt", "gpsTs_min", "gpsTs_max"))
-  
-  disconnect(tags)
-  unlink("gps_sample.motus")
 })
 
 test_that("calcGPS() matches GPS with subset - 60min", {
-  file.copy(system.file("extdata", "gps_sample.motus", package = "motus"), ".")
-  tags <- DBI::dbConnect(RSQLite::SQLite(), "gps_sample.motus")
-  
+  tags <- withr::local_db_connection(tagmeSample("gps_sample.motus"))  
   alltags <- dplyr::tbl(tags, "alltags") %>%
     dplyr::filter(batchID == batchID[1]) %>%
     dplyr::collect()
   
   # By = 60
   expect_silent(g <- calcGPS(prepGPS(tags), prepData(tags, alltags), by = 60)) %>%
-    expect_is("data.frame")
+    expect_s3_class("data.frame")
   expect_gt(nrow(g), 0) # There are GPS points
   expect_true(all(g$hitID %in% alltags$hitID))
   expect_equal(nrow(g[is.na(g$gpsLat),]), 0) # No missing GPS points
@@ -380,14 +331,10 @@ test_that("calcGPS() matches GPS with subset - 60min", {
   
   expect_silent(getGPS(tags, by = 60)) %>%
     expect_named(c("hitID", "gpsLat", "gpsLon", "gpsAlt", "gpsTs_min", "gpsTs_max"))
-  
-  disconnect(tags)
-  unlink("gps_sample.motus")
 })
 
 test_that("calcGPS() matches GPS with subset - closest", {
-  file.copy(system.file("extdata", "gps_sample.motus", package = "motus"), ".")
-  tags <- DBI::dbConnect(RSQLite::SQLite(), "gps_sample.motus")
+  tags <- withr::local_db_connection(tagmeSample("gps_sample.motus"))
   
   alltags <- dplyr::tbl(tags, "alltags") %>%
     dplyr::filter(batchID == batchID[1]) %>%
@@ -395,8 +342,8 @@ test_that("calcGPS() matches GPS with subset - closest", {
   
   # By = "closest"
   expect_message(g <- calcGPS(prepGPS(tags), prepData(tags, alltags), by = "closest"),
-                 "Max time difference") %>%
-    expect_is("data.frame")
+                 "Max time difference")
+  expect_s3_class(g, "data.frame")
   expect_gt(nrow(g), 0) # There are GPS points
   expect_true(all(g$hitID %in% alltags$hitID))
   expect_true(all(alltags$hitID %in% g$hitID))
@@ -405,13 +352,14 @@ test_that("calcGPS() matches GPS with subset - closest", {
   expect_true("gpsID" %in% names(g)) # exact match with gpsID, not range
   g1 <- dplyr::left_join(dplyr::select(g, hitts = ts, gpsID,
                                        gpsLat, gpsLon, gpsAlt), 
-                         dplyr::collect(dplyr::tbl(tags, "gps")))
+                         dplyr::collect(dplyr::tbl(tags, "gps")),
+                         by = "gpsID")
   expect_equal(g1$gpsLat, g1$lat)
   expect_equal(g1$gpsLon, g1$lon)
   expect_equal(g1$gpsAlt, g1$alt)
   
-  expect_message(getGPS(tags, by = "closest"), "Max time difference") %>%
-    expect_named(c("hitID", "gpsID", "gpsLat", "gpsLon", "gpsAlt", "gpsTs"))
+  expect_message(g <- getGPS(tags, by = "closest"), "Max time difference")
+  expect_named(g, c("hitID", "gpsID", "gpsLat", "gpsLon", "gpsAlt", "gpsTs"))
   
   # By = "closest", cutoff not NULL
   expect_silent(g <- calcGPS(prepGPS(tags), 
@@ -419,27 +367,23 @@ test_that("calcGPS() matches GPS with subset - closest", {
                              batches = getBatches(tags, cutoff = 10),
                              by = "closest",
                              cutoff = 10)) %>%
-    expect_is("data.frame")
+    expect_s3_class("data.frame")
   expect_true(all(abs(g$ts - g$gpsTs) <= 10*60, na.rm = TRUE))
   
-  expect_silent(getGPS(tags, by = "closest", cutoff = 10)) %>%
-    expect_named(c("hitID", "gpsID", "gpsLat", "gpsLon", "gpsAlt", "gpsTs"))
-  
-  disconnect(tags)
-  unlink("gps_sample.motus")
+  expect_silent(g <- getGPS(tags, by = "closest", cutoff = 10))
+  expect_named(g, c("hitID", "gpsID", "gpsLat", "gpsLon", "gpsAlt", "gpsTs"))
 })   
 
 
 test_that("calcGPS() keepAll = TRUE", {
-  file.copy(system.file("extdata", "gps_sample.motus", package = "motus"), ".")
-  tags <- DBI::dbConnect(RSQLite::SQLite(), "gps_sample.motus")
-
+  tags <- withr::local_db_connection(tagmeSample("gps_sample.motus"))
+  
   # By = 5 seconds
   expect_silent(g1 <- calcGPS(prepGPS(tags), prepData(tags), by = 120/60)) %>%
-    expect_is("data.frame")
+    expect_s3_class("data.frame")
   expect_silent(g2 <- calcGPS(prepGPS(tags), prepData(tags), by = 120/60,
                               keepAll = TRUE)) %>%
-    expect_is("data.frame")
+    expect_s3_class("data.frame")
   
   expect_gt(nrow(g2), nrow(g1))
   expect_true(all(is.na(dplyr::anti_join(g2, g1, by = "hitID")$gpsLat)))
@@ -450,19 +394,16 @@ test_that("calcGPS() keepAll = TRUE", {
   # By = "closest"
   expect_silent(g1 <- calcGPS(prepGPS(tags), prepData(tags), by = "closest",
                                cutoff = 2)) %>%
-    expect_is("data.frame")
+    expect_s3_class("data.frame")
   expect_silent(g2 <- calcGPS(prepGPS(tags), prepData(tags), by = "closest", 
                                cutoff = 2, keepAll = TRUE)) %>%
-    expect_is("data.frame")
+    expect_s3_class("data.frame")
   
   expect_gt(nrow(g2), nrow(g1))
   expect_true(all(is.na(dplyr::anti_join(g2, g1, by = "hitID")$gpsLat)))
   expect_false(any(is.na(g2$hitID)))
   expect_equal(dplyr::collect(prepData(tags))$hitID,
                g2$hitID)
-  
-  disconnect(tags)
-  unlink("gps_sample.motus")
 })   
 
 
@@ -472,10 +413,8 @@ test_that("calcGPS() keepAll = TRUE", {
 
 test_that("SAMPLE - remove deprecated batches", {
   sample_auth()
-  unlink("project-176.motus")
-  file.copy(system.file("extdata", "project-176.motus", package = "motus"), 
-            to = ".")
-  t <- tagme(176, update = FALSE, new = FALSE)
+  
+  t <- withr::local_db_connection(tagmeSample())
   
   # Deprecated batches listed, but not removed to start
   dep <- dplyr::tbl(t, "deprecated") %>% 
@@ -505,7 +444,8 @@ test_that("SAMPLE - remove deprecated batches", {
   }
   
   # Deprecate batches
-  expect_message(removeDeprecated(t, ask = FALSE))
+  expect_message(removeDeprecated(t, ask = FALSE)) %>%
+    suppressMessages
   dep <- dplyr::tbl(t, "deprecated") %>% 
     dplyr::collect()
   expect_gt(nrow(dep), 0)
@@ -528,25 +468,26 @@ test_that("SAMPLE - remove deprecated batches", {
         expect_equal(., 0)
     }
   }
-  
-  disconnect(t)
-  unlink("project-176.motus")  
 })
 
 
 test_that("PROJ 1 - remove deprecated batches", {
   skip_if_no_auth()
+  withr::local_file("project-1.motus")
+  withr::local_db_connection(
+    suppressMessages(t <- tagme(1, new = TRUE, update = TRUE)))
   
   # Deprecated batches listed, but not removed to start
-  unlink("project-1.motus")
-  expect_message(t <- tagme(1, new = TRUE, update = TRUE))
   dep <- dplyr::tbl(t, "deprecated") %>% 
     dplyr::collect()
   expect_gt(nrow(dep), 0)
   expect_true(all(dep$removed == 0))
   
-  # Make fake deprecated batches
-  d <- c(4597, 101694)
+  # Make fake deprecated batches from real batches (in runs) not yet deprecated
+  d <- dplyr::tbl(t, "runs") %>%
+    dplyr::filter(!batchIDbegin %in% !!dep$batchID) %>%
+    dplyr::pull(batchIDbegin) %>%
+    unique()
   data.frame(batchID = d, batchFilter = 4, removed = 0) %>%
     DBI::dbWriteTable(t, "deprecated", ., append = TRUE)
   
@@ -569,7 +510,8 @@ test_that("PROJ 1 - remove deprecated batches", {
   }
 
   # Deprecate batches
-  expect_message(removeDeprecated(t, ask = FALSE))
+  expect_message(removeDeprecated(t, ask = FALSE)) %>%
+    suppressMessages()
   dep <- dplyr::tbl(t, "deprecated") %>% 
     dplyr::collect()
   expect_gt(nrow(dep), 0)
@@ -592,25 +534,26 @@ test_that("PROJ 1 - remove deprecated batches", {
         expect_equal(., 0)
     }
   }
-
-  disconnect(t)
-  unlink("project-1.motus")  
 })
 
 
 test_that("RECV - remove deprecated batches", {
   skip_if_no_auth()
+  withr::local_file("SG-1814BBBK0461.motus")
+  withr::local_db_connection(
+    suppressMessages(t <- tagme("SG-1814BBBK0461", new = TRUE, update = TRUE)))
   
   # Deprecated batches listed, but not removed to start
-  unlink("SG-1814BBBK0461.motus")
-  expect_message(t <- tagme("SG-1814BBBK0461", new = TRUE, update = TRUE))
   dep <- dplyr::tbl(t, "deprecated") %>% 
     dplyr::collect()
   expect_gt(nrow(dep), 0)
   expect_true(all(dep$removed == 0))
   
   # Make fake deprecated batches
-  d <- c(1179895, 1719802)
+  d <- dplyr::tbl(t, "runs") %>%
+    dplyr::filter(!batchIDbegin %in% !!dep$batchID) %>%
+    dplyr::pull(batchIDbegin) %>%
+    unique()
   data.frame(batchID = d, batchFilter = 4, removed = 0) %>%
     DBI::dbWriteTable(t, "deprecated", ., append = TRUE)
   
@@ -633,7 +576,8 @@ test_that("RECV - remove deprecated batches", {
   }
   
   # Deprecate batches
-  expect_message(removeDeprecated(t, ask = FALSE))
+  expect_message(removeDeprecated(t, ask = FALSE)) %>%
+    suppressMessages()
   dep <- dplyr::tbl(t, "deprecated") %>% 
     dplyr::collect()
   expect_gt(nrow(dep), 0)
@@ -656,7 +600,4 @@ test_that("RECV - remove deprecated batches", {
         expect_equal(., 0)
     }
   }
-  
-  disconnect(t)
-  unlink("SG-1814BBBK0461.motus")  
 })

@@ -1,20 +1,20 @@
-teardown(unlink("project-176.motus"))
-
 test_that("checkVersion and updateMotusDb run and return messages as expected", {
   
-  file.copy(system.file("extdata", "project-176.motus", package = "motus"), ".")
-  tags <- tagme(176, update = FALSE)
+  tags <- tagmeSample()
   
   # Normal database
   expect_message(checkVersion(tags), 
-                 "Your motus sqlite file is up-to-date with the package.")
+                 "Your motus sqlite file is up-to-date with the package.") %>%
+    suppressMessages()
   expect_silent(updateMotusDb(tags))
   
   # No admInfo Table
   DBI::dbRemoveTable(tags, "admInfo")
   
-  expect_message(checkVersion(tags), 
-                 "The admInfo table has not yet been created in your motus sqlite file.")
+  expect_message(
+    checkVersion(tags), 
+    "The admInfo table has not yet been created in your motus sqlite file.") %>%
+    suppressMessages()
 })
 
 test_that("is_proj identifies projects vs. receivers", {
@@ -30,8 +30,7 @@ test_that("get_projRecv pulls project name", {
   expect_error(get_projRecv("hello"), "src must be a SQLite")
   
   skip_if_no_auth()
-  skip_if_no_file(system.file("extdata", "SG-3115BBBK0782.motus", package = "motus"))
+  skip_if_no_file("SG-3115BBBK0782.motus")
   expect_equal(get_projRecv(tagme("SG-3115BBBK0782", update = FALSE, dir = d)),
                "SG-3115BBBK0782")
-  
 })

@@ -24,14 +24,12 @@ test_that("sunRiseSet() aligns with dates", {
 
 test_that("sunRiseSet() returns sunset times", {
   
-  file.copy(system.file("extdata", "project-176.motus", package = "motus"), 
-            to = ".")
-  t <- tagme(176, update = FALSE, new = FALSE)
+  t <- withr::local_db_connection(tagmeSample())
   
-  expect_message(s1 <- sunRiseSet(t), "'df_src' is a complete motus data base") %>%
-    expect_s3_class("data.frame")
-  expect_silent(s2 <- sunRiseSet(dplyr::tbl(t, "alltags"))) %>%
-    expect_s3_class("data.frame")
+  expect_message(s1 <- sunRiseSet(t), "'df_src' is a complete motus data base")
+  expect_s3_class(s1, "data.frame")
+  expect_silent(s2 <- sunRiseSet(dplyr::tbl(t, "alltags")))
+  expect_s3_class(s2, "data.frame")
   
   expect_equal(s1, s2)
   
@@ -56,7 +54,4 @@ test_that("sunRiseSet() returns sunset times", {
     dplyr::mutate(ts = lubridate::as_datetime(ts, tz = "UTC"))
   expect_true(all(abs(difftime(s1_sub$ts, s1_sub$sunrise, units = "hours")) < 24))
   expect_true(all(abs(difftime(s1_sub$ts, s1_sub$sunset, units = "hours")) < 24))
-  
-  disconnect(t)
-  unlink("project-176.motus")
 })

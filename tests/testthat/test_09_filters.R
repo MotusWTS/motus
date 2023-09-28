@@ -1,7 +1,5 @@
 test_that("SQL filters", {
-  sample_auth()
-  file.copy(system.file("extdata", "project-176.motus", package = "motus"), ".")
-  tags <- tagme(176, update = FALSE)
+  tags <- withr::local_db_connection(tagmeSample())
   
   df <- dplyr::tbl(tags, "alltags") %>%
     dplyr::filter(runID == max(runID, na.rm = TRUE)) %>%
@@ -40,8 +38,5 @@ test_that("SQL filters", {
     expect_s3_class("data.frame") %>%
     expect_length(6)
   expect_equal(nrow(l), 2)
-  
-  DBI::dbDisconnect(tags)
-  unlink("project-176.motus")
 })
   
