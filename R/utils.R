@@ -19,10 +19,12 @@ skip_if_no_auth <- function() {
 }
 
 
-skip_if_no_file <- function(file) {
+skip_if_no_file <- function(file, system = TRUE, copy = FALSE) {
+  if(system) file <- system.file("extdata", file, package = "motus")
   if(!file.exists(file)) {
     testthat::skip("File not available")
   }
+  if(copy) file.copy(file, ".")
 }
 
 is_testing <- function() {
