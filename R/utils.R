@@ -119,15 +119,23 @@ getAccess <- function() {
 #' 
 #' Or you can use this helper function to grab an in-memory copy bundled in this
 #' package.
+#' 
+#' @param db Character. Name of sample data base to load. The sample data is
+#'   "project-176.motus".
 #'
 #' @return
 #' @export
 #'
 #' @examples
-tagmeSample <- function() {
+#' # Explore the sample data
+#' tags <- tagmeSample()
+#' dplyr::tbl(tags, "activity")
+#' dplyr::tbl(tags, "alltags")
+
+tagmeSample <- function(db = "project-176.motus") {
   sample <- DBI::dbConnect(
     RSQLite::SQLite(),
-    system.file("extdata", "project-176.motus", package = "motus"))
+    system.file("extdata", db, package = "motus"))
   
   memory <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
   

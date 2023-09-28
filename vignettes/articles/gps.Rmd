@@ -10,7 +10,7 @@ file.copy(system.file("extdata", "gps_sample.motus", package = "motus"),
 gps_tags <- DBI::dbConnect(RSQLite::SQLite(), "./data/gps_sample.motus")
 
 # Get and update sample data to avoid messages later
-sql.motus <- motus:::get_sample_data()
+sql_motus <- motus:::get_sample_data()
 ```
 
 Some tags also collect GPS points, which can be used for more precise locations (as opposed to the receiver location `recDeployLat`/`recDeployLon`). 
@@ -166,9 +166,9 @@ However, as we are changing values in the data, we'll need to [flatten the data 
 
 Using the example from Chapter 5 starting with [Checking receivers](05-data-cleaning.html#checking-receivers)
 ```{r}
-sql.motus <- tagme(176, update = TRUE, dir = "./data/")
+sql_motus <- tagme(176, update = TRUE, dir = "./data/")
 
-df.alltagsGPS <- tbl(sql.motus, "alltagsGPS") %>%
+df_alltagsGPS <- tbl(sql_motus, "alltagsGPS") %>%
   mutate(recvLat = if_else(is.na(gpsLat) | gpsLat %in% c(0, 999), 
                            recvDeployLat, gpsLat),
          recvLon = if_else(is.na(gpsLon) | gpsLon %in% c(0, 999), 
@@ -177,12 +177,12 @@ df.alltagsGPS <- tbl(sql.motus, "alltagsGPS") %>%
   collect()  # Flatten the data
 
 # Take a look
-select(df.alltagsGPS, hitID, recvLat, recvLon)
+select(df_alltagsGPS, hitID, recvLat, recvLon)
 ```
 
 [Continuing on in Chapter 5](05-data-cleaning.html#checking-receivers) with these values, you would then replace all instances of `recvDeployLat` with `recvLat` and `recevDeployLon` with `recvLon`.
 
-You would also use this flattened data frame, `df.alltagsGPS`, rather than the un-flattened `tbl.alltagsGPS`.
+You would also use this flattened data frame, `df_alltagsGPS`, rather than the un-flattened `tbl_alltagsGPS`.
 
 ```{r include = FALSE}
 unlink("data/project-176.motus")

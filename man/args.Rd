@@ -16,6 +16,12 @@ connection would be the result of \code{tagme(XXX)} or
 the result of \code{dplyr::tbl(tags, "alltags")}; a data frame could be the
 result of \code{dplyr::tbl(tags, "alltags") \%>\% dplyr::collect()}.}
 
+\item{lat}{Character. Name of column with latitude values, defaults to
+\code{recvDeployLat}}
+
+\item{lon}{Character. Name of column with longitude values, defaults to
+\code{recvDeployLon}}
+
 \item{resume}{Logical. Resume a download? Otherwise the table is
 removed and the download is started from the beginning.}
 
@@ -29,6 +35,8 @@ removed and the download is started from the beginning.}
 
 \item{motusProjID}{Character. Optional project ID attached to the filter in
 order to share with other users of the same project.}
+
+\item{data}{Defunct, use \code{df_src} instead.}
 }
 \description{
 Common arguments

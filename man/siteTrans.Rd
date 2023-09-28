@@ -47,31 +47,26 @@ lat/lon of site y, distance between the site pair, time between detections,
 rate of movement between detections, and bearing between site pairs.
 }
 \examples{
-# You can use either a selected tbl from .motus eg. "alltagsGPS", or a
-# data.frame, instructions to convert a .motus file to all formats are below.
+# Download sample project 176 to .motus database (username/password are "motus.sample")
+\dontrun{sql_motus <- tagme(176, new = TRUE, update = TRUE)}
 
-# download and access data from project 176 in sql format
-# usename and password are both "motus.sample"
-\dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+# Or use example data base in memory
+sql_motus <- tagmeSample()
 
-# OR use example sql file included in `motus`
-sql.motus <- tagme(176, update = FALSE, 
-                   dir = system.file("extdata", package = "motus"))
-
-# convert sql file "sql.motus" to a tbl called "tbl.alltags"
+# convert sql file "sql_motus" to a tbl called "tbl_alltags"
 library(dplyr)
-tbl.alltags <- tbl(sql.motus, "alltagsGPS") 
+tbl_alltags <- tbl(sql_motus, "alltagsGPS") 
  
-## convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
- df.alltags <- tbl.alltags \%>\%
+## convert the tbl "tbl_alltags" to a data.frame called "df_alltags"
+ df_alltags <- tbl_alltags \%>\%
    collect() \%>\%
    as.data.frame()
 
-# View all site transitions for all detection data from tbl file tbl.alltags
-transitions <- siteTrans(tbl.alltags)
+# View all site transitions for all detection data from tbl file tbl_alltags
+transitions <- siteTrans(tbl_alltags)
 
-# View site transitions for only tag 16037 from data.frame df.alltags using
+# View site transitions for only tag 16037 from data.frame df_alltags using
 # gpsLat/gpsLon
-transitions <- siteTrans(filter(df.alltags, motusTagID == 16037),
+transitions <- siteTrans(filter(df_alltags, motusTagID == 16037),
                            latCoord = "gpsLat", lonCoord = "gpsLon")
 }

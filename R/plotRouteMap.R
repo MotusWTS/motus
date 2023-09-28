@@ -23,21 +23,15 @@
 #' @export
 #'
 #' @examplesIf requireNamespace("ggmap", quietly = TRUE)
-#' # You must use a .motus sql file, instructions to load using tagme() are
-#' # below
+#' # Download sample project 176 to .motus database (username/password are "motus.sample")
+#' \dontrun{sql_motus <- tagme(176, new = TRUE, update = TRUE)}
 #' 
-#' # download and access data from project 176 in sql format
-#' # usename and password are both "motus.sample"
-#' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
-#' 
-#' 
-#' # OR use example sql file included in `motus`
-#' sql.motus <- tagme(176, update = FALSE, 
-#'                    dir = system.file("extdata", package = "motus"))
+#' # Or use example data base in memory
+#' sql_motus <- tagmeSample()
 #' 
 #' # Plot routemap of all detection data, with "terrain" maptype, and receivers
 #' # active between 2016-01-01 and 2017-01-01
-#' plotRouteMap(sql.motus, recvStart = "2016-01-01", recvEnd = "2016-12-31")
+#' plotRouteMap(sql_motus, recvStart = "2016-01-01", recvEnd = "2016-12-31")
 
 plotRouteMap <- function(data, zoom = 3, lat = NULL, lon = NULL,
                          maptype = "terrain", recvStart = NULL, recvEnd = NULL){

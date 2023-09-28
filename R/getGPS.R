@@ -53,42 +53,39 @@
 #' @export
 #'
 #' @examples
+#' # Download sample project 176 to .motus database (username/password are "motus.sample")
+#' \dontrun{sql_motus <- tagme(176, new = TRUE, update = TRUE)}
 #' 
-#' # download and access data from project 176 in sql format
-#' # usename and password are both "motus.sample"
-#' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
-#' 
-#' # OR use example sql file included in `motus`
-#' sql.motus <- tagme(176, update = FALSE, 
-#'                    dir = system.file("extdata", package = "motus"))
+#' # Or use example data base in memory
+#' sql_motus <- tagmeSample()
 #' 
 #' # Match hits to GPS within 24hrs (daily) of each other
-#' my_gps <- getGPS(sql.motus)
+#' my_gps <- getGPS(sql_motus)
 #' my_gps
 #' 
 #' # Note that the sample data doesn't have GPS hits so this will be an 
 #' # empty data frame for project 176.
 #' 
 #' # Match hits to GPS within 15min of each other
-#' my_gps <- getGPS(sql.motus, by = 15)
+#' my_gps <- getGPS(sql_motus, by = 15)
 #' my_gps
 #' 
 #' # Match hits to GPS according to the closest timestamp
-#' my_gps <- getGPS(sql.motus, by = "closest")
+#' my_gps <- getGPS(sql_motus, by = "closest")
 #' my_gps
 #' 
 #' # Match hits to GPS according to the closest timestamp, but limit to within
 #' # 20min of each other
-#' my_gps <- getGPS(sql.motus, by = "closest", cutoff = 20)
+#' my_gps <- getGPS(sql_motus, by = "closest", cutoff = 20)
 #' my_gps
 #' 
 #' # To return all hits, regardless of whether they match a GPS record
 #' 
-#' my_gps <- getGPS(sql.motus, keepAll = TRUE)
+#' my_gps <- getGPS(sql_motus, keepAll = TRUE)
 #' my_gps
 #' 
 #' # Alternatively, use the alltagsGPS view:
-#' dplyr::tbl(sql.motus, "alltagsGPS")
+#' dplyr::tbl(sql_motus, "alltagsGPS")
 
 getGPS <- function(src, data = NULL, by = "daily", cutoff = NULL, 
                    keepAll = FALSE) {

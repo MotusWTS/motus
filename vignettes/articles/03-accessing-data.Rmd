@@ -4,7 +4,7 @@ title: "Chapter 3 - Accessing detections data"
 
 ```{r setup, include = FALSE}
 # Get and update sample data to avoid messages later
-sql.motus <- motus:::get_sample_data()
+sql_motus <- motus:::get_sample_data()
 ```
 
 > In this chapter we'll walk through the motus data format, downloading, exporting and updating your detections, as well as dealing with metadata. 
@@ -137,17 +137,17 @@ getwd()
 
 As this is the first time you are downloading data for project 176, set `projRecv = 176`, `new = TRUE` and `update = TRUE`.
 This will create a `.motus` file in your current working directory, which was shown above using `getwd()`.
-This will also create an SQL object in your R environment called `sql.motus`
+This will also create an SQL object in your R environment called `sql_motus`
 
 ```{r, eval = FALSE}
-sql.motus <- tagme(projRecv = 176, new = TRUE, update = TRUE)
+sql_motus <- tagme(projRecv = 176, new = TRUE, update = TRUE)
 ```
 
 Alternatively you can specify a different location to save the data by entering your preferred filepath. 
 In this example we save to our data folder using the `dir` argument.
 Note that `./` simply means 'relative to the current folder' (shown by `getwd()`).
 ```{r, eval = FALSE}
-sql.motus <- tagme(projRecv = 176, new = TRUE, update = TRUE, dir = "./data/")
+sql_motus <- tagme(projRecv = 176, new = TRUE, update = TRUE, dir = "./data/")
 ```
 
 > **Note:** You'll need to use the **username** `motus.sample` and the **password** `motus.sample` to access this data (see [login](#login) for more details)!
@@ -195,7 +195,7 @@ If you have a receiver registered to your own project, replace the receiver seri
 
 ```{r eval = FALSE}
 proj.num <- "SG-123BBBK1234"
-sql.motus <- tagme(projRecv = proj.num, new = TRUE, update = TRUE)
+sql_motus <- tagme(projRecv = proj.num, new = TRUE, update = TRUE)
 ```
 
 This will download a file to your working directory named `SG-123BBBK1234.motus`.
@@ -209,11 +209,11 @@ Note that since the sample project doesn't have any receivers associated with it
 
 ```{r eval = FALSE}
 # get a copy of the metadata only
-sql.motus <- tagme(176, new = TRUE, update = FALSE, dir = "./data/")
-metadata(sql.motus, 176)
-tbl.recvDeps <- tbl(sql.motus, "recvDeps")
+sql_motus <- tagme(176, new = TRUE, update = FALSE, dir = "./data/")
+metadata(sql_motus, 176)
+tbl_recvDeps <- tbl(sql_motus, "recvDeps")
 
-df.serno <- tbl.recvDeps %>% 
+df_serno <- tbl_recvDeps %>% 
   filter(projectID == 176) %>% 
   select(serno) %>% 
   distinct() %>% 
@@ -261,7 +261,7 @@ tagme(dir = "./data/")
 
 ### Accessing downloaded detection data
 
-Now that we've downloaded our data as an SQLite database and loaded it into an R object called `sql.motus`, we want to access the tables stored within. 
+Now that we've downloaded our data as an SQLite database and loaded it into an R object called `sql_motus`, we want to access the tables stored within. 
 Detailed descriptions of all the tables stored in the .motus file can be found in the [Data structure](#data-structure) section.
 
 You can also view the list of tables, and variables contained within those tables, using the `DBI` and `RSQLite` packages (these are automatically installed when you install `motus`).
@@ -283,9 +283,9 @@ dbListFields(file.name, "species")
 The *virtual* table `alltags` contains the detection data, along with most metadata variables that users need from the various underlying `.motus` tables. 
 We access the tables using the `tbl()` function from the `dplyr` package which we installed in [Chapter 2](02-installing-packages.html) and loaded at the [start of this chapter](#load-relevant-r-packages).  
 
-For example, retrieve the virtual `alltags` table from our `sql.motus` SQLite file.
+For example, retrieve the virtual `alltags` table from our `sql_motus` SQLite file.
 ```{r}
-tbl.alltags <- tbl(sql.motus, "alltags")
+tbl.alltags <- tbl(sql_motus, "alltags")
 ```
 
 We now have a new `tbl.alltags` object in R. 
@@ -428,14 +428,14 @@ Since the `.motus` file is a SQLite database, you can update your existing file 
 To open and update a detections database that already exists (has been downloaded previously), we use the `tagme()` function but set `new = FALSE`:
 
 ```{r}
-sql.motus <- tagme(projRecv = 176, new = FALSE, update = TRUE, dir = "./data/") 
+sql_motus <- tagme(projRecv = 176, new = FALSE, update = TRUE, dir = "./data/") 
 ```
 
 If you are working offline, and simply want to open an already downloaded database without connecting to the server to update, use `new = FALSE` and `update = FALSE`:
 
 ```{r}
 # use dir = to specify a directory
-sql.motus <- tagme(projRecv = 176, new = FALSE, update = FALSE, dir = "./data")
+sql_motus <- tagme(projRecv = 176, new = FALSE, update = FALSE, dir = "./data")
 ```
 
 ### Checking for new detections
@@ -466,7 +466,7 @@ tellme(projRecv = 176, new = TRUE)
 Tag and receiver metadata are automatically merged with tag detections when data are downloaded. However, if metadata have been updated since your initial download, you can force re-import of the metadata when updating a database by running: 
 
 ```{r eval = FALSE}
-sql.motus <- tagme(projRecv = 176, forceMeta = TRUE)
+sql_motus <- tagme(projRecv = 176, forceMeta = TRUE)
 ```
 
 ## Import full tag and receiver metadata {#all-metadata}
@@ -486,17 +486,17 @@ Running the `metadata()` function as follows will add the appropriate metadata f
 
 ```{r eval = FALSE}
 # access all tag and receiver metadata for all projects in the network.
-metadata(sql.motus) 
+metadata(sql_motus) 
 ```
 
 Alternatively, you can load metadata for a specific project(s) using:
 
 ```{r eval = FALSE}
 # access tag and receiver metadata associated with project 176
-metadata(sql.motus, projectIDs = 176) 
+metadata(sql_motus, projectIDs = 176) 
 
 # access tag and receiver metadata associated with projects 176 and 1
-metadata(sql.motus, projectIDs = c(176, 1)) 
+metadata(sql_motus, projectIDs = c(176, 1)) 
 ```
 
 ## Ensure that you have the correct database version {#checkVersion}
@@ -510,7 +510,7 @@ Refer to [Troubleshooting](troubleshooting.html) if the `checkVersion()` call re
 
 
 ```{r eval = FALSE}
-checkVersion(sql.motus)
+checkVersion(sql_motus)
 ```
 
 ## R object naming convention
@@ -526,10 +526,10 @@ if you have not downloaded the data, see the section on [downloading data for th
 
 ```{r eval = FALSE}
 # SQLite R object, which links to the .motus file:
-sql.motus <- tagme(176, update = TRUE, dir = "./data")  
+sql_motus <- tagme(176, update = TRUE, dir = "./data")  
 
 # virtual table object of the alltags table in the sample.motus file:
-tbl.alltags <- tbl(sql.motus, "alltags")  
+tbl.alltags <- tbl(sql_motus, "alltags")  
 df.alltags <- tbl.alltags %>%
                 collect() %>%
                 as.data.frame() %>% # dataframe ("flat") object of alltags table

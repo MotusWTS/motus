@@ -21,35 +21,30 @@ site, length of time between first and last detection of each site, and total
 number of detections at each site.
 }
 \examples{
-# You can use either a selected tbl from .motus eg. "alltagsGPS", or a
-# data.frame, instructions to convert a .motus file to all formats are below.
+# Download sample project 176 to .motus database (username/password are "motus.sample")
+\dontrun{sql_motus <- tagme(176, new = TRUE, update = TRUE)}
 
-# download and access data from project 176 in SQLite format
-# usename and password are both "motus.sample"
-\dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+# Or use example data base in memory
+sql_motus <- tagmeSample()
 
-# use example sql file included in `motus`
-sql.motus <- tagme(176, update = FALSE, 
-                   dir = system.file("extdata", package = "motus"))
-
-# convert sql file "sql.motus" to a tbl called "tbl.alltags"
+# convert sql file "sql_motus" to a tbl called "tbl_alltags"
 library(dplyr)
-tbl.alltags <- tbl(sql.motus, "alltagsGPS") 
+tbl_alltags <- tbl(sql_motus, "alltagsGPS") 
 
-# convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
-df.alltags <- tbl.alltags  \%>\% 
+# convert the tbl "tbl_alltags" to a data.frame called "df_alltags"
+df_alltags <- tbl_alltags  \%>\% 
   collect() \%>\% 
   as.data.frame() 
 
 # Create tag summaries for all tags within detection data with time in
-# minutes with tbl file tbl.alltags
-tag_site_summary <- tagSumSite(tbl.alltags, units = "mins")
+# minutes with tbl file tbl_alltags
+tag_site_summary <- tagSumSite(tbl_alltags, units = "mins")
 
 # Create tag summaries for only select tags with time in default hours with
-# data.frame df.alltags
-tag_site_summary <- tagSumSite(filter(df.alltags, 
+# data.frame df_alltags
+tag_site_summary <- tagSumSite(filter(df_alltags, 
                                       motusTagID \%in\% c(16047, 16037, 16039)))
 
-# Create tag summaries for only a select species with data.frame df.alltags
-tag_site_summary <- tagSumSite(filter(df.alltags, speciesEN == "Red Knot"))
+# Create tag summaries for only a select species with data.frame df_alltags
+tag_site_summary <- tagSumSite(filter(df_alltags, speciesEN == "Red Knot"))
 }

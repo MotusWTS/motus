@@ -4,67 +4,64 @@
 \alias{tagSum}
 \title{General summary of detections for each tag}
 \usage{
-tagSum(data)
+tagSum(df_src, data)
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltagsGPS", or a
-data.frame of detection data including at a minimum variables for
-motusTagID, fullID, recvDeployLat, recvDeployLon, recvDeployName, ts,
-gpsLat, gpsLon}
+\item{df_src}{Data frame, SQLite connection, or SQLite table. An SQLite
+connection would be the result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}; an SQlite table would be
+the result of \code{dplyr::tbl(tags, "alltags")}; a data frame could be the
+result of \code{dplyr::tbl(tags, "alltags") \%>\% dplyr::collect()}.}
+
+\item{data}{Defunct, use \code{df_src} instead.}
 }
 \value{
-a data.frame with these columns:
+A flat data frame with the following for each tag:
 \itemize{
-\item fullID: fullID of Motus registered tag
-\item first_ts: time of first detection of tag
-\item last_ts: time of last detection of tag
-\item first_site: first detection site of tag
-\item last_site: last detection site of tag
-\item lat.x: latitude of first deteciton site of tag
-\item lon.x: longitude of first deteciton site of tag
-\item lat.y: latitude of last deteciton site of tag
-\item lon.y: longitude of last deteciton site of tag
-\item tot_ts: length of time between first and last detection of tag (in seconds)
-\item dist: total straight line distance between first and last detection site (in metres), see latLonDist function in sensorgnome package for details
-\item rate: overall rate of movement (tot_ts/dist), in metres/second
-\item bearing: bearing between first and last detection sites, see bearing function in geosphere package for more details
+\item \code{fullID} - \code{fullID} of Motus registered tag
+\item \code{first_ts} - Time (\code{ts}) of first detection
+\item \code{last_ts} - Time (\code{ts}) of last detection
+\item \code{first_site} - First detection site (\code{recvDeployName})
+\item \code{last_site} - Last detection site (\code{recvDeployName})
+\item \code{recvLat.x} - Latitude of first detection site (\code{gpsLat} or \code{recvDeployLat})
+\item \code{recvLon.x} - Longitude of first detection site (\code{gpsLon} or \code{recvDeployLon})
+\item \code{recvLat.y} - Latitude of last detection site (\code{gpsLat} or \code{recvDeployLat})
+\item \code{recvLon.y} - Longitude of last detection site (\code{gpsLon} or \code{recvDeployLon})
+\item \code{tot_ts} - Time between first and last detection (in seconds)
+\item \code{dist} - Straight line distance between first and last detection site (in metres)
+\item \code{rate} - Overall rate of movement (\code{tot_ts}/\code{dist}), in metres/second
+\item \code{bearing} - Bearing between first and last detection sites
+\item \code{num_det} - Number of detections summarized
 }
 }
 \description{
-Creates a summary for each tag of it's first and last detection time, first
-and last detection site, length of time between first and last detection,
-straight line distance between first and last detection site, rate of
-movement, and bearing
+Creates a summary for each tag of it's first and last detection time (\code{ts}),
+first and last detection site, length of time between first and last
+detection, straight line distance between first and last detection site, rate
+of movement, and bearing. Lat/lons are taken from \code{gpsLat}/\code{gpsLon}, or if
+missing, from \code{recvDeployLat}/\code{recvDeployLon}. Bearing is calculated using
+the \code{geosphere::bearing()} function.
 }
 \examples{
-# You can use either a selected tbl from .motus eg. "alltagsGPS", or a
-# data.frame, instructions to convert a .motus file to all formats are below.
 
-# download and access data from project 176 in sql format
-# usename and password are both "motus.sample"
-\dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+# Download sample project 176 to .motus database (username/password are "motus.sample")
+\dontrun{sql_motus <- tagme(176, new = TRUE, update = TRUE)}
 
-# use example sql file included in `motus`
-sql.motus <- tagme(176, update = FALSE, 
-                   dir = system.file("extdata", package = "motus"))
+# Or use example data base in memory
+sql_motus <- tagmeSample()
 
-# convert sql file "sql.motus" to a tbl called "tbl.alltags"
+# Summarize tags
+tag_summary <- tagSum(sql_motus)
+
+# For specific SQLite table/view (needs gpsLat/gpsLon) --------------
 library(dplyr)
-tbl.alltags <- tbl(sql.motus, "alltagsGPS") 
+tbl_alltagsGPS <- tbl(sql_motus, "alltagsGPS") 
+tag_summary <- tagSum(tbl_alltagsGPS)
 
-# convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
-df.alltags <- tbl.alltags \%>\% 
-  collect() \%>\% 
-  as.data.frame()
+# For a flattened data frame ----------------------------------------
+df_alltagsGPS <- collect(tbl_alltagsGPS)
+tag_summary <- tagSum(df_alltagsGPS)
 
-# Create tag summary for all tags within detection data using tbl file
-# tbl.alltags
-tag_summary <- tagSum(tbl.alltags)
-
-# Create site summaries for only select tags using tbl file tbl.alltags
-tag_summary <- tagSum(filter(tbl.alltags, 
-                             motusTagID \%in\% c(16047, 16037, 16039)))
-
-# Create site summaries for only a select species using data.frame df.alltags
-tag_summary <- tagSum(filter(df.alltags, speciesEN == "Red Knot"))
+# Can be filtered, e.g., for only a few tags
+tag_summary <- tagSum(filter(tbl_alltagsGPS, motusTagID \%in\% c(16047, 16037, 16039)))
 }

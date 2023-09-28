@@ -25,39 +25,34 @@
 #' @export
 #'
 #' @examples
-#' # You can use either a selected tbl from .motus eg. "alltagsGPS", or a
-#' # data.frame, instructions to convert a .motus file to all formats are below.
+#' # Download sample project 176 to .motus database (username/password are "motus.sample")
+#' \dontrun{sql_motus <- tagme(176, new = TRUE, update = TRUE)}
 #' 
-#' # download and access data from project 176 in sql format
-#' # usename and password are both "motus.sample"
-#' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+#' # Or use example data base in memory
+#' sql_motus <- tagmeSample()
 #' 
-#' # OR use example sql file included in `motus`
-#' sql.motus <- tagme(176, update = FALSE, 
-#'                    dir = system.file("extdata", package = "motus"))
-#' 
-#' # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+#' # convert sql file "sql_motus" to a tbl called "tbl_alltags"
 #' library(dplyr)
-#' tbl.alltags <- tbl(sql.motus, "alltagsGPS")
+#' tbl_alltags <- tbl(sql_motus, "alltagsGPS")
 #' 
-#' # convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
-#' df.alltags <- tbl.alltags %>% 
+#' # convert the tbl "tbl_alltags" to a data.frame called "df_alltags"
+#' df_alltags <- tbl_alltags %>% 
 #'   collect() %>% 
 #'   as.data.frame() 
 #' 
 #' # Create site summaries for all sites within detection data with time in
-#' # minutes using tbl file tbl.alltags
-#' daily_site_summary <- siteSumDaily(tbl.alltags, units = "mins")
+#' # minutes using tbl file tbl_alltags
+#' daily_site_summary <- siteSumDaily(tbl_alltags, units = "mins")
 #' 
 #' # Create site summaries for only select sites with time in minutes using tbl
-#' # file tbl.alltags
-#' sub <- filter(tbl.alltags, recvDeployName %in% c("Niapiskau", "Netitishi", 
+#' # file tbl_alltags
+#' sub <- filter(tbl_alltags, recvDeployName %in% c("Niapiskau", "Netitishi", 
 #'                                                  "Old Cut", "Washkaugou"))
 #' daily_site_summary <- siteSumDaily(sub, units = "mins")
 #'
 #' # Create site summaries for only a select species, Red Knot, with default
-#' # time in hours using data frame df.alltags
-#' daily_site_summary <- siteSumDaily(filter(df.alltags,
+#' # time in hours using data frame df_alltags
+#' daily_site_summary <- siteSumDaily(filter(df_alltags,
 #'                                           speciesEN == "Red Knot"))
 
 siteSumDaily <- function(data, units = "hours"){

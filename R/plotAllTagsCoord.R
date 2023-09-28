@@ -16,48 +16,44 @@
 #' @export
 #'
 #' @examples
-#' # You can use either a selected tbl from .motus eg. "alltags", or a
-#' # data.frame, instructions to convert a .motus file to all formats are below.
+#' # Download sample project 176 to .motus database (username/password are "motus.sample")
+#' \dontrun{sql_motus <- tagme(176, new = TRUE, update = TRUE)}
 #' 
-#' # download and access data from project 176 in sql format
-#' # usename and password are both "motus.sample"
-#' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
-#' 
-#' # OR use example sql file included in `motus`
-#' sql.motus <- tagme(176, update = FALSE, 
-#'                    dir = system.file("extdata", package = "motus"))
+#' # Or use example data base in memory
+#' sql_motus <- tagmeSample()
 #'                    
-#' # convert sql file "sql.motus" to a tbl called "tbl.alltags"                
+#' # convert sql file "sql_motus" to a tbl called "tbl_alltags"                
 #' library(dplyr)
-#' tbl.alltags <- tbl(sql.motus, "alltags") 
+#' tbl_alltags <- tbl(sql_motus, "alltags") 
 #' 
-#' # convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
-#' df.alltags <- tbl.alltags %>% 
+#' # convert the tbl "tbl_alltags" to a data.frame called "df_alltags"
+#' df_alltags <- tbl_alltags %>% 
 #'   collect() %>% 
 #'   as.data.frame()
 #' 
-#' # Plot tbl file tbl.alltags with default GPS latitude data and 5 tags per panel
-#' plotAllTagsCoord(tbl.alltags)
+#' # Plot tbl file tbl_alltags with default GPS latitude data and 5 tags per panel
+#' plotAllTagsCoord(tbl_alltags)
 #' 
-#' # Plot an sql file tbl.alltags with 10 tags per panel
-#' plotAllTagsCoord(tbl.alltags, tagsPerPanel = 10)
+#' # Plot an sql file tbl_alltags with 10 tags per panel
+#' plotAllTagsCoord(tbl_alltags, tagsPerPanel = 10)
 #' 
-#' # Plot dataframe df.alltags using receiver deployment latitudes with default
+#' # Plot dataframe df_alltags using receiver deployment latitudes with default
 #' # 5 tags per panel
-#' plotAllTagsCoord(df.alltags, coordinate = "recvDeployLat")
+#' plotAllTagsCoord(df_alltags, coordinate = "recvDeployLat")
 #' 
-#' # Plot dataframe df.alltags using LONGITUDES and 10 tags per panel
+#' # Plot dataframe df_alltags using LONGITUDES and 10 tags per panel
 #' # But only works if non-NA "gpsLon"!
-#' \dontrun{plotAllTagsCoord(df.alltags, coordinate = "gpsLon", tagsPerPanel = 10)}
-
-#' # Plot dataframe df.alltags using lat for select motus tagIDs
-#' plotAllTagsCoord(filter(df.alltags, motusTagID %in% c(19129, 16011, 17357)), 
+#' \dontrun{plotAllTagsCoord(df_alltags, coordinate = "gpsLon", tagsPerPanel = 10)}
+#' 
+#' # Plot dataframe df_alltags using lat for select motus tagIDs
+#' plotAllTagsCoord(filter(df_alltags, motusTagID %in% c(19129, 16011, 17357)), 
 #'                  tagsPerPanel = 1)
-
-## grouping code taken from sensorgnome package
 
 plotAllTagsCoord <- function(data, coordinate = "recvDeployLat", ts = "ts",
                              tagsPerPanel = 5) {
+  
+  ## grouping code taken from sensorgnome package
+  
   if(!is.numeric(tagsPerPanel)) {
     stop('Numeric value required for "tagsPerPanel"', call. = FALSE)
   }

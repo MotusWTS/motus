@@ -139,7 +139,7 @@ library(motusData)
 # We also do a couple manipulations here, to reorder the levels of the
 # recvSiteName factor, and order the data by time.
 
-df.vanish <- vanishBearing %>%
+df_vanish <- vanishBearing %>%
   rename(time = ts) %>%
   mutate(recvSiteName = reorder(recvSiteName, recvLat),
          motusTagID = as.factor(as.character(motusTagID))) %>% # order sites by latitude
@@ -156,7 +156,7 @@ We look for clear departures by first plotting latitude against time.
 In this case, we can see the birds departing north past several stations:
 
 ```{r}
-ggplot(data = df.vanish, aes(x = time, y = recvLat, colour = as.factor(recvSiteName))) + 
+ggplot(data = df_vanish, aes(x = time, y = recvLat, colour = as.factor(recvSiteName))) + 
   geom_point(pch = 21) +
   facet_wrap(~ motusTagID, scales = "free", ncol = 1) +
   theme_bw()
@@ -168,7 +168,7 @@ We plot signal strength by time for a subset of the data, to show the last few h
 
 
 ```{r}
-ggplot(data = filter(df.vanish, motusTagID == 16823, time > "2015-05-30 00:00:00"), 
+ggplot(data = filter(df_vanish, motusTagID == 16823, time > "2015-05-30 00:00:00"), 
        aes(x = time, y = sig, colour = as.factor(port))) + 
   theme_bw() + 
   geom_point(pch = 21) +
@@ -189,7 +189,7 @@ For now, the best way to do this is by manually going through each set of detect
 Continuing with tag 16823, let's find the departure time. 
 
 ```{r}
-ggplot(data = filter(df.vanish, motusTagID == 16823), 
+ggplot(data = filter(df_vanish, motusTagID == 16823), 
        aes(x = time, y = sig, colour= as.factor(antBearing))) + 
   theme_bw() + 
   geom_point() +
@@ -202,7 +202,7 @@ We then subset the plot in order to zoom in to the last few minutes of detection
 By zooming in we can find the exact departure time.  
 
 ```{r}
-ggplot(data = filter(df.vanish, 
+ggplot(data = filter(df_vanish, 
                      motusTagID == 16823,  
                      time > "2015-05-30 03:03:00",  
                      time < "2015-05-30 03:10:00"), 
@@ -223,25 +223,25 @@ if you are keen, you can try the plots above on tags 16897 and 16791 to see how 
 
 ```{r}
 ## create dataframe and assign column names
-dep.16823 <- as.data.frame(cbind(16823, "2015-05-30 03:04:59"))
+dep_16823 <- as.data.frame(cbind(16823, "2015-05-30 03:04:59"))
 
 ## create dataframes for the other two tags:
-dep.16867 <- as.data.frame(cbind(16867, "2015-05-29 01:56:00"))
-dep.16791 <- as.data.frame(cbind(16791, "2015-05-08 02:41:40"))
+dep_16867 <- as.data.frame(cbind(16867, "2015-05-29 01:56:00"))
+dep_16791 <- as.data.frame(cbind(16791, "2015-05-08 02:41:40"))
 
 ## put them all together
-df.departTime <- rbind(dep.16823, dep.16867, dep.16791)
-names(df.departTime) <- c("motusTagID", "time_depart")
+df_departTime <- rbind(dep_16823, dep_16867, dep_16791)
+names(df_departTime) <- c("motusTagID", "time_depart")
 
 ## convert time to posixCT using Lubridate functionality
-df.departTime <- mutate(df.departTime, time_depart = ymd_hms(time_depart))
+df_departTime <- mutate(df_departTime, time_depart = ymd_hms(time_depart))
 
-df.departTime
+df_departTime
 
 ## optionally, save to .RDS file to preserve time structure (you could save to
 ## .csv, but time structure will not be preserved) not run here:
 
-# saveRDS(df.departTime, file = "./data/departureTimes.RDS")
+# saveRDS(df_departTime, file = "./data/departureTimes.RDS")
 ```
 
 ### Calculate vanishing bearings for individuals with departure times
@@ -273,8 +273,8 @@ min.sig <- -78.0691 # normally max/min sig comes from the complete raw data for 
 max.sig <- -17.8707
 
 # in this case, right join should drop any individuals that don't have departure
-# times in df.departTime
-df.vanishBearing <- right_join(df.vanish, df.departTime, by = "motusTagID") %>%
+# times in df_departTime
+df_vanishBearing <- right_join(df_vanish, df_departTime, by = "motusTagID") %>%
   filter(time >= time_depart,
          recvSiteName == depart.station) %>%
   distinct() %>%
@@ -293,13 +293,13 @@ df.vanishBearing <- right_join(df.vanish, df.departTime, by = "motusTagID") %>%
             .groups = "drop")
 ```
 
-The resulting `df.vanish` dataframe contains the `motusTagID`, the vanishing bearing of the tag, the time in seconds/minutes used to estimate the bearing, and the receiver's name and coordinates. 
+The resulting `df_vanish` dataframe contains the `motusTagID`, the vanishing bearing of the tag, the time in seconds/minutes used to estimate the bearing, and the receiver's name and coordinates. 
 We can make a circular plot with points for the individual vanishing bearings and an arrow for the mean bearing as follows:
 
 ```{r}
 # if you have many bearings/points, can use stack = TRUE
-plot.circular(df.vanishBearing$vanish.bearing, zero = pi/2)
-arrows.circular(mean(df.vanishBearing$vanish.bearing), zero = pi/2)
+plot.circular(df_vanishBearing$vanish.bearing, zero = pi/2)
+arrows.circular(mean(df_vanishBearing$vanish.bearing), zero = pi/2)
 ```
 
 ### Plot the vanishing bearings on a map
@@ -335,7 +335,7 @@ ptspermm <- 2.83464567  # need this because geom_text uses mm, and themes use pt
 ## To map antenna bearings:
 ## Create a station dataframe with antenna bearings for all antennas with
 ## detections for the tag of interest
-df.stations <- df.vanish %>%
+df_stations <- df_vanish %>%
   filter(motusTagID == 16823) %>%
   select(recvSiteName, antBearing, port, recvLon, recvLat) %>%
   distinct()
@@ -347,16 +347,16 @@ rad <- function(x) {x * pi/180}
 ## Now we make the map
 
 ggmap(map.OC) +
-    geom_point(data = df.stations, aes(x = recvLon, y = recvLat), size = 1, 
+    geom_point(data = df_stations, aes(x = recvLon, y = recvLat), size = 1, 
                colour = "goldenrod") +
     # Add antenna bearings
-    geom_segment(data = df.stations, 
+    geom_segment(data = df_stations, 
                  aes(x = recvLon, xend = recvLon + (sin(rad(antBearing))*arr.sc), 
                      y = recvLat, yend = recvLat + (cos(rad(antBearing))*arr.sc)), 
                  colour = "goldenrod") +  
   
     # add vanishing bearings
-    geom_segment(data = filter(df.vanishBearing, motusTagID == 16823), 
+    geom_segment(data = filter(df_vanishBearing, motusTagID == 16823), 
                  aes(x = recvLon, xend = recvLon + (sin(rad(vanish.bearing))*arr.sc),
                      y = recvLat, yend = recvLat + (cos(rad(vanish.bearing))*arr.sc), 
                      colour = motusTagID)) +

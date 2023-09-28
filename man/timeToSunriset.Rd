@@ -31,6 +31,8 @@ to \code{ts}}
 
 \item{units}{Character. Units to display time difference, defaults to
 "hours", options include "secs", "mins", "hours", "days", "weeks".}
+
+\item{data}{Defunct, use \code{df_src} instead.}
 }
 \value{
 Original data (as a flat data frame), with the following additional
@@ -54,15 +56,11 @@ Uses \code{sunRiseSet()} to perform sunrise/sunset calculates, see \code{?sunRis
 for details regarding how local dates are assessed from UTC timestamps.
 }
 \examples{
-
-# For SQLite Data base-----------------------------------------------
-
-# Download sample project 176 in SQL (user and password are both "motus.sample")
+# Download sample project 176 to .motus database (username/password are "motus.sample")
 \dontrun{sql_motus <- tagme(176, new = TRUE, update = TRUE)}
 
-# OR Use example SQL file
-sql_motus <- tagme(176, update = FALSE, 
-                   dir = system.file("extdata", package = "motus"))
+# Or use example data base in memory
+sql_motus <- tagmeSample()
 
 # Get sunrise and sunset information for alltags view with units in minutes
 sunrise <- timeToSunriset(sql_motus, units = "mins")

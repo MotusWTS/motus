@@ -12,32 +12,28 @@
 #' @inheritParams args
 #'
 #' @examples
+#' # Download sample project 176 to .motus database (username/password are "motus.sample")
+#' \dontrun{sql_motus <- tagme(176, new = TRUE, update = TRUE)}
 #' 
-#' # Download and access data from project 176 in sql format
-#' \dontrun{
-#' # usename and password are both "motus.sample"
-#' sql.motus <- tagme(176, new = TRUE, update = TRUE)
-#' 
-#' # OR use example sql file included in `motus`
-#' sql.motus <- tagme(176, update = FALSE, 
-#'                    dir = system.file("extdata", package = "motus"))
+#' # Or use example data base in memory
+#' sql_motus <- tagmeSample()
 #'   
 #' # Access 'deprecated' table using tbl() from dplyr
 #' library(dplyr)
-#' tbl(sql.motus, "deprecated")
+#' tbl(sql_motus, "deprecated")
 #' 
 #' # See that there are deprecated batches in the data
-#' filter(tbl(sql.motus, "alltags"), batchID == 6000)
+#' filter(tbl(sql_motus, "alltags"), batchID == 6000)
 #' 
 #' # Fetch deprecated batches
-#' deprecateBatches(sql.motus, fetchOnly = TRUE)
+#' deprecateBatches(sql_motus, fetchOnly = TRUE)
 #' 
 #' # Remove deprecated batches (will ask for confirmation unless ask = FALSE)
-#' deprecateBatches(sql.motus, ask = FALSE)
+#' deprecateBatches(sql_motus, ask = FALSE)
 #' 
 #' # See that there are NO more deprecated batches in the data
-#' filter(tbl(sql.motus, "alltags"), batchID == 6000)
-#' }
+#' filter(tbl(sql_motus, "alltags"), batchID == 6000)
+#' 
 #' @export
 
 deprecateBatches <- function(src, fetchOnly = FALSE, ask = TRUE) {

@@ -30,16 +30,13 @@
 #' - `sunset` - Time of sunset in **UTC** for that row's date and location
 #'
 #' @examples
-#' 
-#' # For SQLite Data base-----------------------------------------------
-#' 
-#' # Download sample project 176 in SQL (user and password are both "motus.sample")
+#' # Download sample project 176 to .motus database (username/password are "motus.sample")
 #' \dontrun{sql_motus <- tagme(176, new = TRUE, update = TRUE)}
 #' 
 #' # Or use example data base in memory
 #' sql_motus <- tagmeSample()
 #' 
-#' # Add sunrise/sunset
+#' # For SQLite Data base-----------------------------------------------
 #' sun <- sunRiseSet(sql_motus)
 #' 
 #' # For specific SQLite table/view ------------------------------------

@@ -60,17 +60,13 @@ is >= \code{ratio}
 }
 }
 \examples{
+# Download sample project 176 to .motus database (username/password are "motus.sample")
+\dontrun{sql_motus <- tagme(176, new = TRUE, update = TRUE)}
 
-# download and access data from project 176 in sql format
-# username and password are both "motus.sample"
-\dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+# Or use example data base in memory
+sql_motus <- tagmeSample()
 
-# OR use example sql file included in `motus`
-sql.motus <- tagme(176, update = FALSE, 
-                   dir = system.file("extdata", package = "motus"))
-
-tbl_good <- filterByActivity(sql.motus)
-tbl_bad <- filterByActivity(sql.motus, return = "bad")
-tbl_all <- filterByActivity(sql.motus, return = "all")
-
+tbl_good <- filterByActivity(sql_motus)
+tbl_bad <- filterByActivity(sql_motus, return = "bad")
+tbl_all <- filterByActivity(sql_motus, return = "all")
 }

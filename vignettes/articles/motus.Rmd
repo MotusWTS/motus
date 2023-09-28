@@ -6,7 +6,7 @@ title: "Get started"
 
 ```{r setup, include = FALSE}
 # Get and update sample data to avoid messages later
-sql.motus <- motus:::get_sample_data()
+sql_motus <- motus:::get_sample_data()
 ```
 
 This is a quick introduction to downloading Motus data. Definitely check out the various [articles](../index.html) for more details!
@@ -24,7 +24,7 @@ You can use your own project number or receiver name.
 
 We use the `tagme()` function to download the data
 ```{r}
-sql.motus <- tagme(176, new = FALSE, update = TRUE, dir = "./data/")
+sql_motus <- tagme(176, new = FALSE, update = TRUE, dir = "./data/")
 ```
 
 `tagme()` includes several options. Here we're using:
@@ -34,25 +34,25 @@ sql.motus <- tagme(176, new = FALSE, update = TRUE, dir = "./data/")
 
 `tagme()` stores a `project-176.motus` SQLite data base in `./data/`.
 
-We can access parts of the data base by referencing the SQL object we created, `sql.motus`
+We can access parts of the data base by referencing the SQL object we created, `sql_motus`
 
 Here, we'll retrieve the `alltags` view from the SQLite database using the `tbl()` function from the `dplyr` package
 ```{r}
-tbl.alltags <- tbl(sql.motus, "alltags")
+tbl_alltags <- tbl(sql_motus, "alltags")
 ```
 
 Next, we can convert this to a data frame (a flat file; see [Converting to flat data in Chapter 3](03-accessing-data.html#converting-to-flat-data))
 
 Convert to flat (`collect()`) and create a date/time column `time` from the numeric timestamps, `ts`.
 ```{r}
-df.alltags <- tbl.alltags %>%
+df_alltags <- tbl_alltags %>%
   collect() %>%
   mutate(time = as_datetime(ts))
 ```
  
 If you want to save this flat file, you can export as RDS (see [Exporting detections in Chapter 3](03-accessing-data.html#exporting-detections))
 ```{r}
-saveRDS(df.alltags, "my_motus_data.rds")
+saveRDS(df_alltags, "my_motus_data.rds")
 ```
 
 Use caution when producing a flat file as using the full suite of fields can use a lot of memory.

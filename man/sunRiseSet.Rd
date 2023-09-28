@@ -24,6 +24,8 @@ result of \code{dplyr::tbl(tags, "alltags") \%>\% dplyr::collect()}.}
 
 \item{lon}{Character. Name of column with longitude values, defaults to
 \code{recvDeployLon}}
+
+\item{data}{Defunct, use \code{df_src} instead.}
 }
 \value{
 Original data (as a flat data frame), with the following additional
@@ -40,47 +42,40 @@ containing at least latitude, longitude, and time.
 }
 \details{
 Note that this will always return the sunrise and sunset of the \emph{local} date.
-For example, 2023-01-01 04:00:00 in Central North America is 2023-01-01 in UTC,
-but 2023-01-01 20:00:00 is actually the following date in UTC. Because the
-timestamps are UTC, times are first converted to their local time zone time
-before extracting the date. Thus:
+For example, 2023-01-01 04:00:00 in Central North American time is 2023-01-01
+in UTC, but 2023-01-01 20:00:00 is actually the following date in UTC.
+Because Motus timestamps are UTC, times are first converted to their local time
+zone time using the lat/lon coordinates before extracting the date. Thus:
 \itemize{
 \item A UTC timestamp of 1672624800 for Winnipeg, Canada
 is 2023-01-02 02:00:00 UTC and 2023-01-01 20:00:00 local time
 \item Therefore \code{sunRiseSet()} calculates the sunrise/sunset times for 2023-01-01
+(not for 2023-01-02)
 \item These sunrise/sunset times are returned in UTC: 2023-01-01 14:27:50 UTC and
 2023-01-01 22:38:30 UTC
 \item Note that the UTC timestamp 2023-01-02 02:00:00 is later than the sunset
 time of 2023-01-01 22:38:30 UTC.
 This makes sense, as we know that the timestamp is ~8pm local time,
-well after sunset in the winter.
+well after sunset in the winter for that date.
 }
 }
 \examples{
-
-# For SQLite Data base-----------------------------------------------
-
-# Download sample project 176 in SQL (user and password are both "motus.sample")
+# Download sample project 176 to .motus database (username/password are "motus.sample")
 \dontrun{sql_motus <- tagme(176, new = TRUE, update = TRUE)}
 
-# OR Use example SQL file
-sql_motus <- tagme(176, update = FALSE, 
-                   dir = system.file("extdata", package = "motus"))
+# Or use example data base in memory
+sql_motus <- tagmeSample()
 
-# Add sunrise/sunset
+# For SQLite Data base-----------------------------------------------
 sun <- sunRiseSet(sql_motus)
 
 # For specific SQLite table/view ------------------------------------
 library(dplyr)
 tbl_alltagsGPS <- tbl(sql_motus, "alltagsGPS") 
-
-# Add sunrise/sunset
 sun <- sunRiseSet(tbl_alltagsGPS)
 
 # For a flattened data frame ----------------------------------------
 df_alltagsGPS <- collect(tbl_alltagsGPS)
-
-# Add sunrise/sunset
 sun <- sunRiseSet(df_alltagsGPS)
 
 # Using alternate lat/lons ------------------------------------------

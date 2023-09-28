@@ -20,25 +20,22 @@ batch. Batches with large numbers of hits may indicate interference and thus
 unreliable hits.
 }
 \examples{
+# Download sample project 176 to .motus database (username/password are "motus.sample")
+\dontrun{sql_motus <- tagme(176, new = TRUE, update = TRUE)}
 
-# download and access data from project 176 in sql format
-# usename and password are both "motus.sample"
-\dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
-
-# OR use example sql file included in `motus`
-sql.motus <- tagme(176, update = FALSE, 
-                   dir = system.file("extdata", package = "motus"))
+# Or use example data base in memory
+sql_motus <- tagmeSample()
   
 # Get all GPS points
-\dontrun{sql.motus <- gpsAll(sql.motus)}
+\dontrun{sql_motus <- gpsAll(sql_motus)}
 
 # Access 'gpsAll' table
 library(dplyr)
-g <- tbl(sql.motus, "gpsAll")
+g <- tbl(sql_motus, "gpsAll")
   
 # gpsAll resumes a previous download by default
 # If you want to delete this original data and do a fresh download, 
 # use resume = FALSE
-\dontrun{sql.motus <- gpsAll(sql.motus, resume = FALSE)}
+\dontrun{sql_motus <- gpsAll(sql_motus, resume = FALSE)}
 
 }
