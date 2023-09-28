@@ -12,8 +12,11 @@ if(have_auth()) {
   
   # Update receiver
   set_testing()
+  orig <- options(motus.test.max = 60)
   unlink("./inst/extdata/SG-3115BBBK0782.motus")
-  tagme("SG-3115BBBK0782", new = TRUE, update = TRUE, dir = "./inst/extdata/")
+  t <- tagme("SG-3115BBBK0782", new = TRUE, update = TRUE, dir = "./inst/extdata/")
+  DBI::dbDisconnect(t)
+  options(orig)
   
   # Update project 4
   unlink("./inst/extdata/project-4.motus")
