@@ -58,7 +58,7 @@ plotSite <- function(data, sitename = unique(data$recvDeployName)){
                   antBearing = as.factor(.data$antBearing)) %>%
     as.data.frame()
   
-  ggplot2::ggplot(data, ggplot2::aes_string(x = "hour", y = "fullID", col = "antBearing")) +
+  ggplot2::ggplot(data, ggplot2::aes(x = .data[["hour"]], y = .data[["fullID"]], col = .data[["antBearing"]])) +
     ggplot2::geom_point() + 
     ggplot2::theme_bw() + 
     ggplot2::labs(title = "Detection Time vs Tag ID, coloured by antenna", 

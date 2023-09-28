@@ -53,7 +53,7 @@ plotTagSig <- function(data, motusTagID){
                   recvDeployName = stats::reorder(.data$recvDeployName, .data$recvLat),
                   antBearing = as.factor(.data$antBearing)) 
 
-  ggplot2::ggplot(data, ggplot2::aes_string(x = "ts", y = "sig", col = "antBearing")) +
+  ggplot2::ggplot(data, ggplot2::aes(x = .data[["ts"]], y = .data[["sig"]], col = .data[["antBearing"]])) +
     ggplot2::geom_point() + 
     ggplot2::theme_bw() + 
     ggplot2::labs(title = paste("Detection Time vs Signal Strength, coloured by antenna \n ID ", motusTagID), 

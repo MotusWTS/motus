@@ -42,7 +42,7 @@ plotSiteSig <- function(data, recvDeployName){
     dplyr::mutate(ts = lubridate::as_datetime(.data$ts, tz = "UTC"),
                   antBearing = as.factor(.data$antBearing))
 
-  ggplot2::ggplot(data, ggplot2::aes_string("ts", "sig", col = "antBearing")) + 
+  ggplot2::ggplot(data, ggplot2::aes(.data[["ts"]], .data[["sig"]], col = .data[["antBearing"]])) + 
     ggplot2::geom_point() + 
     ggplot2::theme_bw() + 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)) + 

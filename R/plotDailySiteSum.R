@@ -39,11 +39,11 @@ plotDailySiteSum <- function(data, recvDeployName){
     tmp <- data %>% dplyr::collect() %>% as.data.frame()
   }
   sitesum <- siteSumDaily(dplyr::filter(data, .data$recvDeployName == !!recvDeployName))
-  detections <- ggplot2::ggplot(sitesum, ggplot2::aes_string(x = "date", y = "num_det")) +
+  detections <- ggplot2::ggplot(sitesum, ggplot2::aes(x = .data[["date"]], y = .data[["num_det"]])) +
     ggplot2::geom_bar(stat = "identity") + 
     ggplot2::theme_bw() + ## creates bar plot by recvDeployName
     ggplot2::labs(x= "Date", y = "Total detections")
-  tags <- ggplot2::ggplot(sitesum, ggplot2::aes_string(x = "date", y = "num_tags")) +
+  tags <- ggplot2::ggplot(sitesum, ggplot2::aes(x = .data[["date"]], y = .data[["num_tags"]])) +
     ggplot2::geom_bar(stat = "identity") + 
     ggplot2::theme_bw() + ## creates line graph by recvDeployName
     ggplot2::labs(x = "Date", y = "Number of tags")

@@ -92,8 +92,8 @@ plotAllTagsCoord <- function(data, coordinate = "recvDeployLat", ts = "ts",
                                          "recvDeployName", "fullID", "tagGroupFactor")))
   data <- data[order(data$hour), ]
   
-  ggplot2::ggplot(data, ggplot2::aes_string(x = "hour", y = "meanlat", 
-                                            colour = "fullID", group = "fullID")) +
+  ggplot2::ggplot(data, ggplot2::aes(x = .data[["hour"]], y = .data[["meanlat"]], 
+                                     colour = .data[["fullID"]], group = .data[["fullID"]])) +
     ggplot2::geom_line() + 
     ggplot2::geom_point(pch = 21) + 
     ggplot2::theme_bw() +

@@ -85,8 +85,12 @@ plotAllTagsSite <- function(data, coordinate = "recvDeployLat", tagsPerPanel = 5
   data <- data[order(data$round_ts),] ## order by time
   out <- by(data, INDICES = data$tagGroupFactor, FUN = function(m){
     m <- droplevels(m)
-    m <- ggplot2::ggplot(m, ggplot2::aes_string(x = "round_ts", y = "sitelat", colour = "fullID", group = "fullID"))
-    p <- ggplot2::ggplot(data, ggplot2::aes(x = "round_ts", y = "sitelat", col = "fullID", group = "fullID"))
+    m <- ggplot2::ggplot(m, ggplot2::aes(
+      x = .data[["round_ts"]], y = .data[["sitelat"]], 
+      colour = .data[["fullID"]], group = .data[["fullID"]]))
+    p <- ggplot2::ggplot(data, ggplot2::aes(
+      x = .data[["round_ts"]], y = .data[["sitelat"]], 
+      col = .data[["fullID"]], group = .data[["fullID"]]))
     m + ggplot2::geom_line() + ggplot2::geom_point(pch = 21) + 
       ggplot2::theme_bw() +
       ggplot2::labs(title = "Detection time vs Site (ordered by latitude) by Tag", 

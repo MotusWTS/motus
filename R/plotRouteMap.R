@@ -106,11 +106,11 @@ plotRouteMap <- function(data, zoom = 3, lat = NULL, lon = NULL,
                                 zoom = zoom,
                                 maptype = maptype)
   ggmap::ggmap(gmap) +
-    ggplot2::geom_point(data = site, ggplot2::aes_string(x = "longitude", y = "latitude"), 
+    ggplot2::geom_point(data = site, ggplot2::aes(x = .data[["longitude"]], y = .data[["latitude"]]), 
                         shape = 21, colour = "black", fill = "yellow") +
     ggplot2::geom_path(data = data, 
-                       ggplot2::aes_string(x = "recvDeployLon", y = "recvDeployLat", 
-                                    group = "fullID", col = "fullID")) +
+                       ggplot2::aes(x = .data[["recvDeployLon"]], y = .data[["recvDeployLat"]], 
+                                    group = .data[["fullID"]], col = .data[["fullID"]])) +
     ggplot2::labs(x = "Longitude", y = "Latitude") + 
     ggplot2::theme_bw()
 }

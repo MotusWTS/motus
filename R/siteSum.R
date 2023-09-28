@@ -80,11 +80,11 @@ siteSum <- function(data, units = "hours"){
                            num.tags = length(unique(.data$motusTagID)),
                            num.det = length(.data$ts))
   
-  detections <- ggplot2::ggplot(data = data, ggplot2::aes_string(x = "recvDeployName", y = "num.det")) +
+  detections <- ggplot2::ggplot(data = data, ggplot2::aes(x = .data[["recvDeployName"]], y = .data[["num.det"]])) +
     ggplot2::geom_bar(stat = "identity") + ggplot2::theme_bw() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)) +  ## make x-axis labels on a 45 deg angle to read more easily
     ggplot2::labs(title = "Total number of detections per recvDeployName, across all tags", x= "Site", y = "Total detections") ## changes x- and y-axis label
-  tags <- ggplot2::ggplot(data = data, ggplot2::aes_string(x = "recvDeployName", y = "num.tags")) +
+  tags <- ggplot2::ggplot(data = data, ggplot2::aes(x = .data[["recvDeployName"]], y = .data[["num.tags"]])) +
     ggplot2::geom_bar(stat = "identity") + 
     ggplot2::theme_bw() + ## creates bar plot by recvDeployName
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)) + ## make x-axis labels on a 45 deg angle to read more easily
