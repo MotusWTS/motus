@@ -4,8 +4,7 @@ destination: docs  # Only for local builds, ignored by GA
 lang: en
 
 development:
-  mode: release
-  version_label: light
+  mode: auto
 
 template:
   bootstrap: 5
@@ -14,8 +13,8 @@ template:
 navbar:
   bg: dark
   structure:
-    left:  [home, intro, articles, troubleshooting, reference, news]
-    right: [search, github, english, french]
+    left:  [home, intro, articles, troubleshooting, reference, news, dev]
+    right: [search, github]
   components:
     troubleshooting:
       text: Troubleshooting
@@ -23,12 +22,6 @@ navbar:
     reference:
       text: Functions
       href: reference/index.html
-    english:
-      text: EN
-      href: index.html
-    french:
-      text: FR
-      href: fr/index.html
 
 reference:
 

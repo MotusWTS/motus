@@ -8,6 +8,7 @@
 * Remove any functions that rely on deprecating spatial functions
 * Standardize names in docs and examples
 * Update tests internally
+* Remove placeholder for French documents (will add back in once we get translations)
 
 # motus 6.0.1
 * Fix bug in `xxxRunsFilter()` functions resulting in the inability to correctly

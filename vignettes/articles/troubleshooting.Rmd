@@ -13,7 +13,7 @@ Occasionally users run into problems while trying to install or update `motus`. 
 
 1. Update all packages before the installation
 
-```{r}
+```{r eval = FALSE}
 library(remotes)
 update_packages()
 ```
@@ -23,7 +23,7 @@ update_packages()
 You can also try to set up a custom R library folder with `.libPaths()` and ensure that you have full write permissions on that folder, or try to start R in administrator (Windows) or SUDO mode (Linux/Ubuntu) and try installing again.
 
 To set a custom library folder for installing new packages:
-```{r}
+```{r eval = FALSE}
 .libPaths("C:/r-libraries/")
 ```
 
