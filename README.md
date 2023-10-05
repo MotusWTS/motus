@@ -1,6 +1,9 @@
 <!-- badges: start -->
-[![R build status](https://github.com/MotusWTS/motus/workflows/R-CMD-check/badge.svg)](https://github.com/MotusWTS/motus/actions)
+[![:name status badge](https://birdscanada.r-universe.dev/badges/:name)](https://birdscanada.r-universe.dev/)
+[![motus status badge](https://birdscanada.r-universe.dev/badges/motus)](https://birdscanada.r-universe.dev/motus)
+[![R-CMD-check](https://github.com/MotusWTS/motus/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/MotusWTS/motus/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/MotusWTS/motus/branch/master/graph/badge.svg)](https://codecov.io/gh/MotusWTS/motus?branch=master)
+
 <!-- badges: end -->
 
 # motus
