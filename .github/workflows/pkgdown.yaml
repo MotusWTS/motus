@@ -31,19 +31,20 @@ jobs:
           use-public-rspm: true
           extra-repositories: 'https://birdscanada.r-universe.dev'
 
+# kableExtra For database-variables TODO: necessary?
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: |
             any::pkgdown
             local::.
-            any::rnaturalearth       # For 2 tutorials
-            any::rnaturalearthhires  # For 2 tutorials
-            any::patchwork           # For signal strength
-            any::motusData           # For vanishing bearings
-            any::circular            # For vanishing bearings
-            any::tidyverse           # For all tutorials etc.
-            any::DT                  # For database-variables
-            any::kableExtra          # For database-variables TODO: necessary?
+            any::rnaturalearth       
+            any::rnaturalearthhires 
+            any::patchwork          
+            any::motusData          
+            any::circular           
+            any::tidyverse          
+            any::DT                 
+            any::kableExtra          
           needs: website
 
       - name: Build site
