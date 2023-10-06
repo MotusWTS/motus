@@ -73,12 +73,16 @@
 tagme <- function(projRecv, update = TRUE, new = FALSE, dir = getwd(), 
                   countOnly = FALSE, forceMeta = FALSE, rename = FALSE,
                   skipActivity = FALSE, skipNodes = FALSE, skipDeprecated = FALSE) {
+  
+  # Update all existing databases in `dir`
   if (missing(projRecv) && ! new) {
-    ## special case: update all existing databases in `dir`
+    
     lapply(dir(dir, pattern = "\\.motus$"),
            function(f) {
              tagme(projRecv = sub("\\.motus$", "", f), update = TRUE, dir = dir, 
-                   countOnly = countOnly, forceMeta = forceMeta)
+                   countOnly = countOnly, forceMeta = forceMeta, 
+                   skipActivity = skipActivity,
+                   skipNodes = skipNodes, skipDeprecated = skipDeprecated)
            }) %>%
       return()
   }
