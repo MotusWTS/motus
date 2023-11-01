@@ -19,7 +19,7 @@ See the [motus package site](https://MotusWTS.github.io/motus) for detailed usag
 
 ## Installation
 
-The easiest way to install motus is from Birds Canada's R-universe:
+The easiest way to install motus is from Birds Canada's [R-Universe](https://birdscanada.r-universe.dev):
 
 ```R
 install.packages("motus", 
