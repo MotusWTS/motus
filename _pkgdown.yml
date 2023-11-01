@@ -44,6 +44,7 @@ reference:
 
 - title: Helper
   contents:
+  - tagmeSample
   - getGPS
   - getRuns
   - simSiteDet
