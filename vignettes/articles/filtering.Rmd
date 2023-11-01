@@ -39,7 +39,7 @@ Sites with more background noise may be more prone to generating a high number o
 The `activity` table contains information on the number of runs (`numRuns`) and how many of these runs were particularly short (i.e. 2 hits = `run2` or 3 hits = `run3`, etc.) per hour (`hourBin`).
 ```{r}
 tbl(sql_motus, "activity") %>%
-  select(batchID, motusDeviceID, ant, year, month, day, hourBin, numRuns, run2, run3)
+  select(batchID, motusDeviceID, ant, hourBin, numRuns, run2, run3)
 ```
 
 Therefore a good first pass filter should use both the length of a run and the amount of radio activity (number of short runs) at a given site to determine whether or not to remove a run of hits.

@@ -6,6 +6,7 @@
 * Add helper function `tagmeSample()` for an in-memory connection to the sample 
   data base for running examples
 * Remove any functions that rely on deprecating spatial functions
+* Remove year, month, day fields from activity tables.
 * Standardize names in docs and examples
 * Update tests internally
 * Remove placeholder for French documents (will add back in once we get translations)
