@@ -2,6 +2,7 @@
 test_that("srvXXX work as expected", {
 
   skip_if_no_auth()
+  skip_if_no_server()
 
   ## srv meta ----------------------
 
@@ -196,6 +197,7 @@ test_that("srvXXX work as expected", {
 
 test_that("tagme() errors appropriately", {
   skip_on_cran()
+  skip_if_no_server()
   sample_auth()
 
   withr::local_file("project-10.motus")
@@ -215,6 +217,7 @@ test_that("tagme() errors appropriately", {
 
 test_that("Proj - tagme() downloads data - Projects", {
   skip_on_cran()
+  skip_if_no_server()
   sample_auth()
 
   withr::local_file("project-176.motus")
@@ -227,6 +230,7 @@ test_that("Proj - tagme() downloads data - Projects", {
 
 test_that("Recv - tagme() downloads data - Receivers", {
   skip_on_cran()
+  skip_if_no_server()
   skip_if_no_auth()
 
   withr::local_file("SG-3115BBBK1127.motus")
@@ -239,6 +243,7 @@ test_that("Recv - tagme() downloads data - Receivers", {
 
 test_that("Proj - tagme() with countOnly (tellme) - Projects", {
   skip_on_cran()
+  skip_if_no_server()
   sample_auth()
   withr::local_file("project-176.motus")
   skip_if_no_file("project-176.motus", copy = TRUE)
@@ -253,6 +258,7 @@ test_that("Proj - tagme() with countOnly (tellme) - Projects", {
 
 test_that("Recv - tagme() with countOnly (tellme) - Receivers", {
   skip_on_cran()
+  skip_if_no_server()
   skip_if_no_auth()
   
   withr::local_file("SG-3115BBBK1127.motus")
@@ -264,6 +270,7 @@ test_that("Recv - tagme() with countOnly (tellme) - Receivers", {
 test_that("srvQuery handles time out graciously", {
   
   sample_auth()
+  skip_if_no_server()
   
   # https://stackoverflow.com/questions/100841/artificially-create-a-connection-timeout-error
   expect_message(
@@ -276,6 +283,7 @@ test_that("srvQuery handles time out graciously", {
 
 
 test_that("srvAuth handles errors informatively", {
+  skip_if_no_server()
   expect_message(motusLogout())
   sessionVariable(name = "userLogin", val = "motus.samp")
   sessionVariable(name = "userPassword", val = "motus.samp")
@@ -285,6 +293,7 @@ test_that("srvAuth handles errors informatively", {
 
 test_that("metadata()", {
   skip_on_cran()
+  skip_if_no_server()
   sample_auth()
   
   tags <- withr::local_db_connection(tagmeSample())
@@ -297,6 +306,7 @@ test_that("metadata()", {
 
 test_that("srvAuth errors/warns/passes on package version", {
   sample_auth()
+  skip_if_no_server()
   expect_silent(srvAuth())
   expect_true(!is.null(motus_vars$currentPkgVersion))
     

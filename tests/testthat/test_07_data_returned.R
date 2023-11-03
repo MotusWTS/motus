@@ -2,6 +2,7 @@
 test_that("Tag data returned as expected - Proj 207", {
   skip_on_cran()
   skip_if_no_auth()
+  skip_if_no_server()
   withr::local_file("project-207.motus")
   
   expect_message(tags <- withr::local_db_connection(
@@ -61,6 +62,7 @@ test_that("Tag data returned as expected - Proj 207", {
 
 test_that("Tag data returned as expected - Activity", {
   sample_auth()
+  skip_if_no_server()
   withr::local_file("project_176.motus")
   
   expect_message(tags <- withr::local_db_connection(
@@ -85,6 +87,7 @@ test_that("Tag data returned as expected - Activity", {
 test_that("Reciever data returned as expected", {
   skip_on_cran()
   skip_if_no_auth()
+  skip_if_no_server()
   withr::local_file("SG-3115BBBK0782.motus")
   withr::local_options(list(motus.test.max = 1))
   
@@ -170,6 +173,7 @@ test_that("Reciever data returned as expected", {
 test_that("activityAll and gpsAll return for tag data", {
   skip_on_cran()
   skip_if_no_auth()
+  skip_if_no_server()
   withr::local_file("project-4.motus")
 
   expect_message(tags <- withr::local_db_connection(

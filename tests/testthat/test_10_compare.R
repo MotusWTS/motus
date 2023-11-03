@@ -1,5 +1,6 @@
 test_that("table fields match server (sample auth)", {
   sample_auth()
+  skip_if_no_server()
   tags <- withr::local_db_connection(tagmeSample())
   
   expect_named(srvActivityForAll(batchID = 53)[1,],
@@ -31,6 +32,7 @@ test_that("table fields match server (sample auth)", {
 
 test_that("table fields match server (local auth)", {
   skip_if_no_auth()
+  skip_if_no_server()
   skip_if_no_file(f <- "project-4.motus")
   tags <- withr::local_db_connection(tagmeSample(f))
   

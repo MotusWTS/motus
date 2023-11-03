@@ -27,6 +27,17 @@ skip_if_no_file <- function(file, system = TRUE, copy = FALSE) {
   if(copy) file.copy(file, ".")
 }
 
+skip_if_no_server <- function() {
+  sample_auth()
+  srv <- suppressMessages(try(srvAuth(timeout = 1), silent = TRUE))
+  if(inherits(srv, "try-error")) {
+    srv <- suppressMessages(try(srvAuth(timeout = 1), silent = TRUE))
+    if(inherits(srv, "try-error")) {
+      skip("Server Offline")
+    }
+  }
+}
+
 is_testing <- function() {
   identical(Sys.getenv("TESTTHAT"), "true")
 }

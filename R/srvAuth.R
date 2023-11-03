@@ -11,7 +11,7 @@
 #'
 #' @noRd
 
-srvAuth <- function(verbose = FALSE) {
+srvAuth <- function(verbose = FALSE, timeout = 120) {
   ## force lookup of userLogin and userPassword using their active bindings.
   ## (we don't want to use lazy evaluation here by instead passing the list(...)
   ## expression to srvQuery
@@ -20,7 +20,8 @@ srvAuth <- function(verbose = FALSE) {
                pkgVersion = pkg_version())
 
   tryCatch({
-    res <- srvQuery(motus_vars$API_DATA_AUTHENTICATE, pars, auth = FALSE, verbose = verbose)
+    res <- srvQuery(motus_vars$API_DATA_AUTHENTICATE, pars, auth = FALSE, 
+                    timeout = timeout, verbose = verbose)
     motus_vars$projects <- res$projects
     motus_vars$receivers <- res$receivers
     motus_vars$dataVersion <- res$dataVersion

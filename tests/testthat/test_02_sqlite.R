@@ -170,6 +170,7 @@ test_that("Missing tables recreated silently", {
   }
   
   # Add tables, no errors
+  skip_if_no_server()
   expect_message(tags <- withr::local_db_connection(
     tagme(176, new = FALSE, update = TRUE))) %>%
     suppressMessages()
@@ -205,6 +206,7 @@ test_that("check for custom views before update", {
                                       "CREATE VIEW alltags_fast")))
   expect_false("alltags_fast" %in% DBI::dbListTables(tags))
    
+  skip_if_no_server()
   expect_message(withr::local_db_connection(tagme(176, update = TRUE)), 
                  "updateMotusDb started") %>%
     suppressMessages()

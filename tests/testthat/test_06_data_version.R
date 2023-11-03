@@ -1,5 +1,6 @@
 test_that("Proj - DB updates - new = TRUE", {
   sample_auth()
+  skip_if_no_server()
   withr::local_file("project-176.motus")
   withr::local_file("project-176_v1.motus")
   
@@ -18,6 +19,7 @@ test_that("Proj - DB updates - new = TRUE", {
 
 test_that("Proj - DB updates - forceMeta", {
   sample_auth()
+  skip_if_no_server()
   withr::local_file("project-176.motus")
   withr::local_file("project-176_v1.motus")
   
@@ -36,6 +38,7 @@ test_that("Proj - DB updates - forceMeta", {
 
 test_that("Proj - DB updates - new = FALSE", {
   sample_auth()
+  skip_if_no_server()
   withr::local_file("project-176.motus")
   withr::local_file("project-176_v1.motus")
   
@@ -69,6 +72,7 @@ test_that("Proj - DB updates - new = FALSE", {
 
 test_that("Proj - Update fails if backup present", {
   sample_auth()
+  skip_if_no_server()
   withr::local_file("project-176_v1.motus")
   withr::local_file("project-176.motus")
   file.create("project-176_v1.motus")
@@ -87,6 +91,7 @@ test_that("Proj - Update fails if backup present", {
 
 test_that("Recv - DB updates - 2", {
   skip_if_no_auth()
+  skip_if_no_server()
   withr::local_file("SG-3115BBBK1127.motus")
   withr::local_file("SG-3115BBBK1127_v1.motus")
   
@@ -115,6 +120,8 @@ test_that("Recv - DB updates - 2", {
 
 test_that("Recv - Update fails if backup present", {
   skip_if_no_auth()
+  skip_if_no_server()
+  
   withr::local_file("SG-3115BBBK1127_v1.motus")
   withr::local_file("SG-3115BBBK1127.motus")
   file.create("SG-3115BBBK1127_v1.motus")
