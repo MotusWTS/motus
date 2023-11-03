@@ -61,6 +61,7 @@ srvQuery <- function(API, params = NULL, JSON = FALSE,
                  httr::config(http_content_decoding = 0), ua, 
                  httr::timeout(timeout))
     }
+    
     resp <- try(api_query(url, json, ua, timeout), silent = TRUE)
     
     if(inherits(resp, "try-error")) {
@@ -90,7 +91,8 @@ srvQuery <- function(API, params = NULL, JSON = FALSE,
         p <- list(errorMsg = "Internal Server Error")
       } else p <- list(errorMsg = "Unknown Error")
       
-      stop(msg_fmt("Motus API request failed [{httr::status_code(resp)}]",
+      code <- httr::status_code(resp)
+      stop(msg_fmt("Motus API request failed [{code}]",
                    "\n{p$errorMsg}"), 
            call. = FALSE)
     }
