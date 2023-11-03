@@ -8,7 +8,7 @@ deleteRunsFilter(src, filterName, motusProjID = NA, clearOnly = FALSE)
 }
 \arguments{
 \item{src}{SQLite connection. Result of \code{tagme(XXX)} or
-\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}}
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}.}
 
 \item{filterName}{Character. Unique name given to the filter}
 

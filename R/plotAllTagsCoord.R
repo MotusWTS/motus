@@ -11,7 +11,8 @@
 #'   is 5
 #' @param coordinate column name from which to obtain location values, by
 #'   default it is set to `recvDeployLat`
-#' @param ts column for a date/time object as numeric or POSIXct, defaults to `ts`
+#' 
+#' @inheritParams args
 #' 
 #' @export
 #'

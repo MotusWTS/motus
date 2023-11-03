@@ -8,7 +8,7 @@ metadata(src, projectIDs = NULL, replace = TRUE, delete = FALSE)
 }
 \arguments{
 \item{src}{SQLite connection. Result of \code{tagme(XXX)} or
-\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}}
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}.}
 
 \item{projectIDs}{optional integer vector of Motus projects IDs for which
 metadata should be obtained; default: NULL, meaning obtain metadata for all

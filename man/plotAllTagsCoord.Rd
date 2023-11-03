@@ -19,7 +19,7 @@ of detection data including at a minimum variables for \code{recvDeployName},
 \item{coordinate}{column name from which to obtain location values, by
 default it is set to \code{recvDeployLat}}
 
-\item{ts}{column for a date/time object as numeric or POSIXct, defaults to \code{ts}}
+\item{ts}{Character. Name of column with timestamp values, defaults to \code{ts}.}
 
 \item{tagsPerPanel}{number of tags in each panel of the plot, by default this
 is 5}

@@ -8,7 +8,7 @@ clarify(src, id, from, to, all.mine = FALSE)
 }
 \arguments{
 \item{src}{SQLite connection. Result of \code{tagme(XXX)} or
-\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}}
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}.}
 
 \item{id}{if not missing, a vector of negative motus ambiguous tag IDs for
 which you wish to claim detections.  If missing, all tags are claimed over

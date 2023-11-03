@@ -8,7 +8,7 @@ checkVersion(src)
 }
 \arguments{
 \item{src}{SQLite connection. Result of \code{tagme(XXX)} or
-\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}}
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}.}
 }
 \description{
 Verifies the version of the package against the \code{admInfo} table of a \code{.motus}

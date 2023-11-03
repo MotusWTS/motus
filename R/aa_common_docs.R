@@ -4,17 +4,18 @@
 #' @param projRecv Numeric. Project code from motus.org, *or* character receiver
 #'   serial number.
 #' @param src SQLite connection. Result of `tagme(XXX)` or
-#'   `DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")`
-#'   
+#'   `DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")`.
 #' @param df_src Data frame, SQLite connection, or SQLite table. An SQLite
 #'   connection would be the result of `tagme(XXX)` or
 #'   `DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")`; an SQlite table would be
 #'   the result of `dplyr::tbl(tags, "alltags")`; a data frame could be the
 #'   result of `dplyr::tbl(tags, "alltags") %>% dplyr::collect()`.
+#'   
 #' @param lat Character. Name of column with latitude values, defaults to
-#'   `recvDeployLat`
+#'   `recvDeployLat`.
 #' @param lon Character. Name of column with longitude values, defaults to
-#'   `recvDeployLon`
+#'   `recvDeployLon`.
+#' @param ts Character. Name of column with timestamp values, defaults to `ts`.
 #'   
 #' @param resume Logical. Resume a download? Otherwise the table is
 #'   removed and the download is started from the beginning.

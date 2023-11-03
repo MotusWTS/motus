@@ -8,7 +8,7 @@ gpsAll(src, resume = TRUE)
 }
 \arguments{
 \item{src}{SQLite connection. Result of \code{tagme(XXX)} or
-\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}}
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}.}
 
 \item{resume}{Logical. Resume a download? Otherwise the table is
 removed and the download is started from the beginning.}

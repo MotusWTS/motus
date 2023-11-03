@@ -20,10 +20,12 @@ the result of \code{dplyr::tbl(tags, "alltags")}; a data frame could be the
 result of \code{dplyr::tbl(tags, "alltags") \%>\% dplyr::collect()}.}
 
 \item{lat}{Character. Name of column with latitude values, defaults to
-\code{recvDeployLat}}
+\code{recvDeployLat}.}
 
 \item{lon}{Character. Name of column with longitude values, defaults to
-\code{recvDeployLon}}
+\code{recvDeployLon}.}
+
+\item{ts}{Character. Name of column with timestamp values, defaults to \code{ts}.}
 
 \item{data}{Defunct, use \code{df_src} instead.}
 }
