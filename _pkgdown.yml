@@ -55,6 +55,7 @@ reference:
 - title: Plotting
   contents:
   - starts_with("plot")
+  - points2Path
   
 - title: Summarizing
   contents: 
