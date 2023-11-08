@@ -2,6 +2,7 @@
 * Clean up helper functions `sunRiseSet()` and `timeToSunriset()`
   * `sunRiseSet()` now required to run `timeToSunriset()`
   * Changed function argument names for clarity
+* Replace use of ggmap with ggspatial for creating plots with static maps.
 * Clean up docs for `tagSum()`
 * Add helper function `tagmeSample()` for an in-memory connection to the sample 
   data base for running examples

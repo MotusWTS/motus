@@ -31,6 +31,7 @@ Imports:
     httr (>= 1.4.0),
     geosphere (>= 1.5.7),
     ggplot2 (>= 3.2.0),
+    ggspatial (>= 1.1.9),
     glue (>= 1.4.2),
     gridExtra (>= 2.3),
     jsonlite (>= 1.6),
@@ -46,7 +47,6 @@ Imports:
     tidyselect (>= 1.0.0),
     suncalc
 Suggests:
-    ggmap (>= 3.0.0),
     mockery,
     roxygen2,
     spelling,

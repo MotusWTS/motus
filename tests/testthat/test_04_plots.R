@@ -27,8 +27,12 @@ test_that("Plots run with no errors", {
   expect_silent(plotTagSig(tags, "16035"))
   expect_silent(plotTagSig(dplyr::tbl(tags_sql, "alltagsGPS"), "16035"))
 
-  skip_if_not_installed("ggmap")
-  expect_message(plotRouteMap(tags_sql))
-  expect_silent(plotRouteMap(tags_sql, recvStart = "2016-01-01",
-                             recvEnd = "2016-12-31"))
+  skip_if_not_installed("ggspatial")
+  skip_if_offline()
+  withr::local_file("rosm.cache")
+  expect_message(plotRouteMap(tags_sql), "Remember") |>
+    suppressMessages()
+  expect_message(plotRouteMap(tags_sql, start_date = "2016-01-01",
+                              end_date = "2016-12-31")) |>
+    suppressMessages()
 })

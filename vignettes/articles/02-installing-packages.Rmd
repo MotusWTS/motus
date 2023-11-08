@@ -60,11 +60,11 @@ packageVersion("motus")
 ## Installing other packages
 Throughout these articles and examples, we use the [`tidyverse`](https://www.tidyverse.org/) collection of R packages for data science, including `tidyr`, `dplyr`, `ggplot2`, and `lubridate` (for managing and manipulating dates).
 See the [`tidyverse` website](https://www.tidyverse.org/) for more information, or browse (or better still, thoroughly read) [R for Data Science](http://r4ds.had.co.nz/) by Garrett Grolemund and Hadley Wickham.
-For mapping we also use the `rnaturalearth`, and `ggmap` packages.
+For mapping we also use the `rnaturalearth`, and `ggspatial` packages.
 
 These can be installed from CRAN, as follows:
 ```{r}
-install.packages(c("tidyverse", "ggmap", "rnaturalearth"))
+install.packages(c("tidyverse", "ggspatial", "rnaturalearth"))
 ```
 
 We also need a couple of data packages for `rnaturalearth` which can be installed
@@ -81,7 +81,7 @@ Now, to use these packages include the following in your scripts:
 library(motus)
 library(rnaturalearth)
 library(tidyverse)
-library(ggmap)
+library(ggspatial)
 ```
 
 ## Internal data processing
