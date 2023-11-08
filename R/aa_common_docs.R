@@ -10,6 +10,8 @@
 #'   `DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")`; an SQlite table would be
 #'   the result of `dplyr::tbl(tags, "alltags")`; a data frame could be the
 #'   result of `dplyr::tbl(tags, "alltags") %>% dplyr::collect()`.
+#' @param df Data frame. Could be the result of `dplyr::tbl(tags, "alltags") %>%
+#'   dplyr::collect()`.
 #'   
 #' @param lat Character. Name of column with latitude values, defaults to
 #'   `recvDeployLat`.

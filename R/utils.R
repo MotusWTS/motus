@@ -33,7 +33,7 @@ skip_if_no_server <- function() {
   if(inherits(srv, "try-error")) {
     srv <- suppressMessages(try(srvAuth(timeout = 1), silent = TRUE))
     if(inherits(srv, "try-error")) {
-      skip("Server Offline")
+      testthat::skip("Server Offline")
     }
   }
 }
@@ -136,7 +136,7 @@ getAccess <- function() {
 #' @param db Character. Name of sample data base to load. The sample data is
 #'   "project-176.motus".
 #'
-#' @return
+#' @return In memory version of the sample database.
 #' @export
 #'
 #' @examples

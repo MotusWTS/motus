@@ -16,6 +16,8 @@ connection would be the result of \code{tagme(XXX)} or
 the result of \code{dplyr::tbl(tags, "alltags")}; a data frame could be the
 result of \code{dplyr::tbl(tags, "alltags") \%>\% dplyr::collect()}.}
 
+\item{df}{Data frame. Could be the result of \code{dplyr::tbl(tags, "alltags") \%>\% dplyr::collect()}.}
+
 \item{lat}{Character. Name of column with latitude values, defaults to
 \code{recvDeployLat}.}
 

@@ -578,10 +578,10 @@ df_ambgi_106 %>%
   filter(motusTagID == 17021) %>% # just pick one of the two ambiguous IDs
   siteTrans() %>%
   filter(rate < 60) %>% # remove the simultaneous detections from Seal and MDR
-  mutate(total.time = as.numeric(round(seconds_to_period(tot_ts)))) %>%
+  mutate(total_time = as.numeric(round(seconds_to_period(tot_ts)))) %>%
   select(start = recvDeployName.x, end = recvDeployName.y, 
          date = ts.x, `rate(m/s)` = rate, 
-         dist, total.time = total.time, bearing)
+         dist, total_time = total_time, bearing)
 ```
 
 These detections are >1200 km distant from one another, but the flight speed (17 m/s) is consistent with a White-rumped Sandpiper. 
@@ -647,15 +647,15 @@ We can look at this transition by filtering out the portion of the data not near
 
 ```{r}
 # other tag is a duplicate
-df_56.tmp <- filter(df_ambgi_56, !(recvDeployLat == 50.2), motusTagID == 22867) 
+df_56_tmp <- filter(df_ambgi_56, !(recvDeployLat == 50.2), motusTagID == 22867) 
 
-siteTrans(df_56.tmp) %>%
+siteTrans(df_56_tmp) %>%
   filter(rate < 60) %>% # get rid of simultaneous detections
-  mutate(total.time = as.numeric(round(seconds_to_period(tot_ts)))) %>%
+  mutate(total_time = as.numeric(round(seconds_to_period(tot_ts)))) %>%
   select(start = recvDeployName.x, 
          end = recvDeployName.y, 
          date = ts.x, `rate(m/s)` = rate, 
-         dist, total.time = total.time, bearing)
+         dist, total_time = total_time, bearing)
 ```
 
 The bird made a 14.5 hour (52386/60/60) flight between Washkaugou and SHNJ at a rate of 24 m/s, which is plausible. 
@@ -663,14 +663,14 @@ The researchers involved may have other data to support or refute the inference 
 We can make another more detailed plot of signal strength to examine these potential migratory flights more closely:
 
 ```{r}
-df_56.tmp <- tbl_alltags_sub %>%
+df_56_tmp <- tbl_alltags_sub %>%
   filter(ambigID == -56, recvDeployLon < -70) %>%
   collect() %>% 
   mutate(time = as_datetime(ts),
          date = as_date(time),
          col = paste(recvDeployLat, recvDeployLon, recvDeployName, sep = ": "))
 
-ggplot(data = df_56.tmp, aes(x = time, y = sig, colour = col)) + 
+ggplot(data = df_56_tmp, aes(x = time, y = sig, colour = col)) + 
   theme_bw() +
   geom_point() + 
   scale_colour_discrete(name = "Lat/Lon and\nStation Name") + 

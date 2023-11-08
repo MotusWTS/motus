@@ -10,6 +10,9 @@ tagmeSample(db = "project-176.motus")
 \item{db}{Character. Name of sample data base to load. The sample data is
 "project-176.motus".}
 }
+\value{
+In memory version of the sample database.
+}
 \description{
 For running examples and testing out motus functionality, it can be useful to
 work with sample data set. You can download the most up-to-date copy of this
