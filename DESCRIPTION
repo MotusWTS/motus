@@ -47,12 +47,13 @@ Imports:
     tidyselect (>= 1.0.0),
     suncalc
 Suggests:
+    covr,
     mockery,
+    rmarkdown,
     roxygen2,
+    sf (>= 1.0.14),
     spelling,
     testthat (>= 3.0.0),
-    covr,
-    rmarkdown,
     withr
 License: GPL-3
 RoxygenNote: 7.2.3

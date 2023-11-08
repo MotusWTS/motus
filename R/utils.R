@@ -84,8 +84,11 @@ is_proj <- function(x) stringr::str_detect(x, "^[0-9]+$")
 # Get project or receiver from source name
 get_projRecv <- function(src) {
   check_src(src)
-  
   projRecv <- basename(src@dbname)
+  if(projRecv == ":memory:") {
+    stop("Cannot use an in-memory data base for this operation (i.e. cannot use `tagmeSample()`)", 
+         call. = FALSE)
+  }
   if(stringr::str_detect(projRecv, "project-[0-9]+.motus")) {
     projRecv <- as.integer(stringr::str_extract(projRecv, "[0-9]+"))
   } else if(stringr::str_detect(projRecv, ".motus")) {

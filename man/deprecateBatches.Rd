@@ -23,10 +23,8 @@ from all tables that reference \code{batchID}s
 }
 \examples{
 # Download sample project 176 to .motus database (username/password are "motus.sample")
-\dontrun{sql_motus <- tagme(176, new = TRUE, update = TRUE)}
-
-# Or use example data base in memory
-sql_motus <- tagmeSample()
+\dontrun{
+sql_motus <- tagme(176, new = TRUE, update = TRUE)
   
 # Access 'deprecated' table using tbl() from dplyr
 library(dplyr)
@@ -43,5 +41,6 @@ deprecateBatches(sql_motus, ask = FALSE)
 
 # See that there are NO more deprecated batches in the data
 filter(tbl(sql_motus, "alltags"), batchID == 6000)
+}
 
 }

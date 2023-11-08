@@ -30,7 +30,7 @@
 #' 
 #' @export
 #'
-#' @examplesIf requireNamespace("ggspatial", quietly = TRUE)
+#' @examplesIf interactive()
 #' # Download sample project 176 to .motus database (username/password are "motus.sample")
 #' \dontrun{sql_motus <- tagme(176, new = TRUE, update = TRUE)}
 #' 
@@ -66,6 +66,11 @@ plotRouteMap <- function(src, maptype = "osm", zoom = NULL,
   if(!requireNamespace("ggspatial", quietly = TRUE)) {
     stop("Package 'ggspatial' required to plot route maps. ",
          "Use the code \"install.packages('ggspatial')\" to install.", call. = FALSE)
+  }
+  
+  if(!requireNamespace("sf", quietly = TRUE)) {
+    stop("Package 'sf' required to plot route maps. ",
+         "Use the code \"install.packages('sf')\" to install.", call. = FALSE)
   }
 
   if(!is.null(zoom) && !is.numeric(zoom)) stop('Numeric values required for `zoom`', call. = FALSE)
@@ -143,7 +148,7 @@ points2Path <- function(df, by = "fullID",
                         lat = "recvDeployLat", lon = "recvDeployLon") {
   
   df %>%
-    dplyr::select(all_of(c(by, lat, lon))) %>%
+    dplyr::select(dplyr::all_of(c(by, lat, lon))) %>%
     dplyr::filter(!(.data[[by]] == dplyr::lead(.data[[by]]) &
                       .data[[lat]] == dplyr::lead(.data[[lat]]) &
                       .data[[lon]] == dplyr::lead(.data[[lon]]))) %>%
@@ -151,7 +156,7 @@ points2Path <- function(df, by = "fullID",
     dplyr::group_by(.data[[by]]) %>%
     dplyr::mutate(n = dplyr::n(),
                   geometry2 = dplyr::lead(.data[["geometry"]])) %>%
-    dplyr::filter(n > 1, !sf::st_is_empty(.data[["geometry2"]])) %>%
+    dplyr::filter(.data[["n"]] > 1, !sf::st_is_empty(.data[["geometry2"]])) %>%
     dplyr::mutate(geometry3 = purrr::map2(.data[["geometry"]], .data[["geometry2"]], 
                                           ~ sf::st_cast(c(.x, .y), to = "LINESTRING")),
                   geometry3 = sf::st_as_sfc(.data[["geometry3"]], crs = 4326)) %>%
