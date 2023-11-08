@@ -1,10 +1,11 @@
 
-test_that("srvXXX work as expected", {
+test_that("srvRecvMetadataForProjects", {
 
+  skip_on_ci()
   skip_if_no_auth()
   skip_if_no_server()
 
-  ## srv meta ----------------------
+  ## srv meta 
 
   # srvRecvMetadataForProjects
   expect_silent(s <- srvRecvMetadataForProjects(projectIDs = 213)) %>%
@@ -25,6 +26,14 @@ test_that("srvXXX work as expected", {
   expect_gt(nrow(s$nodeDeps), 0)
   expect_gt(nrow(s$projs), 0)
 
+})
+
+test_that("srvMetadataForReceivers", {
+  
+  skip_on_ci()
+  skip_if_no_auth()
+  skip_if_no_server()
+  
   # srvMetadataForReceivers
   d <- srvDeviceIDForReceiver("CTT-5031194D3168")$deviceID
   expect_silent(meta_recv <- srvMetadataForReceivers(deviceIDs = d)) %>%
@@ -33,6 +42,13 @@ test_that("srvXXX work as expected", {
   expect_gt(nrow(meta_recv$recvDeps), 0)
   expect_gt(nrow(meta_recv$antDeps), 0)
   expect_gt(nrow(meta_recv$projs), 0)
+})
+
+test_that("srvMetadataForTags", {
+  
+  skip_on_ci()
+  skip_if_no_auth()
+  skip_if_no_server()
 
   # srvMetadataForTags
   expect_silent(s <- srvMetadataForTags(motusTagIDs = 29876)) %>%
@@ -43,14 +59,27 @@ test_that("srvXXX work as expected", {
   expect_s3_class(s$tagProps, "data.frame") # might be empty
   expect_gt(nrow(s$species), 0)
   expect_gt(nrow(s$projs), 0)
+})
 
-
-  ## srvAuth --------------------
+test_that("srvAuth", {
+  
+  skip_on_ci()
+  skip_if_no_auth()
+  skip_if_no_server()
+  
+  ## srvAuth 
   expect_silent(srvAuth()) %>%
     expect_type("character")
+})
 
 
-  ## srv regular ----------------
+## srv regular
+
+test_that("srvActivityXXX", {
+  
+  skip_on_ci()
+  skip_if_no_auth()
+  skip_if_no_server()
 
   # srvActivityForAll
   expect_silent(s <- srvActivityForAll(batchID = 0, hourBin = 0)) %>%
@@ -63,13 +92,28 @@ test_that("srvXXX work as expected", {
   expect_silent(s <- srvActivityForBatches(batchID = b)) %>%
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
+  
+})
 
+test_that("srvAPIinfo", {
+  
+  skip_on_ci()
+  skip_if_no_auth()
+  skip_if_no_server()
+  
   # srvAPIinfo
   expect_silent(s <- srvAPIinfo()) %>%
     expect_type("list")
   expect_named(s, c("maxRows", "dataVersion", "currentPkgVersion"))
   expect_gt(s$maxRows, 0)
   expect_gt(s$dataVersion, 0)
+})
+
+test_that("srvBatchesXXX", {
+  
+  skip_on_ci()
+  skip_if_no_auth()
+  skip_if_no_server()
 
   # srvBatchesForReceiver - From Project 1 (SG-4002BBBK1580)
   expect_silent(s <- srvBatchesForReceiver(deviceID = 217, batchID = 0)) %>%
@@ -94,11 +138,25 @@ test_that("srvXXX work as expected", {
   expect_silent(s <- srvBatchesForTagProjectDeprecated(1)) %>%
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
+})
+
+test_that("srvDeviceIDForReceiver", {
+  
+  skip_on_ci()
+  skip_if_no_auth()
+  skip_if_no_server()
 
   # srvDeviceIDForReceiver
   expect_silent(s <- srvDeviceIDForReceiver(serno = "CTT-5031194D3168")) %>%
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
+})
+
+test_that("srvGPSXXX", {
+  
+  skip_on_ci()
+  skip_if_no_auth()
+  skip_if_no_server()
 
   # srvGPSForAll
   expect_silent(s <- srvGPSForAll(gpsID = 0)) %>%
@@ -116,7 +174,14 @@ test_that("srvXXX work as expected", {
   #expect_silent(s <- srvGPSForTagProject(projectID = p, batchID = 0)) %>%
   #  expect_s3_class("data.frame")
   #expect_gt(nrow(s), 0)
+})
 
+test_that("srvHitsXXX", {
+  
+  skip_on_ci()
+  skip_if_no_auth()
+  skip_if_no_server()
+  
   # srvHitsForReceiver
   expect_silent(s <- srvHitsForReceiver(batchID = b217, hitID = 0)) %>%
     expect_s3_class("data.frame")
@@ -126,11 +191,25 @@ test_that("srvXXX work as expected", {
   expect_silent(s <- srvHitsForTagProject(projectID = 1, batchID = b1)) %>%
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
+})
+
+test_that("srvNodes", {
+  
+  skip_on_ci()
+  skip_if_no_auth()
+  skip_if_no_server()
 
   # srvNodes
   expect_silent(s <- srvNodes(projectID = 207, batchID = 1019183)) %>%
     expect_s3_class("data.frame")
   expect_gt(nrow(s), 0)
+})
+
+test_that("srvEXTRA", {
+  
+  skip_on_ci()
+  skip_if_no_auth()
+  skip_if_no_server()
 
   # srvProjectAmbiguitiesForTagProject - *****************************
   expect_silent(s <- srvProjectAmbiguitiesForTagProject(projectID = 176)) %>%
@@ -166,7 +245,14 @@ test_that("srvXXX work as expected", {
   # expect_silent(s <- srvSizeOfUpdateForTagProject(projectID = 204, batchID = 0)) %>%
   #   expect_s3_class("data.frame")
   # expect_gt(nrow(s), 0)
-
+})
+  
+test_that("srvTagXXX", {
+  
+  skip_on_ci()
+  skip_if_no_auth()
+  skip_if_no_server()
+  
   # srvTagMetadataForProjects
   expect_silent(s <- srvTagMetadataForProjects(projectIDs = 25)) %>%
     expect_type("list")
