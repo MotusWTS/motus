@@ -4,15 +4,15 @@
 \alias{plotSite}
 \title{Plot all tags by site}
 \usage{
-plotSite(data, sitename = unique(data$recvDeployName))
+plotSite(df, sitename = NULL, data)
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltagsGPS", or a
-data.frame of detection data including at a minimum variables for ts,
-antBearing, fullID, recvDeployName}
+\item{df}{Data frame. Could be the result of \code{dplyr::tbl(tags, "alltags") \%>\% dplyr::collect()}.}
 
-\item{sitename}{Character vector. Which sites to plot? Defaults to all unique
-sites.}
+\item{sitename}{Character vector. Subset of sites to plot. If \code{NULL}, all
+unique sites are plotted.}
+
+\item{data}{Defunct, use \code{src}, \code{df_src}, or \code{df} instead.}
 }
 \description{
 Plot tag ID vs time for all tags detected by site, coloured by antenna
@@ -31,8 +31,7 @@ tbl_alltags <- tbl(sql_motus, "alltagsGPS")
 
 # convert the tbl "tbl_alltags" to a data.frame called "df_alltags"
 df_alltags <- tbl_alltags \%>\% 
-  collect() \%>\% 
-  as.data.frame()
+  collect()
 
 # Plot all sites within file for tbl file tbl_alltags
 plotSite(tbl_alltags)

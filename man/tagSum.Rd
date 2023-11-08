@@ -13,7 +13,7 @@ connection would be the result of \code{tagme(XXX)} or
 the result of \code{dplyr::tbl(tags, "alltags")}; a data frame could be the
 result of \code{dplyr::tbl(tags, "alltags") \%>\% dplyr::collect()}.}
 
-\item{data}{Defunct, use \code{df_src} instead.}
+\item{data}{Defunct, use \code{src}, \code{df_src}, or \code{df} instead.}
 }
 \value{
 A flat data frame with the following for each tag:

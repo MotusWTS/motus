@@ -40,7 +40,7 @@ removed and the download is started from the beginning.}
 \item{motusProjID}{Character. Optional project ID attached to the filter in
 order to share with other users of the same project.}
 
-\item{data}{Defunct, use \code{df_src} instead.}
+\item{data}{Defunct, use \code{src}, \code{df_src}, or \code{df} instead.}
 }
 \description{
 Common arguments

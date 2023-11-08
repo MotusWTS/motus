@@ -38,7 +38,7 @@ decrease the resolution of the map tiles.}
 
 \item{lim_lon}{Numeric vector. Optional longitudinal plot limits.}
 
-\item{data}{Defunct}
+\item{data}{Defunct, use \code{src}, \code{df_src}, or \code{df} instead.}
 
 \item{lat}{Defunct}
 

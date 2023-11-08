@@ -13,7 +13,6 @@
 #' @param end_date Character. Optional end date for routes. 
 #' @param lim_lat Numeric vector. Optional latitudinal plot limits.
 #' @param lim_lon Numeric vector. Optional longitudinal plot limits.
-#' @param data Defunct
 #' @param lat Defunct
 #' @param lon Defunct
 #' @param recvStart Defunct

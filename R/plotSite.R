@@ -3,11 +3,10 @@
 #' Plot tag ID vs time for all tags detected by site, coloured by antenna
 #' bearing
 #'
-#' @param data a selected table from .motus data, eg. "alltagsGPS", or a
-#'   data.frame of detection data including at a minimum variables for ts,
-#'   antBearing, fullID, recvDeployName
-#' @param sitename Character vector. Which sites to plot? Defaults to all unique
-#'   sites.
+#' @param sitename Character vector. Subset of sites to plot. If `NULL`, all
+#'   unique sites are plotted.
+#'   
+#' @inheritParams args
 #'
 #' @examples
 #' # Download sample project 176 to .motus database (username/password are "motus.sample")
@@ -22,8 +21,7 @@
 #' 
 #' # convert the tbl "tbl_alltags" to a data.frame called "df_alltags"
 #' df_alltags <- tbl_alltags %>% 
-#'   collect() %>% 
-#'   as.data.frame()
+#'   collect()
 #' 
 #' # Plot all sites within file for tbl file tbl_alltags
 #' plotSite(tbl_alltags)
@@ -37,8 +35,16 @@
 #'
 #' @export
 
-plotSite <- function(data, sitename = unique(data$recvDeployName)){
-  data <- data %>%  
+plotSite <- function(df, sitename = NULL, data) {
+  
+  if(!missing(data)) {
+    warning("`data` is deprecated in favour of `df`)", call. = FALSE)
+    df <- data
+  }
+  
+  if(is.null(sitename)) sitename <- unique(df$recvDeployName)
+  
+  df <- df %>%  
     dplyr::mutate(hour = 3600*round(as.numeric(.data$ts)/3600, 0))  %>% ## round times to the hour
     dplyr::select("hour", "antBearing", "fullID", "recvDeployName", "recvDeployLat", "recvDeployLon",
                   "gpsLat", "gpsLon") %>% 
@@ -55,10 +61,9 @@ plotSite <- function(data, sitename = unique(data$recvDeployName)){
                   recvDeployName = paste(.data$recvDeployName,
                                          round(.data$recvLon, digits = 1), sep = ", "),
                   hour = lubridate::as_datetime(.data$hour, tz = "UTC"),
-                  antBearing = as.factor(.data$antBearing)) %>%
-    as.data.frame()
+                  antBearing = as.factor(.data$antBearing))
   
-  ggplot2::ggplot(data, ggplot2::aes(x = .data[["hour"]], y = .data[["fullID"]], col = .data[["antBearing"]])) +
+  ggplot2::ggplot(df, ggplot2::aes(x = .data[["hour"]], y = .data[["fullID"]], col = .data[["antBearing"]])) +
     ggplot2::geom_point() + 
     ggplot2::theme_bw() + 
     ggplot2::labs(title = "Detection Time vs Tag ID, coloured by antenna", 

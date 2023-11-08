@@ -32,7 +32,7 @@ to \code{ts}}
 \item{units}{Character. Units to display time difference, defaults to
 "hours", options include "secs", "mins", "hours", "days", "weeks".}
 
-\item{data}{Defunct, use \code{df_src} instead.}
+\item{data}{Defunct, use \code{src}, \code{df_src}, or \code{df} instead.}
 }
 \value{
 Original data (as a flat data frame), with the following additional

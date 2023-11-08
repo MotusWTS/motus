@@ -27,7 +27,7 @@ result of \code{dplyr::tbl(tags, "alltags") \%>\% dplyr::collect()}.}
 
 \item{ts}{Character. Name of column with timestamp values, defaults to \code{ts}.}
 
-\item{data}{Defunct, use \code{df_src} instead.}
+\item{data}{Defunct, use \code{src}, \code{df_src}, or \code{df} instead.}
 }
 \value{
 Original data (as a flat data frame), with the following additional

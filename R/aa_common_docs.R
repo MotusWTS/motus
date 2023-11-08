@@ -30,7 +30,7 @@
 #' @param motusProjID Character. Optional project ID attached to the filter in
 #'   order to share with other users of the same project.
 #'   
-#' @param data Defunct, use `df_src` instead.
+#' @param data Defunct, use `src`, `df_src`, or `df` instead.
 #'   
 #' @keywords internal
 #' @name args
