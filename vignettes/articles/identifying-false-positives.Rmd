@@ -189,7 +189,7 @@ runTemp <- df %>%
          meanSlop = mean(slop),
          meanBurstSlop = mean(burstSlop)) %>%
   select(runID, meanTs, meanSigSD, meanNoise, meanFreqSD, meanSlop, meanBurstSlop) %>%
-  filter(duplicated(runID)==F) %>% 
+  filter(duplicated(runID) == F) %>% 
   ungroup()
 
 runFeat <- left_join(runFeat, runTemp, by = "runID")
