@@ -74,7 +74,7 @@ Before proceeding, we want to ensure there are no duplicate runs. If there are, 
 
 # find duplicated runIDs (duplicates in ts, motusTagID, port, recv)
 runsDup <- df %>%
-  filter(duplicated(cbind(ts, motusTagID, port, recv))==T) %>%
+  filter(duplicated(cbind(ts, motusTagID, port, recv)) == TRUE) %>%
   select(runID)
 
 # check for deprecated batches
