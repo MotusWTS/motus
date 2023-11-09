@@ -384,7 +384,7 @@ You could use this graph to define your own threshold probability to filter fals
 ### set individual threshold and filter detection data by run
 # find runIDs with probBad < 0.7
 runsKeep <- runFeat %>%
-  filter(probBad < 0.7 & duplicated(runID)==F) %>%
+  filter(probBad < 0.7 & duplicated(runID) == FALSE) %>%
   select(runID) %>%
   pull() 
 
