@@ -264,7 +264,7 @@ rm(runTemp)
 plotdata <- data.frame(group = rep(c("log10numRuns", "propRS", "tagPropRS"),
                                    each = nrow(runFeat)),
                        value = c(runFeat$log10numRuns, runFeat$propRS, runFeat$tagPropRS),
-                       category = c(rep(runFeat$category, 3)), stringsAsFactors = F) #%>%
+                       category = c(rep(runFeat$category, 3))) #%>%
   #filter(category != "unassigned") # uncomment the %>% filter() statement to ignore the ‘unassigned’
 
 p3 <- ggplot(data = plotdata, aes(abs(value), group = category, colour = category)) +
