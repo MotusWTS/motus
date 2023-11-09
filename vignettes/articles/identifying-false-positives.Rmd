@@ -267,7 +267,7 @@ plotdata <- data.frame(group = rep(c("log10numRuns", "propRS", "tagPropRS"),
                        category = c(rep(runFeat$category, 3))) #%>%
   #filter(category != "unassigned") # uncomment the %>% filter() statement to ignore the ‘unassigned’
 
-p3 <- ggplot(data = plotdata, aes(abs(value), group = category, colour = category)) +
+p3 <- ggplot(data = plotdata, aes(x = abs(value), group = category, colour = category)) +
   geom_density() +
   facet_wrap(~group, scales = "free")
 
