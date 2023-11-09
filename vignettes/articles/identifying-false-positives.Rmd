@@ -68,7 +68,7 @@ rm(t)
 
 ```
 
-Before proceeding, we want to ensure there are no duplicate runs. If there are, these may be due to deprecated batches (see [Removing deprecated batches](https://motuswts.github.io/motus/articles/deprecated-batches.html) for details). We will remove any deprecated batches, leaving only the most recently processed data in our dataset.
+Before proceeding, we want to ensure there are no duplicate runs. If there are, these may be due to deprecated batches (see [Removing deprecated batches](deprecated-batches.html) for details). We will remove any deprecated batches, leaving only the most recently processed data in our dataset.
 
 ```{r, warning = FALSE, eval = FALSE}
 
