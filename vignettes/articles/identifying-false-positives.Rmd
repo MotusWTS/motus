@@ -203,8 +203,7 @@ plotdata <- data.frame(group = rep(c("meanSigSD", "meanNoise", "meanFreqSD",
                        value = c(runFeat$meanSigSD, runFeat$meanNoise,
                                  runFeat$meanFreqSD, runFeat$meanSlop,
                                  runFeat$meanBurstSlop),
-                       category = c(rep(runFeat$category, 5)),
-                       stringsAsFactors = F) #%>%
+                       category = c(rep(runFeat$category, 5))) #%>%
   #filter(category != "unassigned") # uncomment the %>% filter() statement to ignore the 'unassigned'
 
 p2 <- ggplot(data = plotdata, 
