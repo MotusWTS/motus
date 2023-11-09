@@ -234,7 +234,7 @@ rm(a)
 r <- tbl(db, "runs")
 
 rdf <- r %>% 
-  collect %>% as.data.frame %>% 
+  collect() %>%
   mutate(hourBin = floor(tsBegin/3600))                                # calculate hourBin for each run
 
 rm(r)
