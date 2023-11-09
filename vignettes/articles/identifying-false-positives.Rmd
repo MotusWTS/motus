@@ -368,7 +368,8 @@ You can now plot the probability for each of the categories you have defined in 
 
 # plot predicted values (graphical inspection of goodness of fit)
 p5 <- ggplot(data = runFeat, aes(x = probBad, group = category, colour = category)) +
-  geom_density() + xlab("estimate of probability of being a 'bad' run")
+  geom_density() + 
+  xlab("estimate of probability of being a 'bad' run")
 
 p5
 
