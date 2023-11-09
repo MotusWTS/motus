@@ -193,7 +193,7 @@ runTemp <- df %>%
   filter(duplicated(runID)==F) %>% 
   ungroup()
 
-runFeat <- merge(runFeat, runTemp, by = "runID")
+runFeat <- left_join(runFeat, runTemp, by = "runID")
 
 rm(runTemp)
 
