@@ -253,7 +253,7 @@ runTemp <- df %>%
   mutate(tagPropRS = length(unique(runID[runLen<4]))/length(unique(runID))) %>% # tags’ proportion of short runs
   group_by(runID) %>%
   select(runID, numRuns, propRS, tagPropRS, log10numRuns) %>%
-  filter(duplicated(runID)==F) %>% 
+  filter(duplicated(runID) == FALSE) %>% 
   ungroup()
 
 runFeat <- merge(runFeat, runTemp, by = "runID")
