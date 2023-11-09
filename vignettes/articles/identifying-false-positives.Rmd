@@ -64,7 +64,7 @@ df <- t %>%
   mutate(ts = as_datetime(ts)) %>%      # convert ts into date-time format
   distinct()
 
-rm(t)
+rm(t) # Remove this object now that we're done with it
 
 ```
 
