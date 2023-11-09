@@ -41,7 +41,8 @@ jobs:
           extra-packages: |
             any::pkgdown
             local::.
-            any::rnaturalearth       
+            any::rnaturalearth
+            any::rnaturalearthdata
             any::rnaturalearthhires 
             any::patchwork          
             any::motusData          
