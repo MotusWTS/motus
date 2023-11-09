@@ -160,7 +160,7 @@ plotdata <- data.frame(group = rep(c("log10runLen", "propMiss", "deltaMeanBI"),
 
 
 p1 <- ggplot(data = plotdata, 
-             aes(abs(value), group = category, colour = category)) +
+             aes(x = abs(value), group = category, colour = category)) +
   geom_density() +
   facet_wrap(~group, scales = "free")
 
