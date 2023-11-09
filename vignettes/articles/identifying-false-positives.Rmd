@@ -207,7 +207,7 @@ plotdata <- data.frame(group = rep(c("meanSigSD", "meanNoise", "meanFreqSD",
   #filter(category != "unassigned") # uncomment the %>% filter() statement to ignore the 'unassigned'
 
 p2 <- ggplot(data = plotdata, 
-             aes(abs(value), group = category, colour = category)) +
+             aes(x = abs(value), group = category, colour = category)) +
   geom_density() +
   facet_wrap(~group, scales = "free")
 
