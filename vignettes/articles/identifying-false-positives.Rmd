@@ -101,7 +101,7 @@ rm(t)
 
 # confirm there are no longer duplicated runIDs
 runsDup <- df %>%
-  filter(duplicated(cbind(ts, motusTagID, port, recv))==T) %>%
+  filter(duplicated(cbind(ts, motusTagID, port, recv)) == TRUE) %>%
   select(runID)
 
 rm(runsDup)
