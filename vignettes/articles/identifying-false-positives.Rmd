@@ -392,8 +392,7 @@ runsKeep <- runFeat %>%
   pull() 
 
 # filter detection data
-df <- df %>%
-  filter(runID %in% runsKeep)
+df <- filter(df, runID %in% runsKeep)
 
 rm(runsKeep)
 
