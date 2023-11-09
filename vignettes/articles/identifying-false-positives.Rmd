@@ -50,7 +50,7 @@ theme_set(theme_bw(base_size = 18))
 #   note: if you haven't downloaded sample dataset before, use 'new = T'
 #   login name and password are both 'motus.sample'
 #   specify 'dir =' to save elsewhere than working directory
-db <- tagme(176, new = F, update = F, forceMeta = F)
+db <- tagme(176, new = FALSE, update = FALSE, forceMeta = FALSE)
 
 t <- tbl(db, "alltags")
 
