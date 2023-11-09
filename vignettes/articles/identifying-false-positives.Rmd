@@ -38,7 +38,7 @@ Sys.setenv(tz="GMT")
 
 # load required packages
 library(motus)
-library(rms)
+library(rms) # For modelling
 library(ggplot2)
 library(dplyr)
 library(lubridate)
