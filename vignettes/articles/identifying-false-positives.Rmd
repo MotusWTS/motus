@@ -243,7 +243,7 @@ rm(r)
 radf <- left_join(rdf, adf, by = c("batchIDbegin" = "batchID", "ant", "hourBin"))
 
 # join with detection data
-df <- left_join(df, radf %>% select(runID, numRuns, numHits, run2, run3), by = "runID")
+df <- left_join(df, select(radf, runID, numRuns, numHits, run2, run3), by = "runID")
 
 ### calculate 'noise' variables with values from activity table
 runTemp <- df %>% 
