@@ -294,7 +294,7 @@ runTemp <- df %>%
                                      ts >= meanTs - 25*60]))) %>%
   group_by(runID) %>%
   select(runID, nContRuns, nPorts) %>%
-  filter(duplicated(runID)==F) %>% 
+  filter(duplicated(runID) == FALSE) %>% 
   ungroup()
 
 runFeat <- left_join(runFeat, runTemp, by = "runID")
