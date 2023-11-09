@@ -311,8 +311,7 @@ We can check the importance of these new variables graphically again.
 plotdata <- data.frame(group = rep(c("nContRuns", "nPorts"),
                                    each = nrow(runFeat)),
                        value = c(runFeat$nContRuns, runFeat$nPorts),
-                       category = c(rep(runFeat$category, 2)),
-                       stringsAsFactors = F) #%>%
+                       category = c(rep(runFeat$category, 2))) #%>%
   #filter(category != "unassigned") # uncomment the %>% filter() statement to ignore the 'unassigned'
 
 
