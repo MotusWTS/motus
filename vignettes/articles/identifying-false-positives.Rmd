@@ -226,8 +226,7 @@ There are, of course, other factors that can help to validate the detection. We 
 # get activity table
 a <- tbl(db, "activity")
 
-adf <- a %>% 
-  collect %>% as.data.frame                                               # convert into flat data frame
+adf <- collect(a)                                              # convert into flat data frame
   
 rm(a)
 
