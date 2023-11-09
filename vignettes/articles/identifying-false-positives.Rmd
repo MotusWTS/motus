@@ -155,8 +155,7 @@ To validate your threshold classification, you can make frequency distribution p
 plotdata <- data.frame(group = rep(c("log10runLen", "propMiss", "deltaMeanBI"),
                                    each = nrow(runFeat)),
                        value = c(runFeat$log10runLen, runFeat$propMiss, runFeat$deltaMeanBI),
-                       category = c(rep(runFeat$category, 3)),
-                       stringsAsFactors = F) #%>%
+                       category = c(rep(runFeat$category, 3))) #%>%
   #filter(category != "unassigned") # uncomment the %>% filter() statement to ignore the 'unassigned'
 
 
