@@ -93,7 +93,7 @@ df <- t %>%
          motusTagID, port, runLen, tagModel, tagBI, tagDeployID,
          deviceID, recvDeployID, recvDeployLat, recvDeployLon, recv, recvSiteName) %>%
   arrange(motusTagID, ts) %>%                                                  # order data frame
-  collect %>% as.data.frame %>%                                                # convert into flat data frame
+  collect() %>%                                               # convert into flat data frame
   mutate(ts = as.POSIXct(ts, origin="1970-01-01 00:00:00", tz="GMT")) %>%      # convert ts into readable format
   distinct()
 
