@@ -117,7 +117,7 @@ Since we want to consider each detection within its recorded time frame, we calc
 ### calculate features 2 and 3 for each run
 runFeat <- df %>%
   group_by(runID) %>%
-  mutate(duration = as.numeric(difftime(max(ts), min(ts), units="s")),
+  mutate(duration = as.numeric(difftime(max(ts), min(ts), units = "secs")),
          nPred = ceiling(duration/tagBI) + 1,           # expected number of bursts in run if none are missed
          nMiss = nPred - runLen,                        # number of bursts missed in run
          propMiss = nMiss/nPred,                        # feature 2 - proportion of bursts missed in run
