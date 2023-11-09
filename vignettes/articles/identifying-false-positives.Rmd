@@ -127,7 +127,7 @@ runFeat <- df %>%
   select(runID, motusTagID, port, runLen, tagModel, tagBI,
          recv, recvSiteName, recvDeployLat, recvDeployLon,
          duration, nPred, nMiss, propMiss, meanBI, deltaMeanBI, log10runLen) %>%
-  filter(duplicated(runID)==F) %>% 
+  filter(duplicated(runID) == FALSE) %>% 
   ungroup()
 
 ```
