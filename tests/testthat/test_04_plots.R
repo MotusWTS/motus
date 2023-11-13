@@ -19,7 +19,9 @@ test_that("Plots run with no errors", {
   expect_silent(plotDailySiteSum(dplyr::tbl(tags_sql, "alltagsGPS"), "Longridge"))
 
   expect_silent(plotSite(tags))
+  expect_silent(plotSite(tags_sub, ncol = 2))
   expect_silent(plotSite(dplyr::tbl(tags_sql, "alltagsGPS")))
+  expect_silent(plotSite(tags_sql, sitename = "Piskwamish"))
 
   expect_silent(plotSiteSig(tags, "Longridge"))
   expect_silent(plotSiteSig(dplyr::tbl(tags_sql, "alltagsGPS"), "Longridge"))

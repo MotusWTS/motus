@@ -13,7 +13,7 @@ check_df <- function(df, type = "df_src", extra = "") {
   }
 }
 
-check_df_src <- function(df_src, cols, view = "alltags", extra = "") {
+check_df_src <- function(df_src, cols, view = "alltags", collect = TRUE, extra = "") {
 
   fun <- sys.call(-1)
   if(!is.null(fun)) fun <- as.list(fun)[[1]] else fun <- "tagme"
@@ -29,6 +29,7 @@ check_df_src <- function(df_src, cols, view = "alltags", extra = "") {
          call. = FALSE)
   }
   
-  dplyr::collect(df_src) %>%
-    required_cols(req = cols)
+  if(collect) df_src <- dplyr::collect(df_src)
+  
+  required_cols(df_src, req = cols)
 }

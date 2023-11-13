@@ -4,19 +4,32 @@
 \alias{plotSite}
 \title{Plot all tags by site}
 \usage{
-plotSite(df, sitename = NULL, data)
+plotSite(df_src, sitename = NULL, ncol = NULL, nrow = NULL, data)
 }
 \arguments{
-\item{df}{Data frame. Could be the result of \code{dplyr::tbl(tags, "alltags") \%>\% dplyr::collect()}.}
+\item{df_src}{Data frame, SQLite connection, or SQLite table. An SQLite
+connection would be the result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}; an SQlite table would be
+the result of \code{dplyr::tbl(tags, "alltags")}; a data frame could be the
+result of \code{dplyr::tbl(tags, "alltags") \%>\% dplyr::collect()}.}
 
 \item{sitename}{Character vector. Subset of sites to plot. If \code{NULL}, all
 unique sites are plotted.}
+
+\item{ncol}{Numeric. Passed on to \code{ggplot2::facet_wrap()}}
+
+\item{nrow}{Numeric. Passed on to \code{ggplot2::facet_wrap()}}
 
 \item{data}{Defunct, use \code{src}, \code{df_src}, or \code{df} instead.}
 }
 \description{
 Plot tag ID vs time for all tags detected by site, coloured by antenna
-bearing
+bearing. Input is expected to be a data frame, database table, or database.
+The data must contain "ts", "antBearing", "fullID", "recvDeployName",
+"recvDeployLat", "recvDeployLon", and optionally "gpsLat" and "gpsLon". If
+GPS lat/lon are included, they will be used rather than recvDeployLat/Lon.
+These data are generally contained in the \code{alltags} or the \code{alltagsGPS}
+views. If a motus database is submitted, the \code{alltagsGPS} view will be used.
 }
 \examples{
 # Download sample project 176 to .motus database (username/password are "motus.sample")
@@ -29,18 +42,16 @@ sql_motus <- tagmeSample()
 library(dplyr)
 tbl_alltags <- tbl(sql_motus, "alltagsGPS") 
 
-# convert the tbl "tbl_alltags" to a data.frame called "df_alltags"
-df_alltags <- tbl_alltags \%>\% 
-  collect()
-
 # Plot all sites within file for tbl file tbl_alltags
 plotSite(tbl_alltags)
 
-# Plot only detections at a specific site; Piskwamish for data.frame
-# df_alltags
-plotSite(filter(df_alltags, recvDeployName == "Piskwamish"))
+# Plot only detections at a specific site; Piskwamish
+plotSite(tbl_alltags, sitename = "Piskwamish")
 
-#Plot only detections for specified tags for data.frame df_alltags
+# For more custom filtering, convert the tbl "tbl_alltags" to a data.frame called "df_alltags"
+df_alltags <- collect(tbl_alltags)
+
+# Plot only detections for specified tags for data.frame df_alltags
 plotSite(filter(df_alltags, motusTagID \%in\% c(16047, 16037, 16039)))
 
 }
