@@ -146,6 +146,12 @@ tagme <- function(projRecv, update = TRUE, new = FALSE, dir = getwd(),
       motus_vars$authToken 
     }
     
+    # Check if nodeData required
+    if(!skipNodes && stringr::str_detect(projRecv, "^CTT-")) {
+      skipNodes <- TRUE
+      message("Reciever is not a SensorStation, skipping node data download")
+    }
+    
     # Ensure correct DBtables, but only if update = TRUE
     ensureDBTables(rv, projRecv, deviceID, quiet = new)
     
