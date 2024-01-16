@@ -747,7 +747,7 @@ df_alltags_sub <- readRDS("./data/dfAlltagsSub.rds")
 
 As an alternative to saving your data as an RDS file, the Motus R package offers functionalities to save your filters directly within your `.motus` file. 
 Once they are saved in your database, you can do the type of `anti_join()` as above without having to rely on dataframes or an RDS file to store your data.
-To learn more about the functions available to work with Motus filters, refer to [Appendix D]({#appendixD}) for more details. 
+To learn more about the functions available to work with Motus filters, see the filtering section in the [function reference](../reference/index.html#filtering) for more details. 
 
 ```{r}
 df_block_all <- bind_rows(df_block_0, df_block_2, df_block_3, 
