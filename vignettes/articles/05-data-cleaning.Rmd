@@ -70,7 +70,7 @@ Recall from [Chapter 3](03-accessing-data.html#user-authentication) that when ac
 This section assumes you have already completed the [initial sample data download](03-accessing-data.html#downloading-tag-detections).
 
 ```{r}
-sql_motus <- tagme(176, update = TRUE, dir = "./data/")
+sql_motus <- tagme(176, dir = "./data/")
 ```
 
 ## Assess tag detections

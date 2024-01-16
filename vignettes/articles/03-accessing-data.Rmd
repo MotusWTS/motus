@@ -140,14 +140,14 @@ This will create a `.motus` file in your current working directory, which was sh
 This will also create an SQL object in your R environment called `sql_motus`
 
 ```{r, eval = FALSE}
-sql_motus <- tagme(projRecv = 176, new = TRUE, update = TRUE)
+sql_motus <- tagme(projRecv = 176, new = TRUE)
 ```
 
 Alternatively you can specify a different location to save the data by entering your preferred filepath. 
 In this example we save to our data folder using the `dir` argument.
 Note that `./` simply means 'relative to the current folder' (shown by `getwd()`).
 ```{r, eval = FALSE}
-sql_motus <- tagme(projRecv = 176, new = TRUE, update = TRUE, dir = "./data/")
+sql_motus <- tagme(projRecv = 176, new = TRUE, dir = "./data/")
 ```
 
 > **Note:** You'll need to use the **username** `motus.sample` and the **password** `motus.sample` to access this data (see [login](#login) for more details)!
@@ -156,7 +156,7 @@ Using `tagme()` as shown above will download a file to your working or specified
 The progress of the download process should print on the console; 
 if you are not seeing it, try scrolling down your screen while `tagme()` is running.
 
-In the event that your connection to the Motus server fails prior to a complete download (e.g., due to a poor internet connection), use `tagme(proj.num, update = TRUE)` to continue the download from where it left off, ensuring you specify a directory if it is saved outside the working directory. 
+In the event that your connection to the Motus server fails prior to a complete download (e.g., due to a poor internet connection), use `tagme(proj.num)` to continue the download from where it left off, ensuring you specify a directory if it is saved outside the working directory. 
 
 ### User Authentication
 
@@ -195,7 +195,7 @@ If you have a receiver registered to your own project, replace the receiver seri
 
 ```{r eval = FALSE}
 proj.num <- "SG-123BBBK1234"
-sql_motus <- tagme(projRecv = proj.num, new = TRUE, update = TRUE)
+sql_motus <- tagme(projRecv = proj.num, new = TRUE)
 ```
 
 This will download a file to your working directory named `SG-123BBBK1234.motus`.
@@ -222,7 +222,7 @@ df_serno <- tbl_recvDeps %>%
 
 # loop through each receiver (may take a while!)
 for (row in 1:nrow(df.serno)) {
-  tagme(df.serno[row, "serno"], dir = "./data/", new = TRUE, update = TRUE)
+  tagme(df.serno[row, "serno"], dir = "./data/", new = TRUE)
 }
 
 # Note you can remove the dir argument if you want to save it to your working
@@ -236,13 +236,13 @@ df.serno <- c("SG-AB12RPI3CD34", "SG-1234BBBK4321")
 
 # loop through each receiver (may take a while!), and save to the working directory
 for (k in 1:length(df.serno)) {
-  tagme(df.serno[k], new = TRUE, update = TRUE)
+  tagme(df.serno[k], new = TRUE)
 }
 
 # loop through each receiver (may take a while!), and save to a specified directory
 for (k in 1:length(df.serno)) {
   tagme(df.serno[k], dir = "./data/", 
-        new = TRUE, update = TRUE)
+        new = TRUE)
 }
 ```
 
@@ -428,14 +428,14 @@ Since the `.motus` file is a SQLite database, you can update your existing file 
 To open and update a detections database that already exists (has been downloaded previously), we use the `tagme()` function but set `new = FALSE`:
 
 ```{r}
-sql_motus <- tagme(projRecv = 176, new = FALSE, update = TRUE, dir = "./data/") 
+sql_motus <- tagme(projRecv = 176, dir = "./data/") 
 ```
 
 If you are working offline, and simply want to open an already downloaded database without connecting to the server to update, use `new = FALSE` and `update = FALSE`:
 
 ```{r}
 # use dir = to specify a directory
-sql_motus <- tagme(projRecv = 176, new = FALSE, update = FALSE, dir = "./data")
+sql_motus <- tagme(projRecv = 176, update = FALSE, dir = "./data")
 ```
 
 ### Checking for new detections
@@ -526,7 +526,7 @@ if you have not downloaded the data, see the section on [downloading data for th
 
 ```{r eval = FALSE}
 # SQLite R object, which links to the .motus file:
-sql_motus <- tagme(176, update = TRUE, dir = "./data")  
+sql_motus <- tagme(176, dir = "./data")  
 
 # virtual table object of the alltags table in the sample.motus file:
 tbl.alltags <- tbl(sql_motus, "alltags")  

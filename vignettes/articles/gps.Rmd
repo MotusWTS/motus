@@ -30,7 +30,7 @@ gps_tags
 
 If your data has gps point, you should be able to follow along using your own data (replace `PROJECT_NUMBER` with the number corresponding to your project.
 ```{r, eval = FALSE}
-gps_tags <- tagme(PROJECT_NUMBER, update = TRUE, new = TRUE)
+gps_tags <- tagme(PROJECT_NUMBER, new = TRUE)
 ```
 
 GPS points are stored in the `gps` table. 
@@ -166,7 +166,7 @@ However, as we are changing values in the data, we'll need to [flatten the data 
 
 Using the example from Chapter 5 starting with [Checking receivers](05-data-cleaning.html#checking-receivers)
 ```{r}
-sql_motus <- tagme(176, update = TRUE, dir = "./data/")
+sql_motus <- tagme(176, dir = "./data/")
 
 df_alltagsGPS <- tbl(sql_motus, "alltagsGPS") %>%
   mutate(recvLat = if_else(is.na(gpsLat) | gpsLat %in% c(0, 999), 

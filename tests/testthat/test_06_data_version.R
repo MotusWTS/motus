@@ -11,7 +11,7 @@ test_that("Proj - DB updates - new = TRUE", {
   expect_false(file.exists("project-176_v1.motus")) # No backup
   expect_warning(
     withr::local_db_connection(
-      t <- tagme(176, new = TRUE, update = TRUE, rename = TRUE)), 
+      t <- tagme(176, new = TRUE, rename = TRUE)), 
     "already exists") %>%
     suppressMessages()
   expect_true(file.exists("project-176_v1.motus"))  # Backup
@@ -30,7 +30,7 @@ test_that("Proj - DB updates - forceMeta", {
   expect_false(file.exists("project-176_v1.motus")) # No backup
   expect_warning(expect_message(
     withr::local_db_connection(
-      t <- tagme(176, new = TRUE, update = TRUE, forceMeta = TRUE, rename = TRUE))), 
+      t <- tagme(176, new = TRUE, forceMeta = TRUE, rename = TRUE))), 
     "already exists") %>%
     suppressMessages()
   expect_true(file.exists("project-176_v1.motus"))  # Backup
@@ -49,7 +49,7 @@ test_that("Proj - DB updates - new = FALSE", {
   expect_false(file.exists("project-176_v1.motus")) # No backup
   expect_message(
     withr::local_db_connection(
-      t <- tagme(176, new = FALSE, update = TRUE, rename = TRUE))) %>%
+      t <- tagme(176, rename = TRUE))) %>%
     suppressMessages()
   expect_true(file.exists("project-176_v1.motus"))  # Backup
 
@@ -84,7 +84,7 @@ test_that("Proj - Update fails if backup present", {
   expect_error(
     expect_message(
       withr::local_db_connection(
-        tagme(176, new = FALSE, update = TRUE, rename = TRUE), "DATABASE UPDATE")),
+        tagme(176, rename = TRUE), "DATABASE UPDATE")),
     "_v1.motus already exists") %>%
     suppressMessages()
 })
@@ -98,14 +98,14 @@ test_that("Recv - DB updates - 2", {
   # Create dummy version 1 - more data
   withr::local_options(list(motus.test.max = 30))
   tags <- withr::local_db_connection(
-    tagme("SG-3115BBBK1127", new = TRUE, update = TRUE)) %>%
+    tagme("SG-3115BBBK1127", new = TRUE)) %>%
     suppressMessages()
   DBI_Execute(tags, "UPDATE admInfo set data_version = 1")
   
   expect_false(file.exists("SG-3115BBBK1127_v1.motus")) # No backup
   expect_message(
     t <- withr::local_db_connection(
-      tagme("SG-3115BBBK1127", new = FALSE, update = TRUE, rename = TRUE))) %>%
+      tagme("SG-3115BBBK1127", rename = TRUE))) %>%
     suppressMessages()
   expect_true(file.exists("SG-3115BBBK1127_v1.motus"))  # Backup
   
@@ -132,7 +132,7 @@ test_that("Recv - Update fails if backup present", {
   
   expect_error(expect_message(
     t <- withr::local_db_connection(
-      tagme("SG-3115BBBK1127", new = FALSE, update = TRUE, rename = TRUE)), 
+      tagme("SG-3115BBBK1127", rename = TRUE)), 
     "DATABASE UPDATE"),
     "_v1.motus already exists") %>%
     suppressMessages()

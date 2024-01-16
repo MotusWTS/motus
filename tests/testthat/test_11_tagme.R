@@ -4,7 +4,7 @@ test_that("tagme() - Projects", {
   withr::local_file("project-176.motus")
   
   # New/Update
-  expect_error(tagme(176, new = FALSE), "If you \\*really\\* want to create")
+  expect_error(tagme(176), "If you \\*really\\* want to create")
   expect_silent(t <- withr::local_db_connection(tagme(176, new = TRUE, update = FALSE)))
   expect_true(file.exists("project-176.motus"))
   expect_equal(DBI::dbListTables(t), character())
@@ -63,13 +63,13 @@ test_that("tagme() errors appropriately", {
   withr::local_file("project-10.motus")
   withr::local_file("CTT-5031194D3168.motus")
   expect_error(expect_message(
-    withr::local_db_connection(tagme(projRecv = 10, new = TRUE, update = TRUE)),
+    withr::local_db_connection(tagme(projRecv = 10, new = TRUE)),
     "updateMotusDb"),
     "You do not have permission")
   
   expect_error(expect_message(
     withr::local_db_connection(tagme(projRecv = "CTT-5031194D3168",
-                                     new = TRUE, update = TRUE)),
+                                     new = TRUE)),
     "updateMotusDb"),
     "Either") #...
 })
@@ -82,10 +82,10 @@ test_that("tellme() - Projects", {
   withr::local_file("project-176.motus")
   skip_if_no_file("project-176.motus", copy = TRUE)
   
-  expect_silent(tagme(projRecv = 176, new = FALSE, update = TRUE, countOnly = TRUE)) %>%
+  expect_silent(tagme(projRecv = 176, countOnly = TRUE)) %>%
     expect_s3_class("data.frame")
   
-  expect_silent(tellme(projRecv = 176, new = FALSE)) %>%
+  expect_silent(tellme(projRecv = 176)) %>%
     expect_s3_class("data.frame")
 })
 

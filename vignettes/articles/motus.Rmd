@@ -24,7 +24,7 @@ You can use your own project number or receiver name.
 
 We use the `tagme()` function to download the data
 ```{r}
-sql_motus <- tagme(176, new = FALSE, update = TRUE, dir = "./data/")
+sql_motus <- tagme(176, dir = "./data/")
 ```
 
 `tagme()` includes several options. Here we're using:

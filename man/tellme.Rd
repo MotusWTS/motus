@@ -10,15 +10,15 @@ tellme(projRecv, new = FALSE, dir = getwd())
 \item{projRecv}{Numeric. Project code from motus.org, \emph{or} character receiver
 serial number.}
 
-\item{new}{Logical. Is this a new database?  Default: FALSE You have to
-specify \code{new = TRUE} if you want a new local copy of the database to be
-created. Otherwise, this function assumes the database already exists,
-and will stop with an error if it cannot find it in the current directory.
-This is mainly to prevent inadvertent downloads of large amounts of data
-that you already have!}
+\item{new}{Logical. Create a new database (Default \code{FALSE})? Specify
+\code{new = TRUE} to create a new local copy of the database to be downloaded.
+Otherwise, it assumes the database already exists, and will stop with an
+error if it cannot find it in the current directory. This is mainly to
+prevent inadvertent downloads of large amounts of data that you already
+have!}
 
 \item{dir}{Character. Path to the folder where you are storing databases
-Defaults to current directory; i.e. \code{getwd()}.}
+IF \code{NULL} (default), uses current working directory.}
 }
 \value{
 a named list with these items:

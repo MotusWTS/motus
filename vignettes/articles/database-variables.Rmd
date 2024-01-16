@@ -12,7 +12,7 @@ library(lubridate)
 library(kableExtra)
 library(glue)
 
-tags <- tagme(176, update = TRUE, new = FALSE, dir = "./data")
+tags <- tagme(176, dir = "./data")
 ```
 
 ## Variables

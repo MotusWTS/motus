@@ -152,7 +152,7 @@ test_that("PROJ 1 - remove deprecated batches", {
   skip_if_no_auth()
   withr::local_file("project-1.motus")
   withr::local_db_connection(
-    suppressMessages(t <- tagme(1, new = TRUE, update = TRUE)))
+    suppressMessages(t <- tagme(1, new = TRUE)))
   
   # Deprecated batches listed, but not removed to start
   dep <- dplyr::tbl(t, "deprecated") %>% 
@@ -219,7 +219,7 @@ test_that("RECV - remove deprecated batches", {
   skip_if_no_auth()
   withr::local_file("SG-1814BBBK0461.motus")
   withr::local_db_connection(
-    suppressMessages(t <- tagme("SG-1814BBBK0461", new = TRUE, update = TRUE)))
+    suppressMessages(t <- tagme("SG-1814BBBK0461", new = TRUE)))
   
   # Deprecated batches listed, but not removed to start
   dep <- dplyr::tbl(t, "deprecated") %>% 

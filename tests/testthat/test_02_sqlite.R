@@ -153,7 +153,7 @@ test_that("Missing tables recreated silently", {
   sample_auth()
   withr::local_file("project-176.motus")
   skip_if_no_file("project-176.motus", copy = TRUE)
-  tags <- withr::local_db_connection(tagme(176, new = FALSE, update = FALSE))
+  tags <- withr::local_db_connection(tagme(176, update = FALSE))
   
   t <- DBI::dbListTables(tags)
   t <- t[t != "admInfo"] # Don't try removing admInfo table
@@ -172,7 +172,7 @@ test_that("Missing tables recreated silently", {
   # Add tables, no errors
   skip_if_no_server()
   expect_message(tags <- withr::local_db_connection(
-    tagme(176, new = FALSE, update = TRUE))) %>%
+    tagme(176))) %>%
     suppressMessages()
   
   for(i in t) expect_true(DBI::dbExistsTable(tags, !!i))
@@ -207,7 +207,7 @@ test_that("check for custom views before update", {
   expect_false("alltags_fast" %in% DBI::dbListTables(tags))
    
   skip_if_no_server()
-  expect_message(withr::local_db_connection(tagme(176, update = TRUE)), 
+  expect_message(withr::local_db_connection(tagme(176)), 
                  "updateMotusDb started") %>%
     suppressMessages()
 })

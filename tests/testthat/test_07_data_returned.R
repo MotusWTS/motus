@@ -6,7 +6,7 @@ test_that("Tag data returned as expected - Proj 207", {
   withr::local_file("project-207.motus")
   
   expect_message(tags <- withr::local_db_connection(
-    tagme(projRecv = 207, new = TRUE, update = TRUE))) %>%
+    tagme(projRecv = 207, new = TRUE))) %>%
     suppressMessages()
   expect_s4_class(tags, "SQLiteConnection")
   
@@ -66,7 +66,7 @@ test_that("Tag data returned as expected - Activity", {
   withr::local_file("project_176.motus")
   
   expect_message(tags <- withr::local_db_connection(
-    tagme(projRecv = 176, new = TRUE, update = TRUE))) %>%
+    tagme(projRecv = 176, new = TRUE))) %>%
     suppressMessages() 
   
   #activity
@@ -93,7 +93,7 @@ test_that("Reciever data returned as expected", {
   
   # Create empty data
   expect_message(tags <- withr::local_db_connection(
-    tagme(projRecv = "SG-3115BBBK0782", new = TRUE, update = TRUE))) %>%
+    tagme(projRecv = "SG-3115BBBK0782", new = TRUE))) %>%
     suppressMessages()
   expect_s4_class(tags, "SQLiteConnection")
   
@@ -108,7 +108,7 @@ test_that("Reciever data returned as expected", {
   withr::local_options(list(motus.test.max = 10))
   dbInsertOrReplace(tags, "batches", data.frame(batchID = 1789309))
   expect_message(tags <- withr::local_db_connection(
-    tagme(projRecv = "SG-3115BBBK0782", new = FALSE, update = TRUE))) %>%
+    tagme(projRecv = "SG-3115BBBK0782"))) %>%
     suppressMessages()
   
   #activity
@@ -177,7 +177,7 @@ test_that("activityAll and gpsAll return for tag data", {
   withr::local_file("project-4.motus")
 
   expect_message(tags <- withr::local_db_connection(
-    tagme(projRecv = 4, new = TRUE, update = TRUE))) %>%
+    tagme(projRecv = 4, new = TRUE))) %>%
     suppressMessages()
   expect_s4_class(tags, "SQLiteConnection")
   

@@ -3,7 +3,7 @@
 set_testing(set = FALSE)
 sample_auth()
 unlink("./inst/extdata/project-176.motus")
-tags <- tagme(projRecv = 176, new = TRUE, update = TRUE, dir = "./inst/extdata/")
+tags <- tagme(projRecv = 176, new = TRUE, dir = "./inst/extdata/")
 
 #file.remove("./data-raw/project-176.motus") # Keep this file?
 
@@ -14,13 +14,13 @@ if(have_auth()) {
   set_testing()
   orig <- options(motus.test.max = 60)
   unlink("./inst/extdata/SG-3115BBBK0782.motus")
-  t <- tagme("SG-3115BBBK0782", new = TRUE, update = TRUE, dir = "./inst/extdata/")
+  t <- tagme("SG-3115BBBK0782", new = TRUE, dir = "./inst/extdata/")
   DBI::dbDisconnect(t)
   options(orig)
   
   # Update project 4
   unlink("./inst/extdata/project-4.motus")
-  tagme(4, new = TRUE, update = TRUE, dir = "./inst/extdata/")
+  tagme(4, new = TRUE, dir = "./inst/extdata/")
   set_testing(set = FALSE)
   
   # Create small sample for GPS tests

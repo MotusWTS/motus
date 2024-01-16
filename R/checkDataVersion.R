@@ -60,7 +60,7 @@ checkDataVersion <- function(src, dbname, rename = FALSE) {
           t <- paste0("This is a large database (> 1 gig) so archiving may take a while and shouldn't be interrupted.\n",
                       "Alternatively, a faster option is to manually archive your project by closing R and renaming your database file to '", 
                       basename(new_name), 
-                      "'.\nThen restart the tagme() function with 'new = TRUE' and 'update = TRUE'.\n",
+                      "'.\nThen restart the tagme() function with 'new = TRUE'.\n",
                       "Are you ready to proceed?")
           choice <- utils::menu(choices = c("Yes, proceed with the archiving", "No, I'll do it myself"), 
                                 title = t)

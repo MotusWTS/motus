@@ -9,14 +9,14 @@ library(tidyverse)
 motus:::get_sample_data()
 options(width = 90)
 knitr::opts_chunk$set(cache = TRUE)
-sql_motus <- tagme(176, update = TRUE, new = FALSE, dir = "./data/")
+sql_motus <- tagme(176, dir = "./data/")
 ```
 
 ```{r, message = FALSE, eval = FALSE}
 library(motus)
 library(tidyverse)
 
-sql_motus <- tagme(176, update = TRUE, new = TRUE, dir = "./data/")
+sql_motus <- tagme(176, new = TRUE, dir = "./data/")
 ```
 
 As work progresses and data are fine-tuned, batches of data may be re-run on the 

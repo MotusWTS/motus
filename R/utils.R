@@ -131,7 +131,7 @@ getAccess <- function() {
 #' data yourself (to `project-176.motus`) with the username and password both
 #' "motus.sample".
 #' 
-#' `sql_motus <- tagme(176, new = TRUE, update = TRUE)`
+#' `sql_motus <- tagme(176, new = TRUE)`
 #' 
 #' Or you can use this helper function to grab an in-memory copy bundled in this
 #' package.
@@ -169,7 +169,7 @@ get_sample_data <- function() {
   file.copy(system.file("extdata", "project-176.motus", package = "motus"), 
             "./data/")
   message("Loading sample project")
-  tagme(projRecv = 176, new = FALSE, update = TRUE, dir = "./data/")
+  tagme(projRecv = 176, dir = "./data/")
 }
 
 disconnect <- function(src, warnings = FALSE) {

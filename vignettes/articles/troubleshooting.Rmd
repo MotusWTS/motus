@@ -93,7 +93,7 @@ Most issues can be solved by either logging out, or by restarting R and resuming
 To resume your data download, run `tagme()` again, but do not include `new = TRUE`:
 
 ```{r, eval = FALSE}
-tagme(project.num, update = TRUE, dir = ...)
+tagme(project.num, dir = ...)
 ```
 
 If errors persist and you are unable to download your data, the server may be temporarily offline.
@@ -132,7 +132,7 @@ If it occurs during an active download, the connection will usually be maintaine
 However if the download stops, simply run `tagme()` again. 
 If that does not work, we suggest [logging out](#loggint-out-of-motus) of the motus package or restarting R and then [resuming your download](#resume-data-download).
 
-### I get an "Internal Server Error" message when using `tagme(..., update = TRUE)`
+### I get an "Internal Server Error" message when using `tagme(...)`
 
 If you get this message while updating your `.motus` file, use `tagme()` again to continue the download.
 
@@ -179,14 +179,14 @@ To specify a location to save files from your working directory use `./` followe
 getwd() # show working directory, in this case it's "C:/Documents"
 
 # downloads data to your working directory
-tagme(proj.num, new = TRUE, update = TRUE)
+tagme(proj.num, new = TRUE)
 
 # downloads data to the data folder within your working directory
 # ie. the file path C:/Documents/data
-tagme(proj.num, new = TRUE, update = TRUE, dir = "./data/") 
+tagme(proj.num, new = TRUE, dir = "./data/") 
 
 # downloads data to the file path C:/Downloads
-tagme(proj.num, new = TRUE, update = TRUE, dir = "C:/Downloads") 
+tagme(proj.num, new = TRUE, dir = "C:/Downloads") 
 ```
 
 

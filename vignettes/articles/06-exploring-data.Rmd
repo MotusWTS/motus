@@ -47,7 +47,7 @@ Because we are selecting the same variables and filtering the same records, the 
 
 ```{r}
 # load the .motus file (remember 'motus.sample' is both username and password)
-sql_motus <- tagme(176, update = TRUE, dir = "./data/")
+sql_motus <- tagme(176, dir = "./data/")
 tbl_alltags <- tbl(sql_motus, "alltags")
 
 # obtain a table object of the filter

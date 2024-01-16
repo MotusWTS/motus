@@ -50,7 +50,7 @@ This chapter assumes that the `.motus` file has already been downloaded, if you 
 To update and load the existing file into R, use `tagme()`, you may have to [login](03-accessing-data.html#user-authentication) with the username **and** password 'motus.sample'.
 
 ```{r}
-sql_motus <- tagme(176, update = TRUE, dir = "./data")
+sql_motus <- tagme(176, dir = "./data")
 ```
 
 ## Tag deployments

@@ -22,7 +22,7 @@ library(motus)
 library(tidyverse)
 library(lubridate)
 
-sql_motus <- tagme(176, update = TRUE, new = FALSE, dir = "./data/")
+sql_motus <- tagme(176, dir = "./data/")
 ```
 
 As runs are composed of sequences of hits, the longer the run the more confident we can be that it represents a true detection. 
