@@ -75,16 +75,21 @@ tagme <- function(projRecv, update = TRUE, new = FALSE, dir = getwd(),
                   skipActivity = FALSE, skipNodes = FALSE, skipDeprecated = FALSE) {
   
   # Update all existing databases in `dir`
-  if (missing(projRecv) && ! new) {
+  if (missing(projRecv) && !new) {
+    dbs <- dir(dir, pattern = "\\.motus$") %>%
+      stringr::str_remove("\\.motus$")
+    lapply(
+      dbs,
+      function(f) {
+        if(stringr::str_detect(f, "project-")) f <- as.numeric(stringr::str_remove(f, "project-"))
+        tagme(projRecv = f, 
+              update = TRUE, dir = dir, 
+              countOnly = countOnly, forceMeta = forceMeta, 
+              skipActivity = skipActivity,
+              skipNodes = skipNodes, skipDeprecated = skipDeprecated)
+      })
     
-    lapply(dir(dir, pattern = "\\.motus$"),
-           function(f) {
-             tagme(projRecv = sub("\\.motus$", "", f), update = TRUE, dir = dir, 
-                   countOnly = countOnly, forceMeta = forceMeta, 
-                   skipActivity = skipActivity,
-                   skipNodes = skipNodes, skipDeprecated = skipDeprecated)
-           }) %>%
-      return()
+    return(invisible())
   }
   
   if (length(projRecv) != 1 || (! is.numeric(projRecv) && ! is.character(projRecv))) {
@@ -98,7 +103,7 @@ tagme <- function(projRecv, update = TRUE, new = FALSE, dir = getwd(),
   
   dbname <- getDBFilename(projRecv, dir)
   have <- file.exists(dbname)
-  
+
   if (!new && !have) {
     stop("Database ", dbname, " does not exist.\n",
          "If you *really* want to create a new database, specify 'new = TRUE'\n",
@@ -111,7 +116,6 @@ tagme <- function(projRecv, update = TRUE, new = FALSE, dir = getwd(),
             "'new = TRUE' option", immediate. = TRUE, call. = FALSE)
     new <- FALSE
   }
-  if (new && missing(update)) update <- FALSE
   
   if (!have && is.character(projRecv)) {
     deviceID <- srvDeviceIDForReceiver(projRecv)[[2]]
@@ -146,11 +150,6 @@ tagme <- function(projRecv, update = TRUE, new = FALSE, dir = getwd(),
       motus_vars$authToken 
     }
     
-    # Check if nodeData required
-    if(!skipNodes && stringr::str_detect(projRecv, "^CTT-")) {
-      skipNodes <- TRUE
-      message("Reciever is not a SensorStation, skipping node data download")
-    }
     
     # Ensure correct DBtables, but only if update = TRUE
     ensureDBTables(rv, projRecv, deviceID, quiet = new)
@@ -158,8 +157,16 @@ tagme <- function(projRecv, update = TRUE, new = FALSE, dir = getwd(),
     # Update database
     rv <- motusUpdateDB(projRecv, rv, countOnly, forceMeta)
     
-    # Add activity and nodeData
+    # Add extra data - activity, nodeData, deprecated
     if(!countOnly) {
+      
+      # Check if nodeData required - For receivers only
+      if(!is.null(deviceID) && !skipNodes && 
+         stringr::str_detect(projRecv, "^CTT-", negate = TRUE)) {
+        skipNodes <- TRUE
+        message("Reciever is not a SensorStation, skipping node data download")
+      }
+      
       if(!skipActivity) rv <- activity(src = rv, resume = TRUE)
       if(!skipNodes) rv <- nodeData(src = rv, resume = TRUE)
       if(!skipDeprecated) rv <- fetchDeprecated(src = rv)

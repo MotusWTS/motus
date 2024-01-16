@@ -1,6 +1,6 @@
 #' Get node data from the data server
 #' 
-#' Functions for a project OR receiver. If `projectID` is suppled, returns project
+#' Functions for a project OR receiver. If `projectID` is supplied, returns project
 #' `nodeData.`
 #'
 #' @param batchID Integer. Batch ID

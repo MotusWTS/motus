@@ -1,4 +1,8 @@
 # motus 6.1.0
+* fix bugs in `tagme()`
+  * `tagme(dir = ...)` now correctly downloads projects as well as receivers and
+    respects the `skipXXX` arguments
+  * `tagme()` for receivers now skips node downloads if receiver is not a SensorStation
 * Clean up helper functions `sunRiseSet()` and `timeToSunriset()`
   * `sunRiseSet()` now required to run `timeToSunriset()`
   * Changed function argument names for clarity
