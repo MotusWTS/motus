@@ -113,6 +113,8 @@ removeDeprecated <- function(src, ask) {
   removeByID(src, t = "batches", ids = d)
   
   dbInsertOrReplace(src, "deprecated", deprecated)
+  
+  message("Repacking data base to save space...")
   DBI_Execute(src, "VACUUM")
   message("Total deprecated batches removed: ", length(d))
   
