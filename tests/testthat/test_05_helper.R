@@ -148,8 +148,8 @@ test_that("SAMPLE - remove deprecated batches", {
 
 
 test_that("PROJ 1 - remove deprecated batches", {
-  skip_if_no_auth()
   skip_if_no_server()
+  skip_if_no_auth()
   withr::local_file("project-1.motus")
   withr::local_db_connection(
     suppressMessages(t <- tagme(1, new = TRUE, update = TRUE)))
@@ -215,8 +215,8 @@ test_that("PROJ 1 - remove deprecated batches", {
 
 
 test_that("RECV - remove deprecated batches", {
-  skip_if_no_auth()
   skip_if_no_server()
+  skip_if_no_auth()
   withr::local_file("SG-1814BBBK0461.motus")
   withr::local_db_connection(
     suppressMessages(t <- tagme("SG-1814BBBK0461", new = TRUE, update = TRUE)))

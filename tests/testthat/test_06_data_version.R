@@ -90,8 +90,8 @@ test_that("Proj - Update fails if backup present", {
 })
 
 test_that("Recv - DB updates - 2", {
-  skip_if_no_auth()
   skip_if_no_server()
+  skip_if_no_auth()
   withr::local_file("SG-3115BBBK1127.motus")
   withr::local_file("SG-3115BBBK1127_v1.motus")
   

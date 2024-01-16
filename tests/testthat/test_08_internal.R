@@ -1,6 +1,6 @@
 test_that("hitsByBatchProject doesn't fail on extra columns", {
-  sample_auth()
   skip_if_no_server()
+  sample_auth()
   tags <- tagmeSample()
   DBI_Execute(tags, "DELETE FROM projBatch")
   DBI_Execute(tags, "DELETE FROM hits")
@@ -37,8 +37,8 @@ test_that("hitsByBatchProject doesn't fail on extra columns", {
 })
 
 test_that("hitsByBatchReceiver doesn't fail on extra columns", {
-  skip_if_no_auth()
   skip_if_no_server()
+  skip_if_no_auth()
   withr::local_file("SG-3115BBBK0782.motus")
   tags <- withr::local_db_connection(tagmeSample("SG-3115BBBK0782.motus"))
   

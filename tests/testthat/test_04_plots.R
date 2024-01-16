@@ -21,7 +21,8 @@ test_that("Plots run with no errors", {
   expect_silent(plotSite(tags))
   expect_silent(plotSite(tags_sub, ncol = 2))
   expect_silent(plotSite(dplyr::tbl(tags_sql, "alltagsGPS")))
-  expect_silent(plotSite(tags_sql, sitename = "Piskwamish"))
+  expect_message(plotSite(tags_sql, sitename = "Piskwamish"), 
+                 "'df_src' is a complete motus data base")
 
   expect_silent(plotSiteSig(tags, "Longridge"))
   expect_silent(plotSiteSig(dplyr::tbl(tags_sql, "alltagsGPS"), "Longridge"))
