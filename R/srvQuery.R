@@ -24,7 +24,7 @@ srvQuery <- function(API, params = NULL, JSON = FALSE,
                      timeout = 120, verbose = FALSE) {
   
   url <- file.path(url, API)
-  ua <- httr::user_agent(agent = "http://github.com/MotusWTS/motus")
+  ua <- httr::user_agent(agent = "https://github.com/MotusWTS/motus")
   
   # Set curl options
   httr::set_config(httr::accept_json())

@@ -3,4 +3,4 @@ bibentry(bibtype = "Manual",
          title = "{motus}: Fetch and use data from the Motus Wildlife Tracking System",
          author = person("Birds Canada"),
          year = year,
-         url = "https://motusWTS.github.io/motus")
+         url = "https://motusWTS.github.io/motus/")

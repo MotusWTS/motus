@@ -12,7 +12,7 @@ sql_motus <- motus:::get_sample_data()
 Once you have clarified any possible ambiguous tags and removed false positives, you are ready to start analyzing your clean data set. 
 This chapter will walk you through some simple procedures to start working with and visualizing the clean sample data set;
 you can modify these scripts to work with your own data. 
-For a more in-depth R tutorial we strongly recommend working through [R for Data Science](http://r4ds.had.co.nz/) by Garrett Grolemund and Hadley Wickham.
+For a more in-depth R tutorial we strongly recommend working through [R for Data Science](https://r4ds.hadley.nz/) by Garrett Grolemund and Hadley Wickham.
 
 ## Load required packages
 

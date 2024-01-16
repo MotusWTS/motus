@@ -31,9 +31,9 @@ Please also review the [Motus collaboration policy, tag registration, and fee sc
 ## Prerequisites
 
 These articles assume that you have a basic understanding of R. 
-Regardless of whether you are new to R or not, we highly recommend that you become familiar with [R for Data Science](http://r4ds.had.co.nz/) by Garrett Grolemund and Hadley Wickham. 
+Regardless of whether you are new to R or not, we highly recommend that you become familiar with [R for Data Science](https://r4ds.hadley.nz/) by Garrett Grolemund and Hadley Wickham. 
 Their book covers how to import, visualize, and summarize data in R using the [tidyverse](https://www.tidyverse.org/) collection of R packages. 
-It also provides an invaluable framework for [organizing your workflow](http://r4ds.had.co.nz/workflow-projects.html) to create clean, reproducible code. 
+It also provides an invaluable framework for [organizing your workflow](https://r4ds.hadley.nz/workflow-scripts#projects) to create clean, reproducible code. 
 We follow their lead by, wherever possible, using the tidyverse framework throughout these articles.
 
 ## Sample datasets

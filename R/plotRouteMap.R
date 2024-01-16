@@ -4,7 +4,7 @@
 #' date range to show points for receivers that were operational at some point
 #' during the date range.
 #'
-#' @param zoom Integer. Override the calcualted zoom level to increase or
+#' @param zoom Integer. Override the calculated zoom level to increase or
 #'   decrease the resolution of the map tiles.
 #' @param maptype Character. Map tiles to use. Must be one of `rosm::osm.types()`, 
 #'   such as `osm`, `stamenbw`, etc. Most map tiles require attribution for 

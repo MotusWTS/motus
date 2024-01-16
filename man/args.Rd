@@ -12,7 +12,7 @@ serial number.}
 
 \item{df_src}{Data frame, SQLite connection, or SQLite table. An SQLite
 connection would be the result of \code{tagme(XXX)} or
-\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}; an SQlite table would be
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}; an SQLite table would be
 the result of \code{dplyr::tbl(tags, "alltags")}; a data frame could be the
 result of \code{dplyr::tbl(tags, "alltags") \%>\% dplyr::collect()}.}
 

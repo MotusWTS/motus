@@ -27,7 +27,7 @@ plotRouteMap(
 such as \code{osm}, \code{stamenbw}, etc. Most map tiles require attribution for
 publication, see details.}
 
-\item{zoom}{Integer. Override the calcualted zoom level to increase or
+\item{zoom}{Integer. Override the calculated zoom level to increase or
 decrease the resolution of the map tiles.}
 
 \item{start_date}{Character. Optional start date for routes.}
