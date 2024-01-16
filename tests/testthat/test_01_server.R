@@ -284,20 +284,29 @@ test_that("srvTagXXX", {
 })
 
 
-test_that("srvQuery handles time out graciously", {
+test_that("srvQuery() and srvTimeout() timeouts", {
   
   sample_auth()
   skip_if_no_server()
   
+  expect_silent(srvTimeout()) %>%
+    expect_equal(list("motus.timeout" = 120))
+  expect_silent(srvTimeout(5))
+  expect_equal(options("motus.timeout"), list("motus.timeout" = 5))
+  expect_silent(srvTimeout(reset = TRUE))
+  expect_equal(options("motus.timeout"), list("motus.timeout" = 120))
+  
+  
   # https://stackoverflow.com/questions/100841/artificially-create-a-connection-timeout-error
+  srvTimeout(0.001)
   expect_message(
     expect_error(srvQuery(API = motus_vars$API_PROJECT_AMBIGUITIES_FOR_TAG_PROJECT, 
                           params = list(projectID = 176),
-                          url = motus_vars$dataServerURL, timeout = 0.01),
+                          url = motus_vars$dataServerURL),
                  "The server is not responding"),
     "The server did not respond within 0.01s. Trying again...")
+  srvTimeout(reset = TRUE)
 })
-
 
 test_that("srvAuth handles errors informatively", {
   skip_if_no_server()

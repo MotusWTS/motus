@@ -49,7 +49,7 @@
 
 .onLoad <- function(...) {
   
-  options(motus.test.max = 15)
+  options(motus.test.max = 15, motus.timeout = 120)
   
   # default location of motus data server, unless user has already assigned
   # a value to "motusServerURL" in the global environment

@@ -1,29 +1,33 @@
 #' Download motus tag detections to a database
+#' 
+#' This is the main motus function for accessing and updating your data. This
+#' function downloads motus data to a local SQLite data base in the name of 
+#' `project-XXX.motus` or `RECIVER_NAME.motus`. If you are having trouble with
+#' a particular data base timing out on downloads, see `srvTimeout()` for 
+#' options.
 #'
-#' @param update Logical. Should any new data be downloaded and merged?
-#'   Defaults to TRUE unless this is a new database (in which case you must
-#'   specify `update = TRUE` explicitly).
-#' @param new Logical. Is this a new database?  Default: FALSE You have to
-#'   specify `new = TRUE` if you want a new local copy of the database to be
-#'   created. Otherwise, this function assumes the database already exists,
-#'   and will stop with an error if it cannot find it in the current directory.
-#'   This is mainly to prevent inadvertent downloads of large amounts of data
-#'   that you already have!
+#' @param update Logical. Download and merge new data (Default `TRUE`)?
+#' @param new Logical. Create a new database (Default `FALSE`)? Specify 
+#'   `new = TRUE` to create a new local copy of the database to be downloaded. 
+#'   Otherwise, it assumes the database already exists, and will stop with an
+#'   error if it cannot find it in the current directory. This is mainly to
+#'   prevent inadvertent downloads of large amounts of data that you already
+#'   have!
 #' @param dir Character. Path to the folder where you are storing databases
-#'   Defaults to current directory; i.e. `getwd()`.
-#' @param countOnly Logical. If `FALSE`, the default, then do requested
-#'   database updates. Otherwise, return a count of items that would need to be
-#'   transferred in order to update the database.
-#' @param forceMeta Logical. If `TRUE`, re-get metadata for tags and receivers,
-#'   even if we already have them.
-#' @param rename Logical. If current SQLite database is of an older version,
-#'   automatically rename that database for backup purposes and download the
-#'   newest version. If `FALSE` (default), user is prompted for action.
-#' @param skipActivity Logical. Skip checking for and downloading `activity`? See
-#'   `?activity` for more details
+#'   IF `NULL` (default), uses current working directory.
+#' @param countOnly Logical. If `TRUE`, return only a count of items that would
+#'   need to be downloaded in order to update the database (Default `FALSE`).
+#' @param forceMeta Logical. If `TRUE`, re-download metadata for tags and
+#'   receivers, even if we already have them.
+#' @param rename Logical. If current SQLite database is of an older data
+#'   version, automatically rename that database for backup purposes and
+#'   download the newest version. If `FALSE` (default), user is prompted for
+#'   action.
+#' @param skipActivity Logical. Skip checking for and downloading `activity`?
+#'   See `?activity` for more details
 #' @param skipNodes Logical. Skip checking for and downloading `nodeData`? See
 #'   `?nodeData` for more details
-#' @param skipDeprecated logical. Skip fetching list of deprecated batches   
+#' @param skipDeprecated Logical. Skip fetching list of deprecated batches
 #'   stored in `deprecated`. See `?deprecateBatches()` for more details.
 #'
 #' @inheritParams args
@@ -32,7 +36,7 @@
 #' 
 #' \dontrun{
 #'
-#' # Create and open a local tag database for motus project 14 in the
+#' # Create and update a local tag database for motus project 14 in the
 #' # current directory
 #'
 #' t <- tagme(14, new = TRUE)
@@ -40,39 +44,42 @@
 #' # Update and open the local tag database for motus project 14;
 #' # it must already exist and be in the current directory
 #'
-#' t <- tagme(14, update = TRUE)
+#' t <- tagme(14)
 #'
 #' # Update and open the local tag database for a receiver;
 #' # it must already exist and be in the current directory
 #'
-#' t <- tagme("SG-1234BBBK4567", update = TRUE)
+#' t <- tagme("SG-1234BBBK4567")
 #'
 #' # Open the local tag database for a receiver, without
 #' # updating it
 #'
-#' t <- tagme("SG-1234BBBK4567")
+#' t <- tagme("SG-1234BBBK4567", update = FALSE)
 #'
 #' # Open the local tag database for a receiver, but
 #' # tell 'tagme' that it is in a specific directory
 #'
 #' t <- tagme("SG-1234BBBK4567", dir = "Projects/gulls")
 #'
-#' # update all existing project and receiver databases in `dir`
+#' # Update all existing project and receiver databases in the current working
+#' # directory
 #' 
 #' tagme()
 #' }
 #'
-#' @return a SQLite Connection for the (possibly updated) database, or a list
-#' of counts if `countOnly = TRUE`
+#' @return a SQLite Connection for the (possibly updated) database, or a data 
+#' frame of counts if `countOnly = TRUE`.
 #'
 #' @seealso `tellme()`, which is a synonym for 
-#' `tagme(..., update = TRUE, countOnly = TRUE)`
+#' `tagme(..., countOnly = TRUE)`
 #'
 #' @export
 
 tagme <- function(projRecv, update = TRUE, new = FALSE, dir = getwd(), 
                   countOnly = FALSE, forceMeta = FALSE, rename = FALSE,
                   skipActivity = FALSE, skipNodes = FALSE, skipDeprecated = FALSE) {
+  
+  if(is.null(dir)) dir <- "."
   
   # Update all existing databases in `dir`
   if (missing(projRecv) && !new) {
