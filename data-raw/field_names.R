@@ -23,7 +23,8 @@ t <- field_names %>%
   filter(str_detect(table, "batches_activity")) %>%
   mutate(table = "activity",
          keys = column %in% c("batchID", "ant", "hourBin")) %>%
-  bind_rows(t, .)
+  bind_rows(t, .) %>%
+  filter(!column %in% c("year", "month", "day")) # TODO: Remove this once pushed to live
 
 # activityAll ------------------------------------------------------------------
 t <- filter(t, table == "activity") %>%
@@ -387,7 +388,7 @@ sql_fields <- t %>%
   ungroup() %>%
   mutate(
     #most missing options get FALSE
-    across(c(not_nulls, uniques), tidyr::replace_na, FALSE), 
+    across(c(not_nulls, uniques), function(x) tidyr::replace_na(x, FALSE)), 
     # Columns with special words are quoted
     column = if_else(column %in% c("group"), glue("'{column}'"), column),
     not_nulls = if_else(not_nulls, "NOT NULL", ""),
