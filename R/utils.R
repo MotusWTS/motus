@@ -29,13 +29,15 @@ skip_if_no_file <- function(file, system = TRUE, copy = FALSE) {
 
 skip_if_no_server <- function() {
   sample_auth()
-  srv <- suppressMessages(try(srvAuth(timeout = 1), silent = TRUE))
+  srvTimeout(1)
+  srv <- suppressMessages(try(srvAuth(), silent = TRUE))
   if(inherits(srv, "try-error")) {
-    srv <- suppressMessages(try(srvAuth(timeout = 1), silent = TRUE))
+    srv <- suppressMessages(try(srvAuth(), silent = TRUE))
     if(inherits(srv, "try-error")) {
       testthat::skip("Server Offline")
     }
   }
+  srvTimeout(reset = TRUE)
 }
 
 is_testing <- function() {

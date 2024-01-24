@@ -20,10 +20,9 @@
 #' @param reset Logical. Whether to reset the timeout to the default (120s;
 #'   default `FALSE`). If `TRUE`, `timeout` is ignored.
 #'
-#' @return
+#' @return Nothing. Or, if `timeout` is missing and `reset = FALSE`, the current
+#'   timeout value.
 #' @export
-#' 
-#' @seealso [resetTimeout()]
 #'
 #' @examples
 #' srvTimeout()   # get the timeout value

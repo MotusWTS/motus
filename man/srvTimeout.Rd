@@ -14,6 +14,10 @@ to process and serve the data.}
 \item{reset}{Logical. Whether to reset the timeout to the default (120s;
 default \code{FALSE}). If \code{TRUE}, \code{timeout} is ignored.}
 }
+\value{
+Nothing. Or, if \code{timeout} is missing and \code{reset = FALSE}, the current
+timeout value.
+}
 \description{
 Sets, resets or returns the "motus.timeout" global option used by all API
 access functions (including \code{tagme()}). If \code{timeout} is a number and \code{reset}
@@ -43,7 +47,4 @@ srvTimeout(0.001)
 t <- tagme(176, new = TRUE)
 }
 
-}
-\seealso{
-\code{\link[=resetTimeout]{resetTimeout()}}
 }
