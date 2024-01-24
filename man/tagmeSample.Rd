@@ -20,7 +20,7 @@ data yourself (to \verb{project-176.motus}) with the username and password both
 "motus.sample".
 }
 \details{
-\code{sql_motus <- tagme(176, new = TRUE, update = TRUE)}
+\code{sql_motus <- tagme(176, new = TRUE)}
 
 Or you can use this helper function to grab an in-memory copy bundled in this
 package.

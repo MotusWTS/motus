@@ -8,7 +8,7 @@ tagme(
   projRecv,
   update = TRUE,
   new = FALSE,
-  dir = NULL,
+  dir = getwd(),
   countOnly = FALSE,
   forceMeta = FALSE,
   rename = FALSE,

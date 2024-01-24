@@ -31,7 +31,7 @@ deployment latitude in metadata.
 }
 \examples{
 # Download sample project 176 to .motus database (username/password are "motus.sample")
-\dontrun{sql_motus <- tagme(176, new = TRUE, update = TRUE)}
+\dontrun{sql_motus <- tagme(176, new = TRUE)}
 
 # Or use example data base in memory
 sql_motus <- tagmeSample()

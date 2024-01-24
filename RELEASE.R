@@ -84,8 +84,8 @@ urlchecker::url_check()
 ## Finalize package version -----------------------------------------------
 # - Update DESCRIPTION - package version
 # - Update .onLoad - API version
-v <- "6.0.1"
-v <- packageVersion("motus") # If dev version loaded with devtools::load_all()
+#v <- "6.0.1"
+#v <- packageVersion("motus") # If dev version loaded with devtools::load_all()
 
 ## Checks ------------------------------------------------------------------
 
