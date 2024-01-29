@@ -60,6 +60,8 @@ test_that("tagme() errors appropriately", {
   skip_if_no_server()
   sample_auth()
   
+  expect_error(tagme(dir = "testing123"), "`dir` \\(testing123\\) does not exist")
+  
   withr::local_file("project-10.motus")
   withr::local_file("CTT-5031194D3168.motus")
   expect_error(expect_message(

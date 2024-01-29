@@ -79,7 +79,11 @@ tagme <- function(projRecv, update = TRUE, new = FALSE, dir = getwd(),
                   countOnly = FALSE, forceMeta = FALSE, rename = FALSE,
                   skipActivity = FALSE, skipNodes = FALSE, skipDeprecated = FALSE) {
   
-  if(is.null(dir)) dir <- "."
+  if(is.null(dir)) {
+    dir <- "."
+  } else if(!dir.exists(dir)) {
+    stop("`dir` (", dir, ") does not exist, please create it first.", call. = FALSE)
+  }
   
   # Update all existing databases in `dir`
   if (missing(projRecv) && !new) {
