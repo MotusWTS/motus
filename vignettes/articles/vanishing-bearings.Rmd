@@ -113,6 +113,7 @@ library(circular)
 library(tidyverse)
 library(motus)
 library(ggplot2)
+library(sf)
 library(ggspatial)
 library(lubridate)
 
@@ -319,14 +320,14 @@ df_stations <- df_vanish %>%
 arr.sc <- 0.03  # determines length of the vectors for antenna bearings and vanishing bearing lines
 rad <- function(x) {x * pi/180}
 
-sf_bearings_start <- st_as_sf(df_stations, coords = c("recvLon", "recvLat"), crs = 4326)
+sf_stations <- st_as_sf(df_stations, coords = c("recvLon", "recvLat"), crs = 4326)
 sf_bearings_end <- df_stations %>%
   mutate(xend = recvLon + (sin(rad(antBearing))*arr.sc),
          yend = recvLat + (cos(rad(antBearing))*arr.sc)) %>%
   select(-recvLon, -recvLat) %>%
   st_as_sf(coords = c("xend", "yend"), crs = 4326)
 
-sf_bearings <- bind_rows(sf_bearings_start, sf_bearings_end) %>%
+sf_bearings <- bind_rows(sf_stations, sf_bearings_end) %>%
   group_by(recvSiteName, antBearing, port, n) %>%
   summarize() %>%
   st_cast("LINESTRING")

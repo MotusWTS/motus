@@ -133,23 +133,13 @@ srvQuery(API = "custom/update_pkg_version", params = list(pkgVersion = "6.0.1"))
 
 ## Test motus website (will be compiled online) ------------------------------
 
-# English
-file.copy("_pkgdown_en.yml", "_pkgdown.yml")
 pkgdown::build_site(lazy = TRUE)
 pkgdown::build_home_index()
 pkgdown::build_home()
 pkgdown::init_site()
 pkgdown::build_article("articles/06-exploring-data")
 pkgdown::build_article("articles/01-introduction")
-unlink("_pkgdown.yml")
 unlink("vignettes/articles/map-data/", recursive = TRUE)
-
-# French
-file.rename("pkgdown/README_fr.md", "pkgdown/index.md")
-file.rename("_pkgdown_fr.yml", "_pkgdown.yml")
-pkgdown::build_site(lazy = TRUE)
-file.rename("pkgdown/index.md", "pkgdown/README_fr.md")
-file.rename("_pkgdown.yml", "_pkgdown_fr.yml")
 
 
 ## Find ASCII -------------------------------------------------------

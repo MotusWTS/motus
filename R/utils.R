@@ -29,15 +29,15 @@ skip_if_no_file <- function(file, system = TRUE, copy = FALSE) {
 
 skip_if_no_server <- function() {
   sample_auth()
-  srvTimeout(1)
+  srvTimeout(5)
   
   srv <- suppressMessages(try(
     httr::GET(file.path(motus_vars$dataServerURL, "api_info"), 
-              httr::timeout(srvTimeout())), silent = TRUE))
+              httr::timeout(srvTimeout()[[1]])), silent = TRUE))
   if(inherits(srv, "try-error")) {
     srv <- suppressMessages(try(
       httr::GET(file.path(motus_vars$dataServerURL, "api_info"), 
-                srvTimeout()), silent = TRUE))
+                httr::timeout(srvTimeout()[[1]])), silent = TRUE))
     if(inherits(srv, "try-error")) {
       testthat::skip("Server Offline")
     }

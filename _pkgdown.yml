@@ -51,6 +51,7 @@ reference:
   - sunRiseSet
   - timeToSunriset
   - getMotusDBSrc
+  - srvTimeout
   
 - title: Plotting
   contents:
