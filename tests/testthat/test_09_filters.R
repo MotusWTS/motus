@@ -1,4 +1,5 @@
 test_that("SQL filters", {
+  sample_auth()
   tags <- withr::local_db_connection(tagmeSample())
   
   df <- dplyr::tbl(tags, "alltags") %>%

@@ -18,12 +18,13 @@ if(have_auth()) {
   DBI::dbDisconnect(t)
   options(orig)
   
+  # DO not update (messes up the GPS tests) ---------------------------
   # Update project 4
-  unlink("./inst/extdata/project-4.motus")
-  tagme(4, new = TRUE, dir = "./inst/extdata/")
-  set_testing(set = FALSE)
-  
-  # Create small sample for GPS tests
-  file.copy("./inst/extdata/project-4.motus", 
-            "./inst/extdata/gps_sample.motus", overwrite = TRUE)
+  # unlink("./inst/extdata/project-4.motus")
+  # tagme(4, new = TRUE, dir = "./inst/extdata/")
+  # set_testing(set = FALSE)
+  # 
+  # # Create small sample for GPS tests
+  # file.copy("./inst/extdata/project-4.motus", 
+  #           "./inst/extdata/gps_sample.motus", overwrite = TRUE)
 }

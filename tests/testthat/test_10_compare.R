@@ -3,10 +3,12 @@ test_that("table fields match server (sample auth)", {
   sample_auth()
   tags <- withr::local_db_connection(tagmeSample())
   
-  expect_named(srvActivityForAll(batchID = 53)[1,],
+  # TODO: Update once API updated
+  expect_named(srvActivityForAll(batchID = 53)[1,] %>% dplyr::select(-"year", -"month", -"day"),
                DBI::dbListFields(tags, "activityAll"), ignore.order = TRUE)
   
-  expect_named(srvActivityForBatches(batchID = 53)[1,],
+  # TODO: Update once API updated
+  expect_named(srvActivityForBatches(batchID = 53)[1,] %>% dplyr::select(-"year", -"month", -"day"),
                DBI::dbListFields(tags, "activity"), ignore.order = TRUE)
   
   expect_named(srvBatchesForTagProject(projectID = 176, batchID = 53)[1,],
@@ -36,8 +38,9 @@ test_that("table fields match server (local auth)", {
   skip_if_no_file(f <- "project-4.motus")
   tags <- withr::local_db_connection(tagmeSample(f))
   
+  # TODO: Update once API updated
   expect_named(
-    srvActivityForBatches(batchID = 53)[1,],
+    srvActivityForBatches(batchID = 53)[1,] %>% dplyr::select(-"year", -"month", -"day"),
     DBI::dbListFields(tags, "activity"), ignore.order = TRUE)
   
   expect_named(

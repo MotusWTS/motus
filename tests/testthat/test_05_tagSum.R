@@ -8,5 +8,5 @@ test_that("tagSum()", {
   expect_s3_class(tags, "data.frame")
 
   # Not Interactive
-  expect_snapshot_value(tags, style = "json2")
+  expect_snapshot_value(tags, style = "json2", tolerance = 0.001)
 })

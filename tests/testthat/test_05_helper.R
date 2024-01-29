@@ -14,8 +14,10 @@ test_that("filterByActivity filters as expected", {
   expect_equal(nrow(a <- dplyr::collect(a)), 
                nrow(g <- dplyr::collect(g)) + nrow(b <- dplyr::collect(b)))
                  
-  expect_equal(sort(a$hitID[a$probability == 1]), g$hitID)
-  expect_equal(sort(a$hitID[a$probability == 0]), b$hitID)
+  expect_equal(dplyr::arrange(a, .data$probability, .data$hitID) %>%
+                 dplyr::select("probability", "hitID"),
+               rbind(b, g) %>%
+                 dplyr::select("probability", "hitID"))
   
   # Matches motusFilter results
   runs <- dplyr::tbl(tags, "runs") %>%

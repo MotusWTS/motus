@@ -3,6 +3,7 @@
   * `tagme(dir = ...)` now correctly downloads projects as well as receivers and
     respects the `skipXXX` arguments
   * `tagme()` for receivers now skips node downloads if receiver is not a SensorStation
+  * `tagme()` fails gracefully if the directory specified does not exist
 * `tagme(new = TRUE)` now starts a download immediately
 * Add `srvTimeout()` to specify the server timeout limit
 * Clean up helper functions `sunRiseSet()` and `timeToSunriset()`

@@ -1,6 +1,7 @@
 # Setup ------------------------------
 expect_silent({
-  tags <- withr::local_db_connection(tagmeSample("gps_sample.motus"))
+  tags <- withr::with_db_connection(
+    list(con = DBI::dbConnect(RSQLite::SQLite())), tagmeSample("gps_sample.motus"))
   alltags <- dplyr::tbl(tags, "alltags")
   b <- 127792
   alltags1 <- alltags %>%

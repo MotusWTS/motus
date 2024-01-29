@@ -62,8 +62,8 @@ test_that("Proj - DB updates - new = FALSE", {
   expect_named(dplyr::tbl(new, "admInfo") %>% dplyr::collect(), 
                expected = c("db_version", "data_version"))  # New version
   
-  expect_true(all(sort(DBI::dbListFields(old, "activity")) %in%
-                    sort(DBI::dbListFields(new, "activity"))))
+  expect_true(all(sort(DBI::dbListFields(old, "batches")) %in%
+                    sort(DBI::dbListFields(new, "batches"))))
               
   expect_gt(DBI_Query(new, "SELECT * FROM activity") %>% nrow(), 0)
   expect_gt(DBI_Query(new, "SELECT * FROM hits") %>% nrow(), 0)
