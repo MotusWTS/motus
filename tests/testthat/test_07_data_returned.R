@@ -1,3 +1,5 @@
+expect_silent(unlink("project-176.motus")) # double check
+
 # Local auth Tags ---------------------------------------------------------
 test_that("Tag data returned as expected - Proj 207", {
   skip_on_cran()

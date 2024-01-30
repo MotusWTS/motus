@@ -1,6 +1,7 @@
 test_that("tagme() - Projects", {
   skip_if_no_server()
   sample_auth()
+  unlink("project-176.motus") # Make sure nothing is here
   withr::local_file("project-176.motus")
   
   # New/Update

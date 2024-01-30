@@ -39,6 +39,7 @@ test_that("hitsByBatchProject doesn't fail on extra columns", {
 test_that("hitsByBatchReceiver doesn't fail on extra columns", {
   skip_if_no_server()
   skip_if_no_auth()
+  skip_if_no_file("SG-3115BBBK0782.motus")
   withr::local_file("SG-3115BBBK0782.motus")
   tags <- withr::local_db_connection(tagmeSample("SG-3115BBBK0782.motus"))
   
