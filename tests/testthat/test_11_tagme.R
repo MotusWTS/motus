@@ -36,6 +36,7 @@ test_that("tagme() bulk", {
   skip_if_no_server()
   skip_if_no_auth()
   unlink("project-176.motus") # For windows...
+  unlink(list.files(pattern = ".motus", full.names = TRUE)) # For windows...
   
   withr::local_options(motus.test.max = 5)
   withr::local_file(list("project-1.motus", "project-9.motus"))
