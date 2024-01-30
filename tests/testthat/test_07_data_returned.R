@@ -65,7 +65,8 @@ test_that("Tag data returned as expected - Proj 207", {
 test_that("Tag data returned as expected - Activity", {
   sample_auth()
   skip_if_no_server()
-  withr::local_file("project_176.motus")
+  unlink("project-176.motus") # For windows...
+  withr::local_file("project-176.motus")
   
   expect_message(tags <- withr::local_db_connection(
     tagme(projRecv = 176, new = TRUE))) %>%

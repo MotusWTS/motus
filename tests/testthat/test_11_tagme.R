@@ -35,6 +35,7 @@ test_that("tagme() - Receivers & skip nodeData as required", {
 test_that("tagme() bulk", {
   skip_if_no_server()
   skip_if_no_auth()
+  unlink("project-176.motus") # For windows...
   
   withr::local_options(motus.test.max = 5)
   withr::local_file(list("project-1.motus", "project-9.motus"))
@@ -97,6 +98,7 @@ test_that("tellme() - Receivers", {
   skip_on_cran()
   skip_if_no_server()
   skip_if_no_auth()
+  unlink("SG-3115BBBK1127.motus") # For windows...
   
   withr::local_file("SG-3115BBBK1127.motus")
   expect_silent(tellme("SG-3115BBBK1127", new = TRUE)) %>%
