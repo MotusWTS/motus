@@ -51,6 +51,7 @@ jobs:
             any::DT                 
             any::kableExtra
             any::raster
+            any::rms
           needs: website
 
       - name: Build site
