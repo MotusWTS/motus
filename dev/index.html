@@ -6,15 +6,15 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="Retrieve, filter, and visualize telemetry data from the Motus 
-    Wildlife Tracking System &lt;http://motus.org&gt;.">
+    Wildlife Tracking System &lt;https://motus.org&gt;.">
 <title>Fetch and use data from the Motus Wildlife Tracking System • motus</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Fetch and use data from the Motus Wildlife Tracking System">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Fetch and use data from the Motus Wildlife Tracking System">
 <meta property="og:description" content="Retrieve, filter, and visualize telemetry data from the Motus 
-    Wildlife Tracking System &lt;http://motus.org&gt;.">
+    Wildlife Tracking System &lt;https://motus.org&gt;.">
 <meta name="robots" content="noindex">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -29,7 +29,7 @@
     
     <a class="navbar-brand me-2" href="index.html">motus</a>
 
-    <small class="nav-text text-light me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">5.0.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">6.0.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,11 +69,11 @@
 </form>
 
       <ul class="navbar-nav">
-<li class="active nav-item">
-  <a class="nav-link" href="index.html">EN</a>
-</li>
 <li class="nav-item">
-  <a class="nav-link" href="fr/index.html">FR</a>
+  <a class="external-link nav-link" href="https://github.com/MotusWTS/motus/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
 </li>
       </ul>
 </div>
@@ -83,33 +83,42 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9">
+<!-- badges: end -->
 <div class="section level1">
 <div class="page-header"><h1 id="motus">motus<a class="anchor" aria-label="anchor" href="#motus"></a>
 </h1></div>
 <p align="center">
-<a href="https://birdscanada.org" class="external-link"><img src="https://github.com/MotusWTS/motus/blob/master/inst/assets/birds_canada_logo.png?raw=true" alt="Birds Canada Logo showing grey text 'Birds Canada' and 'Oiseaux Canada' on either side of a grey and yellow bird perched on a branch" width="40%"></a> <a href="https://motus.org" class="external-link"><img src="https://github.com/MotusWTS/motus/blob/master/inst/assets/motus_logo.png?raw=true" alt="Motus Logo showing blue text 'Motus Wildlife Tracking System' to the right of pale green images of a bat, bird and dragonfly at the ends of green curved lines"></a>
+<a href="https://www.birdscanada.org" class="external-link"><img src="https://github.com/MotusWTS/motus/blob/master/inst/assets/birds_canada_logo.png?raw=true" alt="Birds Canada Logo showing grey text 'Birds Canada' and 'Oiseaux Canada' on either side of a grey and yellow bird perched on a branch" width="40%"></a> <a href="https://motus.org" class="external-link"><img src="https://github.com/MotusWTS/motus/blob/master/inst/assets/motus_logo.png?raw=true" alt="Motus Logo showing blue text 'Motus Wildlife Tracking System' to the right of pale green images of a bat, bird and dragonfly at the ends of green curved lines"></a>
 </p>
 <p>An R package for handling <a href="https://motus.org" class="external-link">Motus</a> automated radio-telemetry data.</p>
-<p>See the <a href="https://MotusWTS.github.io/motus" class="external-link">motus package site</a> for detailed usage information.</p>
+<p>See the <a href="https://motuswts.github.io/motus/">motus package site</a> for detailed usage information.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>The easiest way to install motus is from Birds Canada’s R-universe:</p>
+<p>The easiest way to install motus is from Birds Canada’s <a href="https://birdscanada.r-universe.dev" class="external-link">R-Universe</a>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"motus"</span>, 
-                 repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>birdscanada <span class="op">=</span> <span class="st">'https://birdscanada.r-universe.dev'</span>,
-                           CRAN <span class="op">=</span> <span class="st">'https://cloud.r-project.org'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"motus"</span>, </span>
+<span>                 repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>birdscanada <span class="op">=</span> <span class="st">'https://birdscanada.r-universe.dev'</span>,</span>
+<span>                           CRAN <span class="op">=</span> <span class="st">'https://cloud.r-project.org'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>If you want to check out work-in-progress, you can install the development branches (betaX and sandbox) using <code>remotes</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>                     <span class="co"># if don't already have it</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"motusWTS/motus@beta3"</span><span class="op">)</span> <span class="co"># the beta branch for v3+</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>                     <span class="co"># if don't already have it</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"motusWTS/motus@beta3"</span><span class="op">)</span> <span class="co"># the beta branch for v3+</span></span></code></pre></div>
 <blockquote>
-<p>Running into problems? Check out the <a href="https://motuswts.github.io/motus/articles/troubleshoting.html" class="external-link">Troubleshooting article</a></p>
+<p>Running into problems? Check out the <a href="https://motuswts.github.io/motus/articles/troubleshooting.html">Troubleshooting article</a></p>
 </blockquote>
 </div>
 </div>
 
-  </main><aside class="col-md-3"><div class="license">
+  </main><aside class="col-md-3"><div class="links">
+<h2 data-toc-skip>Links</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/MotusWTS/motus/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/MotusWTS/motus/issues" class="external-link">Report a bug</a></li>
+</ul>
+</div>
+
+<div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
@@ -138,8 +147,10 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/MotusWTS/motus/actions" class="external-link"><img src="https://github.com/MotusWTS/motus/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://codecov.io/gh/MotusWTS/motus?branch=master" class="external-link"><img src="https://codecov.io/gh/MotusWTS/motus/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://birdscanada.r-universe.dev/" class="external-link"><img src="https://birdscanada.r-universe.dev/badges/:name" alt=":name status badge"></a></li>
+<li><a href="https://birdscanada.r-universe.dev/motus" class="external-link"><img src="https://birdscanada.r-universe.dev/badges/motus" alt="motus status badge"></a></li>
+<li><a href="https://github.com/MotusWTS/motus/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/MotusWTS/motus/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://app.codecov.io/gh/MotusWTS/motus?branch=master" class="external-link"><img src="https://app.codecov.io/gh/MotusWTS/motus/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>
 
@@ -154,7 +165,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
     </footer>

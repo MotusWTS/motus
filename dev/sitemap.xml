@@ -1,189 +1,198 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/CODE_DESIGN.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/CODE_DESIGN.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/LICENSE.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/articles/01-introduction.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/articles/01-introduction.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/articles/02-installing-packages.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/articles/02-installing-packages.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/articles/03-accessing-data.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/articles/03-accessing-data.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/articles/04-deployments.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/articles/04-deployments.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/articles/05-data-cleaning.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/articles/05-data-cleaning.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/articles/06-exploring-data.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/articles/06-exploring-data.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/articles/advanced-modelling.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/articles/advanced-modelling.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/articles/database-variables.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/articles/database-variables.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/articles/filtering.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/articles/deprecated-batches.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/articles/gps.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/articles/filtering.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/articles/index.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/articles/gps.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/articles/motus-data.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/articles/motus.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/articles/motus-data.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/articles/signal-strength.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/articles/motus.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/articles/troubleshooting.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/articles/signal-strength.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/articles/vanishing-bearings.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/articles/troubleshooting.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/authors.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/articles/vanishing-bearings.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/index.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/authors.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/news/index.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/index.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/activity.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/news/index.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/activityAll.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/activity.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/checkVersion.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/activityAll.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/clarify.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/args.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/createRunsFilter.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/checkVersion.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/deleteRunsFilter.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/clarify.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/deprecateBatches.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/createRunsFilter.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/filterByActivity.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/deleteRunsFilter.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/getAccess.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/deprecateBatches.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/getGPS.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/filterByActivity.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/getMotusDBSrc.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/getAccess.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/getRuns.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/getGPS.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/getRunsFilters.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/getMotusDBSrc.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/gpsAll.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/getRuns.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/index.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/getRunsFilters.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/listRunsFilters.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/gpsAll.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/metadata.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/motus.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/listRunsFilters.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/motusLogout.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/metadata.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/nodeData.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/motus.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/pipe.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/motusLogout.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/plotAllTagsCoord.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/nodeData.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/plotAllTagsSite.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/pipe.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/plotDailySiteSum.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/plotAllTagsCoord.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/plotRouteMap.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/plotAllTagsSite.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/plotSite.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/plotDailySiteSum.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/plotSiteSig.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/plotRouteMap.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/plotTagSig.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/plotSite.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/simSiteDet.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/plotSiteSig.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/siteSum.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/plotTagSig.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/siteSumDaily.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/points2Path.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/siteTrans.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/simSiteDet.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/sqliteToRDS.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/siteSum.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/sunRiseSet.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/siteSumDaily.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/tagSum.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/siteTrans.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/tagSumSite.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/srvTimeout.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/tagme.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/sunRiseSet.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/tellme.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/tagSum.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/tidyeval.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/tagSumSite.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/timeToSunriset.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/tagme.html</loc>
   </url>
   <url>
-    <loc>https://MotusWTS.github.io/motus/dev/dev/reference/writeRunsFilter.html</loc>
+    <loc>https://motuswts.github.io/motus/dev/reference/tagmeSample.html</loc>
+  </url>
+  <url>
+    <loc>https://motuswts.github.io/motus/dev/reference/tellme.html</loc>
+  </url>
+  <url>
+    <loc>https://motuswts.github.io/motus/dev/reference/timeToSunriset.html</loc>
+  </url>
+  <url>
+    <loc>https://motuswts.github.io/motus/dev/reference/writeRunsFilter.html</loc>
   </url>
 </urlset>
