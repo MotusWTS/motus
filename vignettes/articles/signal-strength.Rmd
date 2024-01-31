@@ -12,7 +12,7 @@ library(tidyverse)
 library(lubridate)
 library(patchwork)
 
-tags <- tagme(176, update = TRUE, new = FALSE, dir = "./data")
+tags <- tagme(176, dir = "./data")
 
 df_tags <- tbl(tags, "alltags") %>%
   collect() %>%
@@ -55,7 +55,7 @@ library(tidyverse)
 library(lubridate)
 library(patchwork)
 
-tags <- tagme(176, update = TRUE, new = TRUE)
+tags <- tagme(176, new = TRUE)
 ```
 
 Now let's filter the data, and create some extra variables to help us out. 

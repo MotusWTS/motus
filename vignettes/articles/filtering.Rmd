@@ -22,14 +22,14 @@ library(motus)
 library(tidyverse)
 library(lubridate)
 
-sql.motus <- tagme(176, update = TRUE, new = FALSE, dir = "./data/")
+sql_motus <- tagme(176, dir = "./data/")
 ```
 
 As runs are composed of sequences of hits, the longer the run the more confident we can be that it represents a true detection. 
 
 Run lengths (`runLen`) are included in the `alltags` view.
 ```{r}
-tbl(sql.motus, "alltags") %>%
+tbl(sql_motus, "alltags") %>%
   select(hitID, runID, batchID, motusTagID, runLen)
 ```
 
@@ -38,8 +38,8 @@ Sites with more background noise may be more prone to generating a high number o
 
 The `activity` table contains information on the number of runs (`numRuns`) and how many of these runs were particularly short (i.e. 2 hits = `run2` or 3 hits = `run3`, etc.) per hour (`hourBin`).
 ```{r}
-tbl(sql.motus, "activity") %>%
-  select(batchID, motusDeviceID, ant, year, month, day, hourBin, numRuns, run2, run3)
+tbl(sql_motus, "activity") %>%
+  select(batchID, motusDeviceID, ant, hourBin, numRuns, run2, run3)
 ```
 
 Therefore a good first pass filter should use both the length of a run and the amount of radio activity (number of short runs) at a given site to determine whether or not to remove a run of hits.
@@ -76,25 +76,25 @@ Currently the `motusFilter` contains just two values `0` or `1`.
 Runs with a `motusFilter` of `0` are considered invalid (i.e. have a low probability of being true detections) and can therefore be omitted. 
 
 ```{r}
-tbl(sql.motus, "runs")
+tbl(sql_motus, "runs")
 ```
 
 To omit runs identified as dubious by `motusFilter` we can use an `anti_join()` from the `dplyr` package.
 
 First identify invalid runs with a `motusFilter` of `0`:
 ```{r}
-bad_runs <- tbl(sql.motus, "runs") %>%
+bad_runs <- tbl(sql_motus, "runs") %>%
   filter(motusFilter == 0)
 ```
 
 Now use `anti_join()` to remove those runs from the `alltags` view:
 ```{r}
-alltags_filtered <- anti_join(tbl(sql.motus, "alltags"), bad_runs, by = "runID")
+alltags_filtered <- anti_join(tbl(sql_motus, "alltags"), bad_runs, by = "runID")
 ```
 
 To double check we can filter for short runs in the original `alltags` view
 ```{r}
-tbl(sql.motus, "alltags") %>%
+tbl(sql_motus, "alltags") %>%
   select(hitID, runID, batchID, motusTagID, runLen) %>%
   filter(runLen <= 3)
 ```
@@ -117,7 +117,7 @@ However, users can fine-tune the filter by adjusting these cutoffs.
 
 To get the same results as our above example with `motusFilter`, we can use `filterByActivity()` with the default arguments and only return `good` (`runLen` > 3) runs.
 ```{r}
-alltags_filtered2 <- filterByActivity(sql.motus, return = "good")
+alltags_filtered2 <- filterByActivity(sql_motus, return = "good")
 ```
 
 **Note** that `filterByActivity()` requires the SQLite database connection (not a flat data frame).
@@ -140,7 +140,7 @@ Alternatively we can change the default view used, so the `filterByActivity()` f
 **However**, on very large databases this could be slow.
 
 ```{r}
-alltags_filtered3 <- filterByActivity(sql.motus, return = "all", view = "alltagsGPS")
+alltags_filtered3 <- filterByActivity(sql_motus, return = "all", view = "alltagsGPS")
 ```
 
 
@@ -153,7 +153,7 @@ If you return `all` runs, you will also get a new column, `probability`, which r
 For example, the following code adds a `probability` column to the sample project data.
 
 ```{r}
-alltags_filtered4 <- filterByActivity(sql.motus, return = "all") %>%
+alltags_filtered4 <- filterByActivity(sql_motus, return = "all") %>%
   select(hitID, runID, batchID, motusTagID, runLen, probability)
 
 alltags_filtered4
@@ -167,7 +167,7 @@ from an hour which had more than 500 runs (`maxRuns`) and
 where at least 95% (`ratio`) of those runs have a run length of 2.
 
 ```{r}
-relaxed <- filterByActivity(sql.motus, minLen = 2, maxLen = 4, 
+relaxed <- filterByActivity(sql_motus, minLen = 2, maxLen = 4, 
                             maxRuns = 500, ratio = 0.95, 
                             return = "all")
 ```
@@ -180,7 +180,7 @@ from hours which have more than 50 runs (`maxRuns`) and
 where at least 75% (`ratio`) of those runs have a run length of 2. 
 
 ```{r}
-strict <- filterByActivity(sql.motus, minLen = 4, maxLen = 10, 
+strict <- filterByActivity(sql_motus, minLen = 4, maxLen = 10, 
                            maxRuns = 50, ratio = 0.75, 
                            return = "all")
 ```
@@ -198,7 +198,7 @@ Here we will collect and summarize by receiver and month maximum run lengths.
 We'll create a date/time column `time` from the `ts` column using `as_datetime()` from the lubridate package and we'll use the `month()` function to pull out months.
 
 ```{r, fig.asp = 4, fig.width = 5, out.width = "50%"}
-max_runlen <- tbl(sql.motus, "alltags") %>%
+max_runlen <- tbl(sql_motus, "alltags") %>%
   collect() %>%
   mutate(time = as_datetime(ts),
          month = month(time)) %>%

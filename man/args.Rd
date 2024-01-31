@@ -4,11 +4,27 @@
 \alias{args}
 \title{Common arguments}
 \arguments{
-\item{projRecv}{Numeric project code from motus.org, \emph{or} character receiver
+\item{projRecv}{Numeric. Project code from motus.org, \emph{or} character receiver
 serial number.}
 
-\item{src}{SQLite connection (result of \code{tagme(XXX)} or
-\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")})}
+\item{src}{SQLite connection. Result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}.}
+
+\item{df_src}{Data frame, SQLite connection, or SQLite table. An SQLite
+connection would be the result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}; an SQLite table would be
+the result of \code{dplyr::tbl(tags, "alltags")}; a data frame could be the
+result of \code{dplyr::tbl(tags, "alltags") \%>\% dplyr::collect()}.}
+
+\item{df}{Data frame. Could be the result of \code{dplyr::tbl(tags, "alltags") \%>\% dplyr::collect()}.}
+
+\item{lat}{Character. Name of column with latitude values, defaults to
+\code{recvDeployLat}.}
+
+\item{lon}{Character. Name of column with longitude values, defaults to
+\code{recvDeployLon}.}
+
+\item{ts}{Character. Name of column with timestamp values, defaults to \code{ts}.}
 
 \item{resume}{Logical. Resume a download? Otherwise the table is
 removed and the download is started from the beginning.}
@@ -23,6 +39,8 @@ removed and the download is started from the beginning.}
 
 \item{motusProjID}{Character. Optional project ID attached to the filter in
 order to share with other users of the same project.}
+
+\item{data}{Defunct, use \code{src}, \code{df_src}, or \code{df} instead.}
 }
 \description{
 Common arguments

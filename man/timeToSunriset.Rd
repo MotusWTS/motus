@@ -5,75 +5,63 @@
 \title{Obtain time to and from sunrise/sunset}
 \usage{
 timeToSunriset(
-  data,
+  df_src,
   lat = "recvDeployLat",
   lon = "recvDeployLon",
   ts = "ts",
-  units = "hours"
+  units = "hours",
+  data
 )
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltagsGPS", or a
-data.frame of detection data including at a minimum variables for
-date/time, latitude, and longitude}
+\item{df_src}{Data frame, SQLite connection, or SQLite table. An SQLite
+connection would be the result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}; an SQLite table would be
+the result of \code{dplyr::tbl(tags, "alltags")}; a data frame could be the
+result of \code{dplyr::tbl(tags, "alltags") \%>\% dplyr::collect()}.}
 
-\item{lat}{variable with latitude values, defaults to \code{recvDeployLat}}
+\item{lat}{Character. Name of column with latitude values, defaults to
+\code{recvDeployLat}}
 
-\item{lon}{variable with longitude values, defaults to \code{recvDeployLon}}
+\item{lon}{Character. Name of column with longitude values, defaults to
+\code{recvDeployLon}}
 
-\item{ts}{variable with time in UTC as numeric or POSIXct, defaults to ts}
+\item{ts}{Character. Name of column with time as numeric or POSIXct, defaults
+to \code{ts}}
 
-\item{units}{units to display time difference, defaults to "hours", options
-include "secs", "mins", "hours", "days", "weeks"}
+\item{units}{Character. Units to display time difference, defaults to
+"hours", options include "secs", "mins", "hours", "days", "weeks".}
+
+\item{data}{Defunct, use \code{src}, \code{df_src}, or \code{df} instead.}
 }
 \value{
-the original dataframe provided, with the following additional columns:
+Original data (as a flat data frame), with the following additional
+columns:
 \itemize{
-\item sunrise: sunrise time for the date and location provided by ts and
-\code{recvDeployLat}/\code{recvDeployLon} per row
-\item sunset: sunset time for the date and location provided by ts and
-\code{recvDeployLat}/\code{recvDeployLon} per row
-\item ts_to_set: time to next sunset after "ts", units default to "hours"
-\item ts_since_set: time to previous sunset since "ts", units default to "hours"
-\item ts_to_rise: time to next sunrise after "ts", units default to "hours"
-\item ts_since_rise: time to previous sunrise since "ts", units default to "hours"
+\item \code{sunrise} - Time of sunrise in \strong{UTC} for that row's date and location
+\item \code{sunset} - Time of sunset in \strong{UTC} for that row's date and location
+\item \code{ts_to_set} - Time to next sunset, in \code{units}
+\item \code{ts_since_set} - Time to previous sunset, in \code{units}
+\item \code{ts_to_rise} - Time to next sunrise after, in \code{units}
+\item \code{ts_since_rise} - Time to previous sunrise, in \code{units}
 }
 }
 \description{
-Creates and adds columns for time to, and time from sunrise/sunset based on a
-column of POSIXct dates/times dataframe must contain latitude, longitude, and
-a date/time variable
+Create and add columns for time to and time since sunrise/sunset to tag data.
+Can take a motus database table, but will always return a collected data
+frame. Requires data containing at least latitude, longitude, and time.
+}
+\details{
+Uses \code{sunRiseSet()} to perform sunrise/sunset calculates, see \code{?sunRiseSet}
+for details regarding how local dates are assessed from UTC timestamps.
 }
 \examples{
-# You can use either a selected tbl from .motus eg. "alltagsGPS", or a
-# data.frame, instructions to convert a .motus file to all formats are below.
+# Download sample project 176 to .motus database (username/password are "motus.sample")
+\dontrun{sql_motus <- tagme(176, new = TRUE)}
 
-# download and access data from project 176 in sql format
-# usename and password are both "motus.sample"
-\dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+# Or use example data base in memory
+sql_motus <- tagmeSample()
 
-# OR use example sql file included in `motus`
-sql.motus <- tagme(176, update = FALSE, 
-                   dir = system.file("extdata", package = "motus"))
-
-# convert sql file "sql.motus" to a tbl called "tbl.alltags"
-library(dplyr)
-tbl.alltags <- tbl(sql.motus, "alltagsGPS")
-
-# convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
-# let's also filter down to one day
-df.alltags <- tbl.alltags \%>\% 
-  collect() \%>\% 
-  mutate(time = lubridate::as_datetime(tsCorrected),
-         date = lubridate::as_date(time)) \%>\%
-  filter(date == "2015-10-31") \%>\%
-  as.data.frame()
-
-# Get sunrise and sunset information with units in minutse
-sunrise <- timeToSunriset(df.alltags, units = "mins")
-
-# Get sunrise and sunset information with units in hours using gps lat/lon
-# using data.frame df.alltags. NOTE: This only works if there are non-NA
-# gpsLat/gpsLon
-\dontrun{sunrise <- timeToSunriset(df.alltags, lat = "gpsLat", lon = "gpsLon")}
+# Get sunrise and sunset information for alltags view with units in minutes
+sunrise <- timeToSunriset(sql_motus, units = "mins")
 }

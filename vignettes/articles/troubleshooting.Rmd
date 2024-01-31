@@ -13,7 +13,7 @@ Occasionally users run into problems while trying to install or update `motus`. 
 
 1. Update all packages before the installation
 
-```{r}
+```{r eval = FALSE}
 library(remotes)
 update_packages()
 ```
@@ -23,7 +23,7 @@ update_packages()
 You can also try to set up a custom R library folder with `.libPaths()` and ensure that you have full write permissions on that folder, or try to start R in administrator (Windows) or SUDO mode (Linux/Ubuntu) and try installing again.
 
 To set a custom library folder for installing new packages:
-```{r}
+```{r eval = FALSE}
 .libPaths("C:/r-libraries/")
 ```
 
@@ -93,7 +93,7 @@ Most issues can be solved by either logging out, or by restarting R and resuming
 To resume your data download, run `tagme()` again, but do not include `new = TRUE`:
 
 ```{r, eval = FALSE}
-tagme(project.num, update = TRUE, dir = ...)
+tagme(project.num, dir = ...)
 ```
 
 If errors persist and you are unable to download your data, the server may be temporarily offline.
@@ -132,7 +132,7 @@ If it occurs during an active download, the connection will usually be maintaine
 However if the download stops, simply run `tagme()` again. 
 If that does not work, we suggest [logging out](#loggint-out-of-motus) of the motus package or restarting R and then [resuming your download](#resume-data-download).
 
-### I get an "Internal Server Error" message when using `tagme(..., update = TRUE)`
+### I get an "Internal Server Error" message when using `tagme(...)`
 
 If you get this message while updating your `.motus` file, use `tagme()` again to continue the download.
 
@@ -149,8 +149,8 @@ Another possibility is that your `.motus` database hasn't been updated to suppor
 To ensure that your `.motus` file is up-to-date with the `motus` package:
 
 ```{r, eval = FALSE}
-sql.motus <- tagme(project.num, dir= ...)
-checkVersion(sql.motus)
+sql_motus <- tagme(project.num, dir= ...)
+checkVersion(sql_motus)
 ```
 
 To correct any warnings, you should follow these steps:
@@ -179,14 +179,14 @@ To specify a location to save files from your working directory use `./` followe
 getwd() # show working directory, in this case it's "C:/Documents"
 
 # downloads data to your working directory
-tagme(proj.num, new = TRUE, update = TRUE)
+tagme(proj.num, new = TRUE)
 
 # downloads data to the data folder within your working directory
 # ie. the file path C:/Documents/data
-tagme(proj.num, new = TRUE, update = TRUE, dir = "./data/") 
+tagme(proj.num, new = TRUE, dir = "./data/") 
 
 # downloads data to the file path C:/Downloads
-tagme(proj.num, new = TRUE, update = TRUE, dir = "C:/Downloads") 
+tagme(proj.num, new = TRUE, dir = "C:/Downloads") 
 ```
 
 
@@ -196,7 +196,7 @@ Values like these should be ignored, you can replace these with `NA`, or insert 
 
 ```{r, eval = FALSE}
 ## to replace gpsLat/gpsLon values of NA, 0, or 999 with that of receiver deployment metadata in the alltags table, and read into a data.frame
-df.alltags <- tbl.alltags %>% 
+df_alltags <- tbl_alltags %>% 
   mutate(recvLat = if_else((is.na(gpsLat)|gpsLat == 0|gpsLat == 999), 
                            recvDeployLat, gpsLat), 
          recvLon = if_else((is.na(gpsLon)|gpsLon == 0|gpsLon == 999), 

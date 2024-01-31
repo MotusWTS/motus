@@ -17,7 +17,7 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
 
   projectID <- get_projRecv(src)
   batchID <- max_batch(src, projectID)
-  
+
   if(countOnly) {
     DBI::dbDisconnect(src)
     return(srvSizeOfUpdateForTagProject(projectID = projectID, 

@@ -20,38 +20,33 @@ defaults to \code{recvDeployLat}}
 Plot deployment (ordered by latitude) vs time (UTC) for each tag
 }
 \examples{
-# You can use either a selected tbl from .motus eg. "alltags", or a
-# data.frame, instructions to convert a .motus file to all formats are below.
+# Download sample project 176 to .motus database (username/password are "motus.sample")
+\dontrun{sql_motus <- tagme(176, new = TRUE)}
 
-# download and access data from project 176 in sql format
-# usename and password are both "motus.sample"
-\dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+# Or use example data base in memory
+sql_motus <- tagmeSample()
 
-# OR use example sql file included in `motus`
-sql.motus <- tagme(176, update = FALSE, 
-                   dir = system.file("extdata", package = "motus"))
-
-# convert sql file "sql.motus" to a tbl called "tbl.alltags"
+# convert sql file "sql_motus" to a tbl called "tbl_alltags"
 library(dplyr)
-tbl.alltags <- tbl(sql.motus, "alltags") 
+tbl_alltags <- tbl(sql_motus, "alltags") 
 
-# convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
-df.alltags <- tbl.alltags \%>\% 
+# convert the tbl "tbl_alltags" to a data.frame called "df_alltags"
+df_alltags <- tbl_alltags \%>\% 
   collect() \%>\% 
   as.data.frame() 
 
-# Plot detections of dataframe df.alltags by site ordered by latitude, with
+# Plot detections of dataframe df_alltags by site ordered by latitude, with
 # default 5 tags per panel
-plotAllTagsSite(df.alltags)
+plotAllTagsSite(df_alltags)
 
-# Plot detections of dataframe df.alltags by site ordered by latitude, with
+# Plot detections of dataframe df_alltags by site ordered by latitude, with
 # 10 tags per panel
-plotAllTagsSite(df.alltags, tagsPerPanel = 10)
+plotAllTagsSite(df_alltags, tagsPerPanel = 10)
 
-# Plot detections of tbl file tbl.alltags by site ordered by receiver
+# Plot detections of tbl file tbl_alltags by site ordered by receiver
 # deployment latitude
-plotAllTagsSite(tbl.alltags, coordinate = "recvDeployLon")
+plotAllTagsSite(tbl_alltags, coordinate = "recvDeployLon")
 
-# Plot tbl file tbl.alltags using 3 tags per panel for species Red Knot
-plotAllTagsSite(filter(tbl.alltags, speciesEN == "Red Knot"), tagsPerPanel = 3)
+# Plot tbl file tbl_alltags using 3 tags per panel for species Red Knot
+plotAllTagsSite(filter(tbl_alltags, speciesEN == "Red Knot"), tagsPerPanel = 3)
 }

@@ -1,14 +1,14 @@
 test_that("table fields match server (sample auth)", {
+  skip_if_no_server()
   sample_auth()
+  tags <- withr::local_db_connection(tagmeSample())
   
-  tags <- DBI::dbConnect(
-    RSQLite::SQLite(), 
-    system.file("extdata", "project-176.motus", package = "motus"))
-  
-  expect_named(srvActivityForAll(batchID = 53)[1,],
+  # TODO: Update once API updated
+  expect_named(srvActivityForAll(batchID = 53)[1,] %>% dplyr::select(-"year", -"month", -"day"),
                DBI::dbListFields(tags, "activityAll"), ignore.order = TRUE)
   
-  expect_named(srvActivityForBatches(batchID = 53)[1,],
+  # TODO: Update once API updated
+  expect_named(srvActivityForBatches(batchID = 53)[1,] %>% dplyr::select(-"year", -"month", -"day"),
                DBI::dbListFields(tags, "activity"), ignore.order = TRUE)
   
   expect_named(srvBatchesForTagProject(projectID = 176, batchID = 53)[1,],
@@ -26,21 +26,21 @@ test_that("table fields match server (sample auth)", {
   expect_named(srvGPSForTagProject(projectID = 176, batchID = 53, gpsID = 0)[1,],
                DBI::dbListFields(tags, "gps"), ignore.order = TRUE)
   
-  # Update once sample data has nodeData
+  # TODO: Update once sample data has nodeData
   #expect_named(
   #  srvNodes(projectID = 176, batchID = 53, nodeDataID = 0)[1,],
   #  c(DBI::dbListFields(tags, "nodeData"), "projectID"), ignore.order = TRUE)
 })
 
 test_that("table fields match server (local auth)", {
-
+  skip_if_no_server()
   skip_if_no_auth()
-  skip_if_no_file(f <- system.file("extdata", "project-4.motus", package = "motus"))
+  skip_if_no_file(f <- "project-4.motus")
+  tags <- withr::local_db_connection(tagmeSample(f))
   
-  tags <- DBI::dbConnect(RSQLite::SQLite(), f)
-  
+  # TODO: Update once API updated
   expect_named(
-    srvActivityForBatches(batchID = 53)[1,],
+    srvActivityForBatches(batchID = 53)[1,] %>% dplyr::select(-"year", -"month", -"day"),
     DBI::dbListFields(tags, "activity"), ignore.order = TRUE)
   
   expect_named(

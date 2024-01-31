@@ -4,49 +4,54 @@
 \alias{plotSite}
 \title{Plot all tags by site}
 \usage{
-plotSite(data, sitename = unique(data$recvDeployName))
+plotSite(df_src, sitename = NULL, ncol = NULL, nrow = NULL, data)
 }
 \arguments{
-\item{data}{a selected table from .motus data, eg. "alltagsGPS", or a
-data.frame of detection data including at a minimum variables for ts,
-antBearing, fullID, recvDeployName}
+\item{df_src}{Data frame, SQLite connection, or SQLite table. An SQLite
+connection would be the result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}; an SQLite table would be
+the result of \code{dplyr::tbl(tags, "alltags")}; a data frame could be the
+result of \code{dplyr::tbl(tags, "alltags") \%>\% dplyr::collect()}.}
 
-\item{sitename}{Character vector. Which sites to plot? Defaults to all unique
-sites.}
+\item{sitename}{Character vector. Subset of sites to plot. If \code{NULL}, all
+unique sites are plotted.}
+
+\item{ncol}{Numeric. Passed on to \code{ggplot2::facet_wrap()}}
+
+\item{nrow}{Numeric. Passed on to \code{ggplot2::facet_wrap()}}
+
+\item{data}{Defunct, use \code{src}, \code{df_src}, or \code{df} instead.}
 }
 \description{
 Plot tag ID vs time for all tags detected by site, coloured by antenna
-bearing
+bearing. Input is expected to be a data frame, database table, or database.
+The data must contain "ts", "antBearing", "fullID", "recvDeployName",
+"recvDeployLat", "recvDeployLon", and optionally "gpsLat" and "gpsLon". If
+GPS lat/lon are included, they will be used rather than recvDeployLat/Lon.
+These data are generally contained in the \code{alltags} or the \code{alltagsGPS}
+views. If a motus database is submitted, the \code{alltagsGPS} view will be used.
 }
 \examples{
-# You can use either a selected tbl from .motus eg. "alltagsGPS", or a
-# data.frame, instructions to convert a .motus file to all formats are below.
+# Download sample project 176 to .motus database (username/password are "motus.sample")
+\dontrun{sql_motus <- tagme(176, new = TRUE)}
 
-# download and access data from project 176 in sql format
-# usename and password are both "motus.sample"
-\dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+# Or use example data base in memory
+sql_motus <- tagmeSample()
 
-# OR use example sql file included in `motus`
-sql.motus <- tagme(176, update = FALSE, 
-                   dir = system.file("extdata", package = "motus"))
-
-# convert sql file "sql.motus" to a tbl called "tbl.alltags"
+# convert sql file "sql_motus" to a tbl called "tbl_alltags"
 library(dplyr)
-tbl.alltags <- tbl(sql.motus, "alltagsGPS") 
+tbl_alltags <- tbl(sql_motus, "alltagsGPS") 
 
-# convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
-df.alltags <- tbl.alltags \%>\% 
-  collect() \%>\% 
-  as.data.frame()
+# Plot all sites within file for tbl file tbl_alltags
+plotSite(tbl_alltags)
 
-# Plot all sites within file for tbl file tbl.alltags
-plotSite(tbl.alltags)
+# Plot only detections at a specific site; Piskwamish
+plotSite(tbl_alltags, sitename = "Piskwamish")
 
-# Plot only detections at a specific site; Piskwamish for data.frame
-# df.alltags
-plotSite(filter(df.alltags, recvDeployName == "Piskwamish"))
+# For more custom filtering, convert the tbl "tbl_alltags" to a data.frame called "df_alltags"
+df_alltags <- collect(tbl_alltags)
 
-#Plot only detections for specified tags for data.frame df.alltags
-plotSite(filter(df.alltags, motusTagID \%in\% c(16047, 16037, 16039)))
+# Plot only detections for specified tags for data.frame df_alltags
+plotSite(filter(df_alltags, motusTagID \%in\% c(16047, 16037, 16039)))
 
 }

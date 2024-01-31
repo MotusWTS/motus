@@ -21,10 +21,10 @@
 
 srvQuery <- function(API, params = NULL, JSON = FALSE, 
                      auth = TRUE, url = motus_vars$dataServerURL,
-                     timeout = 120, verbose = FALSE) {
+                     verbose = FALSE) {
   
   url <- file.path(url, API)
-  ua <- httr::user_agent(agent = "http://github.com/MotusWTS/motus")
+  ua <- httr::user_agent(agent = "https://github.com/MotusWTS/motus")
   
   # Set curl options
   httr::set_config(httr::accept_json())
@@ -56,11 +56,14 @@ srvQuery <- function(API, params = NULL, JSON = FALSE,
     
     if(verbose) message(url, "\n", json)
     
+    timeout <- getOption("motus.timeout")
+    
     api_query <- function(url, json, ua, timeout) {
       httr::POST(url, body = list("json" = json), encode = "form",
                  httr::config(http_content_decoding = 0), ua, 
                  httr::timeout(timeout))
     }
+    
     resp <- try(api_query(url, json, ua, timeout), silent = TRUE)
     
     if(inherits(resp, "try-error")) {
@@ -72,7 +75,8 @@ srvQuery <- function(API, params = NULL, JSON = FALSE,
         resp <- try(api_query(url, json, ua, timeout), silent = TRUE)
         if(inherits(resp, "try-error") && 
            stringr::str_detect(resp, "Timeout was reached")) {
-          stop("The server is not responding, please try again later.", 
+          stop("The server did not respond within ", timeout, "s.\n",
+               "Use a longer timeout with `srvTimeout()` or try again later.", 
                call. = FALSE)
         } else if(inherits(resp, "try-error")) {
           stop(resp, call. = FALSE)
@@ -90,7 +94,8 @@ srvQuery <- function(API, params = NULL, JSON = FALSE,
         p <- list(errorMsg = "Internal Server Error")
       } else p <- list(errorMsg = "Unknown Error")
       
-      stop(msg_fmt("Motus API request failed [{httr::status_code(resp)}]",
+      code <- httr::status_code(resp)
+      stop(msg_fmt("Motus API request failed [{code}]",
                    "\n{p$errorMsg}"), 
            call. = FALSE)
     }

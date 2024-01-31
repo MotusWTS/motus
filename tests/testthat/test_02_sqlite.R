@@ -1,6 +1,6 @@
 test_that("Create DB, includes any new tables", {
-  unlink("temp.motus")
-  temp <- DBI::dbConnect(RSQLite::SQLite(), "temp.motus") %>%
+  withr::local_file("temp.motus")
+  temp <- withr::local_db_connection(DBI::dbConnect(RSQLite::SQLite(), "temp.motus")) %>%
     expect_silent()
   expect_length(DBI::dbListTables(temp), 0)
   expect_silent(ensureDBTables(temp, 176, quiet = TRUE))
@@ -12,15 +12,12 @@ test_that("Create DB, includes any new tables", {
   
   # Expect Deprecated
   expect_true("deprecated" %in% t)
-  
-  disconnect(temp)
-  unlink("temp.motus")
 })
 
 # Create DB, includes any new fields -----------------------------------------
 test_that("Create DB, includes any new fields", {
-  unlink("temp.motus")
-  temp <- DBI::dbConnect(RSQLite::SQLite(), "temp.motus") %>%
+  withr::local_file("temp.motus")
+  temp <- withr::local_db_connection(DBI::dbConnect(RSQLite::SQLite(), "temp.motus")) %>%
     expect_silent()
   expect_length(DBI::dbListTables(temp), 0)
   
@@ -28,7 +25,8 @@ test_that("Create DB, includes any new fields", {
     temp,
     c("CREATE TABLE admInfo (db_version TEXT, data_version TEXT);",
       "INSERT INTO admInfo (db_version, data_version) VALUES('2000-01-01', 0);"))
-  expect_message(ensureDBTables(temp, 176, quiet = FALSE))
+  expect_message(ensureDBTables(temp, 176, quiet = FALSE)) %>%
+    suppressMessages()
   
   expect_silent(ensureDBTables(temp, 176, quiet = TRUE))
   expect_length(t <- DBI::dbListTables(temp), 32)
@@ -72,17 +70,13 @@ test_that("Create DB, includes any new fields", {
   # Expect new columns in recvDeps
   expect_true(all(c("stationName", "stationID") %in% 
                     DBI::dbListFields(temp, "recvDeps")))
-
-  disconnect(temp)
-  unlink("temp.motus")
 })
 
 
 # views created correctly -------------------------------------------------
 test_that("Views created correctly", {
-  file.copy(system.file("extdata", "project-176.motus", package = "motus"), ".")
-  file.copy("project-176.motus", "project-176-backup.motus")
-  tags <- tagme(176, update = FALSE, new = FALSE)
+  withr::local_file("project-176.motus")
+  tags <- withr::local_db_connection(tagmeSample())
   
   views <- c("allambigs", "alltags", "alltagsGPS", "allruns", "allrunsGPS")
   
@@ -124,47 +118,42 @@ test_that("Views created correctly", {
   expect_equal(unique(at$runID), unique(ar$runID))
   expect_equal(unique(atGPS$batchID), unique(arGPS$batchID))
   expect_equal(unique(atGPS$runID), unique(arGPS$runID))
-  
-  disconnect(tags)
-  unlink("project-176.motus")
-  file.rename("project-176-backup.motus", "project-176.motus")
 })
 
 
 # new tables have character ant and port ----------------------------------
 test_that("new tables have character ant and port", {
-  tags <- DBI::dbConnect(RSQLite::SQLite(), "project-176.motus")
-  expect_is(dplyr::tbl(tags, "runs") %>% 
+  tags <- withr::local_db_connection(tagmeSample())
+  
+  expect_type(dplyr::tbl(tags, "runs") %>% 
               dplyr::collect() %>% 
               dplyr::pull("ant"), 
             "character")
   
-  expect_is(dplyr::tbl(tags, "antDeps") %>% 
+  expect_type(dplyr::tbl(tags, "antDeps") %>% 
               dplyr::collect() %>% 
               dplyr::pull("port"), 
             "character")
   
-  disconnect(tags)
-  unlink("project-176.motus")
-  
   # For receivers
   skip_if_no_auth()
-  f <- system.file("extdata", "SG-3115BBBK0782.motus", package = "motus")
+  f <- "SG-3115BBBK0782.motus"
   skip_if_no_file(f)
-  tags <- DBI::dbConnect(RSQLite::SQLite(), f)
-  expect_is(dplyr::tbl(tags, "pulseCounts") %>% 
+  withr::local_file(f)
+  tags <- withr::local_db_connection(tagmeSample(f))
+  expect_type(dplyr::tbl(tags, "pulseCounts") %>% 
               dplyr::collect() %>% 
               dplyr::pull("ant"), 
             "character")
-  disconnect(tags)
 })
 
 
 # missing tables recreated ------------------------------------------------
 test_that("Missing tables recreated silently", {
   sample_auth()
-  file.copy(system.file("extdata", "project-176.motus", package = "motus"), ".")
-  tags <- tagme(176, new = FALSE, update = FALSE)
+  withr::local_file("project-176.motus")
+  skip_if_no_file("project-176.motus", copy = TRUE)
+  tags <- withr::local_db_connection(tagme(176, update = FALSE))
   
   t <- DBI::dbListTables(tags)
   t <- t[t != "admInfo"] # Don't try removing admInfo table
@@ -181,31 +170,28 @@ test_that("Missing tables recreated silently", {
   }
   
   # Add tables, no errors
-  expect_message(tags <- tagme(176, new = FALSE, update = TRUE))
+  skip_if_no_server()
+  expect_message(tags <- withr::local_db_connection(
+    tagme(176))) %>%
+    suppressMessages()
   
   for(i in t) expect_true(DBI::dbExistsTable(tags, !!i))
-  
-  disconnect(tags)
-  unlink("project-176.motus")
 })
 
 
 # check for custom views before updating ----------------------------------
 test_that("check for custom views before update", {
-  # Get clean database
   sample_auth()
-  unlink("project-176.motus")
-  unlink(list.files(pattern = "project-176_custom_views"))
-  file.copy(system.file("extdata", "project-176.motus", package = "motus"), ".")
+  withr::local_file("project-176.motus")
+  withr::local_file(paste0("project-176_custom_views_", Sys.Date(), ".log"))
+  skip_if_no_file("project-176.motus", copy = TRUE)
+  tags <- withr::local_db_connection(DBI::dbConnect(RSQLite::SQLite(), "project-176.motus"))
   
   # Add custom view
-  tags <- DBI::dbConnect(RSQLite::SQLite(), "project-176.motus")
   DBI_Execute(
     tags, 
     "CREATE VIEW alltags_fast AS SELECT hitID, runID, ts FROM alltags WHERE sig = 52;")
   DBI_Execute(tags, "UPDATE admInfo SET db_version = '2019-01-01 00:00:00'")
-  disconnect(tags)
-  tags <- tagme(176, update = FALSE)
   
   # Test for handling of custom view
   expect_error(checkViews(src = tags, update_sql = sql_versions$sql, response = 2),
@@ -220,10 +206,9 @@ test_that("check for custom views before update", {
                                       "CREATE VIEW alltags_fast")))
   expect_false("alltags_fast" %in% DBI::dbListTables(tags))
    
-  expect_message(tagme(176, update = TRUE), "updateMotusDb started")
-  
-  disconnect(tags)
-  unlink("project-176.motus")
-  unlink(paste0("project-176_custom_views_", Sys.Date(), ".log"))
+  skip_if_no_server()
+  expect_message(withr::local_db_connection(tagme(176)), 
+                 "updateMotusDb started") %>%
+    suppressMessages()
 })
 

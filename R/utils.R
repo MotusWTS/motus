@@ -19,10 +19,30 @@ skip_if_no_auth <- function() {
 }
 
 
-skip_if_no_file <- function(file) {
+skip_if_no_file <- function(file, system = TRUE, copy = FALSE) {
+  if(system) file <- system.file("extdata", file, package = "motus")
   if(!file.exists(file)) {
     testthat::skip("File not available")
   }
+  if(copy) file.copy(file, ".")
+}
+
+skip_if_no_server <- function() {
+  sample_auth()
+  srvTimeout(5)
+  
+  srv <- suppressMessages(try(
+    httr::GET(file.path(motus_vars$dataServerURL, "api_info"), 
+              httr::timeout(srvTimeout()[[1]])), silent = TRUE))
+  if(inherits(srv, "try-error")) {
+    srv <- suppressMessages(try(
+      httr::GET(file.path(motus_vars$dataServerURL, "api_info"), 
+                httr::timeout(srvTimeout()[[1]])), silent = TRUE))
+    if(inherits(srv, "try-error")) {
+      testthat::skip("Server Offline")
+    }
+  }
+  srvTimeout(reset = TRUE)
 }
 
 is_testing <- function() {
@@ -71,8 +91,11 @@ is_proj <- function(x) stringr::str_detect(x, "^[0-9]+$")
 # Get project or receiver from source name
 get_projRecv <- function(src) {
   check_src(src)
-  
   projRecv <- basename(src@dbname)
+  if(projRecv == ":memory:") {
+    stop("Cannot use an in-memory data base for this operation (i.e. cannot use `tagmeSample()`)", 
+         call. = FALSE)
+  }
   if(stringr::str_detect(projRecv, "project-[0-9]+.motus")) {
     projRecv <- as.integer(stringr::str_extract(projRecv, "[0-9]+"))
   } else if(stringr::str_detect(projRecv, ".motus")) {
@@ -108,22 +131,52 @@ getAccess <- function() {
 }
 
 
-requiredCols <- function(x, req, name = "data") {
-  cols <- colnames(x)
-  if(any(!req %in% cols)) {
-    stop("Required columns/fields missing from '", name, "': ",
-         paste0(req[!req %in% cols], collapse = ", "))
-  }
+#' Create an in-memory copy of sample tags data
+#' 
+#' For running examples and testing out motus functionality, it can be useful to
+#' work with sample data set. You can download the most up-to-date copy of this
+#' data yourself (to `project-176.motus`) with the username and password both
+#' "motus.sample".
+#' 
+#' `sql_motus <- tagme(176, new = TRUE)`
+#' 
+#' Or you can use this helper function to grab an in-memory copy bundled in this
+#' package.
+#' 
+#' @param db Character. Name of sample data base to load. The sample data is
+#'   "project-176.motus".
+#'
+#' @return In memory version of the sample database.
+#' @export
+#'
+#' @examples
+#' # Explore the sample data
+#' tags <- tagmeSample()
+#' dplyr::tbl(tags, "activity")
+#' dplyr::tbl(tags, "alltags")
+
+tagmeSample <- function(db = "project-176.motus") {
+  sample <- DBI::dbConnect(
+    RSQLite::SQLite(),
+    system.file("extdata", db, package = "motus"))
+  
+  memory <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+  
+  RSQLite::sqliteCopyDatabase(sample, memory)
+  memory
 }
 
-get_sample_data <- function() {
+#' Internal function for use in docs
+#'
+#' @noRd
+get_sample_data <- function(dir = "./data/") {
   sample_auth() # Use motus sample authorizations
-  if(!dir.exists("./data/")) dir.create("./data/")
+  if(!dir.exists(dir)) dir.create(dir)
   message("Copying sample project")
   file.copy(system.file("extdata", "project-176.motus", package = "motus"), 
-            "./data/")
+            dir)
   message("Loading sample project")
-  tagme(projRecv = 176, new = FALSE, update = TRUE, dir = "./data/")
+  tagme(projRecv = 176, dir = dir)
 }
 
 disconnect <- function(src, warnings = FALSE) {

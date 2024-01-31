@@ -36,8 +36,9 @@ pageDataByBatch <- function(src, table, resume = FALSE,
     
     # Check if actually new, or just the end of the record
     if(nrow(b) > 0 && resume && identical(last_batch, batches[length(batches)])) {
+      bt <- batches[1]
       t <- dplyr::tbl(src, table) %>%
-        dplyr::filter(.data$batchID == batches[1]) %>%
+        dplyr::filter(.data$batchID == .env$bt) %>%
         dplyr::collect() %>%
         as.data.frame()
       if(identical(t, b)) {

@@ -36,7 +36,7 @@ updateMotusDb <- function(src, quiet = FALSE) {
   # Get the current src version
   src_version <- dplyr::tbl(src, "admInfo") %>%
     dplyr::pull(.data$db_version) %>%
-    as.POSIXct(., tz = "UTC")
+    lubridate::ymd_hms(truncated = 3)
 
   update_versions <- dplyr::filter(sql_versions, date > src_version) %>%
     dplyr::arrange(.data$date)

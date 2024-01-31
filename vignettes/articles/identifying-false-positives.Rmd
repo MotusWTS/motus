@@ -9,6 +9,8 @@ knitr::opts_chunk$set(echo = TRUE, fig.width = 12, fig.height = 8)
 library(ggplot2)
 theme_set(theme_bw(base_size = 18))
 
+# Get and update sample data to avoid messages later
+db <- motus:::get_sample_data(dir = ".")
 ```
 
 **Note:** *This is a living document that may be updated in the future to incorporate improved knowledge about predictors of false positives and further validation of training datasets.*
@@ -50,7 +52,7 @@ theme_set(theme_bw(base_size = 18))
 #   note: if you haven't downloaded sample dataset before, use 'new = T'
 #   login name and password are both 'motus.sample'
 #   specify 'dir =' to save elsewhere than working directory
-db <- tagme(176, new = FALSE, update = FALSE, forceMeta = FALSE)
+db <- tagme(176, update = FALSE)
 
 t <- tbl(db, "alltags")
 
@@ -60,7 +62,7 @@ df <- t %>%
          motusTagID, port, runLen, tagModel, tagBI, tagDeployID,
          deviceID, recvDeployID, recvDeployLat, recvDeployLon, recv, recvSiteName) %>%
   arrange(motusTagID, ts) %>%                                                  # order data frame
-  collect()                                                # convert into flat data frame
+  collect() %>%                                               # convert into flat data frame
   mutate(ts = as_datetime(ts)) %>%      # convert ts into date-time format
   distinct()
 

@@ -9,14 +9,14 @@ library(tidyverse)
 motus:::get_sample_data()
 options(width = 90)
 knitr::opts_chunk$set(cache = TRUE)
-sql.motus <- tagme(176, update = TRUE, new = FALSE, dir = "./data/")
+sql_motus <- tagme(176, dir = "./data/")
 ```
 
 ```{r, message = FALSE, eval = FALSE}
 library(motus)
 library(tidyverse)
 
-sql.motus <- tagme(176, update = TRUE, new = TRUE, dir = "./data/")
+sql_motus <- tagme(176, new = TRUE, dir = "./data/")
 ```
 
 As work progresses and data are fine-tuned, batches of data may be re-run on the 
@@ -29,7 +29,7 @@ When the user updates their data, they'll have the new batches, but will also ha
 Users can see which batches have been deprecated in the `deprecated` table:
 
 ```{r}
-tbl(sql.motus, "deprecated")
+tbl(sql_motus, "deprecated")
 ```
 
 Each `batchID` listed represented a deprecated batch. The column `removed` indicates
@@ -39,7 +39,7 @@ This table is updated every time you update your data with a call to `tagme()`.
 If you want to update it again (without removing anything), you can use
 
 ```{r, collapse = TRUE}
-sql.motus <- deprecateBatches(sql.motus, fetchOnly = TRUE)
+sql_motus <- deprecateBatches(sql_motus, fetchOnly = TRUE)
 ```
 
 
@@ -47,7 +47,7 @@ To see where these batches are in your data, you can filter for the IDs in a
 specific table
 
 ```{r}
-tbl(sql.motus, "alltags") %>%
+tbl(sql_motus, "alltags") %>%
   filter(batchID %in% c(6000, 6001, 6002))
 ```
 
@@ -62,7 +62,7 @@ Just in case, `deprecateBatches()` will ask you if you are sure you want to
 remove the batches before proceeding. 
 
 ```{r, eval = FALSE}
-sql.motus <- deprecateBatches(sql.motus)
+sql_motus <- deprecateBatches(sql_motus)
 ```
 
 ```
@@ -76,21 +76,21 @@ Selection: 1
 ```
 
 ```{r, echo = FALSE, collapse = TRUE}
-sql.motus <- deprecateBatches(sql.motus, ask = FALSE)
+sql_motus <- deprecateBatches(sql_motus, ask = FALSE)
 ```
 
 
 After removal, you can see that the batches have been removed from the data
 
 ```{r}
-tbl(sql.motus, "alltags") %>%
+tbl(sql_motus, "alltags") %>%
   filter(batchID %in% c(6000, 6001, 6002))
 ```
 
 Also that the `deprecated` table now lists `removed` as 1.
 
 ```{r}
-tbl(sql.motus, "deprecated")
+tbl(sql_motus, "deprecated")
 ```
 
 

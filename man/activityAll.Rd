@@ -7,8 +7,8 @@
 activityAll(src, resume = FALSE)
 }
 \arguments{
-\item{src}{SQLite connection (result of \code{tagme(XXX)} or
-\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")})}
+\item{src}{SQLite connection. Result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}.}
 
 \item{resume}{Logical. Resume a download? Otherwise the table is
 removed and the download is started from the beginning.}
@@ -20,23 +20,20 @@ batch. Batches with large numbers of hits may indicate interference and thus
 unreliable hits.
 }
 \examples{
+# Download sample project 176 to .motus database (username/password are "motus.sample")
+\dontrun{sql_motus <- tagme(176, new = TRUE)}
 
-# download and access data from project 176 in sql format
-# usename and password are both "motus.sample"
-\dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
-
-# OR use example sql file included in `motus`
-sql.motus <- tagme(176, update = FALSE, 
-                   dir = system.file("extdata", package = "motus"))
+# Or use example data base in memory
+sql_motus <- tagmeSample()
   
 # Get all activity
-\dontrun{sql.motus <- activityAll(sql.motus)}
+\dontrun{sql_motus <- activityAll(sql_motus)}
 
 # Access 'activityAll' table
 library(dplyr)
-a <- tbl(sql.motus, "activityAll")
+a <- tbl(sql_motus, "activityAll")
   
 # If interrupted and you want to resume
-\dontrun{sql.motus <- activityAll(sql.motus, resume = TRUE)}
+\dontrun{sql_motus <- activityAll(sql_motus, resume = TRUE)}
 
 }

@@ -23,7 +23,7 @@ dbInsertOrReplace <- function(src, name, df, replace = TRUE) {
     refcols <- subset(fields$name, fields$name %in% names(df))
 
     ## reorder the fields in df to match the table
-    df <- df[, subset(fields$name, fields$name %in% names(df))]
+    df <- df[fields$name[fields$name %in% names(df)]]
     
     tmp <- basename(tempfile("zztmp"))
 

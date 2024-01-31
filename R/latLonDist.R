@@ -18,7 +18,7 @@
 #'   
 #'   Vincenty inverse formula - T Vincenty, "Direct and Inverse Solutions of
 #'   Geodesics on the Ellipsoid with application of nested equations", Survey
-#'   Review, vol XXII no 176, 1975 http://www.ngs.noaa.gov/PUBS_LIB/inverse.pdf
+#'   Review, vol XXII no 176, 1975 https://www.ngs.noaa.gov/PUBS_LIB/inverse.pdf
 #'   
 #' @noRd
 

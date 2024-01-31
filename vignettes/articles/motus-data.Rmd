@@ -357,7 +357,7 @@ receiver.  A batch record includes these items:
  - first and last timestamp of the raw data processed in this batch
 
 Each new batch downloaded will include hits of one or more
-of the users's tags (or someone's tags, if the batch is for a "receiver"
+of the user's tags (or someone's tags, if the batch is for a "receiver"
 database).
 
 A new batch might also include some GPS fixes, so that the user knows

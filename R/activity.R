@@ -15,21 +15,18 @@
 #'   records.
 #'
 #' @examples
+#' # Download sample project 176 to .motus database (username/password are "motus.sample")
+#' \dontrun{sql_motus <- tagme(176, new = TRUE)}
 #' 
-#' # download and access data from project 176 in sql format
-#' # usename and password are both "motus.sample"
-#' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
-#' 
-#' # OR use example sql file included in `motus`
-#' sql.motus <- tagme(176, update = FALSE, 
-#'                    dir = system.file("extdata", package = "motus"))
-#'   
+#' # Or use example data base in memory
+#' sql_motus <- tagmeSample()
+#'    
 #' # Access 'activity' table
 #' library(dplyr)
-#' a <- tbl(sql.motus, "activity")
+#' a <- tbl(sql_motus, "activity")
 #'   
 #' # If interrupted and you want to resume
-#' \dontrun{my_tags <- activity(sql.motus, resume = TRUE)}
+#' \dontrun{my_tags <- activity(sql_motus, resume = TRUE)}
 #'
 #' @export
 

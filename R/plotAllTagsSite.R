@@ -12,40 +12,35 @@
 #' @export
 #'
 #' @examples
-#' # You can use either a selected tbl from .motus eg. "alltags", or a
-#' # data.frame, instructions to convert a .motus file to all formats are below.
+#' # Download sample project 176 to .motus database (username/password are "motus.sample")
+#' \dontrun{sql_motus <- tagme(176, new = TRUE)}
 #' 
-#' # download and access data from project 176 in sql format
-#' # usename and password are both "motus.sample"
-#' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+#' # Or use example data base in memory
+#' sql_motus <- tagmeSample()
 #' 
-#' # OR use example sql file included in `motus`
-#' sql.motus <- tagme(176, update = FALSE, 
-#'                    dir = system.file("extdata", package = "motus"))
-#' 
-#' # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+#' # convert sql file "sql_motus" to a tbl called "tbl_alltags"
 #' library(dplyr)
-#' tbl.alltags <- tbl(sql.motus, "alltags") 
+#' tbl_alltags <- tbl(sql_motus, "alltags") 
 #' 
-#' # convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
-#' df.alltags <- tbl.alltags %>% 
+#' # convert the tbl "tbl_alltags" to a data.frame called "df_alltags"
+#' df_alltags <- tbl_alltags %>% 
 #'   collect() %>% 
 #'   as.data.frame() 
 #' 
-#' # Plot detections of dataframe df.alltags by site ordered by latitude, with
+#' # Plot detections of dataframe df_alltags by site ordered by latitude, with
 #' # default 5 tags per panel
-#' plotAllTagsSite(df.alltags)
+#' plotAllTagsSite(df_alltags)
 #' 
-#' # Plot detections of dataframe df.alltags by site ordered by latitude, with
+#' # Plot detections of dataframe df_alltags by site ordered by latitude, with
 #' # 10 tags per panel
-#' plotAllTagsSite(df.alltags, tagsPerPanel = 10)
+#' plotAllTagsSite(df_alltags, tagsPerPanel = 10)
 #' 
-#' # Plot detections of tbl file tbl.alltags by site ordered by receiver
+#' # Plot detections of tbl file tbl_alltags by site ordered by receiver
 #' # deployment latitude
-#' plotAllTagsSite(tbl.alltags, coordinate = "recvDeployLon")
+#' plotAllTagsSite(tbl_alltags, coordinate = "recvDeployLon")
 #' 
-#' # Plot tbl file tbl.alltags using 3 tags per panel for species Red Knot
-#' plotAllTagsSite(filter(tbl.alltags, speciesEN == "Red Knot"), tagsPerPanel = 3)
+#' # Plot tbl file tbl_alltags using 3 tags per panel for species Red Knot
+#' plotAllTagsSite(filter(tbl_alltags, speciesEN == "Red Knot"), tagsPerPanel = 3)
 
 ## grouping code taken from sensorgnome package
 plotAllTagsSite <- function(data, coordinate = "recvDeployLat", tagsPerPanel = 5){
@@ -90,8 +85,12 @@ plotAllTagsSite <- function(data, coordinate = "recvDeployLat", tagsPerPanel = 5
   data <- data[order(data$round_ts),] ## order by time
   out <- by(data, INDICES = data$tagGroupFactor, FUN = function(m){
     m <- droplevels(m)
-    m <- ggplot2::ggplot(m, ggplot2::aes_string(x = "round_ts", y = "sitelat", colour = "fullID", group = "fullID"))
-    p <- ggplot2::ggplot(data, ggplot2::aes(x = "round_ts", y = "sitelat", col = "fullID", group = "fullID"))
+    m <- ggplot2::ggplot(m, ggplot2::aes(
+      x = .data[["round_ts"]], y = .data[["sitelat"]], 
+      colour = .data[["fullID"]], group = .data[["fullID"]]))
+    p <- ggplot2::ggplot(data, ggplot2::aes(
+      x = .data[["round_ts"]], y = .data[["sitelat"]], 
+      col = .data[["fullID"]], group = .data[["fullID"]]))
     m + ggplot2::geom_line() + ggplot2::geom_point(pch = 21) + 
       ggplot2::theme_bw() +
       ggplot2::labs(title = "Detection time vs Site (ordered by latitude) by Tag", 

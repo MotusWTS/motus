@@ -24,37 +24,32 @@
 #' 
 #'
 #' @examples
-#' # You can use either a selected tbl from .motus eg. "alltagsGPS", or a
-#' # data.frame, instructions to convert a .motus file to all formats are below.
+#' # Download sample project 176 to .motus database (username/password are "motus.sample")
+#' \dontrun{sql_motus <- tagme(176, new = TRUE)}
 #' 
-#' # download and access data from project 176 in sql format
-#' # usename and password are both "motus.sample"
-#' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+#' # Or use example data base in memory
+#' sql_motus <- tagmeSample()
 #' 
-#' # OR use example sql file included in `motus`
-#' sql.motus <- tagme(176, update = FALSE, 
-#'                    dir = system.file("extdata", package = "motus"))
-#' 
-#' # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+#' # convert sql file "sql_motus" to a tbl called "tbl_alltags"
 #' library(dplyr)
-#' tbl.alltags <- tbl(sql.motus, "alltagsGPS") 
+#' tbl_alltags <- tbl(sql_motus, "alltagsGPS") 
 #' 
-#' # convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
-#' df.alltags <- tbl.alltags %>% 
+#' # convert the tbl "tbl_alltags" to a data.frame called "df_alltags"
+#' df_alltags <- tbl_alltags %>% 
 #'   collect() %>% 
 #'   as.data.frame() 
 #' 
 #' # Create site summaries for all sites within detection data with time in
-#' # default hours using data.frame df.alltags
-#' site_summary <- siteSum(tbl.alltags)
+#' # default hours using data.frame df_alltags
+#' site_summary <- siteSum(tbl_alltags)
 #' 
 #' # Create site summaries for only select sites with time in minutes
-#' sub <- filter(df.alltags, recvDeployName %in% 
+#' sub <- filter(df_alltags, recvDeployName %in% 
 #'                 c("Niapiskau", "Netitishi", "Old Cur", "Washkaugou"))
 #' site_summary <- siteSum(sub, units = "mins")
 #'
 #' # Create site summaries for only a select species, Red Knot
-#' site_summary <- siteSum(filter(df.alltags, speciesEN == "Red Knot"))
+#' site_summary <- siteSum(filter(df_alltags, speciesEN == "Red Knot"))
 
 siteSum <- function(data, units = "hours"){
   data <- dplyr::select(data, "motusTagID", "sig", "recvDeployLat", "recvDeployLon", 
@@ -85,11 +80,11 @@ siteSum <- function(data, units = "hours"){
                            num.tags = length(unique(.data$motusTagID)),
                            num.det = length(.data$ts))
   
-  detections <- ggplot2::ggplot(data = data, ggplot2::aes_string(x = "recvDeployName", y = "num.det")) +
+  detections <- ggplot2::ggplot(data = data, ggplot2::aes(x = .data[["recvDeployName"]], y = .data[["num.det"]])) +
     ggplot2::geom_bar(stat = "identity") + ggplot2::theme_bw() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)) +  ## make x-axis labels on a 45 deg angle to read more easily
     ggplot2::labs(title = "Total number of detections per recvDeployName, across all tags", x= "Site", y = "Total detections") ## changes x- and y-axis label
-  tags <- ggplot2::ggplot(data = data, ggplot2::aes_string(x = "recvDeployName", y = "num.tags")) +
+  tags <- ggplot2::ggplot(data = data, ggplot2::aes(x = .data[["recvDeployName"]], y = .data[["num.tags"]])) +
     ggplot2::geom_bar(stat = "identity") + 
     ggplot2::theme_bw() + ## creates bar plot by recvDeployName
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)) + ## make x-axis labels on a 45 deg angle to read more easily

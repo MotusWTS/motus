@@ -1,97 +1,131 @@
 #' General summary of detections for each tag
 #'
-#' Creates a summary for each tag of it's first and last detection time, first
-#' and last detection site, length of time between first and last detection,
-#' straight line distance between first and last detection site, rate of
-#' movement, and bearing
-#'
-#' @param data a selected table from .motus data, eg. "alltagsGPS", or a
-#'   data.frame of detection data including at a minimum variables for
-#'   motusTagID, fullID, recvDeployLat, recvDeployLon, recvDeployName, ts,
-#'   gpsLat, gpsLon
+#' Creates a summary for each tag of it's first and last detection time (`ts`),
+#' first and last detection site, length of time between first and last
+#' detection, straight line distance between first and last detection site, rate
+#' of movement, and bearing. Lat/lons are taken from `gpsLat`/`gpsLon`, or if
+#' missing, from `recvDeployLat`/`recvDeployLon`. Bearing is calculated using
+#' the `geosphere::bearing()` function.
+#' 
+#' @inheritParams args
+#' 
 #' @export
 #'
-#' @return a data.frame with these columns:
+#' @return A flat data frame with the following for each tag:
 #' 
-#' - fullID: fullID of Motus registered tag
-#' - first_ts: time of first detection of tag
-#' - last_ts: time of last detection of tag
-#' - first_site: first detection site of tag
-#' - last_site: last detection site of tag
-#' - lat.x: latitude of first deteciton site of tag
-#' - lon.x: longitude of first deteciton site of tag
-#' - lat.y: latitude of last deteciton site of tag
-#' - lon.y: longitude of last deteciton site of tag
-#' - tot_ts: length of time between first and last detection of tag (in seconds)
-#' - dist: total straight line distance between first and last detection site (in metres), see latLonDist function in sensorgnome package for details
-#' - rate: overall rate of movement (tot_ts/dist), in metres/second
-#' - bearing: bearing between first and last detection sites, see bearing function in geosphere package for more details
+#' - `fullID` - `fullID` of Motus registered tag
+#' - `first_ts` - Time (`ts`) of first detection
+#' - `last_ts` - Time (`ts`) of last detection
+#' - `first_site` - First detection site (`recvDeployName`)
+#' - `last_site` - Last detection site (`recvDeployName`)
+#' - `recvLat.x` - Latitude of first detection site (`gpsLat` or `recvDeployLat`)
+#' - `recvLon.x` - Longitude of first detection site (`gpsLon` or `recvDeployLon`)
+#' - `recvLat.y` - Latitude of last detection site (`gpsLat` or `recvDeployLat`)
+#' - `recvLon.y` - Longitude of last detection site (`gpsLon` or `recvDeployLon`)
+#' - `tot_ts` - Time between first and last detection (in seconds)
+#' - `dist` - Straight line distance between first and last detection site (in metres)
+#' - `rate` - Overall rate of movement (`tot_ts`/`dist`), in metres/second
+#' - `bearing` - Bearing between first and last detection sites
+#' - `num_det` - Number of detections summarized
 #'
 #' @examples
-#' # You can use either a selected tbl from .motus eg. "alltagsGPS", or a
-#' # data.frame, instructions to convert a .motus file to all formats are below.
 #' 
-#' # download and access data from project 176 in sql format
-#' # usename and password are both "motus.sample"
-#' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+#' # Download sample project 176 to .motus database (username/password are "motus.sample")
+#' \dontrun{sql_motus <- tagme(176, new = TRUE)}
 #' 
-#' # use example sql file included in `motus`
-#' sql.motus <- tagme(176, update = FALSE, 
-#'                    dir = system.file("extdata", package = "motus"))
+#' # Or use example data base in memory
+#' sql_motus <- tagmeSample()
 #' 
-#' # convert sql file "sql.motus" to a tbl called "tbl.alltags"
+#' # Summarize tags
+#' tag_summary <- tagSum(sql_motus)
+#' 
+#' # For specific SQLite table/view (needs gpsLat/gpsLon) --------------
 #' library(dplyr)
-#' tbl.alltags <- tbl(sql.motus, "alltagsGPS") 
+#' tbl_alltagsGPS <- tbl(sql_motus, "alltagsGPS") 
+#' tag_summary <- tagSum(tbl_alltagsGPS)
 #' 
-#' # convert the tbl "tbl.alltags" to a data.frame called "df.alltags"
-#' df.alltags <- tbl.alltags %>% 
-#'   collect() %>% 
-#'   as.data.frame()
+#' # For a flattened data frame ----------------------------------------
+#' df_alltagsGPS <- collect(tbl_alltagsGPS)
+#' tag_summary <- tagSum(df_alltagsGPS)
 #' 
-#' # Create tag summary for all tags within detection data using tbl file
-#' # tbl.alltags
-#' tag_summary <- tagSum(tbl.alltags)
-#' 
-#' # Create site summaries for only select tags using tbl file tbl.alltags
-#' tag_summary <- tagSum(filter(tbl.alltags, 
-#'                              motusTagID %in% c(16047, 16037, 16039)))
-#'
-#' # Create site summaries for only a select species using data.frame df.alltags
-#' tag_summary <- tagSum(filter(df.alltags, speciesEN == "Red Knot"))
+#' # Can be filtered, e.g., for only a few tags
+#' tag_summary <- tagSum(filter(tbl_alltagsGPS, motusTagID %in% c(16047, 16037, 16039)))
 
-tagSum <- function(data){
-  data <- data %>% dplyr::collect() %>% as.data.frame()
-  data <- dplyr::mutate(
-    data,
-    recvLat = dplyr::if_else((is.na(.data$gpsLat)|.data$gpsLat == 0|.data$gpsLat ==999),
-                             .data$recvDeployLat,
-                             .data$gpsLat),
-    recvLon = dplyr::if_else((is.na(.data$gpsLon)|.data$gpsLon == 0|.data$gpsLon == 999),
-                             .data$recvDeployLon,
-                             .data$gpsLon),
-    recvDeployName = paste(.data$recvDeployName, 
-                           round(.data$recvLat, digits = 1), sep = "_" ),
-    recvDeployName = paste(.data$recvDeployName,
-                           round(.data$recvLon, digits = 1), sep = ", "),
-    ts = lubridate::as_datetime(.data$ts, tz = "UTC"))
+tagSum <- function(df_src, data){
+
+  # TODO: When sp evolution messages resolved, remove 
+  #      `suppressPackageStartupMessages()` from geosphere functions
   
-  grouped <- dplyr::group_by(data, .data$fullID)
-  tmp <- dplyr::summarise(grouped,
-                          first_ts=min(.data$ts),
-                          last_ts=max(.data$ts),
-                          tot_ts = difftime(max(.data$ts), min(.data$ts), units = "secs"),
-                          num_det = length(.data$ts)) ## total time in seconds
-  tmp <- merge(tmp, subset(data, select = c("ts", "fullID", "recvDeployName", "recvLat", "recvLon")),
-               by.x = c("first_ts", "fullID"), by.y = c("ts", "fullID"), all.x = TRUE)
-  tmp <- unique(merge(tmp, subset(data, select = c("ts", "fullID", "recvDeployName", "recvLat", "recvLon")),
-                      by.x = c("last_ts", "fullID"), by.y = c("ts", "fullID"), all.x = TRUE))
-  tmp <- dplyr::rename(tmp, first_site = .data$recvDeployName.x, last_site = .data$recvDeployName.y)
-  tmp$dist <- with(tmp, latLonDist(recvLat.x, recvLon.x, recvLat.y, recvLon.y)) ## distance in meters
-  tmp$rate <- with(tmp, dist/(as.numeric(tot_ts))) ## rate of travel in m/s
-  tmp$bearing <- with(tmp, geosphere::bearing(matrix(c(recvLon.x, recvLat.x), ncol=2),
-                                              matrix(c(recvLon.y, recvLat.y), ncol=2))) ## bearing (see package geosphere for help)
-  #  tmp$rhumbline_bearing <- with(tmp, geosphere::bearingRhumb(matrix(c(recvLon.x, recvLat.x), ncol=2),
-  #                                                        matrix(c(recvLon.y, recvLat.y), ncol=2))) ## rhumbline bearing (see package geosphere for help)
-  tmp[c("fullID", "first_ts", "last_ts", "first_site", "last_site", "recvLat.x", "recvLon.x",
-        "recvLat.y", "recvLon.y", "tot_ts", "dist", "rate", "bearing", "num_det")]
+  # Deprecate data - 2023-09
+  if(!missing(data)) {
+    warning("Argument `data` is deprecated in favour of `df_src`", call. = FALSE)
+    df_src <- data
+  }
+  
+  # Checks
+  df <- check_df_src(
+    df_src, 
+    cols = c("fullID", "recvDeployName", "recvDeployLat", "recvDeployLon", 
+             "gpsLat", "gpsLon", "ts"), 
+    view = "alltagsGPS")
+  
+  df <- df %>%
+    dplyr::mutate(
+      recvLat = dplyr::if_else(
+        is.na(.data[["gpsLat"]]) | .data[["gpsLat"]] == 0 | .data[["gpsLat"]] == 999,
+        .data[["recvDeployLat"]], .data[["gpsLat"]]),
+      recvLon = dplyr::if_else(
+        is.na(.data[["gpsLon"]]) | .data[["gpsLon"]] == 0 | .data[["gpsLon"]] == 999,
+        .data[["recvDeployLon"]], .data[["gpsLon"]]),
+      recvDeployName = paste(.data[["recvDeployName"]], 
+                             round(.data[["recvLat"]], digits = 1), sep = "_" ),
+      recvDeployName = paste(.data[["recvDeployName"]],
+                             round(.data[["recvLon"]], digits = 1), sep = ", "),
+      ts = lubridate::as_datetime(.data[["ts"]], tz = "UTC"))
+  
+  tmp <- df %>%
+    dplyr::group_by(.data[["fullID"]]) %>%
+    dplyr::summarise(
+      first_ts = min(.data[["ts"]]),
+      last_ts = max(.data[["ts"]]),
+      # Total time in seconds
+      tot_ts = as.numeric(difftime(max(.data[["ts"]]), min(.data[["ts"]]), units = "secs")),
+      # Number of detections
+      num_det = length(.data$ts))
+  
+  # Add in first detection
+  tmp <- dplyr::left_join(
+    tmp, dplyr::select(df, "ts", "fullID", "recvDeployName", "recvLat", "recvLon"),
+    by = c("first_ts" = "ts", "fullID"))
+  
+  # Add in last detection
+  tmp <- dplyr::left_join(
+    tmp, dplyr::select(df, "ts", "fullID", "recvDeployName", "recvLat", "recvLon"),
+    by = c("last_ts" = "ts", "fullID"))
+  
+  # Clean up and calculations
+  tmp <- dplyr::distinct(tmp) %>%
+    dplyr::rename("first_site" = "recvDeployName.x", 
+                  "last_site" = "recvDeployName.y") %>%
+    dplyr::mutate(
+      # Distance in metres
+      dist = latLonDist(.data[["recvLat.x"]], .data[["recvLon.x"]],
+                        .data[["recvLat.y"]], .data[["recvLon.y"]]),
+      # Rate of travel in m/s
+      rate = .data[["dist"]]/(as.numeric(.data[["tot_ts"]])),
+      # Bearing (see package geosphere for help)
+      bearing = 
+        suppressPackageStartupMessages( # TODO: Remove when sp evolution complete
+          geosphere::bearing(
+            matrix(c(.data[["recvLon.x"]], .data[["recvLat.x"]]), ncol = 2),
+            matrix(c(.data[["recvLon.y"]], .data[["recvLat.y"]]), ncol = 2))))
+  
+  tmp %>%
+    dplyr::select("fullID", 
+                  "first_ts", "last_ts", 
+                  "first_site", "last_site", 
+                  "recvLat.x", "recvLon.x",
+                  "recvLat.y", "recvLon.y", 
+                  "tot_ts", "dist", "rate", "bearing", "num_det") %>%
+    dplyr::arrange(.data[["fullID"]], .data[["first_ts"]])
 }

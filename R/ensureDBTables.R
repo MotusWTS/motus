@@ -116,7 +116,7 @@ makeAdmInfo <- function(src) {
   DBI_Execute(
     src, 
     "INSERT INTO admInfo (db_version, data_version) ",
-    "values ({max(sql_versions$date)}, {motus_vars$dataVersion})")
+    "values ({as.character(max(sql_versions$date))}, {motus_vars$dataVersion})")
 }
 
 makeProjBatch <- function(src, projRecv) {

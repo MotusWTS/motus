@@ -14,8 +14,8 @@ writeRunsFilter(
 )
 }
 \arguments{
-\item{src}{SQLite connection (result of \code{tagme(XXX)} or
-\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")})}
+\item{src}{SQLite connection. Result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}.}
 
 \item{filterName}{Character. Unique name given to the filter}
 

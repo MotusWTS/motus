@@ -1,128 +1,112 @@
 #' Obtain sunrise and sunset times
 #'
-#' Creates and adds a sunrise and sunset column to a data.frame containing
-#' latitude, longitude, and a date/time as POSIXct or numeric.
+#' Create and add sunrise and sunset columns to tag data. Can take a motus
+#' database table, but will always return a collected data frame. Requires data
+#' containing at least latitude, longitude, and time. 
+#' 
+#' Note that this will always return the sunrise and sunset of the *local* date.
+#' For example, 2023-01-01 04:00:00 in Central North American time is 2023-01-01
+#' in UTC, but 2023-01-01 20:00:00 is actually the following date in UTC.
+#' Because Motus timestamps are UTC, times are first converted to their local time
+#' zone time using the lat/lon coordinates before extracting the date. Thus:
+#' 
+#' - A UTC timestamp of 1672624800 for Winnipeg, Canada
+#'   is 2023-01-02 02:00:00 UTC and 2023-01-01 20:00:00 local time
+#' - Therefore `sunRiseSet()` calculates the sunrise/sunset times for 2023-01-01 
+#'   (not for 2023-01-02)
+#' - These sunrise/sunset times are returned in UTC: 2023-01-01 14:27:50 UTC and
+#'   2023-01-01 22:38:30 UTC
+#' - Note that the UTC timestamp 2023-01-02 02:00:00 is later than the sunset 
+#'   time of 2023-01-01 22:38:30 UTC.
+#'   This makes sense, as we know that the timestamp is ~8pm local time, 
+#'   well after sunset in the winter for that date.
+#' 
+#' @inheritParams args
 #'
-#' @param data a selected table from .motus detection data, eg. "alltags", or a
-#'   data.frame of detection data including at a minimum variables for
-#'   date/time, latitude, and longitude
-#' @param lat variable with latitude values, defaults to `recvDeployLat`
-#' @param lon variable with longitude values, defaults to `recvDeployLon`
-#' @param ts variable with time in UTC as numeric or POSIXct, defaults to `ts`
-#'
-#' @return the original dataframe provided, with the following additional
+#' @return Original data (as a flat data frame), with the following additional
 #'   columns:
 #'   
-#' - sunrise: sunrise time for the date and location provided by `ts` and lat/lon
-#' per row
-#' - sunset: sunset time for the date and location provided by `ts` and lat/lon
-#' per row
+#' - `sunrise` - Time of sunrise in **UTC** for that row's date and location
+#' - `sunset` - Time of sunset in **UTC** for that row's date and location
 #'
 #' @examples
-#' # You can use either a selected tbl from .motus eg. "alltags", or a
-#' # data.frame, instructions to convert a .motus file to all formats are below.
+#' # Download sample project 176 to .motus database (username/password are "motus.sample")
+#' \dontrun{sql_motus <- tagme(176, new = TRUE)}
 #' 
-#' # download and access data from project 176 in sql format
-#' # usename and password are both "motus.sample"
-#' \dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+#' # Or use example data base in memory
+#' sql_motus <- tagmeSample()
 #' 
-#' # OR use example sql file included in `motus`
-#' sql.motus <- tagme(176, update = FALSE, 
-#'                    dir = system.file("extdata", package = "motus"))
+#' # For SQLite Data base-----------------------------------------------
+#' sun <- sunRiseSet(sql_motus)
 #' 
-#' # Extract alltags, collect (flatten to data frame), add sunrise/sunset cols:
-#' sun <- sunRiseSet(sql.motus)
-#' 
-#' # For other views, extract them first:
+#' # For specific SQLite table/view ------------------------------------
 #' library(dplyr)
-#' tbl.alltagsGPS <- tbl(sql.motus, "alltagsGPS") 
+#' tbl_alltagsGPS <- tbl(sql_motus, "alltagsGPS") 
+#' sun <- sunRiseSet(tbl_alltagsGPS)
 #' 
-#' # Add sunrise/sunset (after flattening to data frame)
-#' sun <- sunRiseSet(tbl.alltagsGPS)
+#' # For a flattened data frame ----------------------------------------
+#' df_alltagsGPS <- collect(tbl_alltagsGPS)
+#' sun <- sunRiseSet(df_alltagsGPS)
 #' 
-#' # Or, submit a flattened data frame:
-#' df.alltagsGPS <- collect(tbl.alltagsGPS)
-#' 
-#' # Add sunrise/sunset
-#' sun <- sunRiseSet(df.alltagsGPS)
-#' 
-#' # Get sunrise and sunset information from tbl.alltags using gps lat/lon
-#' # Note this only works if there are non-NA values in gpsLat/gpsLon
-#' \dontrun{sun <- sunRiseSet(tbl.alltagsGPS, lat = "gpsLat", lon = "gpsLon")}
+#' # Using alternate lat/lons ------------------------------------------
+#' # Get sunrise and sunset information from tbl_alltags using gps lat/lon
+#' # Note this will only work if there are non-NA values in gpsLat/gpsLon
+#' \dontrun{sun <- sunRiseSet(tbl_alltagsGPS, lat = "gpsLat", lon = "gpsLon")}
 #' 
 #' @export
 
-sunRiseSet <- function(data, lat = "recvDeployLat", lon = "recvDeployLon", ts = "ts"){
-  if(inherits(data, "SQLiteConnection")) {
-    message("'data' is a complete motus data base, using 'alltags' view")
-    data <- dplyr::tbl(data, "alltags")
-  }
-  if(!is.data.frame(data) && !dplyr::is.tbl(data)) {
-    stop("'data' must be a data frame, table/view (e.g., alltags), ",
-         "or motus SQLite database (see ?sunRiseSet for examples)", call. = FALSE)
-  }
-     
-  if(!requireNamespace("lutz", quietly = TRUE)) {
-    stop("The package 'lutz' is required to calculate sunrise/sunset times.\n", 
-         "You can install it with 'install.packages(\"lutz\")'", call. = FALSE)
-  }
+sunRiseSet <- function(df_src, lat = "recvDeployLat", lon = "recvDeployLon", 
+                       ts = "ts", data){
 
-  requiredCols(data, req = c(lat, lon, ts))
+  # Deprecate data - 2023-09
+  if(!missing(data)) {
+    warning("Argument `data` is deprecated in favour of `df_src`", call. = FALSE)
+    df_src <- data
+  }
   
-  data <- data %>%
-    dplyr::collect() %>%
-    dplyr::mutate(time_sun = lubridate::as_datetime(.data[[ts]], tz = "UTC"))
+  # Checks
+  df <- check_df_src(df_src, cols = c(lat, lon, ts))
   
-  if(all(is.na(data[[lat]])) | all(is.na(data[[lon]]))) {
+  if(all(is.na(df[[lat]])) | all(is.na(df[[lon]]))) {
     stop("No data with non-missing coordinates in '", lat, "' and '", lon, "'", 
          call. = FALSE)
   }
   
-  tz <- data %>%
-    dplyr::select("hitID", !!lat, !!lon) %>%
+  # Convert ts to time
+  df <- dplyr::mutate(df, .time_utc = lubridate::as_datetime(.data[[ts]], tz = "UTC"))
+
+  # Get timezone of location 
+  tz <- df %>%
+    dplyr::select(dplyr::all_of(c(lat, lon))) %>%
     dplyr::distinct() %>%
     dplyr::filter(!is.na(.data[[lat]]) & !is.na(.data[[lon]])) %>%
-    dplyr::mutate(tz_sun = lutz::tz_lookup_coords(.data[[lat]], .data[[lon]], warn = FALSE)) %>%
-    tidyr::nest(data = c(-"tz_sun")) %>%
-    dplyr::mutate(tz_sun = purrr::map_dbl(
-      .data$tz_sun, 
+    dplyr::mutate(.tz = lutz::tz_lookup_coords(.data[[lat]], .data[[lon]], warn = FALSE)) %>%
+    tidyr::nest(data = -c(".tz")) %>%
+    dplyr::mutate(.tz = purrr::map_dbl(
+      .data[[".tz"]],
       ~lutz::tz_offset("2021-01-01", .)$utc_offset_h)) %>%
     tidyr::unnest("data")
   
-  data <- data %>%
-    dplyr::left_join(dplyr::select(tz, "tz_sun", "hitID"), by = "hitID") %>%
-    dplyr::mutate(date_sun = lubridate::floor_date(.data$time_sun + 
-                                                 lubridate::hours(.data$tz_sun), 
-                                               unit = "day"))
+  # Calculate local date based on timezone
+  # i.e. Jan 1st 8pm Winnipeg is Jan 2nd 2am in UTC, local date is Jan 1st
+  df <- df %>%
+    dplyr::left_join(tz, by = c(lat, lon)) %>%
+    dplyr::mutate(
+      .date = .data[[".time_utc"]] + lubridate::hours(.data[[".tz"]]),
+      .date = lubridate::floor_date(.data[[".date"]], unit = "day"),
+      .date = lubridate::as_date(.data[[".date"]]))
   
-  sun <- data %>%
-    dplyr::select(.data[[lon]], .data[[lat]], .data$date_sun) %>%
-    dplyr::filter(!is.na(.data$date_sun), !is.na(.data[[lon]]), !is.na(.data[[lat]])) %>%
+  # Get the sunrise/set times in UTC but for the correct date
+  sun <- df %>%
+    dplyr::select(dplyr::all_of(c(lon, lat, ".date"))) %>%
+    dplyr::filter(!is.na(.data[[".date"]]), !is.na(.data[[lon]]), !is.na(.data[[lat]])) %>%
     dplyr::distinct() %>%
-    dplyr::mutate(sunrise = sunriset(.data[[lon]], .data[[lat]], .data$date_sun, 
-                                     direction = "sunrise"),
-                  sunset = sunriset(.data[[lon]], .data[[lat]], .data$date_sun,
-                                    direction = "sunset"))
-                  
-  data %>%
-    dplyr::left_join(sun, by = c(lat, lon, "date_sun")) %>%
-    dplyr::select(-"time_sun", -"date_sun", -"tz_sun")
-}
-
-sunriset <- function(lon, lat, time, direction) {
-  maptools::sunriset(crds = as.matrix(cbind(lon, lat)), 
-                     dateTime = time,  
-                     POSIXct.out = TRUE, 
-                     direction = direction)$time
-}
-
-get_date <- function(x, tz) {
-  if(!is.na(tz)) {
-    d <- lubridate::as_date(lubridate::with_tz(x, tz = tz)) %>%
-      lubridate::force_tz("UTC") 
-  } else d <- as.Date(NA)
-  d
-  # sunriset only uses the input TZ to determine output TZ, 
-  # not for actual sunrise/set calculations
-}
+    dplyr::rename("lat" = !!lat, "lon" = !!lon, "date" = ".date") %>%
+    suncalc::getSunlightTimes(data = ., keep = c("sunrise", "sunset"), tz = "UTC")
   
+  df %>%
+    dplyr::left_join(
+      sun, by = stats::setNames(c("lat", "lon", "date"),
+                                c(lat, lon, ".date"))) %>%
+    dplyr::select(-".time_utc", -".date", -".tz")
+}

@@ -5,35 +5,48 @@
 \title{Map of tag routes and sites coloured by id}
 \usage{
 plotRouteMap(
+  src,
+  maptype = "osm",
+  zoom = NULL,
+  start_date = NULL,
+  end_date = NULL,
+  lim_lat = NULL,
+  lim_lon = NULL,
   data,
-  zoom = 3,
-  lat = NULL,
-  lon = NULL,
-  maptype = "terrain",
-  recvStart = NULL,
-  recvEnd = NULL
+  lat,
+  lon,
+  recvStart,
+  recvEnd
 )
 }
 \arguments{
-\item{data}{a .motus sql file}
+\item{src}{SQLite connection. Result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}.}
 
-\item{zoom}{Integer.  Values between 3 and 21, 3 being continent level, 10
-being city-scale}
+\item{maptype}{Character. Map tiles to use. Must be one of \code{rosm::osm.types()},
+such as \code{osm}, \code{stamenbw}, etc. Most map tiles require attribution for
+publication, see details.}
 
-\item{lat}{Numeric vector. Top and bottom latitude bounds. If NULL (default)
-this is calculated from the data}
+\item{zoom}{Integer. Override the calculated zoom level to increase or
+decrease the resolution of the map tiles.}
 
-\item{lon}{Numeric vector. Left and right longitude bounds. If NULL
-(default) this is calculated from the data}
+\item{start_date}{Character. Optional start date for routes.}
 
-\item{maptype}{Character. Map type to display, can be: "terrain" , "toner",
-"watercolor", or any other option available to \code{ggmap::get_stamenmap()}}
+\item{end_date}{Character. Optional end date for routes.}
 
-\item{recvStart}{Character. Start date for date range of active receivers. If
-\code{NULL} uses the full data range}
+\item{lim_lat}{Numeric vector. Optional latitudinal plot limits.}
 
-\item{recvEnd}{Character. End date for date range of active receivers. If
-\code{NULL} uses the full data range}
+\item{lim_lon}{Numeric vector. Optional longitudinal plot limits.}
+
+\item{data}{Defunct, use \code{src}, \code{df_src}, or \code{df} instead.}
+
+\item{lat}{Defunct}
+
+\item{lon}{Defunct}
+
+\item{recvStart}{Defunct}
+
+\item{recvEnd}{Defunct}
 }
 \description{
 Google map of routes of Motus tag detections coloured by ID.  User defines a
@@ -41,24 +54,23 @@ date range to show points for receivers that were operational at some point
 during the date range.
 }
 \details{
-By default this function uses Stamen maps
+By default this function uses OSM maps (Open Street Map). OSM and
+many other map tiles are released under specific licences, which generally
+require that you give attribution at a minimum. See
+\href{https://www.openstreetmap.org/copyright}{OSM} for more details on their
+tiles, but remember to check what other groups require if you use their
+tiles.
 }
 \examples{
-\dontshow{if (requireNamespace("ggmap", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-# You must use a .motus sql file, instructions to load using tagme() are
-# below
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# Download sample project 176 to .motus database (username/password are "motus.sample")
+\dontrun{sql_motus <- tagme(176, new = TRUE)}
 
-# download and access data from project 176 in sql format
-# usename and password are both "motus.sample"
-\dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
+# Or use example data base in memory
+sql_motus <- tagmeSample()
 
-
-# OR use example sql file included in `motus`
-sql.motus <- tagme(176, update = FALSE, 
-                   dir = system.file("extdata", package = "motus"))
-
-# Plot routemap of all detection data, with "terrain" maptype, and receivers
+# Plot route map of all detection data, with "osm" maptype, and receivers
 # active between 2016-01-01 and 2017-01-01
-plotRouteMap(sql.motus, recvStart = "2016-01-01", recvEnd = "2016-12-31")
+plotRouteMap(sql_motus, start_date = "2016-01-01", end_date = "2016-12-31")
 \dontshow{\}) # examplesIf}
 }

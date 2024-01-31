@@ -1,87 +1,66 @@
+# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
+# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    branches:
-      - master
-      - beta
-      
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  release:
+    types: [published]
+  workflow_dispatch:
+
 name: pkgdown
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   pkgdown:
     runs-on: ubuntu-latest
+    # Only restrict concurrency for non-PR jobs
+    concurrency:
+      group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-pandoc@v2
 
-      - uses: r-lib/actions/setup-pandoc@v1
-
-      - uses: r-lib/actions/setup-r-dependencies@v1
+      - uses: r-lib/actions/setup-r@v2
         with:
-          extra-packages: >
-            circular
-            DT
-            geosphere
-            kableExtra
-            maps
-            mapproj
-            pander
-            patchwork
-            pkgdown
-            remotes
-            rgdal
-            rgeos
-            rnaturalearth
-            tidyverse
+          use-public-rspm: true
+          extra-repositories: 'https://birdscanada.r-universe.dev https://ropensci.r-universe.dev'
+
+# kableExtra For database-variables TODO: necessary?
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: |
+            any::pkgdown
+            local::.
+            any::rnaturalearth
+            any::rnaturalearthdata
+            any::rnaturalearthhires 
+            any::patchwork          
+            any::motusData          
+            any::circular           
+            any::tidyverse          
+            any::DT                 
+            any::kableExtra
+            any::raster
+            any::rms
           needs: website
 
-      - name: Install dependencies
-        run: |
-          install.packages(c("motusData", "rnaturalearthhires", "rnaturalearthdata"), repos = c(BirdsCanada = 'https://birdscanada.r-universe.dev', ropensci = 'https://ropensci.r-universe.dev',  CRAN = 'https://cloud.r-project.org'))
+      - name: Build site
+        run: pkgdown::build_site_github_pages(lazy = TRUE)
         shell: Rscript {0}
 
-      - name: Install package
-        run: R CMD INSTALL .
-
-      - name: Deploy English Docs
-        if: contains(github.ref, 'master')
-        run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          cp _pkgdown_en.yml _pkgdown.yml
-          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
-          rm _pkgdown.yml
-      - name: Deploy French Docs
-        if: contains(github.ref, 'master')
-        run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          cp _pkgdown_fr.yml _pkgdown.yml
-          cp pkgdown/README_fr.md pkgdown/index.md
-          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
-          rm _pkgdown.yml
-          rm pkgdown/index.md
-      - name: Deploy English DEV Docs
-        if: contains(github.ref, 'beta')
-        run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          cp _pkgdown_en.yml _pkgdown.yml
-          sed -i 's/mode: release/mode: dev/g' _pkgdown.yml
-          sed -i 's/motus\//motus\/dev/g' _pkgdown.yml
-          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
-          rm _pkgdown.yml
-      - name: Deploy French DEV Docs
-        if: contains(github.ref, 'beta')
-        run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          cp _pkgdown_fr.yml _pkgdown.yml
-          cp pkgdown/README_fr.md pkgdown/index.md
-          sed -i 's/destination: fr/destination: dev\/fr/g' _pkgdown.yml
-          sed -i 's/motus\/fr/motus\/dev\/fr/g' _pkgdown.yml
-          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
-          rm _pkgdown.yml
-          rm pkgdown/index.md
+      - name: Deploy to GitHub pages 🚀
+        uses: JamesIves/github-pages-deploy-action@v4.4.1
+        with:
+          clean: false
+          branch: gh-pages
+          folder: docs

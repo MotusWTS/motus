@@ -14,8 +14,8 @@ getRuns(
 )
 }
 \arguments{
-\item{src}{SQLite connection (result of \code{tagme(XXX)} or
-\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")})}
+\item{src}{SQLite connection. Result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}.}
 
 \item{ts.min}{minimum timestamp used to filter the dataframe, Default: NA}
 

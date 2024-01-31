@@ -7,8 +7,8 @@
 nodeData(src, resume = FALSE)
 }
 \arguments{
-\item{src}{SQLite connection (result of \code{tagme(XXX)} or
-\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")})}
+\item{src}{SQLite connection. Result of \code{tagme(XXX)} or
+\code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}.}
 
 \item{resume}{Logical. Resume a download? Otherwise the table is
 removed and the download is started from the beginning.}
@@ -33,20 +33,17 @@ Node metadata is found in the \code{nodeDeps} table, updated along with other
 metadata.
 }
 \examples{
+# Download sample project 176 to .motus database (username/password are "motus.sample")
+\dontrun{sql_motus <- tagme(176, new = TRUE)}
 
-# download and access data from project 176 in sql format
-# usename and password are both "motus.sample"
-\dontrun{sql.motus <- tagme(176, new = TRUE, update = TRUE)}
-
-# OR use example sql file included in `motus`
-sql.motus <- tagme(176, update = FALSE, 
-                   dir = system.file("extdata", package = "motus"))
+# Or use example data base in memory
+sql_motus <- tagmeSample()
   
 # Access `nodeData` table
 library(dplyr)
-a <- tbl(sql.motus, "nodeData")
+a <- tbl(sql_motus, "nodeData")
   
 # If you just want to download `nodeData`
-\dontrun{my_tags <- nodeData(sql.motus)}
+\dontrun{my_tags <- nodeData(sql_motus)}
 
 }

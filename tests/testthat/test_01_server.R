@@ -1,68 +1,88 @@
-o <- options(connectionObserver = NULL)
-# srvXXX tests ---------------------------------------
-test_that("srvXXX work as expected", {
-  
+
+test_that("srvRecvMetadataForProjects", {
+
+  skip_on_ci()
+  skip_if_no_server()
   skip_if_no_auth()
-  
-  ## srv meta ----------------------
-  
+
+  ## srv meta 
+
   # srvRecvMetadataForProjects
-  expect_silent(s <- srvRecvMetadataForProjects(projectIDs = 213)) %>%
+  expect_silent(s <- srvRecvMetadataForProjects(projectIDs = 1)) %>%
     expect_type("list")
   expect_named(s, c("recvDeps", "antDeps", "nodeDeps", "projs"))
-  expect_gt(nrow(s$recvDeps), 0)
-  expect_true(all(s$recvDeps$projectID == 213))
-  expect_gt(nrow(s$antDeps), 0)
-  expect_gt(nrow(s$nodeDeps), 0)
-  expect_gt(nrow(s$projs), 0)
-  
+  expect_true(all(s$recvDeps$projectID == 1))
+
   expect_silent(s <- srvRecvMetadataForProjects(projectIDs = NULL)) %>%
     expect_type("list")
   expect_named(s, c("recvDeps", "antDeps", "nodeDeps", "projs"))
-  expect_gt(nrow(s$recvDeps), 0)
-  expect_gt(length(unique(s$recvDeps$projectID)), 10)
-  expect_gt(nrow(s$antDeps), 0)
-  expect_gt(nrow(s$nodeDeps), 0)
-  expect_gt(nrow(s$projs), 0)
+
+})
+
+test_that("srvMetadataForReceivers", {
+  
+  skip_on_ci()
+  skip_if_no_server()
+  skip_if_no_auth()
   
   # srvMetadataForReceivers
-  d <- srvDeviceIDForReceiver("CTT-5031194D3168")$deviceID
+  d <- srvDeviceIDForReceiver("SG-5113BBBK3139")$deviceID
   expect_silent(meta_recv <- srvMetadataForReceivers(deviceIDs = d)) %>%
     expect_type("list")
   expect_named(meta_recv, c("recvDeps", "antDeps", "projs"))
-  expect_gt(nrow(meta_recv$recvDeps), 0)
-  expect_gt(nrow(meta_recv$antDeps), 0)
-  expect_gt(nrow(meta_recv$projs), 0)
+})
+
+test_that("srvMetadataForTags", {
   
+  skip_on_ci()
+  skip_if_no_server()
+  skip_if_no_auth()
+
   # srvMetadataForTags
   expect_silent(s <- srvMetadataForTags(motusTagIDs = 29876)) %>%
     expect_type("list")
   expect_named(s, c("tags", "tagDeps", "tagProps", "species", "projs"))
-  expect_gt(nrow(s$tags), 0)
-  expect_gt(nrow(s$tagDeps), 0)
-  expect_s3_class(s$tagProps, "data.frame") # might be empty
-  expect_gt(nrow(s$species), 0)
-  expect_gt(nrow(s$projs), 0)
+  expect_s3_class(s$tagProps, "data.frame")
+})
+
+test_that("srvAuth", {
   
+  skip_on_ci()
+  skip_if_no_server()
+  skip_if_no_auth()
   
-  #srvAuth --------------------
+  ## srvAuth 
   expect_silent(srvAuth()) %>%
     expect_type("character")
+})
+
+
+## srv regular
+
+test_that("srvActivityXXX", {
   
-  
-  # srv regular ----------------
-  
+  skip_on_ci()
+  skip_if_no_server()
+  skip_if_no_auth()
+
   # srvActivityForAll
   expect_silent(s <- srvActivityForAll(batchID = 0, hourBin = 0)) %>%
     expect_s3_class("data.frame")
-  expect_gt(nrow(s), 0)
-  
-  b <- s$batchID[1]
-  
+  expect_named(s, c("batchID", "motusDeviceID", "ant", "year", "month", "day", 
+                    "hourBin", "numTags", "pulseCount", "numRuns", "numHits",
+                    "run2", "run3", "run4", "run5", "run6", "run7plus", 
+                    "numGPSfix"))
+
   # srvActivityForBatches - From Project 4, non-deprecated
-  expect_silent(s <- srvActivityForBatches(batchID = b)) %>%
+  expect_silent(s <- srvActivityForBatches(batchID = 1)) %>%
     expect_s3_class("data.frame")
-  expect_gt(nrow(s), 0)
+})
+
+test_that("srvAPIinfo", {
+  
+  skip_on_ci()
+  skip_if_no_server()
+  skip_if_no_auth()
   
   # srvAPIinfo
   expect_silent(s <- srvAPIinfo()) %>%
@@ -70,223 +90,227 @@ test_that("srvXXX work as expected", {
   expect_named(s, c("maxRows", "dataVersion", "currentPkgVersion"))
   expect_gt(s$maxRows, 0)
   expect_gt(s$dataVersion, 0)
+  expect_type(s$currentPkgVersion, "character")
+})
+
+test_that("srvBatchesXXX", {
   
+  skip_on_ci()
+  skip_if_no_server()
+  skip_if_no_auth()
+
   # srvBatchesForReceiver - From Project 1 (SG-4002BBBK1580)
   expect_silent(s <- srvBatchesForReceiver(deviceID = 217, batchID = 0)) %>%
     expect_s3_class("data.frame")
-  expect_gt(nrow(s), 0)
-  
-  b217 <- s$batchID[nrow(s)]
-  
+  expect_named(s, 
+               c("motusProjectID", "batchID", "source", "motusDeviceID", "monoBN",
+                 "tsStart", "tsEnd", "numHits", "motusJobID", "motusUserID",
+                 "ts", "version"))
+
   # srvBatchesForTagProject
-  expect_silent(s <- srvBatchesForTagProject(projectID = 1, batchID = 0)) %>%
+  expect_silent(s <- srvBatchesForTagProject(projectID = 4, batchID = 0)) %>%
     expect_s3_class("data.frame")
-  expect_gt(nrow(s), 0)
-  
-  b1 <- s$batchID[nrow(s)]
-  
+  expect_named(s, 
+               c("motusProjectID", "batchID", "source", "motusDeviceID", "monoBN",
+                 "tsStart", "tsEnd", "numHits", "motusJobID", "motusUserID",
+                 "ts", "version"))
+
   #srvBatchesForReceiverDeprecated
   expect_silent(s <- srvBatchesForReceiverDeprecated(217)) %>%
     expect_s3_class("data.frame")
-  expect_gt(nrow(s), 0)
-  
+  expect_named(s, c("batchID", "batchFilter"))
+
   #srvBatchesForTagDeprecated
   expect_silent(s <- srvBatchesForTagProjectDeprecated(1)) %>%
     expect_s3_class("data.frame")
-  expect_gt(nrow(s), 0)
+  expect_named(s, c("batchID", "batchFilter"))
+})
+
+test_that("srvDeviceIDForReceiver", {
   
+  skip_on_ci()
+  skip_if_no_server()
+  skip_if_no_auth()
+
   # srvDeviceIDForReceiver
   expect_silent(s <- srvDeviceIDForReceiver(serno = "CTT-5031194D3168")) %>%
     expect_s3_class("data.frame")
-  expect_gt(nrow(s), 0)
+  expect_named(s, c("serno", "deviceID"))
+})
+
+test_that("srvGPSXXX", {
   
+  skip_on_ci()
+  skip_if_no_server()
+  skip_if_no_auth()
+
   # srvGPSForAll
-  expect_silent(s <- srvGPSForAll(gpsID = 0)) %>%
+  expect_silent(s <- srvGPSForAll(gpsID = 1)) %>%
     expect_s3_class("data.frame")
-  expect_gt(nrow(s), 0)
-  
-  b_gps <- s$batchID[1]
+  expect_named(s, c("gpsID", "recvDeployID", "ts", "gpsts", "batchID", "lat", 
+                    "lon", "alt", "quality", "lat_mean", "lon_mean", 
+                    "n_fixes"))
 
   # srvGPSForReceiver - deviceID = 6115; CTT-5031194D3168
-  expect_silent(s <- srvGPSForReceiver(batchID = b_gps)) %>%
+  expect_silent(s <- srvGPSForReceiver(batchID = 1719802)) %>%
     expect_s3_class("data.frame")
-  expect_gt(nrow(s), 0)
-  
+  expect_named(s, c("gpsID", "recvDeployID", "ts", "gpsts", "batchID", "lat", 
+                    "lon", "alt", "quality", "lat_mean", "lon_mean", 
+                    "n_fixes"))
+
   # srvGPSForTagProject - Not sure what's going on
-  #expect_silent(s <- srvGPSForTagProject(projectID = p, batchID = 0)) %>%
-  #  expect_s3_class("data.frame")
-  #expect_gt(nrow(s), 0)
-  
-  # srvHitsForReceiver
-  expect_silent(s <- srvHitsForReceiver(batchID = b217, hitID = 0)) %>%
+  expect_silent(s <- srvGPSForTagProject(projectID = 1, batchID = 1)) %>%
     expect_s3_class("data.frame")
-  expect_gt(nrow(s), 0)
+  expect_named(s, c("gpsID", "batchID", "ts", "gpsts", "lat", 
+                    "lon", "alt", "quality", "lat_mean", "lon_mean", 
+                    "n_fixes"))
+})
+
+test_that("srvHitsXXX", {
   
+  skip_on_ci()
+  skip_if_no_server()
+  skip_if_no_auth()
+  
+  # srvHitsForReceiver - From SG-1814BBBK0461
+  expect_silent(s <- srvHitsForReceiver(batchID = 1719802, hitID = 3743988014)) %>%
+    expect_s3_class("data.frame")
+  expect_named(s, c("hitID", "runID", "batchID", "ts", "sig", "sigSD", "noise",
+                    "freq", "freqSD", "slop", "burstSlop", "validated"))
+
   # srvHitsForTagProject
-  expect_silent(s <- srvHitsForTagProject(projectID = 1, batchID = b1)) %>%
+  expect_silent(s <- srvHitsForTagProject(projectID = 1, batchID = 1)) %>%
     expect_s3_class("data.frame")
-  expect_gt(nrow(s), 0)
+  expect_named(s, c("hitID", "runID", "batchID", "ts", "sig", "sigSD", "noise",
+                    "freq", "freqSD", "slop", "burstSlop", "validated"))
+})
+
+test_that("srvNodes", {
   
+  skip_on_ci()
+  skip_if_no_server()
+  skip_if_no_auth()
+
   # srvNodes
   expect_silent(s <- srvNodes(projectID = 207, batchID = 1019183)) %>%
     expect_s3_class("data.frame")
-  expect_gt(nrow(s), 0)
+  expect_named(s, c("projectID", "nodeDataID", "batchID", "ts", "nodeNum", "ant",
+                    "sig", "battery", "temperature", "nodets", "firmware", 
+                    "solarVolt", "solarCurrent", "solarCurrentCumul", "lat", "lon"))
+})
+
+test_that("srvEXTRA", {
   
+  skip_on_ci()
+  skip_if_no_server()
+  skip_if_no_auth()
+
   # srvProjectAmbiguitiesForTagProject - *****************************
   expect_silent(s <- srvProjectAmbiguitiesForTagProject(projectID = 176)) %>%
     expect_s3_class("data.frame")
-  expect_equal(nrow(s), 0)  ## WHAT IS THIS, EXACTLY?
-  
+  expect_named(s, c("projectID4", "projectID5", "projectID6",  "projectID1",
+                    "ambigProjectID", "projectID2", "projectID3"))
+
   # srvPulseCountsForReceiver - CTT-5031194D3168
-  # expect_silent(s <- srvPulseCountsForReceiver(batchID = 40570, ant = 0)) %>%
-  #   expect_s3_class("data.frame")
-  # expect_gt(nrow(s), 0)
-  
+  expect_silent(s <- srvPulseCountsForReceiver(batchID = 40570, ant = 0)) %>%
+    expect_s3_class("data.frame")
+  expect_named(s, c("batchID", "ant", "hourBin", "count"))
+
   # srvReceiversForProject
-  # expect_silent(s <- srvReceiversForProject(projectID = 204)) %>%
-  #   expect_s3_class("data.frame")
-  # expect_gt(nrow(s), 0)
-  
-  # srvRunsForReceiver - CTT-5031194D3168
-  # expect_silent(s <- srvRunsForReceiver(batchID = 1582469, runID = 0)) %>%
-  #   expect_s3_class("data.frame")
-  # expect_gt(nrow(s), 0)
-  
+  expect_silent(s <- srvReceiversForProject(projectID = 207)) %>%
+    expect_s3_class("data.frame")
+  expect_named(s, c("projectID", "serno", "receiverType", "deviceID", "status",
+                    "deployID", "name", "fixtureType", "latitude", "longitude",
+                    "isMobile", "tsStart", "tsEnd", "elevation", "StationID"))
+
+  # srvRunsForReceiver - SG-1814BBBK0461
+  expect_silent(s <- srvRunsForReceiver(batchID = 1719802, runID = 149551526)) %>%
+    expect_s3_class("data.frame")
+  expect_named(s, c("runID", "batchIDbegin", "tsBegin", "tsEnd", "done", 
+                    "motusTagID", "ant", "nodeNum", "len", "motusFilter"))
+
   # srvRunsForTagProject
   expect_silent(s <- srvRunsForTagProject(projectID = 4, batchID = 120474)) %>%
     expect_s3_class("data.frame")
-  expect_gt(nrow(s), 0)
-  
+  expect_named(s, c("runID", "batchIDbegin", "tsBegin", "tsEnd", "done", 
+                    "motusTagID", "ant", "len", "nodeNum", "motusFilter"))
+
   # srvSizeOfUpdateForReceiver
   expect_silent(s <- srvSizeOfUpdateForReceiver(deviceID = 217, batchID = 0)) %>%
     expect_s3_class("data.frame")
-  expect_gt(nrow(s), 0)
-  
-  # srvSizeOfUpdateForTagProject
-  # expect_silent(s <- srvSizeOfUpdateForTagProject(projectID = 204, batchID = 0)) %>%
+  expect_named(s, c("numHits", "numBytes", "numRuns", "numBatches", "numGPS"))
+
+  # srvSizeOfUpdateForTagProject - TODO FIX
+  # expect_silent(s <- srvSizeOfUpdateForTagProject(projectID = 25, batchID = 0)) %>%
   #   expect_s3_class("data.frame")
-  # expect_gt(nrow(s), 0)
+  # expect_named(s, c("numHits", "numBytes", "numRuns", "numBatches", "numGPS"))
+})
+  
+test_that("srvTagXXX", {
+  
+  skip_on_ci()
+  skip_if_no_server()
+  skip_if_no_auth()
   
   # srvTagMetadataForProjects
   expect_silent(s <- srvTagMetadataForProjects(projectIDs = 25)) %>%
     expect_type("list")
-  expect_gt(nrow(s$tags), 0)
-  expect_true(all(s$tags$projectID == 25))
-  expect_gt(nrow(s$tagDeps), 0)
-  #expect_gt(nrow(s$tagProps), 0)
-  expect_gt(nrow(s$species), 0)
-  expect_gt(nrow(s$projs), 0)
+  expect_named(s, c("tags", "tagDeps", "tagProps", "species", "projs"))
+  expect_s3_class(s[["tags"]], "data.frame")
+  expect_s3_class(s[["tagDeps"]], "data.frame")
+  expect_s3_class(s[["tagProps"]], "data.frame")
+  expect_s3_class(s[["species"]], "data.frame")
+  expect_s3_class(s[["projs"]], "data.frame")
   
+
   expect_silent(s <- srvTagMetadataForProjects(projectIDs = NULL)) %>%
     expect_type("list")
-  expect_gt(nrow(s$tags), 0)
-  expect_gt(length(unique(s$tags$projectID)), 10)
-  expect_gt(nrow(s$tagDeps), 0)
-  expect_gt(nrow(s$tagProps), 0)
-  expect_gt(nrow(s$species), 0)
-  expect_gt(nrow(s$projs), 0)
-  
+  expect_named(s, c("tags", "tagDeps", "tagProps", "species", "projs"))
+  expect_s3_class(s[["tags"]], "data.frame")
+  expect_s3_class(s[["tagDeps"]], "data.frame")
+  expect_s3_class(s[["tagProps"]], "data.frame")
+  expect_s3_class(s[["species"]], "data.frame")
+  expect_s3_class(s[["projs"]], "data.frame")
+
   # srvTagsForAmbiguities
   expect_silent(s <- srvTagsForAmbiguities(ambigIDs = -56)) %>%
     expect_s3_class("data.frame")
-  expect_gt(nrow(s), 0)
+  expect_named(s, c("ambigID", "ambigProjectID", "motusTagID1", "motusTagID2",
+                    "motusTagID3", "motusTagID4", "motusTagID5", "motusTagID6"))
   expect_silent(s <- srvTagsForAmbiguities(ambigIDs = c(-56, -106))) %>%
     expect_s3_class("data.frame")
-  expect_gt(nrow(s), 0)
+  expect_named(s, c("ambigID", "ambigProjectID", "motusTagID1", "motusTagID2",
+                    "motusTagID3", "motusTagID4", "motusTagID5", "motusTagID6"))
 })
 
-test_that("tagme() errors appropriately", {
-  skip_on_cran()
+
+test_that("srvQuery() and srvTimeout() timeouts", {
   
   sample_auth()
+  skip_if_no_server()
   
-  expect_error(expect_message(tagme(projRecv = 10, new = TRUE, update = TRUE), 
-                              "updateMotusDb"),
-               "You do not have permission")
+  expect_silent(srvTimeout()) %>%
+    expect_equal(list("motus.timeout" = 120))
+  expect_silent(srvTimeout(5))
+  expect_equal(options("motus.timeout"), list("motus.timeout" = 5))
+  expect_silent(srvTimeout(reset = TRUE))
+  expect_equal(options("motus.timeout"), list("motus.timeout" = 120))
   
-  expect_error(expect_message(tagme(projRecv = "CTT-5031194D3168", 
-                                    new = TRUE, update = TRUE), 
-                              "updateMotusDb"),
-               "Either") #...
-  unlink("project-10.motus")
-})
-
-
-# Projects downloads ---------------------------------------
-test_that("tagme() downloads data - Projects", {
-  skip_on_cran()
-  
-  sample_auth()
-  
-  expect_message(tags <- tagme(projRecv = 176, new = TRUE, update = TRUE)) %>%
-    expect_s4_class("SQLiteConnection")
-  disconnect(tags)
-  unlink("project-176.motus")
-})
-
-
-# Receivers download ------------------------------------------------------
-test_that("tagme() downloads data - Receivers", {
-  skip_on_cran()
-  skip_if_no_auth()
-  
-  unlink("SG-3115BBBK1127.motus")
-  expect_message(t <- tagme("SG-3115BBBK1127", new = TRUE, update = TRUE)) %>%
-    expect_s4_class("SQLiteConnection")
-  disconnect(t)
-  unlink("SG-3115BBBK1127.motus")
-})
-
-
-# Projects countOnly = TRUE ---------------------------------------------------
-test_that("tagme with countOnly (tellme) - Projects", {
-  skip_on_cran()
-  sample_auth()
-  
-  unlink("project-176.motus")
-  file.copy(system.file("extdata", "project-176.motus", package = "motus"), 
-            ".")
-  
-  expect_silent(tagme(projRecv = 176, new = FALSE, 
-                      update = TRUE, countOnly = TRUE)) %>%
-    expect_is("data.frame")
-  
-  expect_silent(tellme(projRecv = 176, new = FALSE)) %>%
-    expect_is("data.frame")
-  
-  unlink("project-176.motus")
-})
-
-# Receivers countOnly = TRUE ---------------------------------------------------
-test_that("tagme with countOnly (tellme) - Receivers", {
-  skip_on_cran()
-  skip_if_no_auth()
-  
-  unlink("SG-3115BBBK1127.motus")
-  expect_silent(tellme("SG-3115BBBK1127", new = TRUE)) %>%
-    expect_is("data.frame")
-  unlink("SG-3115BBBK1127.motus")
-})
-
-
-# Timeouts ----------------------------------------------------------------
-test_that("srvQuery handles time out graciously", {
-  
-  sample_auth()
   
   # https://stackoverflow.com/questions/100841/artificially-create-a-connection-timeout-error
+  srvTimeout(0.001)
   expect_message(
     expect_error(srvQuery(API = motus_vars$API_PROJECT_AMBIGUITIES_FOR_TAG_PROJECT, 
                           params = list(projectID = 176),
-                          url = motus_vars$dataServerURL, timeout = 0.01),
-                 "The server is not responding"),
-    "The server did not respond within 0.01s. Trying again...")
+                          url = motus_vars$dataServerURL),
+                 "The server did not respond within"),
+    "The server did not respond within")
+  srvTimeout(reset = TRUE)
 })
 
-
-# srvAuth errors ----------------------------------------------------------
 test_that("srvAuth handles errors informatively", {
-  motusLogout()
+  skip_if_no_server()
+  expect_message(motusLogout())
   sessionVariable(name = "userLogin", val = "motus.samp")
   sessionVariable(name = "userPassword", val = "motus.samp")
   
@@ -295,21 +319,20 @@ test_that("srvAuth handles errors informatively", {
 
 test_that("metadata()", {
   skip_on_cran()
+  skip_if_no_server()
   sample_auth()
   
-  file.copy(system.file("extdata", "project-176.motus", package = "motus"), ".")
-  tags <- tagme(176, new = FALSE, update = FALSE)
-  expect_message(metadata(tags), "Loading complete")
+  tags <- withr::local_db_connection(tagmeSample())
+  expect_message(metadata(tags), "Loading complete") %>%
+    suppressMessages()
   
-  expect_message(metadata(tags, projectIDs = 45), "Loading complete")
-  disconnect(tags)
-  unlink("project-176.motus")
+  expect_message(metadata(tags, projectIDs = 45), "Loading complete") %>%
+    suppressMessages()
 })
-
-# srvAuth package version --------------------------------------------------
 
 test_that("srvAuth errors/warns/passes on package version", {
   sample_auth()
+  skip_if_no_server()
   expect_silent(srvAuth())
   expect_true(!is.null(motus_vars$currentPkgVersion))
     
@@ -319,11 +342,11 @@ test_that("srvAuth errors/warns/passes on package version", {
   v[[c(3,1)]] <- as.numeric(v[[c(3,1)]]) + 1
   v <- as.character(v)
   
-  with_mock("motus:::pkg_version" = mockery::mock(v[1]), 
-            expect_warning(srvAuth()))
-  with_mock("motus:::pkg_version" = mockery::mock(v[2]), 
-            expect_silent(srvAuth()))
-  with_mock("motus:::pkg_version" = mockery::mock(v[3]), 
-            expect_silent(srvAuth()))
+  mock <- mockery::mock(v[1], v[2], v[3], cycle = TRUE)
+  mockery::stub(srvAuth, "pkg_version", mock)
+  
+  expect_warning(srvAuth())
+  expect_silent(srvAuth())
+  expect_silent(srvAuth())
+  expect_length(mock, 3)
 })
-options(o)

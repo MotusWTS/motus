@@ -1,13 +1,10 @@
-url: https://MotusWTS.github.io/motus/fr
+url: https://motuswts.github.io/motus/
 
-destination: docs/fr  # Only for local builds, ignored by GA
-lang: fr
+destination: docs  # Only for local builds, ignored by GA
+lang: en
 
-# Co-op the dev option to create different language versions
 development:
-  mode: devel
-  destination: fr
-  version_label: light
+  mode: auto
 
 template:
   bootstrap: 5
@@ -16,21 +13,15 @@ template:
 navbar:
   bg: dark
   structure:
-    left:  [home, intro, articles, troubleshooting, reference, news]
-    right: [search, github, english, french]
+    left:  [home, intro, articles, troubleshooting, reference, news, dev]
+    right: [search, github]
   components:
     troubleshooting:
-      text: Dépannage
+      text: Troubleshooting
       href: articles/troubleshooting.html
     reference:
-      text: Fonctions
+      text: Functions
       href: reference/index.html
-    english:
-      text: EN
-      href: ../index.html
-    french:
-      text: FR
-      href: index.html
 
 reference:
 
@@ -53,16 +44,19 @@ reference:
 
 - title: Helper
   contents:
+  - tagmeSample
   - getGPS
   - getRuns
   - simSiteDet
   - sunRiseSet
   - timeToSunriset
   - getMotusDBSrc
+  - srvTimeout
   
 - title: Plotting
   contents:
   - starts_with("plot")
+  - points2Path
   
 - title: Summarizing
   contents: 
@@ -85,9 +79,12 @@ reference:
 - title: internal
   contents:
   - motus
+  
 
 articles:
-- title: Visite complète
+
+- title: Complete walk-through
+  navbar: ~
   desc: "This is a complete walk-through, originally compiled as the Motus R book.
         These articles are largely based on the original Motus R Book by 
         [Crewe et al. 2018](https://raw.githubusercontent.com/MotusWTS/motus/master/inst/extdata/MotusRBook2018-01.pdf), 
@@ -99,8 +96,8 @@ articles:
   - articles/04-deployments
   - articles/05-data-cleaning
   - articles/06-exploring-data
-  
-- title: Autres sujets
+
+- title: Other topics
   desc: Specific tutorials for different tasks
   contents:
   - articles/motus
@@ -113,7 +110,8 @@ articles:
   - articles/deprecated-batches
   - articles/identifying-false-positives
 
-- title: Référence
+  
+- title: Reference
   contents:
   - articles/motus-data
   - articles/database-variables

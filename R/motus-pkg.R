@@ -1,10 +1,10 @@
 #' Fetch and use data from the Motus Wildlife Tracking System
 #'
 #' `motus` is an R package for retrieving telemetry data from the Motus
-#' Wildlife Tracking System \url{http://motus.org}.
+#' Wildlife Tracking System \url{https://motus.org}.
 #' 
 #' For a detailed walk-though and instructions check out the 
-#' [walk-throughs and articles](https://MotusWTS.github.io/motus)!
+#' [walk-throughs and articles](https://motuswts.github.io/motus/)!
 #' 
 #' Commonly used functions:
 #'
@@ -44,7 +44,7 @@
 #'
 #'
 #' @references
-#' Motus Wildlife Tracking System \url{http://motus.org}
+#' Motus Wildlife Tracking System \url{https://motus.org}
 #'
 #'
 #' @docType package

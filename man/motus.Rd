@@ -6,11 +6,11 @@
 \title{Fetch and use data from the Motus Wildlife Tracking System}
 \description{
 \code{motus} is an R package for retrieving telemetry data from the Motus
-Wildlife Tracking System \url{http://motus.org}.
+Wildlife Tracking System \url{https://motus.org}.
 }
 \details{
 For a detailed walk-though and instructions check out the
-\href{https://MotusWTS.github.io/motus}{walk-throughs and articles}!
+\href{https://motuswts.github.io/motus/}{walk-throughs and articles}!
 
 Commonly used functions:
 \enumerate{
@@ -56,5 +56,5 @@ Commonly used functions:
 }
 }
 \references{
-Motus Wildlife Tracking System \url{http://motus.org}
+Motus Wildlife Tracking System \url{https://motus.org}
 }
