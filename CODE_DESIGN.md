@@ -14,10 +14,10 @@ This is a collection of developer notes and is by no means exhaustive or correct
 ## Versioning
 There 3-4 different `motus` versions on GitHub at any one time:
 
-- `master` branch - Current release - e.g., v4.0.3
+- `main` branch - Current release - e.g., v4.0.3
 - `betaX` branch - Current minor dev - e.g., v4.0.3.9000
 - `sandbox` branch - Current major dev - e.g., v4.0.3.9999
-- `hotfix-` branch - Current quick fixes to merge in to master quickly v4.0.3.9001 (increments one greater than `betaX`)
+- `dev`/`hotfix-` branch - Current quick fixes to merge in to main quickly v4.0.3.9001 (increments one greater than `betaX`)
 
 
 ## Naming Conventions
