@@ -169,14 +169,14 @@ tagmeSample <- function(db = "project-176.motus") {
 #' Internal function for use in docs
 #'
 #' @noRd
-get_sample_data <- function() {
+get_sample_data <- function(dir = "./data/") {
   sample_auth() # Use motus sample authorizations
-  if(!dir.exists("./data/")) dir.create("./data/")
+  if(!dir.exists(dir)) dir.create(dir)
   message("Copying sample project")
   file.copy(system.file("extdata", "project-176.motus", package = "motus"), 
-            "./data/")
+            dir)
   message("Loading sample project")
-  tagme(projRecv = 176, dir = "./data/")
+  tagme(projRecv = 176, dir = dir)
 }
 
 disconnect <- function(src, warnings = FALSE) {
