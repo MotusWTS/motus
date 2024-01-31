@@ -124,6 +124,8 @@ devtools::check_win_oldrelease()
 srvAPIinfo()
 srvQuery(API = "custom/update_pkg_version", params = list(pkgVersion = "6.0.1"))
 
+usethis::use_github_release(publish = FALSE) # Draft a release
+
 
 ## Actually release it (manually) ----------------------------------
 # - Create signed release on github
@@ -134,9 +136,13 @@ srvQuery(API = "custom/update_pkg_version", params = list(pkgVersion = "6.0.1"))
 ## Test motus website (will be compiled online) ------------------------------
 
 pkgdown::build_site(lazy = TRUE)
-pkgdown::build_home_index()
 pkgdown::build_home()
+
+# Testing themes
+pkgdown::build_home_index()
 pkgdown::init_site()
+
+# TEsting specific articles
 pkgdown::build_article("articles/06-exploring-data")
 pkgdown::build_article("articles/01-introduction")
 unlink("vignettes/articles/map-data/", recursive = TRUE)

@@ -6,10 +6,10 @@
 
 <!-- badges: end -->
 
-# motus
+# motus <img src="man/figures/logo.png" align="right" />
 <p align = "center">
-  <a href = "https://www.birdscanada.org"><img src = "inst/assets/birds_canada_logo.png" alt = "Birds Canada Logo showing grey text 'Birds Canada' and 'Oiseaux Canada' on either side of a grey and yellow bird perched on a branch" width = "40%"></a>
-  <a href = "https://motus.org"><img src = "inst/assets/motus_logo.png" alt = "Motus Logo showing blue text 'Motus Wildlife Tracking System' to the right of pale green images of a bat, bird and dragonfly at the ends of green curved lines"></a>
+  <a href = "https://www.birdscanada.org"><img src = "man/figures/birds_canada_logo.png" alt = "Birds Canada Logo showing grey text 'Birds Canada' and 'Oiseaux Canada' on either side of a grey and yellow bird perched on a branch" width = "40%"></a>
+  <a href = "https://motus.org"><img src = "man/figures/motus_logo.png" alt = "Motus Logo showing blue text 'Motus Wildlife Tracking System' to the right of pale green images of a bat, bird and dragonfly at the ends of green curved lines"></a>
 </p>
 
 An R package for handling [Motus](https://motus.org) automated radio-telemetry data.

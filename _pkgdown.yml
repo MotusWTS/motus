@@ -9,9 +9,12 @@ development:
 template:
   bootstrap: 5
   bootswatch: cosmo
+  bslib:
+    body-secondary-color: "black"
 
 navbar:
   bg: dark
+  type: light
   structure:
     left:  [home, intro, articles, troubleshooting, reference, news, dev]
     right: [search, github]
