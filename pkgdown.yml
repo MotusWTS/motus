@@ -1,5 +1,5 @@
-pandoc: 2.7.3
-pkgdown: 2.0.6
+pandoc: 2.19.2
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   01-introduction: 01-introduction.html
@@ -13,13 +13,14 @@ articles:
   deprecated-batches: deprecated-batches.html
   filtering: filtering.html
   gps: gps.html
+  identifying-false-positives: identifying-false-positives.html
   motus-data: motus-data.html
   motus: motus.html
   signal-strength: signal-strength.html
   troubleshooting: troubleshooting.html
   vanishing-bearings: vanishing-bearings.html
-last_built: 2022-09-21T19:31Z
+last_built: 2024-01-31T17:16Z
 urls:
-  reference: https://MotusWTS.github.io/motus/reference
-  article: https://MotusWTS.github.io/motus/articles
+  reference: https://motuswts.github.io/motus/reference
+  article: https://motuswts.github.io/motus/articles
 
