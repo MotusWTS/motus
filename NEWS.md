@@ -4,6 +4,7 @@
     respects the `skipXXX` arguments
   * `tagme()` for receivers now skips node downloads if receiver is not a SensorStation
   * `tagme()` fails gracefully if the directory specified does not exist
+  * Fixed `Error in as.POSIXlt.character(x, tz, ...)` when starting a download
 * `tagme(new = TRUE)` now starts a download immediately
 * Add `srvTimeout()` to specify the server timeout limit
 * Clean up helper functions `sunRiseSet()` and `timeToSunriset()`
