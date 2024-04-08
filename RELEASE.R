@@ -119,17 +119,16 @@ devtools::check_win_oldrelease()
 
 ## Push to main branch (pull request, etc.)
 
-## Update API package version to current (only for main) -----------
-# - Must use personal access
-srvAPIinfo()
-srvQuery(API = "custom/update_pkg_version", params = list(pkgVersion = "6.0.1"))
-
-usethis::use_github_release(publish = FALSE) # Draft a release
-
-
 ## Actually release it (manually) ----------------------------------
 # - Create signed release on github
 # - Add NEWS to release details
+usethis::use_github_release(publish = FALSE) # Draft a release
+
+## Update API package version to current (only for main) -----------
+# - Must use personal access
+srvAPIinfo()
+srvQuery(API = "custom/update_pkg_version", params = list(pkgVersion = "6.1.0"))
+
 
 
 
