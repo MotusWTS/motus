@@ -1,5 +1,5 @@
-pandoc: 2.19.2
-pkgdown: 2.0.7
+pandoc: 3.1.11
+pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   01-introduction: 01-introduction.html
@@ -19,7 +19,7 @@ articles:
   signal-strength: signal-strength.html
   troubleshooting: troubleshooting.html
   vanishing-bearings: vanishing-bearings.html
-last_built: 2024-02-02T16:51Z
+last_built: 2024-05-21T21:26Z
 urls:
   reference: https://motuswts.github.io/motus/reference
   article: https://motuswts.github.io/motus/articles
