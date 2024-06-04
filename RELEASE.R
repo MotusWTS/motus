@@ -121,9 +121,8 @@ devtools::check_win_oldrelease()
 ## Push to main branch (pull request, etc.)
 
 ## Actually release it (manually) ----------------------------------
-# - Create signed release on github
-# - Add NEWS to release details
-usethis::use_github_release(publish = FALSE) # Draft a release
+# - Create signed release on github using the NEWS 
+usethis::use_github_release() 
 
 ## Update API package version to current (only for main) -----------
 # - Must use personal access
