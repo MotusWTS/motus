@@ -1,3 +1,6 @@
+# motus 6.1.1
+* Add support for Sigma Eight receivers
+
 # motus 6.1.0
 * fix bugs in `tagme()`
   * `tagme(dir = ...)` now correctly downloads projects as well as receivers and

@@ -62,6 +62,7 @@ remotes::install_deps(dependencies = TRUE)
 # - If merging sandbox - make sure that data-raw/updatesql.R updates unique to 
 #   sandbox have a date later than beta updates (otherwise they won't trigger)
 
+
 # Load all functions: devtools::load_all() or Ctrl-Shift-L
 set_testing(set = FALSE) # Make sure to download full sets
 source("data-raw/internal_data.R")
@@ -119,17 +120,16 @@ devtools::check_win_oldrelease()
 
 ## Push to main branch (pull request, etc.)
 
-## Update API package version to current (only for main) -----------
-# - Must use personal access
-srvAPIinfo()
-srvQuery(API = "custom/update_pkg_version", params = list(pkgVersion = "6.0.1"))
-
-usethis::use_github_release(publish = FALSE) # Draft a release
-
-
 ## Actually release it (manually) ----------------------------------
 # - Create signed release on github
 # - Add NEWS to release details
+usethis::use_github_release(publish = FALSE) # Draft a release
+
+## Update API package version to current (only for main) -----------
+# - Must use personal access
+srvAPIinfo()
+srvQuery(API = "custom/update_pkg_version", params = list(pkgVersion = "6.1.0"))
+
 
 
 

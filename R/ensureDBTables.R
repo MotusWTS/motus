@@ -71,8 +71,7 @@ makeMetaTable <- function(src, projRecv, deviceID) {
     if (missing(deviceID) || ! isTRUE(is.numeric(deviceID))) {
       stop("must specify deviceID for new receiver database", call. = FALSE)
     }
-    type <- tolower(stringr::str_remove(projRecv, "-(.)*$"))
-    
+    type <- tolower(stringr::str_remove(projRecv, "(-|_)(.)*$"))
     if (type == "sg") {
       type <- "SENSORGNOME"
       model <- substring(projRecv, 8, 11)
@@ -87,6 +86,10 @@ makeMetaTable <- function(src, projRecv, deviceID) {
       } else if(n == 12 + 4) {
         model <- "V2"
       } else stop("Unexpected model for CTT receivers: ", projRecv, call. = FALSE)
+    } else if(type == "sei") {
+      type <- "SigmaEight"
+      model <- stringr::str_extract(projRecv, "(?<=(-|_))(A|O)") |> tolower()
+      model <- dplyr::case_match(model, "a" ~ "Ares", "o" ~ "Orion", .default = NA_character_)
     } else {
       stop("Unexpected receiver type: ", type, call. = FALSE)
     }
