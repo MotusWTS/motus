@@ -45,6 +45,12 @@ motusUpdateRecvDB <- function(src, countOnly, forceMeta = FALSE) {
     # in order to count runs and hits
     b <- srvBatchesForReceiver(deviceID = deviceID, batchID = batchID)
     if (! isTRUE(nrow(b) > 0)) break
+	
+	# get next set of blu batches (the highest batchID returned may fall outside 
+	# this loop, but those will be ignored and queried in the next loop
+	# to avoid this, we could provide the highest batchID we want for this loop
+	b2 <- srvHitsBluBatchesForReceiver.R(deviceID = deviceID, batchID = batchID)
+	
     # temporary work-around to batches with incorrect starting timestamps
     # (e.g. negative, or on CLOCK_MONOTONIC) that make a batch appears
     # to span multiple deployments.
@@ -63,7 +69,12 @@ motusUpdateRecvDB <- function(src, countOnly, forceMeta = FALSE) {
       
       # 3. Hits for one new batch ----------------------------------------------
       hitsForBatchReceiver(src, batchID, batchMsg)
-      
+
+      # 3b. Hits blue for one new batch (if necessary)--------------------------
+      if (batchID %in% b2$batchID) {
+        hitsBluForBatchReceiver(src, batchID, batchMsg)
+      }
+
       # 4. GPS for for this Batch ----------------------------------------------
       gpsForBatchReceiver(src, batchID, batchMsg)
       

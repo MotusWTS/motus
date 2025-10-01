@@ -109,6 +109,63 @@ hitsForBatchReceiver <- function(src, batchID, batchMsg) {
   } 
 }
 
+#' Get hits blu data by batches for Tags
+#' 
+#' Start after the largest hitID we already have.
+#' Also get the count of hits we already have for this batch, to which we'll add
+#' new hits as we get them, writing the final total to the numHits field in this
+#' batch's record).
+#'
+#' @noRd
+#' @keywords internal
+
+hitsBluForBatchProject <- function(src, batchID, batchMsg, projectID = NULL) {
+
+  hitID <- DBI_Query(src, 
+                     "SELECT IFNULL(max(hitID), 0) FROM hitsBlu WHERE batchID = {batchID}")
+
+  repeat {
+    h <- srvHitsBluForTagProject(projectID = projectID, 
+                              batchID = batchID, 
+                              hitID = hitID)
+    
+    if (!isTRUE(nrow(h) > 0)) break
+    message(msg_fmt("{batchMsg}: got {nrow(h):6d} hitsBlu starting at {hitID:15.0f}"))
+    
+    # add these hit records to the DB
+    # Because some extra fields will cause this to error, use dbInsertOrReplace
+    dbInsertOrReplace(src, "hitsBlu", h)
+    hitID <- max(h$hitID)
+    
+  }
+}
+
+#' Get hits blu data by batches for Receivers
+#' 
+#' Start after the largest hitID we already have.
+#'
+#' @noRd
+#' @keywords internal
+
+hitsBluForBatchReceiver <- function(src, batchID, batchMsg) {
+  
+  hitID <- DBI_Query(src, 
+                     "SELECT IFNULL(max(hitID), 0) FROM hitsBlu WHERE batchID = {batchID}")
+  
+  repeat {
+    h <- srvHitsBluForReceiver(batchID = batchID, hitID = hitID)
+    
+    
+    if (!isTRUE(nrow(h) > 0)) break
+    message(msg_fmt("{batchMsg}: got {nrow(h):6d} hitsBlu starting at {hitID}"))
+    
+    # add these hit records to the DB
+    # Because some extra fields will cause this to error, use dbInsertOrReplace
+    dbInsertOrReplace(src, "hitsBlu", h)
+    hitID <- max(h$hitID)
+  } 
+}
+
 
 #' Get GPS points by batch for Tags
 #' 

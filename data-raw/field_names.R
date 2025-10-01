@@ -99,19 +99,18 @@ t <- field_names %>%
       c("CREATE INDEX IF NOT EXISTS hits_batchID_ts on hits(batchID, ts)"))) %>%
   bind_rows(t, .)
 
-# hits_blu --------------------------------------------------------------------
-# "hits_blu" table applies to hits_blu_for_receiver and hits_blu_for_tag_project
+# hitsBlu --------------------------------------------------------------------
+# "hitsBlu" table applies to hits_blu_for_receiver and hits_blu_for_tag_project
 t <- field_names %>%
   filter(str_detect(table, "hits_blu_for_tag"),
          !column %in% c("projectID")) %>%
   mutate(
-    table = "hits_blu",
+    table = "hitsBlu",
     keys = column == "hitID",
     not_nulls = column %in% c("runID", "batchID"),
     references = case_when(column == "hitID" ~ "hits",
                            column == "batchID" ~ "batches"),
   bind_rows(t, .)
-
 
 # nodeData --------------------------------------------------------------------
 # "nodeData" table applies to node_data_for_receiver & node_data_for_tag_project

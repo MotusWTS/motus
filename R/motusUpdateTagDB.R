@@ -51,6 +51,11 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
       b <- srvBatchesForTagProject(projectID = projectID, batchID = batchID)
       if (!isTRUE(nrow(b) > 0)) break
 
+      # get next set of blu batches (the highest batchID returned may fall outside 
+	  # this loop, but those will be ignored and queried in the next loop
+      # to avoid this, we could provide the highest batchID we want for this loop
+      b2 <- srvHitsBluBatchesForTags.R(projectID = projectID, batchID = batchID)
+
       # Check that version matches (just in case)
       if(any(b$version != dplyr::tbl(src, "admInfo") %>%
              dplyr::pull(.data$data_version))) {
@@ -83,7 +88,12 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
         
         # 3. Hits for one new batch -------------------------------------------
         numHits <- hitsForBatchProject(src, batchID, batchMsg, projectID)
-        
+
+        # 3b. Hits blue for one new batch (if necessary)-----------------------
+        if (batchID %in% b2$batchID) {
+          hitsBluForBatchProject(src, batchID, batchMsg)
+        }
+
         # 4. GPS for for this Batch -------------------------------------------
         gpsForBatchProject(src, batchID, batchMsg, projectID)
         

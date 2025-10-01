@@ -32,7 +32,7 @@ ensureDBTables <- function(src, projRecv, deviceID, quiet = FALSE) {
   
   # Create all empty tables
   for(t in c("activity", "activityAll", "antDeps", "batches", "batchRuns", 
-             "clarified", "deprecated", "filters", "gps", "gpsAll", "hits", 
+             "clarified", "deprecated", "filters", "gps", "gpsAll", "hits", "hitsBlu", 
              "nodeData", "nodeDeps", "projAmbig", "projs", "pulseCounts",
              "recvDeps", "runs", "runsFilters", "species",
              "tagAmbig", "tagDeps", "tagProps", "tags")) {
