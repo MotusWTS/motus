@@ -4,6 +4,18 @@ sql_versions <- dplyr::tibble()
 
 sql_versions <- rbind(
   sql_versions,
+  cbind(date = "2025-10-01",
+        descr = "Create new hitsBlu table",
+        sql = paste0("CREATE TABLE hitsBlu (
+			hitID INTEGER NOT NULL, 
+			batchID INTEGER NOT NULL, sync INTEGER, 
+			product INTEGER, 
+			revision INTEGER, 
+			payload TEXT, 
+			PRIMARY KEY(hitID));")))
+
+sql_versions <- rbind(
+  sql_versions,
   cbind(date = "2021-02-26",
         descr = "Add stationName and stationID fields to recvDeps table",
         sql = paste0("ALTER TABLE recvDeps ADD COLUMN stationName TEXT;",
