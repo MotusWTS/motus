@@ -46,10 +46,10 @@ motusUpdateRecvDB <- function(src, countOnly, forceMeta = FALSE) {
     b <- srvBatchesForReceiver(deviceID = deviceID, batchID = batchID)
     if (! isTRUE(nrow(b) > 0)) break
 	
-	# get next set of blu batches (the highest batchID returned may fall outside 
-	# this loop, but those will be ignored and queried in the next loop
-	# to avoid this, we could provide the highest batchID we want for this loop
-	b2 <- srvHitsBluBatchesForReceiver.R(deviceID = deviceID, batchID = batchID)
+	lastBatchID = max(b$batchID, na.rm = TRUE)
+	
+	# get next set of blu batches within the batchID range of b
+	b2 <- srvHitsBluBatchesForReceiver(deviceID = deviceID, batchID = batchID, lastBatchID = lastBatchID)
 	
     # temporary work-around to batches with incorrect starting timestamps
     # (e.g. negative, or on CLOCK_MONOTONIC) that make a batch appears
