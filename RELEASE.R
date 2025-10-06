@@ -65,7 +65,7 @@ remotes::install_deps(dependencies = TRUE)
 
 # Load all functions: devtools::load_all() or Ctrl-Shift-L
 set_testing(set = FALSE) # Make sure to download full sets
-source("data-raw/internal_data.R")
+source("data-raw/internal_data.R")  # Creates SQL Updates and Field name dfs
 source("data-raw/sample_data.R")
 
 
