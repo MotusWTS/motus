@@ -46,7 +46,7 @@ t <- field_names %>%
 # batches ------------------------------------------------------------------
 # "batches" table applies to batches_for_receiver and batches_for_tag
 t <- field_names %>%
-  filter(str_detect(table, "batches_for_tag_project$"),
+  filter(str_detect(table, "vwr_batches_for_tag_project$"),
          !column %in% c("version")) %>%
   mutate(table = "batches",
          keys = column == "batchID") %>%
@@ -109,7 +109,7 @@ t <- field_names %>%
     keys = column == "hitID",
     not_nulls = column %in% c("runID", "batchID"),
     references = case_when(column == "hitID" ~ "hits",
-                           column == "batchID" ~ "batches"),
+                           column == "batchID" ~ "batches")) %>%
   bind_rows(t, .)
 
 # nodeData --------------------------------------------------------------------
