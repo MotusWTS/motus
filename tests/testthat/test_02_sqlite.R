@@ -28,8 +28,14 @@ test_that("Create DB, includes any new fields", {
   expect_message(ensureDBTables(temp, 176, quiet = FALSE)) %>%
     suppressMessages()
   
+  proj_tbls <- c(unique(sql_fields$table), "allambigs", "allruns", 
+                 "allrunsGPS", "alltags", "alltagsGPS")
+  proj_tbls <- proj_tbls[proj_tbls != "pulseCounts"]
+
   expect_silent(ensureDBTables(temp, 176, quiet = TRUE))
-  expect_length(t <- DBI::dbListTables(temp), 32)
+  expect_equal(
+    t <- sort(DBI::dbListTables(temp)),
+    sort(proj_tbls))
   
   # Expect columns in the tables
   for(i in t) expect_gte(ncol(dplyr::tbl(temp, !!i)), 2)
