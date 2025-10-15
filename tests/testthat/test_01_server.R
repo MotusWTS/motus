@@ -126,6 +126,37 @@ test_that("srvBatchesXXX", {
   expect_named(s, c("batchID", "batchFilter"))
 })
 
+
+test_that("srvHitsBluBatchesForXXX", {
+  skip_on_ci()
+  skip_if_no_server()
+  skip_if_no_auth()
+
+  # srvHitsBluBatchesForReceiver - From  1948 (CTT-6CA25D375881)
+  expect_silent({
+    s <- srvHitsBluBatchesForReceiver(
+      deviceID = 1948,
+      batchID = 26750740,
+      lastBatchID = 26750740 + 10
+    )
+  }) %>%
+    expect_s3_class("data.frame")
+  expect_named(s, "batchID")
+
+  # srvHitsBluBatchesForTagProject
+  expect_silent({
+    s <- srvHitsBluBatchesForTagProject(
+      projectID = 622,
+      batchID = 26752845,
+      lastBatchID = 26752845 + 10
+    )
+  }) %>%
+    expect_s3_class("data.frame")
+  expect_named(s, "batchID")
+
+
+})
+
 test_that("srvDeviceIDForReceiver", {
   
   skip_on_ci()
@@ -179,10 +210,27 @@ test_that("srvHitsXXX", {
                     "freq", "freqSD", "slop", "burstSlop", "validated"))
 
   # srvHitsForTagProject
-  expect_silent(s <- srvHitsForTagProject(projectID = 1, batchID = 1)) %>%
+test_that("srvHitsBluXXX", {
+  
+  skip_on_ci()
+  skip_if_no_server()
+  skip_if_no_auth()
+  
+  # srvHitsBluForReceiver
+  # From 1948 (CTT-6CA25D375881)
+  expect_silent(s <- srvHitsBluForReceiver(1948, batchID = 26750744)) %>%
+    expect_s3_class("data.frame")
+  expect_named(s, c("hitID", "batchID", "sync", "product", "revision", "payload"))
+  expect_gt(nrow(s), 1)
+
+  # srvHitsBluForTagProject
+  # From Project 622
+  expect_silent(s <- srvHitsBluForTagProject(projectID = 622, batchID = 26752850)) %>%
     expect_s3_class("data.frame")
   expect_named(s, c("hitID", "runID", "batchID", "ts", "sig", "sigSD", "noise",
                     "freq", "freqSD", "slop", "burstSlop", "validated"))
+  expect_gt(nrow(s), 1)
+
 })
 
 test_that("srvNodes", {
