@@ -72,7 +72,7 @@ motusUpdateRecvDB <- function(src, countOnly, forceMeta = FALSE) {
 
       # 3b. Hits blue for one new batch (if necessary)--------------------------
       if (batchID %in% b2$batchID) {
-        hitsBluForBatchReceiver(src, batchID, batchMsg)
+        hitsBluForBatchReceiver(src, batchID, batchMsg, deviceID)
       }
 
       # 4. GPS for for this Batch ----------------------------------------------

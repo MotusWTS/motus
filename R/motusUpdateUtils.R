@@ -147,14 +147,16 @@ hitsBluForBatchProject <- function(src, batchID, batchMsg, projectID = NULL) {
 #' @noRd
 #' @keywords internal
 
-hitsBluForBatchReceiver <- function(src, batchID, batchMsg) {
+hitsBluForBatchReceiver <- function(src, batchID, batchMsg, deviceID) {
   
   hitID <- DBI_Query(src, 
                      "SELECT IFNULL(max(hitID), 0) FROM hitsBlu WHERE batchID = {batchID}")
   
   repeat {
-    h <- srvHitsBluForReceiver(batchID = batchID, hitID = hitID)
-    
+    h <- srvHitsBluForReceiver(
+      deviceID = deviceID, 
+      batchID = batchID, 
+      hitID = hitID)
     
     if (!isTRUE(nrow(h) > 0)) break
     message(msg_fmt("{batchMsg}: got {nrow(h):6d} hitsBlu starting at {hitID}"))
