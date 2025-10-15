@@ -15,7 +15,7 @@
 
 motusUpdateRecvDB <- function(src, countOnly, forceMeta = FALSE) {
   check_src(src)
-  
+
   recvSerno <- DBI_Query(src, "SELECT val FROM meta WHERE key = 'recvSerno'")
   deviceID <- DBI_Query(src, "SELECT val FROM meta WHERE key = 'deviceID'") %>%
     as.integer()
@@ -45,12 +45,12 @@ motusUpdateRecvDB <- function(src, countOnly, forceMeta = FALSE) {
     # in order to count runs and hits
     b <- srvBatchesForReceiver(deviceID = deviceID, batchID = batchID)
     if (! isTRUE(nrow(b) > 0)) break
+
+    lastBatchID <- max(b$batchID, na.rm = TRUE)
 	
-	lastBatchID = max(b$batchID, na.rm = TRUE)
-	
-	# get next set of blu batches within the batchID range of b
-	b2 <- srvHitsBluBatchesForReceiver(deviceID = deviceID, batchID = batchID, lastBatchID = lastBatchID)
-	
+	  # get next set of blu batches within the batchID range of b
+    b2 <- srvHitsBluBatchesForReceiver(deviceID = deviceID, batchID = batchID, lastBatchID = lastBatchID)
+    	
     # temporary work-around to batches with incorrect starting timestamps
     # (e.g. negative, or on CLOCK_MONOTONIC) that make a batch appears
     # to span multiple deployments.

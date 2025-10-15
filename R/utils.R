@@ -106,6 +106,17 @@ get_projRecv <- function(src) {
   projRecv
 }
 
+get_deviceID <- function(src) {
+  check_src(src)
+  DBI_Query(src, "SELECT val FROM meta WHERE key = 'deviceID'") %>%
+    as.integer()
+}
+
+get_projectID <- function(src) {
+  check_src(src)
+  DBI_Query(src, "SELECT val FROM meta WHERE key = 'tagProject'") %>%
+    as.integer()
+}
 
 
 updatePkgVersion <- function(version) {

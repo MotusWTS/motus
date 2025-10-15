@@ -38,7 +38,7 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
   # keep track of items we'll need metadata for
   tagIDs <- c()
   devIDs <- c()
-  
+
   for (projectID in projectIDs) {
     batchID <- max_batch(src, projectID)
     
@@ -51,7 +51,7 @@ motusUpdateTagDB <- function(src, countOnly = FALSE, forceMeta = FALSE) {
       b <- srvBatchesForTagProject(projectID = projectID, batchID = batchID)
       if (!isTRUE(nrow(b) > 0)) break
 
-	  lastBatchID = max(b$batchID, na.rm = TRUE)
+	    lastBatchID <- max(b$batchID, na.rm = TRUE)
 
       # get next set of blu batches within the batchID range of b
       b2 <- srvHitsBluBatchesForTagProject(projectID = projectID, batchID = batchID, lastBatchID = lastBatchID)

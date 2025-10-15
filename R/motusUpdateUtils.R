@@ -125,10 +125,11 @@ hitsBluForBatchProject <- function(src, batchID, batchMsg, projectID = NULL) {
                      "SELECT IFNULL(max(hitID), 0) FROM hitsBlu WHERE batchID = {batchID}")
 
   repeat {
-    h <- srvHitsBluForTagProject(projectID = projectID, 
-                              batchID = batchID, 
-                              hitID = hitID)
-    
+    h <- srvHitsBluForTagProject(
+      projectID = projectID, 
+      batchID = batchID, 
+      hitID = hitID)
+      
     if (!isTRUE(nrow(h) > 0)) break
     message(msg_fmt("{batchMsg}: got {nrow(h):6d} hitsBlu starting at {hitID:15.0f}"))
     
