@@ -1,3 +1,6 @@
+# motus 6.2.0 
+* Add hitsBlu table to download Blu tags data
+
 # motus 6.1.1
 * Add support for Sigma Eight receivers
 

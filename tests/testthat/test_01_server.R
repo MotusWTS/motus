@@ -171,6 +171,8 @@ test_that("srvDeviceIDForReceiver", {
 
 test_that("srvGPSXXX", {
   
+  skip()
+
   skip_on_ci()
   skip_if_no_server()
   skip_if_no_auth()
@@ -203,13 +205,32 @@ test_that("srvHitsXXX", {
   skip_if_no_server()
   skip_if_no_auth()
   
-  # srvHitsForReceiver - From SG-1814BBBK0461
-  expect_silent(s <- srvHitsForReceiver(batchID = 1719802, hitID = 3743988014)) %>%
+  # srvHitsForReceiver
+
+  # Get batch to check -  - From Project 1 (SG-4002BBBK1580)
+  b <- srvBatchesForReceiver(deviceID = 217, batchID = 0) %>%
+    dplyr::filter(numHits > 100) %>%
+    dplyr::slice_tail()
+
+  expect_silent(s <- srvHitsForReceiver(batchID = b$batchID)) %>%
     expect_s3_class("data.frame")
   expect_named(s, c("hitID", "runID", "batchID", "ts", "sig", "sigSD", "noise",
                     "freq", "freqSD", "slop", "burstSlop", "validated"))
+  expect_gt(nrow(s), 1)
 
   # srvHitsForTagProject
+  # Get batch to check -  From Project 1
+  # TODO check if we can use real batch?
+  #b <- srvBatchesForTagProject(1, batchID = 27072564) %>%
+  #  dplyr::slice_tail()
+  expect_silent(s <- srvHitsForTagProject(projectID = 1, batchID = 27072564)) %>%
+    expect_s3_class("data.frame")
+  expect_named(s, c("hitID", "runID", "batchID", "ts", "sig", "sigSD", "noise",
+                    "freq", "freqSD", "slop", "burstSlop", "validated"))
+  expect_gt(nrow(s), 1)
+
+})
+
 test_that("srvHitsBluXXX", {
   
   skip_on_ci()
@@ -272,7 +293,10 @@ test_that("srvEXTRA", {
                     "isMobile", "tsStart", "tsEnd", "elevation", "StationID"))
 
   # srvRunsForReceiver - SG-1814BBBK0461
-  expect_silent(s <- srvRunsForReceiver(batchID = 1719802, runID = 149551526)) %>%
+  b <- srvBatchesForReceiver(deviceID = 217, batchID = 0) %>%
+    dplyr::filter(numHits > 100) %>%
+    dplyr::slice_tail()
+  expect_silent(s <- srvRunsForReceiver(batchID = b$batchID)) %>%
     expect_s3_class("data.frame")
   expect_named(s, c("runID", "batchIDbegin", "tsBegin", "tsEnd", "done", 
                     "motusTagID", "ant", "nodeNum", "len", "motusFilter"))

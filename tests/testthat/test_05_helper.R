@@ -9,15 +9,18 @@ test_that("filterByActivity filters as expected", {
     expect_s3_class("tbl")
   expect_silent(b <- filterByActivity(tags, return = "bad")) %>%
     expect_s3_class("tbl")
+
+  gb <- rbind(b, g) %>%
+    dplyr::select("probability", "hitID") %>%
+    dplyr::arrange(probability, hitID)
   
   # 'good' and 'bad' should be subsets of 'all'
   expect_equal(nrow(a <- dplyr::collect(a)), 
-               nrow(g <- dplyr::collect(g)) + nrow(b <- dplyr::collect(b)))
+               nrow(gb))
                  
   expect_equal(dplyr::arrange(a, .data$probability, .data$hitID) %>%
                  dplyr::select("probability", "hitID"),
-               rbind(b, g) %>%
-                 dplyr::select("probability", "hitID"))
+               gb)
   
   # Matches motusFilter results
   runs <- dplyr::tbl(tags, "runs") %>%
@@ -219,9 +222,13 @@ test_that("PROJ 1 - remove deprecated batches", {
 test_that("RECV - remove deprecated batches", {
   skip_if_no_server()
   skip_if_no_auth()
-  withr::local_file("SG-1814BBBK0461.motus")
+  #withr::local_file("SG-1814BBBK0461.motus")
+  #withr::local_db_connection(
+  #  suppressMessages(t <- tagme("SG-1814BBBK0461", new = TRUE)))
+    
+  withr::local_file("SG-4002BBBK1580.motus")
   withr::local_db_connection(
-    suppressMessages(t <- tagme("SG-1814BBBK0461", new = TRUE)))
+    suppressMessages(t <- tagme("SG-4002BBBK1580", new = TRUE)))
   
   # Deprecated batches listed, but not removed to start
   dep <- dplyr::tbl(t, "deprecated") %>% 
