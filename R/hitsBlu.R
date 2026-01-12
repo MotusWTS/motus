@@ -31,13 +31,14 @@ hitsBlu <- function(src) {
     srvHitsBluBatches <- srvHitsBluBatchesForTagProject
     hitsBlu <- hitsBluForBatchProject
   } else {
-    srvHitsBluBatches <- srvHitsBluBatchesForRecvProject
+    srvHitsBluBatches <- srvHitsBluBatchesForReceiver
     hitsBlu <- hitsBluForBatchReceiver
     projdevID <- get_deviceID(src)
   }
   
   # Get batches to check ---------------------------
   message("Checking blu tag batch history...")
+
   # Downloaded batches with blu tag hit data
   blu_batches <- dplyr::tbl(src, "hitsBlu") %>%
     dplyr::pull(.data$batchID) %>%
@@ -45,14 +46,14 @@ hitsBlu <- function(src) {
   
   # Downloaded batches, excluding those with known blu tag hits
   old_batches <- dplyr::tbl(src, "batches") %>%
-    dplyr::filter(!.data$batchID >= blu_batches) %>%
+    dplyr::filter(!.data$batchID %in% .env$blu_batches) %>%
     dplyr::pull(.data$batchID)
   
-  # Get outstanding baches
+  # Get outstanding batches
   batches <- srvHitsBluBatches(
     projdevID,
-    batchID = 26752850, #min(old_batches), 
-    lastBatchID = 26752850 + 10000) #max(old_batches)) %>%
+    batchID = min(old_batches), 
+    lastBatchID = max(old_batches)) %>%
     unlist(use.names = FALSE)
     
   batches <- batches[!batches %in% blu_batches] # Not already downloaded     

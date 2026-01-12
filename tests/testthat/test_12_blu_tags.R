@@ -15,9 +15,11 @@ test_that("tagme() blu project", {
     suppressMessages()
   
   # CHECKS
-  # Dummy batches to blu tag range - >=26750685, 26751098, 26752853 (don't use the first)
-  #DBI::dbExecute(t, "INSERT INTO batches (batchID) VALUES (26751098), (26752850)")
-  #DBI::dbExecute(t, "INSERT INTO projBatch (tagDepProjectID, batchID, maxHitID) VALUES (622, 26751098, 0), (622, 26752850, 0)")
+
+  # Add dummy batches so we skip ahead to blu tag range 
+  # >=26750685, 26751098, 26752853 (don't use the first)
+  DBI::dbExecute(t, "INSERT INTO batches (batchID) VALUES (26751098), (26752850)")
+  DBI::dbExecute(t, "INSERT INTO projBatch (tagDepProjectID, batchID, maxHitID) VALUES (622, 26751098, 0), (622, 26752850, 0)")
 
   # Ensure blu fetched
   withr::local_options(motus.test.max = 5)
@@ -36,12 +38,15 @@ test_that("tagme() blu project", {
   expect_gt(min(tt$batchID), 26750685) # Expect missing first batch
   
   # Fill in missing blu tags
-  expect_message(hitsBlu(t), "Checking blu tag batch history")
+  hitsBlu(t) %>%
+    expect_message("Checking blu tag batch history") %>%
+    expect_message("hitsBlu starting at") %>%
+    suppressMessages()
   tt2 <- DBI::dbReadTable(t, "hitsBlu")
   expect_gt(nrow(tt2), nrow(tt)) # Expect have the first batch
   expect_equal(min(tt2$batchID), 26750685)
 
-  })
+})
 
 test_that("tagme() blu receivers", {
   skip_on_ci()
@@ -56,8 +61,10 @@ test_that("tagme() blu receivers", {
   deviceID <- srvDeviceIDForReceiver(get_projRecv(t))[[2]]
   ensureDBTables(t, get_projRecv(t), deviceID)
   
-  # Dummy batches to blu tag range - >= 26750744 (start with greater to then test adding below)
-  DBI::dbExecute(t, "INSERT INTO batches (batchID) VALUES (26750760)")
+  # Add dummy batches to skip ahead to blu tag range
+  # < 26750744 (add batches before, then test by removing blutags)
+  # (but cannot start on batch that doesn't exist, check "batches" table/call)
+  DBI::dbExecute(t, "INSERT INTO batches (batchID) VALUES (26750740)")
 
   # Ensure blu fetched
   withr::local_options(motus.test.max = 5)
@@ -75,12 +82,19 @@ test_that("tagme() blu receivers", {
     expect_message("hitsBlu") %>%
     suppressMessages()
 
+  # Have blu tag hits
   tt <- DBI::dbReadTable(t, "hitsBlu")
   expect_gt(nrow(tt), 0)
-  expect_gt(min(tt$batchID), 26750744) # Missing first hit
+
+  # Remove starting hits
+  DBI::dbExecute(t, "DELETE FROM hitsBlu WHERE batchID IN (26750744)")
+  tt <- DBI::dbReadTable(t, "hitsBlu")
+  expect_gt(min(tt$batchID), 26750744)
   
   # Fill in missing blu tags
-  expect_message(hitsBlu(t), "Checking blu tag batch history")
+  hitsBlu(t) %>%
+    expect_message("Checking blu tag batch history") %>%
+    expect_message("hitsBlu starting at")
   tt2 <- DBI::dbReadTable(t, "hitsBlu")
   expect_gt(nrow(tt2), nrow(tt)) # Now have the earlier hits
   expect_equal(min(tt2$batchID), 26750744)
