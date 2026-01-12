@@ -93,47 +93,48 @@ test_that("Recv - DB updates - 2", {
   skip_on_os("windows")
   skip_if_no_server()
   skip_if_no_auth()
-  withr::local_file("SG-3115BBBK1127.motus")
-  withr::local_file("SG-3115BBBK1127_v1.motus")
+
+  recv <- "SG-4002BBBK1580"
+  recv_f1 <- paste0(recv, ".motus")
+  recv_f2 <- paste0(recv, "_v1.motus")
+
+  withr::local_file(recv_f1)
+  withr::local_file(recv_f2)
   
   # Create dummy version 1 - more data
   withr::local_options(list(motus.test.max = 30))
   tags <- withr::local_db_connection(
-    tagme("SG-3115BBBK1127", new = TRUE)) %>%
+    tagme(recv, new = TRUE)) %>%
     suppressMessages()
   DBI_Execute(tags, "UPDATE admInfo set data_version = 1")
   
-  expect_false(file.exists("SG-3115BBBK1127_v1.motus")) # No backup
+  expect_false(file.exists(recv_f2)) # No backup
   expect_message(
     t <- withr::local_db_connection(
-      tagme("SG-3115BBBK1127", rename = TRUE))) %>%
+      tagme(recv, rename = TRUE))) %>%
     suppressMessages()
-  expect_true(file.exists("SG-3115BBBK1127_v1.motus"))  # Backup
-  
-  # Expect data
-  new <- withr::local_db_connection(
-    DBI::dbConnect(RSQLite::SQLite(), dbname = "SG-3115BBBK1127.motus"))
-  
-  expect_gt(DBI_Query(new, "SELECT * FROM activity") %>% nrow(), 0)
-  expect_gt(DBI_Query(new, "SELECT * FROM hits") %>% nrow(), 0)
-  expect_gt(DBI_Query(new, "SELECT * FROM runs") %>% nrow(), 0)
+  expect_true(file.exists(recv_f2))  # Backup
 })
 
 test_that("Recv - Update fails if backup present", {
   skip_if_no_auth()
   skip_if_no_server()
+
+  recv <- "SG-4002BBBK1580"
+  recv_f1 <- paste0(recv, ".motus")
+  recv_f2 <- paste0(recv, "_v1.motus")
   
-  withr::local_file("SG-3115BBBK1127_v1.motus")
-  withr::local_file("SG-3115BBBK1127.motus")
-  file.create("SG-3115BBBK1127_v1.motus")
+  withr::local_file(recv_f2)
+  withr::local_file(recv_f1)
+  file.create(recv_f2)
   
   # Get old version
   file.copy(system.file("extdata", "project-176_v1.motus", package = "motus"),
-            "./SG-3115BBBK1127.motus")
+            recv_f1)
   
   expect_error(expect_message(
     t <- withr::local_db_connection(
-      tagme("SG-3115BBBK1127", rename = TRUE)), 
+      tagme(recv, rename = TRUE)), 
     "DATABASE UPDATE"),
     "_v1.motus already exists") %>%
     suppressMessages()

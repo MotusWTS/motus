@@ -59,6 +59,8 @@ remotes::install_deps(dependencies = TRUE)
 
 ## Update internal data files ------------------------------------------------
 
+# - Update SQL fields/tables in data-raw/field_names.R
+
 # - If merging sandbox - make sure that data-raw/updatesql.R updates unique to 
 #   sandbox have a date later than beta updates (otherwise they won't trigger)
 
