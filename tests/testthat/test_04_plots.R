@@ -33,9 +33,9 @@ test_that("Plots run with no errors", {
   skip_if_not_installed("ggspatial")
   skip_if_offline()
   withr::local_file("rosm.cache")
-  expect_message(plotRouteMap(tags_sql), "Remember") |>
+  expect_message(plotRouteMap(tags_sql), "Remember") %>%
     suppressMessages()
   expect_message(plotRouteMap(tags_sql, start_date = "2016-01-01",
-                              end_date = "2016-12-31")) |>
+                              end_date = "2016-12-31")) %>%
     suppressMessages()
 })

@@ -88,7 +88,7 @@ makeMetaTable <- function(src, projRecv, deviceID) {
       } else stop("Unexpected model for CTT receivers: ", projRecv, call. = FALSE)
     } else if(type == "sei") {
       type <- "SigmaEight"
-      model <- stringr::str_extract(projRecv, "(?<=(-|_))(A|O)") |> tolower()
+      model <- stringr::str_extract(projRecv, "(?<=(-|_))(A|O)") %>% tolower()
       model <- dplyr::case_match(model, "a" ~ "Ares", "o" ~ "Orion", .default = NA_character_)
     } else {
       stop("Unexpected receiver type: ", type, call. = FALSE)
