@@ -1,7 +1,7 @@
-#' Add/update hitsBlu data
+#' Update hitsBlu data
 #' 
-#' Download or resume a download of the 'hitsBlu' table in an existing Motus
-#' database. `hitsBlu` contains information regarding the 'health' of portable
+#' Add any missing blu tag hits to the `hitsBlu` table in an existing Motus
+#' database. `hitsBlu` contain information regarding the 'health' of portable
 #' node units. 
 #'
 #' @inheritParams args
@@ -9,10 +9,6 @@
 #' @details This function is only required if you suspect blu tag hits have been
 #'   missed (due to hits being downloaded before the motus package had the 
 #'   functionality to download blu tag hits).
-#'   
-#'   If an `hitsBlu` table doesn't exist, it will be created prior to
-#'   downloading. If there is an existing `hitsBlu` table, this will update the
-#'   records.
 #'
 #' @examples
 #' \dontrun{

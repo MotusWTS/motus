@@ -2,6 +2,7 @@
 % Please edit documentation in R/motus-pkg.R
 \docType{package}
 \name{motus}
+\alias{motus-package}
 \alias{motus}
 \title{Fetch and use data from the Motus Wildlife Tracking System}
 \description{
@@ -57,4 +58,38 @@ Commonly used functions:
 }
 \references{
 Motus Wildlife Tracking System \url{https://motus.org}
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://motuswts.github.io/motus/}
+  \item Report bugs at \url{https://github.com/MotusWTS/motus/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Birds Canada \email{motus@birdscanada.org}
+
+Authors:
+\itemize{
+  \item John Brzustowski \email{jbrzusto@fastmail.fm}
+  \item Denis Lepage \email{dlepage@birdscanada.org}
+}
+
+Other contributors:
+\itemize{
+  \item Steffi LaZerte \email{sel@steffilazerte.ca} [contributor]
+  \item Joey Bernard [contributor]
+  \item Lucas Berrigan [contributor]
+  \item Tara Crewe [contributor]
+  \item Zoe Crysler \email{zcrysler@gmail.com} [contributor]
+  \item Jeremy Hussell [contributor]
+  \item Catherine Jardine [contributor]
+  \item Amie MacDonald [contributor]
+  \item Stuart Mackenzie [contributor]
+  \item Paul Morrill [contributor]
+  \item Josh Sayers [contributor]
+  \item Philip Taylor [contributor]
+}
+
 }
