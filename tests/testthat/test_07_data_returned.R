@@ -91,6 +91,7 @@ test_that("Reciever data returned as expected", {
   skip_on_cran()
   skip_if_no_server()
   skip_if_no_auth()
+  unlink("SG-4002BBBK1580.motus") # For windows...
   withr::local_file("SG-4002BBBK1580.motus")
   withr::local_options(list(motus.test.max = 1))
   
