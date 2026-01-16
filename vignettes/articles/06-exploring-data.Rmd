@@ -12,8 +12,8 @@ sql_motus <- motus:::get_sample_data()
 if(!dir.exists("map-data")) dir.create("map-data")
 sql_motus <- motus:::get_sample_data()
 if(!file.exists("map-data/ne_50m_lakes.shp")) {
-  ne_download(scale = "medium", type = 'lakes', category = 'physical',
-              returnclass = "sf", destdir = "map-data")
+  rnaturalearth::ne_download(scale = "medium", type = 'lakes', category = 'physical',
+                            returnclass = "sf", destdir = "map-data")
 }
 ```
 
