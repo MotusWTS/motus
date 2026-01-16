@@ -1,4 +1,5 @@
 test_that("Proj - DB updates - new = TRUE", {
+  skip_on_os("windows")
   sample_auth()
   skip_if_no_server()
   withr::local_file("project-176.motus")
@@ -18,6 +19,7 @@ test_that("Proj - DB updates - new = TRUE", {
 })
 
 test_that("Proj - DB updates - forceMeta", {
+  skip_on_os("windows")
   sample_auth()
   skip_if_no_server()
   withr::local_file("project-176.motus")
@@ -37,6 +39,7 @@ test_that("Proj - DB updates - forceMeta", {
 })
 
 test_that("Proj - DB updates - new = FALSE", {
+  skip_on_os("windows")
   sample_auth()
   skip_if_no_server()
   withr::local_file("project-176.motus")
@@ -71,6 +74,7 @@ test_that("Proj - DB updates - new = FALSE", {
 })
 
 test_that("Proj - Update fails if backup present", {
+  skip_on_os("windows")
   sample_auth()
   skip_if_no_server()
   withr::local_file("project-176_v1.motus")
@@ -117,6 +121,7 @@ test_that("Recv - DB updates - 2", {
 })
 
 test_that("Recv - Update fails if backup present", {
+  skip_on_os("windows")
   skip_if_no_auth()
   skip_if_no_server()
 
