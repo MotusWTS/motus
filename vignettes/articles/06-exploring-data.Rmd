@@ -7,6 +7,14 @@ title: "Chapter 6 - Exploring detections data"
 ```{r setup, include = FALSE}
 # Get and update sample data to avoid messages later
 sql_motus <- motus:::get_sample_data()
+
+# Re-download lakes if necessary
+if(!dir.exists("map-data")) dir.create("map-data")
+sql_motus <- motus:::get_sample_data()
+if(!file.exists("map-data/ne_50m_lakes.shp")) {
+  ne_download(scale = "medium", type = 'lakes', category = 'physical',
+              returnclass = "sf", destdir = "map-data")
+}
 ```
 
 Once you have clarified any possible ambiguous tags and removed false positives, you are ready to start analyzing your clean data set. 
