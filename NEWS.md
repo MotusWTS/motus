@@ -1,3 +1,7 @@
+# motus 6.1.2
+* Add bandNumbers to `tagDeps` table
+* Update vignettes to use new version of rnaturalearth
+
 # motus 6.1.1
 * Add support for Sigma Eight receivers
 
@@ -9,7 +13,9 @@
   * `tagme()` fails gracefully if the directory specified does not exist
   * Fixed `Error in as.POSIXlt.character(x, tz, ...)` when starting a download
 * `tagme(new = TRUE)` now starts a download immediately
-* Add `srvTimeout()` to specify the server timeout limit
+* Add `srvTimeout()` to specify 
+
+# motus 6.0.0the server timeout limit
 * Clean up helper functions `sunRiseSet()` and `timeToSunriset()`
   * `sunRiseSet()` now required to run `timeToSunriset()`
   * Changed function argument names for clarity

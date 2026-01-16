@@ -11,7 +11,8 @@ field_names <- srvSchema() %>%
   rename_all(tolower) %>%
   rename(column = column_name, table = table_name, type = data_type) %>%
   mutate(type = toupper(type),
-         table = tolower(table)) %>%
+         table = tolower(table),
+         table = stringr::str_remove(table, "^vwr_")) %>%
   filter(!column %in% c("accessLevel"),
          !str_detect(column, "is_private"))
 
@@ -46,7 +47,7 @@ t <- field_names %>%
 # batches ------------------------------------------------------------------
 # "batches" table applies to batches_for_receiver and batches_for_tag
 t <- field_names %>%
-  filter(str_detect(table, "batches_for_tag_project$"),
+  filter(str_detect(table, "^batches_for_tag_project$"),
          !column %in% c("version")) %>%
   mutate(table = "batches",
          keys = column == "batchID") %>%
@@ -175,7 +176,6 @@ t <- field_names %>%
 # tagDeps --------------------------------------------------------------------
 t <- field_names %>%
   filter(str_detect(table, "tags_deps")) %>%
-  add_row(column = "bandNumber", type = "TEXT") %>%
   add_row(column = "id", type = "INTEGER") %>%
   add_row(column = "bi", type = "INTEGER") %>%
   add_row(column = "fullID", type = "INTEGER") %>%
@@ -370,6 +370,12 @@ consolidate <- function(x) {
   x
 }
 
+# Check for duplicates -----------------------------------------------
+dups <- t %>% 
+  summarize(n = n(), .by = c("table", "column")) %>%
+  filter(n > 1)
+
+if(nrow(dups) > 0) stop("Duplicate fields, check it out!\n", paste0(capture.output(dups), collapse = "\n"))
 
 # ** COMBINE ---------------------------------------------------------------
 sql_fields <- t %>%
