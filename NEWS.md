@@ -1,5 +1,6 @@
 # motus 6.1.2
 * Add bandNumbers to `tagDeps` table
+* Update vignettes to use new version of rnaturalearth
 
 # motus 6.1.1
 * Add support for Sigma Eight receivers
