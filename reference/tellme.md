@@ -1,0 +1,52 @@
+# Report how much new data motus has for a tag detection database
+
+"new" means data not already in your local database.
+
+## Usage
+
+``` r
+tellme(projRecv, new = FALSE, dir = getwd())
+```
+
+## Arguments
+
+- projRecv:
+
+  Numeric. Project code from motus.org, *or* character receiver serial
+  number.
+
+- new:
+
+  Logical. Create a new database (Default `FALSE`)? Specify `new = TRUE`
+  to create a new local copy of the database to be downloaded.
+  Otherwise, it assumes the database already exists, and will stop with
+  an error if it cannot find it in the current directory. This is mainly
+  to prevent inadvertent downloads of large amounts of data that you
+  already have!
+
+- dir:
+
+  Character. Path to the folder where you are storing databases IF
+  `NULL` (default), uses current working directory.
+
+## Value
+
+a named list with these items:
+
+- numBatches: number of batches having data for your database
+
+- numRuns: number of runs of tags detections with new data
+
+- numHits: number of new detections
+
+- numGPS: number of new GPS fixes covering the new detections
+
+- numBytes: estimated size of download, in bytes. This is an estimate of
+  the *uncompressed* size, but data are gz-compressed for transfer, so
+  the number of bytes you have to download is typically going to be
+  smaller than this number by a factor of 2 or more.
+
+## Note
+
+if you specify `new = TRUE` and the database does not already exist, it
+will be created (but empty).

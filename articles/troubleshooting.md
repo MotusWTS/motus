@@ -1,0 +1,307 @@
+# Troubleshooting
+
+As a first step, always ensure you are using the latest version of the
+`motus` package (see
+[`checkVersion()`](https://motuswts.github.io/motus/reference/checkVersion.md)),
+and you have all required packages installed, loaded, and up to date
+(see [Chapter 2 - Loading packages](#id_02-loading-packages.html)).
+
+We have outline some problems and possible solutions for working with
+`motus`. Generally, if all else fails, uninstalling R and/or R Studio,
+and reinstalling the latest R version typically works. Depending on how
+much customization you have made to your R configuration, this may be
+the quickest option available.
+
+## Installation Problems
+
+Occasionally users run into problems while trying to install or update
+`motus`. Often this is related to problems with different versions of
+package dependencies. Here we suggest several solutions.
+
+1.  Update all packages before the installation
+
+``` r
+library(remotes)
+update_packages()
+```
+
+2.  If the installation of Motus generates errors saying that some of
+    the existing packages cannot be removed, you can try to quit any R
+    session, manually delete the problematic package folder from your R
+    libraries and manually install the package again before trying to
+    install `motus.`
+
+You can also try to set up a custom R library folder with
+[`.libPaths()`](https://rdrr.io/r/base/libPaths.html) and ensure that
+you have full write permissions on that folder, or try to start R in
+administrator (Windows) or SUDO mode (Linux/Ubuntu) and try installing
+again.
+
+To set a custom library folder for installing new packages:
+
+``` r
+.libPaths("C:/r-libraries/")
+```
+
+3.  In some cases, it is easier to upgrade R itself by reinstalling the
+    newest version of R: <https://cran.r-project.org/>. **Note:** While
+    this results in a nice clean installation with fewer problems, it
+    necessitates the re-installation of R packages which can be
+    time-consuming.
+
+### Updating `motus`from a much earlier version
+
+If you are updating your version of `motus` from a version \<1.5.0 to
+\>= 1.5.0 (i.e. from when `motusClient` was a separate package), you
+will have best results if you first remove `motus` and `motusClient` and
+reinstall from scratch:
+
+``` r
+remove.packages(c("motus", "motusClient"))
+```
+
+Now you can install v1.5.0+.
+
+### Cannot remove old versions
+
+If you get errors “cannot remove prior installation of package …”
+(e.g. `dplyr`) while trying to install motus, this could be due to
+having multiple R sessions active. You can try the following:
+
+1.  find out your R package library location:
+    `Sys.getenv("R_LIBS_USER")` or
+    [`.libPaths()`](https://rdrr.io/r/base/libPaths.html)
+2.  close any session of R and/or R Studio
+3.  in the library folder, manually delete the package that failed to
+    remove (e.g. `dplyr`)
+4.  restart R and manually install the package again
+    e.g. `install.packages("dplyr")`
+
+Another possible cause of this problem relates to file permissions in
+your library folders (e.g. libraries installed in c:files-3.x.x). To
+confirm this, you can try running R “as administrator” (right-clicking
+the R icon), or use `SUDO R` (Linux/Ubuntu) and trying installation
+again. If this resolves your problem, you should consider setting your
+libraries in a new folder where your logged in user has full access:
+
+``` r
+# confirm the libPaths location(s)
+.libPaths()
+# add a new libPaths default location
+.libPaths("c:/users/myusername/R/win-libraries")
+```
+
+## General Problems
+
+Many, *many*, problems arise from conflicts between R packages which may
+be out of date. If you have a problem that you can’t seem to resolve,
+try the following steps in order (stopping when the problem goes away):
+
+1.  Update `motus` and packages that `motus` depends on. (You may first
+    need to install the `remotes` package). **Re-start R**
+
+``` r
+remotes::update_packages("motus")
+```
+
+2.  Update all your packages. **Re-start R**
+
+``` r
+remotes::update_packages()
+```
+
+3.  Update R <https://cran.r-project.org/>. (You may have to reinstall
+    packages)
+
+## Logging out of motus
+
+``` r
+motusLogout()
+```
+
+## Data downloads
+
+While attempting to download data with the `motus` package, you may
+encounter errors, many of which are likely due to an interrupted
+connection. **Always ensure you are connected to the internet when using
+the [`tagme()`](https://motuswts.github.io/motus/reference/tagme.md)
+function with `update = TRUE`**. Most issues can be solved by either
+logging out, or by restarting R and resuming the download.
+
+To resume your data download, run
+[`tagme()`](https://motuswts.github.io/motus/reference/tagme.md) again,
+but do not include `new = TRUE`:
+
+``` r
+tagme(project.num, dir = ...)
+```
+
+If errors persist and you are unable to download your data, the server
+may be temporarily offline.
+
+> Please contact Motus with any concerns at <motus@birdscanada.org>.
+
+## Google Maps
+
+As of October 16, 2018 recent updates require the use of a Google key to
+access google maps. To obtain an access key, you must be a registered
+Google user with **up to date billing information**, however you do not
+have to pay for the service (for the first little while at least). To
+obtain a key:
+
+1.  login to the [Google Cloud
+    Platform](https://cloud.google.com/console/google/maps-apis/overview).  
+2.  If you do not already have a project then create one.  
+3.  Check that you have current billing information - you will not be
+    charged but it must be present and up to date.  
+4.  Under the navigation menu on the left, click APIs & Services \>
+    Credentials, then click Create credentials \> API key.  
+5.  You may need to enable Google Maps Static API. You can do this
+    through the navigation menu in the upper left corner, and selecting
+    APIs & Services \> library, choosing “Google Maps Static API” and
+    clicking “Enable”.
+
+Full details are listed under “Detailed Guide”
+[here](https://developers.google.com/maps/documentation/javascript/get-api-key).
+Note that you may have to enable Google Maps Static API. For
+troubleshooting see
+[here](https://groups.google.com/forum/#!topic/motus-wts/UxqFIO6Pcmo)
+and
+[here](https://groups.google.com/forum/#!topic/motus-wts/UxqFIO6Pcmo%20and%20https://github.com/dkahle/ggmap/issues/51).
+
+Once you have your access key, you’ll need to provide it with the call
+`register_google()`, **each time you start a new R session you will be
+required to enter your key.**
+
+Then you can create Google maps with the `ggmap` package using the
+`get_googlemap()` function and specifying the lat/lon centre of your map
+(as opposed to bounding box as with stamen maps).
+
+## Common errors
+
+### I cannot access Project 176 / I download 0 records from Project 176
+
+Remember that project 176 is *only* accessible with the username and
+password: **`motus.sample`**.
+
+### I get the message “Auto-disconnecting SQLiteConnection” one or multiple times after using `tagme()`
+
+If this occurs after data download has finished, this message can be
+ignored. If it occurs during an active download, the connection will
+usually be maintained and the download will continue. However if the
+download stops, simply run
+[`tagme()`](https://motuswts.github.io/motus/reference/tagme.md) again.
+If that does not work, we suggest [logging out](#loggint-out-of-motus)
+of the motus package or restarting R and then [resuming your
+download](#resume-data-download).
+
+### I get an “Internal Server Error” message when using `tagme(...)`
+
+If you get this message while updating your `.motus` file, use
+[`tagme()`](https://motuswts.github.io/motus/reference/tagme.md) again
+to continue the download.
+
+### I get an “Error: Forbidden” message when using `tagme()`
+
+This error may occur if you are attempting to download multiple projects
+simultaneously from the same user account. If you get this error, we
+suggest [logging out](#loggint-out-of-motus) of the motus package and
+then [resuming your download](#resume-data-download).
+
+### I get an error “Object ‘xxxx’ not found”, referring to a table or field name, or some of your examples in the articles do not work.
+
+Be sure to start the steps from the top of the chapter and run them in
+sequential order. Another possibility is that your `.motus` database
+hasn’t been updated to support the latest version of the `motus`
+package.
+
+To ensure that your `.motus` file is up-to-date with the `motus`
+package:
+
+``` r
+sql_motus <- tagme(project.num, dir= ...)
+checkVersion(sql_motus)
+```
+
+To correct any warnings, you should follow these steps:
+
+1.  download the latest version of the motus package (refer to [Chapter
+    2 - Loading
+    packages](https://motuswts.github.io/motus/articles/02-loading-packages.md)).
+2.  terminate and restart your R session.
+3.  load the `motus` package using
+    [`library(motus)`](https://motuswts.github.io/motus/) in your R
+    console.
+4.  load your sqlite file. Look for notes on the console indicating that
+    your database is being updated.
+5.  check the version again.
+
+``` r
+library(motus)
+sql <- tagme(project.num, dir= ...)
+checkVersion(sql)
+```
+
+### I get an error `Error in rsqlite_connect(dbname, loadable.extensions, flags, vfs) : Could not connect to database: unable to open database file` when attempting to run `tagme()`
+
+If you get this message, it’s likely that you’re attempting a new
+download or update to a nonexistent directory. The directory is
+specified in the **`dir = ""`** command of the
+[`tagme()`](https://motuswts.github.io/motus/reference/tagme.md)
+function. If the directory is not specified, files will be saved to your
+working directory. Use [`getwd()`](https://rdrr.io/r/base/getwd.html) to
+determine your current working directory. Use
+[`setwd()`](https://rdrr.io/r/base/getwd.html) to set a new working
+directory. To specify a location to save files from your working
+directory use `./` followed by the file path.
+
+``` r
+getwd() # show working directory, in this case it's "C:/Documents"
+
+# downloads data to your working directory
+tagme(proj.num, new = TRUE)
+
+# downloads data to the data folder within your working directory
+# ie. the file path C:/Documents/data
+tagme(proj.num, new = TRUE, dir = "./data/") 
+
+# downloads data to the file path C:/Downloads
+tagme(proj.num, new = TRUE, dir = "C:/Downloads") 
+```
+
+### I see GPS coordinates of “0” or “999”
+
+These values are recorded from the GPS unit in the field.  
+Values like these should be ignored, you can replace these with `NA`, or
+insert the `recvDeployLat`/`recvDeplOyLon` values which are taken from
+receiver deployment metadata entered by users.
+
+``` r
+## to replace gpsLat/gpsLon values of NA, 0, or 999 with that of receiver deployment metadata in the alltags table, and read into a data.frame
+df_alltags <- tbl_alltags %>% 
+  mutate(recvLat = if_else((is.na(gpsLat)|gpsLat == 0|gpsLat == 999), 
+                           recvDeployLat, gpsLat), 
+         recvLon = if_else((is.na(gpsLon)|gpsLon == 0|gpsLon == 999), 
+                           recvDeployLon, gpsLon)
+  collect() %>% as.data.frame
+```
+
+### I see port with a value of -1
+
+Port “-1” represents the “A1+A2+A3+A4” compound antenna which is
+sometimes reported in Lotek .DTA file detections. This likely means the
+receiver has combined the signal from 4 antennas to detect the tag.
+
+### I get the error `Error in rsqlite_fetch(res@ptr, n = n) : database disk image is malformed`
+
+This is likely due to corrupt files which can occur during download. The
+easiest solution is to delete your current `.motus` file and download
+from scratch.
+
+Of course, there is always the possibility that these articles contains
+errors!
+
+For further problems, please contact <motus@birdscanada.org>
+
+> **What Next?** [Explore
+> articles](https://motuswts.github.io/motus/articles/index.md)

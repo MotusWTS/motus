@@ -1,26 +1,25 @@
 pandoc: 3.1.11
-pkgdown: 2.0.9
+pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
-  01-introduction: 01-introduction.html
-  02-installing-packages: 02-installing-packages.html
-  03-accessing-data: 03-accessing-data.html
-  04-deployments: 04-deployments.html
-  05-data-cleaning: 05-data-cleaning.html
-  06-exploring-data: 06-exploring-data.html
-  advanced-modelling: advanced-modelling.html
-  database-variables: database-variables.html
-  deprecated-batches: deprecated-batches.html
-  filtering: filtering.html
-  gps: gps.html
-  identifying-false-positives: identifying-false-positives.html
-  motus-data: motus-data.html
-  motus: motus.html
-  signal-strength: signal-strength.html
-  troubleshooting: troubleshooting.html
-  vanishing-bearings: vanishing-bearings.html
-last_built: 2024-05-21T21:26Z
+  articles/01-introduction: 01-introduction.html
+  articles/02-installing-packages: 02-installing-packages.html
+  articles/03-accessing-data: 03-accessing-data.html
+  articles/04-deployments: 04-deployments.html
+  articles/05-data-cleaning: 05-data-cleaning.html
+  articles/06-exploring-data: 06-exploring-data.html
+  articles/advanced-modelling: advanced-modelling.html
+  articles/database-variables: database-variables.html
+  articles/deprecated-batches: deprecated-batches.html
+  articles/filtering: filtering.html
+  articles/gps: gps.html
+  articles/identifying-false-positives: identifying-false-positives.html
+  articles/motus-data: motus-data.html
+  articles/motus: motus.html
+  articles/signal-strength: signal-strength.html
+  articles/troubleshooting: troubleshooting.html
+  articles/vanishing-bearings: vanishing-bearings.html
+last_built: 2026-01-16T19:48Z
 urls:
   reference: https://motuswts.github.io/motus/reference
   article: https://motuswts.github.io/motus/articles
-

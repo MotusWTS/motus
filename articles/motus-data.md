@@ -1,0 +1,518 @@
+# Understanding Motus Data
+
+> **Note:**
+>
+> This document was originally called “Bird’s eye view of Motus data”
+> and was was been adapted from a version written by John Brzustowsky in
+> 2017. It provides an overview of the fundamentals of how Motus data
+> processing works. The document has been adapted to incorporate more
+> recent developments, particularly the addition of new digital tags and
+> base stations manufactured by Cellular Tracking Technologies (CTT),
+> who took over the development from Cornell University.
+
+## Basic terms
+
+**Hardware**
+
+- **Tags** - Attached to an animal, emits radio signals
+  - There are two types of tags, Lotek and CTT, which operate and are
+    processed differently.
+- **Receivers** - On the landscape, receive signals collected by
+  antennas
+- **Antennas** - Attached to a receiver, detect different signals
+  emitted by tags
+- **Nodes** - Special antennas for CTT receivers
+
+**Data**
+
+- **Hits** - An individual detection of a tag signal by an antenna
+- **Runs** - A series of hits for specific tag
+- **Batches** - A collection of hits/runs which were processed together
+
+To better understand these terms, let’s look at a visual of the data.
+
+## Understanding the data
+
+### Hits and Runs
+
+Here’s a segment of data from a receiver (with a two antennas):
+
+    Receiver R
+                                         Time ->
+           \=============================================================\
+    Tag A: / 1-----1--1----1-----1-----1         4---4----4--4------4--4-/ <- antenna #1
+           \                                                             \
+    Tag B: /               3-----3--3--3--3--3-----3----3--3             / <- antenna #1
+           \                                                             \
+    Tag C: /  2--2---2--2--2--2--2--2--2--2--2--2--2--2--2--2--2--2--2   / <- antenna #1
+           \                                                             \
+    Tag C: /            5--------5--5--5--5--5--5-----5-------5-------5  / <- antenna #2
+           \=============================================================\
+
+- Each row represents an individual **tag** (left) on a specific
+  **antenna** (right)
+- Each individual number (digit) represents a tag **hit** (also called
+  detection)
+- Each series of numbers represents a **run**
+  - A run is a series of hits for an individual tag
+  - For example, Tag A shows two runs (1 and 4), each with 6 hits
+- A tag may be detected by more than one antenna at a time, and
+  therefore have multiple runs that overlap in time
+  - For example, Tag C is detected on both antenna 1 and 2
+
+**Overlapping Runs**
+
+Technically, a specific tag should never have overlapping runs on a
+single antenna, but this can happen in noisy environments with Lotek
+tags (see [Chapter 5 - Data Cleaning: Preliminary
+Filtering](https://motuswts.github.io/motus/articles/05-data-cleaning.html#preliminary-filtering)
+for how to address these false positives).
+
+Overlapping runs would not happen with CTT tags because of the way runs
+are built, but the rate of hits would still be expected to be around 1
+per second or lower.
+
+**Determining tag identity**
+
+For Lotek tags, multiple tags transmit the same ID, therefore a
+distinctive period (time between hits) is used to differentiate among
+tags with the same ID. Since Lotek tags cannot be identified by
+individual hits, this means that runs are the fundamental unit of
+detection.
+
+The spacing between two hits is considered *compatible* with a
+particular tag if it represents a multiple of the period length (this
+allows for occasional missed hits). However, a run can have gaps
+(missing hits) only up to a certain size. Beyond that size, measurement
+error and clock drift are large enough that we can’t be sure that the
+next detection is compatible or not.
+
+For example, in the runs for Tag A (above) we’re not sure the gap
+between the last detection in run 1 and the first detection in run 4 is
+really compatible with tag A, so run 1 is ended and a new run is begun.
+We could link runs 1 and 4 post-hoc, once we saw that run 4 was being
+built with gaps compatible with tag A, but at present, the run-building
+algorithm doesn’t backtrack.
+
+In contrast, for CTT tags, there are 2³² unique codes, which ensures
+that each is unique, and the period is not distinct as it may vary with
+power available from the photovoltaic cell.
+
+Runs are assembled based on consecutive hits on a single antenna (or
+node, if applicable), as long as they are not spaced by more than an
+arbitrary period (600 seconds).
+
+### Batches
+
+A **batch** is the result of processing one collection of raw data files
+from a receiver. Batches are not inherent in the data, but instead
+reflect how data were processed. Batches arise in these ways:
+
+- a user visits an isolated receiver, downloads raw data files from it,
+  then uploads the files to motus.org once they are back from the field
+
+- a receiver connected via WiFi, Ethernet, or cell modem is polled for
+  new data files; this typically happens roughly every hour, with random
+  jitter to smooth the processing load on the motus server
+
+- an archive of data files from a receiver is re-processed on the motus
+  server, because important metadata have changed (e.g. new or changed
+  tag deployment records), or because a significant change has been made
+  to processing algorithms.
+
+Batches are artificial divisions in the data stream, so runs of hits
+will often cross batch boundaries. Adding this complication to the
+picture above gives this:
+
+    Receiver R
+                                         Time ->
+           \=============|==============================|==================\
+    Tag A: / 1-----1--1--|--1-----1-----1         4---4-|---4--4------4--4-/
+           \             |                              |                  \
+    Tag B: /             |  3-----3--3--3--3--3-----3---|-3--3             /
+           \             |                              |                  \
+    Tag C: /  2--2---2--2|--2--2--2--2--2--2--2--2--2--2|--2--2--2--2--2   /
+           \============================================|==================\
+           <-- Batch N ->|<-------- Batch N+1 --------->|<--- Batch N+2 --->
+
+## False positives
+
+False positives (apparent detections of tags actually caused by other
+sources) need to be taken into account. These can happen for quite a
+number of reasons, and will sometimes affect Lotek and CTT tags in
+different measure. False positives are difficult to identify, but there
+are approaches to identify conditions in which the are more likely to
+occur, and potential ways to mitigate them.
+
+> **If you have any suggestions about techniques you are using to
+> separate true detections from false positives, we encourage you to
+> share them with us!**
+
+### Noisy environments
+
+Radio noise from interference can create bursts that look like tags. As
+the amount of radio pulses from other sources increases in the
+environment, the expected number of false positives will also increase.
+
+See:
+
+- [Chapter 5 - Data Cleaning \> Preliminary
+  Filtering](https://motuswts.github.io/motus/articles/articles/05-data-cleaning.html#preliminary-filtering-1)
+- [In-depth detections
+  filtering](https://motuswts.github.io/motus/articles/articles/filtering.md)
+
+### Bit errors
+
+Actual tag signals may be incorrectly transmitted. Those should rarely
+produce valid ID’s, but they will be more likely with CTT tags, mostly
+because where is a very high number of possible combinations (4
+billions). They should still rarely produce an ID of a tag actually
+manufactured. In CTT tags, bit errors have been found to lead more often
+to specific patterns (e.g. the last trailing digits being all 7 or F’s:
+xxxFFFF due to only a partial signal being received). These patterns are
+excluded from the list of valid tags.
+
+### Aliasing
+
+Aliasing occurs when the combination of multiple tags create the
+appearance of a tag that is not present but matches another known tag.
+This can happen in at least 2 ways:
+
+1.  2 tags with distinct ID’s, but with the same period (both Lotek and
+    CTT).
+2.  2 tags with the same ID, but with distinct periods (only for Lotek).
+
+In the first case, if the burst of both tags overlap, they may interfere
+with each other and create the appearance of a new tag for a time.
+Assuming that the 2 tags do not have exactly the same period, their
+bursts should eventually drift apart and the alias is not expected to
+persist over a very long run.
+
+In the second case, if you have multiple tags with the same ID but
+distinct periods, this could also result in new periods, but those would
+exceed 2 consecutive hits (run length = 2) only rarely.
+
+Both types of aliasing is mostly problematic in environments where you
+have many tags present simultaneously which increases the incidence of
+overlapping tags (e.g. colonies).
+
+Manufacturers for both Lotek and CTT tags have integrated various
+methods to reduce the incidence of false detections into their
+proprietary technologies. Data collected by Sensor Gnomes are processed
+by the “Tag finder”, which looks at properties of the signal to exclude
+likely false positives (e.g. higher deviation in the frequency of pulses
+within a burst). The parameters can potentially be adjusted, but an
+aggressive approach aimed at reducing false positives will also result
+in an increase in false negatives.
+
+See:
+
+- [Chapter 5 - Data Cleaning \> Examining ambiguous
+  detections](https://motuswts.github.io/motus/articles/articles/05-data-cleaning.html#ambiguous)
+
+### Run length
+
+With both types of tag technologies, the likelihood of obtaining false
+positives should decrease as the run length increases.
+
+For Lotek tags, we generally recommend ignoring runs comprised only of 2
+or 3 hits. Some probably relate to real tag detections, but the vast
+majority probably do not.
+
+For CTT tags, we do not yet have a suggested minimum threshold. In most
+cases, given that tag period is short, one would expect that true
+single-hit runs would be quite rare, so those should be excluded. With
+the exception of some specific tag IDs more prone to error, the
+likelihood of obtaining the same false ID in consecutive detections is
+probably very low. Runs of 2 detections or more are probably safe in
+most instances.
+
+### Missed detections
+
+False positives should more often lead to gaps in detections during a
+run. A run that contains several gaps in detection would therefore be
+deemed less reliable. A simple metric for this would be to divide the
+number of hits in a run (the run length) by the duration of the run
+(tsEnd - tsStart). Longer runs with few or no gaps in detection would be
+optimal.
+
+### Overlapping runs
+
+Runs of the same tag on the same antenna should also be an indication of
+false positives, but this should be highly correlated with the number
+and/or ratio of short runs described above.
+
+### Spatio-temporal models
+
+State-space models and other approach can be used to assess whether
+movement make sense from a biological point of view, and can help assign
+probabilities that individual detections are valid.
+
+## False negatives
+
+False negatives are usually even more difficult to detect.
+
+- Faulty equipement or installation is always possible of course. Please
+  refer to the installation guidelines to make sure you follow all the
+  recommendations.
+
+- DO NOT FORGET to register your tags! (details here)
+
+- DO NOT FORGET to activate your tags before deploying them!
+
+- Make sure that you report your tag and receiver deployment details
+  BEFORE uploading your data. Motus tag finder only seek tags that are
+  known to be deployed.
+
+## Complications
+
+The picture above is complicated by several facts:
+
+- receivers are often deployed to isolated areas so that we can only
+  obtain raw data from them occasionally
+
+- receivers are not aware of the full set of currently-active tags
+
+- sensorgnome receivers do not “know” the full Lotek code set; they
+  record pulses thought to be from Lotek coded ID tags, but are only
+  able to assemble them into tag hits for a small set of tags for which
+  they have an on-board database, built from the user’s own recordings
+  of their tags. This limitation is due to restrictions in the agreement
+  between Lotek and Acadia University for our use of their codeset.
+
+- Lotek receivers report each detected tagID independently, and do not
+  assemble them into runs. This means a raw Lotek .DTA file does not
+  distinguish between tag 123:4.5 and tag 123:9.1 (i.e. between tags
+  with ID `123` and burst intervals 4.5 seconds and 9.1 seconds).
+
+This means that:
+
+- raw receiver data must be processed on a server with full knowledge
+  of:
+
+  - which tags are deployed and likely active
+
+  - the Lotek codeset(s)
+
+- raw data must be processed in incremental batches
+
+- processed data should be distributed to users in incremental batches,
+  especially if they wish to obtain results “as they arrive”, rather
+  than in one lump after all their tags have expired.
+
+### Receiver Boot Sessions
+
+A receiver **reboots** when it is powered down and then (possibly much
+later) powered back up. A boot session is defined as the period between
+reboots. Reboots often correspond to a receiver:
+
+- being redeployed
+- having its software updated
+- or having a change made to its attached radios,
+
+Motus treats receiver reboots in a special way:
+
+- a reboot always begins a new batch; i.e. batches never extend across
+  reboots. This simplifies determination of data ownership. For example,
+  all data in a boot session (time period between consecutive reboots)
+  are deemed to belong to the same Motus project. This reflects the fact
+  that a receiver is (almost?) always turned off between the time it is
+  deployed by one project, and the time it is redeployed by another
+  project.
+
+- any active tag runs are ended when a receiver reboots. Even if the
+  same tag is present and broadcasting, and even if the reboot takes
+  only a few minutes, hits of a tag before and after the reboot will
+  belong to separate runs. This is partly for convenience in determining
+  data ownership, as mentioned above. It is also necessary because
+  sometimes receiver clocks are not properly set by the GPS after a
+  reboot, and so the timestamps for that boot session will revert to a
+  machine default, e.g. 1 Jan 2000. Although runs from these boot
+  sessions could in principle be re-assembled post hoc if the system
+  clock can be pinned from information in field notes, this is not done
+  automatically at present.
+
+- parameters to the tag-finding algorithm are set on a per-batch basis.
+  At some field sites, we want to allow more lenient filtering because
+  there is very little radio noise. At other sites, filtering should be
+  more strict, because there is considerable noise and high
+  false-positive rates for tags. Motus allows projects to set parameter
+  overrides for individual receivers, and these overrides are applied by
+  boot session, because redeployments (always?) cause a reboot.
+
+- when reprocessing data (see below) from an archive of data files, each
+  boot session is processed as a batch.
+
+### Incremental Distribution of Data
+
+The [motus R package](https://github.com/MotusWTS/motus/) allows users
+to build a local copy of the database of all their tags’ (or receivers’)
+hits incrementally. A user can regularly call the
+[`tagme()`](https://motuswts.github.io/motus/reference/tagme.md)
+function to obtain any new hits of their tags. Because data are
+processed in batches,
+[`tagme()`](https://motuswts.github.io/motus/reference/tagme.md) either
+does nothing, or downloads one or more new batches of data into the
+user’s local DB.
+
+Each new batch corresponds to a set of files processed from a single
+receiver. A batch record includes these items:  
+- receiver device ID - how many of hits of their tags occurred in the
+batch - first and last timestamp of the raw data processed in this batch
+
+Each new batch downloaded will include hits of one or more of the user’s
+tags (or someone’s tags, if the batch is for a “receiver” database).
+
+A new batch might also include some GPS fixes, so that the user knows
+where the receiver was when the tags were detected.
+
+A new batch will include information about runs. This information comes
+in three versions:
+
+- information about a new run; i.e. one that begins in this batch
+- information about a continuing run; i.e. a run that began in a
+  previous batch, has some hits in this batch, and is not known to have
+  ended
+- information about an ending run; i.e. a run that began in a previous
+  batch, might have some hits in this batch, but which is also known to
+  end in this batch (because a sufficiently long time has elapsed since
+  the last detection of its tag)
+
+Although the unique `runID` identifier for a run doesn’t change when the
+user calls
+[`tagme()`](https://motuswts.github.io/motus/reference/tagme.md), the
+number of hits in that run and its status (`done` or not), might change.
+
+## Reprocessing Data
+
+Motus will occasionally need to reprocess raw files from receivers.  
+There are several reasons:
+
+- **New or modified tag deployment records**
+
+  The tag detection code relies on knowing the active life of each tag
+  it looks for, to control rates of false positive and false negative
+  hits. If the deployment record for a tag only reaches the server after
+  it has already processed raw files overlapping the tag’s deployment,
+  then those files will need to be reprocessed in order to (potentially)
+  find the tag therein. Similarly, if a tag was mistakenly sought during
+  a period when it was not deployed, it will have “used up” signals that
+  could instead have come from other tags, thereby causing both its own
+  false positives, and false negatives on other tags. (This is only true
+  for Lotek ID tags; CTT should be unaffected, provided deployed tags
+  are well dispersed in the ID codespace.)
+
+- **Bug fixes or improvements in the tag finding algorithm**
+
+- **Corrections of mis-filed data from receivers**
+
+  Sometimes, duplication among receiver serial numbers (a rare event) is
+  only noticed *after* data from them has already been processed. Those
+  data will likely have to be reprocessed so that hits are assigned to
+  the correct station. Interleaved data from two receivers having the
+  same serial number will typically prevent hits from at least one of
+  them, as the tag finder ignores data where the clock seems to have
+  jumped backwards significantly.
+
+### The (eventual) Reprocessing Contract
+
+Reprocessing can be very disruptive from the user’s point of view (“What
+happened to my hits?”), so Motus reprocessing will be:
+
+1.  **Optional**: users should be able to obtain new data without having
+    to accept reprocessed versions of data they already have.
+
+2.  **Reversible**: users should be able to “go back” to a previous
+    version of any reprocessed data they have accepted.
+
+3.  **Transparent**: users will receive a record of what was
+    reprocessed, why, when, what was done differently, and what changed
+
+4.  **All-or-nothing**: for each receiver boot session for which users
+    have data, these data must come entirely from either the original
+    processing, or a subsequent single reprocessing event. The user
+    *must not* end up with an undefined mix of data from original and
+    reprocessed sources.
+
+5.  **In-band**: the user’s copy of data will be updated to incorporate
+    *reprocessed* data as part of the normal process of updating to
+    obtain *new* data, unless they choose otherwise. We expect that most
+    users will want to accept reprocessed data most of the time.
+
+Initially, Motus data processing might not adhere to this contract, but
+it is an eventual goal.
+
+### Reprocessing simplified
+
+Raw data records from an arbitrary stretch of time are complicated to
+reprocess, because runs which cross the reprocessing boundaries might
+lose or gain hits within the reprocessing period, but not outside of it.
+This might even break an existing run into distinct new runs.
+
+This would be challenging to formalize and represent in the database if
+we want to maintain a full history of processing. For example, if
+reprocessing deletes some hits from run `2`, how do we represent both
+the old and the new versions of that run?
+
+Therefore, for simplicity we **choose reprocessing periods that cross no
+runs**. Currently, that means a boot session, [as discussed
+above](#boot).
+
+### Distributing reprocessed data (eventual)
+
+The previous section shows why we only reprocess data by boot session.
+Given that, how do we get reprocessed data to users while fulfilling the
+reprocessing contract?
+
+Note that a reprocessed boot session will fully replace one or more
+existing batches and one or more runs, because batches and runs both
+nest within boot sessions.
+
+Replacement of data by reprocessed versions should happen in-band (point
+\#5 above), so **one *potential* approach** is this:
+
+- the `batches_for_XXX` API entries should mark new batches which result
+  from reprocessing, so that the client can deal with them
+  appropriately. This can be done by adding a field called `reprocessID`
+  with these semantics:
+  - `reprocessID == 0`: data in this batch are from new raw files; the
+    normal situation
+  - `reprocessID == X > 0`: data in this batch are from reprocessing
+    existing raw files.
+  - `X` is the ID of the reprocessing event, and a new API entry
+    `reprocessing_info (X)` can be called to obtain details about it.
+  - if the user chooses to accept the reprocessed version, then existing
+    batches, runs, hits and GPS fixes from the same receiver and boot
+    session are retired before adding the new batches.
+  - if the user chooses to reject the reprocessed version, then `X` is
+    added to a client-side blacklist, and the user will not receive any
+    data from batches whose reprocessID is on the blacklist.
+  - later, if a user decides to accept a reprocessing event they had
+    earlier declined, then the IDs of new batches for that event can be
+    fetched from another new API `reprocessing_batches (X)`, and the
+    original batches will be deleted
+- to let users more efficiently fetch the “best” version of their
+  dataset (i.e. accepting all reprocessing events), we should also mark
+  batches which are subsequently replaced by a reprocessing event. For
+  this, we add the field `replacedIn` with these semantics:
+  - `replacedIn == 0`: data in this batch have not been replaced by any
+    reprocessing event
+  - `replacedIn == X > 0`: data in this batch have been replaced by
+    reprocessing event `X`. Then the client can ignore any batches for
+    which `replacedIn > 0`. We could also add a new boolean parameter
+    `unreplacedOnly` to the `batches_for_XXX` API entries. It defaults
+    to `false`, but if `true`, then only batches which have not been
+    replaced by subsequent reprocessing events are returned.
+- users can choose a policy for how reprocessed data are handled by
+  setting the value of `Motus$acceptReprocessedData` in their workspace
+  before calling
+  [`tagme()`](https://motuswts.github.io/motus/reference/tagme.md):
+  - `Motus$acceptReprocessedData <- TRUE`; always accept batches of data
+    from reprocessing events
+  - `Motus$acceptReprocessedData <- FALSE`; never accept batches of data
+    from reprocessing events
+  - `Motus$acceptReprocessedData <- NA` (default); ask about each
+    reprocessing event
+
+> **What Next?** [Explore all
+> articles](https://motuswts.github.io/motus/articles/index.md)

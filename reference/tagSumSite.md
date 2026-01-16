@@ -1,0 +1,56 @@
+# Summarize detections of all tags by site
+
+Creates a summary for each tag of it's first and last detection time at
+each site, length of time between first and last detection of each site,
+and total number of detections at each site.
+
+## Usage
+
+``` r
+tagSumSite(data, units = "hours")
+```
+
+## Arguments
+
+- data:
+
+  a selected table from .motus data, eg. "alltagsGPS", or a data.frame
+  of detection data including at a minimum variables for motusTagID,
+  fullID, recvDeployName, ts, recvDeployLat, recvDeployLon, gpsLat,
+  gpsLon
+
+- units:
+
+  units to display time difference, defaults to "hours", options include
+  "secs", "mins", "hours", "days", "weeks"
+
+## Examples
+
+``` r
+# Download sample project 176 to .motus database (username/password are "motus.sample")
+if (FALSE) sql_motus <- tagme(176, new = TRUE) # \dontrun{}
+
+# Or use example data base in memory
+sql_motus <- tagmeSample()
+
+# convert sql file "sql_motus" to a tbl called "tbl_alltags"
+library(dplyr)
+tbl_alltags <- tbl(sql_motus, "alltagsGPS") 
+
+# convert the tbl "tbl_alltags" to a data.frame called "df_alltags"
+df_alltags <- tbl_alltags  %>% 
+  collect() %>% 
+  as.data.frame() 
+
+# Create tag summaries for all tags within detection data with time in
+# minutes with tbl file tbl_alltags
+tag_site_summary <- tagSumSite(tbl_alltags, units = "mins")
+
+# Create tag summaries for only select tags with time in default hours with
+# data.frame df_alltags
+tag_site_summary <- tagSumSite(filter(df_alltags, 
+                                      motusTagID %in% c(16047, 16037, 16039)))
+
+# Create tag summaries for only a select species with data.frame df_alltags
+tag_site_summary <- tagSumSite(filter(df_alltags, speciesEN == "Red Knot"))
+```

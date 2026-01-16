@@ -1,0 +1,128 @@
+# Chapter 2 - Installing packages
+
+> In this chapter we’ll install Motus R packages as well as other
+> packages we’ll be using throughout these chapters.
+
+## Installing Motus R packages
+
+Two R packages have been developed for Motus users:
+
+1.  `motus`: provides functions for downloading and updating detection
+    and deployment data, as well as for creating summary plots, and
+    transforming (e.g. adding sunrise/sunset times) and analyzing Motus
+    data.
+
+2.  `motusData`: provides sample datasets used in some of these articles
+
+Motus users can install the latest stable versions of the R packages
+using
+[`install.packages()`](https://rdrr.io/r/utils/install.packages.html)
+(see below). As with all R packages, you only need to install the
+packages once; after installation, you need to load each package (using
+[`library()`](https://rdrr.io/r/base/library.html)) each time you open a
+new R session.
+
+To avoid errors, please ensure you are using the most recent releases of
+[R](https://www.r-project.org/) **and**
+[RStudio](https://www.rstudio.com/products/RStudio/).
+
+First update existing packages with the `remotes` package (this may take
+a while).
+
+``` r
+install.packages("remotes")
+remotes::update_packages()
+```
+
+Next, we’ll start installing the required packages, if not already
+installed.
+
+If you have used the older version of `motus` which included use of the
+`motusClient` package, it is recommended to first uninstall both
+packages.
+
+``` r
+remove.packages(c("motus", "motusClient"))
+```
+
+Then proceed with the installation/update of the `motus` and `motusData`
+packages.
+
+``` r
+install.packages(c("motus", "motusData"), 
+                 repos = c(birdscanada = 'https://birdscanada.r-universe.dev',
+                           CRAN = 'https://cloud.r-project.org'))
+
+# Load the packages for use
+library(motus)
+library(motusData)
+```
+
+If you want to know what version of the motus package you currently have
+installed:
+
+``` r
+packageVersion("motus")
+```
+
+> If you are running into difficulties installing the `motus` package,
+> please refer to the
+> [`troubleshooting`](https://motuswts.github.io/motus/articles/troubleshooting.md)
+> section for tips.
+
+## Installing other packages
+
+Throughout these articles and examples, we use the
+[`tidyverse`](https://www.tidyverse.org/) collection of R packages for
+data science, including `tidyr`, `dplyr`, `ggplot2`, and `lubridate`
+(for managing and manipulating dates). See the [`tidyverse`
+website](https://www.tidyverse.org/) for more information, or browse (or
+better still, thoroughly read) \[R for Data
+Science\](<https://r4ds.hadley.nz/> by Garrett Grolemund and Hadley
+Wickham. For mapping we also use the `rnaturalearth`, and `ggspatial`
+packages.
+
+These can be installed from CRAN, as follows:
+
+``` r
+install.packages(c("tidyverse", "ggspatial", "rnaturalearth"))
+```
+
+We also need a couple of data packages for `rnaturalearth` which can be
+installed from the rOpenSci R-universe:
+
+``` r
+install.packages(c("rnaturalearthhires", "rnaturalearthdata"),
+                 repos = c(ropensci = 'https://ropensci.r-universe.dev',  
+                           CRAN = 'https://cloud.r-project.org'))
+```
+
+Now, to use these packages include the following in your scripts:
+
+``` r
+library(motus)
+library(rnaturalearth)
+library(tidyverse)
+library(ggspatial)
+```
+
+## Internal data processing
+
+As an animal moves within the detection range of a Motus station, radio
+transmissions, or ‘bursts’, are detected by antenna(s) and recorded by a
+receiver. These raw detection data are either uploaded to the Motus
+database instantaneously via internet connection, or downloaded
+periodically from the receiver and uploaded to Motus manually. Behind
+the scenes, various functions read and process the raw detections data
+to produce the tag detections file that users access using the R package
+(see [Chapter 3 - Accessing
+Data](https://motuswts.github.io/motus/articles/03-accessing-data.md)).
+While most users will not need to call on the internal data processing
+functions, a complete list of functions within the Motus server R
+package can be found on the GitHub [motusServer
+repository](https://github.com/MotusWTS/motusServer).
+
+> **Next** [Chapter 3 - Accessing detections
+> data](https://motuswts.github.io/motus/articles/03-accessing-data.md)
+> ([Explore all
+> articles](https://motuswts.github.io/motus/articles/index.md))

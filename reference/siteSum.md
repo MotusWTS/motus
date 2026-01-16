@@ -1,0 +1,76 @@
+# Summarize and plot detections of all tags by site
+
+Creates a summary of the first and last detection at a site, the length
+of time between first and last detection, the number of tags, and the
+total number of detections at a site. Plots total number of detections
+across all tags, and total number of tags detected at each site.
+
+## Usage
+
+``` r
+siteSum(data, units = "hours")
+```
+
+## Arguments
+
+- data:
+
+  a selected table from .motus data, eg. "alltagsGPS", or a data.frame
+  of detection data including at a minimum variables for motusTagID,
+  sig, recvDeployLat, recvDeployLon, recvDeployName, ts, gpsLat, and
+  gpsLon
+
+- units:
+
+  units to display time difference, defaults to "hours", options include
+  "secs", "mins", "hours", "days", "weeks"
+
+## Value
+
+a data.frame with these columns:
+
+- site: site
+
+- first_ts: time of first detection at specified site
+
+- last_ts: time of last detection at specified site
+
+- tot_ts: total amount of time between first and last detection at
+  specified site, output in specified unit (defaults to "hours")
+
+- num.tags: total number of unique tags detected at specified site
+
+- num.det: total number of tag detections at specified site
+
+## Examples
+
+``` r
+# Download sample project 176 to .motus database (username/password are "motus.sample")
+if (FALSE) sql_motus <- tagme(176, new = TRUE) # \dontrun{}
+
+# Or use example data base in memory
+sql_motus <- tagmeSample()
+
+# convert sql file "sql_motus" to a tbl called "tbl_alltags"
+library(dplyr)
+tbl_alltags <- tbl(sql_motus, "alltagsGPS") 
+
+# convert the tbl "tbl_alltags" to a data.frame called "df_alltags"
+df_alltags <- tbl_alltags %>% 
+  collect() %>% 
+  as.data.frame() 
+
+# Create site summaries for all sites within detection data with time in
+# default hours using data.frame df_alltags
+site_summary <- siteSum(tbl_alltags)
+
+
+# Create site summaries for only select sites with time in minutes
+sub <- filter(df_alltags, recvDeployName %in% 
+                c("Niapiskau", "Netitishi", "Old Cur", "Washkaugou"))
+site_summary <- siteSum(sub, units = "mins")
+
+
+# Create site summaries for only a select species, Red Knot
+site_summary <- siteSum(filter(df_alltags, speciesEN == "Red Knot"))
+```

@@ -1,0 +1,199 @@
+# motus
+
+[![Birds Canada Logo showing grey text 'Birds Canada' and 'Oiseaux
+Canada' on either side of a grey and yellow bird perched on a
+branch](reference/figures/birds_canada_logo.png)](https://www.birdscanada.org)
+[![Motus Logo showing blue text 'Motus Wildlife Tracking System' to the
+right of pale green images of a bat, bird and dragonfly at the ends of
+green curved
+lines](reference/figures/motus_logo.png)](https://motus.org)
+
+An R package for handling [Motus](https://motus.org) automated
+radio-telemetry data.
+
+See the [motus package site](https://motuswts.github.io/motus/) for
+detailed usage information.
+
+## Installation
+
+The easiest way to install motus is from Birds Canada’s
+[R-Universe](https://birdscanada.r-universe.dev):
+
+``` r
+install.packages("motus", 
+                 repos = c(birdscanada = 'https://birdscanada.r-universe.dev',
+                           CRAN = 'https://cloud.r-project.org'))
+```
+
+If you want to check out work-in-progress, you can install the
+development branches (betaX and sandbox) using `remotes`.
+
+``` r
+install.packages("remotes")                     # if don't already have it
+remotes::install_github("motusWTS/motus@beta3") # the beta branch for v3+
+```
+
+> Running into problems? Check out the [Troubleshooting
+> article](https://motuswts.github.io/motus/articles/troubleshooting.html)
+
+# Package index
+
+## Download data
+
+- [`tagme()`](https://motuswts.github.io/motus/reference/tagme.md) :
+  Download motus tag detections to a database
+- [`tellme()`](https://motuswts.github.io/motus/reference/tellme.md) :
+  Report how much new data motus has for a tag detection database
+- [`activity()`](https://motuswts.github.io/motus/reference/activity.md)
+  : Add/update batch activity
+- [`metadata()`](https://motuswts.github.io/motus/reference/metadata.md)
+  : Update all metadata
+- [`nodeData()`](https://motuswts.github.io/motus/reference/nodeData.md)
+  : Add/update nodeData
+- [`activityAll()`](https://motuswts.github.io/motus/reference/activityAll.md)
+  : Add/update all batch activity
+- [`gpsAll()`](https://motuswts.github.io/motus/reference/gpsAll.md) :
+  Add/update all GPS points
+
+## Cleaning
+
+Helper functions for cleaning and preparing data
+
+- [`filterByActivity()`](https://motuswts.github.io/motus/reference/filterByActivity.md)
+  :
+
+  Filter `alltags` by `activity`
+
+- [`clarify()`](https://motuswts.github.io/motus/reference/clarify.md) :
+  Report or claim ambiguous tag detections
+
+- [`deprecateBatches()`](https://motuswts.github.io/motus/reference/deprecateBatches.md)
+  : Fetch and remove deprecated batches
+
+## Helper
+
+- [`tagmeSample()`](https://motuswts.github.io/motus/reference/tagmeSample.md)
+  : Create an in-memory copy of sample tags data
+- [`getGPS()`](https://motuswts.github.io/motus/reference/getGPS.md) :
+  Get GPS variables
+- [`getRuns()`](https://motuswts.github.io/motus/reference/getRuns.md) :
+  Returns a dataframe containing runs
+- [`simSiteDet()`](https://motuswts.github.io/motus/reference/simSiteDet.md)
+  : Create a dataframe of simultaneous detections at multiple sites
+- [`sunRiseSet()`](https://motuswts.github.io/motus/reference/sunRiseSet.md)
+  : Obtain sunrise and sunset times
+- [`timeToSunriset()`](https://motuswts.github.io/motus/reference/timeToSunriset.md)
+  : Obtain time to and from sunrise/sunset
+- [`getMotusDBSrc()`](https://motuswts.github.io/motus/reference/getMotusDBSrc.md)
+  : Get the src_sqlite for a receiver or tag database
+- [`srvTimeout()`](https://motuswts.github.io/motus/reference/srvTimeout.md)
+  : Sets global options for timeouts
+
+## Plotting
+
+- [`plotAllTagsCoord()`](https://motuswts.github.io/motus/reference/plotAllTagsCoord.md)
+  : Plot all tag detections by latitude or longitude
+- [`plotAllTagsSite()`](https://motuswts.github.io/motus/reference/plotAllTagsSite.md)
+  : Plot all tag detections by deployment
+- [`plotDailySiteSum()`](https://motuswts.github.io/motus/reference/plotDailySiteSum.md)
+  : Plots number of detections and tags, daily, for a specified site
+- [`plotRouteMap()`](https://motuswts.github.io/motus/reference/plotRouteMap.md)
+  : Map of tag routes and sites coloured by id
+- [`plotSite()`](https://motuswts.github.io/motus/reference/plotSite.md)
+  : Plot all tags by site
+- [`plotSiteSig()`](https://motuswts.github.io/motus/reference/plotSiteSig.md)
+  : Plot signal strength of all tags by a specified site
+- [`plotTagSig()`](https://motuswts.github.io/motus/reference/plotTagSig.md)
+  : Plot signal strength of all detections for a specified tag by site
+- [`points2Path()`](https://motuswts.github.io/motus/reference/points2Path.md)
+  : Convert points to path
+
+## Summarizing
+
+- [`siteSum()`](https://motuswts.github.io/motus/reference/siteSum.md) :
+  Summarize and plot detections of all tags by site
+- [`siteSumDaily()`](https://motuswts.github.io/motus/reference/siteSumDaily.md)
+  : Summarize daily detections of all tags by site
+- [`siteTrans()`](https://motuswts.github.io/motus/reference/siteTrans.md)
+  : Summarize transitions between sites for each tag
+- [`tagSum()`](https://motuswts.github.io/motus/reference/tagSum.md) :
+  General summary of detections for each tag
+- [`tagSumSite()`](https://motuswts.github.io/motus/reference/tagSumSite.md)
+  : Summarize detections of all tags by site
+
+## Filtering
+
+Functions for creating database filters
+
+- [`getRunsFilters()`](https://motuswts.github.io/motus/reference/getRunsFilters.md)
+  : Get runsFilters
+- [`listRunsFilters()`](https://motuswts.github.io/motus/reference/listRunsFilters.md)
+  : Returns a dataframe of the filters stored in the local database.
+- [`createRunsFilter()`](https://motuswts.github.io/motus/reference/createRunsFilter.md)
+  : Create a new filter records that can be applied to runs
+- [`deleteRunsFilter()`](https://motuswts.github.io/motus/reference/deleteRunsFilter.md)
+  : Delete a filter
+- [`writeRunsFilter()`](https://motuswts.github.io/motus/reference/writeRunsFilter.md)
+  : Write to the local database the probabilities associated with runs
+  for a filter
+
+## Administration
+
+- [`getAccess()`](https://motuswts.github.io/motus/reference/getAccess.md)
+  : Return accessible projects and receivers
+- [`motusLogout()`](https://motuswts.github.io/motus/reference/motusLogout.md)
+  : Forget login credentials for motus.
+- [`checkVersion()`](https://motuswts.github.io/motus/reference/checkVersion.md)
+  : Check database version
+
+# Articles
+
+### Complete walk-through
+
+This is a complete walk-through, originally compiled as the Motus R
+book. These articles are largely based on the original Motus R Book by
+[Crewe et
+al. 2018](https://raw.githubusercontent.com/MotusWTS/motus/main/inst/extdata/MotusRBook2018-01.pdf),
+and have since been supplemented by [various people on the Motus
+team](https://motuswts.github.io/motus/articles/01-introduction.html#acknowledgements).
+
+- [Chapter 1 -
+  Introduction](https://motuswts.github.io/motus/articles/01-introduction.md):
+- [Chapter 2 - Installing
+  packages](https://motuswts.github.io/motus/articles/02-installing-packages.md):
+- [Chapter 3 - Accessing detections
+  data](https://motuswts.github.io/motus/articles/03-accessing-data.md):
+- [Chapter 4 - Tag and receiver
+  deployments](https://motuswts.github.io/motus/articles/04-deployments.md):
+- [Chapter 5 - Data
+  Cleaning](https://motuswts.github.io/motus/articles/05-data-cleaning.md):
+- [Chapter 6 - Exploring detections
+  data](https://motuswts.github.io/motus/articles/06-exploring-data.md):
+
+### Other topics
+
+Specific tutorials for different tasks
+
+- [Get started](https://motuswts.github.io/motus/articles/motus.md):
+- [Troubleshooting](https://motuswts.github.io/motus/articles/troubleshooting.md):
+- [In-depth detections
+  filtering](https://motuswts.github.io/motus/articles/filtering.md):
+- [Working with GPS
+  points](https://motuswts.github.io/motus/articles/gps.md):
+- [Vanishing
+  bearings](https://motuswts.github.io/motus/articles/vanishing-bearings.md):
+- [Advanced modelling and
+  analysis](https://motuswts.github.io/motus/articles/advanced-modelling.md):
+- [Plotting signal strength vs.
+  time](https://motuswts.github.io/motus/articles/signal-strength.md):
+- [Removing deprecated
+  batches](https://motuswts.github.io/motus/articles/deprecated-batches.md):
+- [A tool to identify probable false positive
+  detections](https://motuswts.github.io/motus/articles/identifying-false-positives.md):
+
+### Reference
+
+- [Understanding Motus
+  Data](https://motuswts.github.io/motus/articles/motus-data.md):
+- [Database
+  Variables](https://motuswts.github.io/motus/articles/database-variables.md):
