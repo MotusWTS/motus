@@ -99,9 +99,9 @@ test_that("tellme() - Receivers", {
   skip_on_cran()
   skip_if_no_server()
   skip_if_no_auth()
-  unlink("SG-3115BBBK1127.motus") # For windows...
+  unlink("SG-4002BBBK1580.motus") # For windows...
   
-  withr::local_file("SG-3115BBBK1127.motus")
-  expect_silent(tellme("SG-3115BBBK1127", new = TRUE)) %>%
+  withr::local_file("SG-4002BBBK1580.motus")
+  expect_silent(tellme("SG-4002BBBK1580", new = TRUE)) %>%
     expect_s3_class("data.frame")
 })

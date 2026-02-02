@@ -16,7 +16,7 @@ test_that("filterByActivity filters as expected", {
                  
   expect_equal(dplyr::arrange(a, .data$probability, .data$hitID) %>%
                  dplyr::select("probability", "hitID"),
-               rbind(b, g) %>%
+               dplyr::arrange(rbind(b, g), .data$probability, .data$hitID) %>%
                  dplyr::select("probability", "hitID"))
   
   # Matches motusFilter results
@@ -219,10 +219,18 @@ test_that("PROJ 1 - remove deprecated batches", {
 test_that("RECV - remove deprecated batches", {
   skip_if_no_server()
   skip_if_no_auth()
-  withr::local_file("SG-1814BBBK0461.motus")
-  withr::local_db_connection(
-    suppressMessages(t <- tagme("SG-1814BBBK0461", new = TRUE)))
+
+  # Jump start database at batch number to have runs
+  s <- srvAuth() # Authorize to update data versions
+  withr::local_file(list("SG-4002BBBK1580.motus"))
+  withr::local_db_connection(t <- tagme("SG-4002BBBK1580", update = FALSE, new = TRUE))
+  deviceID <- srvDeviceIDForReceiver(get_projRecv(t))[[2]]
+  ensureDBTables(t, get_projRecv(t), deviceID)
+  DBI::dbExecute(t, "INSERT INTO batches (batchID) VALUES (2733020)")
   
+  # Get some runs
+  suppressMessages(t <- tagme("SG-4002BBBK1580", update = TRUE, new = FALSE))
+
   # Deprecated batches listed, but not removed to start
   dep <- dplyr::tbl(t, "deprecated") %>% 
     dplyr::collect()
