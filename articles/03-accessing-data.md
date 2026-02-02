@@ -460,7 +460,7 @@ str(tbl.alltags)
     ##   .. .. ..@ loadable.extensions: logi TRUE
     ##   .. .. ..@ flags              : int 70
     ##   .. .. ..@ vfs                : chr ""
-    ##   .. .. ..@ ref                :<environment: 0x5572829508b0> 
+    ##   .. .. ..@ ref                :<environment: 0x5609fde42a88> 
     ##   .. .. ..@ bigint             : chr "integer64"
     ##   .. .. ..@ extended_types     : logi FALSE
     ##   ..$ disco: NULL
