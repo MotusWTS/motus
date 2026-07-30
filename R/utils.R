@@ -1,58 +1,6 @@
-#' Skip if not testing locally with authorization
-#' 
-#' All testthat tests that require a personal user account are prefaced with
-#' this skip function. 
-#' 
-#' The credentials for a personal user account (`MOTUS_USER` and
-#' `MOTUS_PASSWORD`) should be stored in the users .Renviron file (generally
-#' found in the users Home, e.g., on linux /home/user/ which is loaded on R
-#' startup. If the credentials are not found, the tests are skipped.
-#' 
-#' @noRd
-
-skip_if_no_auth <- function() {
-  if (!have_auth()) {
-    testthat::skip("No authentication available")
-  } else {
-    local_auth()
-  }
-}
 
 
-skip_if_no_file <- function(file, system = TRUE, copy = FALSE) {
-  if(system) file <- system.file("extdata", file, package = "motus")
-  if(!file.exists(file)) {
-    testthat::skip("File not available")
-  }
-  if(copy) file.copy(file, ".")
-}
 
-skip_if_no_server <- function() {
-  sample_auth()
-  srvTimeout(5)
-  
-  srv <- suppressMessages(try(
-    httr::GET(file.path(motus_vars$dataServerURL, "api_info"), 
-              httr::timeout(srvTimeout()[[1]])), silent = TRUE))
-  if(inherits(srv, "try-error")) {
-    srv <- suppressMessages(try(
-      httr::GET(file.path(motus_vars$dataServerURL, "api_info"), 
-                httr::timeout(srvTimeout()[[1]])), silent = TRUE))
-    if(inherits(srv, "try-error")) {
-      testthat::skip("Server Offline")
-    }
-  }
-  srvTimeout(reset = TRUE)
-}
-
-is_testing <- function() {
-  identical(Sys.getenv("TESTTHAT"), "true")
-}
-
-set_testing <- function(set = TRUE) {
-  if(set) Sys.setenv(TESTTHAT = "true")
-  if(!set) Sys.unsetenv("TESTTHAT")
-}
 
 #' Test for local authorization
 #' 

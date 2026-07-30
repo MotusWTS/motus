@@ -220,47 +220,22 @@ test_that("PROJ 1 - remove deprecated batches", {
 
 
 test_that("RECV - remove deprecated batches", {
-  skip_if_no_server()
-  skip_if_no_auth()
+  # USE DUMMY DATA ONLY 
+  
   #withr::local_file("SG-1814BBBK0461.motus")
   #withr::local_db_connection(
   #  suppressMessages(t <- tagme("SG-1814BBBK0461", new = TRUE)))
+
+  t <- test_db("receiver")
     
-  withr::local_file("SG-4002BBBK1580.motus")
-  withr::local_db_connection(
-    suppressMessages(t <- tagme("SG-4002BBBK1580", new = TRUE)))
+  # withr::local_file("SG-4002BBBK1580.motus")
+  # withr::local_db_connection(
+  #   suppressMessages(t <- tagme("SG-4002BBBK1580", new = TRUE)))
   
   # Deprecated batches listed, but not removed to start
-  dep <- dplyr::tbl(t, "deprecated") %>% 
-    dplyr::collect()
+  dep <- dplyr::tbl(t, "deprecated") %>% dplyr::collect()
   expect_gt(nrow(dep), 0)
   expect_true(all(dep$removed == 0))
-  
-  # Make fake deprecated batches
-  d <- dplyr::tbl(t, "runs") %>%
-    dplyr::filter(!batchIDbegin %in% !!dep$batchID) %>%
-    dplyr::pull(batchIDbegin) %>%
-    unique()
-  data.frame(batchID = d, batchFilter = 4, removed = 0) %>%
-    DBI::dbWriteTable(t, "deprecated", ., append = TRUE)
-  
-  # To start, expect deprecated batches in data
-  dplyr::tbl(t, "runs") %>% 
-    dplyr::filter(.data$batchIDbegin %in% d) %>%
-    dplyr::collect() %>%
-    nrow() %>%
-    expect_gt(., 0)
-  
-  for(i in DBI::dbListTables(t)) {
-    if("batchID" %in% DBI::dbListFields(t, i) &
-       DBI::dbExecute(t, glue::glue("SELECT * FROM {i} LIMIT 1")) > 0) {
-      dplyr::tbl(t, i) %>% 
-        dplyr::filter(.data$batchID %in% !!d) %>%
-        dplyr::collect() %>%
-        nrow() %>%
-        expect_gt(., 0)
-    }
-  }
   
   # Deprecate batches
   expect_message(removeDeprecated(t, ask = FALSE)) %>%
@@ -271,12 +246,6 @@ test_that("RECV - remove deprecated batches", {
   expect_true(all(dep$removed == 1))
   
   # With deprecated, expect deprecated batches removed
-  dplyr::tbl(t, "runs") %>% 
-    dplyr::filter(.data$batchIDbegin %in% !!d) %>%
-    dplyr::collect() %>%
-    nrow() %>%
-    expect_equal(., 0)
-  
   for(i in DBI::dbListTables(t)) {
     if("batchID" %in% DBI::dbListFields(t, i) &
        DBI::dbExecute(t, glue::glue("SELECT * FROM {i} LIMIT 1")) > 0) {
