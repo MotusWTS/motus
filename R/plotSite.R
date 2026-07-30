@@ -56,7 +56,7 @@ plotSite <- function(df_src, sitename = NULL, ncol = NULL, nrow = NULL, data) {
   }
   
   df <- df %>%  
-    dplyr::collect() |>
+    dplyr::collect() %>%
     dplyr::mutate(hour = 3600 * round(as.numeric(.data$ts)/3600, 0))  %>% ## round times to the hour
     dplyr::select("hour", "antBearing", "fullID", "recvDeployName", "recvDeployLat", "recvDeployLon",
                   dplyr::any_of(c("gpsLat", "gpsLon"))) %>% 
@@ -67,7 +67,7 @@ plotSite <- function(df_src, sitename = NULL, ncol = NULL, nrow = NULL, data) {
     df <- dplyr::mutate(df, gpsLat = NA, gpsLon = NA)
   }
   
-  df <- df |>
+  df <- df %>%
     dplyr::mutate(recvLat = dplyr::if_else((is.na(.data$gpsLat)|.data$gpsLat == 0|.data$gpsLat ==999),
                                            .data$recvDeployLat,
                                            .data$gpsLat),

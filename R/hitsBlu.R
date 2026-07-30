@@ -1,0 +1,73 @@
+#' Update hitsBlu data
+#' 
+#' Add any missing BLUtag hits to the `hitsBlu` table in an existing Motus
+#' database. `hitsBlu` contain extra information regarding the 'health' of
+#' portable node units. Use [getBluPayload()] to extract these details from 
+#' the payload data.
+#'
+#' @inheritParams args
+#' 
+#' @details This function is only required if you suspect BLUtag hits have been
+#'   missed (due to hits being downloaded before the motus package had the 
+#'   functionality to download BLUtag hits).
+#' 
+#' @seealso [getBluPayload()]
+#'
+#' @examples
+#' \dontrun{
+#'   hitsBlu(my_tags)
+#' }
+#' 
+#' @export
+
+hitsBlu <- function(src) {
+
+  ensureDBTables(src, projRecv = get_projRecv(src))
+    
+  # Tag Project or Receiver?
+  projdevID <- get_projRecv(src)
+  if(is_proj(get_projRecv(src))) {
+    srvHitsBluBatches <- srvHitsBluBatchesForTagProject
+    hitsBlu <- hitsBluForBatchProject
+  } else {
+    srvHitsBluBatches <- srvHitsBluBatchesForReceiver
+    hitsBlu <- hitsBluForBatchReceiver
+    projdevID <- get_deviceID(src)
+  }
+  
+  # Get batches to check ---------------------------
+  message("Checking BLUtag batch history...")
+
+  # Downloaded batches with BLUtag hit data
+  blu_batches <- dplyr::tbl(src, "hitsBlu") %>%
+    dplyr::pull(.data$batchID) %>%
+    unique()
+  
+  # Downloaded batches, excluding those with known BLUtag hits
+  old_batches <- dplyr::tbl(src, "batches") %>%
+    dplyr::filter(!.data$batchID %in% .env$blu_batches) %>%
+    dplyr::pull(.data$batchID)
+  
+  # Get outstanding batches
+  batches <- srvHitsBluBatches(
+    projdevID,
+    batchID = min(old_batches), 
+    lastBatchID = max(old_batches)) %>%
+    unlist(use.names = FALSE)
+    
+  batches <- batches[!batches %in% blu_batches] # Not already downloaded     
+  
+  # Announce
+  message(msg_fmt("hitsBlu: {length(batches):5d} new batch records to check"))
+
+  if(length(batches) > 0) {
+    for(b in batches) {
+      hitsBlu(
+        src, 
+        batchID = b, 
+        batchMsg = msg_fmt("batchID {b:8d} (#{which(b == batches)} of {length(batches):6d})"), 
+        projdevID)
+    }
+  }
+  src
+}

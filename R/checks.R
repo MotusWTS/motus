@@ -19,7 +19,7 @@ check_df_src <- function(df_src, cols, view = "alltags", collect = TRUE, extra =
   if(!is.null(fun)) fun <- as.list(fun)[[1]] else fun <- "tagme"
   
   if(inherits(df_src, "SQLiteConnection")) {
-    message("'df_src' is a complete motus data base, using '", view, "' view")
+    message("'df_src' is a complete motus data base; using '", view, "'")
     df_src <- dplyr::tbl(df_src, view)
   }
   if(!is.data.frame(df_src) && !dplyr::is.tbl(df_src)) {

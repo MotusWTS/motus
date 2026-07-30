@@ -32,7 +32,7 @@ ensureDBTables <- function(src, projRecv, deviceID, quiet = FALSE) {
   
   # Create all empty tables
   for(t in c("activity", "activityAll", "antDeps", "batches", "batchRuns", 
-             "clarified", "deprecated", "filters", "gps", "gpsAll", "hits", 
+             "clarified", "deprecated", "filters", "gps", "gpsAll", "hits", "hitsBlu", 
              "nodeData", "nodeDeps", "projAmbig", "projs", "pulseCounts",
              "recvDeps", "runs", "runsFilters", "species",
              "tagAmbig", "tagDeps", "tagProps", "tags")) {
@@ -88,7 +88,7 @@ makeMetaTable <- function(src, projRecv, deviceID) {
       } else stop("Unexpected model for CTT receivers: ", projRecv, call. = FALSE)
     } else if(type == "sei") {
       type <- "SigmaEight"
-      model <- stringr::str_extract(projRecv, "(?<=(-|_))(A|O)") |> tolower()
+      model <- stringr::str_extract(projRecv, "(?<=(-|_))(A|O)") %>% tolower()
       model <- dplyr::case_match(model, "a" ~ "Ares", "o" ~ "Orion", .default = NA_character_)
     } else {
       stop("Unexpected receiver type: ", type, call. = FALSE)

@@ -46,10 +46,9 @@
 #' @references
 #' Motus Wildlife Tracking System \url{https://motus.org}
 #'
-#'
-#' @docType package
 #' @name motus
-NULL
+#' @keywords internal
+"_PACKAGE"
 
 # .onAttach <- function(libname, pkgname) {
 #   packageStartupMessage("motus v", utils::packageVersion("motus"), "\n",
