@@ -1,6 +1,6 @@
 # motus 6.2.0
 
-- Add `hitsBlu` table to download Blu tags data
+- Add `hitsBlu` table to download BLUtags data
 - Add `hitsBlu()` function to retroactively download missed BLUtag hits
 - Add `getBluPayload()` function to extract out BLUtag variables from payload
   hexadecimal bytes.
