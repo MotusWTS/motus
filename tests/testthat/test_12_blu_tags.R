@@ -16,7 +16,7 @@ test_that("tagme() blu project", {
   
   # CHECKS
 
-  # Add dummy batches so we skip ahead to blu tag range 
+  # Add dummy batches so we skip ahead to BLUtag range 
   # >=26750685, 26751098, 26752853 (don't use the first)
   DBI::dbExecute(t, "INSERT INTO batches (batchID) VALUES (26751098), (26752850)")
   DBI::dbExecute(t, "INSERT INTO projBatch (tagDepProjectID, batchID, maxHitID) VALUES (622, 26751098, 0), (622, 26752850, 0)")
@@ -37,9 +37,9 @@ test_that("tagme() blu project", {
   expect_gt(nrow(tt), 0)
   expect_gt(min(tt$batchID), 26750685) # Expect missing first batch
   
-  # Fill in missing blu tags
+  # Fill in missing BLUtags
   hitsBlu(t) %>%
-    expect_message("Checking blu tag batch history") %>%
+    expect_message("Checking BLUtag batch history") %>%
     expect_message("hitsBlu starting at") %>%
     suppressMessages()
   tt2 <- DBI::dbReadTable(t, "hitsBlu")
@@ -61,7 +61,7 @@ test_that("tagme() blu receivers", {
   deviceID <- srvDeviceIDForReceiver(get_projRecv(t))[[2]]
   ensureDBTables(t, get_projRecv(t), deviceID)
   
-  # Add dummy batches to skip ahead to blu tag range
+  # Add dummy batches to skip ahead to BLUtag range
   # < 26750744 (add batches before, then test by removing blutags)
   # (but cannot start on batch that doesn't exist, check "batches" table/call)
   DBI::dbExecute(t, "INSERT INTO batches (batchID) VALUES (26750740)")
@@ -82,7 +82,7 @@ test_that("tagme() blu receivers", {
     expect_message("hitsBlu") %>%
     suppressMessages()
 
-  # Have blu tag hits
+  # Have BLUtag hits
   tt <- DBI::dbReadTable(t, "hitsBlu")
   expect_gt(nrow(tt), 0)
 
@@ -91,16 +91,16 @@ test_that("tagme() blu receivers", {
   tt <- DBI::dbReadTable(t, "hitsBlu")
   expect_gt(min(tt$batchID), 26750744)
   
-  # Fill in missing blu tags
+  # Fill in missing BLUtags
   hitsBlu(t) %>%
-    expect_message("Checking blu tag batch history") %>%
+    expect_message("Checking BLUtag batch history") %>%
     expect_message("hitsBlu starting at")
   tt2 <- DBI::dbReadTable(t, "hitsBlu")
   expect_gt(nrow(tt2), nrow(tt)) # Now have the earlier hits
   expect_equal(min(tt2$batchID), 26750744)
   })
 
-test_that("blu tags parsed", {
+test_that("BLUtags parsed", {
   t <- data.frame(hitID = 99999999, batchID = 9999999, sync = 49000, product = 1, revision = 0)
   t <- cbind(t, payload = c("6406060F", "6706150F", "6106270F", "6706430B", "0606E803", NA))
   expect_named(p <- getBluPayload(t), c(names(t), "solar_voltage", "temperature"))

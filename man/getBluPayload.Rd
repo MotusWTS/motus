@@ -14,7 +14,7 @@ the result of \code{dplyr::tbl(tags, "alltags")}; a data frame could be the
 result of \code{dplyr::tbl(tags, "alltags") \%>\% dplyr::collect()}.}
 }
 \value{
-Data frame/Tibble of the BLU tag hits with extra variable columns.
+Data frame/Tibble of the BLUtag hits with extra variable columns.
 }
 \description{
 Extracts the data from the hexadecimal BLUtag payload into new columns.

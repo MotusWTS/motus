@@ -2,7 +2,7 @@
 #' 
 #' Extracts the data from the hexadecimal BLUtag payload into new columns.
 #'
-#' @returns Data frame/Tibble of the BLU tag hits with extra variable columns.
+#' @returns Data frame/Tibble of the BLUtag hits with extra variable columns.
 #'
 #' @inheritParams args
 #' 

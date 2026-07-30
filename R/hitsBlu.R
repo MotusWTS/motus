@@ -1,15 +1,15 @@
 #' Update hitsBlu data
 #' 
-#' Add any missing BLU tag hits to the `hitsBlu` table in an existing Motus
+#' Add any missing BLUtag hits to the `hitsBlu` table in an existing Motus
 #' database. `hitsBlu` contain extra information regarding the 'health' of
 #' portable node units. Use [getBluPayload()] to extract these details from 
 #' the payload data.
 #'
 #' @inheritParams args
 #' 
-#' @details This function is only required if you suspect BLU tag hits have been
+#' @details This function is only required if you suspect BLUtag hits have been
 #'   missed (due to hits being downloaded before the motus package had the 
-#'   functionality to download BLU tag hits).
+#'   functionality to download BLUtag hits).
 #' 
 #' @seealso [getBluPayload()]
 #'
@@ -36,14 +36,14 @@ hitsBlu <- function(src) {
   }
   
   # Get batches to check ---------------------------
-  message("Checking blu tag batch history...")
+  message("Checking BLUtag batch history...")
 
-  # Downloaded batches with blu tag hit data
+  # Downloaded batches with BLUtag hit data
   blu_batches <- dplyr::tbl(src, "hitsBlu") %>%
     dplyr::pull(.data$batchID) %>%
     unique()
   
-  # Downloaded batches, excluding those with known blu tag hits
+  # Downloaded batches, excluding those with known BLUtag hits
   old_batches <- dplyr::tbl(src, "batches") %>%
     dplyr::filter(!.data$batchID %in% .env$blu_batches) %>%
     dplyr::pull(.data$batchID)
