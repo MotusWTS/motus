@@ -1,14 +1,17 @@
 #' Update hitsBlu data
 #' 
-#' Add any missing blu tag hits to the `hitsBlu` table in an existing Motus
-#' database. `hitsBlu` contain information regarding the 'health' of portable
-#' node units. 
+#' Add any missing BLU tag hits to the `hitsBlu` table in an existing Motus
+#' database. `hitsBlu` contain extra information regarding the 'health' of
+#' portable node units. Use [getBluPayload()] to extract these details from 
+#' the payload data.
 #'
 #' @inheritParams args
 #' 
-#' @details This function is only required if you suspect blu tag hits have been
+#' @details This function is only required if you suspect BLU tag hits have been
 #'   missed (due to hits being downloaded before the motus package had the 
-#'   functionality to download blu tag hits).
+#'   functionality to download BLU tag hits).
+#' 
+#' @seealso [getBluPayload()]
 #'
 #' @examples
 #' \dontrun{

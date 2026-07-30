@@ -99,3 +99,11 @@ test_that("tagme() blu receivers", {
   expect_gt(nrow(tt2), nrow(tt)) # Now have the earlier hits
   expect_equal(min(tt2$batchID), 26750744)
   })
+
+test_that("blu tags parsed", {
+  t <- data.frame(hitID = 99999999, batchID = 9999999, sync = 49000, product = 1, revision = 0)
+  t <- cbind(t, payload = c("6406060F", "6706150F", "6106270F", "6706430B", "0606E803", NA))
+  expect_named(p <- getBluPayload(t), c(names(t), "solar_voltage", "temperature"))
+  expect_equal(p$solar_voltage, c(1.636, 1.639, 1.633, 1.639, 1.542, NA))
+  expect_equal(p$temperature, c(38.46, 38.61, 38.79, 28.83, 10.00, NA))
+})

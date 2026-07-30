@@ -200,3 +200,22 @@ disconnect <- function(src, warnings = FALSE) {
 to_df <- function(x) {
   structure(x, class = "data.frame", row.names = seq_len(lengths(x[1])))
 }
+
+
+#' Convert hexadecimal bytes to raw
+#'
+#' @param hex_str Character string of hexadecimal bytes
+#'
+#' @returns Raw bytes
+#'
+#' @noRd
+#' @examples
+#' as_raw("6406060F")
+
+as_raw <- function(hex_str) {
+  as.raw(as.hexmode(substring(
+    hex_str,
+    seq(1, nchar(hex_str), 2),
+    seq(2, nchar(hex_str), 2)
+  )))
+}

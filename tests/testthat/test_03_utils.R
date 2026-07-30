@@ -34,3 +34,16 @@ test_that("get_projRecv pulls project name", {
   expect_equal(get_projRecv(tagme("SG-3115BBBK0782", update = FALSE, dir = d)),
                "SG-3115BBBK0782")
 })
+
+
+test_that("as_raw()", {
+  # Expected vals
+  e <- raw(4)
+  e[1] <- as.raw(0x64)
+  e[2] <- e[3] <- as.raw(0x06)
+  e[4] <- as.raw(0x0F)
+
+  # Test
+  expect_silent(r <- as_raw("6406060F")) %>%
+    expect_equal(e)
+})

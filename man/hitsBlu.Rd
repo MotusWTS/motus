@@ -11,18 +11,22 @@ hitsBlu(src)
 \code{DBI::dbConnect(RSQLite::SQLite(), "XXX.motus")}.}
 }
 \description{
-Add any missing blu tag hits to the \code{hitsBlu} table in an existing Motus
-database. \code{hitsBlu} contain information regarding the 'health' of portable
-node units.
+Add any missing BLU tag hits to the \code{hitsBlu} table in an existing Motus
+database. \code{hitsBlu} contain extra information regarding the 'health' of
+portable node units. Use \code{\link[=getBluPayload]{getBluPayload()}} to extract these details from
+the payload data.
 }
 \details{
-This function is only required if you suspect blu tag hits have been
+This function is only required if you suspect BLU tag hits have been
 missed (due to hits being downloaded before the motus package had the
-functionality to download blu tag hits).
+functionality to download BLU tag hits).
 }
 \examples{
 \dontrun{
   hitsBlu(my_tags)
 }
 
+}
+\seealso{
+\code{\link[=getBluPayload]{getBluPayload()}}
 }
