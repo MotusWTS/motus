@@ -59,7 +59,7 @@ set_testing <- function(set = TRUE) {
 #' @param type Character. Project or Receiver
 #'
 #' @return In memory test database.
-#' @export
+#' @noRd
 #'
 #' @examples
 #' # Explore the sample data
