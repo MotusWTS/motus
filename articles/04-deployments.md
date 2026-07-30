@@ -48,6 +48,7 @@ GitHub or CRAN) then please return to [Chapter 2 - Installing
 packages](https://motuswts.github.io/motus/articles/02-installing-packages.md).
 
 ``` r
+
 library(tidyverse)
 library(motus)
 library(lubridate)
@@ -71,6 +72,7 @@ may have to
 with the username **and** password ‘motus.sample’.
 
 ``` r
+
 sql_motus <- tagme(176, dir = "./data")
 ```
 
@@ -120,6 +122,7 @@ function for project 176, described in more detail in [Chapter
 3](https://motuswts.github.io/motus/articles/03-accessing-data.html#all-metadata).
 
 ``` r
+
 metadata(sql_motus, projectIDs = 176)
 ```
 
@@ -135,6 +138,7 @@ to the James Bay Shorebird Project, and ignore tag metadata associated
 with any duplicate tags belonging to other projects:
 
 ``` r
+
 tbl_tags <- tbl(sql_motus, "tags") 
 df_tags <- tbl_tags %>%
   filter(projectID == 176) %>%
@@ -147,6 +151,7 @@ of tags registered to the James Bay Shorebird Project in the sample
 dataset (i.e., 18 tags):
 
 ``` r
+
 nrow(df_tags) # number of registered tags in the database
 ```
 
@@ -155,6 +160,7 @@ nrow(df_tags) # number of registered tags in the database
 You can view the motusTagIDs:
 
 ``` r
+
 unique(df_tags$tagID)
 ```
 
@@ -175,6 +181,7 @@ function to determine which registered tags have (or do not have)
 corresponding deployment information.
 
 ``` r
+
 tbl_tagDeps <- tbl(sql_motus, "tagDeps") 
 
 df_tagDeps <- tbl_tagDeps %>%
@@ -218,6 +225,7 @@ combined `motusTagID`/`tagDeployID` variable to use in place of the
 `motusTagID` if you have multiple deployments of a tag in your own data:
 
 ``` r
+
 df_alltags <- tbl(sql_motus, "alltags") %>% 
   collect() %>% 
   as.data.frame() %>%     # for all fields in the df (data frame)
@@ -242,6 +250,7 @@ deployments of a tag. Moving forward, you would use `motusTagDepID` in
 place of `motusTagID` as you work through the rest of these articles:
 
 ``` r
+
 df_alltags <- df_alltags %>%
   mutate(motusTagDepID = paste(motusTagID, tagDeployID, sep = "."))
 
@@ -266,6 +275,7 @@ directory where you would like to save these files; we have created a
 `map-data` folder within our working directory in this example:
 
 ``` r
+
 world <- ne_countries(scale = "medium", returnclass = "sf") 
 # only need this first time downloading
 lakes <- ne_download(scale = "medium", type = 'lakes', category = 'physical',
@@ -277,6 +287,7 @@ analysis later and run code again, you can use the `ne_load` function
 because the spatial files are already stored on your computer:
 
 ``` r
+
 lakes <- ne_load(type = "lakes", scale = "medium", category = 'physical',
                  returnclass = "sf", destdir = "map-data")
 ```
@@ -286,6 +297,7 @@ lakes <- ne_load(type = "lakes", scale = "medium", category = 'physical',
 Map the location of tag deployments for the sample data:
 
 ``` r
+
 # set limits to map based on locations of detections, ensuring they include the
 # deployment locations
 xmin <- -100 #min(df_tagDeps$longitude, na.rm = TRUE) - 5
@@ -331,6 +343,7 @@ deployment latitude and longitude reasonable? Are the values for
 `speciesID` correct?
 
 ``` r
+
 df_tagDeps %>%
   select(tagID, projectID, timeStart, timeEnd, speciesID, latitude, longitude) %>%
   summary()
@@ -366,6 +379,7 @@ table, and subset to the suite of numeric `speciesID`s in the tag
 metadata:
 
 ``` r
+
 # generate list of species IDs in project 176 metadata
 sp.list <- unique(df_tagDeps$speciesID)  
 
@@ -403,6 +417,7 @@ would then use the `deployID` associated with the entry/entries to find
 and update the deployment record in your project metadata online:
 
 ``` r
+
 filter(df_tagDeps, speciesID == 4780)
 ```
 
@@ -463,6 +478,7 @@ function is described in more detail in [Chapter
 3](https://motuswts.github.io/motus/articles/03-accessing-data.html#all-metadata).
 
 ``` r
+
 metadata(sql_motus)
 ```
 
@@ -472,6 +488,7 @@ To see which (if any) receiver deployments are registered to your
 project, import, subset and summarize the receiver deployment data:
 
 ``` r
+
 tbl_recvDeps <- tbl(sql_motus, "recvDeps") 
 
 df_projRecvs <- tbl_recvDeps %>%
@@ -484,54 +501,46 @@ df_projRecvs <- tbl_recvDeps %>%
 summary(df_projRecvs)
 ```
 
-    ##     deployID      projectID      serno           receiverType      
-    ##  Min.   :1134   Min.   :176   Length:18          Length:18         
-    ##  1st Qu.:2287   1st Qu.:176   Class :character   Class :character  
-    ##  Median :3101   Median :176   Mode  :character   Mode  :character  
-    ##  Mean   :2952   Mean   :176                                        
-    ##  3rd Qu.:4002   3rd Qu.:176                                        
-    ##  Max.   :4221   Max.   :176                                        
-    ##                                                                    
-    ##     deviceID         status              name             siteName        
-    ##  Min.   : 74.00   Length:18          Length:18          Length:18         
-    ##  1st Qu.: 75.75   Class :character   Class :character   Class :character  
-    ##  Median :280.00   Mode  :character   Mode  :character   Mode  :character  
-    ##  Mean   :250.11                                                           
-    ##  3rd Qu.:333.00                                                           
-    ##  Max.   :528.00                                                           
-    ##                                                                           
-    ##  stationName        fixtureType           latitude       longitude     
-    ##  Length:18          Length:18          Min.   :51.15   Min.   :-80.80  
-    ##  Class :character   Class :character   1st Qu.:51.48   1st Qu.:-80.63  
-    ##  Mode  :character   Mode  :character   Median :51.66   Median :-80.57  
-    ##                                        Mean   :51.58   Mean   :-80.47  
-    ##                                        3rd Qu.:51.74   3rd Qu.:-80.45  
-    ##                                        Max.   :51.88   Max.   :-79.81  
-    ##                                        NA's   :3       NA's   :3       
-    ##    elevation        isMobile         tsStart              tsEnd          
-    ##  Min.   :-7.00   Min.   :0.0000   Min.   :1.405e+09   Min.   :1.415e+09  
-    ##  1st Qu.:-6.25   1st Qu.:0.0000   1st Qu.:1.432e+09   1st Qu.:1.445e+09  
-    ##  Median :-5.50   Median :0.0000   Median :1.463e+09   Median :1.458e+09  
-    ##  Mean   :-5.50   Mean   :0.1667   Mean   :1.454e+09   Mean   :1.459e+09  
-    ##  3rd Qu.:-4.75   3rd Qu.:0.0000   3rd Qu.:1.470e+09   3rd Qu.:1.481e+09  
-    ##  Max.   :-4.00   Max.   :1.0000   Max.   :1.503e+09   Max.   :1.503e+09  
-    ##  NA's   :16                                           NA's   :2          
-    ##    utcOffset     stationID    macAddress          timeStart                  
-    ##  Min.   : NA   Min.   : NA   Length:18          Min.   :2014-07-12 00:00:00  
-    ##  1st Qu.: NA   1st Qu.: NA   Class :character   1st Qu.:2015-05-24 06:00:00  
-    ##  Median : NA   Median : NA   Mode  :character   Median :2016-05-17 12:00:00  
-    ##  Mean   :NaN   Mean   :NaN                      Mean   :2016-01-23 14:03:16  
-    ##  3rd Qu.: NA   3rd Qu.: NA                      3rd Qu.:2016-08-04 01:26:15  
-    ##  Max.   : NA   Max.   : NA                      Max.   :2017-08-20 23:30:00  
-    ##  NA's   :18    NA's   :18                                                    
-    ##     timeEnd                   
-    ##  Min.   :2014-11-06 00:00:00  
-    ##  1st Qu.:2015-10-20 00:00:00  
-    ##  Median :2016-03-16 21:05:00  
-    ##  Mean   :2016-03-25 17:06:15  
-    ##  3rd Qu.:2016-12-01 00:00:00  
-    ##  Max.   :2017-08-20 23:30:00  
-    ##  NA's   :2
+    ##     deployID      projectID         serno       receiverType    deviceID     
+    ##  Min.   :1134   Min.   :176   Length   :18   Length   :18    Min.   : 74.00  
+    ##  1st Qu.:2287   1st Qu.:176   N.unique : 7   N.unique : 2    1st Qu.: 75.75  
+    ##  Median :3101   Median :176   N.blank  : 0   N.blank  : 0    Median :280.00  
+    ##  Mean   :2952   Mean   :176   Min.nchar: 9   Min.nchar:11    Mean   :250.11  
+    ##  3rd Qu.:4002   3rd Qu.:176   Max.nchar:15   Max.nchar:11    3rd Qu.:333.00  
+    ##  Max.   :4221   Max.   :176                                  Max.   :528.00  
+    ##                                                                              
+    ##        status          name         siteName     stationName    fixtureType
+    ##  Length   :18   Length   :18   Length   :18   Length   :18   Length   :18  
+    ##  N.unique : 2   N.unique : 9   N.unique : 0   N.unique : 0   N.unique : 3  
+    ##  N.blank  : 0   N.blank  : 0   N.blank  : 0   N.blank  : 0   N.blank  : 0  
+    ##  Min.nchar: 6   Min.nchar: 9   Min.nchar:NA   Min.nchar:NA   Min.nchar: 5  
+    ##  Max.nchar:10   Max.nchar:16   Max.nchar:NA   Max.nchar:NA   Max.nchar: 8  
+    ##                                NAs      :18   NAs      :18                 
+    ##                                                                            
+    ##     latitude       longitude        elevation        isMobile     
+    ##  Min.   :51.15   Min.   :-80.80   Min.   :-7.00   Min.   :0.0000  
+    ##  1st Qu.:51.48   1st Qu.:-80.63   1st Qu.:-6.25   1st Qu.:0.0000  
+    ##  Median :51.66   Median :-80.57   Median :-5.50   Median :0.0000  
+    ##  Mean   :51.58   Mean   :-80.47   Mean   :-5.50   Mean   :0.1667  
+    ##  3rd Qu.:51.74   3rd Qu.:-80.45   3rd Qu.:-4.75   3rd Qu.:0.0000  
+    ##  Max.   :51.88   Max.   :-79.81   Max.   :-4.00   Max.   :1.0000  
+    ##  NAs    :3       NAs    :3        NAs    :16                      
+    ##     tsStart              tsEnd             utcOffset     stationID  
+    ##  Min.   :1.405e+09   Min.   :1.415e+09   Min.   : NA   Min.   : NA  
+    ##  1st Qu.:1.432e+09   1st Qu.:1.445e+09   1st Qu.: NA   1st Qu.: NA  
+    ##  Median :1.463e+09   Median :1.458e+09   Median : NA   Median : NA  
+    ##  Mean   :1.454e+09   Mean   :1.459e+09   Mean   :NaN   Mean   :NaN  
+    ##  3rd Qu.:1.470e+09   3rd Qu.:1.481e+09   3rd Qu.: NA   3rd Qu.: NA  
+    ##  Max.   :1.503e+09   Max.   :1.503e+09   Max.   : NA   Max.   : NA  
+    ##                      NAs    :2           NAs    :18    NAs    :18   
+    ##      macAddress   timeStart                      timeEnd                   
+    ##  Length   :18   Min.   :2014-07-12 00:00:00   Min.   :2014-11-06 00:00:00  
+    ##  N.unique : 0   1st Qu.:2015-05-24 06:00:00   1st Qu.:2015-10-20 00:00:00  
+    ##  N.blank  : 0   Median :2016-05-17 12:00:00   Median :2016-03-16 21:05:00  
+    ##  Min.nchar:NA   Mean   :2016-01-23 14:03:16   Mean   :2016-03-25 17:06:15  
+    ##  Max.nchar:NA   3rd Qu.:2016-08-04 01:26:15   3rd Qu.:2016-12-01 00:00:00  
+    ##  NAs      :18   Max.   :2017-08-20 23:30:00   Max.   :2017-08-20 23:30:00  
+    ##                                               NAs    :2
 
 There are 18 receiver deployments registered to the sample project. Four
 deployments are missing latitude and longitude, and six deployments are
@@ -543,6 +552,7 @@ we do not need), and arranges the remaining records by receiver ID,
 latitude, and start date:
 
 ``` r
+
 df_projRecvs %>%
   mutate(dateStart = date(timeStart)) %>% 
   select(-serno,-fixtureType, -macAddress, -timeStart, -timeEnd, -elevation, 
@@ -612,6 +622,7 @@ dates do not get displayed. Different deployments of the same receiver
 should not overlap in time:
 
 ``` r
+
 # put data in long format to simplify plotting (or use geom_segment)
 df_projRecvs.long <- df_projRecvs %>%
   select(deviceID, deployID, timeStart, timeEnd) %>% 
@@ -639,6 +650,7 @@ subset and re-plot, or use the day of year on the x-axis, and
 by year.
 
 ``` r
+
 ggplot(data = df_projRecvs.long, 
        aes(x = yday(time), y = as.factor(deviceID), colour = as.factor(deployID))) +
   theme_bw() +
@@ -663,6 +675,7 @@ with receivers deployed by the sample project displayed in red.
 **a. Load all receiver metadata**
 
 ``` r
+
 df_recvDeps <- tbl_recvDeps %>%
   collect() %>%
   as.data.frame() %>%
@@ -673,6 +686,7 @@ df_recvDeps <- tbl_recvDeps %>%
 **b. Load base map files**
 
 ``` r
+
 # include all of the Americas to begin
 world <- ne_countries(scale = "medium", returnclass = "sf") 
 
@@ -686,6 +700,7 @@ location of network-wide receivers (dark grey points) and receivers
 deployed by the James Bay Shorebird Project (project 176; red points).
 
 ``` r
+
 # set map limits using detection locations; 
 # ensure they include the deployment locations
 xmin <- min(df_recvDeps$longitude, na.rm = TRUE) - 2
@@ -716,6 +731,7 @@ dataframe created above. Deployments are restricted to those that were
 active at in 2016.
 
 ``` r
+
 # get a higher resolution basemap for the James Bay region
 region <- ne_states(country = "Canada", returnclass = "sf") %>% 
   filter(name %in% c("Ontario", "Québec", "Nunavut"))
@@ -767,6 +783,7 @@ without detections).
 **a. Load receiver and antenna metadata**
 
 ``` r
+
 # antenna metadata for ALL Motus antenna deployments; 
 # to simplify, keep only the variables of interest.
 tbl_antDeps <- tbl(sql_motus, "antDeps") 
@@ -787,6 +804,7 @@ df_stationDeps <- left_join(df_recvDeps, df_antDeps, by = "deployID")
 Subset these to receivers registered to a project:
 
 ``` r
+
 df_stationDeps <- filter(df_stationDeps, projectID == 176)
 ```
 
@@ -796,49 +814,42 @@ Use [`summary()`](https://rdrr.io/r/base/summary.html) to get a general
 idea of the distribution of the variables in the data.
 
 ``` r
+
 summary(df_stationDeps)
 ```
 
-    ##     deployID    receiverType          deviceID         name          
-    ##  Min.   :1134   Length:55          Min.   : 74.0   Length:55         
-    ##  1st Qu.:2286   Class :character   1st Qu.: 75.0   Class :character  
-    ##  Median :3100   Mode  :character   Median :280.0   Mode  :character  
-    ##  Mean   :2919                      Mean   :201.3                     
-    ##  3rd Qu.:4048                      3rd Qu.:285.0                     
-    ##  Max.   :4221                      Max.   :528.0                     
-    ##                                                                      
-    ##     latitude       longitude         isMobile      
-    ##  Min.   :51.15   Min.   :-80.80   Min.   :0.00000  
-    ##  1st Qu.:51.48   1st Qu.:-80.60   1st Qu.:0.00000  
-    ##  Median :51.66   Median :-80.57   Median :0.00000  
-    ##  Mean   :51.57   Mean   :-80.46   Mean   :0.05455  
-    ##  3rd Qu.:51.70   3rd Qu.:-80.45   3rd Qu.:0.00000  
-    ##  Max.   :51.88   Max.   :-79.81   Max.   :1.00000  
-    ##  NA's   :3       NA's   :3                         
-    ##    timeStart                      timeEnd                      projectID  
-    ##  Min.   :2014-07-12 00:00:00   Min.   :2014-11-06 00:00:00   Min.   :176  
-    ##  1st Qu.:2015-05-24 00:00:00   1st Qu.:2015-11-02 00:00:00   1st Qu.:176  
-    ##  Median :2016-05-18 00:00:00   Median :2016-10-05 08:15:00   Median :176  
-    ##  Mean   :2016-02-22 12:28:39   Mean   :2016-05-04 00:08:20   Mean   :176  
-    ##  3rd Qu.:2017-05-16 15:55:00   3rd Qu.:2016-12-01 00:00:00   3rd Qu.:176  
-    ##  Max.   :2017-08-20 23:30:00   Max.   :2017-08-20 23:30:00   Max.   :176  
-    ##                                NA's   :7                                  
-    ##    elevation          port           antennaType           bearing      
-    ##  Min.   :-7.000   Length:55          Length:55          Min.   : 10.00  
-    ##  1st Qu.:-7.000   Class :character   Class :character   1st Qu.: 66.25  
-    ##  Median :-7.000   Mode  :character   Mode  :character   Median :145.00  
-    ##  Mean   :-5.714                                         Mean   :151.34  
-    ##  3rd Qu.:-4.000                                         3rd Qu.:215.00  
-    ##  Max.   :-4.000                                         Max.   :357.50  
-    ##  NA's   :48                                             NA's   :11      
-    ##   heightMeters 
-    ##  Min.   :5.60  
-    ##  1st Qu.:5.60  
-    ##  Median :5.80  
-    ##  Mean   :5.85  
-    ##  3rd Qu.:6.00  
-    ##  Max.   :6.20  
-    ##  NA's   :3
+    ##     deployID       receiverType    deviceID            name       latitude    
+    ##  Min.   :1134   Length   :55    Min.   : 74.0   Length   :55   Min.   :51.15  
+    ##  1st Qu.:2286   N.unique : 2    1st Qu.: 75.0   N.unique : 9   1st Qu.:51.48  
+    ##  Median :3100   N.blank  : 0    Median :280.0   N.blank  : 0   Median :51.66  
+    ##  Mean   :2919   Min.nchar:11    Mean   :201.3   Min.nchar: 9   Mean   :51.57  
+    ##  3rd Qu.:4048   Max.nchar:11    3rd Qu.:285.0   Max.nchar:16   3rd Qu.:51.70  
+    ##  Max.   :4221                   Max.   :528.0                  Max.   :51.88  
+    ##                                                                NAs    :3      
+    ##    longitude         isMobile         timeStart                  
+    ##  Min.   :-80.80   Min.   :0.00000   Min.   :2014-07-12 00:00:00  
+    ##  1st Qu.:-80.60   1st Qu.:0.00000   1st Qu.:2015-05-24 00:00:00  
+    ##  Median :-80.57   Median :0.00000   Median :2016-05-18 00:00:00  
+    ##  Mean   :-80.46   Mean   :0.05455   Mean   :2016-02-22 12:28:39  
+    ##  3rd Qu.:-80.45   3rd Qu.:0.00000   3rd Qu.:2017-05-16 15:55:00  
+    ##  Max.   :-79.81   Max.   :1.00000   Max.   :2017-08-20 23:30:00  
+    ##  NAs    :3                                                       
+    ##     timeEnd                      projectID     elevation             port   
+    ##  Min.   :2014-11-06 00:00:00   Min.   :176   Min.   :-7.000   Length   :55  
+    ##  1st Qu.:2015-11-02 00:00:00   1st Qu.:176   1st Qu.:-7.000   N.unique : 4  
+    ##  Median :2016-10-05 08:15:00   Median :176   Median :-7.000   N.blank  : 0  
+    ##  Mean   :2016-05-04 00:08:20   Mean   :176   Mean   :-5.714   Min.nchar: 1  
+    ##  3rd Qu.:2016-12-01 00:00:00   3rd Qu.:176   3rd Qu.:-4.000   Max.nchar: 1  
+    ##  Max.   :2017-08-20 23:30:00   Max.   :176   Max.   :-4.000                 
+    ##  NAs    :7                                   NAs    :48                     
+    ##     antennaType    bearing        heightMeters 
+    ##  Length   :55   Min.   : 10.00   Min.   :5.60  
+    ##  N.unique : 5   1st Qu.: 66.25   1st Qu.:5.60  
+    ##  N.blank  : 0   Median :145.00   Median :5.80  
+    ##  Min.nchar: 6   Mean   :151.34   Mean   :5.85  
+    ##  Max.nchar: 9   3rd Qu.:215.00   3rd Qu.:6.00  
+    ##                 Max.   :357.50   Max.   :6.20  
+    ##                 NAs    :11       NAs    :3
 
 There are the 4 deployments with missing latitude and longitude
 associated with the four deployments of mobile receivers that we saw
@@ -854,6 +865,7 @@ antenna(s) is missing for 4 of 91 records. Subset the records with
 missing antenna bearing to see if these can be fixed:
 
 ``` r
+
 df_stationDeps %>%
   filter(is.na(bearing)) %>%
   select(-elevation, -deviceID, -timeEnd)

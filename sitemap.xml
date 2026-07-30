@@ -33,11 +33,13 @@
 <url><loc>https://motuswts.github.io/motus/reference/deprecateBatches.html</loc></url>
 <url><loc>https://motuswts.github.io/motus/reference/filterByActivity.html</loc></url>
 <url><loc>https://motuswts.github.io/motus/reference/getAccess.html</loc></url>
+<url><loc>https://motuswts.github.io/motus/reference/getBluPayload.html</loc></url>
 <url><loc>https://motuswts.github.io/motus/reference/getGPS.html</loc></url>
 <url><loc>https://motuswts.github.io/motus/reference/getMotusDBSrc.html</loc></url>
 <url><loc>https://motuswts.github.io/motus/reference/getRuns.html</loc></url>
 <url><loc>https://motuswts.github.io/motus/reference/getRunsFilters.html</loc></url>
 <url><loc>https://motuswts.github.io/motus/reference/gpsAll.html</loc></url>
+<url><loc>https://motuswts.github.io/motus/reference/hitsBlu.html</loc></url>
 <url><loc>https://motuswts.github.io/motus/reference/index.html</loc></url>
 <url><loc>https://motuswts.github.io/motus/reference/listRunsFilters.html</loc></url>
 <url><loc>https://motuswts.github.io/motus/reference/metadata.html</loc></url>

@@ -35,7 +35,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/MotusWTS/motus/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/MotusWTS/motus/blob/denis/blu_tags_data/inst/CITATION)
 
 Birds Canada (2026). *motus: Fetch and use data from the Motus Wildlife
 Tracking System*. <https://motusWTS.github.io/motus/>.

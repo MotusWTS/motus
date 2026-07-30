@@ -1,6 +1,7 @@
 # Removing deprecated batches
 
 ``` r
+
 library(motus)
 library(tidyverse)
 
@@ -22,11 +23,12 @@ Users can see which batches have been deprecated in the `deprecated`
 table:
 
 ``` r
+
 tbl(sql_motus, "deprecated")
 ```
 
-    ## # Source:   table<`deprecated`> [?? x 3]
-    ## # Database: sqlite 3.51.1 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
+    ## # A query:  ?? x 3
+    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
     ##   batchID batchFilter removed
     ##     <int>       <int>   <int>
     ## 1    6000           4       0
@@ -45,6 +47,7 @@ This table is updated every time you update your data with a call to
 want to update it again (without removing anything), you can use
 
 ``` r
+
 sql_motus <- deprecateBatches(sql_motus, fetchOnly = TRUE)
 ## Fetching deprecated batches
 ## Total deprecated batches: 6
@@ -55,12 +58,13 @@ To see where these batches are in your data, you can filter for the IDs
 in a specific table
 
 ``` r
+
 tbl(sql_motus, "alltags") %>%
   filter(batchID %in% c(6000, 6001, 6002))
 ```
 
-    ## # Source:   SQL [?? x 62]
-    ## # Database: sqlite 3.51.1 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
+    ## # A query:  ?? x 62
+    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
     ##       hitID   runID batchID          ts tsCorrected   sig sigsd noise  freq freqsd   slop
     ##       <int>   <int>   <int>       <dbl>       <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl>  <dbl>
     ##  1 23271881 1822216    6000 1487894945. 1487894945. -68.2 10.9  -76.3  2.07 0.127  0.0034
@@ -96,6 +100,7 @@ will ask you if you are sure you want to remove the batches before
 proceeding.
 
 ``` r
+
 sql_motus <- deprecateBatches(sql_motus)
 ```
 
@@ -123,12 +128,13 @@ After removal, you can see that the batches have been removed from the
 data
 
 ``` r
+
 tbl(sql_motus, "alltags") %>%
   filter(batchID %in% c(6000, 6001, 6002))
 ```
 
-    ## # Source:   SQL [?? x 62]
-    ## # Database: sqlite 3.51.1 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
+    ## # A query:  ?? x 62
+    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
     ## # ℹ 62 variables: hitID <int>, runID <int>, batchID <int>, ts <dbl>, tsCorrected <lgl>,
     ## #   sig <dbl>, sigsd <dbl>, noise <dbl>, freq <dbl>, freqsd <dbl>, slop <dbl>,
     ## #   burstSlop <dbl>, done <int>, motusTagID <lgl>, ambigID <int>, port <chr>,
@@ -140,11 +146,12 @@ tbl(sql_motus, "alltags") %>%
 Also that the `deprecated` table now lists `removed` as 1.
 
 ``` r
+
 tbl(sql_motus, "deprecated")
 ```
 
-    ## # Source:   table<`deprecated`> [?? x 3]
-    ## # Database: sqlite 3.51.1 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
+    ## # A query:  ?? x 3
+    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
     ##   batchID batchFilter removed
     ##     <int>       <int>   <int>
     ## 1    6000           4       1

@@ -85,6 +85,7 @@ beyond the period; i.e. runs are not split.
 ## Examples
 
 ``` r
+
 if (FALSE) { # \dontrun{
 s <- tagme(57)         # get the tag database for project 57
 clarify(s)             # report on the ambiguous tag detections in s

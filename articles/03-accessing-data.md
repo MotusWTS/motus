@@ -137,6 +137,7 @@ github and CRAN) then please return to [Chapter 2 - Installing
 Packages](https://motuswts.github.io/motus/articles/02-installing-packages.md).
 
 ``` r
+
 library(motus)
 library(lubridate)
 library(dplyr)
@@ -154,6 +155,7 @@ been detected across multiple time zones, then they can also
 inadvertently be changed.
 
 ``` r
+
 Sys.setenv(TZ = "UTC")
 ```
 
@@ -223,6 +225,7 @@ Lets start by determining what our working directory is so we know where
 our file will be saved.
 
 ``` r
+
 getwd()
 ```
 
@@ -233,6 +236,7 @@ using [`getwd()`](https://rdrr.io/r/base/getwd.html). This will also
 create an SQL object in your R environment called `sql_motus`
 
 ``` r
+
 sql_motus <- tagme(projRecv = 176, new = TRUE)
 ```
 
@@ -243,6 +247,7 @@ to the current folder’ (shown by
 [`getwd()`](https://rdrr.io/r/base/getwd.html)).
 
 ``` r
+
 sql_motus <- tagme(projRecv = 176, new = TRUE, dir = "./data/")
 ```
 
@@ -299,6 +304,7 @@ access data from another account. If you need to logout of the current
 account to access other data, you will need to use the logout function.
 
 ``` r
+
 motusLogout()
 ```
 
@@ -314,6 +320,7 @@ ensuring that you are logged in using your own
 [credentials](#user-authentication).
 
 ``` r
+
 proj.num <- "SG-123BBBK1234"
 sql_motus <- tagme(projRecv = proj.num, new = TRUE)
 ```
@@ -337,6 +344,7 @@ script will not result in a download but you can try it with your own
 project if you have receivers.
 
 ``` r
+
 # get a copy of the metadata only
 sql_motus <- tagme(176, new = TRUE, update = FALSE, dir = "./data/")
 metadata(sql_motus, 176)
@@ -362,6 +370,7 @@ You can also create a list of receivers you’d like to download if you
 don’t want to download project-wide receivers:
 
 ``` r
+
 # create list of receivers you'd like to download
 df.serno <- c("SG-AB12RPI3CD34", "SG-1234BBBK4321")
 
@@ -385,6 +394,7 @@ calling the
 function but leaving all arguments blank, apart from the directory:
 
 ``` r
+
 # If you have them saved your working directory:
 tagme()
 
@@ -404,6 +414,7 @@ those tables, using the `DBI` and `RSQLite` packages (these are
 automatically installed when you install `motus`).
 
 ``` r
+
 library(DBI)
 library(RSQLite)
 
@@ -417,12 +428,13 @@ dbListTables(file.name)
     ##  [1] "activity"    "activityAll" "admInfo"     "allambigs"   "allruns"    
     ##  [6] "allrunsGPS"  "alltags"     "alltagsGPS"  "antDeps"     "batchRuns"  
     ## [11] "batches"     "clarified"   "deprecated"  "filters"     "gps"        
-    ## [16] "gpsAll"      "hits"        "meta"        "nodeData"    "nodeDeps"   
-    ## [21] "projAmbig"   "projBatch"   "projs"       "recvDeps"    "recvs"      
-    ## [26] "runs"        "runsFilters" "species"     "tagAmbig"    "tagDeps"    
-    ## [31] "tagProps"    "tags"
+    ## [16] "gpsAll"      "hits"        "hitsBlu"     "meta"        "nodeData"   
+    ## [21] "nodeDeps"    "projAmbig"   "projBatch"   "projs"       "recvDeps"   
+    ## [26] "recvs"       "runs"        "runsFilters" "species"     "tagAmbig"   
+    ## [31] "tagDeps"     "tagProps"    "tags"
 
 ``` r
+
 # get a list of variables in the "species" table in the .motus file.
 dbListFields(file.name, "species") 
 ```
@@ -442,6 +454,7 @@ For example, retrieve the virtual `alltags` table from our `sql_motus`
 SQLite file.
 
 ``` r
+
 tbl.alltags <- tbl(sql_motus, "alltags")
 ```
 
@@ -449,18 +462,28 @@ We now have a new `tbl.alltags` object in R. The underlying structure of
 these tables is a list of length 2:
 
 ``` r
+
 str(tbl.alltags)
 ```
 
-    ## List of 2
+    ## List of 3
+    ##  $ con       :Formal class 'SQLiteConnection' [package "RSQLite"] with 8 slots
+    ##   .. ..@ ptr                :<pointer: 0x5629b05d2a70> 
+    ##   .. ..@ dbname             : chr "/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus"
+    ##   .. ..@ loadable.extensions: logi TRUE
+    ##   .. ..@ flags              : int 70
+    ##   .. ..@ vfs                : chr ""
+    ##   .. ..@ ref                :<environment: 0x5629b23f5cd8> 
+    ##   .. ..@ bigint             : chr "integer64"
+    ##   .. ..@ extended_types     : logi FALSE
     ##  $ src       :List of 2
     ##   ..$ con  :Formal class 'SQLiteConnection' [package "RSQLite"] with 8 slots
-    ##   .. .. ..@ ptr                :<externalptr> 
+    ##   .. .. ..@ ptr                :<pointer: 0x5629b05d2a70> 
     ##   .. .. ..@ dbname             : chr "/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus"
     ##   .. .. ..@ loadable.extensions: logi TRUE
     ##   .. .. ..@ flags              : int 70
     ##   .. .. ..@ vfs                : chr ""
-    ##   .. .. ..@ ref                :<environment: 0x5609fde42a88> 
+    ##   .. .. ..@ ref                :<environment: 0x5629b23f5cd8> 
     ##   .. .. ..@ bigint             : chr "integer64"
     ##   .. .. ..@ extended_types     : logi FALSE
     ##   ..$ disco: NULL
@@ -492,6 +515,7 @@ function. For example, to look at the names of the variables in the
 `alltags` table:
 
 ``` r
+
 tbl.alltags %>% 
   collect() %>%
   names() # list the variable names in the table
@@ -535,6 +559,7 @@ functions. The output can then be further manipulated, or used to
 generate a RDS file of your data for archiving or export.
 
 ``` r
+
 df.alltags <- tbl.alltags %>% 
   collect() %>% 
   as.data.frame()
@@ -544,6 +569,7 @@ Now we have flat data of the alltags table called `df.alltags`. We can
 look at some metrics of the file:
 
 ``` r
+
 names(df.alltags)     # field names
 str(df.alltags)       # structure of your data fields
 head(df.alltags)      # prints the first 6 rows of your df to the console
@@ -561,6 +587,7 @@ uses an origin of 1 January 1970 and UTC as the timezone, exactly what
 we want!
 
 ``` r
+
 df.alltags <- tbl.alltags %>% 
   collect() %>% 
   as.data.frame() %>%     # for all fields in the df (data frame)
@@ -583,6 +610,7 @@ a dataframe. Some examples are below:
 1.  To select certain variables:
 
 ``` r
+
 # to grab a subset of variables, in this case a unique list of Motus tag IDs at
 # each receiver and antenna.
 df.alltagsSub <- tbl.alltags %>%
@@ -595,6 +623,7 @@ df.alltagsSub <- tbl.alltags %>%
 2.  To select certain tag IDs:
 
 ``` r
+
 # filter to include only motusTagIDs 16011, 23316
 df.alltagsSub <- tbl.alltags %>%
   filter(motusTagID %in% c(16011, 23316)) %>% 
@@ -606,6 +635,7 @@ df.alltagsSub <- tbl.alltags %>%
 3.  To select a specific species:
 
 ``` r
+
 # filter to only Red Knot (using speciesID)
 df.4670 <- tbl.alltags %>%
   filter(speciesID == 4670) %>%  
@@ -626,6 +656,7 @@ converting to a flat file. For example, to find the number of different
 detections for each tag at each receiver:
 
 ``` r
+
 df.detectSum <- tbl.alltags %>% 
   count(motusTagID, recv) %>%
   collect() %>%
@@ -645,6 +676,7 @@ consistent) starting point. We use an .rds file, which preserves all of
 the associated R data structures (such as time stamps).
 
 ``` r
+
 saveRDS(df.alltags, "./data/df_alltags.rds")  
 ```
 
@@ -653,6 +685,7 @@ for analysis in other programs. This can easily be done with the
 following code. Note that it **does not** preserve time stamps:
 
 ``` r
+
 write.csv(df.alltags, "./data/df_alltags.csv")
 ```
 
@@ -670,6 +703,7 @@ the [`tagme()`](https://motuswts.github.io/motus/reference/tagme.md)
 function but set `new = FALSE`:
 
 ``` r
+
 sql_motus <- tagme(projRecv = 176, dir = "./data/") 
 ```
 
@@ -695,6 +729,7 @@ downloaded database without connecting to the server to update, use
 `new = FALSE` and `update = FALSE`:
 
 ``` r
+
 # use dir = to specify a directory
 sql_motus <- tagme(projRecv = 176, update = FALSE, dir = "./data")
 ```
@@ -717,6 +752,7 @@ function, which returns a list with:
 The following assumes that a local copy of the database already exists:
 
 ``` r
+
 tellme(projRecv = 176)                    # If db is in the working directory
 tellme(projRecv = 176, dir = "./data/")   # To specify a different directory
 ```
@@ -725,6 +761,7 @@ To check how much data is available for a project but you *do not* have
 a database for it, use the ‘new’ parameter:
 
 ``` r
+
 tellme(projRecv = 176, new = TRUE)
 ```
 
@@ -736,6 +773,7 @@ your initial download, you can force re-import of the metadata when
 updating a database by running:
 
 ``` r
+
 sql_motus <- tagme(projRecv = 176, forceMeta = TRUE)
 ```
 
@@ -772,6 +810,7 @@ network (all tags and all receivers) to the `recvDeps` and `tagDeps`
 tables in your .motus file:
 
 ``` r
+
 # access all tag and receiver metadata for all projects in the network.
 metadata(sql_motus) 
 ```
@@ -779,6 +818,7 @@ metadata(sql_motus)
 Alternatively, you can load metadata for a specific project(s) using:
 
 ``` r
+
 # access tag and receiver metadata associated with project 176
 metadata(sql_motus, projectIDs = 176) 
 
@@ -807,6 +847,7 @@ if the
 call returns a warning.
 
 ``` r
+
 checkVersion(sql_motus)
 ```
 
@@ -825,6 +866,7 @@ the section on [downloading data for the first time](#download) for
 instructions on initial download.
 
 ``` r
+
 # SQLite R object, which links to the .motus file:
 sql_motus <- tagme(176, dir = "./data")  
 

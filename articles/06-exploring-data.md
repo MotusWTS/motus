@@ -20,6 +20,7 @@ to install the following packages before loading, if you haven’t already
 done so.
 
 ``` r
+
 library(motus)
 library(tidyverse)
 library(sf)
@@ -40,6 +41,7 @@ data](#summarizing-your-data).
 Otherwise, if you saved your data as an RDS file, you can load it using:
 
 ``` r
+
 df_alltags_sub <- readRDS("./data/dfAlltagsSub.rds") # change dir to local directory
 ```
 
@@ -60,6 +62,7 @@ same records, the following gives you the same dataset as the
 [`readRDS()`](https://rdrr.io/r/base/readRDS.html) statement above:
 
 ``` r
+
 # load the .motus file (remember 'motus.sample' is both username and password)
 sql_motus <- tagme(176, dir = "./data/")
 ```
@@ -82,6 +85,7 @@ sql_motus <- tagme(176, dir = "./data/")
     ## New deprecated batches: 0
 
 ``` r
+
 tbl_alltags <- tbl(sql_motus, "alltags")
 
 # obtain a table object of the filter
@@ -115,6 +119,7 @@ only creating a dataframe for `motusTagID` 16047, but you can decide how
 to best subset your data based on your need (e.g. by species or year):
 
 ``` r
+
 # create a subset for a single tag, to keep the dataframe small
 df_alltags_16047 <- filter(df_alltags_sub, motusTagID == 16047) 
 ```
@@ -126,6 +131,7 @@ Here we will run through some basic commands, starting with the
 selection of variables in a data frame:
 
 ``` r
+
 sql_motus %>% 
   tbl("alltags") %>% 
   select(ts, motusTagID, runLen, speciesEN, tagDepLat, tagDepLon, 
@@ -135,13 +141,13 @@ sql_motus %>%
   summary()
 ```
 
-    ##        ts              motusTagID        runLen        speciesEN        
-    ##  Min.   :1.438e+09   Min.   :10811   Min.   :   2.0   Length:109474     
-    ##  1st Qu.:1.476e+09   1st Qu.:22897   1st Qu.:  30.0   Class :character  
-    ##  Median :1.477e+09   Median :22905   Median : 120.0   Mode  :character  
-    ##  Mean   :1.476e+09   Mean   :22639   Mean   : 353.8                     
-    ##  3rd Qu.:1.477e+09   3rd Qu.:23316   3rd Qu.: 402.0                     
-    ##  Max.   :1.498e+09   Max.   :24303   Max.   :2474.0                     
+    ##        ts              motusTagID        runLen           speciesEN     
+    ##  Min.   :1.438e+09   Min.   :10811   Min.   :   2.0   Length   :109474  
+    ##  1st Qu.:1.476e+09   1st Qu.:22897   1st Qu.:  30.0   N.unique :    10  
+    ##  Median :1.477e+09   Median :22905   Median : 120.0   N.blank  :     0  
+    ##  Mean   :1.476e+09   Mean   :22639   Mean   : 353.8   Min.nchar:     6  
+    ##  3rd Qu.:1.477e+09   3rd Qu.:23316   3rd Qu.: 402.0   Max.nchar:    22  
+    ##  Max.   :1.498e+09   Max.   :24303   Max.   :2474.0   NAs      :  2069  
     ##                                                                         
     ##    tagDepLat       tagDepLon      recvDeployLat    recvDeployLon    
     ##  Min.   :11.12   Min.   :-80.69   Min.   :-42.50   Min.   :-143.68  
@@ -150,7 +156,7 @@ sql_motus %>%
     ##  Mean   :50.15   Mean   :-65.86   Mean   : 48.50   Mean   : -65.68  
     ##  3rd Qu.:50.19   3rd Qu.:-63.75   3rd Qu.: 50.20   3rd Qu.: -63.75  
     ##  Max.   :51.80   Max.   :-63.75   Max.   : 62.89   Max.   : -60.02  
-    ##  NA's   :2069    NA's   :2069     NA's   :173      NA's   :173      
+    ##  NAs    :2069    NAs    :2069     NAs    :173      NAs    :173      
     ##       time                    
     ##  Min.   :2015-07-23 10:10:54  
     ##  1st Qu.:2016-10-10 21:26:15  
@@ -161,6 +167,7 @@ sql_motus %>%
     ## 
 
 ``` r
+
 # same summary for the filtered sql data
 df_alltags_sub %>% 
   select(time, motusTagID, runLen, speciesEN, tagDepLat, tagDepLon, 
@@ -176,14 +183,14 @@ df_alltags_sub %>%
     ##  3rd Qu.:2016-10-19 10:37:42   3rd Qu.:22897   3rd Qu.: 287.0  
     ##  Max.   :2017-04-20 22:33:19   Max.   :23316   Max.   :1371.0  
     ##                                                                
-    ##   speciesEN           tagDepLat       tagDepLon      recvDeployLat  
-    ##  Length:48133       Min.   :50.19   Min.   :-80.69   Min.   :37.10  
-    ##  Class :character   1st Qu.:50.19   1st Qu.:-63.75   1st Qu.:50.20  
-    ##  Mode  :character   Median :50.19   Median :-63.75   Median :50.20  
-    ##                     Mean   :50.34   Mean   :-65.56   Mean   :50.05  
-    ##                     3rd Qu.:50.19   3rd Qu.:-63.75   3rd Qu.:50.20  
-    ##                     Max.   :51.80   Max.   :-63.75   Max.   :51.82  
-    ##                                                      NA's   :164    
+    ##      speciesEN       tagDepLat       tagDepLon      recvDeployLat  
+    ##  Length   :48133   Min.   :50.19   Min.   :-80.69   Min.   :37.10  
+    ##  N.unique :    7   1st Qu.:50.19   1st Qu.:-63.75   1st Qu.:50.20  
+    ##  N.blank  :    0   Median :50.19   Median :-63.75   Median :50.20  
+    ##  Min.nchar:    6   Mean   :50.34   Mean   :-65.56   Mean   :50.05  
+    ##  Max.nchar:   22   3rd Qu.:50.19   3rd Qu.:-63.75   3rd Qu.:50.20  
+    ##                    Max.   :51.80   Max.   :-63.75   Max.   :51.82  
+    ##                                                     NAs    :164    
     ##  recvDeployLon   
     ##  Min.   :-80.69  
     ##  1st Qu.:-63.75  
@@ -191,7 +198,7 @@ df_alltags_sub %>%
     ##  Mean   :-65.26  
     ##  3rd Qu.:-63.75  
     ##  Max.   :-62.99  
-    ##  NA's   :164
+    ##  NAs    :164
 
 The `dplyr` package allows you to easily summarize data by group,
 manipulate variables, or create new variables based on your data.
@@ -207,6 +214,7 @@ approximate location of the receiver is known) but can cause warnings or
 errors when plotting.
 
 ``` r
+
 df_alltags_sub <- df_alltags_sub %>%
   mutate(year = year(time), # extract year from time
          doy = yday(time)) %>% # extract numeric day of year from time
@@ -239,6 +247,7 @@ tag was detected on, the first and last detection date, and the total
 number of days there was at least one detection:
 
 ``` r
+
 tagSummary <- df_alltags_sub %>%
   group_by(motusTagID) %>% 
   summarize(nDet = n(),
@@ -269,6 +278,7 @@ each row. This in not very informative, however we include this to help
 illustrate how grouping works:
 
 ``` r
+
 tagRecvSummary <- df_alltags_sub %>%
   group_by(motusTagID, recvDeployName) %>% 
   summarize(nDet = n(),
@@ -306,6 +316,7 @@ faster. Here we round detection times to the nearest hour, then make a
 basic plot of hourly detections by `motusTagID`:
 
 ``` r
+
 df_alltags_sub_2 <- df_alltags_sub %>%
   mutate(hour = hour(time)) %>% 
   select(motusTagID, port, tagDeployStart, tagDepLat, tagDepLon, 
@@ -324,6 +335,7 @@ Let’s focus only on tags deployed in 2016, and we can colour the tags by
 species:
 
 ``` r
+
 ggplot(data = filter(df_alltags_sub_2, year(tagDeployStart) == 2016), 
        aes(x = hour, y = as.factor(motusTagID), colour = speciesEN)) +
   theme_bw() + 
@@ -338,6 +350,7 @@ We can see how tags moved latitudinally by first ordering by hour, and
 colouring by `motusTagID`:
 
 ``` r
+
 df_alltags_sub_2 <- arrange(df_alltags_sub_2, hour)
 
 ggplot(data = filter(df_alltags_sub_2, year(tagDeployStart) == 2016), 
@@ -359,6 +372,7 @@ tag 22897 at Niapiskau; we facet the plot by deployment name, ordered by
 decreasing latitude:
 
 ``` r
+
 ggplot(data = filter(df_alltags_sub, 
                      motusTagID == 22897, 
                      recvDeployName == "Niapiskau"), 
@@ -380,6 +394,7 @@ statement to the code, which adds a yellow line for sunrise time, and a
 blue line for sunset time:
 
 ``` r
+
 # add sunrise and sunset times to the dataframe
 df_alltags_sub <- sunRiseSet(df_alltags_sub, lat = "recvDeployLat", lon = "recvDeployLon") 
 
@@ -405,6 +420,7 @@ The same plots can provide valuable movement information when the
 receivers are ordered geographically. We do this for `motusTagID` 16039:
 
 ``` r
+
 # We'll first order sitelat by latitude (for plots)
 df_alltags_sub <- mutate(df_alltags_sub, 
                          recvDeployName = reorder(recvDeployName, recvDeployLat))
@@ -424,6 +440,7 @@ We zoom in on a section of this plot and look at antenna bearings to see
 directional movement past stations:
 
 ``` r
+
 ggplot(data = filter(df_alltags_sub, motusTagID == 16039, 
                      time > "2015-09-14", 
                      time < "2015-10-01"), 
@@ -453,6 +470,7 @@ since we will likely want to do this type of summary over and over
 again.
 
 ``` r
+
 # Simplify the data by summarizing by the runID
 # If you want to summarize at a finer (or coarser) scale, you can also create
 # other groups.
@@ -472,6 +490,7 @@ df_alltags_path <- fun.getpath(df_alltags_sub)
 ```
 
 ``` r
+
 df_alltags_sub_path <- df_alltags_sub %>%
   filter(tagProjID == 176) %>% # only tags registered to project
   arrange(motusTagID, time) %>%       # order by time stamp for each tag
@@ -492,6 +511,7 @@ for more detail if you have not already downloaded the `rnaturalearth`
 shapefiles.
 
 ``` r
+
 world <- ne_countries(scale = "medium", returnclass = "sf") 
 lakes <- ne_load(type = "lakes", scale = "medium", category = 'physical',
                  returnclass = "sf",
@@ -507,6 +527,7 @@ receivers and lines connecting consecutive detections by `motusTagID`.
 We also include an ‘x’ for where tags were deployed.
 
 ``` r
+
 # just use the tags that we have examined carefully and filtered (in the
 # previous chapter)
 df_tmp <- df_alltags_path %>%
@@ -544,6 +565,7 @@ these birds during a certain time period if we have already downloaded
 all metadata.
 
 ``` r
+
 # get receiver metadata
 tbl_recvDeps <- tbl(sql_motus, "recvDeps")
 df_recvDeps <- tbl_recvDeps %>% 
@@ -604,6 +626,7 @@ detections by `motusTagID.`
 Remember that base maps generally require attribution in publications.
 
 ``` r
+
 library(ggspatial)
 
 # just use the tags that we have examined carefully and filtered (in the

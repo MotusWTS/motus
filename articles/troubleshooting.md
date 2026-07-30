@@ -21,6 +21,7 @@ package dependencies. Here we suggest several solutions.
 1.  Update all packages before the installation
 
 ``` r
+
 library(remotes)
 update_packages()
 ```
@@ -40,6 +41,7 @@ again.
 To set a custom library folder for installing new packages:
 
 ``` r
+
 .libPaths("C:/r-libraries/")
 ```
 
@@ -57,6 +59,7 @@ will have best results if you first remove `motus` and `motusClient` and
 reinstall from scratch:
 
 ``` r
+
 remove.packages(c("motus", "motusClient"))
 ```
 
@@ -85,6 +88,7 @@ again. If this resolves your problem, you should consider setting your
 libraries in a new folder where your logged in user has full access:
 
 ``` r
+
 # confirm the libPaths location(s)
 .libPaths()
 # add a new libPaths default location
@@ -101,12 +105,14 @@ try the following steps in order (stopping when the problem goes away):
     need to install the `remotes` package). **Re-start R**
 
 ``` r
+
 remotes::update_packages("motus")
 ```
 
 2.  Update all your packages. **Re-start R**
 
 ``` r
+
 remotes::update_packages()
 ```
 
@@ -116,6 +122,7 @@ remotes::update_packages()
 ## Logging out of motus
 
 ``` r
+
 motusLogout()
 ```
 
@@ -133,6 +140,7 @@ To resume your data download, run
 but do not include `new = TRUE`:
 
 ``` r
+
 tagme(project.num, dir = ...)
 ```
 
@@ -219,6 +227,7 @@ To ensure that your `.motus` file is up-to-date with the `motus`
 package:
 
 ``` r
+
 sql_motus <- tagme(project.num, dir= ...)
 checkVersion(sql_motus)
 ```
@@ -237,6 +246,7 @@ To correct any warnings, you should follow these steps:
 5.  check the version again.
 
 ``` r
+
 library(motus)
 sql <- tagme(project.num, dir= ...)
 checkVersion(sql)
@@ -256,6 +266,7 @@ directory. To specify a location to save files from your working
 directory use `./` followed by the file path.
 
 ``` r
+
 getwd() # show working directory, in this case it's "C:/Documents"
 
 # downloads data to your working directory

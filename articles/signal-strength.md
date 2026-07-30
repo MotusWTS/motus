@@ -26,6 +26,7 @@ Let’s use some data from the sample project 176 (username:
 different ways we might use signal strength plots
 
 ``` r
+
 library(motus)
 library(tidyverse)
 library(lubridate)
@@ -38,6 +39,7 @@ Now let’s filter the data, and create some extra variables to help us
 out.
 
 ``` r
+
 df_tags <- tbl(tags, "alltags") %>%
   filter(!is.na(recvDeployLat)) %>%  # Omit unknown receiver locations
   collect() %>%
@@ -63,6 +65,7 @@ Here we look at a single id by date. We can see at least several
 examples of a fly by based on the time by signal strength.
 
 ``` r
+
 ggplot(data = filter(df_tags, motusTagID == 16039), aes(x = time, y = sig)) + 
   geom_point() +
   theme_bw() +
@@ -81,6 +84,7 @@ A good starting point is to add in `runLen` (run lengths). We can do
 this by ‘binning’ (categorizing) run lengths to catch short runs.
 
 ``` r
+
 ggplot(data = filter(df_tags, motusTagID == 16039), 
        aes(x = time, y = sig, colour = runLen_cat)) + 
   geom_point() +
@@ -101,6 +105,7 @@ arrows](https://en.wikipedia.org/wiki/List_of_Unicode_characters#Arrows)
 to define general antenna directions.
 
 ``` r
+
 ggplot(data = filter(df_tags, motusTagID == 16039), 
        aes(x = time, y = sig, colour = runLen_cat, shape = antBearing_cat)) + 
   geom_point(size = 8) + 
@@ -119,6 +124,7 @@ ggplot(data = filter(df_tags, motusTagID == 16039),
 We can also look more carefully to get a better idea of what’s going on.
 
 ``` r
+
 ggplot(data = filter(df_tags, motusTagID == 16039, date == "2015-08-31"), 
        aes(x = time, y = sig, colour = runLen_cat, shape = antBearing_cat)) + 
   geom_point(size = 8) + 
@@ -142,6 +148,7 @@ global pattern over time.
 In this case we see a steady northern direction in the early fall.
 
 ``` r
+
 ggplot(data = filter(df_tags, motusTagID == 16039, date < "2015-10-01"), 
        aes(x = time, y = sig, colour = runLen_cat, shape = antBearing_cat)) + 
   geom_point(size = 8) + 
@@ -160,6 +167,7 @@ The best of both worlds is to use the patchwork package to compare
 figures.
 
 ``` r
+
 g1 <- ggplot(data = filter(df_tags, motusTagID == 16039, date < "2015-10-01"), 
        aes(x = time, y = sig, colour = runLen_cat, shape = antBearing_cat)) + 
   geom_point(size = 8) + 
@@ -194,6 +202,7 @@ An alternative feature that may help us identify problematic data is to
 highlight hits that have been flagged by `motusFilter`.
 
 ``` r
+
 ggplot(data = filter(df_tags, motusTagID == "24298", date == "2017-05-18"), 
        aes(x = time, y = sig, colour = factor(motusFilter), shape = antBearing_cat)) + 
   geom_point(size = 8) + 
@@ -213,6 +222,7 @@ highlight hits that have been flagged as ambiguous tags.
 Here we filter to only tags that have some ambiguity.
 
 ``` r
+
 motus_id <- df_tags %>%
   filter(!is.na(ambigID)) %>%
   pull(motusTagID) %>%
@@ -222,6 +232,7 @@ df_ambig <- filter(df_tags, motusTagID %in% motus_id)
 ```
 
 ``` r
+
 ggplot(data = filter(df_ambig, date < "2015-09-01"),
        aes(x = time, y = sig, colour = ambig)) + 
   geom_point() + 

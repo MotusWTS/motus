@@ -56,8 +56,8 @@ if (FALSE) metadata(sql_motus) # \dontrun{}
 # Access different metadata tables
 library(dplyr)
 tbl(sql_motus, "species")
-#> # Source:   table<`species`> [?? x 6]
-#> # Database: sqlite 3.51.1 [:memory:]
+#> # A query:  ?? x 6
+#> # Database: sqlite 3.53.3 [:memory:]
 #>       id english                french                    scientific group  sort
 #>    <int> <chr>                  <chr>                     <chr>      <chr> <int>
 #>  1  4180 Semipalmated Plover    Pluvier semipalmé         Charadriu… BIRDS    NA
@@ -71,8 +71,8 @@ tbl(sql_motus, "species")
 #>  9 15560 Gray-cheeked Thrush    Grive à joues grises      Catharus … BIRDS    NA
 #> 10 19050 White-crowned Sparrow  Bruant à couronne blanche Zonotrich… BIRDS    NA
 tbl(sql_motus, "projs")
-#> # Source:   table<`projs`> [?? x 5]
-#> # Database: sqlite 3.51.1 [:memory:]
+#> # A query:  ?? x 5
+#> # Database: sqlite 3.53.3 [:memory:]
 #>      id name                            label tagsPermissions sensorsPermissions
 #>   <int> <chr>                           <chr>           <int>              <int>
 #> 1    47 Red Knot staging and migration… Niles              NA                 NA
@@ -81,8 +81,8 @@ tbl(sql_motus, "projs")
 #> 4   146 Neonicotinoid insecticides and… NEON…              NA                 NA
 #> 5   176 Sample Data                     Samp…              NA                 NA
 tbl(sql_motus, "tagDeps")
-#> # Source:   table<`tagDeps`> [?? x 24]
-#> # Database: sqlite 3.51.1 [:memory:]
+#> # A query:  ?? x 24
+#> # Database: sqlite 3.53.3 [:memory:]
 #>    tagID deployID projectID    tsStart      tsEnd deferSec speciesID markerType
 #>    <int>    <int>     <int>      <dbl>      <dbl>    <dbl>     <int> <chr>     
 #>  1 10811     1077        47 1414479600 1438585200        0      4670 metal band

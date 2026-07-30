@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Chapter 5 - Data Cleaning">
 </head>
@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">motus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +72,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Chapter 5 - Data Cleaning</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/main/vignettes/articles/05-data-cleaning.Rmd" class="external-link"><code>vignettes/articles/05-data-cleaning.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/denis/blu_tags_data/vignettes/articles/05-data-cleaning.Rmd" class="external-link"><code>vignettes/articles/05-data-cleaning.Rmd</code></a></small>
       <div class="d-none name"><code>05-data-cleaning.Rmd</code></div>
     </div>
 
@@ -236,8 +236,8 @@ therefore be omitted.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql_motus</span>, <span class="st">"alltags"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">ts</span>, <span class="va">motusFilter</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># Source:   SQL [?? x 5]</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.51.1 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A query:  ?? x 5</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span></span>
 <span><span class="co">##     hitID runID batchID          ts motusFilter</span></span>
 <span><span class="co">##     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 1</span>  <span style="text-decoration: underline;">45</span>107  <span style="text-decoration: underline;">8</span>886      53 <span style="text-decoration: underline;">1</span>445<span style="text-decoration: underline;">858</span>390.           1</span></span>
@@ -262,8 +262,8 @@ therefore be omitted.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql_motus</span>, <span class="st">"alltags"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">motusTagID</span>, <span class="va">runLen</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">runLen</span> <span class="op">&lt;=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># Source:   SQL [?? x 5]</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.51.1 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A query:  ?? x 5</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span></span>
 <span><span class="co">##     hitID  runID batchID motusTagID runLen</span></span>
 <span><span class="co">##     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 1</span> <span style="text-decoration: underline;">516</span>095 <span style="text-decoration: underline;">104</span>118     141      <span style="text-decoration: underline;">16</span>047      3</span></span>
@@ -283,8 +283,8 @@ therefore be omitted.</p>
 <code class="sourceCode R"><span><span class="va">tbl_alltags_sub</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">motusTagID</span>, <span class="va">runLen</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">runLen</span> <span class="op">&lt;=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># Source:   SQL [?? x 5]</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.51.1 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A query:  ?? x 5</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ 5 variables: hitID &lt;int&gt;, runID &lt;int&gt;, batchID &lt;int&gt;, motusTagID &lt;lgl&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   runLen &lt;int&gt;</span></span></span></code></pre>
 <p>Note that the filters may exclude some true detections in the
@@ -318,8 +318,8 @@ by <code>is.na(recvDeployLat)</code> and
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">recvDeployLat</span>, <span class="va">recvDeployLon</span>, <span class="va">recvDeployName</span>, <span class="va">recvDeployID</span>, <span class="va">recv</span>, </span>
 <span>         <span class="va">recvProjID</span>, <span class="va">recvProjName</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># Source:   SQL [?? x 7]</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.51.1 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A query:  ?? x 7</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span></span>
 <span><span class="co">##   recvDeployLat recvDeployLon recvDeployName recvDeployID recv        recvProjID</span></span>
 <span><span class="co">##           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span>            <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span> NP mobile              <span style="text-decoration: underline;">3</span>813 Lotek-280          176</span></span>
@@ -1055,7 +1055,7 @@ articles</a>)</span></p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

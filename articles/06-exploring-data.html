@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Chapter 6 - Exploring detections data">
 </head>
@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">motus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +72,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Chapter 6 - Exploring detections data</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/main/vignettes/articles/06-exploring-data.Rmd" class="external-link"><code>vignettes/articles/06-exploring-data.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/denis/blu_tags_data/vignettes/articles/06-exploring-data.Rmd" class="external-link"><code>vignettes/articles/06-exploring-data.Rmd</code></a></small>
       <div class="d-none name"><code>06-exploring-data.Rmd</code></div>
     </div>
 
@@ -185,13 +185,13 @@ data frame:</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>time <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="va">ts</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##        ts              motusTagID        runLen        speciesEN        </span></span>
-<span><span class="co">##  Min.   :1.438e+09   Min.   :10811   Min.   :   2.0   Length:109474     </span></span>
-<span><span class="co">##  1st Qu.:1.476e+09   1st Qu.:22897   1st Qu.:  30.0   Class :character  </span></span>
-<span><span class="co">##  Median :1.477e+09   Median :22905   Median : 120.0   Mode  :character  </span></span>
-<span><span class="co">##  Mean   :1.476e+09   Mean   :22639   Mean   : 353.8                     </span></span>
-<span><span class="co">##  3rd Qu.:1.477e+09   3rd Qu.:23316   3rd Qu.: 402.0                     </span></span>
-<span><span class="co">##  Max.   :1.498e+09   Max.   :24303   Max.   :2474.0                     </span></span>
+<pre><code><span><span class="co">##        ts              motusTagID        runLen           speciesEN     </span></span>
+<span><span class="co">##  Min.   :1.438e+09   Min.   :10811   Min.   :   2.0   Length   :109474  </span></span>
+<span><span class="co">##  1st Qu.:1.476e+09   1st Qu.:22897   1st Qu.:  30.0   N.unique :    10  </span></span>
+<span><span class="co">##  Median :1.477e+09   Median :22905   Median : 120.0   N.blank  :     0  </span></span>
+<span><span class="co">##  Mean   :1.476e+09   Mean   :22639   Mean   : 353.8   Min.nchar:     6  </span></span>
+<span><span class="co">##  3rd Qu.:1.477e+09   3rd Qu.:23316   3rd Qu.: 402.0   Max.nchar:    22  </span></span>
+<span><span class="co">##  Max.   :1.498e+09   Max.   :24303   Max.   :2474.0   NAs      :  2069  </span></span>
 <span><span class="co">##                                                                         </span></span>
 <span><span class="co">##    tagDepLat       tagDepLon      recvDeployLat    recvDeployLon    </span></span>
 <span><span class="co">##  Min.   :11.12   Min.   :-80.69   Min.   :-42.50   Min.   :-143.68  </span></span>
@@ -200,7 +200,7 @@ data frame:</p>
 <span><span class="co">##  Mean   :50.15   Mean   :-65.86   Mean   : 48.50   Mean   : -65.68  </span></span>
 <span><span class="co">##  3rd Qu.:50.19   3rd Qu.:-63.75   3rd Qu.: 50.20   3rd Qu.: -63.75  </span></span>
 <span><span class="co">##  Max.   :51.80   Max.   :-63.75   Max.   : 62.89   Max.   : -60.02  </span></span>
-<span><span class="co">##  NA's   :2069    NA's   :2069     NA's   :173      NA's   :173      </span></span>
+<span><span class="co">##  NAs    :2069    NAs    :2069     NAs    :173      NAs    :173      </span></span>
 <span><span class="co">##       time                    </span></span>
 <span><span class="co">##  Min.   :2015-07-23 10:10:54  </span></span>
 <span><span class="co">##  1st Qu.:2016-10-10 21:26:15  </span></span>
@@ -223,14 +223,14 @@ data frame:</p>
 <span><span class="co">##  3rd Qu.:2016-10-19 10:37:42   3rd Qu.:22897   3rd Qu.: 287.0  </span></span>
 <span><span class="co">##  Max.   :2017-04-20 22:33:19   Max.   :23316   Max.   :1371.0  </span></span>
 <span><span class="co">##                                                                </span></span>
-<span><span class="co">##   speciesEN           tagDepLat       tagDepLon      recvDeployLat  </span></span>
-<span><span class="co">##  Length:48133       Min.   :50.19   Min.   :-80.69   Min.   :37.10  </span></span>
-<span><span class="co">##  Class :character   1st Qu.:50.19   1st Qu.:-63.75   1st Qu.:50.20  </span></span>
-<span><span class="co">##  Mode  :character   Median :50.19   Median :-63.75   Median :50.20  </span></span>
-<span><span class="co">##                     Mean   :50.34   Mean   :-65.56   Mean   :50.05  </span></span>
-<span><span class="co">##                     3rd Qu.:50.19   3rd Qu.:-63.75   3rd Qu.:50.20  </span></span>
-<span><span class="co">##                     Max.   :51.80   Max.   :-63.75   Max.   :51.82  </span></span>
-<span><span class="co">##                                                      NA's   :164    </span></span>
+<span><span class="co">##      speciesEN       tagDepLat       tagDepLon      recvDeployLat  </span></span>
+<span><span class="co">##  Length   :48133   Min.   :50.19   Min.   :-80.69   Min.   :37.10  </span></span>
+<span><span class="co">##  N.unique :    7   1st Qu.:50.19   1st Qu.:-63.75   1st Qu.:50.20  </span></span>
+<span><span class="co">##  N.blank  :    0   Median :50.19   Median :-63.75   Median :50.20  </span></span>
+<span><span class="co">##  Min.nchar:    6   Mean   :50.34   Mean   :-65.56   Mean   :50.05  </span></span>
+<span><span class="co">##  Max.nchar:   22   3rd Qu.:50.19   3rd Qu.:-63.75   3rd Qu.:50.20  </span></span>
+<span><span class="co">##                    Max.   :51.80   Max.   :-63.75   Max.   :51.82  </span></span>
+<span><span class="co">##                                                     NAs    :164    </span></span>
 <span><span class="co">##  recvDeployLon   </span></span>
 <span><span class="co">##  Min.   :-80.69  </span></span>
 <span><span class="co">##  1st Qu.:-63.75  </span></span>
@@ -238,7 +238,7 @@ data frame:</p>
 <span><span class="co">##  Mean   :-65.26  </span></span>
 <span><span class="co">##  3rd Qu.:-63.75  </span></span>
 <span><span class="co">##  Max.   :-62.99  </span></span>
-<span><span class="co">##  NA's   :164</span></span></code></pre>
+<span><span class="co">##  NAs    :164</span></span></code></pre>
 <p>The <code>dplyr</code> package allows you to easily summarize data by
 group, manipulate variables, or create new variables based on your
 data.</p>
@@ -658,7 +658,7 @@ articles</a></p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

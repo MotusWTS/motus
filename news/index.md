@@ -1,5 +1,16 @@
 # Changelog
 
+## motus 6.2.0
+
+- Add `hitsBlu` table to download BLUtags data
+- Add
+  [`hitsBlu()`](https://motuswts.github.io/motus/reference/hitsBlu.md)
+  function to retroactively download missed BLUtag hits
+- Add
+  [`getBluPayload()`](https://motuswts.github.io/motus/reference/getBluPayload.md)
+  function to extract out BLUtag variables from payload hexadecimal
+  bytes.
+
 ## motus 6.1.2
 
 - Add bandNumbers to `tagDeps` table
@@ -14,7 +25,33 @@
 - fix bugs in
   [`tagme()`](https://motuswts.github.io/motus/reference/tagme.md)
   - `tagme(dir = ...)` now correctly downloads projects as well as
-    receivers and respects the `skipXXX` arguments
+    receivers and respects the `skipXXX` arguments \<\<\<\<\<\<\< HEAD
+  - [`tagme()`](https://motuswts.github.io/motus/reference/tagme.md) for
+    receivers now skips node downloads if receiver is not a
+    SensorStation
+  - [`tagme()`](https://motuswts.github.io/motus/reference/tagme.md)
+    fails gracefully if the directory specified does not exist
+  - Fixed `Error in as.POSIXlt.character(x, tz, ...)` when starting a
+    download
+- `tagme(new = TRUE)` now starts a download immediately
+- Add
+  [`srvTimeout()`](https://motuswts.github.io/motus/reference/srvTimeout.md)
+  to specify the server timeout limit
+- Clean up helper functions
+  [`sunRiseSet()`](https://motuswts.github.io/motus/reference/sunRiseSet.md)
+  and
+  [`timeToSunriset()`](https://motuswts.github.io/motus/reference/timeToSunriset.md)
+  - [`sunRiseSet()`](https://motuswts.github.io/motus/reference/sunRiseSet.md)
+    now required to run
+    [`timeToSunriset()`](https://motuswts.github.io/motus/reference/timeToSunriset.md)
+  - Changed function argument names for clarity
+- Replace use of ggmap with ggspatial for creating plots with static
+  maps.
+- Clean up docs for
+  [`tagSum()`](https://motuswts.github.io/motus/reference/tagSum.md)
+- Add helper function
+  [`tagmeSample()`](https://motuswts.github.io/motus/reference/tagmeSample.md)
+  for an in-memory connection to the sample =======
   - [`tagme()`](https://motuswts.github.io/motus/reference/tagme.md) for
     receivers now skips node downloads if receiver is not a
     SensorStation
@@ -43,7 +80,8 @@
   [`tagSum()`](https://motuswts.github.io/motus/reference/tagSum.md)
 - Add helper function
   [`tagmeSample()`](https://motuswts.github.io/motus/reference/tagmeSample.md)
-  for an in-memory connection to the sample data base for running
+  for an in-memory connection to the sample \>\>\>\>\>\>\>
+  66e6a9821cd12faaf272202e830b1fe7726f8740 data base for running
   examples
 - Remove any functions that rely on deprecating spatial functions
 - Remove year, month, day fields from activity tables.
@@ -285,9 +323,10 @@
   the `motus` package. If automatic installation of `motusClient` fails,
   you can install it directly like so:
 
-``` r
-install_github("motusWTS/motusClient")
-```
+  ``` r
+
+  install_github("motusWTS/motusClient")
+  ```
 
 #### 2017 Jul 28
 

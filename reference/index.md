@@ -16,6 +16,8 @@
   : Add/update all batch activity
 - [`gpsAll()`](https://motuswts.github.io/motus/reference/gpsAll.md) :
   Add/update all GPS points
+- [`hitsBlu()`](https://motuswts.github.io/motus/reference/hitsBlu.md) :
+  Update hitsBlu data
 
 ## Cleaning
 
@@ -40,6 +42,8 @@ Helper functions for cleaning and preparing data
   Get GPS variables
 - [`getRuns()`](https://motuswts.github.io/motus/reference/getRuns.md) :
   Returns a dataframe containing runs
+- [`getBluPayload()`](https://motuswts.github.io/motus/reference/getBluPayload.md)
+  : Extract variables from BLUtag Payloads
 - [`simSiteDet()`](https://motuswts.github.io/motus/reference/simSiteDet.md)
   : Create a dataframe of simultaneous detections at multiple sites
 - [`sunRiseSet()`](https://motuswts.github.io/motus/reference/sunRiseSet.md)

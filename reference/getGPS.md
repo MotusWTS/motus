@@ -140,8 +140,8 @@ my_gps
 
 # Alternatively, use the alltagsGPS view:
 dplyr::tbl(sql_motus, "alltagsGPS")
-#> # Source:   table<`alltagsGPS`> [?? x 65]
-#> # Database: sqlite 3.51.1 [:memory:]
+#> # A query:  ?? x 65
+#> # Database: sqlite 3.53.3 [:memory:]
 #>     hitID runID batchID      ts tsCorrected   sig sigsd noise  freq freqsd  slop
 #>     <int> <int>   <int>   <dbl>       <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl> <dbl>
 #>  1  45107  8886      53  1.45e9 1445858390.    52     0   -96     4      0  1e-4

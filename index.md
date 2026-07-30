@@ -20,6 +20,7 @@ The easiest way to install motus is from Birds Canada’s
 [R-Universe](https://birdscanada.r-universe.dev):
 
 ``` r
+
 install.packages("motus", 
                  repos = c(birdscanada = 'https://birdscanada.r-universe.dev',
                            CRAN = 'https://cloud.r-project.org'))
@@ -29,6 +30,7 @@ If you want to check out work-in-progress, you can install the
 development branches (betaX and sandbox) using `remotes`.
 
 ``` r
+
 install.packages("remotes")                     # if don't already have it
 remotes::install_github("motusWTS/motus@beta3") # the beta branch for v3+
 ```

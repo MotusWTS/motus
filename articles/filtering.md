@@ -17,6 +17,7 @@ detail.
 ## Background
 
 ``` r
+
 library(motus)
 library(tidyverse)
 library(lubridate)
@@ -30,12 +31,13 @@ confident we can be that it represents a true detection.
 Run lengths (`runLen`) are included in the `alltags` view.
 
 ``` r
+
 tbl(sql_motus, "alltags") %>%
   select(hitID, runID, batchID, motusTagID, runLen)
 ```
 
-    ## # Source:   SQL [?? x 5]
-    ## # Database: sqlite 3.51.1 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
+    ## # A query:  ?? x 5
+    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
     ##     hitID runID batchID motusTagID runLen
     ##     <int> <int>   <int>      <int>  <int>
     ##  1  45107  8886      53      16047      5
@@ -60,12 +62,13 @@ The `activity` table contains information on the number of runs
 hits = `run2` or 3 hits = `run3`, etc.) per hour (`hourBin`).
 
 ``` r
+
 tbl(sql_motus, "activity") %>%
   select(batchID, motusDeviceID, ant, hourBin, numRuns, run2, run3)
 ```
 
-    ## # Source:   SQL [?? x 7]
-    ## # Database: sqlite 3.51.1 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
+    ## # A query:  ?? x 7
+    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
     ##    batchID motusDeviceID ant   hourBin numRuns  run2  run3
     ##      <int>         <int> <chr>   <int>   <int> <int> <int>
     ##  1      53           486 1      400872       1     0     0
@@ -108,7 +111,7 @@ There are two filtering options in the `motus` R package that follow
 these ideas:
 
 1.  `motusFilter` is a field/column in the `runs` table is the easiest
-    option [¹](#fn1)
+    option [^1]
 2.  [`filterByActivity()`](https://motuswts.github.io/motus/reference/filterByActivity.md)
     is a function in the `motus` package and is more customizable
 
@@ -119,8 +122,7 @@ created on the server that reflects:
 
 1.  [Empirically-based cutoffs](#empirically-based-cutoffs) defined
     above
-2.  Some manual filtering based on aliasing or out-of-range records
-    [²](#fn2)
+2.  Some manual filtering based on aliasing or out-of-range records [^2]
 
 This is a good first option for identifying detections that have a
 higher probability of being false. Currently the `motusFilter` contains
@@ -129,11 +131,12 @@ considered invalid (i.e. have a low probability of being true
 detections) and can therefore be omitted.
 
 ``` r
+
 tbl(sql_motus, "runs")
 ```
 
-    ## # Source:   table<`runs`> [?? x 10]
-    ## # Database: sqlite 3.51.1 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
+    ## # A query:  ?? x 10
+    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
     ##     runID batchIDbegin     tsBegin  tsEnd  done motusTagID ant     len nodeNum motusFilter
     ##     <int>        <int>       <dbl>  <dbl> <int>      <int> <chr> <int> <chr>         <dbl>
     ##  1   8886           53 1445858390. 1.45e9     1      16047 3         5 NA                1
@@ -155,6 +158,7 @@ from the `dplyr` package.
 First identify invalid runs with a `motusFilter` of `0`:
 
 ``` r
+
 bad_runs <- tbl(sql_motus, "runs") %>%
   filter(motusFilter == 0)
 ```
@@ -164,6 +168,7 @@ Now use
 to remove those runs from the `alltags` view:
 
 ``` r
+
 alltags_filtered <- anti_join(tbl(sql_motus, "alltags"), bad_runs, by = "runID")
 ```
 
@@ -171,13 +176,14 @@ To double check we can filter for short runs in the original `alltags`
 view
 
 ``` r
+
 tbl(sql_motus, "alltags") %>%
   select(hitID, runID, batchID, motusTagID, runLen) %>%
   filter(runLen <= 3)
 ```
 
-    ## # Source:   SQL [?? x 5]
-    ## # Database: sqlite 3.51.1 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
+    ## # A query:  ?? x 5
+    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
     ##     hitID  runID batchID motusTagID runLen
     ##     <int>  <int>   <int>      <int>  <int>
     ##  1 516095 104118     141      16047      3
@@ -195,13 +201,14 @@ tbl(sql_motus, "alltags") %>%
 And compare this to our newly created `alltags_filtered` table
 
 ``` r
+
 alltags_filtered %>%
   select(hitID, runID, batchID, motusTagID, runLen) %>%
   filter(runLen <= 3)
 ```
 
-    ## # Source:   SQL [?? x 5]
-    ## # Database: sqlite 3.51.1 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
+    ## # A query:  ?? x 5
+    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
     ## # ℹ 5 variables: hitID <int>, runID <int>, batchID <int>, motusTagID <lgl>, runLen <int>
 
 No more short runs, good!
@@ -223,6 +230,7 @@ use
 with the default arguments and only return `good` (`runLen` \> 3) runs.
 
 ``` r
+
 alltags_filtered2 <- filterByActivity(sql_motus, return = "good")
 ```
 
@@ -231,9 +239,10 @@ alltags_filtered2 <- filterByActivity(sql_motus, return = "good")
 requires the SQLite database connection (not a flat data frame).
 
 If we compare hits, runs, and batches, we see that the two filtered data
-sets are identical (although this won’t always be the case[³](#fn3)).
+sets are identical (although this won’t always be the case[^3]).
 
 ``` r
+
 test1 <- alltags_filtered %>%
   select(hitID, runID, batchID) %>%
   collect()
@@ -253,6 +262,7 @@ function uses the `alltagsGPS` view. **However**, on very large
 databases this could be slow.
 
 ``` r
+
 alltags_filtered3 <- filterByActivity(sql_motus, return = "all", view = "alltagsGPS")
 ```
 
@@ -272,6 +282,7 @@ For example, the following code adds a `probability` column to the
 sample project data.
 
 ``` r
+
 alltags_filtered4 <- filterByActivity(sql_motus, return = "all") %>%
   select(hitID, runID, batchID, motusTagID, runLen, probability)
 
@@ -301,6 +312,7 @@ had more than 500 runs (`maxRuns`) and where at least 95% (`ratio`) of
 those runs have a run length of 2.
 
 ``` r
+
 relaxed <- filterByActivity(sql_motus, minLen = 2, maxLen = 4, 
                             maxRuns = 500, ratio = 0.95, 
                             return = "all")
@@ -314,6 +326,7 @@ more than 50 runs (`maxRuns`) and where at least 75% (`ratio`) of those
 runs have a run length of 2.
 
 ``` r
+
 strict <- filterByActivity(sql_motus, minLen = 4, maxLen = 10, 
                            maxRuns = 50, ratio = 0.75, 
                            return = "all")
@@ -340,6 +353,7 @@ from the lubridate package and we’ll use the
 function to pull out months.
 
 ``` r
+
 max_runlen <- tbl(sql_motus, "alltags") %>%
   collect() %>%
   mutate(time = as_datetime(ts),
@@ -348,10 +362,15 @@ max_runlen <- tbl(sql_motus, "alltags") %>%
   summarize(max.rl = max(runLen))
 ```
 
-    ## `summarise()` has grouped output by 'recvDeployName'. You can override using the
-    ## `.groups` argument.
+    ## `summarise()` has regrouped the output.
+    ## ℹ Summaries were computed grouped by recvDeployName and month.
+    ## ℹ Output is grouped by recvDeployName.
+    ## ℹ Use `summarise(.groups = "drop_last")` to silence this message.
+    ## ℹ Use `summarise(.by = c(recvDeployName, month))` for per-operation grouping
+    ##   (`?dplyr::dplyr_by`) instead.
 
 ``` r
+
 ggplot(max_runlen, aes(x = recvDeployName, y = max.rl, fill = month)) +
   geom_col(position = "dodge") +
   scale_fill_viridis_c() +
@@ -365,6 +384,7 @@ length of detections was never greater than (say) 4, which may sometimes
 (but not always!) indicate they are simply false detections.
 
 ``` r
+
 ggplot(filter(max_runlen, max.rl < 5), 
        aes(x = recvDeployName, y = max.rl, fill = month)) +
   geom_col(position = "dodge") +
@@ -382,9 +402,7 @@ indeterminate.
 > **What Next?** [Explore all
 > articles](https://motuswts.github.io/motus/articles/index.md)
 
-------------------------------------------------------------------------
-
-1.  If you are working with a dataset downloaded through
+[^1]: If you are working with a dataset downloaded through
     [`tagme()`](https://motuswts.github.io/motus/reference/tagme.md)
     prior to July 2019 it will not include those values. In those cases,
     you will either need to download a new copy of the entire dataset
@@ -392,9 +410,9 @@ indeterminate.
     [`filterByActivity()`](https://motuswts.github.io/motus/reference/filterByActivity.md)
     function described below to calculate the missing values.
 
-2.  Future versions of the `motus` package should give users access to
+[^2]: Future versions of the `motus` package should give users access to
     specific information on why each run was filtered (activity/noise or
     a manual assessment).
 
-3.  Not *quite* the same because `motusFilter` does include some manual
-    filtering.
+[^3]: Not *quite* the same because `motusFilter` does include some
+    manual filtering.

@@ -10,6 +10,7 @@ have GPS points, so in these next examples we’ll be using a different
 data base called `gps_tags`.
 
 ``` r
+
 library(motus)
 library(tidyverse)
 library(lubridate)
@@ -26,17 +27,19 @@ your own data (replace `PROJECT_NUMBER` with the number corresponding to
 your project.
 
 ``` r
+
 gps_tags <- tagme(PROJECT_NUMBER, new = TRUE)
 ```
 
 GPS points are stored in the `gps` table.
 
 ``` r
+
 tbl(gps_tags, "gps")
 ```
 
-    ## # Source:   table<`gps`> [?? x 11]
-    ## # Database: sqlite 3.51.1 [/home/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus]
+    ## # A query:  ?? x 11
+    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus]
     ##      gpsID batchID        ts gpsts   lat    lon    alt quality lat_mean lon_mean
     ##      <int>   <int>     <dbl> <dbl> <dbl>  <dbl>  <dbl>   <int>    <dbl>    <dbl>
     ##  1  313414  127792    1.51e9    NA  33.5 -104.  1074        NA       NA       NA
@@ -66,12 +69,13 @@ You can work with GPS points in one of two ways:
 The `alltagsGPS` view combines hits and GPS points
 
 ``` r
+
 tbl(gps_tags, "alltagsGPS") %>%
   select(hitID, runID, batchID, ts, gpsLat, gpsLon, gpsAlt)
 ```
 
-    ## # Source:   SQL [?? x 7]
-    ## # Database: sqlite 3.51.1 [/home/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus]
+    ## # A query:  ?? x 7
+    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus]
     ##       hitID   runID batchID          ts gpsLat gpsLon gpsAlt
     ##       <int>   <int>   <int>       <dbl>  <dbl>  <dbl>  <dbl>
     ##  1 32811108 7984227  118721 1509139743.     NA     NA     NA
@@ -90,13 +94,14 @@ Note that not all hits have a GPS point associated, but we can filter to
 those that do:
 
 ``` r
+
 tbl(gps_tags, "alltagsGPS") %>%
   select(hitID, runID, batchID, ts, gpsLat, gpsLon, gpsAlt) %>%
   filter(!is.na(gpsLat))
 ```
 
-    ## # Source:   SQL [?? x 7]
-    ## # Database: sqlite 3.51.1 [/home/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus]
+    ## # A query:  ?? x 7
+    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus]
     ##        hitID    runID batchID          ts gpsLat gpsLon gpsAlt
     ##        <int>    <int>   <int>       <dbl>  <dbl>  <dbl>  <dbl>
     ##  1 449016552 24439773  370452 1457111891.   36.5  -76.0   -3.4
@@ -121,6 +126,7 @@ For example, let’s work with a subset of the alltags view, including
 only King Rails.
 
 ``` r
+
 rails <- tbl(gps_tags, "alltags") %>%
   filter(speciesEN == "King Rail")
 ```
@@ -133,6 +139,7 @@ function requires the original, numeric `ts` column, so if you want a
 date/time column it’s best to rename it (i.e. `time = as_datetime(ts)`).
 
 ``` r
+
 index_GPS <- getGPS(src = gps_tags, data = rails)
 ```
 
@@ -147,6 +154,7 @@ data](https://motuswts.github.io/motus/articles/03-accessing-data.html#convertin
 for more details).
 
 ``` r
+
 rails_GPS <- left_join(collect(rails), index_GPS, by = "hitID")
 ```
 
@@ -155,6 +163,7 @@ non-missing, because not all hits have a GPS point when using the
 default matching).
 
 ``` r
+
 rails_GPS %>%
   select(hitID, runID, batchID, ts, contains("gps")) %>%
   filter(!is.na(gpsLat))
@@ -196,6 +205,7 @@ by the `by` argument.
 For example, the median location within 60 minutes of a `hitID`.
 
 ``` r
+
 index_GPS <- getGPS(src = gps_tags, data = rails, by = 60)
 index_GPS
 ```
@@ -223,6 +233,7 @@ index_GPS
       location.
 
 ``` r
+
 index_GPS <- getGPS(src = gps_tags, data = rails, by = "daily")
 index_GPS
 ```
@@ -255,6 +266,7 @@ index_GPS
 For example, the closest location in time noted within 2 hours of a hit.
 
 ``` r
+
 index_GPS <- getGPS(src = gps_tags, data = rails, by = "closest", cutoff = 120)
 index_GPS
 ```
@@ -280,6 +292,7 @@ not, use the argument `keepAll = TRUE`. This results in `NA` for
 (otherwise the hit is omitted).
 
 ``` r
+
 index_GPS <- getGPS(src = gps_tags, data = rails, keepAll = TRUE)
 index_GPS
 ```
@@ -329,6 +342,7 @@ Using the example from Chapter 5 starting with [Checking
 receivers](https://motuswts.github.io/motus/articles/05-data-cleaning.html#checking-receivers)
 
 ``` r
+
 sql_motus <- tagme(176, dir = "./data/")
 ```
 
@@ -350,6 +364,7 @@ sql_motus <- tagme(176, dir = "./data/")
     ## New deprecated batches: 0
 
 ``` r
+
 df_alltagsGPS <- tbl(sql_motus, "alltagsGPS") %>%
   mutate(recvLat = if_else(is.na(gpsLat) | gpsLat %in% c(0, 999), 
                            recvDeployLat, gpsLat),

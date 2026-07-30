@@ -30,6 +30,7 @@ First update existing packages with the `remotes` package (this may take
 a while).
 
 ``` r
+
 install.packages("remotes")
 remotes::update_packages()
 ```
@@ -42,6 +43,7 @@ If you have used the older version of `motus` which included use of the
 packages.
 
 ``` r
+
 remove.packages(c("motus", "motusClient"))
 ```
 
@@ -49,6 +51,7 @@ Then proceed with the installation/update of the `motus` and `motusData`
 packages.
 
 ``` r
+
 install.packages(c("motus", "motusData"), 
                  repos = c(birdscanada = 'https://birdscanada.r-universe.dev',
                            CRAN = 'https://cloud.r-project.org'))
@@ -62,6 +65,7 @@ If you want to know what version of the motus package you currently have
 installed:
 
 ``` r
+
 packageVersion("motus")
 ```
 
@@ -85,6 +89,7 @@ packages.
 These can be installed from CRAN, as follows:
 
 ``` r
+
 install.packages(c("tidyverse", "ggspatial", "rnaturalearth"))
 ```
 
@@ -92,6 +97,7 @@ We also need a couple of data packages for `rnaturalearth` which can be
 installed from the rOpenSci R-universe:
 
 ``` r
+
 install.packages(c("rnaturalearthhires", "rnaturalearthdata"),
                  repos = c(ropensci = 'https://ropensci.r-universe.dev',  
                            CRAN = 'https://cloud.r-project.org'))
@@ -100,6 +106,7 @@ install.packages(c("rnaturalearthhires", "rnaturalearthdata"),
 Now, to use these packages include the following in your scripts:
 
 ``` r
+
 library(motus)
 library(rnaturalearth)
 library(tidyverse)

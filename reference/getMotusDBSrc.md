@@ -29,7 +29,7 @@ getMotusDBSrc(
 - create:
 
   Is this a new database? Default: FALSE. Same semantics as for
-  [`src_sqlite()`](https://dplyr.tidyverse.org/reference/src_dbi.html)'s
+  [`src_sqlite()`](https://dplyr.tidyverse.org/reference/defunct.html)'s
   parameter of the same name: the DB must already exist unless you
   specify `create = TRUE`
 

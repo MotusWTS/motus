@@ -95,6 +95,7 @@ which is a synonym for `tagme(..., countOnly = TRUE)`
 ## Examples
 
 ``` r
+
 if (FALSE) { # \dontrun{
 
 # Create and update a local tag database for motus project 14 in the

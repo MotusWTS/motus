@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Chapter 4 - Tag and receiver deployments">
 </head>
@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">motus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +72,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Chapter 4 - Tag and receiver deployments</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/main/vignettes/articles/04-deployments.Rmd" class="external-link"><code>vignettes/articles/04-deployments.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/denis/blu_tags_data/vignettes/articles/04-deployments.Rmd" class="external-link"><code>vignettes/articles/04-deployments.Rmd</code></a></small>
       <div class="d-none name"><code>04-deployments.Rmd</code></div>
     </div>
 
@@ -493,54 +493,46 @@ project, import, subset and summarize the receiver deployment data:</p>
 <span>         timeEnd <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="va">tsEnd</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">df_projRecvs</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##     deployID      projectID      serno           receiverType      </span></span>
-<span><span class="co">##  Min.   :1134   Min.   :176   Length:18          Length:18         </span></span>
-<span><span class="co">##  1st Qu.:2287   1st Qu.:176   Class :character   Class :character  </span></span>
-<span><span class="co">##  Median :3101   Median :176   Mode  :character   Mode  :character  </span></span>
-<span><span class="co">##  Mean   :2952   Mean   :176                                        </span></span>
-<span><span class="co">##  3rd Qu.:4002   3rd Qu.:176                                        </span></span>
-<span><span class="co">##  Max.   :4221   Max.   :176                                        </span></span>
-<span><span class="co">##                                                                    </span></span>
-<span><span class="co">##     deviceID         status              name             siteName        </span></span>
-<span><span class="co">##  Min.   : 74.00   Length:18          Length:18          Length:18         </span></span>
-<span><span class="co">##  1st Qu.: 75.75   Class :character   Class :character   Class :character  </span></span>
-<span><span class="co">##  Median :280.00   Mode  :character   Mode  :character   Mode  :character  </span></span>
-<span><span class="co">##  Mean   :250.11                                                           </span></span>
-<span><span class="co">##  3rd Qu.:333.00                                                           </span></span>
-<span><span class="co">##  Max.   :528.00                                                           </span></span>
-<span><span class="co">##                                                                           </span></span>
-<span><span class="co">##  stationName        fixtureType           latitude       longitude     </span></span>
-<span><span class="co">##  Length:18          Length:18          Min.   :51.15   Min.   :-80.80  </span></span>
-<span><span class="co">##  Class :character   Class :character   1st Qu.:51.48   1st Qu.:-80.63  </span></span>
-<span><span class="co">##  Mode  :character   Mode  :character   Median :51.66   Median :-80.57  </span></span>
-<span><span class="co">##                                        Mean   :51.58   Mean   :-80.47  </span></span>
-<span><span class="co">##                                        3rd Qu.:51.74   3rd Qu.:-80.45  </span></span>
-<span><span class="co">##                                        Max.   :51.88   Max.   :-79.81  </span></span>
-<span><span class="co">##                                        NA's   :3       NA's   :3       </span></span>
-<span><span class="co">##    elevation        isMobile         tsStart              tsEnd          </span></span>
-<span><span class="co">##  Min.   :-7.00   Min.   :0.0000   Min.   :1.405e+09   Min.   :1.415e+09  </span></span>
-<span><span class="co">##  1st Qu.:-6.25   1st Qu.:0.0000   1st Qu.:1.432e+09   1st Qu.:1.445e+09  </span></span>
-<span><span class="co">##  Median :-5.50   Median :0.0000   Median :1.463e+09   Median :1.458e+09  </span></span>
-<span><span class="co">##  Mean   :-5.50   Mean   :0.1667   Mean   :1.454e+09   Mean   :1.459e+09  </span></span>
-<span><span class="co">##  3rd Qu.:-4.75   3rd Qu.:0.0000   3rd Qu.:1.470e+09   3rd Qu.:1.481e+09  </span></span>
-<span><span class="co">##  Max.   :-4.00   Max.   :1.0000   Max.   :1.503e+09   Max.   :1.503e+09  </span></span>
-<span><span class="co">##  NA's   :16                                           NA's   :2          </span></span>
-<span><span class="co">##    utcOffset     stationID    macAddress          timeStart                  </span></span>
-<span><span class="co">##  Min.   : NA   Min.   : NA   Length:18          Min.   :2014-07-12 00:00:00  </span></span>
-<span><span class="co">##  1st Qu.: NA   1st Qu.: NA   Class :character   1st Qu.:2015-05-24 06:00:00  </span></span>
-<span><span class="co">##  Median : NA   Median : NA   Mode  :character   Median :2016-05-17 12:00:00  </span></span>
-<span><span class="co">##  Mean   :NaN   Mean   :NaN                      Mean   :2016-01-23 14:03:16  </span></span>
-<span><span class="co">##  3rd Qu.: NA   3rd Qu.: NA                      3rd Qu.:2016-08-04 01:26:15  </span></span>
-<span><span class="co">##  Max.   : NA   Max.   : NA                      Max.   :2017-08-20 23:30:00  </span></span>
-<span><span class="co">##  NA's   :18    NA's   :18                                                    </span></span>
-<span><span class="co">##     timeEnd                   </span></span>
-<span><span class="co">##  Min.   :2014-11-06 00:00:00  </span></span>
-<span><span class="co">##  1st Qu.:2015-10-20 00:00:00  </span></span>
-<span><span class="co">##  Median :2016-03-16 21:05:00  </span></span>
-<span><span class="co">##  Mean   :2016-03-25 17:06:15  </span></span>
-<span><span class="co">##  3rd Qu.:2016-12-01 00:00:00  </span></span>
-<span><span class="co">##  Max.   :2017-08-20 23:30:00  </span></span>
-<span><span class="co">##  NA's   :2</span></span></code></pre>
+<pre><code><span><span class="co">##     deployID      projectID         serno       receiverType    deviceID     </span></span>
+<span><span class="co">##  Min.   :1134   Min.   :176   Length   :18   Length   :18    Min.   : 74.00  </span></span>
+<span><span class="co">##  1st Qu.:2287   1st Qu.:176   N.unique : 7   N.unique : 2    1st Qu.: 75.75  </span></span>
+<span><span class="co">##  Median :3101   Median :176   N.blank  : 0   N.blank  : 0    Median :280.00  </span></span>
+<span><span class="co">##  Mean   :2952   Mean   :176   Min.nchar: 9   Min.nchar:11    Mean   :250.11  </span></span>
+<span><span class="co">##  3rd Qu.:4002   3rd Qu.:176   Max.nchar:15   Max.nchar:11    3rd Qu.:333.00  </span></span>
+<span><span class="co">##  Max.   :4221   Max.   :176                                  Max.   :528.00  </span></span>
+<span><span class="co">##                                                                              </span></span>
+<span><span class="co">##        status          name         siteName     stationName    fixtureType</span></span>
+<span><span class="co">##  Length   :18   Length   :18   Length   :18   Length   :18   Length   :18  </span></span>
+<span><span class="co">##  N.unique : 2   N.unique : 9   N.unique : 0   N.unique : 0   N.unique : 3  </span></span>
+<span><span class="co">##  N.blank  : 0   N.blank  : 0   N.blank  : 0   N.blank  : 0   N.blank  : 0  </span></span>
+<span><span class="co">##  Min.nchar: 6   Min.nchar: 9   Min.nchar:NA   Min.nchar:NA   Min.nchar: 5  </span></span>
+<span><span class="co">##  Max.nchar:10   Max.nchar:16   Max.nchar:NA   Max.nchar:NA   Max.nchar: 8  </span></span>
+<span><span class="co">##                                NAs      :18   NAs      :18                 </span></span>
+<span><span class="co">##                                                                            </span></span>
+<span><span class="co">##     latitude       longitude        elevation        isMobile     </span></span>
+<span><span class="co">##  Min.   :51.15   Min.   :-80.80   Min.   :-7.00   Min.   :0.0000  </span></span>
+<span><span class="co">##  1st Qu.:51.48   1st Qu.:-80.63   1st Qu.:-6.25   1st Qu.:0.0000  </span></span>
+<span><span class="co">##  Median :51.66   Median :-80.57   Median :-5.50   Median :0.0000  </span></span>
+<span><span class="co">##  Mean   :51.58   Mean   :-80.47   Mean   :-5.50   Mean   :0.1667  </span></span>
+<span><span class="co">##  3rd Qu.:51.74   3rd Qu.:-80.45   3rd Qu.:-4.75   3rd Qu.:0.0000  </span></span>
+<span><span class="co">##  Max.   :51.88   Max.   :-79.81   Max.   :-4.00   Max.   :1.0000  </span></span>
+<span><span class="co">##  NAs    :3       NAs    :3        NAs    :16                      </span></span>
+<span><span class="co">##     tsStart              tsEnd             utcOffset     stationID  </span></span>
+<span><span class="co">##  Min.   :1.405e+09   Min.   :1.415e+09   Min.   : NA   Min.   : NA  </span></span>
+<span><span class="co">##  1st Qu.:1.432e+09   1st Qu.:1.445e+09   1st Qu.: NA   1st Qu.: NA  </span></span>
+<span><span class="co">##  Median :1.463e+09   Median :1.458e+09   Median : NA   Median : NA  </span></span>
+<span><span class="co">##  Mean   :1.454e+09   Mean   :1.459e+09   Mean   :NaN   Mean   :NaN  </span></span>
+<span><span class="co">##  3rd Qu.:1.470e+09   3rd Qu.:1.481e+09   3rd Qu.: NA   3rd Qu.: NA  </span></span>
+<span><span class="co">##  Max.   :1.503e+09   Max.   :1.503e+09   Max.   : NA   Max.   : NA  </span></span>
+<span><span class="co">##                      NAs    :2           NAs    :18    NAs    :18   </span></span>
+<span><span class="co">##      macAddress   timeStart                      timeEnd                   </span></span>
+<span><span class="co">##  Length   :18   Min.   :2014-07-12 00:00:00   Min.   :2014-11-06 00:00:00  </span></span>
+<span><span class="co">##  N.unique : 0   1st Qu.:2015-05-24 06:00:00   1st Qu.:2015-10-20 00:00:00  </span></span>
+<span><span class="co">##  N.blank  : 0   Median :2016-05-17 12:00:00   Median :2016-03-16 21:05:00  </span></span>
+<span><span class="co">##  Min.nchar:NA   Mean   :2016-01-23 14:03:16   Mean   :2016-03-25 17:06:15  </span></span>
+<span><span class="co">##  Max.nchar:NA   3rd Qu.:2016-08-04 01:26:15   3rd Qu.:2016-12-01 00:00:00  </span></span>
+<span><span class="co">##  NAs      :18   Max.   :2017-08-20 23:30:00   Max.   :2017-08-20 23:30:00  </span></span>
+<span><span class="co">##                                               NAs    :2</span></span></code></pre>
 <p>There are 18 receiver deployments registered to the sample project.
 Four deployments are missing latitude and longitude, and six deployments
 are missing end dates, which suggests that those receivers are still
@@ -772,46 +764,38 @@ without detections).</p>
 of the variables in the data.</p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">df_stationDeps</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##     deployID    receiverType          deviceID         name          </span></span>
-<span><span class="co">##  Min.   :1134   Length:55          Min.   : 74.0   Length:55         </span></span>
-<span><span class="co">##  1st Qu.:2286   Class :character   1st Qu.: 75.0   Class :character  </span></span>
-<span><span class="co">##  Median :3100   Mode  :character   Median :280.0   Mode  :character  </span></span>
-<span><span class="co">##  Mean   :2919                      Mean   :201.3                     </span></span>
-<span><span class="co">##  3rd Qu.:4048                      3rd Qu.:285.0                     </span></span>
-<span><span class="co">##  Max.   :4221                      Max.   :528.0                     </span></span>
-<span><span class="co">##                                                                      </span></span>
-<span><span class="co">##     latitude       longitude         isMobile      </span></span>
-<span><span class="co">##  Min.   :51.15   Min.   :-80.80   Min.   :0.00000  </span></span>
-<span><span class="co">##  1st Qu.:51.48   1st Qu.:-80.60   1st Qu.:0.00000  </span></span>
-<span><span class="co">##  Median :51.66   Median :-80.57   Median :0.00000  </span></span>
-<span><span class="co">##  Mean   :51.57   Mean   :-80.46   Mean   :0.05455  </span></span>
-<span><span class="co">##  3rd Qu.:51.70   3rd Qu.:-80.45   3rd Qu.:0.00000  </span></span>
-<span><span class="co">##  Max.   :51.88   Max.   :-79.81   Max.   :1.00000  </span></span>
-<span><span class="co">##  NA's   :3       NA's   :3                         </span></span>
-<span><span class="co">##    timeStart                      timeEnd                      projectID  </span></span>
-<span><span class="co">##  Min.   :2014-07-12 00:00:00   Min.   :2014-11-06 00:00:00   Min.   :176  </span></span>
-<span><span class="co">##  1st Qu.:2015-05-24 00:00:00   1st Qu.:2015-11-02 00:00:00   1st Qu.:176  </span></span>
-<span><span class="co">##  Median :2016-05-18 00:00:00   Median :2016-10-05 08:15:00   Median :176  </span></span>
-<span><span class="co">##  Mean   :2016-02-22 12:28:39   Mean   :2016-05-04 00:08:20   Mean   :176  </span></span>
-<span><span class="co">##  3rd Qu.:2017-05-16 15:55:00   3rd Qu.:2016-12-01 00:00:00   3rd Qu.:176  </span></span>
-<span><span class="co">##  Max.   :2017-08-20 23:30:00   Max.   :2017-08-20 23:30:00   Max.   :176  </span></span>
-<span><span class="co">##                                NA's   :7                                  </span></span>
-<span><span class="co">##    elevation          port           antennaType           bearing      </span></span>
-<span><span class="co">##  Min.   :-7.000   Length:55          Length:55          Min.   : 10.00  </span></span>
-<span><span class="co">##  1st Qu.:-7.000   Class :character   Class :character   1st Qu.: 66.25  </span></span>
-<span><span class="co">##  Median :-7.000   Mode  :character   Mode  :character   Median :145.00  </span></span>
-<span><span class="co">##  Mean   :-5.714                                         Mean   :151.34  </span></span>
-<span><span class="co">##  3rd Qu.:-4.000                                         3rd Qu.:215.00  </span></span>
-<span><span class="co">##  Max.   :-4.000                                         Max.   :357.50  </span></span>
-<span><span class="co">##  NA's   :48                                             NA's   :11      </span></span>
-<span><span class="co">##   heightMeters </span></span>
-<span><span class="co">##  Min.   :5.60  </span></span>
-<span><span class="co">##  1st Qu.:5.60  </span></span>
-<span><span class="co">##  Median :5.80  </span></span>
-<span><span class="co">##  Mean   :5.85  </span></span>
-<span><span class="co">##  3rd Qu.:6.00  </span></span>
-<span><span class="co">##  Max.   :6.20  </span></span>
-<span><span class="co">##  NA's   :3</span></span></code></pre>
+<pre><code><span><span class="co">##     deployID       receiverType    deviceID            name       latitude    </span></span>
+<span><span class="co">##  Min.   :1134   Length   :55    Min.   : 74.0   Length   :55   Min.   :51.15  </span></span>
+<span><span class="co">##  1st Qu.:2286   N.unique : 2    1st Qu.: 75.0   N.unique : 9   1st Qu.:51.48  </span></span>
+<span><span class="co">##  Median :3100   N.blank  : 0    Median :280.0   N.blank  : 0   Median :51.66  </span></span>
+<span><span class="co">##  Mean   :2919   Min.nchar:11    Mean   :201.3   Min.nchar: 9   Mean   :51.57  </span></span>
+<span><span class="co">##  3rd Qu.:4048   Max.nchar:11    3rd Qu.:285.0   Max.nchar:16   3rd Qu.:51.70  </span></span>
+<span><span class="co">##  Max.   :4221                   Max.   :528.0                  Max.   :51.88  </span></span>
+<span><span class="co">##                                                                NAs    :3      </span></span>
+<span><span class="co">##    longitude         isMobile         timeStart                  </span></span>
+<span><span class="co">##  Min.   :-80.80   Min.   :0.00000   Min.   :2014-07-12 00:00:00  </span></span>
+<span><span class="co">##  1st Qu.:-80.60   1st Qu.:0.00000   1st Qu.:2015-05-24 00:00:00  </span></span>
+<span><span class="co">##  Median :-80.57   Median :0.00000   Median :2016-05-18 00:00:00  </span></span>
+<span><span class="co">##  Mean   :-80.46   Mean   :0.05455   Mean   :2016-02-22 12:28:39  </span></span>
+<span><span class="co">##  3rd Qu.:-80.45   3rd Qu.:0.00000   3rd Qu.:2017-05-16 15:55:00  </span></span>
+<span><span class="co">##  Max.   :-79.81   Max.   :1.00000   Max.   :2017-08-20 23:30:00  </span></span>
+<span><span class="co">##  NAs    :3                                                       </span></span>
+<span><span class="co">##     timeEnd                      projectID     elevation             port   </span></span>
+<span><span class="co">##  Min.   :2014-11-06 00:00:00   Min.   :176   Min.   :-7.000   Length   :55  </span></span>
+<span><span class="co">##  1st Qu.:2015-11-02 00:00:00   1st Qu.:176   1st Qu.:-7.000   N.unique : 4  </span></span>
+<span><span class="co">##  Median :2016-10-05 08:15:00   Median :176   Median :-7.000   N.blank  : 0  </span></span>
+<span><span class="co">##  Mean   :2016-05-04 00:08:20   Mean   :176   Mean   :-5.714   Min.nchar: 1  </span></span>
+<span><span class="co">##  3rd Qu.:2016-12-01 00:00:00   3rd Qu.:176   3rd Qu.:-4.000   Max.nchar: 1  </span></span>
+<span><span class="co">##  Max.   :2017-08-20 23:30:00   Max.   :176   Max.   :-4.000                 </span></span>
+<span><span class="co">##  NAs    :7                                   NAs    :48                     </span></span>
+<span><span class="co">##     antennaType    bearing        heightMeters </span></span>
+<span><span class="co">##  Length   :55   Min.   : 10.00   Min.   :5.60  </span></span>
+<span><span class="co">##  N.unique : 5   1st Qu.: 66.25   1st Qu.:5.60  </span></span>
+<span><span class="co">##  N.blank  : 0   Median :145.00   Median :5.80  </span></span>
+<span><span class="co">##  Min.nchar: 6   Mean   :151.34   Mean   :5.85  </span></span>
+<span><span class="co">##  Max.nchar: 9   3rd Qu.:215.00   3rd Qu.:6.00  </span></span>
+<span><span class="co">##                 Max.   :357.50   Max.   :6.20  </span></span>
+<span><span class="co">##                 NAs    :11       NAs    :3</span></span></code></pre>
 <p>There are the 4 deployments with missing latitude and longitude
 associated with the four deployments of mobile receivers that we saw
 earlier.</p>
@@ -879,7 +863,7 @@ articles</a>)</span></p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

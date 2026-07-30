@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Chapter 3 - Accessing detections data">
 </head>
@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">motus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +72,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Chapter 3 - Accessing detections data</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/main/vignettes/articles/03-accessing-data.Rmd" class="external-link"><code>vignettes/articles/03-accessing-data.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/denis/blu_tags_data/vignettes/articles/03-accessing-data.Rmd" class="external-link"><code>vignettes/articles/03-accessing-data.Rmd</code></a></small>
       <div class="d-none name"><code>03-accessing-data.Rmd</code></div>
     </div>
 
@@ -515,10 +515,10 @@ packages (these are automatically installed when you install
 <pre><code><span><span class="co">##  [1] "activity"    "activityAll" "admInfo"     "allambigs"   "allruns"    </span></span>
 <span><span class="co">##  [6] "allrunsGPS"  "alltags"     "alltagsGPS"  "antDeps"     "batchRuns"  </span></span>
 <span><span class="co">## [11] "batches"     "clarified"   "deprecated"  "filters"     "gps"        </span></span>
-<span><span class="co">## [16] "gpsAll"      "hits"        "meta"        "nodeData"    "nodeDeps"   </span></span>
-<span><span class="co">## [21] "projAmbig"   "projBatch"   "projs"       "recvDeps"    "recvs"      </span></span>
-<span><span class="co">## [26] "runs"        "runsFilters" "species"     "tagAmbig"    "tagDeps"    </span></span>
-<span><span class="co">## [31] "tagProps"    "tags"</span></span></code></pre>
+<span><span class="co">## [16] "gpsAll"      "hits"        "hitsBlu"     "meta"        "nodeData"   </span></span>
+<span><span class="co">## [21] "nodeDeps"    "projAmbig"   "projBatch"   "projs"       "recvDeps"   </span></span>
+<span><span class="co">## [26] "recvs"       "runs"        "runsFilters" "species"     "tagAmbig"   </span></span>
+<span><span class="co">## [31] "tagDeps"     "tagProps"    "tags"</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get a list of variables in the "species" table in the .motus file.</span></span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbListFields.html" class="external-link">dbListFields</a></span><span class="op">(</span><span class="va">file.name</span>, <span class="st">"species"</span><span class="op">)</span> </span></code></pre></div>
@@ -537,15 +537,24 @@ package which we installed in <a href="02-installing-packages.html">Chapter 2</a
 underlying structure of these tables is a list of length 2:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">tbl.alltags</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## List of 2</span></span>
+<pre><code><span><span class="co">## List of 3</span></span>
+<span><span class="co">##  $ con       :Formal class 'SQLiteConnection' [package "RSQLite"] with 8 slots</span></span>
+<span><span class="co">##   .. ..@ ptr                :&lt;pointer: 0x5629b05d2a70&gt; </span></span>
+<span><span class="co">##   .. ..@ dbname             : chr "/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus"</span></span>
+<span><span class="co">##   .. ..@ loadable.extensions: logi TRUE</span></span>
+<span><span class="co">##   .. ..@ flags              : int 70</span></span>
+<span><span class="co">##   .. ..@ vfs                : chr ""</span></span>
+<span><span class="co">##   .. ..@ ref                :&lt;environment: 0x5629b23f5cd8&gt; </span></span>
+<span><span class="co">##   .. ..@ bigint             : chr "integer64"</span></span>
+<span><span class="co">##   .. ..@ extended_types     : logi FALSE</span></span>
 <span><span class="co">##  $ src       :List of 2</span></span>
 <span><span class="co">##   ..$ con  :Formal class 'SQLiteConnection' [package "RSQLite"] with 8 slots</span></span>
-<span><span class="co">##   .. .. ..@ ptr                :&lt;externalptr&gt; </span></span>
+<span><span class="co">##   .. .. ..@ ptr                :&lt;pointer: 0x5629b05d2a70&gt; </span></span>
 <span><span class="co">##   .. .. ..@ dbname             : chr "/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus"</span></span>
 <span><span class="co">##   .. .. ..@ loadable.extensions: logi TRUE</span></span>
 <span><span class="co">##   .. .. ..@ flags              : int 70</span></span>
 <span><span class="co">##   .. .. ..@ vfs                : chr ""</span></span>
-<span><span class="co">##   .. .. ..@ ref                :&lt;environment: 0x5609fde42a88&gt; </span></span>
+<span><span class="co">##   .. .. ..@ ref                :&lt;environment: 0x5629b23f5cd8&gt; </span></span>
 <span><span class="co">##   .. .. ..@ bigint             : chr "integer64"</span></span>
 <span><span class="co">##   .. .. ..@ extended_types     : logi FALSE</span></span>
 <span><span class="co">##   ..$ disco: NULL</span></span>
@@ -885,7 +894,7 @@ articles</a>)</span></p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

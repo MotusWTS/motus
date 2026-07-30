@@ -70,6 +70,7 @@ A flat data frame with the following for each tag:
 ## Examples
 
 ``` r
+
 # Download sample project 176 to .motus database (username/password are "motus.sample")
 if (FALSE) sql_motus <- tagme(176, new = TRUE) # \dontrun{}
 
@@ -78,7 +79,7 @@ sql_motus <- tagmeSample()
 
 # Summarize tags
 tag_summary <- tagSum(sql_motus)
-#> 'df_src' is a complete motus data base, using 'alltagsGPS' view
+#> 'df_src' is a complete motus data base; using 'alltagsGPS'
 
 # For specific SQLite table/view (needs gpsLat/gpsLon) --------------
 library(dplyr)

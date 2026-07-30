@@ -20,6 +20,7 @@ The easiest way to install motus is from Birds Canada’s
 [R-Universe](https://birdscanada.r-universe.dev):
 
 ``` r
+
 install.packages("motus", 
                  repos = c(birdscanada = 'https://birdscanada.r-universe.dev',
                            CRAN = 'https://cloud.r-project.org'))
@@ -29,6 +30,7 @@ If you want to check out work-in-progress, you can install the
 development branches (betaX and sandbox) using `remotes`.
 
 ``` r
+
 install.packages("remotes")                     # if don't already have it
 remotes::install_github("motusWTS/motus@beta3") # the beta branch for v3+
 ```
@@ -54,6 +56,8 @@ remotes::install_github("motusWTS/motus@beta3") # the beta branch for v3+
   : Add/update all batch activity
 - [`gpsAll()`](https://motuswts.github.io/motus/reference/gpsAll.md) :
   Add/update all GPS points
+- [`hitsBlu()`](https://motuswts.github.io/motus/reference/hitsBlu.md) :
+  Update hitsBlu data
 
 ## Cleaning
 
@@ -78,6 +82,8 @@ Helper functions for cleaning and preparing data
   Get GPS variables
 - [`getRuns()`](https://motuswts.github.io/motus/reference/getRuns.md) :
   Returns a dataframe containing runs
+- [`getBluPayload()`](https://motuswts.github.io/motus/reference/getBluPayload.md)
+  : Extract variables from BLUtag Payloads
 - [`simSiteDet()`](https://motuswts.github.io/motus/reference/simSiteDet.md)
   : Create a dataframe of simultaneous detections at multiple sites
 - [`sunRiseSet()`](https://motuswts.github.io/motus/reference/sunRiseSet.md)

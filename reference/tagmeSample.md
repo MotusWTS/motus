@@ -35,8 +35,8 @@ this package.
 # Explore the sample data
 tags <- tagmeSample()
 dplyr::tbl(tags, "activity")
-#> # Source:   table<`activity`> [?? x 15]
-#> # Database: sqlite 3.51.1 [:memory:]
+#> # A query:  ?? x 15
+#> # Database: sqlite 3.53.3 [:memory:]
 #>    batchID motusDeviceID ant   hourBin numTags pulseCount numRuns numHits  run2
 #>      <int>         <int> <chr>   <int>   <int>      <int>   <int>   <int> <int>
 #>  1      53           486 1      400872       1         28       1       7     0
@@ -53,8 +53,8 @@ dplyr::tbl(tags, "activity")
 #> # ℹ 6 more variables: run3 <int>, run4 <int>, run5 <int>, run6 <int>,
 #> #   run7plus <int>, numGPSfix <int>
 dplyr::tbl(tags, "alltags")
-#> # Source:   table<`alltags`> [?? x 62]
-#> # Database: sqlite 3.51.1 [:memory:]
+#> # A query:  ?? x 62
+#> # Database: sqlite 3.53.3 [:memory:]
 #>     hitID runID batchID      ts tsCorrected   sig sigsd noise  freq freqsd  slop
 #>     <int> <int>   <int>   <dbl>       <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl> <dbl>
 #>  1  45107  8886      53  1.45e9 1445858390.    52     0   -96     4      0  1e-4

@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Working with GPS points">
 </head>
@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">motus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +72,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Working with GPS points</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/main/vignettes/articles/gps.Rmd" class="external-link"><code>vignettes/articles/gps.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/denis/blu_tags_data/vignettes/articles/gps.Rmd" class="external-link"><code>vignettes/articles/gps.Rmd</code></a></small>
       <div class="d-none name"><code>gps.Rmd</code></div>
     </div>
 
@@ -102,8 +102,8 @@ corresponding to your project.</p>
 <p>GPS points are stored in the <code>gps</code> table.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">gps_tags</span>, <span class="st">"gps"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># Source:   table&lt;`gps`&gt; [?? x 11]</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.51.1 [/home/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus]</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A query:  ?? x 11</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus]</span></span></span>
 <span><span class="co">##      gpsID batchID        ts gpsts   lat    lon    alt quality lat_mean lon_mean</span></span>
 <span><span class="co">##      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 1</span>  <span style="text-decoration: underline;">313</span>414  <span style="text-decoration: underline;">127</span>792    1.51<span style="color: #949494;">e</span>9    <span style="color: #BB0000;">NA</span>  33.5 -<span style="color: #BB0000;">104.</span>  <span style="text-decoration: underline;">1</span>074        <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span></span></span>
@@ -136,8 +136,8 @@ corresponding to your project.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">gps_tags</span>, <span class="st">"alltagsGPS"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">ts</span>, <span class="va">gpsLat</span>, <span class="va">gpsLon</span>, <span class="va">gpsAlt</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># Source:   SQL [?? x 7]</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.51.1 [/home/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus]</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A query:  ?? x 7</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus]</span></span></span>
 <span><span class="co">##       hitID   runID batchID          ts gpsLat gpsLon gpsAlt</span></span>
 <span><span class="co">##       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 32<span style="text-decoration: underline;">811</span>108 7<span style="text-decoration: underline;">984</span>227  <span style="text-decoration: underline;">118</span>721 <span style="text-decoration: underline;">1</span>509<span style="text-decoration: underline;">139</span>743.     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span></span></span>
@@ -157,8 +157,8 @@ to those that do:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">gps_tags</span>, <span class="st">"alltagsGPS"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">ts</span>, <span class="va">gpsLat</span>, <span class="va">gpsLon</span>, <span class="va">gpsAlt</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">gpsLat</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># Source:   SQL [?? x 7]</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.51.1 [/home/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus]</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A query:  ?? x 7</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus]</span></span></span>
 <span><span class="co">##        hitID    runID batchID          ts gpsLat gpsLon gpsAlt</span></span>
 <span><span class="co">##        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 449<span style="text-decoration: underline;">016</span>552 24<span style="text-decoration: underline;">439</span>773  <span style="text-decoration: underline;">370</span>452 <span style="text-decoration: underline;">1</span>457<span style="text-decoration: underline;">111</span>891.   36.5  -<span style="color: #BB0000;">76.0</span>   -<span style="color: #BB0000;">3.4</span></span></span>
@@ -434,7 +434,7 @@ articles</a></p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

@@ -160,6 +160,7 @@ packages](https://motuswts.github.io/motus/articles/02-installing-packages.md)
 for help), then load them:
 
 ``` r
+
 library(circular)
 library(tidyverse)
 library(motus)
@@ -186,6 +187,7 @@ to first
 the `motusData` package, *prior* to running the code in this chapter:
 
 ``` r
+
 # load the motusData package, which contains the sample data for this chapter
 library(motusData) 
 
@@ -215,6 +217,7 @@ look for clear departures by first plotting latitude against time. In
 this case, we can see the birds departing north past several stations:
 
 ``` r
+
 ggplot(data = df_vanish, aes(x = time, y = recvLat, colour = as.factor(recvSiteName))) + 
   geom_point(pch = 21) +
   facet_wrap(~ motusTagID, scales = "free", ncol = 1) +
@@ -231,6 +234,7 @@ show the last few hours of detections of the bird at Old Cut. Let’s try
 this with tag \# 16823 from our sample data:
 
 ``` r
+
 ggplot(data = filter(df_vanish, motusTagID == 16823, time > "2015-05-30 00:00:00"), 
        aes(x = time, y = sig, colour = as.factor(port))) + 
   theme_bw() + 
@@ -264,6 +268,7 @@ strength.
 Continuing with tag 16823, let’s find the departure time.
 
 ``` r
+
 ggplot(data = filter(df_vanish, motusTagID == 16823), 
        aes(x = time, y = sig, colour= as.factor(antBearing))) + 
   theme_bw() + 
@@ -281,6 +286,7 @@ detections at Old Cut, which is where the bird is departing from. By
 zooming in we can find the exact departure time.
 
 ``` r
+
 ggplot(data = filter(df_vanish, 
                      motusTagID == 16823,  
                      time > "2015-05-30 03:03:00",  
@@ -312,6 +318,7 @@ the plots above on tags 16897 and 16791 to see how we came up with those
 departure times:
 
 ``` r
+
 ## create dataframe and assign column names
 dep_16823 <- as.data.frame(cbind(16823, "2015-05-30 03:04:59"))
 
@@ -335,6 +342,7 @@ df_departTime
     ## 3      16791 2015-05-08 02:41:40
 
 ``` r
+
 ## optionally, save to .RDS file to preserve time structure (you could save to
 ## .csv, but time structure will not be preserved) not run here:
 
@@ -369,6 +377,7 @@ and max signal strength for your station (using the full stations’s
 data, not only from the subset of the tags you are analyzing).
 
 ``` r
+
 ## Merge sample data with departure times, subset data, and calculate vanishing bearing
 
 ## Note that we use the recvSiteName to specify the departure station of
@@ -407,6 +416,7 @@ make a circular plot with points for the individual vanishing bearings
 and an arrow for the mean bearing as follows:
 
 ``` r
+
 # if you have many bearings/points, can use stack = TRUE
 plot.circular(df_vanishBearing$vanish.bearing, zero = pi/2)
 arrows.circular(mean(df_vanishBearing$vanish.bearing), zero = pi/2)
@@ -428,6 +438,7 @@ stations with detections, yellow lines to represent antenna bearings
 with detections, and a red line for the vanishing bearing:
 
 ``` r
+
 df_stations <- df_vanish %>%
   filter(motusTagID == 16823) %>%
   select(recvSiteName, antBearing, port, recvLon, recvLat) %>%
@@ -494,6 +505,7 @@ other stations which corroborate the vanishing bearing.
 If desired, you can print the map to file as follows:
 
 ``` r
+
 ggsave(g, file = "16823vanishBearing.tiff", width = 10, height = 8)
 ```
 

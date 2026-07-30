@@ -9,6 +9,7 @@ Let’s get started by loading the packages we’ll use (see also [Chapter
 packages](https://motuswts.github.io/motus/articles/02-installing-packages.md).)
 
 ``` r
+
 library(motus)
 library(dplyr)
 library(lubridate)
@@ -23,6 +24,7 @@ We use the
 function to download the data
 
 ``` r
+
 sql_motus <- tagme(176, dir = "./data/")
 ```
 
@@ -62,6 +64,7 @@ the [`tbl()`](https://dplyr.tidyverse.org/reference/tbl.html) function
 from the `dplyr` package
 
 ``` r
+
 tbl_alltags <- tbl(sql_motus, "alltags")
 ```
 
@@ -74,6 +77,7 @@ Convert to flat
 create a date/time column `time` from the numeric timestamps, `ts`.
 
 ``` r
+
 df_alltags <- tbl_alltags %>%
   collect() %>%
   mutate(time = as_datetime(ts))
@@ -84,6 +88,7 @@ If you want to save this flat file, you can export as RDS (see
 3](https://motuswts.github.io/motus/articles/03-accessing-data.html#exporting-detections))
 
 ``` r
+
 saveRDS(df_alltags, "my_motus_data.rds")
 ```
 

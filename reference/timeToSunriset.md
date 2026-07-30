@@ -90,5 +90,5 @@ sql_motus <- tagmeSample()
 
 # Get sunrise and sunset information for alltags view with units in minutes
 sunrise <- timeToSunriset(sql_motus, units = "mins")
-#> 'df_src' is a complete motus data base, using 'alltags' view
+#> 'df_src' is a complete motus data base; using 'alltags'
 ```

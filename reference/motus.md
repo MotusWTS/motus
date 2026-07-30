@@ -71,3 +71,47 @@ Commonly used functions:
 ## References
 
 Motus Wildlife Tracking System <https://motus.org>
+
+## See also
+
+Useful links:
+
+- <https://motuswts.github.io/motus/>
+
+- Report bugs at <https://github.com/MotusWTS/motus/issues>
+
+## Author
+
+**Maintainer**: Birds Canada <motus@birdscanada.org>
+
+Authors:
+
+- John Brzustowski <jbrzusto@fastmail.fm>
+
+- Denis Lepage <dlepage@birdscanada.org>
+
+Other contributors:
+
+- Steffi LaZerte <sel@steffilazerte.ca> \[contributor\]
+
+- Joey Bernard \[contributor\]
+
+- Lucas Berrigan \[contributor\]
+
+- Tara Crewe \[contributor\]
+
+- Zoe Crysler <zcrysler@gmail.com> \[contributor\]
+
+- Jeremy Hussell \[contributor\]
+
+- Catherine Jardine \[contributor\]
+
+- Amie MacDonald \[contributor\]
+
+- Stuart Mackenzie \[contributor\]
+
+- Paul Morrill \[contributor\]
+
+- Josh Sayers \[contributor\]
+
+- Philip Taylor \[contributor\]

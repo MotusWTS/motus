@@ -97,6 +97,7 @@ want to use all three of them to classify our detection dataset *a
 priori* into ‘good’ and ‘bad’ detections.
 
 ``` r
+
 # set system environment time zone to GMT
 Sys.setenv(tz="GMT")
 
@@ -139,6 +140,7 @@ for details). We will remove any deprecated batches, leaving only the
 most recently processed data in our dataset.
 
 ``` r
+
 # find duplicated runIDs (duplicates in ts, motusTagID, port, recv)
 runsDup <- df %>%
   filter(duplicated(cbind(ts, motusTagID, port, recv)) == TRUE) %>%
@@ -178,6 +180,7 @@ Since we want to consider each detection within its recorded time frame,
 we calculate features 2 and 3 for each run individually.
 
 ``` r
+
 ##### Step 1 - Classification of detections
 
 ### calculate features 2 and 3 for each run
@@ -209,6 +212,7 @@ bursts missed, or the deviation between the recorded mean burst interval
 is more than 3 times the tag burst interval.
 
 ``` r
+
 ### assign category for goodness of detection (run)
 #   filter by propMiss >= 0.75, deltaMeanBI >= 3*tagBI, runLen < 4
 runFeat$category <- ifelse(abs(runFeat$propMiss) > 0.75 |
@@ -225,6 +229,7 @@ categories ‘good’, ‘bad’, and ‘unassigned’. We can log transform run
 length for better visibility.
 
 ``` r
+
 # some diagnostic plots
 plotdata <- data.frame(group = rep(c("log10runLen", "propMiss", "deltaMeanBI"),
                                    each = nrow(runFeat)),
@@ -256,6 +261,7 @@ of each parameter for each run and check graphically if they can be used
 to describe the quality of the recorded run.
 
 ``` r
+
 ##### Step 2 - Identification of potential diagnostic parameters
 
 ### calculate run mean values for
@@ -335,6 +341,7 @@ noise. We can therefore calculate for each tag a variable for the
 overall ‘proportion of short run lengths’.
 
 ``` r
+
 # get activity table
 a <- tbl(db, "activity")
 
@@ -407,6 +414,7 @@ minutes of the mean time stamp of the given run. You may choose to use a
 longer or shorter time window.
 
 ``` r
+
 ### calculate 'continuity' variables
 runTemp <- df %>%
   group_by(runID) %>%
@@ -429,6 +437,7 @@ rm(runTemp)
 We can check the importance of these new variables graphically again.
 
 ``` r
+
 # plot variables
 plotdata <- data.frame(group = rep(c("nContRuns", "nPorts"),
                                    each = nrow(runFeat)),
@@ -481,6 +490,7 @@ these to your data, you can use the date-bin of tag registration or
 create your own variable.
 
 ``` r
+
 ##### Step 3 - Prediction of the probability of being a false positive
 
 modeldata <- runFeat %>%
@@ -527,6 +537,7 @@ summary(M)
     ## Number of Fisher Scoring iterations: 9
 
 ``` r
+
 # goodness of fit parameters
 MRS <- lrm(category ~ meanSigSD + meanNoise + meanFreqSD + meanSlop + 
            meanBurstSlop + numRuns + propRS + tagPropRS + nContRuns + nPorts,
@@ -539,6 +550,7 @@ MRS$stats[10] # Nagelkerke's pseudo R^2
     ## 0.4908672
 
 ``` r
+
 rm(modeldata)
 
 # predict probability of being a 'bad' run
@@ -555,6 +567,7 @@ probability estimates. Nevertheless, the two ‘good’ and ‘bad’ curves
 should be clearly separated.
 
 ``` r
+
 # plot predicted values (graphical inspection of goodness of fit)
 p5 <- ggplot(data = runFeat, aes(x = probBad, group = category, colour = category)) +
   geom_density() + 
@@ -586,6 +599,7 @@ individual threshold settings may still be valid in a biological sense,
 or if additional detections should be excluded.
 
 ``` r
+
 ### set individual threshold and filter detection data by run
 # find runIDs with probBad < 0.7
 runsKeep <- runFeat %>%
