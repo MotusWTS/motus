@@ -5,6 +5,11 @@
 - Add `getBluPayload()` function to extract out BLUtag variables from payload
   hexadecimal bytes.
 
+# motus 6.1.2
+
+- Add bandNumbers to `tagDeps` table
+- Update vignettes to use new version of rnaturalearth
+
 # motus 6.1.1
 
 - Add support for Sigma Eight receivers
@@ -13,7 +18,7 @@
 
 - fix bugs in `tagme()`
   - `tagme(dir = ...)` now correctly downloads projects as well as receivers and
-    respects the `skipXXX` arguments
+    respects the `skipXXX` arguments <<<<<<< HEAD
   - `tagme()` for receivers now skips node downloads if receiver is not a
     SensorStation
   - `tagme()` fails gracefully if the directory specified does not exist
@@ -25,8 +30,24 @@
   - Changed function argument names for clarity
 - Replace use of ggmap with ggspatial for creating plots with static maps.
 - Clean up docs for `tagSum()`
+- Add helper function `tagmeSample()` for an in-memory connection to the sample =======
+  - `tagme()` for receivers now skips node downloads if receiver is not a
+    SensorStation
+  - `tagme()` fails gracefully if the directory specified does not exist
+  - Fixed `Error in as.POSIXlt.character(x, tz, ...)` when starting a download
+- `tagme(new = TRUE)` now starts a download immediately
+- Add `srvTimeout()` to specify
+
+# motus 6.0.0the server timeout limit
+
+- Clean up helper functions `sunRiseSet()` and `timeToSunriset()`
+  - `sunRiseSet()` now required to run `timeToSunriset()`
+  - Changed function argument names for clarity
+- Replace use of ggmap with ggspatial for creating plots with static maps.
+- Clean up docs for `tagSum()`
 - Add helper function `tagmeSample()` for an in-memory connection to the sample
-  data base for running examples
+  >>>>>>> 66e6a9821cd12faaf272202e830b1fe7726f8740 data base for running
+  examples
 - Remove any functions that rely on deprecating spatial functions
 - Remove year, month, day fields from activity tables.
 - Standardize names in docs and examples

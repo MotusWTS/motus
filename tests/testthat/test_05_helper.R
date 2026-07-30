@@ -232,6 +232,9 @@ test_that("RECV - remove deprecated batches", {
   # withr::local_db_connection(
   #   suppressMessages(t <- tagme("SG-4002BBBK1580", new = TRUE)))
   
+  # Get some runs
+  suppressMessages(t <- tagme("SG-4002BBBK1580", update = TRUE, new = FALSE))
+
   # Deprecated batches listed, but not removed to start
   dep <- dplyr::tbl(t, "deprecated") %>% dplyr::collect()
   expect_gt(nrow(dep), 0)
