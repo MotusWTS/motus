@@ -37,6 +37,7 @@ reference:
   - nodeData
   - activityAll
   - gpsAll
+  - hitsBlu
   
 - title: Cleaning
   desc: Helper functions for cleaning and preparing data
@@ -50,11 +51,13 @@ reference:
   - tagmeSample
   - getGPS
   - getRuns
+  - getBluPayload
   - simSiteDet
   - sunRiseSet
   - timeToSunriset
   - getMotusDBSrc
   - srvTimeout
+  
   
 - title: Plotting
   contents:
