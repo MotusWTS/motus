@@ -5,12 +5,11 @@ development:
   mode: auto
 template:
   bootstrap: 5
-  bootswatch: cosmo
+  bootswatch: simplex
   bslib:
-    body-secondary-color: black
+    link-color: rgb(117, 185, 26)
+
 navbar:
-  bg: dark
-  type: light
   structure:
     left:
     - home

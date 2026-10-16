@@ -134,7 +134,7 @@ srvQuery(API = "custom/update_pkg_version", params = list(pkgVersion = "6.1.0"))
 
 
 
-## Test motus website (will be compiled online) ------------------------------
+## Docs website - Test motus website (will be compiled online) ------------------------------
 
 pkgdown::build_site(lazy = TRUE)
 pkgdown::build_home()
