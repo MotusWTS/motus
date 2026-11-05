@@ -316,7 +316,7 @@ ggplot(data = world) +
              aes(longitude, latitude), size = 2, shape = 19, colour = "red")
 ```
 
-![](images/mapRecvs1sf.png)
+![Map showing deployments as red circles](images/mapRecvs1sf.png)
 
 If there are any errors in tag deployment location, please correct these
 online at <https://motus.org/data/>.
@@ -642,7 +642,8 @@ ggplot(data = df_projRecvs.long,
   labs(x = "Year", y = "Receiver ID")
 ```
 
-![](04-deployments_files/figure-html/unnamed-chunk-20-1.png)
+![Plot of device IDs for each receiver over
+time](figures/04_unnamed-chunk-20-1.png)
 
 If you want more detail for a given year (or all years) you can either
 subset and re-plot, or use the day of year on the x-axis, and
@@ -664,7 +665,8 @@ ggplot(data = df_projRecvs.long,
   scale_color_viridis_d()
 ```
 
-![](04-deployments_files/figure-html/unnamed-chunk-21-1.png)
+![Plot of device IDs for each receiver over time, with a separate panel
+for each year](figures/04_unnamed-chunk-21-1.png)
 
 ### Location of receiver deployments
 
@@ -721,7 +723,8 @@ ggplot(data = world) +
   scale_colour_manual(values = c("grey30", "red"), name = "Project 176 Deployment") 
 ```
 
-![](images/mapRecvs2sf.png)
+![Map of the Americas showing deployment locations with Project 176
+highlighted in red](images/mapRecvs2sf.png)
 
 **d. Map the location of project specific receivers only**
 
@@ -758,7 +761,8 @@ ggplot(data = region) +
   scale_colour_viridis_d(name = "Receiver ID") 
 ```
 
-![](images/mapProjRecvssf.png)
+![Map showing receiver ids as points coloured by
+ID](images/mapProjRecvssf.png)
 
 ### Completeness and accuracy of receiver metadata
 

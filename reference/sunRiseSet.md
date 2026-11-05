@@ -89,7 +89,7 @@ sql_motus <- tagmeSample()
 
 # For SQLite Data base-----------------------------------------------
 sun <- sunRiseSet(sql_motus)
-#> 'df_src' is a complete motus data base; using 'alltags'
+#> 'df_src' is a complete motus data base, using 'alltags' view
 
 # For specific SQLite table/view ------------------------------------
 library(dplyr)

@@ -27,8 +27,8 @@ table:
 tbl(sql_motus, "deprecated")
 ```
 
-    ## # A query:  ?? x 3
-    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
+    ## # Source:   table<`deprecated`> [?? x 3]
+    ## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus]
     ##   batchID batchFilter removed
     ##     <int>       <int>   <int>
     ## 1    6000           4       0
@@ -63,8 +63,8 @@ tbl(sql_motus, "alltags") %>%
   filter(batchID %in% c(6000, 6001, 6002))
 ```
 
-    ## # A query:  ?? x 62
-    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
+    ## # Source:   SQL [?? x 62]
+    ## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus]
     ##       hitID   runID batchID          ts tsCorrected   sig sigsd noise  freq freqsd   slop
     ##       <int>   <int>   <int>       <dbl>       <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl>  <dbl>
     ##  1 23271881 1822216    6000 1487894945. 1487894945. -68.2 10.9  -76.3  2.07 0.127  0.0034
@@ -133,8 +133,8 @@ tbl(sql_motus, "alltags") %>%
   filter(batchID %in% c(6000, 6001, 6002))
 ```
 
-    ## # A query:  ?? x 62
-    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
+    ## # Source:   SQL [?? x 62]
+    ## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus]
     ## # ℹ 62 variables: hitID <int>, runID <int>, batchID <int>, ts <dbl>, tsCorrected <lgl>,
     ## #   sig <dbl>, sigsd <dbl>, noise <dbl>, freq <dbl>, freqsd <dbl>, slop <dbl>,
     ## #   burstSlop <dbl>, done <int>, motusTagID <lgl>, ambigID <int>, port <chr>,
@@ -150,8 +150,8 @@ Also that the `deprecated` table now lists `removed` as 1.
 tbl(sql_motus, "deprecated")
 ```
 
-    ## # A query:  ?? x 3
-    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
+    ## # Source:   table<`deprecated`> [?? x 3]
+    ## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus]
     ##   batchID batchFilter removed
     ##     <int>       <int>   <int>
     ## 1    6000           4       1

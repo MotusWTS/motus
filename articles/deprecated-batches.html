@@ -21,11 +21,11 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-dark" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">motus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +72,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Removing deprecated batches</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/denis/blu_tags_data/vignettes/articles/deprecated-batches.Rmd" class="external-link"><code>vignettes/articles/deprecated-batches.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/main/vignettes/articles/deprecated-batches.Rmd" class="external-link"><code>vignettes/articles/deprecated-batches.Rmd</code></a></small>
       <div class="d-none name"><code>deprecated-batches.Rmd</code></div>
     </div>
 
@@ -94,16 +94,16 @@ batches.</p>
 <code>deprecated</code> table:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql_motus</span>, <span class="st">"deprecated"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A query:  ?? x 3</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span></span>
+<pre><code><span><span class="co">## # Source:   table&lt;`deprecated`&gt; [?? x 3]</span></span>
+<span><span class="co">## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus]</span></span>
 <span><span class="co">##   batchID batchFilter removed</span></span>
-<span><span class="co">##     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span>    <span style="text-decoration: underline;">6</span>000           4       0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span>    <span style="text-decoration: underline;">6</span>001           4       0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span>    <span style="text-decoration: underline;">6</span>002           4       0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span>    <span style="text-decoration: underline;">6</span>003           4       0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">5</span>    <span style="text-decoration: underline;">6</span>004           4       0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">6</span>    <span style="text-decoration: underline;">6</span>005           4       0</span></span></code></pre>
+<span><span class="co">##     &lt;int&gt;       &lt;int&gt;   &lt;int&gt;</span></span>
+<span><span class="co">## 1    6000           4       0</span></span>
+<span><span class="co">## 2    6001           4       0</span></span>
+<span><span class="co">## 3    6002           4       0</span></span>
+<span><span class="co">## 4    6003           4       0</span></span>
+<span><span class="co">## 5    6004           4       0</span></span>
+<span><span class="co">## 6    6005           4       0</span></span></code></pre>
 <p>Each <code>batchID</code> listed represented a deprecated batch. The
 column <code>removed</code> indicates whether this batch has been
 removed from your data (<code>1</code>) or not (<code>0</code>).</p>
@@ -120,27 +120,27 @@ IDs in a specific table</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql_motus</span>, <span class="st">"alltags"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">batchID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6000</span>, <span class="fl">6001</span>, <span class="fl">6002</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A query:  ?? x 62</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span></span>
+<pre><code><span><span class="co">## # Source:   SQL [?? x 62]</span></span>
+<span><span class="co">## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus]</span></span>
 <span><span class="co">##       hitID   runID batchID          ts tsCorrected   sig sigsd noise  freq freqsd   slop</span></span>
-<span><span class="co">##       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 23<span style="text-decoration: underline;">271</span>881 1<span style="text-decoration: underline;">822</span>216    <span style="text-decoration: underline;">6</span>000 <span style="text-decoration: underline;">1</span>487<span style="text-decoration: underline;">894</span>945. <span style="text-decoration: underline;">1</span>487<span style="text-decoration: underline;">894</span>945. -<span style="color: #BB0000;">68.2</span> 10.9  -<span style="color: #BB0000;">76.3</span>  2.07 0.127  0.003<span style="text-decoration: underline;">4</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 23<span style="text-decoration: underline;">271</span>882 1<span style="text-decoration: underline;">822</span>216    <span style="text-decoration: underline;">6</span>000 <span style="text-decoration: underline;">1</span>487<span style="text-decoration: underline;">894</span>995. <span style="text-decoration: underline;">1</span>487<span style="text-decoration: underline;">894</span>995. -<span style="color: #BB0000;">67.9</span> 18.9  -<span style="color: #BB0000;">75.7</span>  1.98 0.185  0.001<span style="text-decoration: underline;">9</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 23<span style="text-decoration: underline;">284</span>651 1<span style="text-decoration: underline;">828</span>340    <span style="text-decoration: underline;">6</span>000 <span style="text-decoration: underline;">1</span>487<span style="text-decoration: underline;">916</span>706. <span style="text-decoration: underline;">1</span>487<span style="text-decoration: underline;">916</span>706. -<span style="color: #BB0000;">68.7</span> 34.9  -<span style="color: #BB0000;">76.4</span>  2.00 0.11   0.004<span style="text-decoration: underline;">5</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> 23<span style="text-decoration: underline;">284</span>652 1<span style="text-decoration: underline;">828</span>340    <span style="text-decoration: underline;">6</span>000 <span style="text-decoration: underline;">1</span>487<span style="text-decoration: underline;">916</span>736. <span style="text-decoration: underline;">1</span>487<span style="text-decoration: underline;">916</span>736. -<span style="color: #BB0000;">68.9</span> 15.3  -<span style="color: #BB0000;">76.7</span>  1.90 0.031<span style="text-decoration: underline;">5</span> 0.004<span style="text-decoration: underline;">7</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> 23<span style="text-decoration: underline;">306</span>136 1<span style="text-decoration: underline;">838</span>711    <span style="text-decoration: underline;">6</span>000 <span style="text-decoration: underline;">1</span>487<span style="text-decoration: underline;">954</span>561. <span style="text-decoration: underline;">1</span>487<span style="text-decoration: underline;">954</span>561. -<span style="color: #BB0000;">68.1</span>  8.84 -<span style="color: #BB0000;">76.9</span>  1.92 0.035<span style="text-decoration: underline;">1</span> 0.004<span style="text-decoration: underline;">7</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> 23<span style="text-decoration: underline;">306</span>137 1<span style="text-decoration: underline;">838</span>711    <span style="text-decoration: underline;">6</span>000 <span style="text-decoration: underline;">1</span>487<span style="text-decoration: underline;">954</span>612. <span style="text-decoration: underline;">1</span>487<span style="text-decoration: underline;">954</span>612. -<span style="color: #BB0000;">69.3</span> 14.8  -<span style="color: #BB0000;">76.4</span>  1.91 0.067<span style="text-decoration: underline;">5</span> 0.001<span style="text-decoration: underline;">3</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> 23<span style="text-decoration: underline;">306</span>412 1<span style="text-decoration: underline;">838</span>841    <span style="text-decoration: underline;">6</span>000 <span style="text-decoration: underline;">1</span>487<span style="text-decoration: underline;">954</span>709. <span style="text-decoration: underline;">1</span>487<span style="text-decoration: underline;">954</span>709. -<span style="color: #BB0000;">69.7</span> 22.9  -<span style="color: #BB0000;">76.8</span>  1.88 0.035<span style="text-decoration: underline;">6</span> 0.004<span style="text-decoration: underline;">7</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> 23<span style="text-decoration: underline;">306</span>413 1<span style="text-decoration: underline;">838</span>841    <span style="text-decoration: underline;">6</span>000 <span style="text-decoration: underline;">1</span>487<span style="text-decoration: underline;">954</span>759. <span style="text-decoration: underline;">1</span>487<span style="text-decoration: underline;">954</span>759. -<span style="color: #BB0000;">69.3</span> 17.8  -<span style="color: #BB0000;">76.4</span>  1.88 0.071<span style="text-decoration: underline;">6</span> 0.002<span style="text-decoration: underline;">2</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 23<span style="text-decoration: underline;">322</span>817 1<span style="text-decoration: underline;">846</span>692    <span style="text-decoration: underline;">6</span>000 <span style="text-decoration: underline;">1</span>488<span style="text-decoration: underline;">002</span>715. <span style="text-decoration: underline;">1</span>488<span style="text-decoration: underline;">002</span>715. -<span style="color: #BB0000;">67.3</span> 15.0  -<span style="color: #BB0000;">75.3</span>  1.91 0.116  0.004<span style="text-decoration: underline;">6</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> 23<span style="text-decoration: underline;">322</span>818 1<span style="text-decoration: underline;">846</span>692    <span style="text-decoration: underline;">6</span>000 <span style="text-decoration: underline;">1</span>488<span style="text-decoration: underline;">002</span>746. <span style="text-decoration: underline;">1</span>488<span style="text-decoration: underline;">002</span>746. -<span style="color: #BB0000;">67.9</span> 21.5  -<span style="color: #BB0000;">76.0</span>  2.00 0.166  0.004<span style="text-decoration: underline;">8</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ more rows</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 51 more variables: burstSlop &lt;dbl&gt;, done &lt;int&gt;, motusTagID &lt;int&gt;, ambigID &lt;int&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   port &lt;chr&gt;, nodeNum &lt;chr&gt;, runLen &lt;int&gt;, motusFilter &lt;dbl&gt;, bootnum &lt;int&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   tagProjID &lt;int&gt;, mfgID &lt;chr&gt;, tagType &lt;chr&gt;, codeSet &lt;chr&gt;, mfg &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   tagModel &lt;chr&gt;, tagLifespan &lt;int&gt;, nomFreq &lt;dbl&gt;, tagBI &lt;dbl&gt;, pulseLen &lt;dbl&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   tagDeployID &lt;int&gt;, speciesID &lt;int&gt;, markerNumber &lt;chr&gt;, markerType &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   tagDeployStart &lt;dbl&gt;, tagDeployEnd &lt;dbl&gt;, tagDepLat &lt;dbl&gt;, tagDepLon &lt;dbl&gt;, …</span></span></span></code></pre>
+<span><span class="co">##       &lt;int&gt;   &lt;int&gt;   &lt;int&gt;       &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span><span class="co">##  1 23271881 1822216    6000 1487894945. 1487894945. -68.2 10.9  -76.3  2.07 0.127  0.0034</span></span>
+<span><span class="co">##  2 23271882 1822216    6000 1487894995. 1487894995. -67.9 18.9  -75.7  1.98 0.185  0.0019</span></span>
+<span><span class="co">##  3 23284651 1828340    6000 1487916706. 1487916706. -68.7 34.9  -76.4  2.00 0.11   0.0045</span></span>
+<span><span class="co">##  4 23284652 1828340    6000 1487916736. 1487916736. -68.9 15.3  -76.7  1.90 0.0315 0.0047</span></span>
+<span><span class="co">##  5 23306136 1838711    6000 1487954561. 1487954561. -68.1  8.84 -76.9  1.92 0.0351 0.0047</span></span>
+<span><span class="co">##  6 23306137 1838711    6000 1487954612. 1487954612. -69.3 14.8  -76.4  1.91 0.0675 0.0013</span></span>
+<span><span class="co">##  7 23306412 1838841    6000 1487954709. 1487954709. -69.7 22.9  -76.8  1.88 0.0356 0.0047</span></span>
+<span><span class="co">##  8 23306413 1838841    6000 1487954759. 1487954759. -69.3 17.8  -76.4  1.88 0.0716 0.0022</span></span>
+<span><span class="co">##  9 23322817 1846692    6000 1488002715. 1488002715. -67.3 15.0  -75.3  1.91 0.116  0.0046</span></span>
+<span><span class="co">## 10 23322818 1846692    6000 1488002746. 1488002746. -67.9 21.5  -76.0  2.00 0.166  0.0048</span></span>
+<span><span class="co">## # ℹ more rows</span></span>
+<span><span class="co">## # ℹ 51 more variables: burstSlop &lt;dbl&gt;, done &lt;int&gt;, motusTagID &lt;int&gt;, ambigID &lt;int&gt;,</span></span>
+<span><span class="co">## #   port &lt;chr&gt;, nodeNum &lt;chr&gt;, runLen &lt;int&gt;, motusFilter &lt;dbl&gt;, bootnum &lt;int&gt;,</span></span>
+<span><span class="co">## #   tagProjID &lt;int&gt;, mfgID &lt;chr&gt;, tagType &lt;chr&gt;, codeSet &lt;chr&gt;, mfg &lt;chr&gt;,</span></span>
+<span><span class="co">## #   tagModel &lt;chr&gt;, tagLifespan &lt;int&gt;, nomFreq &lt;dbl&gt;, tagBI &lt;dbl&gt;, pulseLen &lt;dbl&gt;,</span></span>
+<span><span class="co">## #   tagDeployID &lt;int&gt;, speciesID &lt;int&gt;, markerNumber &lt;chr&gt;, markerType &lt;chr&gt;,</span></span>
+<span><span class="co">## #   tagDeployStart &lt;dbl&gt;, tagDeployEnd &lt;dbl&gt;, tagDepLat &lt;dbl&gt;, tagDepLon &lt;dbl&gt;, …</span></span></code></pre>
 <p>Deprecated batches can also be removed with the
 <code><a href="../reference/deprecateBatches.html">deprecateBatches()</a></code> function, which, by default, fetches the
 update-to-date record of deprecated batches and then removes them.</p>
@@ -174,29 +174,29 @@ the data</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql_motus</span>, <span class="st">"alltags"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">batchID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6000</span>, <span class="fl">6001</span>, <span class="fl">6002</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A query:  ?? x 62</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 62 variables: hitID &lt;int&gt;, runID &lt;int&gt;, batchID &lt;int&gt;, ts &lt;dbl&gt;, tsCorrected &lt;lgl&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   sig &lt;dbl&gt;, sigsd &lt;dbl&gt;, noise &lt;dbl&gt;, freq &lt;dbl&gt;, freqsd &lt;dbl&gt;, slop &lt;dbl&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   burstSlop &lt;dbl&gt;, done &lt;int&gt;, motusTagID &lt;lgl&gt;, ambigID &lt;int&gt;, port &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   nodeNum &lt;chr&gt;, runLen &lt;int&gt;, motusFilter &lt;dbl&gt;, bootnum &lt;int&gt;, tagProjID &lt;int&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   mfgID &lt;chr&gt;, tagType &lt;chr&gt;, codeSet &lt;chr&gt;, mfg &lt;chr&gt;, tagModel &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   tagLifespan &lt;int&gt;, nomFreq &lt;dbl&gt;, tagBI &lt;dbl&gt;, pulseLen &lt;dbl&gt;, tagDeployID &lt;int&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   speciesID &lt;int&gt;, markerNumber &lt;chr&gt;, markerType &lt;chr&gt;, tagDeployStart &lt;dbl&gt;, …</span></span></span></code></pre>
+<pre><code><span><span class="co">## # Source:   SQL [?? x 62]</span></span>
+<span><span class="co">## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus]</span></span>
+<span><span class="co">## # ℹ 62 variables: hitID &lt;int&gt;, runID &lt;int&gt;, batchID &lt;int&gt;, ts &lt;dbl&gt;, tsCorrected &lt;lgl&gt;,</span></span>
+<span><span class="co">## #   sig &lt;dbl&gt;, sigsd &lt;dbl&gt;, noise &lt;dbl&gt;, freq &lt;dbl&gt;, freqsd &lt;dbl&gt;, slop &lt;dbl&gt;,</span></span>
+<span><span class="co">## #   burstSlop &lt;dbl&gt;, done &lt;int&gt;, motusTagID &lt;lgl&gt;, ambigID &lt;int&gt;, port &lt;chr&gt;,</span></span>
+<span><span class="co">## #   nodeNum &lt;chr&gt;, runLen &lt;int&gt;, motusFilter &lt;dbl&gt;, bootnum &lt;int&gt;, tagProjID &lt;int&gt;,</span></span>
+<span><span class="co">## #   mfgID &lt;chr&gt;, tagType &lt;chr&gt;, codeSet &lt;chr&gt;, mfg &lt;chr&gt;, tagModel &lt;chr&gt;,</span></span>
+<span><span class="co">## #   tagLifespan &lt;int&gt;, nomFreq &lt;dbl&gt;, tagBI &lt;dbl&gt;, pulseLen &lt;dbl&gt;, tagDeployID &lt;int&gt;,</span></span>
+<span><span class="co">## #   speciesID &lt;int&gt;, markerNumber &lt;chr&gt;, markerType &lt;chr&gt;, tagDeployStart &lt;dbl&gt;, …</span></span></code></pre>
 <p>Also that the <code>deprecated</code> table now lists
 <code>removed</code> as 1.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql_motus</span>, <span class="st">"deprecated"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A query:  ?? x 3</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span></span>
+<pre><code><span><span class="co">## # Source:   table&lt;`deprecated`&gt; [?? x 3]</span></span>
+<span><span class="co">## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus]</span></span>
 <span><span class="co">##   batchID batchFilter removed</span></span>
-<span><span class="co">##     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span>    <span style="text-decoration: underline;">6</span>000           4       1</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span>    <span style="text-decoration: underline;">6</span>001           4       1</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span>    <span style="text-decoration: underline;">6</span>002           4       1</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span>    <span style="text-decoration: underline;">6</span>003           4       1</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">5</span>    <span style="text-decoration: underline;">6</span>004           4       1</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">6</span>    <span style="text-decoration: underline;">6</span>005           4       1</span></span></code></pre>
+<span><span class="co">##     &lt;int&gt;       &lt;int&gt;   &lt;int&gt;</span></span>
+<span><span class="co">## 1    6000           4       1</span></span>
+<span><span class="co">## 2    6001           4       1</span></span>
+<span><span class="co">## 3    6002           4       1</span></span>
+<span><span class="co">## 4    6003           4       1</span></span>
+<span><span class="co">## 5    6004           4       1</span></span>
+<span><span class="co">## 6    6005           4       1</span></span></code></pre>
 <div class="section level2">
 <h2 id="why-not-remove-deprecated">Why <strong>not</strong> remove deprecated batches?<a class="anchor" aria-label="anchor" href="#why-not-remove-deprecated"></a>
 </h2>

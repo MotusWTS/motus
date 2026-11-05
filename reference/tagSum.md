@@ -79,7 +79,7 @@ sql_motus <- tagmeSample()
 
 # Summarize tags
 tag_summary <- tagSum(sql_motus)
-#> 'df_src' is a complete motus data base; using 'alltagsGPS'
+#> 'df_src' is a complete motus data base, using 'alltagsGPS' view
 
 # For specific SQLite table/view (needs gpsLat/gpsLon) --------------
 library(dplyr)

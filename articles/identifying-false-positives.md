@@ -103,10 +103,12 @@ Sys.setenv(tz="GMT")
 
 # load required packages
 library(motus)
-library(rms) # For modelling
 library(ggplot2)
 library(dplyr)
 library(lubridate)
+
+# We also use the rms package, but will call that function directly with 
+# rms::lrm() when require
 
 # set base theme for plots
 theme_set(theme_bw(base_size = 18))
@@ -248,7 +250,7 @@ rm(plotdata)
 p1
 ```
 
-![](identifying-false-positives_files/figure-html/unnamed-chunk-5-1.png)
+![](figures/false_pos_unnamed-chunk-5-1.png)
 
 ## Step 2 – Identification of potential diagnostic parameters
 
@@ -302,7 +304,7 @@ rm(plotdata)
 p2
 ```
 
-![](identifying-false-positives_files/figure-html/unnamed-chunk-6-1.png)
+![](figures/false_pos_unnamed-chunk-6-1.png)
 
 Motus allows a certain time offset (±4 ms) between the observed burst
 interval and the expected burst interval recorded at tag registration
@@ -395,7 +397,7 @@ rm(plotdata)
 p3
 ```
 
-![](identifying-false-positives_files/figure-html/unnamed-chunk-7-1.png)
+![](figures/false_pos_unnamed-chunk-7-1.png)
 
 In the plots above, we can see that detections we have classified as
 false positives tend to have more runs per hour and a higher proportion
@@ -456,7 +458,7 @@ rm(plotdata)
 p4
 ```
 
-![](identifying-false-positives_files/figure-html/unnamed-chunk-9-1.png)
+![](figures/false_pos_unnamed-chunk-9-1.png)
 
 ## Step 3 – Prediction of the probability of being a false positive
 
@@ -539,9 +541,10 @@ summary(M)
 ``` r
 
 # goodness of fit parameters
-MRS <- lrm(category ~ meanSigSD + meanNoise + meanFreqSD + meanSlop + 
-           meanBurstSlop + numRuns + propRS + tagPropRS + nContRuns + nPorts,
-           data = modeldata)
+MRS <- rms::lrm(
+  category ~ meanSigSD + meanNoise + meanFreqSD + meanSlop + meanBurstSlop + 
+    numRuns + propRS + tagPropRS + nContRuns + nPorts,
+  data = modeldata)
 
 MRS$stats[10] # Nagelkerke's pseudo R^2
 ```
@@ -576,7 +579,7 @@ p5 <- ggplot(data = runFeat, aes(x = probBad, group = category, colour = categor
 p5
 ```
 
-![](identifying-false-positives_files/figure-html/unnamed-chunk-11-1.png)
+![](figures/false_pos_unnamed-chunk-11-1.png)
 
 We can see that many runs we classified as ‘bad’ do have a high
 probability of being false positives as predicted by the model and few
@@ -616,7 +619,10 @@ rm(runsKeep)
 p5 + geom_vline(xintercept = 0.7, linetype = "dashed")
 ```
 
-![](identifying-false-positives_files/figure-html/unnamed-chunk-12-1.png)
+![plot of chunk
+unnamed-chunk-12](articles/articles/figures/false_pos_unnamed-chunk-12-1.png)
+
+plot of chunk unnamed-chunk-12
 
 **Note:** We used the three characteristics `runLen`, `propMiss`, and
 `deltaMeanBI` when assigning the *a priori* classification of detections

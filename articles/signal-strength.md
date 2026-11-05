@@ -1,12 +1,12 @@
 # Plotting signal strength vs. time
 
 A common diagnostic plot used when exploring Motus data is a signal
-strength vs. time plot.
+strength vs. time plot.
 
 These plots look at how the value of signal strength (`sig`) changes
 over time with each hit.
 
-![](signal-strength_files/figure-html/unnamed-chunk-2-1.png)
+![](figures/sig_unnamed-chunk-2-1.png)
 
 A couple of things to note:
 
@@ -41,20 +41,24 @@ out.
 ``` r
 
 df_tags <- tbl(tags, "alltags") %>%
-  filter(!is.na(recvDeployLat)) %>%  # Omit unknown receiver locations
+  filter(!is.na(recvDeployLat)) %>% # Omit unknown receiver locations
   collect() %>%
-  mutate(time = as_datetime(ts),
-         date = as_date(time),
-         ambig = if_else(!is.na(ambigID), "ambiguous tag", "okay tag"),
-         # Create antenna bearing category
-         antBearing_cat = case_when(antBearing > 315 & antBearing < 45 ~ "N",
-                                     antBearing < 135 ~ "E",
-                                     antBearing < 225 ~ "S",
-                                     antBearing < 315 ~ "W"),
-         # Create run length category
-         runLen_cat = cut(runLen, breaks = c(0, 5, 10, 20, Inf)),
-         # Create hour bin category
-         hourBin = hour(time))
+  mutate(
+    time = as_datetime(ts),
+    date = as_date(time),
+    ambig = if_else(!is.na(ambigID), "ambiguous tag", "okay tag"),
+    # Create antenna bearing category
+    antBearing_cat = case_when(
+      antBearing > 315 & antBearing < 45 ~ "N",
+      antBearing < 135 ~ "E",
+      antBearing < 225 ~ "S",
+      antBearing < 315 ~ "W"
+    ),
+    # Create run length category
+    runLen_cat = cut(runLen, breaks = c(0, 5, 10, 20, Inf)),
+    # Create hour bin category
+    hourBin = hour(time)
+  )
 ```
 
 ## Exploring data
@@ -66,14 +70,14 @@ examples of a fly by based on the time by signal strength.
 
 ``` r
 
-ggplot(data = filter(df_tags, motusTagID == 16039), aes(x = time, y = sig)) + 
+ggplot(data = filter(df_tags, motusTagID == 16039), aes(x = time, y = sig)) +
   geom_point() +
   theme_bw() +
   labs(x = "Time", y = "Signal strength") +
-  facet_wrap(~ date, scales = "free", ncol = 3)
+  facet_wrap(~date, scales = "free", ncol = 3)
 ```
 
-![](signal-strength_files/figure-html/unnamed-chunk-5-1.png)
+![](figures/sig_unnamed-chunk-5-1.png)
 
 Creating these plots can yield a lot of information, especially if we
 start coding the symbols to help us out.
@@ -85,17 +89,19 @@ this by ‘binning’ (categorizing) run lengths to catch short runs.
 
 ``` r
 
-ggplot(data = filter(df_tags, motusTagID == 16039), 
-       aes(x = time, y = sig, colour = runLen_cat)) + 
+ggplot(
+  data = filter(df_tags, motusTagID == 16039),
+  aes(x = time, y = sig, colour = runLen_cat)
+) +
   geom_point() +
   theme_bw() +
   theme(legend.position = "top") +
   labs(x = "Time", y = "Signal strength") +
   scale_colour_viridis_d(end = 0.7) +
-  facet_wrap(~ date, scales = "free", ncol = 3)
+  facet_wrap(~date, scales = "free", ncol = 3)
 ```
 
-![](signal-strength_files/figure-html/unnamed-chunk-6-1.png)
+![](figures/sig_unnamed-chunk-6-1.png)
 
 ### Adding antenna bearings
 
@@ -106,38 +112,44 @@ to define general antenna directions.
 
 ``` r
 
-ggplot(data = filter(df_tags, motusTagID == 16039), 
-       aes(x = time, y = sig, colour = runLen_cat, shape = antBearing_cat)) + 
-  geom_point(size = 8) + 
+ggplot(
+  data = filter(df_tags, motusTagID == 16039),
+  aes(x = time, y = sig, colour = runLen_cat, shape = antBearing_cat)
+) +
+  geom_point(size = 8) +
   theme_bw() +
   theme(legend.position = "top") +
   labs(x = "Time", y = "Signal strength") +
   scale_colour_viridis_d(end = 0.7) +
-  scale_shape_manual(values = c("N" = "\u2191", "S" = "\u2193",
-                                "E" = "\u2192", "W" = "\u2190"), 
-                     na.value = "\u25AA") +
-  facet_wrap(~ date, scales = "free", ncol = 3)
+  scale_shape_manual(
+    values = c("N" = "\u2191", "S" = "\u2193", "E" = "\u2192", "W" = "\u2190"),
+    na.value = "\u25AA"
+  ) +
+  facet_wrap(~date, scales = "free", ncol = 3)
 ```
 
-![](signal-strength_files/figure-html/unnamed-chunk-7-1.png)
+![](figures/sig_unnamed-chunk-7-1.png)
 
 We can also look more carefully to get a better idea of what’s going on.
 
 ``` r
 
-ggplot(data = filter(df_tags, motusTagID == 16039, date == "2015-08-31"), 
-       aes(x = time, y = sig, colour = runLen_cat, shape = antBearing_cat)) + 
-  geom_point(size = 8) + 
+ggplot(
+  data = filter(df_tags, motusTagID == 16039, date == "2015-08-31"),
+  aes(x = time, y = sig, colour = runLen_cat, shape = antBearing_cat)
+) +
+  geom_point(size = 8) +
   theme_bw() +
   labs(x = "Time", y = "Signal strength") +
   scale_colour_viridis_d(end = 0.7) +
-  scale_shape_manual(values = c("N" = "\u2191", "S" = "\u2193",
-                                "E" = "\u2192", "W" = "\u2190"), 
-                     na.value = "\u25AA") +
-  facet_wrap( ~ hourBin, scales = "free", ncol = 3)
+  scale_shape_manual(
+    values = c("N" = "\u2191", "S" = "\u2193", "E" = "\u2192", "W" = "\u2190"),
+    na.value = "\u25AA"
+  ) +
+  facet_wrap(~hourBin, scales = "free", ncol = 3)
 ```
 
-![](signal-strength_files/figure-html/unnamed-chunk-8-1.png)
+![](figures/sig_unnamed-chunk-8-1.png)
 
 ### By receiver latitude
 
@@ -149,52 +161,61 @@ In this case we see a steady northern direction in the early fall.
 
 ``` r
 
-ggplot(data = filter(df_tags, motusTagID == 16039, date < "2015-10-01"), 
-       aes(x = time, y = sig, colour = runLen_cat, shape = antBearing_cat)) + 
-  geom_point(size = 8) + 
+ggplot(
+  data = filter(df_tags, motusTagID == 16039, date < "2015-10-01"),
+  aes(x = time, y = sig, colour = runLen_cat, shape = antBearing_cat)
+) +
+  geom_point(size = 8) +
   theme_bw() +
   labs(x = "Time", y = "Signal strength") +
   scale_colour_viridis_d(end = 0.7) +
-  scale_shape_manual(values = c("N" = "\u2191", "S" = "\u2193",
-                                "E" = "\u2192", "W" = "\u2190"), 
-                     na.value = "\u25AA") +
+  scale_shape_manual(
+    values = c("N" = "\u2191", "S" = "\u2193", "E" = "\u2192", "W" = "\u2190"),
+    na.value = "\u25AA"
+  ) +
   facet_wrap(~recvDeployLat, ncol = 1, scales = "free_y")
 ```
 
-![](signal-strength_files/figure-html/unnamed-chunk-9-1.png)
+![](figures/sig_unnamed-chunk-9-1.png)
 
 The best of both worlds is to use the patchwork package to compare
 figures.
 
 ``` r
 
-g1 <- ggplot(data = filter(df_tags, motusTagID == 16039, date < "2015-10-01"), 
-       aes(x = time, y = sig, colour = runLen_cat, shape = antBearing_cat)) + 
-  geom_point(size = 8) + 
+g1 <- ggplot(
+  data = filter(df_tags, motusTagID == 16039, date < "2015-10-01"),
+  aes(x = time, y = sig, colour = runLen_cat, shape = antBearing_cat)
+) +
+  geom_point(size = 8) +
   theme_bw() +
   labs(x = "Time", y = "Signal strength") +
   scale_colour_viridis_d(end = 0.7) +
-  scale_shape_manual(values = c("N" = "\u2191", "S" = "\u2193",
-                                "E" = "\u2192", "W" = "\u2190"), 
-                     na.value = "\u25AA") +
+  scale_shape_manual(
+    values = c("N" = "\u2191", "S" = "\u2193", "E" = "\u2192", "W" = "\u2190"),
+    na.value = "\u25AA"
+  ) +
   facet_wrap(~recvDeployLat, ncol = 1, scales = "free_y")
 
-g2 <- ggplot(data = filter(df_tags, motusTagID == 16039, date < "2015-10-01"), 
-       aes(x = time, y = sig, colour = runLen_cat, shape = antBearing_cat)) + 
-  geom_point(size = 4) + 
+g2 <- ggplot(
+  data = filter(df_tags, motusTagID == 16039, date < "2015-10-01"),
+  aes(x = time, y = sig, colour = runLen_cat, shape = antBearing_cat)
+) +
+  geom_point(size = 4) +
   theme_bw() +
   labs(x = "Time", y = "Signal strength") +
   scale_colour_viridis_d(end = 0.7) +
-  scale_shape_manual(values = c("N" = "\u2191", "S" = "\u2193",
-                                "E" = "\u2192", "W" = "\u2190"), 
-                     na.value = "\u25AA") +
+  scale_shape_manual(
+    values = c("N" = "\u2191", "S" = "\u2193", "E" = "\u2192", "W" = "\u2190"),
+    na.value = "\u25AA"
+  ) +
   facet_wrap(~recvDeployLat, ncol = 1, scales = "free")
 
 
 g1 + g2 + plot_layout(widths = c(4, 1), guides = "collect")
 ```
 
-![](signal-strength_files/figure-html/unnamed-chunk-10-1.png)
+![](figures/sig_unnamed-chunk-10-1.png)
 
 ## Highlighting problems
 
@@ -203,18 +224,21 @@ highlight hits that have been flagged by `motusFilter`.
 
 ``` r
 
-ggplot(data = filter(df_tags, motusTagID == "24298", date == "2017-05-18"), 
-       aes(x = time, y = sig, colour = factor(motusFilter), shape = antBearing_cat)) + 
-  geom_point(size = 8) + 
+ggplot(
+  data = filter(df_tags, motusTagID == "24298", date == "2017-05-18"),
+  aes(x = time, y = sig, colour = factor(motusFilter), shape = antBearing_cat)
+) +
+  geom_point(size = 8) +
   theme_bw() +
   labs(x = "Time", y = "Signal strength") +
   scale_colour_manual(values = c("1" = "black", "0" = "red")) +
-  scale_shape_manual(values = c("N" = "\u2191", "S" = "\u2193",
-                                "E" = "\u2192", "W" = "\u2190")) +
+  scale_shape_manual(
+    values = c("N" = "\u2191", "S" = "\u2193", "E" = "\u2192", "W" = "\u2190")
+  ) +
   facet_wrap(~recvDeployLat, ncol = 1)
 ```
 
-![](signal-strength_files/figure-html/unnamed-chunk-11-1.png)
+![](figures/sig_unnamed-chunk-11-1.png)
 
 An alternative feature that may help us identify problematic data is to
 highlight hits that have been flagged as ambiguous tags.
@@ -233,16 +257,18 @@ df_ambig <- filter(df_tags, motusTagID %in% motus_id)
 
 ``` r
 
-ggplot(data = filter(df_ambig, date < "2015-09-01"),
-       aes(x = time, y = sig, colour = ambig)) + 
-  geom_point() + 
+ggplot(
+  data = filter(df_ambig, date < "2015-09-01"),
+  aes(x = time, y = sig, colour = ambig)
+) +
+  geom_point() +
   theme_bw() +
   labs(x = "Time", y = "Signal strength") +
   scale_colour_manual(values = c("red", "black")) +
   facet_wrap(~motusTagID, ncol = 1)
 ```
 
-![](signal-strength_files/figure-html/unnamed-chunk-13-1.png)
+![](figures/sig_unnamed-chunk-13-1.png)
 
 > **What Next?** [Explore all
 > articles](https://motuswts.github.io/motus/articles/index.md)

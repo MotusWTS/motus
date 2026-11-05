@@ -7,11 +7,11 @@ containing at least latitude, longitude, and time."><meta property="og:image" co
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-dark" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">motus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,7 @@ containing at least latitude, longitude, and time."><meta property="og:image" co
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Obtain sunrise and sunset times</h1>
-      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/denis/blu_tags_data/R/sunRiseSet.R" class="external-link"><code>R/sunRiseSet.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/main/R/sunRiseSet.R" class="external-link"><code>R/sunRiseSet.R</code></a></small>
       <div class="d-none name"><code>sunRiseSet.Rd</code></div>
     </div>
 
@@ -130,7 +130,7 @@ well after sunset in the winter for that date.</p></li>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># For SQLite Data base-----------------------------------------------</span></span></span>
 <span class="r-in"><span><span class="va">sun</span> <span class="op">&lt;-</span> <span class="fu">sunRiseSet</span><span class="op">(</span><span class="va">sql_motus</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 'df_src' is a complete motus data base; using 'alltags'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 'df_src' is a complete motus data base, using 'alltags' view</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># For specific SQLite table/view ------------------------------------</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>

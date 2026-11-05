@@ -288,7 +288,7 @@ password ‘motus.sample’ in the R console when prompted by the
 function (see the [Download](#download) section above). It will look
 like this:
 
-![](images/SampleLogin.png)
+![Sample login in the console](images/SampleLogin.png)
 
 To download data for one of your own projects, change the project number
 to that of your own project in the
@@ -428,10 +428,10 @@ dbListTables(file.name)
     ##  [1] "activity"    "activityAll" "admInfo"     "allambigs"   "allruns"    
     ##  [6] "allrunsGPS"  "alltags"     "alltagsGPS"  "antDeps"     "batchRuns"  
     ## [11] "batches"     "clarified"   "deprecated"  "filters"     "gps"        
-    ## [16] "gpsAll"      "hits"        "hitsBlu"     "meta"        "nodeData"   
-    ## [21] "nodeDeps"    "projAmbig"   "projBatch"   "projs"       "recvDeps"   
-    ## [26] "recvs"       "runs"        "runsFilters" "species"     "tagAmbig"   
-    ## [31] "tagDeps"     "tagProps"    "tags"
+    ## [16] "gpsAll"      "hits"        "meta"        "nodeData"    "nodeDeps"   
+    ## [21] "projAmbig"   "projBatch"   "projs"       "recvDeps"    "recvs"      
+    ## [26] "runs"        "runsFilters" "species"     "tagAmbig"    "tagDeps"    
+    ## [31] "tagProps"    "tags"
 
 ``` r
 
@@ -466,24 +466,15 @@ these tables is a list of length 2:
 str(tbl.alltags)
 ```
 
-    ## List of 3
-    ##  $ con       :Formal class 'SQLiteConnection' [package "RSQLite"] with 8 slots
-    ##   .. ..@ ptr                :<pointer: 0x5629b05d2a70> 
-    ##   .. ..@ dbname             : chr "/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus"
-    ##   .. ..@ loadable.extensions: logi TRUE
-    ##   .. ..@ flags              : int 70
-    ##   .. ..@ vfs                : chr ""
-    ##   .. ..@ ref                :<environment: 0x5629b23f5cd8> 
-    ##   .. ..@ bigint             : chr "integer64"
-    ##   .. ..@ extended_types     : logi FALSE
+    ## List of 2
     ##  $ src       :List of 2
     ##   ..$ con  :Formal class 'SQLiteConnection' [package "RSQLite"] with 8 slots
-    ##   .. .. ..@ ptr                :<pointer: 0x5629b05d2a70> 
-    ##   .. .. ..@ dbname             : chr "/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus"
+    ##   .. .. ..@ ptr                :<pointer: 0x5c5f3c370820> 
+    ##   .. .. ..@ dbname             : chr "/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus"
     ##   .. .. ..@ loadable.extensions: logi TRUE
     ##   .. .. ..@ flags              : int 70
     ##   .. .. ..@ vfs                : chr ""
-    ##   .. .. ..@ ref                :<environment: 0x5629b23f5cd8> 
+    ##   .. .. ..@ ref                :<environment: 0x5c5f3a080050> 
     ##   .. .. ..@ bigint             : chr "integer64"
     ##   .. .. ..@ extended_types     : logi FALSE
     ##   ..$ disco: NULL

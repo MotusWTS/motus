@@ -21,11 +21,11 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-dark" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">motus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +72,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Chapter 6 - Exploring detections data</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/denis/blu_tags_data/vignettes/articles/06-exploring-data.Rmd" class="external-link"><code>vignettes/articles/06-exploring-data.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/main/vignettes/articles/06-exploring-data.Rmd" class="external-link"><code>vignettes/articles/06-exploring-data.Rmd</code></a></small>
       <div class="d-none name"><code>06-exploring-data.Rmd</code></div>
     </div>
 
@@ -186,27 +186,27 @@ data frame:</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>time <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="va">ts</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##        ts              motusTagID        runLen           speciesEN     </span></span>
-<span><span class="co">##  Min.   :1.438e+09   Min.   :10811   Min.   :   2.0   Length   :109474  </span></span>
+<span><span class="co">##  Min.   :1.438e+09   Min.   :10811   Min.   :   2.0   Length   :108999  </span></span>
 <span><span class="co">##  1st Qu.:1.476e+09   1st Qu.:22897   1st Qu.:  30.0   N.unique :    10  </span></span>
-<span><span class="co">##  Median :1.477e+09   Median :22905   Median : 120.0   N.blank  :     0  </span></span>
-<span><span class="co">##  Mean   :1.476e+09   Mean   :22639   Mean   : 353.8   Min.nchar:     6  </span></span>
+<span><span class="co">##  Median :1.477e+09   Median :22905   Median : 122.0   N.blank  :     0  </span></span>
+<span><span class="co">##  Mean   :1.476e+09   Mean   :22654   Mean   : 355.4   Min.nchar:     6  </span></span>
 <span><span class="co">##  3rd Qu.:1.477e+09   3rd Qu.:23316   3rd Qu.: 402.0   Max.nchar:    22  </span></span>
-<span><span class="co">##  Max.   :1.498e+09   Max.   :24303   Max.   :2474.0   NAs      :  2069  </span></span>
+<span><span class="co">##  Max.   :1.498e+09   Max.   :24303   Max.   :2474.0   NAs      :  2065  </span></span>
 <span><span class="co">##                                                                         </span></span>
 <span><span class="co">##    tagDepLat       tagDepLon      recvDeployLat    recvDeployLon    </span></span>
 <span><span class="co">##  Min.   :11.12   Min.   :-80.69   Min.   :-42.50   Min.   :-143.68  </span></span>
 <span><span class="co">##  1st Qu.:50.19   1st Qu.:-63.75   1st Qu.: 50.20   1st Qu.: -63.75  </span></span>
 <span><span class="co">##  Median :50.19   Median :-63.75   Median : 50.20   Median : -63.75  </span></span>
-<span><span class="co">##  Mean   :50.15   Mean   :-65.86   Mean   : 48.50   Mean   : -65.68  </span></span>
+<span><span class="co">##  Mean   :50.15   Mean   :-65.79   Mean   : 48.90   Mean   : -65.65  </span></span>
 <span><span class="co">##  3rd Qu.:50.19   3rd Qu.:-63.75   3rd Qu.: 50.20   3rd Qu.: -63.75  </span></span>
 <span><span class="co">##  Max.   :51.80   Max.   :-63.75   Max.   : 62.89   Max.   : -60.02  </span></span>
-<span><span class="co">##  NAs    :2069    NAs    :2069     NAs    :173      NAs    :173      </span></span>
+<span><span class="co">##  NAs    :2065    NAs    :2065     NAs    :173      NAs    :173      </span></span>
 <span><span class="co">##       time                    </span></span>
 <span><span class="co">##  Min.   :2015-07-23 10:10:54  </span></span>
-<span><span class="co">##  1st Qu.:2016-10-10 21:26:15  </span></span>
-<span><span class="co">##  Median :2016-10-19 15:29:45  </span></span>
-<span><span class="co">##  Mean   :2016-10-12 05:31:23  </span></span>
-<span><span class="co">##  3rd Qu.:2016-10-22 06:44:40  </span></span>
+<span><span class="co">##  1st Qu.:2016-10-10 21:16:05  </span></span>
+<span><span class="co">##  Median :2016-10-19 15:22:10  </span></span>
+<span><span class="co">##  Mean   :2016-10-11 14:20:32  </span></span>
+<span><span class="co">##  3rd Qu.:2016-10-22 05:34:53  </span></span>
 <span><span class="co">##  Max.   :2017-06-26 16:11:04  </span></span>
 <span><span class="co">## </span></span></code></pre>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
@@ -257,22 +257,22 @@ errors when plotting.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">recvDeployLat</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df_alltags_sub</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 67</span></span></span>
+<pre><code><span><span class="co">## # A tibble: 6 × 67</span></span>
 <span><span class="co">##    hitID runID batchID       ts tsCorrected   sig sigsd noise  freq freqsd  slop</span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span>  <span style="text-decoration: underline;">45</span>107  <span style="text-decoration: underline;">8</span>886      53   1.45<span style="color: #949494;">e</span>9 <span style="text-decoration: underline;">1</span>445<span style="text-decoration: underline;">858</span>390.    52     0   -<span style="color: #BB0000;">96</span>     4      0  1<span style="color: #949494;">e</span><span style="color: #BB0000;">-4</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span>  <span style="text-decoration: underline;">45</span>108  <span style="text-decoration: underline;">8</span>886      53   1.45<span style="color: #949494;">e</span>9 <span style="text-decoration: underline;">1</span>445<span style="text-decoration: underline;">858</span>429.    54     0   -<span style="color: #BB0000;">96</span>     4      0  1<span style="color: #949494;">e</span><span style="color: #BB0000;">-4</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span>  <span style="text-decoration: underline;">45</span>109  <span style="text-decoration: underline;">8</span>886      53   1.45<span style="color: #949494;">e</span>9 <span style="text-decoration: underline;">1</span>445<span style="text-decoration: underline;">858</span>477.    55     0   -<span style="color: #BB0000;">96</span>     4      0  1<span style="color: #949494;">e</span><span style="color: #BB0000;">-4</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span>  <span style="text-decoration: underline;">45</span>110  <span style="text-decoration: underline;">8</span>886      53   1.45<span style="color: #949494;">e</span>9 <span style="text-decoration: underline;">1</span>445<span style="text-decoration: underline;">858</span>516.    52     0   -<span style="color: #BB0000;">96</span>     4      0  1<span style="color: #949494;">e</span><span style="color: #BB0000;">-4</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">5</span>  <span style="text-decoration: underline;">45</span>111  <span style="text-decoration: underline;">8</span>886      53   1.45<span style="color: #949494;">e</span>9 <span style="text-decoration: underline;">1</span>445<span style="text-decoration: underline;">858</span>564.    49     0   -<span style="color: #BB0000;">96</span>     4      0  1<span style="color: #949494;">e</span><span style="color: #BB0000;">-4</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">6</span> <span style="text-decoration: underline;">199</span>885 <span style="text-decoration: underline;">23</span>305      64   1.45<span style="color: #949494;">e</span>9 <span style="text-decoration: underline;">1</span>445<span style="text-decoration: underline;">857</span>924.    33     0   -<span style="color: #BB0000;">96</span>     4      0  1<span style="color: #949494;">e</span><span style="color: #BB0000;">-4</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 56 more variables: burstSlop &lt;dbl&gt;, done &lt;int&gt;, motusTagID &lt;int&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ambigID &lt;int&gt;, port &lt;chr&gt;, nodeNum &lt;chr&gt;, runLen &lt;int&gt;, motusFilter &lt;dbl&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   bootnum &lt;int&gt;, tagProjID &lt;int&gt;, mfgID &lt;chr&gt;, tagType &lt;chr&gt;, codeSet &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   mfg &lt;chr&gt;, tagModel &lt;chr&gt;, tagLifespan &lt;int&gt;, nomFreq &lt;dbl&gt;, tagBI &lt;dbl&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   pulseLen &lt;dbl&gt;, tagDeployID &lt;int&gt;, speciesID &lt;int&gt;, markerNumber &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   markerType &lt;chr&gt;, tagDeployStart &lt;dttm&gt;, tagDeployEnd &lt;dttm&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   tagDepLat &lt;dbl&gt;, tagDepLon &lt;dbl&gt;, tagDepAlt &lt;dbl&gt;, tagDepComments &lt;chr&gt;, …</span></span></span></code></pre>
+<span><span class="co">##    &lt;int&gt; &lt;int&gt;   &lt;int&gt;    &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">## 1  45107  8886      53   1.45e9 1445858390.    52     0   -96     4      0  1e-4</span></span>
+<span><span class="co">## 2  45108  8886      53   1.45e9 1445858429.    54     0   -96     4      0  1e-4</span></span>
+<span><span class="co">## 3  45109  8886      53   1.45e9 1445858477.    55     0   -96     4      0  1e-4</span></span>
+<span><span class="co">## 4  45110  8886      53   1.45e9 1445858516.    52     0   -96     4      0  1e-4</span></span>
+<span><span class="co">## 5  45111  8886      53   1.45e9 1445858564.    49     0   -96     4      0  1e-4</span></span>
+<span><span class="co">## 6 199885 23305      64   1.45e9 1445857924.    33     0   -96     4      0  1e-4</span></span>
+<span><span class="co">## # ℹ 56 more variables: burstSlop &lt;dbl&gt;, done &lt;int&gt;, motusTagID &lt;int&gt;,</span></span>
+<span><span class="co">## #   ambigID &lt;int&gt;, port &lt;chr&gt;, nodeNum &lt;chr&gt;, runLen &lt;int&gt;, motusFilter &lt;dbl&gt;,</span></span>
+<span><span class="co">## #   bootnum &lt;int&gt;, tagProjID &lt;int&gt;, mfgID &lt;chr&gt;, tagType &lt;chr&gt;, codeSet &lt;chr&gt;,</span></span>
+<span><span class="co">## #   mfg &lt;chr&gt;, tagModel &lt;chr&gt;, tagLifespan &lt;int&gt;, nomFreq &lt;dbl&gt;, tagBI &lt;dbl&gt;,</span></span>
+<span><span class="co">## #   pulseLen &lt;dbl&gt;, tagDeployID &lt;int&gt;, speciesID &lt;int&gt;, markerNumber &lt;chr&gt;,</span></span>
+<span><span class="co">## #   markerType &lt;chr&gt;, tagDeployStart &lt;dttm&gt;, tagDeployEnd &lt;dttm&gt;,</span></span>
+<span><span class="co">## #   tagDepLat &lt;dbl&gt;, tagDepLon &lt;dbl&gt;, tagDepAlt &lt;dbl&gt;, tagDepComments &lt;chr&gt;, …</span></span></code></pre>
 <p>We can also summarize information by group, in this case
 <code>motusTagID</code>, and apply various functions to these groups
 such as getting the total number of detections (<code>n</code>) for each
@@ -289,15 +289,15 @@ detection:</p>
 <span>            totDay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">doy</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">tagSummary</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 6</span></span></span>
+<pre><code><span><span class="co">## # A tibble: 6 × 6</span></span>
 <span><span class="co">##   motusTagID  nDet nRecv timeMin             timeMax             totDay</span></span>
-<span><span class="co">##        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span>      <span style="text-decoration: underline;">16</span>011   116     1 2015-08-03 <span style="color: #949494;">06:37:11</span> 2015-08-05 <span style="color: #949494;">20:41:12</span>      3</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span>      <span style="text-decoration: underline;">16</span>035   415     5 2015-08-14 <span style="color: #949494;">17:53:49</span> 2015-09-02 <span style="color: #949494;">14:06:09</span>      6</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span>      <span style="text-decoration: underline;">16</span>036    62     1 2015-08-17 <span style="color: #949494;">21:56:44</span> 2015-08-17 <span style="color: #949494;">21:58:52</span>      1</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span>      <span style="text-decoration: underline;">16</span>037  <span style="text-decoration: underline;">1</span>278     3 2015-08-23 <span style="color: #949494;">15:13:57</span> 2015-09-08 <span style="color: #949494;">18:37:16</span>     14</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">5</span>      <span style="text-decoration: underline;">16</span>038    70     1 2015-08-20 <span style="color: #949494;">18:42:33</span> 2015-08-22 <span style="color: #949494;">22:19:37</span>      3</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">6</span>      <span style="text-decoration: underline;">16</span>039  <span style="text-decoration: underline;">1</span>044    10 2015-08-23 <span style="color: #949494;">02:28:45</span> 2015-09-19 <span style="color: #949494;">06:08:31</span>      8</span></span></code></pre>
+<span><span class="co">##        &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dttm&gt;              &lt;dttm&gt;               &lt;int&gt;</span></span>
+<span><span class="co">## 1      16011   116     1 2015-08-03 06:37:11 2015-08-05 20:41:12      3</span></span>
+<span><span class="co">## 2      16035   415     5 2015-08-14 17:53:49 2015-09-02 14:06:09      6</span></span>
+<span><span class="co">## 3      16036    62     1 2015-08-17 21:56:44 2015-08-17 21:58:52      1</span></span>
+<span><span class="co">## 4      16037  1278     3 2015-08-23 15:13:57 2015-09-08 18:37:16     14</span></span>
+<span><span class="co">## 5      16038    70     1 2015-08-20 18:42:33 2015-08-22 22:19:37      3</span></span>
+<span><span class="co">## 6      16039  1044    10 2015-08-23 02:28:45 2015-09-19 06:08:31      8</span></span></code></pre>
 <p>We can also group by multiple variables; applying the same function
 as above but now grouping by <code>motusTagID</code> and
 <code>recvDeployName</code>, we will get information for each tag
@@ -316,16 +316,16 @@ however we include this to help illustrate how grouping works:</p>
 <span>            totDay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">doy</span><span class="op">)</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">tagRecvSummary</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 7</span></span></span>
+<pre><code><span><span class="co">## # A tibble: 6 × 7</span></span>
 <span><span class="co">##   motusTagID recvDeployName  nDet nRecv timeMin             timeMax            </span></span>
-<span><span class="co">##        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>             </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span>      <span style="text-decoration: underline;">16</span>011 North Bluff      116     1 2015-08-03 <span style="color: #949494;">06:37:11</span> 2015-08-05 <span style="color: #949494;">20:41:12</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span>      <span style="text-decoration: underline;">16</span>035 Brier2            38     1 2015-09-02 <span style="color: #949494;">14:03:19</span> 2015-09-02 <span style="color: #949494;">14:06:09</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span>      <span style="text-decoration: underline;">16</span>035 D'Estimauville    32     1 2015-09-02 <span style="color: #949494;">07:58:43</span> 2015-09-02 <span style="color: #949494;">08:04:24</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span>      <span style="text-decoration: underline;">16</span>035 Netitishi        274     1 2015-08-14 <span style="color: #949494;">17:53:49</span> 2015-09-01 <span style="color: #949494;">21:35:32</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">5</span>      <span style="text-decoration: underline;">16</span>035 Southwest Head    65     1 2015-09-02 <span style="color: #949494;">13:06:13</span> 2015-09-02 <span style="color: #949494;">13:14:39</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">6</span>      <span style="text-decoration: underline;">16</span>035 Swallowtail        6     1 2015-09-02 <span style="color: #949494;">13:21:27</span> 2015-09-02 <span style="color: #949494;">13:22:22</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 1 more variable: totDay &lt;int&gt;</span></span></span></code></pre>
+<span><span class="co">##        &lt;int&gt; &lt;chr&gt;          &lt;int&gt; &lt;int&gt; &lt;dttm&gt;              &lt;dttm&gt;             </span></span>
+<span><span class="co">## 1      16011 North Bluff      116     1 2015-08-03 06:37:11 2015-08-05 20:41:12</span></span>
+<span><span class="co">## 2      16035 Brier2            38     1 2015-09-02 14:03:19 2015-09-02 14:06:09</span></span>
+<span><span class="co">## 3      16035 D'Estimauville    32     1 2015-09-02 07:58:43 2015-09-02 08:04:24</span></span>
+<span><span class="co">## 4      16035 Netitishi        274     1 2015-08-14 17:53:49 2015-09-01 21:35:32</span></span>
+<span><span class="co">## 5      16035 Southwest Head    65     1 2015-09-02 13:06:13 2015-09-02 13:14:39</span></span>
+<span><span class="co">## 6      16035 Swallowtail        6     1 2015-09-02 13:21:27 2015-09-02 13:22:22</span></span>
+<span><span class="co">## # ℹ 1 more variable: totDay &lt;int&gt;</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="plotting-your-data">Plotting your data<a class="anchor" aria-label="anchor" href="#plotting-your-data"></a>
@@ -352,7 +352,7 @@ hour, then make a basic plot of hourly detections by
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Hour"</span>, y <span class="op">=</span> <span class="st">"MotusTagID"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="06-exploring-data_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="700"></p>
+<p><img src="figures/06_unnamed-chunk-9-1.png" alt="Detection of motusTagID by hour"></p>
 <p>Let’s focus only on tags deployed in 2016, and we can colour the tags
 by species:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
@@ -362,7 +362,7 @@ by species:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Hour"</span>, y <span class="op">=</span> <span class="st">"MotusTagID"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_colour_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="06-exploring-data_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="700"></p>
+<p><img src="figures/06_unnamed-chunk-10-1.png" alt="Detection of motusTagID by hour, colour-coded by species"></p>
 <p>We can see how tags moved latitudinally by first ordering by hour,
 and colouring by <code>motusTagID</code>:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
@@ -376,7 +376,7 @@ and colouring by <code>motusTagID</code>:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_path</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Hour"</span>, y <span class="op">=</span> <span class="st">"Receiver latitude"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_colour_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"MotusTagID"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="06-exploring-data_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="700"></p>
+<p><img src="figures/06_unnamed-chunk-11-1.png" alt="Receiver latitude by hour for different tags"></p>
 <p>Now let’s look at more detailed plots of signal variation. We use the
 full <code>df_alltags_sub</code> dataframe so that we can get signal
 strength for each detection of a specific tag. Let’s examine fall 2016
@@ -391,7 +391,7 @@ name, ordered by decreasing latitude:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Time"</span>, y <span class="op">=</span> <span class="st">"Signal strength"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">recvDeployName</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></span></code></pre></div>
-<p><img src="06-exploring-data_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="" width="700"></p>
+<p><img src="figures/06_unnamed-chunk-12-1.png" alt="Signal strength over time"></p>
 <p>We use the <code><a href="../reference/sunRiseSet.html">sunRiseSet()</a></code> to get sunrise and sunset times
 for all detections. We then zoom in on a certain timeframe and add that
 information to the above plot by adding a <code><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline()</a></code>
@@ -411,7 +411,7 @@ blue line for sunset time:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Time of year"</span>, y <span class="op">=</span> <span class="st">"Signal strength"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">sunrise</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">sunset</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="06-exploring-data_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="" width="700"></p>
+<p><img src="figures/06_unnamed-chunk-13-1.png" alt="Signal strength over time with added sunrise/sunset"></p>
 <p>We can see that during this period, the tag was most often detected
 during the day, suggesting it may be actively foraging in this area
 during this time.</p>
@@ -430,7 +430,7 @@ receivers are ordered geographically. We do this for
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Time of year"</span>, y <span class="op">=</span> <span class="st">"Receiver name (ordered by latitude)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="06-exploring-data_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="" width="700"></p>
+<p><img src="figures/06_unnamed-chunk-14-1.png" alt="Detections by receiver over time"></p>
 <p>We zoom in on a section of this plot and look at antenna bearings to
 see directional movement past stations:</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
@@ -443,7 +443,7 @@ see directional movement past stations:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Time of day"</span>, y <span class="op">=</span> <span class="st">"Signal strength"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_color_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Antenna bearing"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">recvDeployName</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></span></code></pre></div>
-<p><img src="06-exploring-data_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" alt="" width="700"></p>
+<p><img src="figures/06_unnamed-chunk-15-1.png" alt="Signal strength over time of day for different stations and antenna"></p>
 <p>This plot shows the typical fly-by pattern of a migrating animal,
 with signal strength increasing and then decreasing as the tag moves
 through the beams of the antennas.</p>
@@ -535,9 +535,9 @@ deployed.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">df_tmp</span>, </span>
 <span>             <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">tagDepLon</span>, y <span class="op">=</span> <span class="va">tagDepLat</span><span class="op">)</span>, colour <span class="op">=</span> <span class="st">"red"</span>, shape <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_colour_discrete</a></span><span class="op">(</span><span class="st">"motusTagID"</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="06-exploring-data_files/figure-html/unnamed-chunk-19-1.png" class="r-plt" alt="" width="700">
-We can also add points for all receivers that were active, but did not
-detect these birds during a certain time period if we have already
+<p><img src="figures/06_unnamed-chunk-19-1.png" alt="Map of individual tag paths"></p>
+<p>We can also add points for all receivers that were active, but did
+not detect these birds during a certain time period if we have already
 downloaded all metadata.</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get receiver metadata</span></span>
@@ -578,7 +578,9 @@ downloaded all metadata.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">df_tmp</span>, </span>
 <span>             <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">tagDepLon</span>, y <span class="op">=</span> <span class="va">tagDepLat</span><span class="op">)</span>, colour <span class="op">=</span> <span class="st">"red"</span>, shape <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_colour_discrete</a></span><span class="op">(</span><span class="st">"motusTagID"</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="06-exploring-data_files/figure-html/unnamed-chunk-20-1.png" class="r-plt" alt="" width="960"></p>
+<pre><code><span><span class="co">## Warning: Removed 1 row containing missing values or values outside the scale range</span></span>
+<span><span class="co">## (`geom_point()`).</span></span></code></pre>
+<p><img src="figures/06_unnamed-chunk-20-1.png" alt="Map of individual tag paths showing all active receivers"></p>
 </div>
 <div class="section level3">
 <h3 id="mapping-with-the-ggspatial-package">Mapping with the <code>ggspatial</code> package<a class="anchor" aria-label="anchor" href="#mapping-with-the-ggspatial-package"></a>
@@ -595,7 +597,7 @@ among others).</p>
 detections by <code>motusTagID.</code></p>
 <p>Remember that base maps generally require attribution in
 publications.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://paleolimbot.github.io/ggspatial/" class="external-link">ggspatial</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># just use the tags that we have examined carefully and filtered (in the</span></span>
@@ -618,8 +620,8 @@ publications.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">df_points</span>, shape <span class="op">=</span> <span class="fl">21</span>, colour <span class="op">=</span> <span class="st">"black"</span>, fill <span class="op">=</span> <span class="st">"yellow"</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_d</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"MotusTagID"</span>, end <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Map data from OpenStreetMap"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##   |                                                                              |                                                                      |   0%  |                                                                              |==================                                                    |  25%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================================                  |  75%  |                                                                              |======================================================================| 100%</span></span></code></pre>
-<p><img src="06-exploring-data_files/figure-html/unnamed-chunk-21-1.png" class="r-plt" alt="" width="700"></p>
+<pre><code><span><span class="co">## Zoom: 4</span></span></code></pre>
+<p><img src="figures/06_unnamed-chunk-21-1.png" alt="Map of individual tag paths"></p>
 <p>See also the <code><a href="../reference/plotRouteMap.html">plotRouteMap()</a></code> for a shortcut function
 which will produce a similar plot of your entire data base (optionally
 limited by date).</p>

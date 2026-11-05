@@ -19,7 +19,7 @@ gps_tags
 ```
 
     ## <SQLiteConnection>
-    ##   Path: /home/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus
+    ##   Path: /home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/gps_sample.motus
     ##   Extensions: TRUE
 
 If your data has gps point, you should be able to follow along using
@@ -38,8 +38,8 @@ GPS points are stored in the `gps` table.
 tbl(gps_tags, "gps")
 ```
 
-    ## # A query:  ?? x 11
-    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus]
+    ## # Source:   table<`gps`> [?? x 11]
+    ## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/gps_sample.motus]
     ##      gpsID batchID        ts gpsts   lat    lon    alt quality lat_mean lon_mean
     ##      <int>   <int>     <dbl> <dbl> <dbl>  <dbl>  <dbl>   <int>    <dbl>    <dbl>
     ##  1  313414  127792    1.51e9    NA  33.5 -104.  1074        NA       NA       NA
@@ -74,8 +74,8 @@ tbl(gps_tags, "alltagsGPS") %>%
   select(hitID, runID, batchID, ts, gpsLat, gpsLon, gpsAlt)
 ```
 
-    ## # A query:  ?? x 7
-    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus]
+    ## # Source:   SQL [?? x 7]
+    ## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/gps_sample.motus]
     ##       hitID   runID batchID          ts gpsLat gpsLon gpsAlt
     ##       <int>   <int>   <int>       <dbl>  <dbl>  <dbl>  <dbl>
     ##  1 32811108 7984227  118721 1509139743.     NA     NA     NA
@@ -100,8 +100,8 @@ tbl(gps_tags, "alltagsGPS") %>%
   filter(!is.na(gpsLat))
 ```
 
-    ## # A query:  ?? x 7
-    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus]
+    ## # Source:   SQL [?? x 7]
+    ## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/gps_sample.motus]
     ##        hitID    runID batchID          ts gpsLat gpsLon gpsAlt
     ##        <int>    <int>   <int>       <dbl>  <dbl>  <dbl>  <dbl>
     ##  1 449016552 24439773  370452 1457111891.   36.5  -76.0   -3.4

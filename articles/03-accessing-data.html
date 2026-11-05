@@ -21,11 +21,11 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-dark" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">motus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +72,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Chapter 3 - Accessing detections data</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/denis/blu_tags_data/vignettes/articles/03-accessing-data.Rmd" class="external-link"><code>vignettes/articles/03-accessing-data.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/main/vignettes/articles/03-accessing-data.Rmd" class="external-link"><code>vignettes/articles/03-accessing-data.Rmd</code></a></small>
       <div class="d-none name"><code>03-accessing-data.Rmd</code></div>
     </div>
 
@@ -393,7 +393,7 @@ Motus staff or the project principal investigator.</p>
 and password ‘motus.sample’ in the R console when prompted by the
 <code><a href="../reference/tagme.html">tagme()</a></code> function (see the <a href="#download">Download</a>
 section above). It will look like this:</p>
-<p><img src="images/SampleLogin.png" class="r-plt" alt="" width="244" style="display: block; margin: auto;"></p>
+<p><img src="images/SampleLogin.png" alt="Sample login in the console" style="display: block; margin: auto;"></p>
 <p>To download data for one of your own projects, change the project
 number to that of your own project in the <code><a href="../reference/tagme.html">tagme()</a></code> call, and
 enter your own Motus login/password in the R console when prompted. If
@@ -515,10 +515,10 @@ packages (these are automatically installed when you install
 <pre><code><span><span class="co">##  [1] "activity"    "activityAll" "admInfo"     "allambigs"   "allruns"    </span></span>
 <span><span class="co">##  [6] "allrunsGPS"  "alltags"     "alltagsGPS"  "antDeps"     "batchRuns"  </span></span>
 <span><span class="co">## [11] "batches"     "clarified"   "deprecated"  "filters"     "gps"        </span></span>
-<span><span class="co">## [16] "gpsAll"      "hits"        "hitsBlu"     "meta"        "nodeData"   </span></span>
-<span><span class="co">## [21] "nodeDeps"    "projAmbig"   "projBatch"   "projs"       "recvDeps"   </span></span>
-<span><span class="co">## [26] "recvs"       "runs"        "runsFilters" "species"     "tagAmbig"   </span></span>
-<span><span class="co">## [31] "tagDeps"     "tagProps"    "tags"</span></span></code></pre>
+<span><span class="co">## [16] "gpsAll"      "hits"        "meta"        "nodeData"    "nodeDeps"   </span></span>
+<span><span class="co">## [21] "projAmbig"   "projBatch"   "projs"       "recvDeps"    "recvs"      </span></span>
+<span><span class="co">## [26] "runs"        "runsFilters" "species"     "tagAmbig"    "tagDeps"    </span></span>
+<span><span class="co">## [31] "tagProps"    "tags"</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get a list of variables in the "species" table in the .motus file.</span></span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbListFields.html" class="external-link">dbListFields</a></span><span class="op">(</span><span class="va">file.name</span>, <span class="st">"species"</span><span class="op">)</span> </span></code></pre></div>
@@ -537,24 +537,15 @@ package which we installed in <a href="02-installing-packages.html">Chapter 2</a
 underlying structure of these tables is a list of length 2:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">tbl.alltags</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## List of 3</span></span>
-<span><span class="co">##  $ con       :Formal class 'SQLiteConnection' [package "RSQLite"] with 8 slots</span></span>
-<span><span class="co">##   .. ..@ ptr                :&lt;pointer: 0x5629b05d2a70&gt; </span></span>
-<span><span class="co">##   .. ..@ dbname             : chr "/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus"</span></span>
-<span><span class="co">##   .. ..@ loadable.extensions: logi TRUE</span></span>
-<span><span class="co">##   .. ..@ flags              : int 70</span></span>
-<span><span class="co">##   .. ..@ vfs                : chr ""</span></span>
-<span><span class="co">##   .. ..@ ref                :&lt;environment: 0x5629b23f5cd8&gt; </span></span>
-<span><span class="co">##   .. ..@ bigint             : chr "integer64"</span></span>
-<span><span class="co">##   .. ..@ extended_types     : logi FALSE</span></span>
+<pre><code><span><span class="co">## List of 2</span></span>
 <span><span class="co">##  $ src       :List of 2</span></span>
 <span><span class="co">##   ..$ con  :Formal class 'SQLiteConnection' [package "RSQLite"] with 8 slots</span></span>
-<span><span class="co">##   .. .. ..@ ptr                :&lt;pointer: 0x5629b05d2a70&gt; </span></span>
-<span><span class="co">##   .. .. ..@ dbname             : chr "/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus"</span></span>
+<span><span class="co">##   .. .. ..@ ptr                :&lt;pointer: 0x5c5f3c370820&gt; </span></span>
+<span><span class="co">##   .. .. ..@ dbname             : chr "/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus"</span></span>
 <span><span class="co">##   .. .. ..@ loadable.extensions: logi TRUE</span></span>
 <span><span class="co">##   .. .. ..@ flags              : int 70</span></span>
 <span><span class="co">##   .. .. ..@ vfs                : chr ""</span></span>
-<span><span class="co">##   .. .. ..@ ref                :&lt;environment: 0x5629b23f5cd8&gt; </span></span>
+<span><span class="co">##   .. .. ..@ ref                :&lt;environment: 0x5c5f3a080050&gt; </span></span>
 <span><span class="co">##   .. .. ..@ bigint             : chr "integer64"</span></span>
 <span><span class="co">##   .. .. ..@ extended_types     : logi FALSE</span></span>
 <span><span class="co">##   ..$ disco: NULL</span></span>

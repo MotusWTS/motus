@@ -21,11 +21,11 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-dark" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">motus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +72,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>In-depth detections filtering</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/denis/blu_tags_data/vignettes/articles/filtering.Rmd" class="external-link"><code>vignettes/articles/filtering.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/main/vignettes/articles/filtering.Rmd" class="external-link"><code>vignettes/articles/filtering.Rmd</code></a></small>
       <div class="d-none name"><code>filtering.Rmd</code></div>
     </div>
 
@@ -105,21 +105,21 @@ more confident we can be that it represents a true detection.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql_motus</span>, <span class="st">"alltags"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">motusTagID</span>, <span class="va">runLen</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A query:  ?? x 5</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span></span>
+<pre><code><span><span class="co">## # Source:   SQL [?? x 5]</span></span>
+<span><span class="co">## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus]</span></span>
 <span><span class="co">##     hitID runID batchID motusTagID runLen</span></span>
-<span><span class="co">##     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span>  <span style="text-decoration: underline;">45</span>107  <span style="text-decoration: underline;">8</span>886      53      <span style="text-decoration: underline;">16</span>047      5</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span>  <span style="text-decoration: underline;">45</span>108  <span style="text-decoration: underline;">8</span>886      53      <span style="text-decoration: underline;">16</span>047      5</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span>  <span style="text-decoration: underline;">45</span>109  <span style="text-decoration: underline;">8</span>886      53      <span style="text-decoration: underline;">16</span>047      5</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span>  <span style="text-decoration: underline;">45</span>110  <span style="text-decoration: underline;">8</span>886      53      <span style="text-decoration: underline;">16</span>047      5</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span>  <span style="text-decoration: underline;">45</span>111  <span style="text-decoration: underline;">8</span>886      53      <span style="text-decoration: underline;">16</span>047      5</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> <span style="text-decoration: underline;">199</span>885 <span style="text-decoration: underline;">23</span>305      64      <span style="text-decoration: underline;">16</span>047     11</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> <span style="text-decoration: underline;">199</span>886 <span style="text-decoration: underline;">23</span>305      64      <span style="text-decoration: underline;">16</span>047     11</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> <span style="text-decoration: underline;">199</span>887 <span style="text-decoration: underline;">23</span>305      64      <span style="text-decoration: underline;">16</span>047     11</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> <span style="text-decoration: underline;">199</span>888 <span style="text-decoration: underline;">23</span>305      64      <span style="text-decoration: underline;">16</span>047     11</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> <span style="text-decoration: underline;">199</span>889 <span style="text-decoration: underline;">23</span>305      64      <span style="text-decoration: underline;">16</span>047     11</span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ more rows</span></span></span></code></pre>
+<span><span class="co">##     &lt;int&gt; &lt;int&gt;   &lt;int&gt;      &lt;int&gt;  &lt;int&gt;</span></span>
+<span><span class="co">##  1  45107  8886      53      16047      5</span></span>
+<span><span class="co">##  2  45108  8886      53      16047      5</span></span>
+<span><span class="co">##  3  45109  8886      53      16047      5</span></span>
+<span><span class="co">##  4  45110  8886      53      16047      5</span></span>
+<span><span class="co">##  5  45111  8886      53      16047      5</span></span>
+<span><span class="co">##  6 199885 23305      64      16047     11</span></span>
+<span><span class="co">##  7 199886 23305      64      16047     11</span></span>
+<span><span class="co">##  8 199887 23305      64      16047     11</span></span>
+<span><span class="co">##  9 199888 23305      64      16047     11</span></span>
+<span><span class="co">## 10 199889 23305      64      16047     11</span></span>
+<span><span class="co">## # ℹ more rows</span></span></code></pre>
 <p>However, local conditions at an individual receiver may vary in their
 level of background radio noise/interference. Sites with more background
 noise may be more prone to generating a high number of very short runs
@@ -131,21 +131,21 @@ etc.) per hour (<code>hourBin</code>).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql_motus</span>, <span class="st">"activity"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">batchID</span>, <span class="va">motusDeviceID</span>, <span class="va">ant</span>, <span class="va">hourBin</span>, <span class="va">numRuns</span>, <span class="va">run2</span>, <span class="va">run3</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A query:  ?? x 7</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span></span>
+<pre><code><span><span class="co">## # Source:   SQL [?? x 7]</span></span>
+<span><span class="co">## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus]</span></span>
 <span><span class="co">##    batchID motusDeviceID ant   hourBin numRuns  run2  run3</span></span>
-<span><span class="co">##      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span>      53           486 1      <span style="text-decoration: underline;">400</span>872       1     0     0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span>      53           486 1      <span style="text-decoration: underline;">401</span>014       1     0     0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span>      53           486 1      <span style="text-decoration: underline;">401</span>204       1     0     0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span>      53           486 -1     <span style="text-decoration: underline;">401</span>014       1     1     0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span>      53           486 -1     <span style="text-decoration: underline;">401</span>204       1     0     0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span>      53           486 2      <span style="text-decoration: underline;">401</span>012       1     0     1</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span>      53           486 2      <span style="text-decoration: underline;">401</span>014       1     1     0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span>      53           486 2      <span style="text-decoration: underline;">401</span>204       1     0     0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span>      53           486 3      <span style="text-decoration: underline;">400</span>796       1     1     0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span>      53           486 3      <span style="text-decoration: underline;">400</span>872       1     0     1</span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ more rows</span></span></span></code></pre>
+<span><span class="co">##      &lt;int&gt;         &lt;int&gt; &lt;chr&gt;   &lt;int&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt;</span></span>
+<span><span class="co">##  1      53           486 1      400872       1     0     0</span></span>
+<span><span class="co">##  2      53           486 1      401014       1     0     0</span></span>
+<span><span class="co">##  3      53           486 1      401204       1     0     0</span></span>
+<span><span class="co">##  4      53           486 -1     401014       1     1     0</span></span>
+<span><span class="co">##  5      53           486 -1     401204       1     0     0</span></span>
+<span><span class="co">##  6      53           486 2      401012       1     0     1</span></span>
+<span><span class="co">##  7      53           486 2      401014       1     1     0</span></span>
+<span><span class="co">##  8      53           486 2      401204       1     0     0</span></span>
+<span><span class="co">##  9      53           486 3      400796       1     1     0</span></span>
+<span><span class="co">## 10      53           486 3      400872       1     0     1</span></span>
+<span><span class="co">## # ℹ more rows</span></span></code></pre>
 <p>Therefore a good first pass filter should use both the length of a
 run and the amount of radio activity (number of short runs) at a given
 site to determine whether or not to remove a run of hits.</p>
@@ -211,21 +211,21 @@ are considered invalid (i.e. have a low probability of being true
 detections) and can therefore be omitted.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql_motus</span>, <span class="st">"runs"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A query:  ?? x 10</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span></span>
+<pre><code><span><span class="co">## # Source:   table&lt;`runs`&gt; [?? x 10]</span></span>
+<span><span class="co">## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus]</span></span>
 <span><span class="co">##     runID batchIDbegin     tsBegin  tsEnd  done motusTagID ant     len nodeNum motusFilter</span></span>
-<span><span class="co">##     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span>   <span style="text-decoration: underline;">8</span>886           53 <span style="text-decoration: underline;">1</span>445<span style="text-decoration: underline;">858</span>390. 1.45<span style="color: #949494;">e</span>9     1      <span style="text-decoration: underline;">16</span>047 3         5 <span style="color: #BB0000;">NA</span>                1</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span>  <span style="text-decoration: underline;">23</span>305           64 <span style="text-decoration: underline;">1</span>445<span style="text-decoration: underline;">857</span>924. 1.45<span style="color: #949494;">e</span>9     1      <span style="text-decoration: underline;">16</span>047 1        11 <span style="color: #BB0000;">NA</span>                1</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span>  <span style="text-decoration: underline;">23</span>306           64 <span style="text-decoration: underline;">1</span>445<span style="text-decoration: underline;">858</span>341. 1.45<span style="color: #949494;">e</span>9     1      <span style="text-decoration: underline;">16</span>047 3         6 <span style="color: #BB0000;">NA</span>                1</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span>  <span style="text-decoration: underline;">23</span>307           64 <span style="text-decoration: underline;">1</span>445<span style="text-decoration: underline;">858</span>497. 1.45<span style="color: #949494;">e</span>9     1      <span style="text-decoration: underline;">16</span>047 2         5 <span style="color: #BB0000;">NA</span>                1</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span>  <span style="text-decoration: underline;">23</span>308           64 <span style="text-decoration: underline;">1</span>445<span style="text-decoration: underline;">858</span>826. 1.45<span style="color: #949494;">e</span>9     1      <span style="text-decoration: underline;">16</span>047 2         5 <span style="color: #BB0000;">NA</span>                1</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> <span style="text-decoration: underline;">104</span>118          141 <span style="text-decoration: underline;">1</span>445<span style="text-decoration: underline;">858</span>904. 1.45<span style="color: #949494;">e</span>9     1      <span style="text-decoration: underline;">16</span>047 2         3 <span style="color: #BB0000;">NA</span>                0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> <span style="text-decoration: underline;">104</span>119          141 <span style="text-decoration: underline;">1</span>445<span style="text-decoration: underline;">858</span>875. 1.45<span style="color: #949494;">e</span>9     1      <span style="text-decoration: underline;">16</span>047 3         3 <span style="color: #BB0000;">NA</span>                0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> <span style="text-decoration: underline;">104</span>120          141 <span style="text-decoration: underline;">1</span>445<span style="text-decoration: underline;">858</span>933. 1.45<span style="color: #949494;">e</span>9     1      <span style="text-decoration: underline;">16</span>047 -1        2 <span style="color: #BB0000;">NA</span>                0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> <span style="text-decoration: underline;">104</span>131           97 <span style="text-decoration: underline;">1</span>445<span style="text-decoration: underline;">855</span>802. 1.45<span style="color: #949494;">e</span>9     1      <span style="text-decoration: underline;">16</span>047 2         4 <span style="color: #BB0000;">NA</span>                1</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> <span style="text-decoration: underline;">104</span>132           97 <span style="text-decoration: underline;">1</span>445<span style="text-decoration: underline;">855</span>812. 1.45<span style="color: #949494;">e</span>9     1      <span style="text-decoration: underline;">16</span>047 3         5 <span style="color: #BB0000;">NA</span>                1</span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ more rows</span></span></span></code></pre>
+<span><span class="co">##     &lt;int&gt;        &lt;int&gt;       &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt;      &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">##  1   8886           53 1445858390. 1.45e9     1      16047 3         5 &lt;NA&gt;              1</span></span>
+<span><span class="co">##  2  23305           64 1445857924. 1.45e9     1      16047 1        11 &lt;NA&gt;              1</span></span>
+<span><span class="co">##  3  23306           64 1445858341. 1.45e9     1      16047 3         6 &lt;NA&gt;              1</span></span>
+<span><span class="co">##  4  23307           64 1445858497. 1.45e9     1      16047 2         5 &lt;NA&gt;              1</span></span>
+<span><span class="co">##  5  23308           64 1445858826. 1.45e9     1      16047 2         5 &lt;NA&gt;              1</span></span>
+<span><span class="co">##  6 104118          141 1445858904. 1.45e9     1      16047 2         3 &lt;NA&gt;              0</span></span>
+<span><span class="co">##  7 104119          141 1445858875. 1.45e9     1      16047 3         3 &lt;NA&gt;              0</span></span>
+<span><span class="co">##  8 104120          141 1445858933. 1.45e9     1      16047 -1        2 &lt;NA&gt;              0</span></span>
+<span><span class="co">##  9 104131           97 1445855802. 1.45e9     1      16047 2         4 &lt;NA&gt;              1</span></span>
+<span><span class="co">## 10 104132           97 1445855812. 1.45e9     1      16047 3         5 &lt;NA&gt;              1</span></span>
+<span><span class="co">## # ℹ more rows</span></span></code></pre>
 <p>To omit runs identified as dubious by <code>motusFilter</code> we can
 use an <code><a href="https://dplyr.tidyverse.org/reference/filter-joins.html" class="external-link">anti_join()</a></code> from the <code>dplyr</code> package.</p>
 <p>First identify invalid runs with a <code>motusFilter</code> of
@@ -243,30 +243,30 @@ use an <code><a href="https://dplyr.tidyverse.org/reference/filter-joins.html" c
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">sql_motus</span>, <span class="st">"alltags"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">motusTagID</span>, <span class="va">runLen</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">runLen</span> <span class="op">&lt;=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A query:  ?? x 5</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span></span>
+<pre><code><span><span class="co">## # Source:   SQL [?? x 5]</span></span>
+<span><span class="co">## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus]</span></span>
 <span><span class="co">##     hitID  runID batchID motusTagID runLen</span></span>
-<span><span class="co">##     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> <span style="text-decoration: underline;">516</span>095 <span style="text-decoration: underline;">104</span>118     141      <span style="text-decoration: underline;">16</span>047      3</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> <span style="text-decoration: underline;">516</span>096 <span style="text-decoration: underline;">104</span>118     141      <span style="text-decoration: underline;">16</span>047      3</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> <span style="text-decoration: underline;">516</span>097 <span style="text-decoration: underline;">104</span>119     141      <span style="text-decoration: underline;">16</span>047      3</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> <span style="text-decoration: underline;">516</span>098 <span style="text-decoration: underline;">104</span>119     141      <span style="text-decoration: underline;">16</span>047      3</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> <span style="text-decoration: underline;">516</span>099 <span style="text-decoration: underline;">104</span>118     141      <span style="text-decoration: underline;">16</span>047      3</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> <span style="text-decoration: underline;">516</span>100 <span style="text-decoration: underline;">104</span>119     141      <span style="text-decoration: underline;">16</span>047      3</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> <span style="text-decoration: underline;">516</span>101 <span style="text-decoration: underline;">104</span>120     141      <span style="text-decoration: underline;">16</span>047      2</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> <span style="text-decoration: underline;">516</span>102 <span style="text-decoration: underline;">104</span>120     141      <span style="text-decoration: underline;">16</span>047      2</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> <span style="text-decoration: underline;">516</span>132 <span style="text-decoration: underline;">104</span>133      97      <span style="text-decoration: underline;">16</span>047      2</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> <span style="text-decoration: underline;">516</span>133 <span style="text-decoration: underline;">104</span>133      97      <span style="text-decoration: underline;">16</span>047      2</span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ more rows</span></span></span></code></pre>
+<span><span class="co">##     &lt;int&gt;  &lt;int&gt;   &lt;int&gt;      &lt;int&gt;  &lt;int&gt;</span></span>
+<span><span class="co">##  1 516095 104118     141      16047      3</span></span>
+<span><span class="co">##  2 516096 104118     141      16047      3</span></span>
+<span><span class="co">##  3 516097 104119     141      16047      3</span></span>
+<span><span class="co">##  4 516098 104119     141      16047      3</span></span>
+<span><span class="co">##  5 516099 104118     141      16047      3</span></span>
+<span><span class="co">##  6 516100 104119     141      16047      3</span></span>
+<span><span class="co">##  7 516101 104120     141      16047      2</span></span>
+<span><span class="co">##  8 516102 104120     141      16047      2</span></span>
+<span><span class="co">##  9 516132 104133      97      16047      2</span></span>
+<span><span class="co">## 10 516133 104133      97      16047      2</span></span>
+<span><span class="co">## # ℹ more rows</span></span></code></pre>
 <p>And compare this to our newly created <code>alltags_filtered</code>
 table</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">alltags_filtered</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">motusTagID</span>, <span class="va">runLen</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">runLen</span> <span class="op">&lt;=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A query:  ?? x 5</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 5 variables: hitID &lt;int&gt;, runID &lt;int&gt;, batchID &lt;int&gt;, motusTagID &lt;lgl&gt;, runLen &lt;int&gt;</span></span></span></code></pre>
+<pre><code><span><span class="co">## # Source:   SQL [?? x 5]</span></span>
+<span><span class="co">## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus]</span></span>
+<span><span class="co">## # ℹ 5 variables: hitID &lt;int&gt;, runID &lt;int&gt;, batchID &lt;int&gt;, motusTagID &lt;lgl&gt;, runLen &lt;int&gt;</span></span></code></pre>
 <p>No more short runs, good!</p>
 </div>
 <div class="section level3">
@@ -300,7 +300,7 @@ data sets are identical (although this won’t always be the case<a class="footn
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">waldo</span><span class="fu">::</span><span class="fu"><a href="https://waldo.r-lib.org/reference/compare.html" class="external-link">compare</a></span><span class="op">(</span><span class="va">test1</span>, <span class="va">test2</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #00BB00;">✔</span> No differences</span></span></code></pre>
+<pre><code><span><span class="co">## ✔ No differences</span></span></code></pre>
 <p>Alternatively we can change the default view used, so the
 <code><a href="../reference/filterByActivity.html">filterByActivity()</a></code> function uses the
 <code>alltagsGPS</code> view. <strong>However</strong>, on very large
@@ -327,20 +327,20 @@ column to the sample project data.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">motusTagID</span>, <span class="va">runLen</span>, <span class="va">probability</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">alltags_filtered4</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 108,999 × 6</span></span></span>
+<pre><code><span><span class="co">## # A tibble: 108,999 × 6</span></span>
 <span><span class="co">##       hitID   runID batchID motusTagID runLen probability</span></span>
-<span><span class="co">##     <span style="color: #949494; font-style: italic;">&lt;int64&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 57<span style="text-decoration: underline;">633</span>911 3<span style="text-decoration: underline;">923</span>241   <span style="text-decoration: underline;">27</span>722      <span style="text-decoration: underline;">16</span>052      2           0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 57<span style="text-decoration: underline;">633</span>913 3<span style="text-decoration: underline;">923</span>242   <span style="text-decoration: underline;">27</span>722      <span style="text-decoration: underline;">16</span>052      2           0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 57<span style="text-decoration: underline;">633</span>915 3<span style="text-decoration: underline;">923</span>243   <span style="text-decoration: underline;">27</span>722      <span style="text-decoration: underline;">16</span>052      2           0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> 57<span style="text-decoration: underline;">633</span>917 3<span style="text-decoration: underline;">923</span>244   <span style="text-decoration: underline;">27</span>722      <span style="text-decoration: underline;">16</span>052      2           0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> 57<span style="text-decoration: underline;">633</span>919 3<span style="text-decoration: underline;">923</span>245   <span style="text-decoration: underline;">27</span>722      <span style="text-decoration: underline;">16</span>052      2           0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> 57<span style="text-decoration: underline;">633</span>912 3<span style="text-decoration: underline;">923</span>241   <span style="text-decoration: underline;">27</span>722      <span style="text-decoration: underline;">16</span>052      2           0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> 57<span style="text-decoration: underline;">633</span>914 3<span style="text-decoration: underline;">923</span>242   <span style="text-decoration: underline;">27</span>722      <span style="text-decoration: underline;">16</span>052      2           0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> 57<span style="text-decoration: underline;">633</span>916 3<span style="text-decoration: underline;">923</span>243   <span style="text-decoration: underline;">27</span>722      <span style="text-decoration: underline;">16</span>052      2           0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 57<span style="text-decoration: underline;">633</span>918 3<span style="text-decoration: underline;">923</span>244   <span style="text-decoration: underline;">27</span>722      <span style="text-decoration: underline;">16</span>052      2           0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> 57<span style="text-decoration: underline;">633</span>920 3<span style="text-decoration: underline;">923</span>245   <span style="text-decoration: underline;">27</span>722      <span style="text-decoration: underline;">16</span>052      2           0</span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 108,989 more rows</span></span></span></code></pre>
+<span><span class="co">##     &lt;int64&gt;   &lt;int&gt;   &lt;int&gt;      &lt;int&gt;  &lt;int&gt;       &lt;dbl&gt;</span></span>
+<span><span class="co">##  1 57633911 3923241   27722      16052      2           0</span></span>
+<span><span class="co">##  2 57633913 3923242   27722      16052      2           0</span></span>
+<span><span class="co">##  3 57633915 3923243   27722      16052      2           0</span></span>
+<span><span class="co">##  4 57633917 3923244   27722      16052      2           0</span></span>
+<span><span class="co">##  5 57633919 3923245   27722      16052      2           0</span></span>
+<span><span class="co">##  6 57633912 3923241   27722      16052      2           0</span></span>
+<span><span class="co">##  7 57633914 3923242   27722      16052      2           0</span></span>
+<span><span class="co">##  8 57633916 3923243   27722      16052      2           0</span></span>
+<span><span class="co">##  9 57633918 3923244   27722      16052      2           0</span></span>
+<span><span class="co">## 10 57633920 3923245   27722      16052      2           0</span></span>
+<span><span class="co">## # ℹ 108,989 more rows</span></span></code></pre>
 <p>You can adjust these parameters to be <strong>less strict</strong>
 (i.e., exclude fewer detections). For example, here we exclude all runs
 of length 2 or less (<code>minLen</code>), keep all runs of length 4 or
@@ -390,17 +390,17 @@ pull out months.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">recvDeployName</span>, <span class="va">month</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>max.rl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">runLen</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## `summarise()` has regrouped the output.</span></span>
-<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Summaries were computed grouped by <span style="color: #0000BB;">recvDeployName</span> and <span style="color: #0000BB;">month</span>.</span></span>
-<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Output is grouped by <span style="color: #0000BB;">recvDeployName</span>.</span></span>
-<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Use `summarise(.groups = "drop_last")` to silence this message.</span></span>
-<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Use `summarise(.by = c(recvDeployName, month))` for per-operation grouping</span></span>
+<span><span class="co">## ℹ Summaries were computed grouped by recvDeployName and month.</span></span>
+<span><span class="co">## ℹ Output is grouped by recvDeployName.</span></span>
+<span><span class="co">## ℹ Use `summarise(.groups = "drop_last")` to silence this message.</span></span>
+<span><span class="co">## ℹ Use `summarise(.by = c(recvDeployName, month))` for per-operation grouping</span></span>
 <span><span class="co">##   (`?dplyr::dplyr_by`) instead.</span></span></code></pre>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">max_runlen</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">recvDeployName</span>, y <span class="op">=</span> <span class="va">max.rl</span>, fill <span class="op">=</span> <span class="va">month</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="filtering_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" alt="" width="50%"></p>
+<p><img src="figures/filtering_unnamed-chunk-16-1.png" alt="" width="50%"></p>
 <p>Alternatively, you can produce a list of sites where the maximum run
 length of detections was never greater than (say) 4, which may sometimes
 (but not always!) indicate they are simply false detections.</p>
@@ -410,7 +410,7 @@ length of detections was never greater than (say) 4, which may sometimes
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="filtering_files/figure-html/unnamed-chunk-17-1.png" class="r-plt" alt="" width="50%"></p>
+<p><img src="figures/filtering_unnamed-chunk-17-1.png" alt="" width="50%"></p>
 <p>It is impossible to go through every possible issue that you may
 encounter here. Users are strongly encouraged to explore their data
 fully, and make reasoned decisions on which detections are unlikely or

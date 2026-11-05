@@ -7,11 +7,11 @@ frame. Requires data containing at least latitude, longitude, and time."><meta p
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-dark" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">motus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,7 @@ frame. Requires data containing at least latitude, longitude, and time."><meta p
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Obtain time to and from sunrise/sunset</h1>
-      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/denis/blu_tags_data/R/timeToSunriset.R" class="external-link"><code>R/timeToSunriset.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/main/R/timeToSunriset.R" class="external-link"><code>R/timeToSunriset.R</code></a></small>
       <div class="d-none name"><code>timeToSunriset.Rd</code></div>
     </div>
 
@@ -129,7 +129,7 @@ for details regarding how local dates are assessed from UTC timestamps.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get sunrise and sunset information for alltags view with units in minutes</span></span></span>
 <span class="r-in"><span><span class="va">sunrise</span> <span class="op">&lt;-</span> <span class="fu">timeToSunriset</span><span class="op">(</span><span class="va">sql_motus</span>, units <span class="op">=</span> <span class="st">"mins"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 'df_src' is a complete motus data base; using 'alltags'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 'df_src' is a complete motus data base, using 'alltags' view</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

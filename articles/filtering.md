@@ -36,8 +36,8 @@ tbl(sql_motus, "alltags") %>%
   select(hitID, runID, batchID, motusTagID, runLen)
 ```
 
-    ## # A query:  ?? x 5
-    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
+    ## # Source:   SQL [?? x 5]
+    ## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus]
     ##     hitID runID batchID motusTagID runLen
     ##     <int> <int>   <int>      <int>  <int>
     ##  1  45107  8886      53      16047      5
@@ -67,8 +67,8 @@ tbl(sql_motus, "activity") %>%
   select(batchID, motusDeviceID, ant, hourBin, numRuns, run2, run3)
 ```
 
-    ## # A query:  ?? x 7
-    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
+    ## # Source:   SQL [?? x 7]
+    ## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus]
     ##    batchID motusDeviceID ant   hourBin numRuns  run2  run3
     ##      <int>         <int> <chr>   <int>   <int> <int> <int>
     ##  1      53           486 1      400872       1     0     0
@@ -135,20 +135,20 @@ detections) and can therefore be omitted.
 tbl(sql_motus, "runs")
 ```
 
-    ## # A query:  ?? x 10
-    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
+    ## # Source:   table<`runs`> [?? x 10]
+    ## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus]
     ##     runID batchIDbegin     tsBegin  tsEnd  done motusTagID ant     len nodeNum motusFilter
     ##     <int>        <int>       <dbl>  <dbl> <int>      <int> <chr> <int> <chr>         <dbl>
-    ##  1   8886           53 1445858390. 1.45e9     1      16047 3         5 NA                1
-    ##  2  23305           64 1445857924. 1.45e9     1      16047 1        11 NA                1
-    ##  3  23306           64 1445858341. 1.45e9     1      16047 3         6 NA                1
-    ##  4  23307           64 1445858497. 1.45e9     1      16047 2         5 NA                1
-    ##  5  23308           64 1445858826. 1.45e9     1      16047 2         5 NA                1
-    ##  6 104118          141 1445858904. 1.45e9     1      16047 2         3 NA                0
-    ##  7 104119          141 1445858875. 1.45e9     1      16047 3         3 NA                0
-    ##  8 104120          141 1445858933. 1.45e9     1      16047 -1        2 NA                0
-    ##  9 104131           97 1445855802. 1.45e9     1      16047 2         4 NA                1
-    ## 10 104132           97 1445855812. 1.45e9     1      16047 3         5 NA                1
+    ##  1   8886           53 1445858390. 1.45e9     1      16047 3         5 <NA>              1
+    ##  2  23305           64 1445857924. 1.45e9     1      16047 1        11 <NA>              1
+    ##  3  23306           64 1445858341. 1.45e9     1      16047 3         6 <NA>              1
+    ##  4  23307           64 1445858497. 1.45e9     1      16047 2         5 <NA>              1
+    ##  5  23308           64 1445858826. 1.45e9     1      16047 2         5 <NA>              1
+    ##  6 104118          141 1445858904. 1.45e9     1      16047 2         3 <NA>              0
+    ##  7 104119          141 1445858875. 1.45e9     1      16047 3         3 <NA>              0
+    ##  8 104120          141 1445858933. 1.45e9     1      16047 -1        2 <NA>              0
+    ##  9 104131           97 1445855802. 1.45e9     1      16047 2         4 <NA>              1
+    ## 10 104132           97 1445855812. 1.45e9     1      16047 3         5 <NA>              1
     ## # ℹ more rows
 
 To omit runs identified as dubious by `motusFilter` we can use an
@@ -182,8 +182,8 @@ tbl(sql_motus, "alltags") %>%
   filter(runLen <= 3)
 ```
 
-    ## # A query:  ?? x 5
-    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
+    ## # Source:   SQL [?? x 5]
+    ## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus]
     ##     hitID  runID batchID motusTagID runLen
     ##     <int>  <int>   <int>      <int>  <int>
     ##  1 516095 104118     141      16047      3
@@ -207,8 +207,8 @@ alltags_filtered %>%
   filter(runLen <= 3)
 ```
 
-    ## # A query:  ?? x 5
-    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
+    ## # Source:   SQL [?? x 5]
+    ## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus]
     ## # ℹ 5 variables: hitID <int>, runID <int>, batchID <int>, motusTagID <lgl>, runLen <int>
 
 No more short runs, good!
@@ -377,7 +377,7 @@ ggplot(max_runlen, aes(x = recvDeployName, y = max.rl, fill = month)) +
   coord_flip()
 ```
 
-![](filtering_files/figure-html/unnamed-chunk-16-1.png)
+![](figures/filtering_unnamed-chunk-16-1.png)
 
 Alternatively, you can produce a list of sites where the maximum run
 length of detections was never greater than (say) 4, which may sometimes
@@ -392,7 +392,7 @@ ggplot(filter(max_runlen, max.rl < 5),
   coord_flip()
 ```
 
-![](filtering_files/figure-html/unnamed-chunk-17-1.png)
+![](figures/filtering_unnamed-chunk-17-1.png)
 
 It is impossible to go through every possible issue that you may
 encounter here. Users are strongly encouraged to explore their data

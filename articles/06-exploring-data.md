@@ -142,27 +142,27 @@ sql_motus %>%
 ```
 
     ##        ts              motusTagID        runLen           speciesEN     
-    ##  Min.   :1.438e+09   Min.   :10811   Min.   :   2.0   Length   :109474  
+    ##  Min.   :1.438e+09   Min.   :10811   Min.   :   2.0   Length   :108999  
     ##  1st Qu.:1.476e+09   1st Qu.:22897   1st Qu.:  30.0   N.unique :    10  
-    ##  Median :1.477e+09   Median :22905   Median : 120.0   N.blank  :     0  
-    ##  Mean   :1.476e+09   Mean   :22639   Mean   : 353.8   Min.nchar:     6  
+    ##  Median :1.477e+09   Median :22905   Median : 122.0   N.blank  :     0  
+    ##  Mean   :1.476e+09   Mean   :22654   Mean   : 355.4   Min.nchar:     6  
     ##  3rd Qu.:1.477e+09   3rd Qu.:23316   3rd Qu.: 402.0   Max.nchar:    22  
-    ##  Max.   :1.498e+09   Max.   :24303   Max.   :2474.0   NAs      :  2069  
+    ##  Max.   :1.498e+09   Max.   :24303   Max.   :2474.0   NAs      :  2065  
     ##                                                                         
     ##    tagDepLat       tagDepLon      recvDeployLat    recvDeployLon    
     ##  Min.   :11.12   Min.   :-80.69   Min.   :-42.50   Min.   :-143.68  
     ##  1st Qu.:50.19   1st Qu.:-63.75   1st Qu.: 50.20   1st Qu.: -63.75  
     ##  Median :50.19   Median :-63.75   Median : 50.20   Median : -63.75  
-    ##  Mean   :50.15   Mean   :-65.86   Mean   : 48.50   Mean   : -65.68  
+    ##  Mean   :50.15   Mean   :-65.79   Mean   : 48.90   Mean   : -65.65  
     ##  3rd Qu.:50.19   3rd Qu.:-63.75   3rd Qu.: 50.20   3rd Qu.: -63.75  
     ##  Max.   :51.80   Max.   :-63.75   Max.   : 62.89   Max.   : -60.02  
-    ##  NAs    :2069    NAs    :2069     NAs    :173      NAs    :173      
+    ##  NAs    :2065    NAs    :2065     NAs    :173      NAs    :173      
     ##       time                    
     ##  Min.   :2015-07-23 10:10:54  
-    ##  1st Qu.:2016-10-10 21:26:15  
-    ##  Median :2016-10-19 15:29:45  
-    ##  Mean   :2016-10-12 05:31:23  
-    ##  3rd Qu.:2016-10-22 06:44:40  
+    ##  1st Qu.:2016-10-10 21:16:05  
+    ##  Median :2016-10-19 15:22:10  
+    ##  Mean   :2016-10-11 14:20:32  
+    ##  3rd Qu.:2016-10-22 05:34:53  
     ##  Max.   :2017-06-26 16:11:04  
     ## 
 
@@ -329,7 +329,7 @@ ggplot(data = df_alltags_sub_2, aes(x = hour, y = as.factor(motusTagID))) +
   labs(x = "Hour", y = "MotusTagID")
 ```
 
-![](06-exploring-data_files/figure-html/unnamed-chunk-9-1.png)
+![Detection of motusTagID by hour](figures/06_unnamed-chunk-9-1.png)
 
 Let’s focus only on tags deployed in 2016, and we can colour the tags by
 species:
@@ -344,7 +344,8 @@ ggplot(data = filter(df_alltags_sub_2, year(tagDeployStart) == 2016),
   scale_colour_discrete(name = "Species")
 ```
 
-![](06-exploring-data_files/figure-html/unnamed-chunk-10-1.png)
+![Detection of motusTagID by hour, colour-coded by
+species](figures/06_unnamed-chunk-10-1.png)
 
 We can see how tags moved latitudinally by first ordering by hour, and
 colouring by `motusTagID`:
@@ -363,7 +364,8 @@ ggplot(data = filter(df_alltags_sub_2, year(tagDeployStart) == 2016),
   scale_colour_discrete(name = "MotusTagID")
 ```
 
-![](06-exploring-data_files/figure-html/unnamed-chunk-11-1.png)
+![Receiver latitude by hour for different
+tags](figures/06_unnamed-chunk-11-1.png)
 
 Now let’s look at more detailed plots of signal variation. We use the
 full `df_alltags_sub` dataframe so that we can get signal strength for
@@ -383,7 +385,7 @@ ggplot(data = filter(df_alltags_sub,
   facet_grid(recvDeployName ~ .)
 ```
 
-![](06-exploring-data_files/figure-html/unnamed-chunk-12-1.png)
+![Signal strength over time](figures/06_unnamed-chunk-12-1.png)
 
 We use the
 [`sunRiseSet()`](https://motuswts.github.io/motus/reference/sunRiseSet.md)
@@ -410,7 +412,8 @@ ggplot(data = filter(df_alltags_sub, motusTagID == 22897,
   geom_vline(aes(xintercept = sunset), col = "blue")
 ```
 
-![](06-exploring-data_files/figure-html/unnamed-chunk-13-1.png)
+![Signal strength over time with added
+sunrise/sunset](figures/06_unnamed-chunk-13-1.png)
 
 We can see that during this period, the tag was most often detected
 during the day, suggesting it may be actively foraging in this area
@@ -434,7 +437,7 @@ ggplot(data = filter(df_alltags_sub,
   labs(x = "Time of year", y = "Receiver name (ordered by latitude)")
 ```
 
-![](06-exploring-data_files/figure-html/unnamed-chunk-14-1.png)
+![Detections by receiver over time](figures/06_unnamed-chunk-14-1.png)
 
 We zoom in on a section of this plot and look at antenna bearings to see
 directional movement past stations:
@@ -452,7 +455,8 @@ ggplot(data = filter(df_alltags_sub, motusTagID == 16039,
   facet_grid(recvDeployName ~ .)
 ```
 
-![](06-exploring-data_files/figure-html/unnamed-chunk-15-1.png)
+![Signal strength over time of day for different stations and
+antenna](figures/06_unnamed-chunk-15-1.png)
 
 This plot shows the typical fly-by pattern of a migrating animal, with
 signal strength increasing and then decreasing as the tag moves through
@@ -559,10 +563,11 @@ ggplot(data = world) +
   scale_colour_discrete("motusTagID") 
 ```
 
-![](06-exploring-data_files/figure-html/unnamed-chunk-19-1.png) We can
-also add points for all receivers that were active, but did not detect
-these birds during a certain time period if we have already downloaded
-all metadata.
+![Map of individual tag paths](figures/06_unnamed-chunk-19-1.png)
+
+We can also add points for all receivers that were active, but did not
+detect these birds during a certain time period if we have already
+downloaded all metadata.
 
 ``` r
 
@@ -606,7 +611,11 @@ ggplot(data = world) +
   scale_colour_discrete("motusTagID") 
 ```
 
-![](06-exploring-data_files/figure-html/unnamed-chunk-20-1.png)
+    ## Warning: Removed 1 row containing missing values or values outside the scale range
+    ## (`geom_point()`).
+
+![Map of individual tag paths showing all active
+receivers](figures/06_unnamed-chunk-20-1.png)
 
 ### Mapping with the `ggspatial` package
 
@@ -651,9 +660,9 @@ ggplot() +
   labs(caption = "Map data from OpenStreetMap")
 ```
 
-    ##   |                                                                              |                                                                      |   0%  |                                                                              |==================                                                    |  25%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================================                  |  75%  |                                                                              |======================================================================| 100%
+    ## Zoom: 4
 
-![](06-exploring-data_files/figure-html/unnamed-chunk-21-1.png)
+![Map of individual tag paths](figures/06_unnamed-chunk-21-1.png)
 
 See also the
 [`plotRouteMap()`](https://motuswts.github.io/motus/reference/plotRouteMap.md)

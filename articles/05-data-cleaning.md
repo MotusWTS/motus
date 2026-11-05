@@ -193,8 +193,8 @@ tbl(sql_motus, "alltags") %>%
   select(hitID, runID, batchID, ts, motusFilter)
 ```
 
-    ## # A query:  ?? x 5
-    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
+    ## # Source:   SQL [?? x 5]
+    ## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus]
     ##     hitID runID batchID          ts motusFilter
     ##     <int> <int>   <int>       <dbl>       <dbl>
     ##  1  45107  8886      53 1445858390.           1
@@ -230,8 +230,8 @@ tbl(sql_motus, "alltags") %>%
   filter(runLen <= 3)
 ```
 
-    ## # A query:  ?? x 5
-    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
+    ## # Source:   SQL [?? x 5]
+    ## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus]
     ##     hitID  runID batchID motusTagID runLen
     ##     <int>  <int>   <int>      <int>  <int>
     ##  1 516095 104118     141      16047      3
@@ -255,8 +255,8 @@ tbl_alltags_sub %>%
   filter(runLen <= 3)
 ```
 
-    ## # A query:  ?? x 5
-    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
+    ## # Source:   SQL [?? x 5]
+    ## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus]
     ## # ℹ 5 variables: hitID <int>, runID <int>, batchID <int>, motusTagID <lgl>,
     ## #   runLen <int>
 
@@ -298,13 +298,13 @@ tbl_alltags_sub %>%
   distinct()
 ```
 
-    ## # A query:  ?? x 7
-    ## # Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/project-176.motus]
+    ## # Source:   SQL [?? x 7]
+    ## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus]
     ##   recvDeployLat recvDeployLon recvDeployName recvDeployID recv        recvProjID
     ##           <dbl>         <dbl> <chr>                 <int> <chr>            <int>
     ## 1            NA            NA NP mobile              3813 Lotek-280          176
-    ## 2            NA            NA NA                       NA SG-1415BBB…         NA
-    ## 3            NA            NA NA                       NA SG-2814BBB…         NA
+    ## 2            NA            NA <NA>                     NA SG-1415BBB…         NA
+    ## 3            NA            NA <NA>                     NA SG-2814BBB…         NA
     ## # ℹ 1 more variable: recvProjName <chr>
 
 Notice that some of these receivers are also missing names.
@@ -393,7 +393,8 @@ ggplot(data = filter(df_summary,
   scale_x_datetime(date_labels = "%Y-%m-%d")
 ```
 
-![](05-data-cleaning_files/figure-html/unnamed-chunk-11-1.png)
+![Series of plots showing recvDeployLat over time for different
+motusTagIDs](figures/05_unnamed-chunk-11-1.png)
 
 Although there don’t seem to be any immediate problems, let’s take a
 look at the tags showing up around 44 degrees during September. Let’s
@@ -479,7 +480,8 @@ ggplot(data = filter(df_summary_sub,
   scale_x_datetime(date_labels = "%Y-%m-%d")
 ```
 
-![](05-data-cleaning_files/figure-html/unnamed-chunk-15-1.png)
+![Series of plots showing recvDeployLat over time for different
+motusTagIDs](figures/05_unnamed-chunk-15-1.png)
 
 You are encouraged to explore the rest of the tags within this group, to
 determine if there are additional false positives.
@@ -506,7 +508,7 @@ clarify(sql_motus)
     ##   ambigID numHits   id1                              fullID1   id2
     ## 1    -337       4 10811        Niles#152:6.1@166.38(M.10811) 16011
     ## 2    -171    2074 22778   RBrownAMWO#308:5.3@166.38(M.22778) 22902
-    ## 3    -134   22749 22905   SampleData#301:5.3@166.38(M.22905) 23319
+    ## 3    -134   22747 22905   SampleData#301:5.3@166.38(M.22905) 23319
     ## 4    -114      86 22897 SampleData#303.1:5.3@166.38(M.22897) 24298
     ## 5    -106     279 17021        Selva#172:6.1@166.38(M.17021) 17357
     ## 6     -56    5734 22867 SampleData#272.1:5.3@166.38(M.22867) 23316
@@ -590,7 +592,9 @@ ggplot(data = df_summary.ambig,
   facet_wrap(~ newID, scales = "free", ncol = 2)
 ```
 
-![](05-data-cleaning_files/figure-html/unnamed-chunk-19-1.png)
+![Series of plots showing recvDeployLat over time for different
+motusTagIDs, colour-coded by ambiguous or
+not](figures/05_unnamed-chunk-19-1.png)
 
 Let’s deal with the easy ones first.
 
@@ -677,7 +681,8 @@ ggplot(data = df_plot,
   facet_grid(recvDeployLon ~ .)
 ```
 
-![](05-data-cleaning_files/figure-html/unnamed-chunk-22-1.png)
+![Signal strength over time for two different
+receivers](figures/05_unnamed-chunk-22-1.png)
 
 It appears that these are overlapping detections, at two sites in
 proximity to one another. Additional information from the field
@@ -746,7 +751,8 @@ ggplot(data = df_ambgi_171, aes(x = time, y = sig, colour = as.factor(port))) +
 
     ## `geom_smooth()` using formula = 'y ~ x'
 
-![](05-data-cleaning_files/figure-html/unnamed-chunk-25-1.png)
+![Signal strength over time for different date/locations and
+colour-coded by port](figures/05_unnamed-chunk-25-1.png)
 
 We see that there are a large number of ambiguous detections on 10 May
 2017 at Old Cut (Long Point, Lake Erie, Ontario), consistent with a bird
@@ -815,7 +821,8 @@ ggplot(data = df_ambgi_114, aes(x = time, y = sig, colour = LatLonStationName)) 
   theme_bw() 
 ```
 
-![](05-data-cleaning_files/figure-html/unnamed-chunk-28-1.png)
+![Signal strength over time for several different
+stations](figures/05_unnamed-chunk-28-1.png)
 
 Notice that these detections are consistent with a migratory departure
 from the Long Point area (Old Cut Field Station, Lake Erie, Ontario)
@@ -879,7 +886,8 @@ ggplot(data = df_ambgi_106, aes(x = time, y = sig, colour = col)) +
   facet_wrap(~ date, scales = "free_x")
 ```
 
-![](05-data-cleaning_files/figure-html/unnamed-chunk-31-1.png)
+![Signal strength over time for several different
+stations](figures/05_unnamed-chunk-31-1.png)
 
 Both sets of detections are long run lengths, and look valid (increasing
 then decreasing signal strength). They are about a day apart, and so it
@@ -965,7 +973,8 @@ ggplot(data = df_ambgi_56, aes(x = time, y = recvDeployLon, colour = col)) +
   scale_colour_discrete(name="Lat/Lon and\nStation Name") 
 ```
 
-![](05-data-cleaning_files/figure-html/unnamed-chunk-35-1.png)
+![Receiver longitude over time colour coded by
+station](figures/05_unnamed-chunk-35-1.png)
 
 We can see from the plot that a tag is detected consistently near
 longitude -65, which is near the deployment location for `motusTagID`
@@ -987,7 +996,8 @@ ggplot(data = filter(df_ambgi_56, time > time.begin, time < time.end),
   scale_colour_discrete(name = "Lat/Lon and\nStation Name") 
 ```
 
-![](05-data-cleaning_files/figure-html/unnamed-chunk-36-1.png)
+![Receiver longitude over time colour coded by
+station](figures/05_unnamed-chunk-36-1.png)
 
 We can see that the ambiguous tag was detected consistently at Niapiskau
 and Grand Ile before and after the period when it was also detected to
@@ -1051,7 +1061,8 @@ ggplot(data = df_56_tmp, aes(x = time, y = sig, colour = col)) +
   facet_wrap(~ date, scales = "free_x")
 ```
 
-![](05-data-cleaning_files/figure-html/unnamed-chunk-38-1.png)
+![Signal strength over time colour coded by
+station](figures/05_unnamed-chunk-38-1.png)
 
 These look like typical fly-by patterns of increasing and then
 decreasing signal strength.  
@@ -1171,6 +1182,9 @@ df_block_all <- bind_rows(df_block_0, df_block_2, df_block_3,
 tbl_filter <- writeRunsFilter(sql_motus, "filtAmbigFalsePos", 
                               df = df_block_all, delete = TRUE)
 ```
+
+    ## Warning: Filter already exists. Use createRunsFilter function with 'update =
+    ## TRUE' if you want to update the properties (e.g. name) of the existing filter.
 
     ## Filter records saved
 

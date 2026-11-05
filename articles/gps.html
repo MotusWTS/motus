@@ -21,11 +21,11 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-dark" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">motus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">6.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +72,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Working with GPS points</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/denis/blu_tags_data/vignettes/articles/gps.Rmd" class="external-link"><code>vignettes/articles/gps.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/MotusWTS/motus/blob/main/vignettes/articles/gps.Rmd" class="external-link"><code>vignettes/articles/gps.Rmd</code></a></small>
       <div class="d-none name"><code>gps.Rmd</code></div>
     </div>
 
@@ -92,7 +92,7 @@ data base called <code>gps_tags</code>.</p>
 <span></span>
 <span><span class="va">gps_tags</span></span></code></pre></div>
 <pre><code><span><span class="co">## &lt;SQLiteConnection&gt;</span></span>
-<span><span class="co">##   Path: /home/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus</span></span>
+<span><span class="co">##   Path: /home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/gps_sample.motus</span></span>
 <span><span class="co">##   Extensions: TRUE</span></span></code></pre>
 <p>If your data has gps point, you should be able to follow along using
 your own data (replace <code>PROJECT_NUMBER</code> with the number
@@ -102,22 +102,22 @@ corresponding to your project.</p>
 <p>GPS points are stored in the <code>gps</code> table.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">gps_tags</span>, <span class="st">"gps"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A query:  ?? x 11</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus]</span></span></span>
+<pre><code><span><span class="co">## # Source:   table&lt;`gps`&gt; [?? x 11]</span></span>
+<span><span class="co">## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/gps_sample.motus]</span></span>
 <span><span class="co">##      gpsID batchID        ts gpsts   lat    lon    alt quality lat_mean lon_mean</span></span>
-<span><span class="co">##      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span>  <span style="text-decoration: underline;">313</span>414  <span style="text-decoration: underline;">127</span>792    1.51<span style="color: #949494;">e</span>9    <span style="color: #BB0000;">NA</span>  33.5 -<span style="color: #BB0000;">104.</span>  <span style="text-decoration: underline;">1</span>074        <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span>  <span style="text-decoration: underline;">313</span>415  <span style="text-decoration: underline;">127</span>792    1.51<span style="color: #949494;">e</span>9    <span style="color: #BB0000;">NA</span>  33.5 -<span style="color: #BB0000;">104.</span>  <span style="text-decoration: underline;">1</span>072.       <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 4<span style="text-decoration: underline;">967</span>619  <span style="text-decoration: underline;">370</span>452    1.46<span style="color: #949494;">e</span>9    <span style="color: #BB0000;">NA</span>  36.5  -<span style="color: #BB0000;">76.0</span>   -<span style="color: #BB0000;">3.4</span>      <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> 4<span style="text-decoration: underline;">967</span>620  <span style="text-decoration: underline;">370</span>452    1.46<span style="color: #949494;">e</span>9    <span style="color: #BB0000;">NA</span>  36.5  -<span style="color: #BB0000;">76.0</span>    8.7      <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> 4<span style="text-decoration: underline;">967</span>621  <span style="text-decoration: underline;">370</span>452    1.46<span style="color: #949494;">e</span>9    <span style="color: #BB0000;">NA</span>  36.5  -<span style="color: #BB0000;">76.0</span>    5.3      <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> 4<span style="text-decoration: underline;">967</span>622  <span style="text-decoration: underline;">370</span>452    1.46<span style="color: #949494;">e</span>9    <span style="color: #BB0000;">NA</span>  36.5  -<span style="color: #BB0000;">76.0</span>   -<span style="color: #BB0000;">6.6</span>      <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> 4<span style="text-decoration: underline;">967</span>623  <span style="text-decoration: underline;">370</span>452    1.46<span style="color: #949494;">e</span>9    <span style="color: #BB0000;">NA</span>  36.5  -<span style="color: #BB0000;">76.0</span>   -<span style="color: #BB0000;">3.1</span>      <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> 4<span style="text-decoration: underline;">967</span>624  <span style="text-decoration: underline;">370</span>452    1.46<span style="color: #949494;">e</span>9    <span style="color: #BB0000;">NA</span>  36.5  -<span style="color: #BB0000;">76.0</span>    2.5      <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 4<span style="text-decoration: underline;">967</span>625  <span style="text-decoration: underline;">370</span>452    1.46<span style="color: #949494;">e</span>9    <span style="color: #BB0000;">NA</span>  36.5  -<span style="color: #BB0000;">76.0</span>   -<span style="color: #BB0000;">4.8</span>      <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> 4<span style="text-decoration: underline;">967</span>626  <span style="text-decoration: underline;">370</span>452    1.46<span style="color: #949494;">e</span>9    <span style="color: #BB0000;">NA</span>  36.5  -<span style="color: #BB0000;">76.0</span>    1        <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ more rows</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 1 more variable: n_fixes &lt;int&gt;</span></span></span></code></pre>
+<span><span class="co">##      &lt;int&gt;   &lt;int&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;int&gt;    &lt;dbl&gt;    &lt;dbl&gt;</span></span>
+<span><span class="co">##  1  313414  127792    1.51e9    NA  33.5 -104.  1074        NA       NA       NA</span></span>
+<span><span class="co">##  2  313415  127792    1.51e9    NA  33.5 -104.  1072.       NA       NA       NA</span></span>
+<span><span class="co">##  3 4967619  370452    1.46e9    NA  36.5  -76.0   -3.4      NA       NA       NA</span></span>
+<span><span class="co">##  4 4967620  370452    1.46e9    NA  36.5  -76.0    8.7      NA       NA       NA</span></span>
+<span><span class="co">##  5 4967621  370452    1.46e9    NA  36.5  -76.0    5.3      NA       NA       NA</span></span>
+<span><span class="co">##  6 4967622  370452    1.46e9    NA  36.5  -76.0   -6.6      NA       NA       NA</span></span>
+<span><span class="co">##  7 4967623  370452    1.46e9    NA  36.5  -76.0   -3.1      NA       NA       NA</span></span>
+<span><span class="co">##  8 4967624  370452    1.46e9    NA  36.5  -76.0    2.5      NA       NA       NA</span></span>
+<span><span class="co">##  9 4967625  370452    1.46e9    NA  36.5  -76.0   -4.8      NA       NA       NA</span></span>
+<span><span class="co">## 10 4967626  370452    1.46e9    NA  36.5  -76.0    1        NA       NA       NA</span></span>
+<span><span class="co">## # ℹ more rows</span></span>
+<span><span class="co">## # ℹ 1 more variable: n_fixes &lt;int&gt;</span></span></code></pre>
 <div class="section level2">
 <h2 id="working-with-gps-points">Working with GPS points<a class="anchor" aria-label="anchor" href="#working-with-gps-points"></a>
 </h2>
@@ -136,42 +136,42 @@ corresponding to your project.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">gps_tags</span>, <span class="st">"alltagsGPS"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">ts</span>, <span class="va">gpsLat</span>, <span class="va">gpsLon</span>, <span class="va">gpsAlt</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A query:  ?? x 7</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus]</span></span></span>
+<pre><code><span><span class="co">## # Source:   SQL [?? x 7]</span></span>
+<span><span class="co">## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/gps_sample.motus]</span></span>
 <span><span class="co">##       hitID   runID batchID          ts gpsLat gpsLon gpsAlt</span></span>
-<span><span class="co">##       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 32<span style="text-decoration: underline;">811</span>108 7<span style="text-decoration: underline;">984</span>227  <span style="text-decoration: underline;">118</span>721 <span style="text-decoration: underline;">1</span>509<span style="text-decoration: underline;">139</span>743.     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 32<span style="text-decoration: underline;">811</span>109 7<span style="text-decoration: underline;">984</span>227  <span style="text-decoration: underline;">118</span>721 <span style="text-decoration: underline;">1</span>509<span style="text-decoration: underline;">139</span>823.     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 32<span style="text-decoration: underline;">912</span>898 7<span style="text-decoration: underline;">985</span>620  <span style="text-decoration: underline;">120</span>474 <span style="text-decoration: underline;">1</span>515<span style="text-decoration: underline;">877</span>560.     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> 32<span style="text-decoration: underline;">912</span>899 7<span style="text-decoration: underline;">985</span>620  <span style="text-decoration: underline;">120</span>474 <span style="text-decoration: underline;">1</span>515<span style="text-decoration: underline;">877</span>600.     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> 32<span style="text-decoration: underline;">913</span>271 7<span style="text-decoration: underline;">985</span>787  <span style="text-decoration: underline;">120</span>474 <span style="text-decoration: underline;">1</span>515<span style="text-decoration: underline;">878</span>154.     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> 32<span style="text-decoration: underline;">913</span>272 7<span style="text-decoration: underline;">985</span>787  <span style="text-decoration: underline;">120</span>474 <span style="text-decoration: underline;">1</span>515<span style="text-decoration: underline;">878</span>194.     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> 32<span style="text-decoration: underline;">913</span>404 7<span style="text-decoration: underline;">985</span>850  <span style="text-decoration: underline;">120</span>474 <span style="text-decoration: underline;">1</span>515<span style="text-decoration: underline;">878</span>250.     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> 32<span style="text-decoration: underline;">913</span>405 7<span style="text-decoration: underline;">985</span>850  <span style="text-decoration: underline;">120</span>474 <span style="text-decoration: underline;">1</span>515<span style="text-decoration: underline;">878</span>329.     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 32<span style="text-decoration: underline;">913</span>717 7<span style="text-decoration: underline;">985</span>998  <span style="text-decoration: underline;">120</span>474 <span style="text-decoration: underline;">1</span>515<span style="text-decoration: underline;">878</span>623.     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> 32<span style="text-decoration: underline;">913</span>718 7<span style="text-decoration: underline;">985</span>998  <span style="text-decoration: underline;">120</span>474 <span style="text-decoration: underline;">1</span>515<span style="text-decoration: underline;">878</span>662.     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ more rows</span></span></span></code></pre>
+<span><span class="co">##       &lt;int&gt;   &lt;int&gt;   &lt;int&gt;       &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span><span class="co">##  1 32811108 7984227  118721 1509139743.     NA     NA     NA</span></span>
+<span><span class="co">##  2 32811109 7984227  118721 1509139823.     NA     NA     NA</span></span>
+<span><span class="co">##  3 32912898 7985620  120474 1515877560.     NA     NA     NA</span></span>
+<span><span class="co">##  4 32912899 7985620  120474 1515877600.     NA     NA     NA</span></span>
+<span><span class="co">##  5 32913271 7985787  120474 1515878154.     NA     NA     NA</span></span>
+<span><span class="co">##  6 32913272 7985787  120474 1515878194.     NA     NA     NA</span></span>
+<span><span class="co">##  7 32913404 7985850  120474 1515878250.     NA     NA     NA</span></span>
+<span><span class="co">##  8 32913405 7985850  120474 1515878329.     NA     NA     NA</span></span>
+<span><span class="co">##  9 32913717 7985998  120474 1515878623.     NA     NA     NA</span></span>
+<span><span class="co">## 10 32913718 7985998  120474 1515878662.     NA     NA     NA</span></span>
+<span><span class="co">## # ℹ more rows</span></span></code></pre>
 <p>Note that not all hits have a GPS point associated, but we can filter
 to those that do:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">gps_tags</span>, <span class="st">"alltagsGPS"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">ts</span>, <span class="va">gpsLat</span>, <span class="va">gpsLon</span>, <span class="va">gpsAlt</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">gpsLat</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A query:  ?? x 7</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.53.3 [/home/runner/work/motus/motus/vignettes/articles/data/gps_sample.motus]</span></span></span>
+<pre><code><span><span class="co">## # Source:   SQL [?? x 7]</span></span>
+<span><span class="co">## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/gps_sample.motus]</span></span>
 <span><span class="co">##        hitID    runID batchID          ts gpsLat gpsLon gpsAlt</span></span>
-<span><span class="co">##        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 449<span style="text-decoration: underline;">016</span>552 24<span style="text-decoration: underline;">439</span>773  <span style="text-decoration: underline;">370</span>452 <span style="text-decoration: underline;">1</span>457<span style="text-decoration: underline;">111</span>891.   36.5  -<span style="color: #BB0000;">76.0</span>   -<span style="color: #BB0000;">3.4</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 449<span style="text-decoration: underline;">016</span>553 24<span style="text-decoration: underline;">439</span>773  <span style="text-decoration: underline;">370</span>452 <span style="text-decoration: underline;">1</span>457<span style="text-decoration: underline;">111</span>897.   36.5  -<span style="color: #BB0000;">76.0</span>   -<span style="color: #BB0000;">3.4</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 449<span style="text-decoration: underline;">016</span>554 24<span style="text-decoration: underline;">439</span>773  <span style="text-decoration: underline;">370</span>452 <span style="text-decoration: underline;">1</span>457<span style="text-decoration: underline;">111</span>904.   36.5  -<span style="color: #BB0000;">76.0</span>   -<span style="color: #BB0000;">3.4</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> 449<span style="text-decoration: underline;">016</span>555 24<span style="text-decoration: underline;">439</span>774  <span style="text-decoration: underline;">370</span>452 <span style="text-decoration: underline;">1</span>457<span style="text-decoration: underline;">111</span>897.   36.5  -<span style="color: #BB0000;">76.0</span>   -<span style="color: #BB0000;">3.4</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> 449<span style="text-decoration: underline;">016</span>556 24<span style="text-decoration: underline;">439</span>774  <span style="text-decoration: underline;">370</span>452 <span style="text-decoration: underline;">1</span>457<span style="text-decoration: underline;">111</span>904.   36.5  -<span style="color: #BB0000;">76.0</span>   -<span style="color: #BB0000;">3.4</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> 449<span style="text-decoration: underline;">016</span>557 24<span style="text-decoration: underline;">439</span>775  <span style="text-decoration: underline;">370</span>452 <span style="text-decoration: underline;">1</span>457<span style="text-decoration: underline;">111</span>891.   36.5  -<span style="color: #BB0000;">76.0</span>   -<span style="color: #BB0000;">3.4</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> 449<span style="text-decoration: underline;">016</span>558 24<span style="text-decoration: underline;">439</span>775  <span style="text-decoration: underline;">370</span>452 <span style="text-decoration: underline;">1</span>457<span style="text-decoration: underline;">111</span>910.   36.5  -<span style="color: #BB0000;">76.0</span>   -<span style="color: #BB0000;">3.4</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> 449<span style="text-decoration: underline;">016</span>559 24<span style="text-decoration: underline;">439</span>773  <span style="text-decoration: underline;">370</span>452 <span style="text-decoration: underline;">1</span>457<span style="text-decoration: underline;">111</span>910.   36.5  -<span style="color: #BB0000;">76.0</span>   -<span style="color: #BB0000;">3.4</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 449<span style="text-decoration: underline;">016</span>560 24<span style="text-decoration: underline;">439</span>774  <span style="text-decoration: underline;">370</span>452 <span style="text-decoration: underline;">1</span>457<span style="text-decoration: underline;">111</span>916.   36.5  -<span style="color: #BB0000;">76.0</span>   -<span style="color: #BB0000;">3.4</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> 449<span style="text-decoration: underline;">016</span>561 24<span style="text-decoration: underline;">439</span>775  <span style="text-decoration: underline;">370</span>452 <span style="text-decoration: underline;">1</span>457<span style="text-decoration: underline;">111</span>916.   36.5  -<span style="color: #BB0000;">76.0</span>   -<span style="color: #BB0000;">3.4</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ more rows</span></span></span></code></pre>
+<span><span class="co">##        &lt;int&gt;    &lt;int&gt;   &lt;int&gt;       &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span><span class="co">##  1 449016552 24439773  370452 1457111891.   36.5  -76.0   -3.4</span></span>
+<span><span class="co">##  2 449016553 24439773  370452 1457111897.   36.5  -76.0   -3.4</span></span>
+<span><span class="co">##  3 449016554 24439773  370452 1457111904.   36.5  -76.0   -3.4</span></span>
+<span><span class="co">##  4 449016555 24439774  370452 1457111897.   36.5  -76.0   -3.4</span></span>
+<span><span class="co">##  5 449016556 24439774  370452 1457111904.   36.5  -76.0   -3.4</span></span>
+<span><span class="co">##  6 449016557 24439775  370452 1457111891.   36.5  -76.0   -3.4</span></span>
+<span><span class="co">##  7 449016558 24439775  370452 1457111910.   36.5  -76.0   -3.4</span></span>
+<span><span class="co">##  8 449016559 24439773  370452 1457111910.   36.5  -76.0   -3.4</span></span>
+<span><span class="co">##  9 449016560 24439774  370452 1457111916.   36.5  -76.0   -3.4</span></span>
+<span><span class="co">## 10 449016561 24439775  370452 1457111916.   36.5  -76.0   -3.4</span></span>
+<span><span class="co">## # ℹ more rows</span></span></code></pre>
 <blockquote>
 <p>Note: The <code>alltagsGPS</code> view is the same as the
 <code>alltags</code> view but includes GPS points. Because of this, the
@@ -211,20 +211,20 @@ default matching).</p>
 <code class="sourceCode R"><span><span class="va">rails_GPS</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">hitID</span>, <span class="va">runID</span>, <span class="va">batchID</span>, <span class="va">ts</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"gps"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">gpsLat</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 90 × 9</span></span></span>
+<pre><code><span><span class="co">## # A tibble: 90 × 9</span></span>
 <span><span class="co">##         hitID    runID batchID       ts gpsLat gpsLon gpsAlt gpsTs_min gpsTs_max</span></span>
-<span><span class="co">##         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span>   34<span style="text-decoration: underline;">126</span>729  8<span style="text-decoration: underline;">211</span>543  <span style="text-decoration: underline;">127</span>792   1.51<span style="color: #949494;">e</span>9   40.4  -<span style="color: #BB0000;">76.1</span>   106.    1.51<span style="color: #949494;">e</span>9    1.51<span style="color: #949494;">e</span>9</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span>   34<span style="text-decoration: underline;">126</span>730  8<span style="text-decoration: underline;">211</span>543  <span style="text-decoration: underline;">127</span>792   1.51<span style="color: #949494;">e</span>9   40.4  -<span style="color: #BB0000;">76.1</span>   106.    1.51<span style="color: #949494;">e</span>9    1.51<span style="color: #949494;">e</span>9</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span>   34<span style="text-decoration: underline;">126</span>795  8<span style="text-decoration: underline;">211</span>576  <span style="text-decoration: underline;">127</span>792   1.51<span style="color: #949494;">e</span>9   40.4  -<span style="color: #BB0000;">76.1</span>   106.    1.51<span style="color: #949494;">e</span>9    1.51<span style="color: #949494;">e</span>9</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span>   34<span style="text-decoration: underline;">126</span>796  8<span style="text-decoration: underline;">211</span>576  <span style="text-decoration: underline;">127</span>792   1.51<span style="color: #949494;">e</span>9   40.4  -<span style="color: #BB0000;">76.1</span>   106.    1.51<span style="color: #949494;">e</span>9    1.51<span style="color: #949494;">e</span>9</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span>   34<span style="text-decoration: underline;">126</span>846  8<span style="text-decoration: underline;">211</span>593  <span style="text-decoration: underline;">127</span>792   1.51<span style="color: #949494;">e</span>9   40.4  -<span style="color: #BB0000;">76.1</span>   106.    1.51<span style="color: #949494;">e</span>9    1.51<span style="color: #949494;">e</span>9</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span>   34<span style="text-decoration: underline;">126</span>847  8<span style="text-decoration: underline;">211</span>593  <span style="text-decoration: underline;">127</span>792   1.51<span style="color: #949494;">e</span>9   40.4  -<span style="color: #BB0000;">76.1</span>   106.    1.51<span style="color: #949494;">e</span>9    1.51<span style="color: #949494;">e</span>9</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span>   34<span style="text-decoration: underline;">128</span>916  8<span style="text-decoration: underline;">212</span>308  <span style="text-decoration: underline;">132</span>026   1.51<span style="color: #949494;">e</span>9   40.4  -<span style="color: #BB0000;">76.1</span>   105.    1.51<span style="color: #949494;">e</span>9    1.51<span style="color: #949494;">e</span>9</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span>   34<span style="text-decoration: underline;">128</span>917  8<span style="text-decoration: underline;">212</span>308  <span style="text-decoration: underline;">132</span>026   1.51<span style="color: #949494;">e</span>9   40.4  -<span style="color: #BB0000;">76.1</span>   105.    1.51<span style="color: #949494;">e</span>9    1.51<span style="color: #949494;">e</span>9</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> <span style="text-decoration: underline;">1</span>136<span style="text-decoration: underline;">575</span>629 47<span style="text-decoration: underline;">145</span>854  <span style="text-decoration: underline;">742</span>386   1.50<span style="color: #949494;">e</span>9   44.0  -<span style="color: #BB0000;">79.5</span>   313.    1.50<span style="color: #949494;">e</span>9    1.50<span style="color: #949494;">e</span>9</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> <span style="text-decoration: underline;">1</span>136<span style="text-decoration: underline;">575</span>630 47<span style="text-decoration: underline;">145</span>854  <span style="text-decoration: underline;">742</span>386   1.50<span style="color: #949494;">e</span>9   44.0  -<span style="color: #BB0000;">79.5</span>   313.    1.50<span style="color: #949494;">e</span>9    1.50<span style="color: #949494;">e</span>9</span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 80 more rows</span></span></span></code></pre>
+<span><span class="co">##         &lt;int&gt;    &lt;int&gt;   &lt;int&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;</span></span>
+<span><span class="co">##  1   34126729  8211543  127792   1.51e9   40.4  -76.1   106.    1.51e9    1.51e9</span></span>
+<span><span class="co">##  2   34126730  8211543  127792   1.51e9   40.4  -76.1   106.    1.51e9    1.51e9</span></span>
+<span><span class="co">##  3   34126795  8211576  127792   1.51e9   40.4  -76.1   106.    1.51e9    1.51e9</span></span>
+<span><span class="co">##  4   34126796  8211576  127792   1.51e9   40.4  -76.1   106.    1.51e9    1.51e9</span></span>
+<span><span class="co">##  5   34126846  8211593  127792   1.51e9   40.4  -76.1   106.    1.51e9    1.51e9</span></span>
+<span><span class="co">##  6   34126847  8211593  127792   1.51e9   40.4  -76.1   106.    1.51e9    1.51e9</span></span>
+<span><span class="co">##  7   34128916  8212308  132026   1.51e9   40.4  -76.1   105.    1.51e9    1.51e9</span></span>
+<span><span class="co">##  8   34128917  8212308  132026   1.51e9   40.4  -76.1   105.    1.51e9    1.51e9</span></span>
+<span><span class="co">##  9 1136575629 47145854  742386   1.50e9   44.0  -79.5   313.    1.50e9    1.50e9</span></span>
+<span><span class="co">## 10 1136575630 47145854  742386   1.50e9   44.0  -79.5   313.    1.50e9    1.50e9</span></span>
+<span><span class="co">## # ℹ 80 more rows</span></span></code></pre>
 <div class="section level4">
 <h4 id="more-ways-of-matching-gps-points">More ways of matching GPS points<a class="anchor" aria-label="anchor" href="#more-ways-of-matching-gps-points"></a>
 </h4>
@@ -251,20 +251,20 @@ associated with GPS</li>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">index_GPS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGPS.html">getGPS</a></span><span class="op">(</span>src <span class="op">=</span> <span class="va">gps_tags</span>, data <span class="op">=</span> <span class="va">rails</span>, by <span class="op">=</span> <span class="fl">60</span><span class="op">)</span></span>
 <span><span class="va">index_GPS</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 78 × 6</span></span></span>
+<pre><code><span><span class="co">## # A tibble: 78 × 6</span></span>
 <span><span class="co">##         hitID gpsLat gpsLon gpsAlt  gpsTs_min  gpsTs_max</span></span>
-<span><span class="co">##         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span>   34<span style="text-decoration: underline;">126</span>729   40.4  -<span style="color: #BB0000;">76.1</span>   111. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">761</span>796 <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">761</span>796</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span>   34<span style="text-decoration: underline;">126</span>730   40.4  -<span style="color: #BB0000;">76.1</span>   111. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">761</span>796 <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">761</span>796</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span>   34<span style="text-decoration: underline;">126</span>795   40.4  -<span style="color: #BB0000;">76.1</span>   110. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">776</span>197 <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">776</span>197</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span>   34<span style="text-decoration: underline;">126</span>796   40.4  -<span style="color: #BB0000;">76.1</span>   110. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">776</span>197 <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">776</span>197</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span>   34<span style="text-decoration: underline;">126</span>846   40.4  -<span style="color: #BB0000;">76.1</span>   106. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">837</span>998 <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">837</span>998</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span>   34<span style="text-decoration: underline;">126</span>847   40.4  -<span style="color: #BB0000;">76.1</span>   106. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">837</span>998 <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">837</span>998</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span>   34<span style="text-decoration: underline;">128</span>916   40.4  -<span style="color: #BB0000;">76.1</span>   100. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">350</span>490 <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">350</span>490</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span>   34<span style="text-decoration: underline;">128</span>917   40.4  -<span style="color: #BB0000;">76.1</span>   100. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">350</span>490 <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">350</span>490</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> <span style="text-decoration: underline;">1</span>136<span style="text-decoration: underline;">575</span>629   44.0  -<span style="color: #BB0000;">79.5</span>   312. <span style="text-decoration: underline;">1</span>496<span style="text-decoration: underline;">846</span>031 <span style="text-decoration: underline;">1</span>496<span style="text-decoration: underline;">846</span>031</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> <span style="text-decoration: underline;">1</span>136<span style="text-decoration: underline;">575</span>630   44.0  -<span style="color: #BB0000;">79.5</span>   312. <span style="text-decoration: underline;">1</span>496<span style="text-decoration: underline;">846</span>031 <span style="text-decoration: underline;">1</span>496<span style="text-decoration: underline;">846</span>031</span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 68 more rows</span></span></span></code></pre>
+<span><span class="co">##         &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">##  1   34126729   40.4  -76.1   111. 1505761796 1505761796</span></span>
+<span><span class="co">##  2   34126730   40.4  -76.1   111. 1505761796 1505761796</span></span>
+<span><span class="co">##  3   34126795   40.4  -76.1   110. 1505776197 1505776197</span></span>
+<span><span class="co">##  4   34126796   40.4  -76.1   110. 1505776197 1505776197</span></span>
+<span><span class="co">##  5   34126846   40.4  -76.1   106. 1505837998 1505837998</span></span>
+<span><span class="co">##  6   34126847   40.4  -76.1   106. 1505837998 1505837998</span></span>
+<span><span class="co">##  7   34128916   40.4  -76.1   100. 1505350490 1505350490</span></span>
+<span><span class="co">##  8   34128917   40.4  -76.1   100. 1505350490 1505350490</span></span>
+<span><span class="co">##  9 1136575629   44.0  -79.5   312. 1496846031 1496846031</span></span>
+<span><span class="co">## 10 1136575630   44.0  -79.5   312. 1496846031 1496846031</span></span>
+<span><span class="co">## # ℹ 68 more rows</span></span></code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>
 <strong><code>by = "daily"</code></strong> median location
@@ -280,20 +280,20 @@ location.</li>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">index_GPS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGPS.html">getGPS</a></span><span class="op">(</span>src <span class="op">=</span> <span class="va">gps_tags</span>, data <span class="op">=</span> <span class="va">rails</span>, by <span class="op">=</span> <span class="st">"daily"</span><span class="op">)</span></span>
 <span><span class="va">index_GPS</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 90 × 6</span></span></span>
+<pre><code><span><span class="co">## # A tibble: 90 × 6</span></span>
 <span><span class="co">##         hitID gpsLat gpsLon gpsAlt  gpsTs_min  gpsTs_max</span></span>
-<span><span class="co">##         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span>   34<span style="text-decoration: underline;">126</span>729   40.4  -<span style="color: #BB0000;">76.1</span>   106. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">693</span>095 <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">776</span>197</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span>   34<span style="text-decoration: underline;">126</span>730   40.4  -<span style="color: #BB0000;">76.1</span>   106. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">693</span>095 <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">776</span>197</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span>   34<span style="text-decoration: underline;">126</span>795   40.4  -<span style="color: #BB0000;">76.1</span>   106. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">693</span>095 <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">776</span>197</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span>   34<span style="text-decoration: underline;">126</span>796   40.4  -<span style="color: #BB0000;">76.1</span>   106. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">693</span>095 <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">776</span>197</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span>   34<span style="text-decoration: underline;">126</span>846   40.4  -<span style="color: #BB0000;">76.1</span>   106. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">780</span>097 <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">863</span>198</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span>   34<span style="text-decoration: underline;">126</span>847   40.4  -<span style="color: #BB0000;">76.1</span>   106. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">780</span>097 <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">863</span>198</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span>   34<span style="text-decoration: underline;">128</span>916   40.4  -<span style="color: #BB0000;">76.1</span>   105. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">350</span>490 <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">433</span>291</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span>   34<span style="text-decoration: underline;">128</span>917   40.4  -<span style="color: #BB0000;">76.1</span>   105. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">350</span>490 <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">433</span>291</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> <span style="text-decoration: underline;">1</span>136<span style="text-decoration: underline;">575</span>629   44.0  -<span style="color: #BB0000;">79.5</span>   313. <span style="text-decoration: underline;">1</span>496<span style="text-decoration: underline;">797</span>130 <span style="text-decoration: underline;">1</span>496<span style="text-decoration: underline;">879</span>031</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> <span style="text-decoration: underline;">1</span>136<span style="text-decoration: underline;">575</span>630   44.0  -<span style="color: #BB0000;">79.5</span>   313. <span style="text-decoration: underline;">1</span>496<span style="text-decoration: underline;">797</span>130 <span style="text-decoration: underline;">1</span>496<span style="text-decoration: underline;">879</span>031</span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 80 more rows</span></span></span></code></pre>
+<span><span class="co">##         &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">##  1   34126729   40.4  -76.1   106. 1505693095 1505776197</span></span>
+<span><span class="co">##  2   34126730   40.4  -76.1   106. 1505693095 1505776197</span></span>
+<span><span class="co">##  3   34126795   40.4  -76.1   106. 1505693095 1505776197</span></span>
+<span><span class="co">##  4   34126796   40.4  -76.1   106. 1505693095 1505776197</span></span>
+<span><span class="co">##  5   34126846   40.4  -76.1   106. 1505780097 1505863198</span></span>
+<span><span class="co">##  6   34126847   40.4  -76.1   106. 1505780097 1505863198</span></span>
+<span><span class="co">##  7   34128916   40.4  -76.1   105. 1505350490 1505433291</span></span>
+<span><span class="co">##  8   34128917   40.4  -76.1   105. 1505350490 1505433291</span></span>
+<span><span class="co">##  9 1136575629   44.0  -79.5   313. 1496797130 1496879031</span></span>
+<span><span class="co">## 10 1136575630   44.0  -79.5   313. 1496797130 1496879031</span></span>
+<span><span class="co">## # ℹ 80 more rows</span></span></code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li>or the <strong><code>by = "closest"</code></strong> location in time
 <ul>
@@ -313,20 +313,20 @@ hit.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">index_GPS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGPS.html">getGPS</a></span><span class="op">(</span>src <span class="op">=</span> <span class="va">gps_tags</span>, data <span class="op">=</span> <span class="va">rails</span>, by <span class="op">=</span> <span class="st">"closest"</span>, cutoff <span class="op">=</span> <span class="fl">120</span><span class="op">)</span></span>
 <span><span class="va">index_GPS</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 90 × 6</span></span></span>
+<pre><code><span><span class="co">## # A tibble: 90 × 6</span></span>
 <span><span class="co">##         hitID    gpsID gpsLat gpsLon gpsAlt      gpsTs</span></span>
-<span><span class="co">##         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span>   34<span style="text-decoration: underline;">126</span>729 23<span style="text-decoration: underline;">978</span>179   40.4  -<span style="color: #BB0000;">76.1</span>   111. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">761</span>796</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span>   34<span style="text-decoration: underline;">126</span>730 23<span style="text-decoration: underline;">978</span>179   40.4  -<span style="color: #BB0000;">76.1</span>   111. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">761</span>796</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span>   34<span style="text-decoration: underline;">126</span>795 23<span style="text-decoration: underline;">978</span>184   40.4  -<span style="color: #BB0000;">76.1</span>   100. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">780</span>097</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span>   34<span style="text-decoration: underline;">126</span>796 23<span style="text-decoration: underline;">978</span>184   40.4  -<span style="color: #BB0000;">76.1</span>   100. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">780</span>097</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span>   34<span style="text-decoration: underline;">126</span>846 23<span style="text-decoration: underline;">978</span>200   40.4  -<span style="color: #BB0000;">76.1</span>   106. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">837</span>998</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span>   34<span style="text-decoration: underline;">126</span>847 23<span style="text-decoration: underline;">978</span>200   40.4  -<span style="color: #BB0000;">76.1</span>   106. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">837</span>998</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span>   34<span style="text-decoration: underline;">128</span>916 23<span style="text-decoration: underline;">978</span>065   40.4  -<span style="color: #BB0000;">76.1</span>   100. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">350</span>490</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span>   34<span style="text-decoration: underline;">128</span>917 23<span style="text-decoration: underline;">978</span>065   40.4  -<span style="color: #BB0000;">76.1</span>   100. <span style="text-decoration: underline;">1</span>505<span style="text-decoration: underline;">350</span>490</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> <span style="text-decoration: underline;">1</span>136<span style="text-decoration: underline;">575</span>629 22<span style="text-decoration: underline;">242</span>037   44.0  -<span style="color: #BB0000;">79.5</span>   312. <span style="text-decoration: underline;">1</span>496<span style="text-decoration: underline;">846</span>031</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> <span style="text-decoration: underline;">1</span>136<span style="text-decoration: underline;">575</span>630 22<span style="text-decoration: underline;">242</span>037   44.0  -<span style="color: #BB0000;">79.5</span>   312. <span style="text-decoration: underline;">1</span>496<span style="text-decoration: underline;">846</span>031</span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 80 more rows</span></span></span></code></pre>
+<span><span class="co">##         &lt;int&gt;    &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">##  1   34126729 23978179   40.4  -76.1   111. 1505761796</span></span>
+<span><span class="co">##  2   34126730 23978179   40.4  -76.1   111. 1505761796</span></span>
+<span><span class="co">##  3   34126795 23978184   40.4  -76.1   100. 1505780097</span></span>
+<span><span class="co">##  4   34126796 23978184   40.4  -76.1   100. 1505780097</span></span>
+<span><span class="co">##  5   34126846 23978200   40.4  -76.1   106. 1505837998</span></span>
+<span><span class="co">##  6   34126847 23978200   40.4  -76.1   106. 1505837998</span></span>
+<span><span class="co">##  7   34128916 23978065   40.4  -76.1   100. 1505350490</span></span>
+<span><span class="co">##  8   34128917 23978065   40.4  -76.1   100. 1505350490</span></span>
+<span><span class="co">##  9 1136575629 22242037   44.0  -79.5   312. 1496846031</span></span>
+<span><span class="co">## 10 1136575630 22242037   44.0  -79.5   312. 1496846031</span></span>
+<span><span class="co">## # ℹ 80 more rows</span></span></code></pre>
 <p>To keep all <code>hitID</code>s, regardless of whether they match to
 GPS data or not, use the argument <code>keepAll = TRUE</code>. This
 results in <code>NA</code> for <code>gpsLat</code>, <code>gpsLon</code>
@@ -335,20 +335,20 @@ and <code>gpsAlt</code> where there is no corresponding GPS hit
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">index_GPS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGPS.html">getGPS</a></span><span class="op">(</span>src <span class="op">=</span> <span class="va">gps_tags</span>, data <span class="op">=</span> <span class="va">rails</span>, keepAll <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">index_GPS</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2,748 × 6</span></span></span>
+<pre><code><span><span class="co">## # A tibble: 2,748 × 6</span></span>
 <span><span class="co">##       hitID gpsLat gpsLon gpsAlt gpsTs_min gpsTs_max</span></span>
-<span><span class="co">##       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 32<span style="text-decoration: underline;">811</span>108     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 32<span style="text-decoration: underline;">811</span>109     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 32<span style="text-decoration: underline;">912</span>898     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> 32<span style="text-decoration: underline;">912</span>899     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> 32<span style="text-decoration: underline;">913</span>271     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> 32<span style="text-decoration: underline;">913</span>272     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> 32<span style="text-decoration: underline;">913</span>404     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> 32<span style="text-decoration: underline;">913</span>405     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 32<span style="text-decoration: underline;">913</span>717     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> 32<span style="text-decoration: underline;">913</span>718     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 2,738 more rows</span></span></span></code></pre>
+<span><span class="co">##       &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;</span></span>
+<span><span class="co">##  1 32811108     NA     NA     NA        NA        NA</span></span>
+<span><span class="co">##  2 32811109     NA     NA     NA        NA        NA</span></span>
+<span><span class="co">##  3 32912898     NA     NA     NA        NA        NA</span></span>
+<span><span class="co">##  4 32912899     NA     NA     NA        NA        NA</span></span>
+<span><span class="co">##  5 32913271     NA     NA     NA        NA        NA</span></span>
+<span><span class="co">##  6 32913272     NA     NA     NA        NA        NA</span></span>
+<span><span class="co">##  7 32913404     NA     NA     NA        NA        NA</span></span>
+<span><span class="co">##  8 32913405     NA     NA     NA        NA        NA</span></span>
+<span><span class="co">##  9 32913717     NA     NA     NA        NA        NA</span></span>
+<span><span class="co">## 10 32913718     NA     NA     NA        NA        NA</span></span>
+<span><span class="co">## # ℹ 2,738 more rows</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -397,20 +397,20 @@ receivers</a></p>
 <span></span>
 <span><span class="co"># Take a look</span></span>
 <span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">df_alltagsGPS</span>, <span class="va">hitID</span>, <span class="va">recvLat</span>, <span class="va">recvLon</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 108,999 × 3</span></span></span>
+<pre><code><span><span class="co">## # A tibble: 108,999 × 3</span></span>
 <span><span class="co">##      hitID recvLat recvLon</span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;int64&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span>   <span style="text-decoration: underline;">45</span>107    42.6   -<span style="color: #BB0000;">72.7</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span>   <span style="text-decoration: underline;">45</span>108    42.6   -<span style="color: #BB0000;">72.7</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span>   <span style="text-decoration: underline;">45</span>109    42.6   -<span style="color: #BB0000;">72.7</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span>   <span style="text-decoration: underline;">45</span>110    42.6   -<span style="color: #BB0000;">72.7</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span>   <span style="text-decoration: underline;">45</span>111    42.6   -<span style="color: #BB0000;">72.7</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span>  <span style="text-decoration: underline;">199</span>885    42.7   -<span style="color: #BB0000;">72.5</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span>  <span style="text-decoration: underline;">199</span>886    42.7   -<span style="color: #BB0000;">72.5</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span>  <span style="text-decoration: underline;">199</span>887    42.7   -<span style="color: #BB0000;">72.5</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span>  <span style="text-decoration: underline;">199</span>888    42.7   -<span style="color: #BB0000;">72.5</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span>  <span style="text-decoration: underline;">199</span>889    42.7   -<span style="color: #BB0000;">72.5</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 108,989 more rows</span></span></span></code></pre>
+<span><span class="co">##    &lt;int64&gt;   &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">##  1   45107    42.6   -72.7</span></span>
+<span><span class="co">##  2   45108    42.6   -72.7</span></span>
+<span><span class="co">##  3   45109    42.6   -72.7</span></span>
+<span><span class="co">##  4   45110    42.6   -72.7</span></span>
+<span><span class="co">##  5   45111    42.6   -72.7</span></span>
+<span><span class="co">##  6  199885    42.7   -72.5</span></span>
+<span><span class="co">##  7  199886    42.7   -72.5</span></span>
+<span><span class="co">##  8  199887    42.7   -72.5</span></span>
+<span><span class="co">##  9  199888    42.7   -72.5</span></span>
+<span><span class="co">## 10  199889    42.7   -72.5</span></span>
+<span><span class="co">## # ℹ 108,989 more rows</span></span></code></pre>
 <p><a href="05-data-cleaning.html#checking-receivers">Continuing on in
 Chapter 5</a> with these values, you would then replace all instances of
 <code>recvDeployLat</code> with <code>recvLat</code> and
