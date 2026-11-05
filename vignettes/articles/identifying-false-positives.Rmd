@@ -3,15 +3,7 @@ title: "A tool to identify probable false positive detections"
 author: "Bianca Michalik and Amie MacDonald"
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, fig.width = 12, fig.height = 8)
 
-library(ggplot2)
-theme_set(theme_bw(base_size = 18))
-
-# Get and update sample data to avoid messages later
-db <- motus:::get_sample_data(dir = ".")
-```
 
 **Note:** *This is a living document that may be updated in the future to incorporate improved knowledge about predictors of false positives and further validation of training datasets.*
 
@@ -33,17 +25,19 @@ The third feature is that the time intervals of the detected bursts might not pr
 
 As pointed out, none of the three common features of false positives described above can alone describe the quality of a detection. We thus want to use all three of them to classify our detection dataset *a priori* into ‘good’ and ‘bad’ detections. 
 
-```{r, warning = FALSE, message = FALSE}
 
+``` r
 # set system environment time zone to GMT
 Sys.setenv(tz="GMT")
 
 # load required packages
 library(motus)
-library(rms) # For modelling
 library(ggplot2)
 library(dplyr)
 library(lubridate)
+
+# We also use the rms package, but will call that function directly with 
+# rms::lrm() when require
 
 # set base theme for plots
 theme_set(theme_bw(base_size = 18))
@@ -67,13 +61,12 @@ df <- t %>%
   distinct()
 
 rm(t) # Remove this object now that we're done with it
-
 ```
 
 Before proceeding, we want to ensure there are no duplicate runs. If there are, these may be due to deprecated batches (see [Removing deprecated batches](deprecated-batches.html) for details). We will remove any deprecated batches, leaving only the most recently processed data in our dataset.
 
-```{r, warning = FALSE, eval = FALSE}
 
+``` r
 # find duplicated runIDs (duplicates in ts, motusTagID, port, recv)
 runsDup <- df %>%
   filter(duplicated(cbind(ts, motusTagID, port, recv)) == TRUE) %>%
@@ -107,13 +100,12 @@ runsDup <- df %>%
   select(runID)
 
 rm(runsDup)
-
 ```
 
 Since we want to consider each detection within its recorded time frame, we calculate features 2 and 3 for each run individually.
 
-```{r, warning = FALSE}
 
+``` r
 ##### Step 1 - Classification of detections
 
 ### calculate features 2 and 3 for each run
@@ -131,13 +123,12 @@ runFeat <- df %>%
          duration, nPred, nMiss, propMiss, meanBI, deltaMeanBI, log10runLen) %>%
   filter(duplicated(runID) == FALSE) %>% 
   ungroup()
-
 ```
 
 Now, we can classify our dataset of runs into the *a priori* categories ‘good’, ‘bad’ and ‘unassigned’. We use a simple if-else statement and threshold values for each of the three features. Of course, threshold setting is up to you. We recommend a conservative classification of ‘good’ runs having less than 25% of the bursts missed or the deviation between the recorded mean burst interval and the tag burst interval should be smaller than the tag burst interval itself. ‘Bad’ runs are those recorded with run lengths smaller than 4, more than 75% of the bursts missed, or the deviation between the recorded mean burst interval is more than 3 times the tag burst interval.
 
-```{r, warning = FALSE}
 
+``` r
 ### assign category for goodness of detection (run)
 #   filter by propMiss >= 0.75, deltaMeanBI >= 3*tagBI, runLen < 4
 runFeat$category <- ifelse(abs(runFeat$propMiss) > 0.75 |
@@ -146,13 +137,12 @@ runFeat$category <- ifelse(abs(runFeat$propMiss) > 0.75 |
                            ifelse(abs(runFeat$propMiss) < 0.25 |
                                       runFeat$deltaMeanBI < runFeat$tagBI,
                                       "good", "unassigned"))
-
 ```
 
 To validate your threshold classification, you can make frequency distribution plots for each of the three features for *a priori* categories ‘good’, ‘bad’, and 'unassigned'. We can log transform run length for better visibility.
 
-```{r, warning = FALSE}
 
+``` r
 # some diagnostic plots
 plotdata <- data.frame(group = rep(c("log10runLen", "propMiss", "deltaMeanBI"),
                                    each = nrow(runFeat)),
@@ -169,15 +159,16 @@ p1 <- ggplot(data = plotdata,
 rm(plotdata)
 
 p1
-
 ```
+
+<img src="figures/false_pos_unnamed-chunk-5-1.png" alt=""  />
 
 ## Step 2 – Identification of potential diagnostic parameters
 
 The Motus `alltags` table provides some physical parameters, such as `sigsd`, `noise`, `freqsd`, `slop`, `burstSlop` for each detection hit (see [Database Variables](https://motuswts.github.io/motus/articles/database-variables.html) for detailed explanation of variables). We can calculate the mean values of each parameter for each run and check graphically if they can be used to describe the quality of the recorded run.
 
-```{r, warning = FALSE}
 
+``` r
 ##### Step 2 - Identification of potential diagnostic parameters
 
 ### calculate run mean values for
@@ -216,15 +207,16 @@ p2 <- ggplot(data = plotdata,
 rm(plotdata)
 
 p2
-
 ```
+
+<img src="figures/false_pos_unnamed-chunk-6-1.png" alt=""  />
 
 Motus allows a certain time offset (±4 ms) between the observed burst interval and the expected burst interval recorded at tag registration (`burstSlop`) during automated data processing. Similarly, `slop` refers to the deviation in timing of inter-pulse intervals within a burst and a total absolute difference of 1.5 ms between observed and expected bursts is permitted during automated data processing. Therefore, we might expect false positives to have greater absolute values for `burstSlop` and `slop`, while true detections would have values closer to zero. We also might expect to see false positives have a greater standard deviation of the offset of frequencies from the expected tag frequency than true detections, which appears to be the case in the plot above. `Noise` is an estimate of the background radio noise, which does not appear to vary drastically between true and false detections in this case, but may be a valuable predictor for other datasets. Interestingly for this dataset, the standard deviation in signal strength among pulses in a burst appears to be similar for detections we classified *a priori* as true or false, but higher for detections we did not classify.
 
 There are, of course, other factors that can help to validate the detection. We will examine two that we expect to be explanatory, noisiness and continuity, and create additional variables to describe these factors. We consider times when there are many recordings at a given receiver to be noisy. We can use the `activity` table to identify the number of runs and their lengths for each antenna of each receiver recorded per hour. We can get a more complete picture of noisiness using the `activity` table because it includes numbers of runs across all projects, not just our own. We can also calculate ‘proportion of short run lengths in runs per receiver hour’ and link the data from the `activity` table back to the runs in the `alltags` table via the `runs` table by calculating the `hourBin` for each `runID`. This allows us to connect the information on noise in the `activity` table back to our detection data. In addition, there might be a propensity for some tags to be recorded with short run lengths, i.e. detections resulting from noise. We can therefore calculate for each tag a variable for the overall ‘proportion of short run lengths’.
 
-```{r, warning = FALSE}
 
+``` r
 # get activity table
 a <- tbl(db, "activity")
 
@@ -276,15 +268,16 @@ p3 <- ggplot(data = plotdata, aes(x = abs(value), group = category, colour = cat
 rm(plotdata)
 
 p3
-
 ```
+
+<img src="figures/false_pos_unnamed-chunk-7-1.png" alt=""  />
 
 In the plots above, we can see that detections we have classified as false positives tend to have more runs per hour and a higher proportion of short runs per hour. There is more overlap in distributions between detections we have classified as ‘bad’ and ‘good’, though ‘bad’ detections appear to be associated with tags that have a lot of short runs somewhat more frequently than ‘good’ detections.
 
 The other factor that might have some importance and potential for diagnostics is continuity. This means that recordings assigned to match a certain tag may be more trustworthy if other recordings assigned to the same tag happen in some time window at the same or another antenna of the same receiver station. We thus calculate the number of runs and the number of recording antenna ports assigned to the same tag within 25 minutes of the mean time stamp of the given run. You may choose to use a longer or shorter time window.
 
-```{r}
 
+``` r
 ### calculate 'continuity' variables
 runTemp <- df %>%
   group_by(runID) %>%
@@ -302,13 +295,12 @@ runTemp <- df %>%
 runFeat <- left_join(runFeat, runTemp, by = "runID")
 
 rm(runTemp)
-
 ```
 
 We can check the importance of these new variables graphically again.
 
-```{r}
 
+``` r
 # plot variables
 plotdata <- data.frame(group = rep(c("nContRuns", "nPorts"),
                                    each = nrow(runFeat)),
@@ -325,8 +317,9 @@ p4 <- ggplot(data = plotdata,
 rm(plotdata)
 
 p4
-
 ```
+
+<img src="figures/false_pos_unnamed-chunk-9-1.png" alt=""  />
 
 ## Step 3 – Prediction of the probability of being a false positive
 
@@ -334,8 +327,8 @@ From the plots produced above, we can examine which variables we would like to i
 
 Note that our example model includes all variables mentioned above, but we recommend you to carefully select powerful variables that might best represent the characteristics of your own data. You may also want to explore other potential variables that we do not include in this example, such as tag model. Depending on the antenna of the tag, the specified burst intervals or the transmitted power of the tag, different tag types might bear different detection probabilities and consequently, different probabilities of resulting in false detections. This only makes sense, however, if different tag types are used, or if different tag properties were assigned to different tag types. To better match these to your data, you can use the date-bin of tag registration or create your own variable.
 
-```{r}
 
+``` r
 ##### Step 3 - Prediction of the probability of being a false positive
 
 modeldata <- runFeat %>%
@@ -349,40 +342,82 @@ M <- glm(category ~ meanSigSD + meanNoise + meanFreqSD + meanSlop +
          data = modeldata, family = binomial())
 
 summary(M)
+```
 
+```
+## 
+## Call:
+## glm(formula = category ~ meanSigSD + meanNoise + meanFreqSD + 
+##     meanSlop + meanBurstSlop + numRuns + propRS + tagPropRS + 
+##     nContRuns + nPorts, family = binomial(), data = modeldata)
+## 
+## Coefficients:
+##                 Estimate Std. Error z value Pr(>|z|)    
+## (Intercept)   -5.268e+00  8.388e-01  -6.281 3.37e-10 ***
+## meanSigSD     -6.660e-03  3.301e-03  -2.018  0.04361 *  
+## meanNoise     -4.414e-02  8.984e-03  -4.913 8.96e-07 ***
+## meanFreqSD     6.441e+00  2.113e+00   3.048  0.00230 ** 
+## meanSlop       8.293e+02  1.518e+02   5.463 4.68e-08 ***
+## meanBurstSlop -6.672e+01  3.177e+01  -2.100  0.03572 *  
+## numRuns        5.039e-04  3.536e-04   1.425  0.15410    
+## propRS         3.709e+00  2.165e-01  17.132  < 2e-16 ***
+## tagPropRS      1.379e+00  4.817e-01   2.862  0.00421 ** 
+## nContRuns      7.446e-04  1.388e-04   5.365 8.09e-08 ***
+## nPorts        -2.346e-01  9.415e-02  -2.492  0.01270 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 4554.9  on 3395  degrees of freedom
+## Residual deviance: 3026.0  on 3385  degrees of freedom
+## AIC: 3048
+## 
+## Number of Fisher Scoring iterations: 9
+```
+
+``` r
 # goodness of fit parameters
-MRS <- lrm(category ~ meanSigSD + meanNoise + meanFreqSD + meanSlop + 
-           meanBurstSlop + numRuns + propRS + tagPropRS + nContRuns + nPorts,
-           data = modeldata)
+MRS <- rms::lrm(
+  category ~ meanSigSD + meanNoise + meanFreqSD + meanSlop + meanBurstSlop + 
+    numRuns + propRS + tagPropRS + nContRuns + nPorts,
+  data = modeldata)
 
 MRS$stats[10] # Nagelkerke's pseudo R^2
+```
 
+```
+##        R2 
+## 0.4908672
+```
+
+``` r
 rm(modeldata)
 
 # predict probability of being a 'bad' run
 runFeat$probBad <- predict(M, runFeat, "response")
-
 ```
 
 You can now plot the probability for each of the categories you have defined in step 1 to visually check the validity of your predictions. Ideally, runs of the category ‘good’ should have resulted in low probability estimates, whereas runs of the category ‘bad’ should have resulted in high probability estimates. There will likely also be some overlap where some runs previously assigned as ‘bad’ will have low probability estimates. Nevertheless, the two ‘good’ and ‘bad’ curves should be clearly separated.
 
-```{r, warning = FALSE}
 
+``` r
 # plot predicted values (graphical inspection of goodness of fit)
 p5 <- ggplot(data = runFeat, aes(x = probBad, group = category, colour = category)) +
   geom_density() + 
   xlab("estimate of probability of being a 'bad' run")
 
 p5
-
 ```
+
+<img src="figures/false_pos_unnamed-chunk-11-1.png" alt=""  />
 
 We can see that many runs we classified as ‘bad’ do have a high probability of being false positives as predicted by the model and few have low probabilities of being false positives, while more runs we classified as ‘good’ have low probabilities of being false positives. However, some runs of all categories have probabilities of being false positives around 0.5. Selecting our predictor variables more judiciously or defining stricter *a priori* classifications may improve the separation of curves.
 
 You could use this graph to define your own threshold probability to filter false positives from your data. Make sure not to filter single detections (i.e. by `hitID`), but to exclude all detections within a run that match your filter criterion for your dataset, i.e. to filter by `runID`. We generally recommend that afterward you use the tools described in [Chapter 5](05-data-cleaning.html#assess-tag-detections) to check individually if a detection or run you have excluded by your individual threshold settings may still be valid in a biological sense, or if additional detections should be excluded.
 
-```{r, warning = FALSE}
 
+``` r
 ### set individual threshold and filter detection data by run
 # find runIDs with probBad < 0.7
 runsKeep <- runFeat %>%
@@ -397,11 +432,14 @@ rm(runsKeep)
 
 # add threshold to plot of predicted values
 p5 + geom_vline(xintercept = 0.7, linetype = "dashed")
-
 ```
+
+![plot of chunk unnamed-chunk-12](vignettes/articles/figures/false_pos_unnamed-chunk-12-1.png)
 
 **Note:** We used the three characteristics `runLen`, `propMiss`, and `deltaMeanBI` when assigning the *a priori* classification of detections for the sample dataset (project 176), but these characteristics may not be as appropriate for other datasets. There are, of course, other features of false positives and you are invited to create your own set of characteristics for your data. We highly recommend you examine your own data carefully and think critically about how you classify your detection data. This tool is designed to help you detect false positives and speed processing of large datasets, but it is not a one-size-fits-all solution---a careful examination of your dataset and carefully considered selection of classification criteria and predictor variables is absolutely necessary. For example, you might consider classifying 'bad' detections as those where over 85% of detections per hour are short runs or where a receiver records more than 100 runs per hour (i.e. a noisy site---similar to how the `motusFilter` and the `filterByActivity` function work), and good detections as those where fewer than 50% of detections per hour are short runs. In this case you would be using some of the 'noise' variables calculated below as classification features, so you must exclude them as predictor variables. Instead, you could consider some of the features we used in this example to classify the detections (`runLen`, `propMiss`, and `meanDeltaBI`), as potential predictor variables.
 
 ### Acknowledgements
 
 Phil Taylor proposed ideas on identifying false positives that provided the foundation for this chapter. Adam Smith, Sjoerd Duijns, Lucas Berrigan, and Denis Lepage provided valuable feedback and discussions that contributed to this chapter.
+
+

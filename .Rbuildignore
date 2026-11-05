@@ -13,3 +13,4 @@
 ^docs$
 ^pkgdown$
 ^_pkgdown\.yml$
+^vignettes/_precompile.R$

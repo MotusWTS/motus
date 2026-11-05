@@ -2,16 +2,7 @@
 title: "Working with GPS points"
 ---
 
-```{r, include = FALSE}
-motus:::local_auth()
-if(!dir.exists("data")) dir.create("data")
-file.copy(system.file("extdata", "gps_sample.motus", package = "motus"),
-          "./data/")
-gps_tags <- DBI::dbConnect(RSQLite::SQLite(), "./data/gps_sample.motus")
 
-# Get and update sample data to avoid messages later
-sql_motus <- motus:::get_sample_data()
-```
 
 Some tags also collect GPS points, which can be used for more precise locations (as opposed to the receiver location `recDeployLat`/`recDeployLon`). 
 In this article we will show you how to efficiently work with these GPS points. 
@@ -20,7 +11,8 @@ In this article we will show you how to efficiently work with these GPS points.
 First, let's get set up. 
 The motus.sample data (project 176) doesn't have GPS points, so in these next examples we'll be using a different data base called `gps_tags`. 
 
-```{r, message = FALSE}
+
+``` r
 library(motus)
 library(tidyverse)
 library(lubridate)
@@ -28,15 +20,42 @@ library(lubridate)
 gps_tags
 ```
 
+```
+## <SQLiteConnection>
+##   Path: /home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/gps_sample.motus
+##   Extensions: TRUE
+```
+
 If your data has gps point, you should be able to follow along using your own data (replace `PROJECT_NUMBER` with the number corresponding to your project.
-```{r, eval = FALSE}
+
+``` r
 gps_tags <- tagme(PROJECT_NUMBER, new = TRUE)
 ```
 
 GPS points are stored in the `gps` table. 
 
-```{r}
+
+``` r
 tbl(gps_tags, "gps")
+```
+
+```
+## # Source:   table<`gps`> [?? x 11]
+## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/gps_sample.motus]
+##      gpsID batchID        ts gpsts   lat    lon    alt quality lat_mean lon_mean
+##      <int>   <int>     <dbl> <dbl> <dbl>  <dbl>  <dbl>   <int>    <dbl>    <dbl>
+##  1  313414  127792    1.51e9    NA  33.5 -104.  1074        NA       NA       NA
+##  2  313415  127792    1.51e9    NA  33.5 -104.  1072.       NA       NA       NA
+##  3 4967619  370452    1.46e9    NA  36.5  -76.0   -3.4      NA       NA       NA
+##  4 4967620  370452    1.46e9    NA  36.5  -76.0    8.7      NA       NA       NA
+##  5 4967621  370452    1.46e9    NA  36.5  -76.0    5.3      NA       NA       NA
+##  6 4967622  370452    1.46e9    NA  36.5  -76.0   -6.6      NA       NA       NA
+##  7 4967623  370452    1.46e9    NA  36.5  -76.0   -3.1      NA       NA       NA
+##  8 4967624  370452    1.46e9    NA  36.5  -76.0    2.5      NA       NA       NA
+##  9 4967625  370452    1.46e9    NA  36.5  -76.0   -4.8      NA       NA       NA
+## 10 4967626  370452    1.46e9    NA  36.5  -76.0    1        NA       NA       NA
+## # ℹ more rows
+## # ℹ 1 more variable: n_fixes <int>
 ```
 
 ## Working with GPS points
@@ -50,17 +69,55 @@ You can work with GPS points in one of two ways:
 ### `alltagsGPS` view
 
 The `alltagsGPS` view combines hits and GPS points
-```{r}
+
+``` r
 tbl(gps_tags, "alltagsGPS") %>%
   select(hitID, runID, batchID, ts, gpsLat, gpsLon, gpsAlt)
 ```
 
+```
+## # Source:   SQL [?? x 7]
+## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/gps_sample.motus]
+##       hitID   runID batchID          ts gpsLat gpsLon gpsAlt
+##       <int>   <int>   <int>       <dbl>  <dbl>  <dbl>  <dbl>
+##  1 32811108 7984227  118721 1509139743.     NA     NA     NA
+##  2 32811109 7984227  118721 1509139823.     NA     NA     NA
+##  3 32912898 7985620  120474 1515877560.     NA     NA     NA
+##  4 32912899 7985620  120474 1515877600.     NA     NA     NA
+##  5 32913271 7985787  120474 1515878154.     NA     NA     NA
+##  6 32913272 7985787  120474 1515878194.     NA     NA     NA
+##  7 32913404 7985850  120474 1515878250.     NA     NA     NA
+##  8 32913405 7985850  120474 1515878329.     NA     NA     NA
+##  9 32913717 7985998  120474 1515878623.     NA     NA     NA
+## 10 32913718 7985998  120474 1515878662.     NA     NA     NA
+## # ℹ more rows
+```
+
 Note that not all hits have a GPS point associated, but we can filter to those that do:
 
-```{r}
+
+``` r
 tbl(gps_tags, "alltagsGPS") %>%
   select(hitID, runID, batchID, ts, gpsLat, gpsLon, gpsAlt) %>%
   filter(!is.na(gpsLat))
+```
+
+```
+## # Source:   SQL [?? x 7]
+## # Database: sqlite 3.51.2 [/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/gps_sample.motus]
+##        hitID    runID batchID          ts gpsLat gpsLon gpsAlt
+##        <int>    <int>   <int>       <dbl>  <dbl>  <dbl>  <dbl>
+##  1 449016552 24439773  370452 1457111891.   36.5  -76.0   -3.4
+##  2 449016553 24439773  370452 1457111897.   36.5  -76.0   -3.4
+##  3 449016554 24439773  370452 1457111904.   36.5  -76.0   -3.4
+##  4 449016555 24439774  370452 1457111897.   36.5  -76.0   -3.4
+##  5 449016556 24439774  370452 1457111904.   36.5  -76.0   -3.4
+##  6 449016557 24439775  370452 1457111891.   36.5  -76.0   -3.4
+##  7 449016558 24439775  370452 1457111910.   36.5  -76.0   -3.4
+##  8 449016559 24439773  370452 1457111910.   36.5  -76.0   -3.4
+##  9 449016560 24439774  370452 1457111916.   36.5  -76.0   -3.4
+## 10 449016561 24439775  370452 1457111916.   36.5  -76.0   -3.4
+## # ℹ more rows
 ```
 
 > Note: The `alltagsGPS` view is the same as the `alltags` view but includes GPS points. 
@@ -72,7 +129,8 @@ tbl(gps_tags, "alltagsGPS") %>%
 
 For example, let's work with a subset of the alltags view, including only King Rails.
 
-```{r}
+
+``` r
 rails <- tbl(gps_tags, "alltags") %>%
   filter(speciesEN == "King Rail")
 ```
@@ -81,14 +139,16 @@ Now let's retrieve the daily median location of GPS points for these data.
 Note that we use both the original database `gps_tags` as well as the data subset `rails`. 
 Also note that the `getGPS()` function requires the original, numeric `ts` column, so if you want a date/time column it's best to rename it (i.e. `time = as_datetime(ts)`).
 
-```{r}
+
+``` r
 index_GPS <- getGPS(src = gps_tags, data = rails)
 ```
 
 This table is an index matching GPS points to specific `hitID`, so the next step is to join it into your data subset using the `left_join()` function from the `dplyr` package.
 Note that at this point, we need to use `collect()` to ensure that `rails` is 'flat' (i.e. a data frame, not a database; see [Converting to flat data](03-accessing-data.html#converting-to-flat-data) for more details).
 
-```{r}
+
+``` r
 rails_GPS <- left_join(collect(rails), index_GPS, by = "hitID")
 ```
 
@@ -96,10 +156,28 @@ We can subset the columns to see if it worked as expected
 (we filter to non-missing, because not all hits have a GPS point when using the
 default matching).
 
-```{r}
+
+``` r
 rails_GPS %>%
   select(hitID, runID, batchID, ts, contains("gps")) %>%
   filter(!is.na(gpsLat))
+```
+
+```
+## # A tibble: 90 × 9
+##         hitID    runID batchID       ts gpsLat gpsLon gpsAlt gpsTs_min gpsTs_max
+##         <int>    <int>   <int>    <dbl>  <dbl>  <dbl>  <dbl>     <dbl>     <dbl>
+##  1   34126729  8211543  127792   1.51e9   40.4  -76.1   106.    1.51e9    1.51e9
+##  2   34126730  8211543  127792   1.51e9   40.4  -76.1   106.    1.51e9    1.51e9
+##  3   34126795  8211576  127792   1.51e9   40.4  -76.1   106.    1.51e9    1.51e9
+##  4   34126796  8211576  127792   1.51e9   40.4  -76.1   106.    1.51e9    1.51e9
+##  5   34126846  8211593  127792   1.51e9   40.4  -76.1   106.    1.51e9    1.51e9
+##  6   34126847  8211593  127792   1.51e9   40.4  -76.1   106.    1.51e9    1.51e9
+##  7   34128916  8212308  132026   1.51e9   40.4  -76.1   105.    1.51e9    1.51e9
+##  8   34128917  8212308  132026   1.51e9   40.4  -76.1   105.    1.51e9    1.51e9
+##  9 1136575629 47145854  742386   1.50e9   44.0  -79.5   313.    1.50e9    1.50e9
+## 10 1136575630 47145854  742386   1.50e9   44.0  -79.5   313.    1.50e9    1.50e9
+## # ℹ 80 more rows
 ```
 
 
@@ -116,19 +194,55 @@ However, we can match GPS locations to `hitID`s according to one of several diff
     - be aware that you should ideally not chose a period smaller than the frequency at which GPS fixes are recorded, or some hits will not be associated with GPS
 
 For example, the median location within 60 minutes of a `hitID`.
-```{r}
+
+``` r
 index_GPS <- getGPS(src = gps_tags, data = rails, by = 60)
 index_GPS
-```    
+```
+
+```
+## # A tibble: 78 × 6
+##         hitID gpsLat gpsLon gpsAlt  gpsTs_min  gpsTs_max
+##         <int>  <dbl>  <dbl>  <dbl>      <dbl>      <dbl>
+##  1   34126729   40.4  -76.1   111. 1505761796 1505761796
+##  2   34126730   40.4  -76.1   111. 1505761796 1505761796
+##  3   34126795   40.4  -76.1   110. 1505776197 1505776197
+##  4   34126796   40.4  -76.1   110. 1505776197 1505776197
+##  5   34126846   40.4  -76.1   106. 1505837998 1505837998
+##  6   34126847   40.4  -76.1   106. 1505837998 1505837998
+##  7   34128916   40.4  -76.1   100. 1505350490 1505350490
+##  8   34128917   40.4  -76.1   100. 1505350490 1505350490
+##  9 1136575629   44.0  -79.5   312. 1496846031 1496846031
+## 10 1136575630   44.0  -79.5   312. 1496846031 1496846031
+## # ℹ 68 more rows
+```
     
     
 2. **`by = "daily"`** median location (**default**, used in first example)
     - similar to `by = X` except the duration is 24hr (same as `by = 1440`)
     - this method is most suitable for receiver deployments at fixed location.
     
-```{r}
+
+``` r
 index_GPS <- getGPS(src = gps_tags, data = rails, by = "daily")
 index_GPS
+```
+
+```
+## # A tibble: 90 × 6
+##         hitID gpsLat gpsLon gpsAlt  gpsTs_min  gpsTs_max
+##         <int>  <dbl>  <dbl>  <dbl>      <dbl>      <dbl>
+##  1   34126729   40.4  -76.1   106. 1505693095 1505776197
+##  2   34126730   40.4  -76.1   106. 1505693095 1505776197
+##  3   34126795   40.4  -76.1   106. 1505693095 1505776197
+##  4   34126796   40.4  -76.1   106. 1505693095 1505776197
+##  5   34126846   40.4  -76.1   106. 1505780097 1505863198
+##  6   34126847   40.4  -76.1   106. 1505780097 1505863198
+##  7   34128916   40.4  -76.1   105. 1505350490 1505433291
+##  8   34128917   40.4  -76.1   105. 1505350490 1505433291
+##  9 1136575629   44.0  -79.5   313. 1496797130 1496879031
+## 10 1136575630   44.0  -79.5   313. 1496797130 1496879031
+## # ℹ 80 more rows
 ```
     
 3. or the **`by = "closest"`** location in time
@@ -137,17 +251,53 @@ index_GPS
     - you can also specify a `cutoff` which will only match GPS records which are within `cutoff = X` minutes of the hit. This way you can avoid having situations where the 'closest' GPS record is actually days away.
 
 For example, the closest location in time noted within 2 hours of a hit.
-```{r}
+
+``` r
 index_GPS <- getGPS(src = gps_tags, data = rails, by = "closest", cutoff = 120)
 index_GPS
+```
+
+```
+## # A tibble: 90 × 6
+##         hitID    gpsID gpsLat gpsLon gpsAlt      gpsTs
+##         <int>    <int>  <dbl>  <dbl>  <dbl>      <dbl>
+##  1   34126729 23978179   40.4  -76.1   111. 1505761796
+##  2   34126730 23978179   40.4  -76.1   111. 1505761796
+##  3   34126795 23978184   40.4  -76.1   100. 1505780097
+##  4   34126796 23978184   40.4  -76.1   100. 1505780097
+##  5   34126846 23978200   40.4  -76.1   106. 1505837998
+##  6   34126847 23978200   40.4  -76.1   106. 1505837998
+##  7   34128916 23978065   40.4  -76.1   100. 1505350490
+##  8   34128917 23978065   40.4  -76.1   100. 1505350490
+##  9 1136575629 22242037   44.0  -79.5   312. 1496846031
+## 10 1136575630 22242037   44.0  -79.5   312. 1496846031
+## # ℹ 80 more rows
 ```
 
 To keep all `hitID`s, regardless of whether they match to GPS data or not, use the argument `keepAll = TRUE`.
 This results in `NA` for `gpsLat`, `gpsLon` and `gpsAlt` where there is no corresponding GPS hit (otherwise the hit is omitted). 
 
-```{r}
+
+``` r
 index_GPS <- getGPS(src = gps_tags, data = rails, keepAll = TRUE)
 index_GPS
+```
+
+```
+## # A tibble: 2,748 × 6
+##       hitID gpsLat gpsLon gpsAlt gpsTs_min gpsTs_max
+##       <int>  <dbl>  <dbl>  <dbl>     <dbl>     <dbl>
+##  1 32811108     NA     NA     NA        NA        NA
+##  2 32811109     NA     NA     NA        NA        NA
+##  3 32912898     NA     NA     NA        NA        NA
+##  4 32912899     NA     NA     NA        NA        NA
+##  5 32913271     NA     NA     NA        NA        NA
+##  6 32913272     NA     NA     NA        NA        NA
+##  7 32913404     NA     NA     NA        NA        NA
+##  8 32913405     NA     NA     NA        NA        NA
+##  9 32913717     NA     NA     NA        NA        NA
+## 10 32913718     NA     NA     NA        NA        NA
+## # ℹ 2,738 more rows
 ```
 
 
@@ -165,9 +315,45 @@ Missing GPS coordinates may appear as `NA` if they are missing, or as `0` or `99
 However, as we are changing values in the data, we'll need to [flatten the data first](03-accessing-data.html#converting-to-flat-data).
 
 Using the example from Chapter 5 starting with [Checking receivers](05-data-cleaning.html#checking-receivers)
-```{r}
-sql_motus <- tagme(176, dir = "./data/")
 
+``` r
+sql_motus <- tagme(176, dir = "./data/")
+```
+
+```
+## Checking for new data in project 176
+```
+
+```
+## Updating metadata
+```
+
+```
+## activity:     1 new batch records to check
+```
+
+```
+## batchID  1977125 (#     1 of      1): got    156 activity records
+```
+
+```
+## Downloaded 156 activity records
+```
+
+```
+## nodeData:     0 new batch records to check
+```
+
+```
+## Fetching deprecated batches
+```
+
+```
+## Total deprecated batches: 6
+## New deprecated batches: 0
+```
+
+``` r
 df_alltagsGPS <- tbl(sql_motus, "alltagsGPS") %>%
   mutate(recvLat = if_else(is.na(gpsLat) | gpsLat %in% c(0, 999), 
                            recvDeployLat, gpsLat),
@@ -180,13 +366,27 @@ df_alltagsGPS <- tbl(sql_motus, "alltagsGPS") %>%
 select(df_alltagsGPS, hitID, recvLat, recvLon)
 ```
 
+```
+## # A tibble: 108,999 × 3
+##      hitID recvLat recvLon
+##    <int64>   <dbl>   <dbl>
+##  1   45107    42.6   -72.7
+##  2   45108    42.6   -72.7
+##  3   45109    42.6   -72.7
+##  4   45110    42.6   -72.7
+##  5   45111    42.6   -72.7
+##  6  199885    42.7   -72.5
+##  7  199886    42.7   -72.5
+##  8  199887    42.7   -72.5
+##  9  199888    42.7   -72.5
+## 10  199889    42.7   -72.5
+## # ℹ 108,989 more rows
+```
+
 [Continuing on in Chapter 5](05-data-cleaning.html#checking-receivers) with these values, you would then replace all instances of `recvDeployLat` with `recvLat` and `recevDeployLon` with `recvLon`.
 
 You would also use this flattened data frame, `df_alltagsGPS`, rather than the un-flattened `tbl_alltagsGPS`.
 
-```{r include = FALSE}
-unlink("data/project-176.motus")
-unlink("data/gps_sample.motus")
-```
+
 
 > **What Next?** [Explore all articles](index.html)

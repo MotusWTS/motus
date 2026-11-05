@@ -8,3 +8,4 @@ tests/spelling.R
 vignettes/articles/data/*
 docs
 vignettes/articles/*cache/
+vignettes/articles/map-data/ne_50m_lakes.gpkg
