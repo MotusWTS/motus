@@ -136,7 +136,7 @@ srvQuery(API = "custom/update_pkg_version", params = list(pkgVersion = "6.1.0"))
 
 ## Docs website - Test motus website (will be compiled online) ------------------------------
 
-pkgdown::build_site(lazy = TRUE)
+pkgdown::build_site()
 pkgdown::build_home()
 
 # Testing themes
@@ -144,8 +144,13 @@ pkgdown::build_home_index()
 pkgdown::init_site()
 
 # TEsting specific articles
+pkgdown::build_articles(lazy = TRUE)
 pkgdown::build_article("articles/06-exploring-data")
 pkgdown::build_article("articles/01-introduction")
+pkgdown::build_article("articles/03-accessing-data")
+pkgdown::build_article("articles/04-deployments")
+pkgdown::build_article("articles/05-data-cleaning")
+pkgdown::build_article("articles/database-variables")
 unlink("vignettes/articles/map-data/", recursive = TRUE)
 
 
