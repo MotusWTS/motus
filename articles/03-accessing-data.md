@@ -358,8 +358,8 @@ df_serno <- tbl_recvDeps %>%
   as.data.frame()
 
 # loop through each receiver (may take a while!)
-for (row in 1:nrow(df.serno)) {
-  tagme(df.serno[row, "serno"], dir = "./data/", new = TRUE)
+for (row in 1:nrow(df_serno)) {
+  tagme(df_serno[row, "serno"], dir = "./data/", new = TRUE)
 }
 
 # Note you can remove the dir argument if you want to save it to your working
@@ -372,16 +372,16 @@ don’t want to download project-wide receivers:
 ``` r
 
 # create list of receivers you'd like to download
-df.serno <- c("SG-AB12RPI3CD34", "SG-1234BBBK4321")
+df_serno <- c("SG-AB12RPI3CD34", "SG-1234BBBK4321")
 
 # loop through each receiver (may take a while!), and save to the working directory
-for (k in 1:length(df.serno)) {
-  tagme(df.serno[k], new = TRUE)
+for (k in 1:length(df_serno)) {
+  tagme(df_serno[k], new = TRUE)
 }
 
 # loop through each receiver (may take a while!), and save to a specified directory
-for (k in 1:length(df.serno)) {
-  tagme(df.serno[k], dir = "./data/", 
+for (k in 1:length(df_serno)) {
+  tagme(df_serno[k], dir = "./data/", 
         new = TRUE)
 }
 ```
@@ -466,15 +466,24 @@ these tables is a list of length 2:
 str(tbl.alltags)
 ```
 
-    ## List of 2
+    ## List of 3
+    ##  $ con       :Formal class 'SQLiteConnection' [package "RSQLite"] with 8 slots
+    ##   .. ..@ ptr                :<pointer: 0x5a6b2afd59f0> 
+    ##   .. ..@ dbname             : chr "/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus"
+    ##   .. ..@ loadable.extensions: logi TRUE
+    ##   .. ..@ flags              : int 70
+    ##   .. ..@ vfs                : chr ""
+    ##   .. ..@ ref                :<environment: 0x5a6b2a98c268> 
+    ##   .. ..@ bigint             : chr "integer64"
+    ##   .. ..@ extended_types     : logi FALSE
     ##  $ src       :List of 2
     ##   ..$ con  :Formal class 'SQLiteConnection' [package "RSQLite"] with 8 slots
-    ##   .. .. ..@ ptr                :<pointer: 0x5c5f3c370820> 
+    ##   .. .. ..@ ptr                :<pointer: 0x5a6b2afd59f0> 
     ##   .. .. ..@ dbname             : chr "/home/steffi/Projects/Business/Birds Canada/MOTUS/motus/vignettes/articles/data/project-176.motus"
     ##   .. .. ..@ loadable.extensions: logi TRUE
     ##   .. .. ..@ flags              : int 70
     ##   .. .. ..@ vfs                : chr ""
-    ##   .. .. ..@ ref                :<environment: 0x5c5f3a080050> 
+    ##   .. .. ..@ ref                :<environment: 0x5a6b2a98c268> 
     ##   .. .. ..@ bigint             : chr "integer64"
     ##   .. .. ..@ extended_types     : logi FALSE
     ##   ..$ disco: NULL

@@ -67,7 +67,7 @@ There 3-4 different `motus` versions on GitHub at any one time:
 - The API requires that some parameters be boxed (i.e. `[parameter]`)
   and some be unboxed (i.e., `parameter`)
 - In `srvQuery.R`,
-  [`jsonlite::toJSON()`](https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html)
+  [`jsonlite::toJSON()`](https://rdrr.io/pkg/jsonlite/man/fromJSON.html)
   unboxes all single value parameters
 - If you have a parameter that should NOT be unboxed (usually a single
   value parameter that could have more), you must go to its `srvXXXX.R`
