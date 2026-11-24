@@ -233,8 +233,8 @@ df_serno <- tbl_recvDeps %>%
   as.data.frame()
 
 # loop through each receiver (may take a while!)
-for (row in 1:nrow(df.serno)) {
-  tagme(df.serno[row, "serno"], dir = "./data/", new = TRUE)
+for (row in 1:nrow(df_serno)) {
+  tagme(df_serno[row, "serno"], dir = "./data/", new = TRUE)
 }
 
 # Note you can remove the dir argument if you want to save it to your working
@@ -244,16 +244,16 @@ for (row in 1:nrow(df.serno)) {
 You can also create a list of receivers you'd like to download if you don't want to download project-wide receivers:
 ```{r tagmeMultipleRecvs, eval = FALSE}
 # create list of receivers you'd like to download
-df.serno <- c("SG-AB12RPI3CD34", "SG-1234BBBK4321")
+df_serno <- c("SG-AB12RPI3CD34", "SG-1234BBBK4321")
 
 # loop through each receiver (may take a while!), and save to the working directory
-for (k in 1:length(df.serno)) {
-  tagme(df.serno[k], new = TRUE)
+for (k in 1:length(df_serno)) {
+  tagme(df_serno[k], new = TRUE)
 }
 
 # loop through each receiver (may take a while!), and save to a specified directory
-for (k in 1:length(df.serno)) {
-  tagme(df.serno[k], dir = "./data/", 
+for (k in 1:length(df_serno)) {
+  tagme(df_serno[k], dir = "./data/", 
         new = TRUE)
 }
 ```
